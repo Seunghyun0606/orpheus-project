@@ -1,0 +1,9 @@
+.project-os/
+dist/
+node_modules/
+specs/
+src-tauri/target/
+src-tauri/gen/
+AGENTS.md
+PROJECT.md
+package-lock.json
