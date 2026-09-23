@@ -1,0 +1,31 @@
+task: TASK-001
+status: pass
+summary: Bootstrapped the Tauri 2, React 19, TypeScript, and Vite desktop foundation
+  with pinned dependencies, a minimal Orpheus shell, strict source boundaries, quality
+  scripts, a scenario-validation placeholder, tests, and documented setup commands.
+files_changed:
+- package.json
+- package-lock.json
+- README.md
+- eslint.config.js
+- tsconfig.json
+- vite.config.ts
+- vitest.config.ts
+- src/
+- src-tauri/
+- scripts/validate-scenarios.mjs
+verification:
+  clean_install: npm ci passed with 0 vulnerabilities
+  build: npm run build passed
+  desktop_build: npm run build:desktop passed and produced orpheus-desktop.exe
+  lint: npm run lint passed with zero warnings
+  formatting: npm run format:check and cargo fmt --check passed
+  typecheck: npm run typecheck passed in the build pipeline
+  unit_test: npm test passed (1 test)
+  scenario_validation: npm run validate:scenarios passed
+  desktop_runtime: Orpheus window was responsive with a non-zero native window handle
+followups: []
+commit: c9c8757
+kind: implementation
+role: developer
+actor: codex
