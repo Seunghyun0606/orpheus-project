@@ -1,0 +1,49 @@
+id: TASK-004
+title: Author the INC-001 scenario data
+role: developer
+milestone: M1
+priority: P1
+status: ready
+
+objective: Encode the complete headless INC-001 path as validated authored data.
+why: A real scenario is needed to prove the schema and engine express the intended design without code-level exceptions.
+
+scope:
+  include:
+    - Define Gateway, Payment API, PostgreSQL, initial metrics, and customer-impact state.
+    - Define the required observation, mitigation, diagnosis, and resolution actions.
+    - Encode restart as a temporary recovery followed by recurrence at 180 seconds when the root cause remains.
+    - Encode stale-session discovery and termination as the root-cause path.
+    - Encode the conditional UNKNOWN message and corrupted-log Evidence reveal.
+    - Define completion and postmortem inputs needed by headless verification.
+  exclude:
+    - React presentation, production artwork, sound, save/load, or final prose polish.
+    - Additional Incidents or disclosure of NULL and ORPHEUS.
+    - Engine behavior written specifically for INC-001.
+
+depends_on:
+  - TASK-002
+specs:
+  - specs/feature/inc-001-vertical-slice.md
+  - specs/feature/incident-simulation.md
+  - specs/architecture/scenario-format.md
+relevant_files:
+  - src/scenario/data/incidents/
+  - src/scenario/data/narrative/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - INC-001 passes scenario validation with no warnings or unresolved references.
+  - Initial signals and required outcomes match the vertical-slice spec.
+  - Restart, recurrence, investigation, root-cause resolution, and Narrative evidence are expressed in data.
+  - The scenario contains no post-MVP reveal about NULL or ORPHEUS.
+  - No production TypeScript file contains an INC-001-specific conditional.
+verification:
+  - Run the scenario-validation command against INC-001.
+  - Inspect parsed output in a focused fixture test.
+  - Search production TypeScript for the scenario id and justify any non-test occurrence.
+
+human_gate: false
+risk: medium

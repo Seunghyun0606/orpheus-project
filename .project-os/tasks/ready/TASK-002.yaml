@@ -1,0 +1,49 @@
+id: TASK-002
+title: Define the scenario contract and validator
+role: developer
+milestone: M1
+priority: P0
+status: ready
+
+objective: Implement the minimum versioned YAML contract and validation pipeline required to express INC-001 safely.
+why: Content must fail early and clearly when an id, reference, effect, signal, condition, or action is invalid.
+
+scope:
+  include:
+    - Define Zod schemas and inferred TypeScript types for the M1 scenario concepts.
+    - Parse YAML into validated domain input without leaking unvalidated objects into the engine.
+    - Validate duplicate ids, references, action requirements, signals, event targets, and narrative/evidence references.
+    - Return aggregate diagnostics with file, data path, stable error code, and message.
+    - Implement a command behind the scenario-validation package script.
+    - Add valid and invalid fixture tests.
+  exclude:
+    - Full campaign, player model, ending, localization, or modding schemas.
+    - INC-001 content authoring beyond small test fixtures.
+    - Simulation execution semantics.
+
+depends_on:
+  - TASK-001
+specs:
+  - specs/architecture/scenario-format.md
+  - specs/architecture/system-architecture.md
+  - specs/feature/incident-simulation.md
+relevant_files:
+  - src/scenario/
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - The schema can represent INC-001 initial state, actions, temporary effects, delayed events, reveals, evidence, and completion conditions.
+  - Parsed engine input is available only after validation succeeds.
+  - Validator diagnostics identify every detected error in a fixture rather than stopping at the first error.
+  - Unknown effect or event types fail validation.
+  - The validation command exits non-zero for invalid content and zero for valid content.
+verification:
+  - Run unit tests for valid parsing and every required validation class.
+  - Run the scenario-validation command against valid and intentionally invalid fixtures.
+  - Run typecheck and lint.
+
+human_gate: false
+risk: medium

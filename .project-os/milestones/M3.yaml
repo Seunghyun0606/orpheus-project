@@ -1,0 +1,14 @@
+id: M3
+name: Three-Incident MVP
+status: planned
+objective: Validate reusable content authoring and an early narrative arc across three distinct incidents.
+entry_criteria:
+  - M2 exit criteria are satisfied.
+exit_criteria:
+  - INC-001 Connection Saturation, INC-002 Bad Deployment, and INC-003 Queue Backlog are fully playable.
+  - Shared engine and UI systems support all three incidents without scenario-specific React logic.
+  - Evidence, narrative triggers, War Room communication, and delegation work across incidents.
+  - The MVP reveals only the presence of UNKNOWN and does not disclose ORPHEUS identity.
+tasks: []
+human_gate:
+  required_on_completion: true

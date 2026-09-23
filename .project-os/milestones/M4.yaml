@@ -1,0 +1,14 @@
+id: M4
+name: Campaign Intelligence Systems
+status: planned
+objective: Build the reusable campaign, player-model, branching, and ending infrastructure needed for the full narrative.
+entry_criteria:
+  - M3 is approved as a coherent and expandable MVP.
+exit_criteria:
+  - Campaign progression, hidden values, evidence, and narrative flags persist deterministically.
+  - Player behavior is derived from actions and can drive prediction feedback and branch conditions.
+  - Ending definitions and priority resolution are data-driven and deterministically testable.
+  - Narrative authoring preserves the established twist order and moral ambiguity rules.
+tasks: []
+human_gate:
+  required_on_completion: false

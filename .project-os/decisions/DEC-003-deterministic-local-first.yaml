@@ -1,0 +1,20 @@
+id: DEC-003
+title: Make simulation deterministic and persistence local-first
+status: active
+date: "2026-09-24"
+applies_to:
+  - global
+context: >-
+  Replay tests, reliable save/load, explainable postmortems, and future scenario
+  authoring require reproducible outcomes without external services.
+decision: >-
+  The same scenario version, seed, initial state, and ordered action log must
+  produce the same outcome. Randomness and time are injected, never read directly
+  by domain code. Campaign and incident data are stored locally with explicit
+  schema and content versions.
+consequences:
+  - Math.random and wall-clock access are prohibited inside the domain engine.
+  - Replays are durable test fixtures and diagnostics.
+  - Save compatibility and migrations must be handled explicitly.
+  - Cloud sync and live service integrations remain outside the current scope.
+supersedes: null

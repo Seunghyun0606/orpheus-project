@@ -1,0 +1,51 @@
+tasks:
+  - id: TASK-001
+    title: Bootstrap the desktop application and quality toolchain
+    role: developer
+    milestone: M1
+    priority: P0
+    status: ready
+    depends_on: []
+    human_gate: false
+
+  - id: TASK-002
+    title: Define the scenario contract and validator
+    role: developer
+    milestone: M1
+    priority: P0
+    status: ready
+    depends_on:
+      - TASK-001
+    human_gate: false
+
+  - id: TASK-003
+    title: Implement the deterministic simulation core
+    role: developer
+    milestone: M1
+    priority: P0
+    status: ready
+    depends_on:
+      - TASK-001
+      - TASK-002
+    human_gate: false
+
+  - id: TASK-004
+    title: Author the INC-001 scenario data
+    role: developer
+    milestone: M1
+    priority: P1
+    status: ready
+    depends_on:
+      - TASK-002
+    human_gate: false
+
+  - id: TASK-005
+    title: Prove INC-001 through headless replay tests
+    role: developer
+    milestone: M1
+    priority: P0
+    status: ready
+    depends_on:
+      - TASK-003
+      - TASK-004
+    human_gate: false

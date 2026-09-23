@@ -1,0 +1,20 @@
+id: M1
+name: Deterministic Incident Foundation
+status: active
+objective: Prove the data-driven architecture with a complete headless run of INC-001 before UI integration.
+entry_criteria:
+  - Product direction, architecture boundaries, and INC-001 requirements are documented.
+exit_criteria:
+  - Tauri, React, TypeScript, and Vite project foundation is runnable with lint, formatting, typecheck, and test commands.
+  - YAML scenario data is parsed and validated against an explicit contract.
+  - A pure TypeScript engine executes actions, advances time, applies temporary effects, and dispatches delayed events without React imports.
+  - INC-001 can reach temporary mitigation and root-cause resolution through data-defined actions.
+  - Identical scenario, seed, and action sequence produce identical replay results in automated tests.
+tasks:
+  - TASK-001
+  - TASK-002
+  - TASK-003
+  - TASK-004
+  - TASK-005
+human_gate:
+  required_on_completion: false

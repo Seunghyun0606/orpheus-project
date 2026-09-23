@@ -1,0 +1,52 @@
+id: TASK-005
+title: Prove INC-001 through headless replay tests
+role: developer
+milestone: M1
+priority: P0
+status: ready
+
+objective: Demonstrate through automated headless runs that INC-001 satisfies M1 exit criteria and remains deterministic.
+why: The milestone is complete only when the architecture and content work together under repeatable verification.
+
+scope:
+  include:
+    - Add a replay fixture for a temporary-mitigation path that demonstrates recurrence.
+    - Add a replay fixture for an investigation and root-cause resolution path.
+    - Assert key signal transitions, elapsed time, delayed events, customer impact, reveals, evidence, and completion state.
+    - Execute each replay more than once with the same seed and compare state and events.
+    - Document the headless replay command and concise fixture-authoring convention.
+    - Run all M1 quality checks and record any gaps as follow-up proposals.
+  exclude:
+    - Desktop UI integration, save/load UI, audio, and visual regression tests.
+    - Expanding the scenario or engine beyond behavior required by approved specs.
+    - Marking later vertical-slice criteria complete.
+
+depends_on:
+  - TASK-003
+  - TASK-004
+specs:
+  - specs/feature/inc-001-vertical-slice.md
+  - specs/feature/incident-simulation.md
+  - specs/architecture/system-architecture.md
+relevant_files:
+  - src/engine/
+  - src/scenario/data/
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - The temporary-mitigation replay proves the specified immediate improvement and 180-second recurrence.
+  - The root-cause replay proves stale-session discovery and durable recovery.
+  - The eligible investigation path emits the UNKNOWN event and persists corrupted-log evidence in state.
+  - Repeated runs with identical inputs produce deeply equal final state and event history.
+  - Scenario validation, unit tests, typecheck, lint, and formatting checks all pass.
+  - M1 exit criteria have objective evidence; unresolved gaps remain open rather than being self-approved.
+verification:
+  - Run both replay fixtures independently and as part of the full test suite.
+  - Run scenario validation, unit tests, typecheck, lint, and formatting checks.
+  - Review engine imports for forbidden UI or platform dependencies.
+
+human_gate: false
+risk: high

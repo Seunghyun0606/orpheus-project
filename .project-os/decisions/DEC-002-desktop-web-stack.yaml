@@ -1,0 +1,18 @@
+id: DEC-002
+title: Use Tauri with React and TypeScript for the desktop client
+status: active
+date: "2026-09-24"
+applies_to:
+  - global
+context: >-
+  The product is centered on terminals, logs, metrics, documents, messages,
+  graphs, and desktop-style panels rather than a 3D world.
+decision: >-
+  Build the desktop application with Tauri, React, TypeScript, and Vite. Use
+  Zustand as the UI adapter/state projection, Zod for runtime schemas, and YAML
+  for authored content.
+consequences:
+  - Web UI tooling can express the dense operations desktop efficiently.
+  - Native capabilities must remain behind Tauri and persistence adapters.
+  - Package versions are chosen at implementation time and pinned by the lockfile.
+supersedes: null

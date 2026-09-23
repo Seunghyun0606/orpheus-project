@@ -1,0 +1,53 @@
+id: TASK-003
+title: Implement the deterministic simulation core
+role: developer
+milestone: M1
+priority: P0
+status: ready
+
+objective: Execute validated incident data as a deterministic, UI-independent state machine.
+why: Action-driven time, temporary mitigation, delayed consequences, and replay are the mechanical foundation of every Incident.
+
+scope:
+  include:
+    - Define incident state, engine command, emitted event, clock, and seeded RNG boundaries.
+    - Evaluate action requirements and apply immediate effects.
+    - Advance action-driven time in deterministic order.
+    - Schedule, expire, and cancel temporary effects and delayed events.
+    - Unlock signals, actions, evidence, and narrative events from declarative conditions.
+    - Record an ordered replay log and expose a pure headless execution API.
+    - Unit test mutations, timing ties, expiration, propagation, and determinism.
+  exclude:
+    - React, Zustand, Tauri, visual UI, sound, and persistence adapters.
+    - Campaign-wide state, player behavior modeling, and ending resolution.
+    - Scenario-specific branches hardcoded for INC-001.
+
+depends_on:
+  - TASK-001
+  - TASK-002
+specs:
+  - specs/feature/incident-simulation.md
+  - specs/architecture/system-architecture.md
+  - specs/architecture/scenario-format.md
+relevant_files:
+  - src/engine/
+  - src/scenario/
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - The domain engine has no React, DOM, Zustand, or Tauri imports.
+  - The same validated scenario, seed, initial state, and actions produce deeply equal state and emitted events.
+  - Action requirements prevent unavailable actions without partially mutating state.
+  - Temporary effects expire and delayed events execute in a documented deterministic order.
+  - Replay logs contain all player inputs required to reproduce the run.
+  - Core simulation behavior is covered by automated unit tests.
+verification:
+  - Run engine unit tests including repeated deterministic execution.
+  - Run an import-boundary check for the engine package.
+  - Run typecheck and lint.
+
+human_gate: false
+risk: high

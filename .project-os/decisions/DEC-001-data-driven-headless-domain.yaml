@@ -1,0 +1,19 @@
+id: DEC-001
+title: Keep authored content data-driven and the domain engine headless
+status: active
+date: "2026-09-24"
+applies_to:
+  - global
+context: >-
+  The game must support many incidents, narrative discoveries, campaign branches,
+  and endings without coupling each content item to a React implementation.
+decision: >-
+  Define Scenario, Narrative, Evidence, Campaign, and Ending content as validated
+  data. Execute it in a pure TypeScript domain layer that has no React, DOM, or
+  Tauri imports. React and Zustand adapt domain commands, state, and events for UI.
+consequences:
+  - Incident and narrative content can be added without scenario-specific UI logic.
+  - The simulation can run in headless tests and replay tooling.
+  - Schema design and validation become required parts of feature delivery.
+  - UI-only shortcuts that mutate simulation state directly are not allowed.
+supersedes: null

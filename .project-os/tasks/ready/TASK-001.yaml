@@ -1,0 +1,46 @@
+id: TASK-001
+title: Bootstrap the desktop application and quality toolchain
+role: developer
+milestone: M1
+priority: P0
+status: ready
+
+objective: Create the smallest runnable Tauri, React, TypeScript, and Vite foundation with repeatable quality commands.
+why: Every M1 implementation and verification task needs a stable application, package, and test foundation.
+
+scope:
+  include:
+    - Initialize the desktop and web application structure in the repository.
+    - Configure TypeScript strict checking and the selected test runner.
+    - Add scripts for development, build, lint, formatting check, typecheck, tests, and scenario validation placeholder wiring.
+    - Render a minimal application shell that proves the Tauri and React boundary works.
+    - Add a concise README quick start for the new commands.
+  exclude:
+    - Simulation, scenario, narrative, persistence, or production UI feature implementation.
+    - Final visual styling or operations desktop layout.
+    - Cloud services, analytics, release signing, and deployment automation.
+
+depends_on: []
+specs:
+  - specs/architecture/system-architecture.md
+  - specs/ux/operations-desktop.md
+relevant_files:
+  - PROJECT.md
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-002-desktop-web-stack.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - A clean checkout can install dependencies with the documented package-manager command.
+  - The React application runs inside the Tauri desktop shell and shows a minimal Orpheus shell.
+  - Build, lint, formatting check, typecheck, and unit-test commands exist and pass.
+  - Source boundaries provide an engine location that does not import React or Tauri.
+  - No gameplay feature beyond the bootstrap shell is implemented.
+verification:
+  - Run the documented clean dependency installation.
+  - Run build, lint, formatting check, typecheck, and unit-test scripts.
+  - Start the Tauri development application and confirm the shell renders without console errors.
+
+human_gate: false
+risk: medium

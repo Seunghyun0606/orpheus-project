@@ -1,0 +1,14 @@
+id: M5
+name: Full Campaign and Release Readiness
+status: planned
+objective: Expand the proven systems into the complete nine-act campaign and prepare a stable desktop release.
+entry_criteria:
+  - M4 campaign systems are complete and tested.
+exit_criteria:
+  - The nine-act campaign contains the intended 24 to 28 incidents and preserves all required reveal beats.
+  - Supported endings resolve from accumulated behavior and campaign state without a labeled true ending.
+  - Performance, persistence, accessibility, audio, packaging, and regression quality gates pass on target desktop platforms.
+  - Release documentation and scenario-authoring guidance are complete.
+tasks: []
+human_gate:
+  required_on_completion: true
