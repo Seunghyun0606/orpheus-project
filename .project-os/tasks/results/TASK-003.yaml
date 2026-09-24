@@ -1,0 +1,52 @@
+task: TASK-003
+status: pass
+summary: Implemented a pure deterministic incident state machine with explicit clock
+  and seeded RNG boundaries, immutable command execution, action-driven scheduling,
+  reactive condition propagation, ordered replay logs, and headless tests.
+files_changed:
+- README.md
+- src/engine/index.ts
+- src/engine/types.ts
+- src/engine/clock.ts
+- src/engine/rng.ts
+- src/engine/simulation.ts
+- src/engine/simulation.test.ts
+verification:
+  acceptance:
+    status: pass
+    detail: All six TASK-003 acceptance criteria are covered by implementation, unit
+      tests, import-boundary checks, and deterministic replay assertions.
+  engine_tests:
+    status: pass
+    detail: Eight engine tests cover mutations, atomic rejection, expiration ties,
+      conditional and explicit cancellation, resource changes, propagation, replay
+      determinism, and seeded RNG draws.
+  full_tests:
+    status: pass
+    detail: Vitest passed 16 of 16 tests across 3 test files.
+  lint:
+    status: pass
+    detail: ESLint passed with zero warnings and enforces the engine import boundary.
+  typecheck:
+    status: pass
+    detail: Strict TypeScript typecheck passed.
+  build:
+    status: pass
+    detail: Web production build and native Tauri no-bundle build both passed.
+  format:
+    status: pass
+    detail: Prettier check passed.
+evidence:
+- Failed commands return the original state object and no emitted events.
+- Scheduled work is ordered by due time, temporary expiration before timer event,
+  then insertion sequence.
+- Conditional events, narratives, resolution, and completion settle to a fixed point
+  after effect batches.
+- Replay state records every accepted command including target and scalar input payloads.
+- Engine sources contain no React, DOM, Zustand, Tauri, wall-clock, or Math.random
+  usage.
+followups: []
+commit: null
+kind: implementation
+role: developer
+actor: codex-developer

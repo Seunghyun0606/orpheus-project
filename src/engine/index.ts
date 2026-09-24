@@ -1,6 +1,39 @@
-/**
- * Public entry point for the pure TypeScript domain layer.
- *
- * Gameplay behavior is intentionally absent until the simulation tasks begin.
- */
-export const ENGINE_BOUNDARY = 'headless' as const;
+export { actionDrivenClock } from './clock.ts';
+export { createSeededRngState, drawRandom, seededRng } from './rng.ts';
+export {
+  cloneIncidentState,
+  createIncidentState,
+  defaultEngineDependencies,
+  evaluateCondition,
+  executeCommand,
+  getAvailableActionIds,
+  getUnmetActionRequirements,
+  replayCommands,
+} from './simulation.ts';
+export type {
+  CommandFailure,
+  CommandFailureCode,
+  CommandResult,
+  CommandSuccess,
+  CreateIncidentOptions,
+  EngineCommand,
+  EngineDependencies,
+  EngineEvent,
+  EngineEventType,
+  IncidentInitialStateOverride,
+  IncidentState,
+  PerformActionCommand,
+  ReplayEntry,
+  ReplayFailure,
+  ReplayResult,
+  ReplaySuccess,
+  RuntimeResource,
+  RuntimeSignal,
+  ScalarValue,
+  ScheduledTimerEvent,
+  ScheduledTemporaryExpiration,
+  ScheduledWork,
+  SeededRng,
+  SeededRngState,
+  SimulationClock,
+} from './types.ts';

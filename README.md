@@ -53,3 +53,14 @@ produces a non-zero exit code.
   rejected by ESLint here.
 - `src/scenario`: versioned Zod contract, YAML parser, reference validator, and validation CLI.
 - `src-tauri`: native desktop entry point and configuration.
+
+## Deterministic simulation order
+
+The headless engine applies an accepted action's costs, immediate effects, and temporary-effect
+starts at the current simulation time, then advances the action-driven clock. Scheduled work runs
+in ascending due-time order. At the same timestamp, temporary effects expire before timer events;
+items of the same kind retain their scheduling order. Each effect batch settles conditional events,
+narratives, resolution, and completion to a fixed point before time continues.
+
+Only accepted player commands enter the ordered replay log. Replaying the same validated scenario,
+seed, initial state, and command list produces deeply equal state and emitted events.
