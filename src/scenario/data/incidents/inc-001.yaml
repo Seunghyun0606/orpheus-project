@@ -1,0 +1,361 @@
+schemaVersion: 1
+contentVersion: 1.0.0
+id: INC-001
+title: Connection Saturation
+act: 1
+severity: SEV1
+
+services:
+  - id: GATEWAY
+    name: Gateway
+    dependsOn: [PAYMENT_API]
+  - id: PAYMENT_API
+    name: Payment API
+    dependsOn: [POSTGRESQL]
+  - id: POSTGRESQL
+    name: PostgreSQL
+
+initialState:
+  signals:
+    - id: API_ERROR_RATE
+      value: 31
+      revealed: true
+      serviceId: PAYMENT_API
+    - id: DB_CONNECTIONS
+      value: 498
+      revealed: true
+      serviceId: POSTGRESQL
+    - id: DB_CONNECTION_LIMIT
+      value: 500
+      revealed: true
+      serviceId: POSTGRESQL
+    - id: DB_CPU
+      value: 41
+      revealed: true
+      serviceId: POSTGRESQL
+    - id: API_CPU
+      value: 67
+      revealed: true
+      serviceId: PAYMENT_API
+    - id: PAGER_SERVICE
+      value: Payment API
+      revealed: true
+      serviceId: PAYMENT_API
+    - id: PAGER_THRESHOLD
+      value: Error Rate > 20%
+      revealed: true
+      serviceId: PAYMENT_API
+    - id: STALE_SESSION_COUNT
+      value: 164
+      serviceId: POSTGRESQL
+    - id: STALE_SESSION_STATE
+      value: idle in transaction
+      serviceId: POSTGRESQL
+    - id: STALE_SESSION_AVERAGE_AGE
+      value: 47m
+      serviceId: POSTGRESQL
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_RESOLVED
+      value: false
+
+incident:
+  trigger:
+    id: CONNECTION_LIMIT_REACHED
+    label: PostgreSQL connection pool approaches its configured limit
+    description: Payment requests begin failing as the pool reaches 498 of 500 connections.
+  contributingFactors:
+    - id: MISSING_TRANSACTION_CLEANUP
+      label: Transaction cleanup is incomplete
+      description: Abandoned transactions are not releasing their database sessions.
+  failureMechanisms:
+    - id: STALE_SESSION_POOL
+      label: Idle transactions retain database connections
+      description: Long-lived idle-in-transaction sessions exhaust the available connection pool.
+  symptoms:
+    - id: PAYMENT_ERRORS
+      label: Payment API errors exceed the pager threshold
+    - id: CONNECTION_SATURATION
+      label: PostgreSQL connections are at capacity
+  amplifiers:
+    - id: CLIENT_RETRIES
+      label: Client retries add connection pressure
+
+actions:
+  - id: OPEN_LOGS
+    title: Open Payment API logs
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+    effects:
+      - type: unlock_action
+        actionId: COMMUNICATE_STATUS
+
+  - id: OPEN_METRICS
+    title: Open service metrics
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+
+  - id: RESTART_API
+    title: Restart Payment API
+    category: MITIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - resourceId: OPERATIONAL_RISK
+        amount: 8
+    effects:
+      - type: schedule_event
+        eventId: CONNECTION_SATURATION_RECURS
+    temporaryEffects:
+      - id: RESTART_RECOVERY_WINDOW
+        durationSeconds: 180
+        apply:
+          - type: set_signal
+            signalId: API_ERROR_RATE
+            value: 3
+          - type: set_signal
+            signalId: DB_CONNECTIONS
+            value: 310
+
+  - id: SCALE_API
+    title: Scale Payment API
+    category: MITIGATE
+    durationSeconds: 120
+    initiallyAvailable: true
+    costs:
+      - resourceId: COST
+        amount: 250
+      - resourceId: CUSTOMER_IMPACT
+        amount: 24
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    temporaryEffects:
+      - id: SCALE_PARTIAL_RELIEF
+        durationSeconds: 240
+        apply:
+          - type: set_signal
+            signalId: API_ERROR_RATE
+            value: 19
+          - type: set_signal
+            signalId: API_CPU
+            value: 46
+        expire:
+          - type: set_signal
+            signalId: API_ERROR_RATE
+            value: 31
+          - type: set_signal
+            signalId: API_CPU
+            value: 67
+
+  - id: ROLLBACK
+    title: Roll back the latest Payment API deployment
+    category: MODIFY
+    durationSeconds: 180
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 42
+      - resourceId: OPERATIONAL_RISK
+        amount: 12
+    temporaryEffects:
+      - id: ROLLBACK_PARTIAL_RELIEF
+        durationSeconds: 120
+        apply:
+          - type: set_signal
+            signalId: API_ERROR_RATE
+            value: 24
+          - type: set_signal
+            signalId: DB_CONNECTIONS
+            value: 472
+        expire:
+          - type: set_signal
+            signalId: API_ERROR_RATE
+            value: 31
+          - type: set_signal
+            signalId: DB_CONNECTIONS
+            value: 498
+
+  - id: INSPECT_DB
+    title: Inspect PostgreSQL
+    category: DIAGNOSE
+    durationSeconds: 60
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 24
+    effects:
+      - type: unlock_action
+        actionId: INSPECT_SESSIONS
+
+  - id: INSPECT_SESSIONS
+    title: Inspect database sessions
+    category: INVESTIGATE
+    durationSeconds: 90
+    requirements:
+      - type: action_completed
+        actionId: INSPECT_DB
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 36
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: reveal_signal
+        signalId: STALE_SESSION_COUNT
+      - type: reveal_signal
+        signalId: STALE_SESSION_STATE
+      - type: reveal_signal
+        signalId: STALE_SESSION_AVERAGE_AGE
+      - type: unlock_action
+        actionId: TERMINATE_STALE_SESSIONS
+
+  - id: TERMINATE_STALE_SESSIONS
+    title: Terminate stale database sessions
+    category: MODIFY
+    durationSeconds: 120
+    requirements:
+      - type: signal_revealed
+        signalId: STALE_SESSION_COUNT
+      - type: signal_revealed
+        signalId: STALE_SESSION_STATE
+      - type: signal_revealed
+        signalId: STALE_SESSION_AVERAGE_AGE
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - type: resolve_mechanism
+        mechanismId: STALE_SESSION_POOL
+      - type: set_flag
+        flagId: ROOT_CAUSE_RESOLVED
+        value: true
+      - type: set_signal
+        signalId: DB_CONNECTIONS
+        value: 112
+      - type: set_signal
+        signalId: API_ERROR_RATE
+        value: 0.2
+
+  - id: COMMUNICATE_STATUS
+    title: Send a customer-impact status update
+    category: COMMUNICATE
+    durationSeconds: 45
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+
+events:
+  - id: CONNECTION_SATURATION_RECURS
+    type: timer
+    delaySeconds: 180
+    targetServiceId: POSTGRESQL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: STALE_SESSION_POOL
+    effects:
+      - type: set_signal
+        signalId: DB_CONNECTIONS
+        value: 499
+      - type: set_signal
+        signalId: API_ERROR_RATE
+        value: 28
+
+evidence:
+  - id: CORRUPTED_LOG_ENTRY
+    title: Corrupted log entry
+    description: A transient UNKNOWN message recovered from the incident log buffer.
+    sourceNarrativeId: UNKNOWN_GOOD
+
+narratives:
+  - id: UNKNOWN_GOOD
+    title: Transient log message
+    body: '02:23:11 / UNKNOWN: Good.'
+    conditions:
+      - type: action_completed
+        actionId: OPEN_LOGS
+      - type: action_completed
+        actionId: INSPECT_SESSIONS
+      - type: mechanism_resolved
+        mechanismId: STALE_SESSION_POOL
+    effects:
+      - type: reveal_evidence
+        evidenceId: CORRUPTED_LOG_ENTRY
+
+resolution:
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: STALE_SESSION_POOL
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_RESOLVED
+      value: true
+
+completion:
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_RESOLVED
+      value: true
+    - type: signal
+      signalId: API_ERROR_RATE
+      operator: lte
+      value: 0.2
+
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Service recovery time
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final Payment API error rate
+      source: signal
+      refId: API_ERROR_RATE
+    - id: CUSTOMER_DAMAGE
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: OPERATIONAL_EXPOSURE
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: RESTART_COUNT
+      label: API restart count
+      source: action_count
+      refId: RESTART_API
+    - id: SCALE_COUNT
+      label: API scale count
+      source: action_count
+      refId: SCALE_API
+    - id: ROLLBACK_COUNT
+      label: Rollback count
+      source: action_count
+      refId: ROLLBACK
+    - id: COMMUNICATION_COUNT
+      label: Status update count
+      source: action_count
+      refId: COMMUNICATE_STATUS

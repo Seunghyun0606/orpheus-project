@@ -1,0 +1,48 @@
+task: TASK-004
+status: pass
+summary: Authored the complete validated INC-001 scenario as data, including the service
+  graph, exact initial signals, required action paths, temporary restart recovery,
+  conditional recurrence, root-cause resolution, conditional UNKNOWN evidence hook,
+  completion conditions, and postmortem inputs.
+files_changed:
+- src/scenario/data/incidents/inc-001.yaml
+- src/scenario/inc-001-data.test.ts
+verification:
+  acceptance:
+    status: pass
+    detail: All five TASK-004 acceptance criteria are covered by validated authored
+      data, focused parser assertions, and a production TypeScript source scan.
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios validated INC-001 with no diagnostics or unresolved
+      references.
+  focused_tests:
+    status: pass
+    detail: Five focused tests inspect services, initial signals, action availability,
+      recurrence, resolution, Narrative evidence, completion, postmortem inputs, and
+      prohibited later-story names.
+  full_tests:
+    status: pass
+    detail: Vitest passed 21 of 21 tests across 4 test files.
+  production_source_scan:
+    status: pass
+    detail: No non-test TypeScript or TSX source contains INC-001 or equivalent scenario-specific
+      identifiers.
+  lint: pass
+  typecheck: pass
+  format: pass
+  build: pass
+evidence:
+- Restart recovery sets error rate to 3 and connections to 310, then schedules conditional
+  recurrence to 28 and 499 at 180 seconds.
+- Session inspection reveals 164 idle-in-transaction sessions with an average age
+  of 47 minutes and unlocks the root-cause action.
+- Terminating stale sessions resolves the mechanism and restores connections to 112
+  and error rate to 0.2 percent.
+- The UNKNOWN message requires the investigation and log path and persists only the
+  CORRUPTED_LOG_ENTRY evidence.
+followups: []
+commit: null
+kind: implementation
+role: developer
+actor: codex-developer
