@@ -1,8 +1,9 @@
 # Orpheus
 
 Orpheus is a desktop narrative techno-thriller built with Tauri, React, and TypeScript.
-The repository currently contains the application and quality-tooling foundation; gameplay
-systems and authored scenarios are intentionally introduced by later tasks.
+The repository contains the desktop foundation, validated scenario data, and a deterministic
+headless incident engine. INC-001 is covered by authored-data and replay verification while UI
+integration remains a later milestone.
 
 ## Prerequisites
 
@@ -31,6 +32,7 @@ npm run lint
 npm run format:check
 npm run typecheck
 npm test
+npm run test:replays
 npm run validate:scenarios
 ```
 
@@ -64,3 +66,22 @@ narratives, resolution, and completion to a fixed point before time continues.
 
 Only accepted player commands enter the ordered replay log. Replaying the same validated scenario,
 seed, initial state, and command list produces deeply equal state and emitted events.
+
+## Headless replay fixtures
+
+Run both INC-001 replay paths without the UI:
+
+```sh
+npm run test:replays
+```
+
+To run one path independently, filter by its test name:
+
+```sh
+npm run test:replays -- -t "temporary mitigation"
+npm run test:replays -- -t "root-cause resolution"
+```
+
+Replay fixtures live in `src/tests/fixtures` and contain only a stable fixture id, seed, and ordered
+engine commands. Keep outcome assertions in the adjacent replay test so fixture inputs remain concise,
+serializable, and reusable by future replay tooling.

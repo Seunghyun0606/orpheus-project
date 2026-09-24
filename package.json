@@ -18,6 +18,7 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:replays": "vitest run src/tests/inc-001-replay.test.ts",
     "test:watch": "vitest",
     "validate:scenarios": "node scripts/validate-scenarios.mjs",
     "tauri": "tauri"

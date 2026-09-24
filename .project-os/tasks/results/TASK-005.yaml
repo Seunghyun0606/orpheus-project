@@ -1,0 +1,64 @@
+task: TASK-005
+status: pass
+summary: Added reusable INC-001 replay fixtures and headless integration tests that
+  prove temporary restart recovery and 180-second recurrence, investigation and durable
+  root-cause recovery, conditional UNKNOWN evidence, completion, customer impact,
+  and deterministic repeated execution.
+files_changed:
+- package.json
+- README.md
+- src/tests/fixtures/inc-001-replays.ts
+- src/tests/inc-001-replay.test.ts
+verification:
+  acceptance:
+    status: pass
+    detail: Both approved replay paths have explicit assertions for signal transitions,
+      elapsed time, delayed events, customer impact, investigation reveals, narrative
+      evidence, resolution, and completion.
+  temporary_mitigation:
+    status: pass
+    detail: The fixture proves immediate recovery to 3 percent errors and 310 connections
+      at time zero, then recurrence to 28 percent and 499 connections through CONNECTION_SATURATION_RECURS
+      at 180 seconds.
+  root_cause_resolution:
+    status: pass
+    detail: The fixture reveals 164 idle-in-transaction sessions averaging 47 minutes,
+      resolves STALE_SESSION_POOL, and remains recovered at 0.2 percent errors and
+      112 connections with no scheduled work.
+  narrative_evidence:
+    status: pass
+    detail: The eligible investigation path triggers UNKNOWN_GOOD and persists CORRUPTED_LOG_ENTRY
+      in incident state before completion.
+  determinism:
+    status: pass
+    detail: Each fixture executes twice with the same scenario, seed, and ordered
+      commands; both final state and emitted events are deeply equal.
+  focused_replays:
+    status: pass
+    detail: Both replay cases pass together and independently through npm run test:replays
+      with test-name filters.
+  full_tests:
+    status: pass
+    detail: Vitest passed 23 of 23 tests across 5 test files.
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios validated the authored scenario without diagnostics.
+  engine_boundary:
+    status: pass
+    detail: The engine source scan found no React, Zustand, Tauri, DOM, wall-clock,
+      or ambient-random dependency.
+  milestone_evidence:
+    status: pass
+    detail: M1 now has objective automated evidence for the runnable foundation, validated
+      YAML contract, pure deterministic engine, data-defined mitigation and root-cause
+      paths, and identical replay outputs; no unresolved M1 gap was found.
+  build: pass
+  desktop_build: pass
+  lint: pass
+  typecheck: pass
+  format: pass
+followups: []
+commit: null
+kind: implementation
+role: developer
+actor: codex-developer

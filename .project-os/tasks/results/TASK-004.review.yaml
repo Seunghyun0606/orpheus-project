@@ -1,0 +1,43 @@
+task: TASK-004
+status: pass
+summary: Independent review found no blocking correctness, scope, data-contract, narrative-boundary,
+  or maintainability issues in the authored INC-001 scenario.
+files_changed: []
+verification:
+  scenario_contract:
+    status: pass
+    detail: The authored YAML parses through the versioned schema and all service,
+      signal, resource, action, event, mechanism, evidence, and narrative references
+      resolve.
+  required_path:
+    status: pass
+    detail: Initial observations, database investigation, stale-session discovery,
+      temporary restart recovery, conditional recurrence, and root-cause termination
+      are represented declaratively.
+  exact_outcomes:
+    status: pass
+    detail: Initial 31 percent error rate and 498 of 500 connections, restart recovery
+      to 3 percent and 310, recurrence to 28 percent and 499 after 180 seconds, and
+      resolution to 0.2 percent and 112 match the feature spec.
+  narrative_boundary:
+    status: pass
+    detail: UNKNOWN_GOOD requires the log and session investigation path plus mechanism
+      resolution, reveals only CORRUPTED_LOG_ENTRY, and contains no NULL or ORPHEUS
+      disclosure.
+  engine_boundary:
+    status: pass
+    detail: A production TypeScript and TSX scan found no INC-001 or equivalent scenario-specific
+      identifiers.
+  scope:
+    status: pass
+    detail: The change is limited to INC-001 authored data, focused parser assertions,
+      and Project OS evidence.
+review:
+  findings: []
+  residual_risk: low
+critical_issues: 0
+followups: []
+commit: null
+kind: review
+role: reviewer
+actor: codex-reviewer

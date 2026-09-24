@@ -1,0 +1,41 @@
+task: TASK-005
+status: pass
+summary: Acceptance QA confirms objective headless evidence for both INC-001 paths,
+  narrative evidence persistence, deterministic replay, all required quality commands,
+  and every M1 exit criterion.
+files_changed: []
+verification:
+  temporary_mitigation:
+    status: pass
+    detail: Immediate values are 3 percent errors and 310 connections; CONNECTION_SATURATION_RECURS
+      fires at 180 seconds and sets 28 percent errors and 499 connections.
+  root_cause_resolution:
+    status: pass
+    detail: Investigation reveals 164 idle-in-transaction sessions averaging 47 minutes
+      before durable recovery to 0.2 percent errors and 112 connections.
+  narrative_evidence:
+    status: pass
+    detail: The eligible path emits UNKNOWN_GOOD and retains CORRUPTED_LOG_ENTRY in
+      final state while resolution and completion are true.
+  deterministic_replay:
+    status: pass
+    detail: Repeated executions of each fixture with identical validated scenario,
+      seed, and command sequence yield deeply equal final state and events.
+  customer_impact:
+    status: pass
+    detail: The temporary and resolution paths assert action-derived customer impact
+      totals of 56 and 82 respectively.
+  quality_commands:
+    status: pass
+    detail: Scenario validation, focused and full tests, lint, typecheck, formatting,
+      web build, desktop build, and engine boundary scan all pass.
+  milestone_exit:
+    status: pass
+    detail: Each M1 exit criterion has implementation plus automated evidence from
+      TASK-001 through TASK-005; no unresolved M1 gap remains to carry forward.
+critical_issues: 0
+followups: []
+commit: null
+kind: qa
+role: qa
+actor: codex-qa

@@ -1,0 +1,33 @@
+task: TASK-004
+status: pass
+summary: Acceptance QA confirmed that INC-001 is valid, matches the specified initial
+  state and outcomes, expresses the full required path as data, preserves the narrative
+  boundary, and introduces no scenario-specific production code.
+files_changed: []
+verification:
+  valid_scenario:
+    status: pass
+    detail: Scenario validation completed with no warnings, schema failures, duplicate
+      ids, or unresolved references.
+  initial_state:
+    status: pass
+    detail: Gateway to Payment API to PostgreSQL, SEV1 pager context, exact initial
+      signals, and customer-impact state match the vertical-slice specification.
+  incident_path:
+    status: pass
+    detail: Restart, 180-second conditional recurrence, session inspection, stale-session
+      termination, final recovery, completion, and postmortem inputs are all authored
+      in YAML.
+  narrative_evidence:
+    status: pass
+    detail: The conditional UNKNOWN message and persistent CORRUPTED_LOG_ENTRY evidence
+      are present without post-MVP names or disclosures.
+  architecture_guard:
+    status: pass
+    detail: Production TypeScript and TSX contain no INC-001-specific branch or identifier.
+critical_issues: 0
+followups: []
+commit: null
+kind: qa
+role: qa
+actor: codex-qa
