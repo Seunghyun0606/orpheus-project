@@ -1,0 +1,25 @@
+task: TASK-006
+status: pass
+summary: The focused incident-session tests and the complete automated quality suite
+  pass against the authored INC-001 scenario.
+files_changed: []
+verification:
+  focused_store_tests:
+    status: pass
+    detail: Four adapter tests cover initial projections, engine-routed unlocks and
+      reveals, atomic command rejection, and deterministic restart.
+  full_tests:
+    status: pass
+    detail: Vitest passed 27 of 27 tests across 6 test files.
+  scenario_validation:
+    status: pass
+    detail: Scenario validation passed for the single authored INC-001 YAML file.
+  typecheck: pass
+  lint: pass
+  format: pass
+  web_build: pass
+followups: []
+commit: 7d615cd987b19fb12ee9033efb0ee67842cfe98d
+kind: test
+role: qa
+actor: codex-qa

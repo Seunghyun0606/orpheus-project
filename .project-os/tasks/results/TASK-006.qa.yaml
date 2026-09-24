@@ -1,0 +1,36 @@
+task: TASK-006
+status: pass
+summary: Acceptance QA confirms the browser adapter loads validated authored content,
+  exposes current projections, preserves rejected-command errors, and restarts deterministically.
+files_changed: []
+verification:
+  browser_yaml_loading:
+    status: pass
+    detail: The production web build transforms the raw INC-001 YAML import and completes
+      successfully.
+  initial_session:
+    status: pass
+    detail: A fresh seeded session exposes the deterministic initial state and exactly
+      the six initially available actions.
+  action_progression:
+    status: pass
+    detail: INSPECT_DB and INSPECT_SESSIONS progress only through executeCommand and
+      reveal stale-session signals plus the root-cause action.
+  rejected_command:
+    status: pass
+    detail: Executing the locked root-cause action leaves IncidentState deeply equal
+      and exposes ACTION_LOCKED with a message.
+  restart:
+    status: pass
+    detail: Restarting after mutation with the original seed restores a deeply equal
+      initial state and clears the error projection.
+  quality_commands:
+    status: pass
+    detail: Scenario validation, all tests, typecheck, lint, formatting check, diff
+      check, and web build passed.
+critical_issues: 0
+followups: []
+commit: 7d615cd987b19fb12ee9033efb0ee67842cfe98d
+kind: qa
+role: qa
+actor: codex-qa

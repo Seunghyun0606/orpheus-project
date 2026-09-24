@@ -1,0 +1,35 @@
+task: TASK-006
+status: pass
+summary: Code review found no blocking correctness, architecture-boundary, determinism,
+  browser-safety, or scope issues in the incident session adapter.
+files_changed: []
+verification:
+  authored_content:
+    status: pass
+    detail: The browser loader imports inc-001.yaml as raw source and validates it
+      through parseScenarioYaml without duplicating scenario values.
+  engine_boundary:
+    status: pass
+    detail: All authoritative transitions are delegated to createIncidentState and
+      executeCommand; the store contains projection and session orchestration only.
+  browser_safety:
+    status: pass
+    detail: The adapter uses Zustand vanilla and Vite raw imports with no React, DOM,
+      platform, wall-clock, timer, or ambient-random dependency.
+  command_atomicity:
+    status: pass
+    detail: Failed commands retain the prior IncidentState and expose a typed error
+      projection for UI feedback.
+  deterministic_restart:
+    status: pass
+    detail: Restart reconstructs state from the validated scenario and retained or
+      supplied seed and clears transient error state.
+review:
+  findings: []
+  residual_risk: low
+critical_issues: 0
+followups: []
+commit: 7d615cd987b19fb12ee9033efb0ee67842cfe98d
+kind: review
+role: reviewer
+actor: codex-reviewer

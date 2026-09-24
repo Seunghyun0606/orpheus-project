@@ -10,6 +10,10 @@ files_changed:
 - src/store/incident-session.ts
 - src/store/incident-session.test.ts
 verification:
+  acceptance:
+    status: pass
+    detail: All six TASK-006 acceptance criteria are covered by focused adapter tests,
+      source review, scenario validation, and the web production build.
   authored_content:
     status: pass
     detail: The browser module imports inc-001.yaml as source and parses it through
@@ -39,7 +43,7 @@ verification:
   format: pass
   build: pass
 followups: []
-commit: null
+commit: 7d615cd987b19fb12ee9033efb0ee67842cfe98d
 kind: implementation
 role: developer
 actor: codex-developer
