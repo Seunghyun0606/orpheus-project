@@ -1,0 +1,46 @@
+id: TASK-009
+title: Generate the action-derived INC-001 postmortem
+role: developer
+milestone: M2
+priority: P1
+status: ready
+
+objective: End the playable incident with an explainable postmortem derived from scenario scoring inputs and the actual action log.
+why: The player must understand the causal trade-offs of their response without being reduced to a correct-or-incorrect grade.
+
+scope:
+  include:
+    - Compute all data-authored INC-001 postmortem inputs from authoritative incident state.
+    - Present recovery time, root-cause handling, customer impact, operational risk, action counts, and communication.
+    - Explain temporary mitigation and unnecessary actions from recorded events and commands.
+    - Transition from completed Incident to a dedicated postmortem view.
+    - Add deterministic tests for restart-first and investigation-first paths.
+  exclude:
+    - Global player grading, ending resolution, campaign-wide behavior modeling, and editorial right-or-wrong labels.
+
+depends_on:
+  - TASK-007
+  - TASK-008
+specs:
+  - specs/feature/inc-001-vertical-slice.md
+  - specs/feature/incident-simulation.md
+  - specs/ux/operations-desktop.md
+relevant_files:
+  - src/engine/
+  - src/store/
+  - src/app/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - Every configured postmortem scoring input resolves from elapsed time, signals, resources, or action history.
+  - Restart-first and investigation-first paths produce different but explainable summaries.
+  - The postmortem reports customer impact and operational risk without a binary grade.
+  - Computation is deterministic and independent of rendered UI state.
+verification:
+  - Run focused postmortem calculation tests and component tests for both approved paths.
+  - Run scenario validation and the full quality command set.
+
+human_gate: false
+risk: medium

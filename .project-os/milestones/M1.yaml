@@ -1,6 +1,6 @@
 id: M1
 name: Deterministic Incident Foundation
-status: active
+status: completed
 objective: Prove the data-driven architecture with a complete headless run of INC-001 before UI integration.
 entry_criteria:
   - Product direction, architecture boundaries, and INC-001 requirements are documented.

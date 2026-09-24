@@ -1,0 +1,48 @@
+id: TASK-007
+title: Build the playable operations desktop
+role: developer
+milestone: M2
+priority: P0
+status: ready
+
+objective: Make INC-001 playable from its Pager alert through root-cause recovery in the operations desktop.
+why: M2 must turn the headless proof into a legible desktop investigation and response loop.
+
+scope:
+  include:
+    - Render the Incident header, severity, elapsed time, customer impact, and recovery state.
+    - Render the Gateway to Payment API to PostgreSQL service path with non-color status cues.
+    - Provide logs, metrics, database investigation, status, and action views driven by scenario and session projections.
+    - Show action duration, requirements, category, and observable results without right-or-wrong labels.
+    - Support keyboard navigation for core actions.
+    - Add component tests for the mitigation, recurrence, investigation, and recovery paths.
+  exclude:
+    - Persistence, Evidence Board, postmortem scoring, audio, and campaign screens.
+    - Scenario-specific state mutation in React components.
+
+depends_on:
+  - TASK-006
+specs:
+  - specs/ux/operations-desktop.md
+  - specs/feature/inc-001-vertical-slice.md
+  - specs/feature/incident-simulation.md
+relevant_files:
+  - src/app/
+  - src/store/
+  - src/ui/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-002-desktop-web-stack.yaml
+
+acceptance:
+  - A player can complete INC-001 through the rendered desktop using only unlocked actions.
+  - Logs, metrics, database discoveries, customer impact, temporary recovery, and recurrence are legible.
+  - The interface distinguishes temporary recovery from root-cause resolution without success or failure badges.
+  - Core incident actions are keyboard accessible and status does not rely on color alone.
+  - Automated UI tests cover the approved temporary-mitigation and root-cause paths.
+verification:
+  - Run component tests for initial, mitigation, recurrence, investigation, and completion states.
+  - Run the full quality command set and a desktop build.
+
+human_gate: false
+risk: high

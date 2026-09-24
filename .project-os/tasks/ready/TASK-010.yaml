@@ -1,0 +1,49 @@
+id: TASK-010
+title: Complete accessibility and vertical-slice verification
+role: developer
+milestone: M2
+priority: P0
+status: ready
+
+objective: Close M2 with adjustable presentation, non-color cues, and objective end-to-end evidence for the complete desktop session.
+why: The final slice must preserve the terminal atmosphere without sacrificing accessibility or relying on self-assessed completeness.
+
+scope:
+  include:
+    - Add controls for CRT effects, reduced animation, and text scaling with local persistence.
+    - Audit status presentation for text or shape cues in addition to color.
+    - Verify keyboard navigation across the complete incident, evidence, save/load, and postmortem flow.
+    - Add an end-to-end component-level vertical-slice test and document the desktop run path.
+    - Run and record all M2 quality checks against every milestone exit criterion.
+  exclude:
+    - Screen-reader certification, localization, audio settings, and later-campaign accessibility work.
+
+depends_on:
+  - TASK-007
+  - TASK-008
+  - TASK-009
+specs:
+  - specs/ux/operations-desktop.md
+  - specs/feature/inc-001-vertical-slice.md
+relevant_files:
+  - src/app/
+  - src/ui/
+  - src/tests/
+  - README.md
+active_decisions:
+  - .project-os/decisions/DEC-002-desktop-web-stack.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - CRT effects can be disabled, reduced animation can be enabled, and text scale can be changed without hiding content.
+  - Critical, warning, recovery, and resolved states are distinguishable without color.
+  - The complete Pager-to-postmortem flow is keyboard operable and covered by an automated integration test.
+  - Save/load within the complete flow preserves UNKNOWN evidence.
+  - Scenario validation, unit and integration tests, typecheck, lint, formatting, web build, and desktop build pass.
+  - Every M2 exit criterion has objective evidence and no critical review finding remains.
+verification:
+  - Run accessibility-oriented component assertions and the complete vertical-slice test.
+  - Run every quality command plus independent review and acceptance QA.
+
+human_gate: false
+risk: high

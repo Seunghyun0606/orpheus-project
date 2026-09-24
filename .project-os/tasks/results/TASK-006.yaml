@@ -1,0 +1,45 @@
+task: TASK-006
+status: pass
+summary: Added a browser-safe validated loader for the authored INC-001 YAML and a
+  Zustand vanilla incident session that delegates all state transitions to the deterministic
+  engine, exposes available-action and revealed-signal projections, preserves command
+  errors, and supports deterministic restart.
+files_changed:
+- src/scenario/inc-001.ts
+- src/scenario/index.ts
+- src/store/incident-session.ts
+- src/store/incident-session.test.ts
+verification:
+  authored_content:
+    status: pass
+    detail: The browser module imports inc-001.yaml as source and parses it through
+      the existing scenario validator; no scenario values are duplicated in TypeScript.
+  engine_boundary:
+    status: pass
+    detail: The store constructs incident state and sends perform_action commands
+      through engine exports; source scans found no copied signal, resource, effect,
+      or mechanism rules.
+  projections:
+    status: pass
+    detail: Automated tests prove the initial available actions, INSPECT_SESSIONS
+      unlock, stale-session signal reveals, and TERMINATE_STALE_SESSIONS unlock.
+  command_failure:
+    status: pass
+    detail: A locked action leaves authoritative incident state deeply equal and exposes
+      ACTION_LOCKED with its message.
+  deterministic_restart:
+    status: pass
+    detail: Restarting after a mutation with the original seed restores a deeply equal
+      initial IncidentState and clears prior error state.
+  scenario_validation: pass
+  focused_tests: pass
+  full_tests: pass
+  typecheck: pass
+  lint: pass
+  format: pass
+  build: pass
+followups: []
+commit: null
+kind: implementation
+role: developer
+actor: codex-developer

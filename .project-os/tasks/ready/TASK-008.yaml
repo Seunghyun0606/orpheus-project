@@ -1,0 +1,48 @@
+id: TASK-008
+title: Persist incident progress and discovered evidence
+role: developer
+milestone: M2
+priority: P0
+status: ready
+
+objective: Preserve and restore the deterministic INC-001 session, including UNKNOWN narrative and evidence discoveries, through a versioned local save envelope.
+why: The vertical slice requires evidence and narrative state to survive save and load without weakening replay guarantees.
+
+scope:
+  include:
+    - Define and validate the minimum versioned M2 save envelope.
+    - Isolate browser and Tauri persistence behind an adapter boundary.
+    - Save and restore replay metadata, incident state, narrative triggers, and revealed evidence.
+    - Present the transient UNKNOWN message and a persistent Evidence view from scenario data.
+    - Return explicit errors for malformed or incompatible saves.
+    - Add round-trip and incompatible-save tests.
+  exclude:
+    - Cloud sync, multiple campaign acts, save migration beyond the initial schema, and ending state.
+    - Persisting non-authoritative React component state.
+
+depends_on:
+  - TASK-006
+specs:
+  - specs/architecture/system-architecture.md
+  - specs/feature/campaign-and-player-model.md
+  - specs/feature/inc-001-vertical-slice.md
+relevant_files:
+  - src/persistence/
+  - src/store/
+  - src/app/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - The eligible investigation path presents the data-authored UNKNOWN hint before incident completion.
+  - CORRUPTED_LOG_ENTRY remains available after a save/load round trip.
+  - Restored incident state and replay metadata equal the saved authoritative state.
+  - Invalid schema or content versions fail explicitly without replacing the active session.
+  - Persistence remains outside the headless domain engine.
+verification:
+  - Run narrative/evidence UI tests and persistence round-trip tests.
+  - Run malformed and incompatible-save cases plus the full quality command set.
+
+human_gate: false
+risk: high

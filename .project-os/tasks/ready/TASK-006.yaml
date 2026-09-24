@@ -1,0 +1,52 @@
+id: TASK-006
+title: Create the browser incident session adapter
+role: developer
+milestone: M2
+priority: P0
+status: ready
+
+objective: Connect validated INC-001 content and the headless engine to a browser-safe Zustand session boundary for the operations desktop.
+why: The React interface needs observable incident state and commands without taking ownership of simulation rules.
+
+scope:
+  include:
+    - Load and validate the authored INC-001 YAML in the Vite browser build.
+    - Create a Zustand vanilla store that owns the current scenario and incident state.
+    - Route player actions through the existing engine command boundary.
+    - Expose projections for available actions and revealed signals.
+    - Preserve explicit command failures for future UI feedback and support deterministic session restart.
+    - Add automated adapter tests using the authored INC-001 scenario.
+  exclude:
+    - Rendering the operations desktop panels.
+    - Local save/load, campaign persistence, evidence-board UI, and postmortem presentation.
+    - Adding INC-001-specific simulation rules to the store or React.
+
+depends_on:
+  - TASK-005
+specs:
+  - specs/architecture/system-architecture.md
+  - specs/feature/incident-simulation.md
+  - specs/feature/inc-001-vertical-slice.md
+relevant_files:
+  - src/scenario/
+  - src/engine/
+  - src/store/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-002-desktop-web-stack.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - The browser build imports and validates the authored INC-001 YAML rather than duplicating scenario data in TypeScript.
+  - A fresh session exposes the deterministic initial incident state and only currently available actions.
+  - Performing an action updates state exclusively through executeCommand and exposes newly unlocked actions and revealed signals.
+  - A rejected command does not mutate incident state and produces inspectable error information.
+  - Restarting with the same seed restores a deeply equal initial state.
+  - Scenario validation, unit tests, typecheck, lint, formatting, and web build pass.
+verification:
+  - Run focused store tests and the full unit suite.
+  - Run scenario validation, typecheck, lint, formatting check, and web build.
+  - Review the adapter for duplicated simulation logic and forbidden domain-to-UI imports.
+
+human_gate: false
+risk: medium

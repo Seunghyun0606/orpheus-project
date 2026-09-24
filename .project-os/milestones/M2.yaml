@@ -1,6 +1,6 @@
 id: M2
 name: Playable INC-001 Vertical Slice
-status: planned
+status: active
 objective: Turn the headless proof into a complete desktop play session from Pager alert through postmortem.
 entry_criteria:
   - M1 exit criteria are satisfied.
@@ -9,6 +9,11 @@ exit_criteria:
   - Customer impact and temporary recovery are clearly communicated without right-or-wrong labels.
   - The UNKNOWN hint and corrupted-log evidence are discoverable and persist across save and load.
   - Accessibility controls cover CRT effects, reduced animation, text scaling, and non-color-only status cues.
-tasks: []
+tasks:
+  - TASK-006
+  - TASK-007
+  - TASK-008
+  - TASK-009
+  - TASK-010
 human_gate:
   required_on_completion: false

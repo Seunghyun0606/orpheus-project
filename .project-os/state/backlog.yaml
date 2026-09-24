@@ -45,3 +45,51 @@ tasks:
   - TASK-003
   - TASK-004
   human_gate: false
+- id: TASK-006
+  title: Create the browser incident session adapter
+  role: developer
+  milestone: M2
+  priority: P0
+  status: active
+  depends_on:
+  - TASK-005
+  human_gate: false
+- id: TASK-007
+  title: Build the playable operations desktop
+  role: developer
+  milestone: M2
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-006
+  human_gate: false
+- id: TASK-008
+  title: Persist incident progress and discovered evidence
+  role: developer
+  milestone: M2
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-006
+  human_gate: false
+- id: TASK-009
+  title: Generate the action-derived INC-001 postmortem
+  role: developer
+  milestone: M2
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-007
+  - TASK-008
+  human_gate: false
+- id: TASK-010
+  title: Complete accessibility and vertical-slice verification
+  role: developer
+  milestone: M2
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-007
+  - TASK-008
+  - TASK-009
+  human_gate: false
