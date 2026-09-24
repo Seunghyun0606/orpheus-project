@@ -1,0 +1,59 @@
+task: TASK-007
+status: pass
+summary: Built a scenario-driven operations desktop for INC-001 with incident telemetry,
+  non-color service status, logs, metrics, database investigation, action metadata,
+  observable engine results, temporary mitigation, recurrence, root-cause recovery,
+  responsive styling, and keyboard-accessible controls.
+files_changed:
+- src/app/App.tsx
+- src/app/App.test.tsx
+- src/ui/base.css
+verification:
+  acceptance:
+    status: pass
+    detail: The rendered desktop exposes only engine-projected actions and supports
+      the complete Pager-to-recovery route without scenario-specific state mutation
+      in React.
+  incident_views:
+    status: pass
+    detail: Header, service path, logs, metrics, database findings, status, actions,
+      customer impact, elapsed time, and engine event results are rendered from scenario
+      and incident-session projections.
+  recovery_distinction:
+    status: pass
+    detail: Initial degradation, temporary stabilization, recurrence, and root-cause
+      recovery use explicit text and shape cues without success/failure scoring labels.
+  accessibility:
+    status: pass
+    detail: Core controls use native buttons, visible focus treatment, semantic tabs
+      and tables, reduced-motion support, non-color status labels and glyphs, and
+      a component test that activates mitigation by keyboard.
+  component_tests:
+    status: pass
+    detail: Five UI tests cover initial Pager state, temporary mitigation, timed recurrence,
+      database investigation, root-cause completion, stable service cues, and UNKNOWN
+      log discovery through the real Zustand and engine flow.
+  full_tests:
+    status: pass
+    detail: Vitest passed 31 of 31 tests across 6 test files.
+  scenario_validation: pass
+  typecheck: pass
+  lint: pass
+  format: pass
+  diff_check: pass
+  web_build: pass
+  desktop_build:
+    status: pass
+    detail: Tauri release build completed after adding the existing user Cargo toolchain
+      to the command-local PATH and produced orpheus-desktop.exe.
+  desktop_runtime:
+    status: pass
+    detail: The release executable launched with a nonzero native window handle and
+      reported Responding=true before the bounded smoke process was stopped.
+followups:
+- Independent QA should perform screenshot-based visual inspection because browser
+  and native capture surfaces were unavailable in this session.
+commit: e214cda
+kind: implementation
+role: developer
+actor: codex-developer
