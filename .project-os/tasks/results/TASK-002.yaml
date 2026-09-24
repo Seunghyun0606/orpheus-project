@@ -1,0 +1,53 @@
+task: TASK-002
+status: pass
+summary: Added the versioned M1 scenario contract, YAML parser, aggregate structural
+  and semantic validator, recursive validation CLI, INC-001-shaped valid fixture,
+  and invalid fixture coverage without implementing simulation behavior.
+files_changed:
+- README.md
+- scripts/validate-scenarios.mjs
+- tsconfig.json
+- src/scenario/schema.ts
+- src/scenario/validator.ts
+- src/scenario/parser.ts
+- src/scenario/index.ts
+- src/scenario/cli.ts
+- src/scenario/data/.gitkeep
+- src/scenario/__fixtures__/
+- src/scenario/scenario.test.ts
+verification:
+  acceptance:
+    status: pass
+    detail: All five TASK-002 acceptance criteria are covered by executable tests
+      and CLI runs.
+  build:
+    status: pass
+    detail: npm run build completed successfully.
+  lint:
+    status: pass
+    detail: npm run lint completed with zero warnings.
+  typecheck:
+    status: pass
+    detail: npm run typecheck completed successfully under strict settings.
+  unit_test:
+    status: pass
+    detail: Vitest passed 8 of 8 tests across 2 test files.
+  format:
+    status: pass
+    detail: npm run format:check completed successfully.
+  scenario_cli:
+    status: pass
+    detail: Valid fixture exited 0; invalid fixture emitted 17 diagnostics and exited
+      1.
+evidence:
+- The valid fixture expresses initial state, immediate and temporary effects, a delayed
+  event, reveals, evidence, resolution, completion, and postmortem inputs.
+- The failure result union exposes diagnostics but no Scenario object.
+- The invalid reference fixture reports duplicate ids plus every invalid reference
+  in one run.
+- Unknown effect and event discriminators emit UNKNOWN_EFFECT_TYPE and UNKNOWN_EVENT_TYPE.
+followups: []
+commit: null
+kind: implementation
+role: developer
+actor: codex-developer

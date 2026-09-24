@@ -15,6 +15,9 @@ files_changed:
 - src-tauri/
 - scripts/validate-scenarios.mjs
 verification:
+  acceptance:
+    status: pass
+    detail: All task acceptance criteria are covered by the implementation, automated checks, and recorded native runtime smoke test.
   clean_install: npm ci passed with 0 vulnerabilities
   build: npm run build passed
   desktop_build: npm run build:desktop passed and produced orpheus-desktop.exe

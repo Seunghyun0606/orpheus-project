@@ -1,0 +1,23 @@
+task: TASK-002
+status: pass
+summary: Automated checks cover valid parsing, validation boundaries, aggregate reference
+  failures, unknown discriminators, YAML syntax diagnostics, and CLI exit behavior.
+files_changed: []
+verification:
+  build: pass
+  lint: pass
+  typecheck: pass
+  unit_test:
+    status: pass
+    detail: 2 test files and 8 tests passed.
+  acceptance:
+    status: pass
+    detail: Valid and intentionally invalid fixtures exercise every configured acceptance
+      class.
+  cli_valid_exit: 0
+  cli_invalid_exit: 1
+followups: []
+commit: null
+kind: test
+role: qa
+actor: codex-developer

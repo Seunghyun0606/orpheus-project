@@ -1,1 +1,3 @@
-console.log('Scenario validation is wired; TASK-002 will provide the versioned validator.');
+import { runScenarioValidationCli } from '../src/scenario/cli.ts';
+
+process.exitCode = await runScenarioValidationCli(process.argv.slice(2));

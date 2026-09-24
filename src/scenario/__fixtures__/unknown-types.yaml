@@ -1,0 +1,56 @@
+schemaVersion: 1
+contentVersion: 1.0.0
+id: UNKNOWN-TYPES
+title: Unknown discriminators fixture
+act: 1
+severity: SEV3
+services:
+  - id: API
+    name: API
+initialState:
+  signals:
+    - id: HEALTH
+      value: 1
+  resources:
+    - id: TIME
+      value: 60
+incident:
+  trigger:
+    id: TRIGGER
+    label: Trigger
+  failureMechanisms:
+    - id: MECHANISM
+      label: Mechanism
+  symptoms:
+    - id: SYMPTOM
+      label: Symptom
+actions:
+  - id: INVALID_EFFECT
+    title: Invalid effect
+    category: MODIFY
+    durationSeconds: 1
+    effects:
+      - type: teleport
+        signalId: HEALTH
+events:
+  - id: INVALID_EVENT
+    type: cron
+    effects:
+      - type: set_signal
+        signalId: HEALTH
+        value: 0
+resolution:
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: MECHANISM
+completion:
+  conditions:
+    - type: signal
+      signalId: HEALTH
+      operator: eq
+      value: 0
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Recovery time
+      source: elapsed_time

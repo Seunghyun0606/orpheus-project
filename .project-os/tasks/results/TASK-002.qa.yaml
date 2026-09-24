@@ -1,0 +1,29 @@
+task: TASK-002
+status: pass
+summary: Acceptance verification passed for schema expressiveness, validated-only
+  output, aggregate diagnostics, discriminator rejection, and CLI exit codes.
+files_changed: []
+verification:
+  inc_001_shape:
+    status: pass
+    detail: Valid fixture models restart relief, 180-second rebound, root-cause action,
+      UNKNOWN narrative, and evidence.
+  validation_boundary:
+    status: pass
+    detail: Invalid input returns a discriminated failure result without a scenario
+      property.
+  aggregate_diagnostics:
+    status: pass
+    detail: Invalid reference fixture produced 17 diagnostics in a single run.
+  unknown_types:
+    status: pass
+    detail: Both unknown effect and unknown event types are rejected with stable codes.
+  command_exit_codes:
+    status: pass
+    detail: Explicit valid input returned 0 and invalid input returned 1.
+critical_issues: 0
+followups: []
+commit: null
+kind: qa
+role: qa
+actor: codex-qa

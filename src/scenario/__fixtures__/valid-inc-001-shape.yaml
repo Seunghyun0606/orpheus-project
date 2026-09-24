@@ -1,0 +1,178 @@
+schemaVersion: 1
+contentVersion: 1.0.0
+id: INC-001-TEST
+title: Connection Saturation Contract Fixture
+act: 1
+severity: SEV1
+services:
+  - id: GATEWAY
+    name: Gateway
+    dependsOn: [PAYMENT_API]
+  - id: PAYMENT_API
+    name: Payment API
+    dependsOn: [POSTGRESQL]
+  - id: POSTGRESQL
+    name: PostgreSQL
+initialState:
+  signals:
+    - id: API_ERROR_RATE
+      value: 31
+      revealed: true
+      serviceId: PAYMENT_API
+    - id: DB_CONNECTIONS
+      value: 498
+      revealed: true
+      serviceId: POSTGRESQL
+    - id: STALE_SESSIONS
+      value: 164
+      serviceId: POSTGRESQL
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_RESOLVED
+      value: false
+incident:
+  trigger:
+    id: CONNECTION_LIMIT_REACHED
+    label: PostgreSQL connection pool approaches its limit
+  contributingFactors:
+    - id: MISSING_TRANSACTION_CLEANUP
+      label: Session cleanup is incomplete
+  failureMechanisms:
+    - id: STALE_SESSION_POOL
+      label: Idle transactions retain database connections
+  symptoms:
+    - id: PAYMENT_ERRORS
+      label: Payment API errors exceed the pager threshold
+  amplifiers:
+    - id: CLIENT_RETRIES
+      label: Client retries add connection pressure
+actions:
+  - id: OPEN_METRICS
+    title: Open metrics
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    effects:
+      - type: reveal_signal
+        signalId: DB_CONNECTIONS
+  - id: RESTART_API
+    title: Restart Payment API
+    category: MITIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    effects:
+      - type: schedule_event
+        eventId: CONNECTION_REBOUND
+    temporaryEffects:
+      - id: RESTART_RELIEF
+        durationSeconds: 180
+        apply:
+          - type: set_signal
+            signalId: API_ERROR_RATE
+            value: 3
+          - type: set_signal
+            signalId: DB_CONNECTIONS
+            value: 310
+        expire:
+          - type: set_signal
+            signalId: API_ERROR_RATE
+            value: 28
+          - type: set_signal
+            signalId: DB_CONNECTIONS
+            value: 499
+  - id: INSPECT_SESSIONS
+    title: Inspect database sessions
+    category: INVESTIGATE
+    durationSeconds: 90
+    initiallyAvailable: true
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: reveal_signal
+        signalId: STALE_SESSIONS
+      - type: unlock_action
+        actionId: TERMINATE_STALE_SESSIONS
+  - id: TERMINATE_STALE_SESSIONS
+    title: Terminate stale sessions
+    category: MODIFY
+    durationSeconds: 120
+    requirements:
+      - type: signal_revealed
+        signalId: STALE_SESSIONS
+    effects:
+      - type: resolve_mechanism
+        mechanismId: STALE_SESSION_POOL
+      - type: set_flag
+        flagId: ROOT_CAUSE_RESOLVED
+        value: true
+      - type: set_signal
+        signalId: DB_CONNECTIONS
+        value: 112
+      - type: set_signal
+        signalId: API_ERROR_RATE
+        value: 0.2
+      - type: trigger_narrative
+        narrativeId: UNKNOWN_GOOD
+events:
+  - id: CONNECTION_REBOUND
+    type: timer
+    delaySeconds: 180
+    targetServiceId: POSTGRESQL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: STALE_SESSION_POOL
+    effects:
+      - type: set_signal
+        signalId: DB_CONNECTIONS
+        value: 499
+      - type: set_signal
+        signalId: API_ERROR_RATE
+        value: 28
+evidence:
+  - id: CORRUPTED_LOG_ENTRY
+    title: Corrupted log entry
+    description: A transient UNKNOWN message recovered from the incident log.
+    sourceNarrativeId: UNKNOWN_GOOD
+narratives:
+  - id: UNKNOWN_GOOD
+    title: UNKNOWN transmission
+    body: '02:23:11 / UNKNOWN: Good.'
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_SESSIONS
+    effects:
+      - type: reveal_evidence
+        evidenceId: CORRUPTED_LOG_ENTRY
+resolution:
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: STALE_SESSION_POOL
+completion:
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_RESOLVED
+      value: true
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Service recovery time
+      source: elapsed_time
+    - id: CUSTOMER_DAMAGE
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: RESTART_COUNT
+      label: API restart count
+      source: action_count
+      refId: RESTART_API

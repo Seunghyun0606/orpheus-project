@@ -1,0 +1,20 @@
+task: TASK-001
+status: pass
+summary: Implementation, independent review, and executable acceptance evidence satisfy
+  the configured standard quality profile for TASK-001.
+files_changed: []
+verification:
+  implementation_result: pass
+  independent_review: pass
+  acceptance_evidence: pass
+  critical_issues: 0
+followups: []
+commit: c9c8757
+decision: PASS
+quality:
+  passed: true
+  missing: []
+  failed: []
+kind: evaluation
+role: evaluator
+actor: codex-evaluator

@@ -1,0 +1,93 @@
+schemaVersion: 1
+contentVersion: 1.0.0
+id: INVALID-REFERENCES
+title: Invalid reference aggregation fixture
+act: 1
+severity: SEV2
+services:
+  - id: API
+    name: API
+    dependsOn: [MISSING_SERVICE]
+  - id: API
+    name: Duplicate API
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 10
+      serviceId: MISSING_SERVICE
+    - id: ERROR_RATE
+      value: 11
+  resources:
+    - id: TIME
+      value: 300
+  flags:
+    - id: READY
+      value: false
+incident:
+  trigger:
+    id: TRIGGER
+    label: Trigger
+  failureMechanisms:
+    - id: ROOT_CAUSE
+      label: Root cause
+  symptoms:
+    - id: ERRORS
+      label: Errors
+actions:
+  - id: INSPECT
+    title: Inspect
+    category: DIAGNOSE
+    durationSeconds: 30
+    requirements:
+      - type: evidence
+        evidenceId: MISSING_EVIDENCE
+      - type: flag
+        flagId: MISSING_FLAG
+        value: true
+      - type: action_completed
+        actionId: MISSING_ACTION
+    costs:
+      - resourceId: MISSING_RESOURCE
+        amount: -1
+    effects:
+      - type: schedule_event
+        eventId: MISSING_EVENT
+      - type: trigger_narrative
+        narrativeId: MISSING_NARRATIVE
+events:
+  - id: TIMER
+    type: timer
+    delaySeconds: 10
+    targetServiceId: MISSING_SERVICE
+    effects:
+      - type: set_signal
+        signalId: MISSING_SIGNAL
+        value: 0
+evidence:
+  - id: CLUE
+    title: Clue
+    description: Broken source reference
+    sourceNarrativeId: MISSING_NARRATIVE
+narratives:
+  - id: NOTE
+    title: Note
+    body: Broken reveal
+    effects:
+      - type: reveal_evidence
+        evidenceId: MISSING_EVIDENCE
+resolution:
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: MISSING_MECHANISM
+completion:
+  conditions:
+    - type: signal
+      signalId: MISSING_SIGNAL
+      operator: lt
+      value: 1
+postmortem:
+  scoringInputs:
+    - id: MISSING_SCORE_SIGNAL
+      label: Missing score signal
+      source: signal
+      refId: MISSING_SIGNAL
