@@ -1,0 +1,62 @@
+task: TASK-009
+status: pass
+summary: Added a pure action-derived INC-001 postmortem and a dedicated responsive
+  report that explains measured outcomes, contained mechanisms, temporary mitigation,
+  non-resolving interventions, communication, and the ordered response without grading
+  the player.
+files_changed:
+- src/engine/postmortem.ts
+- src/engine/postmortem.test.ts
+- src/engine/index.ts
+- src/app/Postmortem.tsx
+- src/app/App.tsx
+- src/app/App.test.tsx
+- src/ui/base.css
+verification:
+  acceptance:
+    status: pass
+    detail: All eight authored scoring inputs resolve from incident time, signals,
+      resources, or action history; restart-first and investigation-first reports
+      differ causally; customer impact and operational risk appear without a binary
+      grade; computation uses only scenario and incident state.
+  deterministic_calculation:
+    status: pass
+    detail: Focused tests cover both approved routes, action counts, resource and
+      signal changes, temporary expiration, recurrence, communication, replay equivalence,
+      and refusal of incomplete or mismatched incidents.
+  component_routes:
+    status: pass
+    detail: UI tests cover direct postmortem transition, UNKNOWN-before-postmortem
+      flow, both response paths, communication, read-only completed record, and save/load
+      restoration of the report.
+  full_tests:
+    status: pass
+    detail: Vitest passed 45 tests across eight files.
+  browser_runtime:
+    status: pass
+    detail: Chromium showed the restart-first report at 05:30 with customer impact
+      78 and operational risk 14; saved postmortem state reopened after restart and
+      Load with no page errors.
+  responsive_accessibility:
+    status: pass
+    detail: Desktop and 390px report screenshots remained readable; axe reported zero
+      violations and zero incomplete checks on the report.
+  scenario_validation: pass
+  typecheck: pass
+  lint: pass
+  format: pass
+  diff_check: pass
+  web_build: pass
+  desktop_build:
+    status: pass
+    detail: Final Tauri release build succeeded and produced orpheus-desktop.exe.
+  desktop_runtime:
+    status: pass
+    detail: The built executable launched with a nonzero window handle and Responding=true
+      in a bounded smoke check.
+followups:
+- Independent TASK-009 review and QA are required before Project OS completion evaluation.
+commit: 3d2b23a
+kind: implementation
+role: developer
+actor: codex-developer
