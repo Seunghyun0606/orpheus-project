@@ -1,0 +1,32 @@
+task: TASK-008
+status: pass
+summary: Automated and observable TASK-008 verification passed after the narrow-screen
+  navigation correction.
+files_changed: []
+verification:
+  unit_and_component_tests:
+    status: pass
+    detail: Vitest passed 38 tests across seven files, including persistence round-trip,
+      recurrence after restore, malformed and incompatible saves, storage failure,
+      UNKNOWN dialog, and Evidence view.
+  browser_route:
+    status: pass
+    detail: Manual Chromium route exposed UNKNOWN before recovery and restored Corrupted
+      log entry after browser reload and Load.
+  browser_accessibility:
+    status: pass
+    detail: Axe found zero violations; the transient dialog had no incomplete checks,
+      while the main screen retained an inconclusive gradient contrast check.
+  scenario_validation: pass
+  typecheck: pass
+  lint: pass
+  format: pass
+  diff_check: pass
+  web_build: pass
+  desktop_build: pass
+  native_smoke: pass
+followups: []
+commit: 427f521
+kind: test
+role: qa
+actor: codex-qa

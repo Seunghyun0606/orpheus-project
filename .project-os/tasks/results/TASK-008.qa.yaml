@@ -1,0 +1,46 @@
+task: TASK-008
+status: pass
+summary: Independent browser QA confirmed UNKNOWN timing, persistent evidence, reload
+  recovery, responsive tabs, accessible dialog, and native build/runtime startup.
+files_changed: []
+verification:
+  eligible_path:
+    status: pass
+    detail: Open Logs, Inspect PostgreSQL, Inspect Sessions, and Terminate Stale Sessions
+      displayed the authored UNKNOWN message in a modal before the recovery screen
+      became visible.
+  evidence_persistence:
+    status: pass
+    detail: Corrupted log entry appeared in Evidence, then remained after Save, browser
+      reload, Load, and elapsed-time recovery to 05:00.
+  invalid_saves:
+    status: pass
+    detail: Automated tests covered malformed JSON and state, incompatible schema
+      and content versions, wrong scenario, replay tampering, missing save, and unavailable
+      storage without replacing active state.
+  responsive_layout:
+    status: pass
+    detail: Screenshots at 320px and 390px after the review fix showed all five investigation
+      tabs, the discovered evidence card, and save/load controls.
+  accessibility:
+    status: pass
+    detail: Axe reported zero violations and zero incomplete checks for the UNKNOWN
+      dialog; the Evidence view had zero violations, with gradient color contrast
+      inconclusive.
+  native_runtime:
+    status: pass
+    detail: The final Tauri release build succeeded and its executable launched with
+      a nonzero window handle and Responding=true. Native in-app save/load was not
+      inspected because the Windows Computer Use pipe was unavailable after recovery
+      attempts.
+  quality_commands:
+    status: pass
+    detail: Vitest 38/38, scenario validation, typecheck, lint, format, diff check,
+      web build, and final Tauri build passed.
+critical_issues: 0
+followups:
+- Manually verify packaged Tauri save/load UI when Windows Computer Use becomes available.
+commit: 427f521
+kind: qa
+role: qa
+actor: codex-qa
