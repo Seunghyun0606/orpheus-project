@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { inc001Scenario } from '../scenario/index.ts';
+import type { SaveStorage } from '../persistence/index.ts';
 import {
   createIncidentSessionStore,
   selectAvailableActions,
@@ -74,5 +75,67 @@ describe('INC-001 browser incident session', () => {
     store.getState().restart();
     expect(store.getState().incident).toEqual(initial);
     expect(store.getState().lastError).toBeNull();
+  });
+
+  it('round-trips a discovered narrative and evidence through injected local storage', () => {
+    let saved: string | null = null;
+    const storage: SaveStorage = {
+      read: () => saved,
+      write: (value) => {
+        saved = value;
+      },
+    };
+    const store = createIncidentSessionStore(inc001Scenario, 113, storage);
+
+    for (const id of ['OPEN_LOGS', 'INSPECT_DB', 'INSPECT_SESSIONS', 'TERMINATE_STALE_SESSIONS']) {
+      expect(store.getState().performAction(id).ok).toBe(true);
+    }
+    const savedState = structuredClone(store.getState().incident);
+    expect(store.getState().save().ok).toBe(true);
+
+    store.getState().restart();
+    expect(store.getState().incident.revealedEvidenceIds).toEqual([]);
+    expect(store.getState().load().ok).toBe(true);
+    expect(store.getState().incident).toEqual(savedState);
+    expect(store.getState().incident.revealedEvidenceIds).toContain('CORRUPTED_LOG_ENTRY');
+  });
+
+  it('leaves the active incident unchanged when a save is incompatible or malformed', () => {
+    let saved: string | null = null;
+    const storage: SaveStorage = {
+      read: () => saved,
+      write: (value) => {
+        saved = value;
+      },
+    };
+    const store = createIncidentSessionStore(inc001Scenario, 127, storage);
+    expect(store.getState().performAction('INSPECT_DB').ok).toBe(true);
+    const before = structuredClone(store.getState().incident);
+
+    expect(store.getState().load()).toMatchObject({ ok: false, code: 'SAVE_NOT_FOUND' });
+    saved = '{';
+    expect(store.getState().load()).toMatchObject({ ok: false, code: 'MALFORMED_SAVE' });
+    saved = JSON.stringify({ schemaVersion: 9, scenarioId: 'INC-001', contentVersion: '1.0.0' });
+    expect(store.getState().load()).toMatchObject({ ok: false, code: 'INCOMPATIBLE_SCHEMA' });
+    expect(store.getState().incident).toEqual(before);
+    expect(store.getState().persistenceError?.code).toBe('INCOMPATIBLE_SCHEMA');
+  });
+
+  it('reports unavailable local storage without changing the active incident', () => {
+    const storage: SaveStorage = {
+      read: () => {
+        throw new Error('Storage unavailable');
+      },
+      write: () => {
+        throw new Error('Storage unavailable');
+      },
+    };
+    const store = createIncidentSessionStore(inc001Scenario, 131, storage);
+    expect(store.getState().performAction('INSPECT_DB').ok).toBe(true);
+    const before = structuredClone(store.getState().incident);
+
+    expect(store.getState().save()).toMatchObject({ ok: false, code: 'STORAGE_ERROR' });
+    expect(store.getState().load()).toMatchObject({ ok: false, code: 'STORAGE_ERROR' });
+    expect(store.getState().incident).toEqual(before);
   });
 });

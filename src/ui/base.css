@@ -284,8 +284,7 @@ button:focus-visible {
   letter-spacing: 0.05em;
 }
 
-.service-rail,
-.action-rail {
+.service-rail {
   position: sticky;
   top: 1rem;
 }
@@ -521,14 +520,8 @@ button:focus-visible {
   letter-spacing: 0.05em;
 }
 
-.log-level--critical,
-.log-anomaly .log-level {
+.log-level--critical {
   color: var(--red);
-}
-
-.log-anomaly {
-  color: var(--amber) !important;
-  background: rgba(232, 189, 103, 0.04);
 }
 
 .empty-state {
@@ -636,6 +629,40 @@ button:focus-visible {
   line-height: 1.5;
 }
 
+.evidence-grid {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.evidence-card {
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--amber);
+  padding: 1rem;
+  background: var(--surface-raised);
+}
+
+.evidence-card > span {
+  color: var(--amber);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+}
+
+.evidence-card h3 {
+  margin: 0.65rem 0 0.5rem;
+  color: var(--white);
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+.evidence-card p {
+  max-width: 35rem;
+  margin: 0;
+  color: #a6bcb6;
+  font-size: 0.68rem;
+  line-height: 1.6;
+}
+
 .activity-strip {
   border-top: 1px solid var(--line);
 }
@@ -711,9 +738,6 @@ button:focus-visible {
 .action-list {
   display: grid;
   gap: 0.6rem;
-  max-height: calc(100vh - 22rem);
-  min-height: 15rem;
-  overflow-y: auto;
   padding: 0.8rem;
 }
 
@@ -778,6 +802,35 @@ button:focus-visible {
   line-height: 1.45;
 }
 
+.session-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0.8rem;
+}
+
+.session-controls button {
+  border: 1px solid var(--line-strong);
+  padding: 0.7rem 0.4rem;
+  color: var(--white);
+  background: #0c211b;
+  cursor: pointer;
+  font-size: 0.61rem;
+  line-height: 1.4;
+}
+
+.session-controls button:hover {
+  border-color: var(--green);
+  background: #102c24;
+}
+
+.persistence-notice {
+  margin: 0 0.8rem 0.8rem;
+  color: var(--green);
+  font-size: 0.61rem;
+  line-height: 1.5;
+}
+
 .restart-button {
   width: calc(100% - 1.6rem);
   margin: 0 0.8rem 0.8rem;
@@ -792,6 +845,62 @@ button:focus-visible {
 .restart-button:hover {
   border-color: var(--line-strong);
   color: var(--white);
+}
+
+.narrative-overlay {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  padding: 1rem;
+  background: rgba(3, 8, 7, 0.97);
+}
+
+.narrative-dialog {
+  width: min(36rem, 100%);
+  border: 1px solid var(--amber);
+  padding: clamp(1.25rem, 5vw, 2.5rem);
+  background: #0b1110;
+  box-shadow: 0 0 4rem rgba(232, 189, 103, 0.1);
+}
+
+.narrative-channel {
+  color: var(--amber);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.narrative-dialog h2 {
+  margin: 1.1rem 0;
+  color: var(--white);
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.narrative-dialog p {
+  margin: 1.6rem 0;
+  border-left: 2px solid var(--amber);
+  padding: 0.9rem 1rem;
+  color: var(--amber);
+  background: rgba(232, 189, 103, 0.05);
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  line-height: 1.6;
+}
+
+.narrative-dialog button {
+  border: 1px solid var(--green);
+  padding: 0.75rem 1rem;
+  color: var(--white);
+  background: #0c211b;
+  cursor: pointer;
+  font-size: 0.72rem;
+}
+
+.narrative-dialog button:hover {
+  background: #123127;
 }
 
 @media (max-width: 1180px) {
@@ -815,14 +924,11 @@ button:focus-visible {
   }
 
   .action-rail {
-    position: static;
     grid-column: 1 / -1;
   }
 
   .action-list {
     grid-template-columns: repeat(3, minmax(13rem, 1fr));
-    max-height: none;
-    min-height: 0;
   }
 }
 

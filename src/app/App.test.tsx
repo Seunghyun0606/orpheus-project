@@ -2,14 +2,15 @@ import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 
+import type { SaveStorage } from '../persistence/index.ts';
 import { inc001Scenario } from '../scenario/index.ts';
 import { createIncidentSessionStore } from '../store/incident-session.ts';
 import { App } from './App.tsx';
 
 afterEach(cleanup);
 
-function renderIncident(seed = 701) {
-  const store = createIncidentSessionStore(inc001Scenario, seed);
+function renderIncident(seed = 701, storage?: SaveStorage) {
+  const store = createIncidentSessionStore(inc001Scenario, seed, storage);
   const user = userEvent.setup();
 
   render(<App store={store} />);
@@ -100,13 +101,26 @@ describe('INC-001 operations desktop', () => {
     expect(screen.getByText(/Stale Session Count observed/)).toBeInTheDocument();
   });
 
-  it('reaches root-cause recovery and surfaces the discovered UNKNOWN log artifact', async () => {
-    const { user } = renderIncident(709);
+  it('shows the transient UNKNOWN hint before recovery and preserves discovered evidence through save/load', async () => {
+    let saved: string | null = null;
+    const storage: SaveStorage = {
+      read: () => saved,
+      write: (value) => {
+        saved = value;
+      },
+    };
+    const { user } = renderIncident(709, storage);
 
     await perform(user, 'Open Payment API logs');
     await perform(user, 'Inspect PostgreSQL');
     await perform(user, 'Inspect database sessions');
     await perform(user, 'Terminate stale database sessions');
+
+    const hint = screen.getByRole('dialog', { name: 'Transient log message' });
+    expect(within(hint).getByText('02:23:11 / UNKNOWN: Good.')).toBeInTheDocument();
+    expect(within(hint).getByRole('button', { name: 'Continue incident' })).toHaveFocus();
+    await user.click(within(hint).getByRole('button', { name: 'Continue incident' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
     expect(screen.getAllByText('Incident recovered')).toHaveLength(2);
     expect(
@@ -118,7 +132,31 @@ describe('INC-001 operations desktop', () => {
     expect(screen.getByText('0.2%')).toBeInTheDocument();
     expect(screen.getByText('112')).toBeInTheDocument();
 
-    await user.click(screen.getByRole('tab', { name: /Logs/ }));
-    expect(screen.getByText('02:23:11 / UNKNOWN: Good.')).toBeInTheDocument();
+    await user.click(screen.getByRole('tab', { name: /Evidence/ }));
+    expect(screen.getByText('Corrupted log entry')).toBeInTheDocument();
+    expect(screen.queryByText('02:23:11 / UNKNOWN: Good.')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Save session' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Session saved locally.');
+    await user.click(screen.getByRole('button', { name: 'Restart incident session' }));
+    expect(screen.getByTestId('elapsed-time')).toHaveTextContent('00:00');
+    await user.click(screen.getByRole('tab', { name: /Evidence/ }));
+    expect(screen.getByText('No evidence recovered')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Load saved session' }));
+    expect(screen.getByTestId('elapsed-time')).toHaveTextContent('05:00');
+    expect(screen.getByText('Corrupted log entry')).toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('reports a missing local save without replacing the active session', async () => {
+    const storage: SaveStorage = { read: () => null, write: () => undefined };
+    const { user } = renderIncident(711, storage);
+    await perform(user, 'Inspect PostgreSQL');
+
+    await user.click(screen.getByRole('button', { name: 'Load saved session' }));
+
+    expect(screen.getByRole('alert')).toHaveTextContent('No saved session was found.');
+    expect(screen.getByTestId('elapsed-time')).toHaveTextContent('01:00');
   });
 });
