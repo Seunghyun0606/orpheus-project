@@ -4,6 +4,9 @@ summary: Automated and observable TASK-008 verification passed after the narrow-
   navigation correction.
 files_changed: []
 verification:
+  acceptance:
+    status: pass
+    detail: The authored UNKNOWN hint appeared before visible recovery; CORRUPTED_LOG_ENTRY survived save, reload, and load; replay-backed incident state restored exactly; invalid schema and content versions were rejected without replacing active state; persistence remained outside the headless engine.
   unit_and_component_tests:
     status: pass
     detail: Vitest passed 38 tests across seven files, including persistence round-trip,
