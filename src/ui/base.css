@@ -996,6 +996,25 @@ button:focus-visible {
   }
 }
 
+@media (max-width: 640px) {
+  .tool-tabs {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    overflow-x: visible;
+  }
+
+  .tool-tab {
+    grid-column: span 2;
+    min-width: 0;
+    padding: 0.75rem 0.55rem;
+  }
+
+  .tool-tab:nth-last-child(-n + 2) {
+    grid-column: span 3;
+    border-top: 1px solid var(--line);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
