@@ -422,7 +422,7 @@ button:focus-visible {
 
 .tool-tab span {
   margin-right: 0.45rem;
-  color: #4d6c64;
+  color: #8aaca3;
   font-size: 0.56rem;
 }
 
@@ -663,6 +663,11 @@ button:focus-visible {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.activity-list:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: -2px;
 }
 
 .activity-list li {

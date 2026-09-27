@@ -422,7 +422,7 @@ export function App({ store = defaultSessionStore }: AppProps) {
             {recentEvents.length === 0 ? (
               <p className="activity-empty">Awaiting operator action.</p>
             ) : (
-              <ol className="activity-list">
+              <ol className="activity-list" tabIndex={0} aria-label="Recent incident events">
                 {recentEvents.map((event) => (
                   <li key={event.sequence}>
                     <time>{formatElapsed(event.atSeconds)}</time>
