@@ -1,0 +1,59 @@
+task: TASK-008
+status: pass
+summary: Added a versioned local incident save with deterministic replay validation,
+  atomic load failures, a transient data-authored UNKNOWN narrative, and a persistent
+  Evidence view.
+files_changed:
+- src/persistence/index.ts
+- src/persistence/save.ts
+- src/persistence/save.test.ts
+- src/persistence/storage.ts
+- src/store/incident-session.ts
+- src/store/incident-session.test.ts
+- src/app/App.tsx
+- src/app/App.test.tsx
+- src/ui/base.css
+verification:
+  narrative_and_evidence:
+    status: pass
+    detail: The eligible INC-001 route shows the scenario-authored UNKNOWN dialog
+      before displaying completion; the evidence board retains CORRUPTED_LOG_ENTRY
+      after dismissal and save/load.
+  persistence_round_trip:
+    status: pass
+    detail: Unit and browser checks restored incident state, replay metadata, narrative
+      and evidence IDs, and scheduled recurrence; browser local storage also survived
+      a page reload.
+  invalid_saves:
+    status: pass
+    detail: Malformed, incompatible-schema, incompatible-content, wrong-scenario,
+      and replay-inconsistent saves return explicit errors. Missing or unavailable
+      storage and invalid loads leave the active incident unchanged.
+  engine_boundary:
+    status: pass
+    detail: Local storage I/O resides behind an injected adapter in src/persistence;
+      the headless engine has no persistence dependency.
+  full_tests:
+    status: pass
+    detail: Vitest passed 38 of 38 tests across 7 files.
+  scenario_validation: pass
+  typecheck: pass
+  lint: pass
+  format: pass
+  diff_check: pass
+  web_build: pass
+  desktop_build:
+    status: pass
+    detail: Tauri release build completed and produced orpheus-desktop.exe.
+  browser_accessibility:
+    status: pass
+    detail: Axe reported zero violations in the Evidence view and zero violations
+      or incomplete checks in the transient narrative dialog. Gradient backgrounds
+      leave automated color contrast inconclusive outside the dialog.
+followups:
+- Independent TASK-008 review and QA must run before Project OS evaluation marks the
+  task complete.
+commit: 849f941
+kind: implementation
+role: developer
+actor: codex-developer
