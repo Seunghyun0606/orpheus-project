@@ -237,6 +237,17 @@ button:focus-visible {
   line-height: 1.4;
 }
 
+.recovery-banner button {
+  margin-left: auto;
+  border: 1px solid var(--green);
+  padding: 0.55rem 0.8rem;
+  color: var(--white);
+  background: #0c211b;
+  cursor: pointer;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
 .desktop-grid {
   display: grid;
   grid-template-columns: minmax(13.5rem, 0.72fr) minmax(30rem, 2.5fr) minmax(17rem, 0.94fr);
@@ -783,6 +794,14 @@ button:focus-visible {
   background: #102c24;
 }
 
+.action-card button:disabled,
+.action-card button:disabled:hover {
+  border-color: var(--line);
+  color: #9aafa9;
+  background: var(--surface-inset);
+  cursor: not-allowed;
+}
+
 .action-card p {
   margin: 0;
   color: #708b84;
@@ -903,6 +922,232 @@ button:focus-visible {
   background: #123127;
 }
 
+.postmortem-shell {
+  min-height: 100vh;
+  padding: clamp(0.5rem, 2vw, 2rem);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(62, 142, 121, 0.14), transparent 38rem), #050808;
+}
+
+.postmortem-shell > * {
+  max-width: 85rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.postmortem-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: start;
+  border: 1px solid var(--line-strong);
+  padding: clamp(1rem, 3vw, 2rem);
+  background: var(--surface);
+}
+
+.postmortem-header .eyebrow {
+  margin: 0 0 1.5rem;
+}
+
+.postmortem-kicker,
+.postmortem-section-heading > span {
+  color: var(--green);
+  font-size: 0.62rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.postmortem-header h1 {
+  margin: 0.5rem 0;
+  color: var(--white);
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 500;
+}
+
+.postmortem-header p:last-child,
+.postmortem-section-heading p,
+.postmortem-finding p,
+.postmortem-empty {
+  color: #a7bcb6;
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+.postmortem-header-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.postmortem-header-actions button,
+.postmortem-footer button {
+  border: 1px solid var(--line-strong);
+  padding: 0.7rem 0.85rem;
+  color: var(--white);
+  background: #0c211b;
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+
+.postmortem-header-actions button:hover,
+.postmortem-footer button:hover,
+.recovery-banner button:hover {
+  border-color: var(--green);
+  background: #123127;
+}
+
+.postmortem-section {
+  margin-top: 0.8rem;
+  border: 1px solid var(--line);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: var(--surface);
+}
+
+.postmortem-section-heading {
+  margin-bottom: 1rem;
+}
+
+.postmortem-section-heading h2 {
+  margin: 0.4rem 0;
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.postmortem-section-heading p {
+  margin: 0.4rem 0 0;
+}
+
+.postmortem-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.postmortem-metrics article {
+  display: grid;
+  gap: 0.65rem;
+  border: 1px solid var(--line);
+  padding: 0.9rem;
+  background: var(--surface-inset);
+}
+
+.postmortem-metrics article > span,
+.postmortem-metrics small {
+  color: #a7bcb6;
+  font-size: 0.65rem;
+}
+
+.postmortem-metrics strong {
+  color: var(--green);
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  font-weight: 500;
+}
+
+.postmortem-metrics small {
+  text-transform: uppercase;
+}
+
+.postmortem-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.postmortem-columns .postmortem-section {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.postmortem-stack {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.postmortem-finding {
+  border-left: 2px solid var(--amber);
+  padding: 0.8rem 1rem;
+  background: var(--surface-inset);
+}
+
+.postmortem-finding > span {
+  color: var(--amber);
+  font-size: 0.62rem;
+  letter-spacing: 0.09em;
+}
+
+.postmortem-finding h3,
+.postmortem-subsection h3 {
+  margin: 0.5rem 0;
+  color: var(--white);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.postmortem-finding p {
+  margin: 0.4rem 0 0;
+}
+
+.postmortem-finding ul,
+.postmortem-subsection ul {
+  margin: 0.8rem 0 0;
+  padding-left: 1.3rem;
+  color: #b8d2ca;
+  font-size: 0.7rem;
+  line-height: 1.7;
+}
+
+.postmortem-subsection {
+  margin-top: 1rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.75rem;
+}
+
+.postmortem-empty {
+  border-left: 2px solid var(--line-strong);
+  padding: 0.85rem 1rem;
+  background: var(--surface-inset);
+}
+
+.postmortem-list {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.postmortem-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  padding: 0.65rem 0;
+}
+
+.postmortem-list strong {
+  color: var(--white);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.postmortem-list span {
+  color: #a7bcb6;
+  font-size: 0.66rem;
+  text-align: right;
+}
+
+.postmortem-footer {
+  margin-top: 0.8rem;
+  border: 1px solid var(--line);
+  padding: 1rem;
+  background: var(--surface);
+}
+
+.postmortem-footer .session-controls {
+  justify-content: flex-start;
+}
+
 @media (max-width: 1180px) {
   .incident-header {
     grid-template-columns: 0.7fr 1.5fr;
@@ -993,6 +1238,24 @@ button:focus-visible {
   .log-lines p {
     grid-template-columns: 4.5rem 4.2rem minmax(0, 1fr);
     gap: 0.4rem;
+  }
+
+  .postmortem-header,
+  .postmortem-list li {
+    flex-direction: column;
+  }
+
+  .postmortem-columns {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .postmortem-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .postmortem-list span {
+    text-align: left;
   }
 }
 

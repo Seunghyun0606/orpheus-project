@@ -1,4 +1,15 @@
 export { actionDrivenClock } from './clock.ts';
+export { computePostmortem } from './postmortem.ts';
+export type {
+  PostmortemAction,
+  PostmortemIntervention,
+  PostmortemMechanism,
+  PostmortemMetric,
+  PostmortemReport,
+  PostmortemResourceChange,
+  PostmortemSignalChange,
+  PostmortemTemporaryEffect,
+} from './postmortem.ts';
 export { createSeededRngState, drawRandom, seededRng } from './rng.ts';
 export {
   cloneIncidentState,

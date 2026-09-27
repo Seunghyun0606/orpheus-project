@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import type { StoreApi } from 'zustand/vanilla';
 
-import type { EngineEvent, ScalarValue } from '../engine/index.ts';
+import { computePostmortem, type EngineEvent, type ScalarValue } from '../engine/index.ts';
 import { inc001Scenario } from '../scenario/index.ts';
 import {
   createIncidentSessionStore,
@@ -10,6 +10,7 @@ import {
   selectRevealedSignals,
   type IncidentSessionState,
 } from '../store/incident-session.ts';
+import { Postmortem } from './Postmortem.tsx';
 
 type ToolId = 'logs' | 'metrics' | 'database' | 'status' | 'evidence';
 
@@ -147,6 +148,9 @@ export function App({ store = defaultSessionStore }: AppProps) {
   const session = useStore(store);
   const [activeTool, setActiveTool] = useState<ToolId>('metrics');
   const [activeNarrativeId, setActiveNarrativeId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'incident' | 'postmortem'>(
+    store.getState().incident.completionReached ? 'postmortem' : 'incident',
+  );
   const narrativeContinueRef = useRef<HTMLButtonElement>(null);
   const activeNarrative = session.scenario.narratives.find(({ id }) => id === activeNarrativeId);
   const availableActions = selectAvailableActions(session);
@@ -172,6 +176,8 @@ export function App({ store = defaultSessionStore }: AppProps) {
     if (narrativeEvent?.sourceId !== undefined) {
       setActiveNarrativeId(narrativeEvent.sourceId);
       setActiveTool('logs');
+    } else if (result.state.completionReached) {
+      setViewMode('postmortem');
     } else if (action !== undefined) {
       setActiveTool(chooseTool(action));
     }
@@ -179,14 +185,32 @@ export function App({ store = defaultSessionStore }: AppProps) {
 
   const loadSession = () => {
     const result = session.load();
-    if (result.ok) setActiveNarrativeId(null);
+    if (result.ok) {
+      setActiveNarrativeId(null);
+      setViewMode(store.getState().incident.completionReached ? 'postmortem' : 'incident');
+    }
   };
 
   const restartSession = () => {
     session.restart();
     setActiveNarrativeId(null);
     setActiveTool('metrics');
+    setViewMode('incident');
   };
+
+  if (viewMode === 'postmortem' && session.incident.completionReached) {
+    return (
+      <Postmortem
+        report={computePostmortem(session.scenario, session.incident)}
+        persistenceNotice={session.persistenceNotice}
+        persistenceError={session.persistenceError?.message ?? null}
+        onSave={() => session.save()}
+        onLoad={loadSession}
+        onReturn={() => setViewMode('incident')}
+        onRestart={restartSession}
+      />
+    );
+  }
 
   return (
     <>
@@ -227,6 +251,11 @@ export function App({ store = defaultSessionStore }: AppProps) {
             <strong>{recovery.label}</strong>
             <span>{recovery.detail}</span>
           </div>
+          {session.incident.completionReached && (
+            <button onClick={() => setViewMode('postmortem')} type="button">
+              View postmortem
+            </button>
+          )}
         </section>
 
         <div className="desktop-grid">
@@ -496,7 +525,9 @@ export function App({ store = defaultSessionStore }: AppProps) {
               <span className="action-count">{availableActions.length}</span>
             </div>
             <p className="action-intro">
-              Only actions available in the current incident state are shown.
+              {session.incident.completionReached
+                ? 'This completed incident record is read-only.'
+                : 'Only actions available in the current incident state are shown.'}
             </p>
 
             <div className="action-list">
@@ -506,7 +537,11 @@ export function App({ store = defaultSessionStore }: AppProps) {
                     <span>{action.category}</span>
                     <span>+{formatElapsed(action.durationSeconds)}</span>
                   </div>
-                  <button onClick={() => performAction(action.id)} type="button">
+                  <button
+                    disabled={session.incident.completionReached}
+                    onClick={() => performAction(action.id)}
+                    type="button"
+                  >
                     {action.title}
                   </button>
                   <p>
@@ -565,7 +600,10 @@ export function App({ store = defaultSessionStore }: AppProps) {
             <p id="narrative-body">{activeNarrative.body}</p>
             <button
               ref={narrativeContinueRef}
-              onClick={() => setActiveNarrativeId(null)}
+              onClick={() => {
+                setActiveNarrativeId(null);
+                if (session.incident.completionReached) setViewMode('postmortem');
+              }}
               type="button"
             >
               Continue incident

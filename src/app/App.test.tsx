@@ -121,8 +121,16 @@ describe('INC-001 operations desktop', () => {
     expect(within(hint).getByRole('button', { name: 'Continue incident' })).toHaveFocus();
     await user.click(within(hint).getByRole('button', { name: 'Continue incident' }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Incident postmortem' })).toBeInTheDocument();
+    expect(screen.getByText('Service recovery time').closest('article')).toHaveTextContent('05:00');
+    expect(screen.getByText('Customer impact').closest('article')).toHaveTextContent('82');
+
+    await user.click(screen.getByRole('button', { name: 'Return to incident record' }));
 
     expect(screen.getAllByText('Incident recovered')).toHaveLength(2);
+    expect(screen.getByText('This completed incident record is read-only.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Restart Payment API' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'View postmortem' })).toBeEnabled();
     expect(
       screen.getByText('Root cause contained; service indicators are stable.'),
     ).toBeInTheDocument();
@@ -144,9 +152,62 @@ describe('INC-001 operations desktop', () => {
     expect(screen.getByText('No evidence recovered')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Load saved session' }));
+    expect(screen.getByRole('heading', { name: 'Incident postmortem' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Return to incident record' }));
     expect(screen.getByTestId('elapsed-time')).toHaveTextContent('05:00');
     expect(screen.getByText('Corrupted log entry')).toBeInTheDocument();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('opens a neutral postmortem directly after an investigation-first completion', async () => {
+    const { user } = renderIncident(713);
+
+    await perform(user, 'Inspect PostgreSQL');
+    await perform(user, 'Inspect database sessions');
+    await perform(user, 'Terminate stale database sessions');
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Incident postmortem' })).toBeInTheDocument();
+    expect(screen.getByText('Service recovery time').closest('article')).toHaveTextContent('04:30');
+    expect(screen.getByText('Customer impact').closest('article')).toHaveTextContent('70');
+    expect(screen.getByText('Operational risk').closest('article')).toHaveTextContent('6');
+    expect(screen.getByText('No non-resolving intervention was recorded.')).toBeInTheDocument();
+    expect(screen.queryByText(/correct|incorrect|score/i)).not.toBeInTheDocument();
+  });
+
+  it('explains restart-first temporary mitigation and recurrence in the postmortem', async () => {
+    const { user } = renderIncident(715);
+
+    await perform(user, 'Restart Payment API');
+    await perform(user, 'Inspect PostgreSQL');
+    await perform(user, 'Inspect database sessions');
+    await perform(user, 'Terminate stale database sessions');
+
+    expect(screen.getByRole('heading', { name: 'Incident postmortem' })).toBeInTheDocument();
+    expect(screen.getByText('Service recovery time').closest('article')).toHaveTextContent('05:30');
+    expect(screen.getByText('Customer impact').closest('article')).toHaveTextContent('78');
+    expect(screen.getByText('Operational risk').closest('article')).toHaveTextContent('14');
+    expect(screen.getByRole('heading', { name: 'Temporary windows' })).toBeInTheDocument();
+    expect(screen.getByText(/expired at 03:00/)).toBeInTheDocument();
+    expect(screen.getByText('Connection Saturation Recurs')).toBeInTheDocument();
+    expect(screen.getByText(/did not contain the root cause/i)).toBeInTheDocument();
+  });
+
+  it('lists an actual customer-impact update in the postmortem communication record', async () => {
+    const { user } = renderIncident(717);
+
+    await perform(user, 'Open Payment API logs');
+    await perform(user, 'Send a customer-impact status update');
+    await perform(user, 'Inspect PostgreSQL');
+    await perform(user, 'Inspect database sessions');
+    await perform(user, 'Terminate stale database sessions');
+    await user.click(screen.getByRole('button', { name: 'Continue incident' }));
+
+    const communication = screen.getByRole('region', { name: 'Recorded updates' });
+    expect(
+      within(communication).getByText('Send a customer-impact status update'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Status update count').closest('article')).toHaveTextContent('1');
   });
 
   it('reports a missing local save without replacing the active session', async () => {
