@@ -152,6 +152,7 @@ export function App({ store = defaultSessionStore }: AppProps) {
     store.getState().incident.completionReached ? 'postmortem' : 'incident',
   );
   const narrativeContinueRef = useRef<HTMLButtonElement>(null);
+  const postmortemReturnRef = useRef<HTMLButtonElement>(null);
   const activeNarrative = session.scenario.narratives.find(({ id }) => id === activeNarrativeId);
   const availableActions = selectAvailableActions(session);
   const revealedSignals = selectRevealedSignals(session);
@@ -167,6 +168,16 @@ export function App({ store = defaultSessionStore }: AppProps) {
   useEffect(() => {
     if (activeNarrative !== undefined) narrativeContinueRef.current?.focus();
   }, [activeNarrative]);
+
+  useEffect(() => {
+    if (
+      viewMode === 'incident' &&
+      session.incident.completionReached &&
+      activeNarrative === undefined
+    ) {
+      postmortemReturnRef.current?.focus();
+    }
+  }, [viewMode, session.incident.completionReached, activeNarrative]);
 
   const performAction = (actionId: string) => {
     const action = session.scenario.actions.find(({ id }) => id === actionId);
@@ -252,7 +263,11 @@ export function App({ store = defaultSessionStore }: AppProps) {
             <span>{recovery.detail}</span>
           </div>
           {session.incident.completionReached && (
-            <button onClick={() => setViewMode('postmortem')} type="button">
+            <button
+              ref={postmortemReturnRef}
+              onClick={() => setViewMode('postmortem')}
+              type="button"
+            >
               View postmortem
             </button>
           )}

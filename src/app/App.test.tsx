@@ -122,6 +122,7 @@ describe('INC-001 operations desktop', () => {
     await user.click(within(hint).getByRole('button', { name: 'Continue incident' }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Incident postmortem' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Incident postmortem' })).toHaveFocus();
     expect(screen.getByText('Service recovery time').closest('article')).toHaveTextContent('05:00');
     expect(screen.getByText('Customer impact').closest('article')).toHaveTextContent('82');
 
@@ -131,6 +132,7 @@ describe('INC-001 operations desktop', () => {
     expect(screen.getByText('This completed incident record is read-only.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Restart Payment API' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'View postmortem' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'View postmortem' })).toHaveFocus();
     expect(
       screen.getByText('Root cause contained; service indicators are stable.'),
     ).toBeInTheDocument();
@@ -168,6 +170,7 @@ describe('INC-001 operations desktop', () => {
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Incident postmortem' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Incident postmortem' })).toHaveFocus();
     expect(screen.getByText('Service recovery time').closest('article')).toHaveTextContent('04:30');
     expect(screen.getByText('Customer impact').closest('article')).toHaveTextContent('70');
     expect(screen.getByText('Operational risk').closest('article')).toHaveTextContent('6');

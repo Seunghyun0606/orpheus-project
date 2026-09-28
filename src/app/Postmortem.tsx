@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 import type { PostmortemMetric, PostmortemReport, ScalarValue } from '../engine/index.ts';
 
 export interface PostmortemProps {
@@ -47,13 +49,21 @@ export function Postmortem({
   onReturn,
   onRestart,
 }: PostmortemProps) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+
   return (
     <main className="postmortem-shell">
       <header className="postmortem-header">
         <div>
           <p className="eyebrow">VANTAGE SYSTEMS // INCIDENT ARCHIVE</p>
           <p className="postmortem-kicker">{report.scenarioId} / RESPONSE RECORD</p>
-          <h1>Incident postmortem</h1>
+          <h1 ref={headingRef} tabIndex={-1}>
+            Incident postmortem
+          </h1>
           <p>
             {report.scenarioTitle} · Reconstructed from the incident state and recorded actions.
           </p>
