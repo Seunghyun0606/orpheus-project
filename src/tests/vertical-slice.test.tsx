@@ -26,9 +26,16 @@ describe('INC-001 complete vertical slice', () => {
     const user = userEvent.setup();
     render(<App store={store} />);
 
+    async function reachByTab(target: HTMLElement) {
+      for (let attempt = 0; attempt < 60 && document.activeElement !== target; attempt += 1) {
+        await user.tab();
+      }
+      expect(target).toHaveFocus();
+    }
+
     async function activate(name: string) {
       const button = screen.getByRole('button', { name });
-      button.focus();
+      await reachByTab(button);
       await user.keyboard('{Enter}');
     }
 
@@ -48,7 +55,7 @@ describe('INC-001 complete vertical slice', () => {
     expect(within(findings).getByText('idle in transaction')).toBeInTheDocument();
 
     const databaseTab = screen.getByRole('tab', { name: /Database/ });
-    databaseTab.focus();
+    await reachByTab(databaseTab);
     await user.keyboard('{ArrowRight}');
     expect(screen.getByRole('tab', { name: /Status/ })).toHaveFocus();
     expect(screen.getByText('Open')).toBeInTheDocument();
@@ -65,9 +72,9 @@ describe('INC-001 complete vertical slice', () => {
     await activate('Return to incident record');
     expect(screen.getByRole('button', { name: 'View postmortem' })).toHaveFocus();
     expect(screen.getAllByText('Incident recovered')).toHaveLength(2);
-    const statusTab = screen.getByRole('tab', { name: /Status/ });
-    statusTab.focus();
-    await user.keyboard('{ArrowRight}');
+    const activeTabAfterReturn = screen.getByRole('tab', { selected: true });
+    await reachByTab(activeTabAfterReturn);
+    await user.keyboard('{End}');
     expect(screen.getByRole('tab', { name: /Evidence/ })).toHaveFocus();
     expect(screen.getByText('Corrupted log entry')).toBeInTheDocument();
 
@@ -80,7 +87,7 @@ describe('INC-001 complete vertical slice', () => {
     await activate('Return to incident record');
     expect(screen.getByTestId('elapsed-time')).toHaveTextContent('05:00');
     const metricsTab = screen.getByRole('tab', { name: /Metrics/ });
-    metricsTab.focus();
+    await reachByTab(metricsTab);
     await user.keyboard('{End}');
     expect(screen.getByRole('tab', { name: /Evidence/ })).toHaveFocus();
     expect(screen.getByText('Corrupted log entry')).toBeInTheDocument();
