@@ -6,16 +6,20 @@ import type { SaveStorage } from '../persistence/index.ts';
 import { inc001Scenario } from '../scenario/index.ts';
 import { createIncidentSessionStore } from '../store/incident-session.ts';
 import { App } from './App.tsx';
+import { presentationStorageKey } from './presentation-settings.ts';
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  window.localStorage.removeItem(presentationStorageKey);
+});
 
 function renderIncident(seed = 701, storage?: SaveStorage) {
   const store = createIncidentSessionStore(inc001Scenario, seed, storage);
   const user = userEvent.setup();
 
-  render(<App store={store} />);
+  const { unmount } = render(<App store={store} />);
 
-  return { store, user };
+  return { store, user, unmount };
 }
 
 async function perform(user: ReturnType<typeof userEvent.setup>, actionName: string) {
@@ -23,6 +27,50 @@ async function perform(user: ReturnType<typeof userEvent.setup>, actionName: str
 }
 
 describe('INC-001 operations desktop', () => {
+  it('persists display controls independently of the incident and restores them after remount', async () => {
+    const { user, unmount } = renderIncident();
+
+    await user.click(screen.getByText('Display settings'));
+    await user.click(screen.getByRole('checkbox', { name: 'CRT effects' }));
+    await user.click(screen.getByRole('checkbox', { name: 'Reduce animation' }));
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Text scale' }), 'extra-large');
+
+    expect(document.documentElement).toHaveAttribute('data-crt-effects', 'off');
+    expect(document.documentElement).toHaveAttribute('data-motion', 'reduce');
+    expect(document.documentElement).toHaveAttribute('data-text-scale', 'extra-large');
+    expect(JSON.parse(window.localStorage.getItem(presentationStorageKey) ?? '{}')).toEqual({
+      crtEffects: false,
+      reducedAnimation: true,
+      textScale: 'extra-large',
+    });
+
+    unmount();
+    expect(document.documentElement).not.toHaveAttribute('data-text-scale');
+    renderIncident();
+    await user.click(screen.getByText('Display settings'));
+    expect(screen.getByRole('checkbox', { name: 'CRT effects' })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: 'Reduce animation' })).toBeChecked();
+    expect(screen.getByRole('combobox', { name: 'Text scale' })).toHaveValue('extra-large');
+    expect(screen.getByRole('heading', { name: 'Connection Saturation' })).toBeInTheDocument();
+  });
+
+  it('supports arrow, Home, and End navigation among investigation tabs', async () => {
+    const { user } = renderIncident();
+    const metrics = screen.getByRole('tab', { name: /Metrics/ });
+    metrics.focus();
+
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('tab', { name: /Database/ })).toHaveFocus();
+    expect(screen.getByRole('heading', { name: 'Session investigation' })).toBeInTheDocument();
+    await user.keyboard('{End}');
+    expect(screen.getByRole('tab', { name: /Evidence/ })).toHaveFocus();
+    await user.keyboard('{Home}');
+    expect(screen.getByRole('tab', { name: /Logs/ })).toHaveFocus();
+    await user.keyboard('{ArrowLeft}');
+    expect(screen.getByRole('tab', { name: /Evidence/ })).toHaveFocus();
+    expect(screen.getAllByRole('tab').filter((tab) => tab.tabIndex === 0)).toHaveLength(1);
+  });
+
   it('renders the initial pager state, service path, telemetry, and unlocked actions', () => {
     renderIncident();
 

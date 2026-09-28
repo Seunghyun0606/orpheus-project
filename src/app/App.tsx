@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { useStore } from 'zustand';
 import type { StoreApi } from 'zustand/vanilla';
 
@@ -11,6 +11,11 @@ import {
   type IncidentSessionState,
 } from '../store/incident-session.ts';
 import { Postmortem } from './Postmortem.tsx';
+import { PresentationSettings } from './PresentationSettings.tsx';
+import {
+  readPresentationPreferences,
+  savePresentationPreferences,
+} from './presentation-settings.ts';
 
 type ToolId = 'logs' | 'metrics' | 'database' | 'status' | 'evidence';
 
@@ -146,6 +151,9 @@ function recoveryCopy(state: IncidentSessionState['incident']): {
 
 export function App({ store = defaultSessionStore }: AppProps) {
   const session = useStore(store);
+  const [presentationPreferences, setPresentationPreferences] = useState(
+    readPresentationPreferences,
+  );
   const [activeTool, setActiveTool] = useState<ToolId>('metrics');
   const [activeNarrativeId, setActiveNarrativeId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'incident' | 'postmortem'>(
@@ -164,6 +172,19 @@ export function App({ store = defaultSessionStore }: AppProps) {
     return initial?.revealed === false;
   });
   const recentEvents = session.incident.eventLog.slice(-8).reverse();
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.crtEffects = presentationPreferences.crtEffects ? 'on' : 'off';
+    root.dataset.motion = presentationPreferences.reducedAnimation ? 'reduce' : 'standard';
+    root.dataset.textScale = presentationPreferences.textScale;
+    savePresentationPreferences(presentationPreferences);
+    return () => {
+      delete root.dataset.crtEffects;
+      delete root.dataset.motion;
+      delete root.dataset.textScale;
+    };
+  }, [presentationPreferences]);
 
   useEffect(() => {
     if (activeNarrative !== undefined) narrativeContinueRef.current?.focus();
@@ -209,23 +230,60 @@ export function App({ store = defaultSessionStore }: AppProps) {
     setViewMode('incident');
   };
 
+  const handleToolKeyDown = (event: KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+    let nextIndex: number;
+    switch (event.key) {
+      case 'ArrowRight':
+        nextIndex = (currentIndex + 1) % tools.length;
+        break;
+      case 'ArrowLeft':
+        nextIndex = (currentIndex - 1 + tools.length) % tools.length;
+        break;
+      case 'Home':
+        nextIndex = 0;
+        break;
+      case 'End':
+        nextIndex = tools.length - 1;
+        break;
+      default:
+        return;
+    }
+    event.preventDefault();
+    const nextTool = tools[nextIndex];
+    if (nextTool === undefined) return;
+    setActiveTool(nextTool.id);
+    const tabs =
+      event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    tabs?.[nextIndex]?.focus();
+  };
+
   if (viewMode === 'postmortem' && session.incident.completionReached) {
     return (
-      <Postmortem
-        report={computePostmortem(session.scenario, session.incident)}
-        persistenceNotice={session.persistenceNotice}
-        persistenceError={session.persistenceError?.message ?? null}
-        onSave={() => session.save()}
-        onLoad={loadSession}
-        onReturn={() => setViewMode('incident')}
-        onRestart={restartSession}
-      />
+      <>
+        <PresentationSettings
+          onChange={setPresentationPreferences}
+          preferences={presentationPreferences}
+        />
+        <Postmortem
+          report={computePostmortem(session.scenario, session.incident)}
+          persistenceNotice={session.persistenceNotice}
+          persistenceError={session.persistenceError?.message ?? null}
+          onSave={() => session.save()}
+          onLoad={loadSession}
+          onReturn={() => setViewMode('incident')}
+          onRestart={restartSession}
+        />
+      </>
     );
   }
 
   return (
     <>
       <main className="operations-shell" inert={activeNarrative !== undefined}>
+        <PresentationSettings
+          onChange={setPresentationPreferences}
+          preferences={presentationPreferences}
+        />
         <header className="incident-header">
           <div className="brand-lockup">
             <p className="eyebrow">VANTAGE SYSTEMS // PRODUCTION RELIABILITY</p>
@@ -327,15 +385,17 @@ export function App({ store = defaultSessionStore }: AppProps) {
 
           <section className="workspace panel" aria-label="Incident investigation workspace">
             <div className="tool-tabs" role="tablist" aria-label="Investigation tools">
-              {tools.map((tool) => (
+              {tools.map((tool, index) => (
                 <button
-                  aria-controls={`tool-panel-${tool.id}`}
+                  aria-controls="tool-panel"
                   aria-selected={activeTool === tool.id}
                   className={activeTool === tool.id ? 'tool-tab tool-tab--active' : 'tool-tab'}
                   id={`tool-tab-${tool.id}`}
                   key={tool.id}
                   onClick={() => setActiveTool(tool.id)}
+                  onKeyDown={(event) => handleToolKeyDown(event, index)}
                   role="tab"
+                  tabIndex={activeTool === tool.id ? 0 : -1}
                   type="button"
                 >
                   <span>{tool.shortcut}</span> {tool.label}
@@ -346,7 +406,7 @@ export function App({ store = defaultSessionStore }: AppProps) {
             <div
               aria-labelledby={`tool-tab-${activeTool}`}
               className="tool-panel"
-              id={`tool-panel-${activeTool}`}
+              id="tool-panel"
               role="tabpanel"
             >
               {activeTool === 'logs' && (
@@ -434,8 +494,8 @@ export function App({ store = defaultSessionStore }: AppProps) {
                         {newDiscoveries.map((signal) => (
                           <tr key={signal.id}>
                             <th scope="row">{humanize(signal.id)}</th>
-                            <td>{formatSignalValue(signal.id, signal.value)}</td>
-                            <td>
+                            <td data-label="Value">{formatSignalValue(signal.id, signal.value)}</td>
+                            <td data-label="Source">
                               {signal.serviceId === undefined
                                 ? 'Incident'
                                 : humanize(signal.serviceId)}

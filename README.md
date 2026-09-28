@@ -1,9 +1,9 @@
 # Orpheus
 
 Orpheus is a desktop narrative techno-thriller built with Tauri, React, and TypeScript.
-The repository contains the desktop foundation, validated scenario data, and a deterministic
-headless incident engine. INC-001 is covered by authored-data and replay verification while UI
-integration remains a later milestone.
+The repository contains a playable INC-001 desktop slice, validated scenario data, and a
+deterministic headless incident engine. The session runs from the Pager alert through investigation,
+recovery, saved evidence, and an action-derived postmortem.
 
 ## Prerequisites
 
@@ -18,11 +18,34 @@ npm ci
 npm run dev
 ```
 
-Open the URL printed by Vite to run the web shell. To run the native desktop shell:
+Open the URL printed by Vite to run the web client. To run the native desktop client:
 
 ```sh
 npm run dev:desktop
 ```
+
+## Desktop vertical-slice run
+
+Start with `npm run dev:desktop` (or `npm run dev` for browser QA). The initial Pager shows
+`SEV1`, Payment API, and the error-rate alert. Use the investigation tabs with Tab and arrow keys,
+then activate actions with Enter or Space:
+
+1. Open Payment API logs, inspect PostgreSQL, and inspect database sessions. The session table
+   reveals 164 stale `idle in transaction` sessions, then unlocks the termination action.
+2. Terminate stale database sessions. The transient `UNKNOWN` log message appears before the
+   postmortem; activate **Continue incident** to finish. The report shows elapsed time, customer
+   impact, operational risk, and the recorded action sequence without grading the player.
+3. Return to the completed incident record, open **Evidence**, and confirm **Corrupted log entry**.
+   Save the session, restart the incident, then load the saved session. Return from the restored
+   postmortem and confirm that the evidence and recovered state remain.
+
+For the temporary-mitigation path, restart Payment API before investigation. The recovery banner
+labels this **Temporary stabilization**; after enough action-driven time the degradation recurs.
+The postmortem explains the temporary window and its observed effects.
+
+**Display settings** are available on both the incident and postmortem screens. They independently
+persist CRT effects, reduced animation, and 100%, 125%, or 150% text scaling in local browser
+storage. They do not alter the incident save or replay log.
 
 ## Quality commands
 
@@ -34,9 +57,24 @@ npm run typecheck
 npm test
 npm run test:replays
 npm run validate:scenarios
+npm run build:desktop
 ```
 
 `npm run build:desktop` compiles the native application without producing an installer.
+
+## M2 verification map
+
+| M2 exit criterion                                    | Repeatable evidence                                                                                                                                                                                                                                                 |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Operations desktop from Pager to postmortem          | `src/tests/vertical-slice.test.tsx` exercises logs, database investigation, status, actions, evidence, save/load, and postmortem; `npm run build:desktop` compiles the native client. Follow the desktop run above for visual QA.                                   |
+| Impact and temporary recovery without grading        | `src/app/App.test.tsx` verifies temporary stabilization and recurrence; `src/engine/postmortem.test.ts` compares the two response paths and measured impact.                                                                                                        |
+| UNKNOWN discovery and durable corrupted-log evidence | `src/tests/vertical-slice.test.tsx` verifies the transient message before the report and evidence after save, restart, and load.                                                                                                                                    |
+| Adjustable presentation and non-color status cues    | `src/app/App.test.tsx` verifies persisted controls and keyboard tab navigation; its incident assertions verify textual recovery states. At 320px and 150% text scale, check the database observations and report for clipped content and run an accessibility scan. |
+
+Run the full quality command set above and the desktop build for the final M2 check. The
+structured TASK-010 result in `.project-os/tasks/results` records actual command outcomes and
+independent review/QA decisions.
+
 The scenario validation command recursively checks `src/scenario/data` by default. Pass one or
 more YAML files or directories to validate authored content elsewhere:
 
