@@ -1,0 +1,62 @@
+task: TASK-010
+status: pass
+summary: Added locally persisted presentation controls, non-color status and keyboard
+  navigation verification, a complete component-level INC-001 path, responsive text-scaling
+  fixes, and the documented desktop/M2 verification path.
+files_changed:
+- src/app/presentation-settings.ts
+- src/app/PresentationSettings.tsx
+- src/app/App.tsx
+- src/app/App.test.tsx
+- src/tests/vertical-slice.test.tsx
+- src/ui/base.css
+- README.md
+verification:
+  acceptance:
+    status: pass
+    detail: CRT effects, reduced animation, and 100/125/150 percent text scaling persist
+      independently of incident saves. Status banners, service nodes, logs, and resolution
+      use text or shapes in addition to color. Keyboard navigation covers tabs, actions,
+      the UNKNOWN dialog, evidence, save/load, and postmortem. The full path preserves
+      CORRUPTED_LOG_ENTRY. All quality commands and the desktop build passed; M2 exit
+      criteria have mapped tests.
+  m2_operations_desktop:
+    status: pass
+    detail: The complete component-level test traverses Pager, logs, database investigation,
+      status, actions, evidence, local save/load, and postmortem. The final Tauri
+      release build and bounded runtime launch passed.
+  m2_impact_and_temporary_recovery:
+    status: pass
+    detail: App and engine tests verify measured customer impact, temporary stabilization,
+      recurrence, root-cause recovery, and a non-grading report.
+  m2_unknown_evidence:
+    status: pass
+    detail: The integration test observes UNKNOWN before the report, then verifies
+      Corrupted log entry after save, restart, and load.
+  m2_accessibility:
+    status: pass
+    detail: Component tests cover persisted controls and roving keyboard tabs. Browser
+      checks at 320, 390, 760, 900, 1280, and 1700px with 150 percent text found no
+      document-level horizontal overflow. The 320px report had zero axe violations
+      and zero incomplete checks; incident decorative glyphs and layered backgrounds
+      produced inconclusive contrast checks but no violations.
+  full_tests:
+    status: pass
+    detail: Vitest passed 48 tests across nine files; replay fixtures passed 2/2.
+  scenario_validation: pass
+  typecheck: pass
+  lint: pass
+  format: pass
+  diff_check: pass
+  web_build: pass
+  desktop_build: pass
+  desktop_runtime:
+    status: pass
+    detail: Final executable launched with a nonzero window handle and Responding=true
+      in a bounded smoke check. Full native in-app play remains a manual QA path.
+followups:
+- Independent TASK-010 review and acceptance QA are required before completion evaluation.
+commit: 9dc6602
+kind: implementation
+role: developer
+actor: codex-developer
