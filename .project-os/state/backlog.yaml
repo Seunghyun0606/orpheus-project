@@ -77,7 +77,7 @@ tasks:
   role: developer
   milestone: M2
   priority: P1
-  status: active
+  status: done
   depends_on:
   - TASK-007
   - TASK-008
