@@ -1,0 +1,48 @@
+task: TASK-010
+status: pass
+summary: Acceptance QA confirmed persisted display settings, enlarged-text layout,
+  keyboard-driven vertical slice, UNKNOWN evidence restoration, and final native build/runtime
+  startup.
+files_changed: []
+verification:
+  presentation_controls:
+    status: pass
+    detail: Browser QA at 320px toggled CRT off and reduced animation on, selected
+      150 percent text, reloaded, and observed all three preferences restored.
+  enlarged_layout:
+    status: pass
+    detail: Browser document width matched viewport at 320, 390, 760, 900, 1280, and
+      1700px with 150 percent text. The database table stacked into labeled observations
+      and the 320px report metrics used one column.
+  keyboard_and_evidence:
+    status: pass
+    detail: The complete component integration test traversed controls by Tab, operated
+      them by Enter, used arrow keys for investigation tabs, saw UNKNOWN before the
+      report, and restored corrupted-log evidence after save/restart/load.
+  non_color_status:
+    status: pass
+    detail: Critical/degradation, temporary stabilization, incident recovery, service
+      alert/stable, and contained/open cause states have text labels; banner and service
+      statuses additionally use distinct glyphs.
+  accessibility:
+    status: pass
+    detail: Axe 4.12.1 reported zero violations. The 320px/150-percent report had
+      zero incomplete checks; the incident view had inconclusive contrast checks on
+      decorative glyphs/layered backgrounds, not confirmed violations.
+  native_runtime:
+    status: pass
+    detail: Final Tauri release build succeeded and executable smoke showed a nonzero
+      window handle and Responding=true. Full native in-app flow was not manually
+      inspected.
+  quality_commands:
+    status: pass
+    detail: Vitest 48/48, replay fixtures 2/2, scenario validation, typecheck, lint,
+      format, diff check, web build, and Tauri release build passed.
+critical_issues: 0
+followups:
+- Manually exercise the packaged native in-app path when a native UI connection is
+  available; browser and component routes plus native startup passed here.
+commit: 0e0362e
+kind: qa
+role: qa
+actor: codex-qa
