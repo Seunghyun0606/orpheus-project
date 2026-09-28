@@ -1,0 +1,33 @@
+task: TASK-009
+status: pass
+summary: Independent QA exercised completed-incident report navigation and verified
+  focus, accessibility, automated quality checks, and the native runtime.
+files_changed: []
+verification:
+  response_paths:
+    status: pass
+    detail: Component and engine tests cover restart-first and investigation-first
+      outcomes, UNKNOWN-before-postmortem ordering, communication, and saved completed-session
+      restoration.
+  browser_navigation:
+    status: pass
+    detail: Chromium investigation-first completion focused the postmortem h1; returning
+      to the read-only incident record focused View postmortem.
+  accessibility:
+    status: pass
+    detail: Axe 4.12.1 reported zero violations and zero incomplete checks on the
+      report after the focus correction.
+  native_runtime:
+    status: pass
+    detail: Final Tauri release build succeeded; the executable launched with a nonzero
+      window handle and Responding=true in a bounded smoke check.
+  quality_commands:
+    status: pass
+    detail: Vitest 45/45, scenario validation, typecheck, lint, format check, diff
+      check, web build, and Tauri release build passed.
+critical_issues: 0
+followups: []
+commit: 803d062
+kind: qa
+role: qa
+actor: codex-qa

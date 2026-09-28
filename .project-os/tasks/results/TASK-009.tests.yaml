@@ -1,0 +1,37 @@
+task: TASK-009
+status: pass
+summary: Automated and observable TASK-009 acceptance evidence passed after the postmortem
+  focus correction.
+files_changed: []
+verification:
+  acceptance:
+    status: pass
+    detail: Eight configured metrics derive from authoritative incident state; the
+      two approved response paths produce distinct causal summaries; customer impact
+      and operational risk appear without binary grading; calculation remains headless
+      and deterministic.
+  unit_and_component_tests:
+    status: pass
+    detail: Vitest passed 45 tests across eight files, including both action paths,
+      temporary mitigation, recurrence, communication, replay equivalence, save/load
+      restoration, and focus transitions.
+  browser_route:
+    status: pass
+    detail: Chromium investigation-first route reached the report and returned to
+      the read-only incident record with the expected focus targets.
+  browser_accessibility:
+    status: pass
+    detail: Axe reported zero violations and zero incomplete checks on the report.
+  scenario_validation: pass
+  typecheck: pass
+  lint: pass
+  format: pass
+  diff_check: pass
+  web_build: pass
+  desktop_build: pass
+  native_smoke: pass
+followups: []
+commit: 803d062
+kind: test
+role: qa
+actor: codex-qa
