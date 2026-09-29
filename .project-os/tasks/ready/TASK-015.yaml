@@ -1,0 +1,48 @@
+id: TASK-015
+title: Connect evidence and UNKNOWN narrative across three incidents
+role: developer
+milestone: M3
+priority: P1
+status: ready
+
+objective: Give the three incidents a discoverable early narrative arc while retaining evidence and trigger history.
+why: The MVP should reward investigation across incidents without disclosing the later campaign's explanation.
+
+scope:
+  include:
+    - Author evidence and narrative triggers in incident data, including War Room and operational artifacts where relevant.
+    - Make discoveries visible in an incident-independent evidence view or equivalent shared projection.
+    - Preserve discovered artifacts and the minimum cross-incident progression needed for the M3 arc.
+    - Validate references, ordering, and save/replay behavior with focused tests.
+  exclude:
+    - Revealing NULL's identity, ORPHEUS's identity, Production Experiment, or later-act turns.
+    - Full campaign alignment, prediction, ending, or irreversible save migration.
+
+depends_on:
+  - TASK-012
+  - TASK-013
+  - TASK-014
+specs:
+  - specs/product/01-game-and-narrative-direction.md
+  - specs/feature/campaign-and-player-model.md
+  - specs/architecture/scenario-format.md
+relevant_files:
+  - src/scenario/data/
+  - src/engine/
+  - src/store/
+  - src/persistence/
+  - src/app/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - Each incident has an investigable discovery route; M3 as a whole establishes only UNKNOWN's presence.
+  - Trigger order and evidence are derived from validated data and actual actions, not incident-id conditionals.
+  - Saved and restored progress retains previously discovered artifacts without replay disagreement.
+  - Automated content checks reject prohibited early reveals and invalid narrative references.
+verification:
+  - Run narrative/content validation, three-incident replay, save/load, and UI evidence tests.
+
+human_gate: false
+risk: high

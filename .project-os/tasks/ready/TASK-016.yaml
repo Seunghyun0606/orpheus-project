@@ -1,0 +1,50 @@
+id: TASK-016
+title: Make the shared desktop and local progression playable for all incidents
+role: developer
+milestone: M3
+priority: P0
+status: ready
+
+objective: Let a player enter, complete, and revisit all three incidents through one accessible desktop flow.
+why: Validated data and headless replays are insufficient if the MVP cannot be played end to end.
+
+scope:
+  include:
+    - Provide an incident entry/progression path for INC-001, INC-002, and INC-003 without scenario-specific React branches.
+    - Generalize operations views, postmortem, evidence, War Room, and action presentation to all three datasets.
+    - Save and restore the active incident and already completed/discovered M3 progress locally.
+    - Handle incompatible or malformed saves explicitly without erasing the active session.
+    - Keep accessible settings, keyboard operation, and non-color status cues in the shared flow.
+  exclude:
+    - Later acts, cloud sync, multiple user profiles, or changes to the product's ending model.
+    - Silent overwrite or migration of existing M2 saves when compatibility cannot be proven.
+
+depends_on:
+  - TASK-012
+  - TASK-013
+  - TASK-014
+  - TASK-015
+specs:
+  - specs/ux/operations-desktop.md
+  - specs/architecture/system-architecture.md
+  - specs/product/01-game-and-narrative-direction.md
+relevant_files:
+  - src/app/
+  - src/store/
+  - src/persistence/
+  - src/scenario/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-002-desktop-web-stack.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - All three incidents are startable, playable to postmortem, and revisitable in one local app.
+  - Existing INC-001 play and save behavior does not regress; any necessary incompatible migration is escalated before implementation.
+  - No production React file branches on a specific incident id.
+  - Core flows remain keyboard operable and communicate status without color alone.
+verification:
+  - Run three-incident UI integration, persistence compatibility, accessibility, and full build tests.
+
+human_gate: false
+risk: high

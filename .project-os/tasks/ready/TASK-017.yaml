@@ -1,0 +1,46 @@
+id: TASK-017
+title: Verify the three-incident MVP against M3 exit criteria
+role: developer
+milestone: M3
+priority: P0
+status: ready
+
+objective: Produce objective, independently checked evidence for every M3 exit criterion.
+why: M3 completion requires a playable multi-incident MVP and an explicit human completion gate, not implementation alone.
+
+scope:
+  include:
+    - Run and record content validation, deterministic replay, component/end-to-end, persistence, accessibility, web, and native build checks.
+    - Exercise the complete INC-001, INC-002, and INC-003 paths, including delegation and UNKNOWN discovery.
+    - Map every M3 exit criterion to evidence and request independent review and acceptance QA.
+    - Identify remaining limitations and obtain the configured human completion decision separately.
+  exclude:
+    - Marking M3 complete without independent evidence and the human gate.
+    - Later-campaign content, release approval, or unrequested product direction changes.
+
+depends_on:
+  - TASK-016
+specs:
+  - specs/product/01-game-and-narrative-direction.md
+  - specs/feature/incident-simulation.md
+  - specs/ux/operations-desktop.md
+relevant_files:
+  - src/tests/
+  - src/scenario/
+  - README.md
+  - .project-os/tasks/results/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - All three incidents are fully playable, with repeatable replays and no scenario-specific React logic.
+  - Evidence, narrative triggers, War Room communication, and delegation work across incidents.
+  - Automated content checks and independent QA confirm the UNKNOWN-only reveal boundary.
+  - Every M3 exit criterion has objective evidence and no critical review finding remains.
+  - M3 remains active until its configured human completion gate is resolved.
+verification:
+  - Run the complete quality command set, independent review, acceptance QA, and native desktop inspection.
+
+human_gate: false
+risk: high

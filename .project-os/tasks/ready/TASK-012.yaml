@@ -1,0 +1,44 @@
+id: TASK-012
+title: Author and replay INC-002 Bad Deployment
+role: developer
+milestone: M3
+priority: P0
+status: ready
+
+objective: Deliver a distinct, data-authored Bad Deployment incident with a complete deterministic response path.
+why: The second incident must prove that deployment investigation and mitigation do not require one-off engine or React rules.
+
+scope:
+  include:
+    - Record an incident brief covering trigger, causal mechanism, observable symptoms, customer impact, actions, and evidence before content authoring.
+    - Author validated INC-002 data for observation, temporary mitigation, root-cause containment, delayed consequences, and postmortem inputs.
+    - Add at least two meaningful response/replay paths with different consequences.
+    - Keep narrative disclosures within the M3 UNKNOWN-only boundary.
+  exclude:
+    - Scenario-specific engine or React branches, later-act reveals, and production deployment integration.
+    - Inventing major narrative or product-direction changes outside the approved MVP scope.
+
+depends_on:
+  - TASK-011
+specs:
+  - specs/feature/incident-simulation.md
+  - specs/architecture/scenario-format.md
+  - specs/product/01-game-and-narrative-direction.md
+relevant_files:
+  - src/scenario/data/incidents/
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - INC-002 validates with stable ids and no unresolved references.
+  - Headless replay reaches both temporary relief and causal resolution, with differing customer impact.
+  - Identical seed and ordered actions produce identical state and events.
+  - Deployment information is investigable from authored data and the postmortem explains actual actions without right-or-wrong labels.
+  - No content exposes NULL, ORPHEUS identity, or later-act revelations.
+verification:
+  - Run content validation, INC-002 fixture/replay tests, and existing INC-001 regressions.
+
+human_gate: false
+risk: high

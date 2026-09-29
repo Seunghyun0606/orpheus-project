@@ -93,3 +93,71 @@ tasks:
   - TASK-008
   - TASK-009
   human_gate: false
+- id: TASK-011
+  title: Establish the reusable three-incident scenario catalog
+  role: developer
+  milestone: M3
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-010
+  human_gate: false
+- id: TASK-012
+  title: Author and replay INC-002 Bad Deployment
+  role: developer
+  milestone: M3
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-011
+  human_gate: false
+- id: TASK-013
+  title: Author and replay INC-003 Queue Backlog
+  role: developer
+  milestone: M3
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-011
+  human_gate: false
+- id: TASK-014
+  title: Add shared War Room communication and delayed delegation
+  role: developer
+  milestone: M3
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-011
+  human_gate: false
+- id: TASK-015
+  title: Connect evidence and UNKNOWN narrative across three incidents
+  role: developer
+  milestone: M3
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-012
+  - TASK-013
+  - TASK-014
+  human_gate: false
+- id: TASK-016
+  title: Make the shared desktop and local progression playable for all incidents
+  role: developer
+  milestone: M3
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-012
+  - TASK-013
+  - TASK-014
+  - TASK-015
+  human_gate: false
+- id: TASK-017
+  title: Verify the three-incident MVP against M3 exit criteria
+  role: developer
+  milestone: M3
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-016
+  human_gate: false

@@ -5,11 +5,11 @@ milestones:
     milestone_file: .project-os/milestones/M1.yaml
   - id: M2
     name: Playable INC-001 Vertical Slice
-    status: active
+    status: completed
     milestone_file: .project-os/milestones/M2.yaml
   - id: M3
     name: Three-Incident MVP
-    status: planned
+    status: active
     milestone_file: .project-os/milestones/M3.yaml
   - id: M4
     name: Campaign Intelligence Systems

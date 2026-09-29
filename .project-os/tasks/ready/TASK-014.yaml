@@ -1,0 +1,47 @@
+id: TASK-014
+title: Add shared War Room communication and delayed delegation
+role: developer
+milestone: M3
+priority: P0
+status: ready
+
+objective: Make team messages and delegated work playable through reusable, deterministic incident systems.
+why: M3 requires the response loop to include colleagues and communication, not only direct solo actions.
+
+scope:
+  include:
+    - Represent team roles, authored messages, delegation requirements, ETA, and capacity usage in validated data.
+    - Execute delegated work and its delayed results through the headless event engine.
+    - Present War Room messages, pending work, capacity, and communication actions in the shared desktop.
+    - Preserve delegated work and communication events through replay and local save/load.
+  exclude:
+    - Live chat, external messaging, generative dialogue, or scenario-specific React logic.
+    - A full campaign trust or player-prediction model.
+    - A breaking persistence migration without explicit compatibility decision.
+
+depends_on:
+  - TASK-011
+specs:
+  - specs/feature/incident-simulation.md
+  - specs/architecture/scenario-format.md
+  - specs/ux/operations-desktop.md
+relevant_files:
+  - src/scenario/
+  - src/engine/
+  - src/store/
+  - src/app/
+  - src/persistence/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - At least one delegated path has an observable ETA, consumes capacity, and resolves at the authored time.
+  - War Room messages can convey incomplete or conflicting information without a correctness badge.
+  - Replay and save/load preserve pending delegation and communication history.
+  - Shared engine and UI behavior is demonstrated with fixtures from more than one incident.
+verification:
+  - Run schema, event-timing, replay, persistence, keyboard interaction, and regression tests.
+
+human_gate: false
+risk: high

@@ -1,6 +1,6 @@
 id: M2
 name: Playable INC-001 Vertical Slice
-status: active
+status: completed
 objective: Turn the headless proof into a complete desktop play session from Pager alert through postmortem.
 entry_criteria:
   - M1 exit criteria are satisfied.
@@ -15,5 +15,9 @@ tasks:
   - TASK-008
   - TASK-009
   - TASK-010
+completion_evidence:
+  - .project-os/tasks/results/TASK-010.evaluation.yaml
+  - .project-os/tasks/results/TASK-010.native-qa-addendum.yaml
+completion_approved_at: '2026-09-30'
 human_gate:
   required_on_completion: false

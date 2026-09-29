@@ -1,0 +1,44 @@
+id: TASK-013
+title: Author and replay INC-003 Queue Backlog
+role: developer
+milestone: M3
+priority: P0
+status: ready
+
+objective: Deliver a distinct, data-authored Queue Backlog incident with a complete deterministic response path.
+why: A third failure mode is needed to demonstrate that the shared systems generalize beyond connection pressure and deployment faults.
+
+scope:
+  include:
+    - Record an incident brief covering trigger, causal mechanism, observable symptoms, customer impact, actions, and evidence before content authoring.
+    - Author validated INC-003 data for backlog observation, temporary relief, causal containment, delayed consequences, and postmortem inputs.
+    - Add at least two meaningful response/replay paths with different consequences.
+    - Keep narrative disclosures within the M3 UNKNOWN-only boundary.
+  exclude:
+    - Scenario-specific engine or React branches, later-act reveals, and real queue-service integration.
+    - Inventing major narrative or product-direction changes outside the approved MVP scope.
+
+depends_on:
+  - TASK-011
+specs:
+  - specs/feature/incident-simulation.md
+  - specs/architecture/scenario-format.md
+  - specs/product/01-game-and-narrative-direction.md
+relevant_files:
+  - src/scenario/data/incidents/
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - INC-003 validates with stable ids and no unresolved references.
+  - Headless replay distinguishes reduced queue pressure from root-cause containment and tracks differing customer impact.
+  - Identical seed and ordered actions produce identical state and events.
+  - Queue evidence is investigable from authored data and the postmortem explains actual actions without right-or-wrong labels.
+  - No content exposes NULL, ORPHEUS identity, or later-act revelations.
+verification:
+  - Run content validation, INC-003 fixture/replay tests, and existing INC-001 regressions.
+
+human_gate: false
+risk: high

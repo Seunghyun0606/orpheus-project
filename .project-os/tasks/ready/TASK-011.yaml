@@ -1,0 +1,44 @@
+id: TASK-011
+title: Establish the reusable three-incident scenario catalog
+role: developer
+milestone: M3
+priority: P0
+status: ready
+
+objective: Make multiple validated incident definitions discoverable by stable id without changing the headless domain boundary.
+why: M3 cannot test shared authoring while the application and tooling assume a single imported INC-001 module.
+
+scope:
+  include:
+    - Add a validated catalog/loader for INC-001 and future M3 incident data.
+    - Validate every cataloged incident and detect duplicate ids and invalid references before play.
+    - Define fixture-backed authoring guidance for the data needed by distinct incidents.
+    - Preserve INC-001 deterministic replay and existing content behavior.
+  exclude:
+    - Authoring the INC-002 or INC-003 stories, War Room, campaign systems, or UI incident selection.
+    - Breaking the save schema or changing existing save semantics without a separate human decision.
+
+depends_on:
+  - TASK-010
+specs:
+  - specs/architecture/scenario-format.md
+  - specs/architecture/system-architecture.md
+  - specs/product/01-game-and-narrative-direction.md
+relevant_files:
+  - src/scenario/
+  - scripts/validate-scenarios.mjs
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+
+acceptance:
+  - A test fixture for a second incident loads through the same validated path as INC-001.
+  - The validator checks the complete catalog and reports duplicate ids and invalid references with actionable diagnostics.
+  - INC-001 replay fixtures remain unchanged and pass.
+  - The domain layer has no React, DOM, or Tauri dependency and no incident-id-specific branch.
+verification:
+  - Run catalog and validator tests, replay fixtures, typecheck, lint, and scenario validation.
+
+human_gate: false
+risk: medium

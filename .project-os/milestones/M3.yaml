@@ -1,6 +1,6 @@
 id: M3
 name: Three-Incident MVP
-status: planned
+status: active
 objective: Validate reusable content authoring and an early narrative arc across three distinct incidents.
 entry_criteria:
   - M2 exit criteria are satisfied.
@@ -9,6 +9,13 @@ exit_criteria:
   - Shared engine and UI systems support all three incidents without scenario-specific React logic.
   - Evidence, narrative triggers, War Room communication, and delegation work across incidents.
   - The MVP reveals only the presence of UNKNOWN and does not disclose ORPHEUS identity.
-tasks: []
+tasks:
+  - TASK-011
+  - TASK-012
+  - TASK-013
+  - TASK-014
+  - TASK-015
+  - TASK-016
+  - TASK-017
 human_gate:
   required_on_completion: true
