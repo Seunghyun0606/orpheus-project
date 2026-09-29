@@ -1,0 +1,63 @@
+task: TASK-010
+kind: qa_addendum
+role: qa
+actor: codex-qa
+status: pass
+observed_at: '2026-09-29'
+recorded_at: '2026-09-30'
+scope: Packaged Windows native in-app follow-up to TASK-010 acceptance QA.
+prior_records:
+  qa: .project-os/tasks/results/TASK-010.qa.yaml
+  evaluation: .project-os/tasks/results/TASK-010.evaluation.yaml
+summary: >-
+  Manual Computer Use inspection of the packaged Tauri application completed the
+  Pager-to-postmortem INC-001 path and confirmed that the UNKNOWN evidence and
+  incident state survive save, process exit, relaunch, and load.
+environment:
+  platform: Windows
+  executable: src-tauri/target/release/orpheus-desktop.exe
+  repository_head_at_run: 216e154
+verification:
+  investigation:
+    status: pass
+    detail: >-
+      Opened Payment API logs, inspected PostgreSQL, then inspected database
+      sessions. The native UI revealed 164 stale sessions in the
+      "idle in transaction" state.
+  narrative_and_evidence:
+    status: pass
+    detail: >-
+      Terminating stale database sessions displayed the transient
+      "02:23:11 / UNKNOWN: Good." dialog. After continuing, the recovered
+      incident's Evidence tab showed one discovered CORRUPTED_LOG_ENTRY titled
+      "Corrupted log entry".
+  postmortem:
+    status: pass
+    detail: >-
+      The postmortem showed 05:00 service recovery time, 82 customer impact,
+      0.2% final Payment API error rate, the contained idle-transaction
+      mechanism, and the four actions in the order performed.
+  native_persistence:
+    status: pass
+    detail: >-
+      "Save session" displayed "Session saved locally." The app window was
+      closed and the packaged executable relaunched, starting at 00:00 with
+      zero customer impact. "Load saved session" then displayed
+      "Saved session restored." and restored the 05:00 postmortem, 82 customer
+      impact, CORRUPTED_LOG_ENTRY, and completed read-only incident record.
+critical_issues: 0
+limitations:
+  - >-
+    This is an additive manual native-flow record, not a rerun of the
+    automated, browser, layout, or accessibility checks in TASK-010.qa.yaml.
+  - >-
+    Observations were made through Computer Use; no screenshot artifacts were
+    retained in the repository.
+notes:
+  - >-
+    The prior single local save slot was overwritten for this QA after explicit
+    human approval. The app was left showing the restored completed record.
+  - >-
+    The original QA and evaluation records remain unchanged; this addendum
+    closes their manual packaged-native follow-up without changing canonical
+    milestone or task state.
