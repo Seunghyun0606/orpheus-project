@@ -4,6 +4,7 @@ summary: Automated acceptance checks passed after the conditional-event target v
   fix at HEAD 54090a1.
 files_changed: []
 verification:
+  acceptance: pass
   targeted_catalog_validator_and_replay:
     status: pass
     detail: npm run test -- src/scenario/catalog.test.ts src/scenario/scenario.test.ts
