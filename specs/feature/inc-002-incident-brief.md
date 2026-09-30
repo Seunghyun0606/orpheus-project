@@ -20,7 +20,7 @@ The rollout ordering, rather than the existence of a new key alone, is the failu
 
 ## Actions and trade-offs
 
-- Route new authorization traffic to the stable region: fast temporary relief, extra cost and operational risk. If the incompatibility remains, traffic returns after the short routing window and errors recur.
+- Route new authorization traffic to the stable region: fast temporary relief, extra cost and operational risk. If the incompatibility remains, traffic returns after the short routing window and errors recur. Repeating this action renews the window and replaces its prior return-to-traffic timer, at the same additional cost and risk.
 - Roll back build 1847 after investigating the trace and deployment: faster causal containment, but session churn and rollback risk increase impact.
 - Update the verifier key set after investigating the trace and deployment: slower causal containment, but avoids rollback churn while consuming more investigation time.
 - Communicate status: consumes time but appears in the action-derived postmortem; it is neither a win condition nor a penalty label.

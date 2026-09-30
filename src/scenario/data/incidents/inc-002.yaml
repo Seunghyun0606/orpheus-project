@@ -25,6 +25,10 @@ initialState:
       value: Authorization errors > 20%
       revealed: true
       serviceId: PAYMENT_GATEWAY
+    - id: PAGER_SERVICE
+      value: Payment Gateway
+      revealed: true
+      serviceId: PAYMENT_GATEWAY
     - id: IDENTITY_CPU
       value: 72
       revealed: true
@@ -165,6 +169,8 @@ actions:
       - resourceId: OPERATIONAL_RISK
         amount: 8
     effects:
+      - type: cancel_event
+        eventId: ROUTING_WINDOW_EXPIRES
       - type: schedule_event
         eventId: ROUTING_WINDOW_EXPIRES
     temporaryEffects:
@@ -205,6 +211,12 @@ actions:
       - type: set_signal
         signalId: RETRY_RATE
         value: 12
+      - type: set_signal
+        signalId: ISSUER_KEY_ID
+        value: K71
+      - type: set_signal
+        signalId: DEPLOYMENT_BUILD
+        value: '1846'
 
   - id: UPDATE_VERIFIER_KEYSET
     title: Distribute the new key set to Token Verifier
@@ -235,6 +247,9 @@ actions:
       - type: set_signal
         signalId: RETRY_RATE
         value: 5
+      - type: set_signal
+        signalId: VERIFIER_KEY_ID
+        value: K72
 
   - id: COMMUNICATE_STATUS
     title: Send a payment authorization status update

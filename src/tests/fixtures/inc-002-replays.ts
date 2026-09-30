@@ -19,6 +19,17 @@ export const temporaryRoutingReplay: Inc002ReplayFixture = {
   ],
 };
 
+export const renewedRoutingReplay: Inc002ReplayFixture = {
+  id: 'INC-002-ROUTING-RENEWAL',
+  seed: 2004,
+  commands: [
+    perform('ROUTE_STABLE_REGION'),
+    perform('OPEN_METRICS'),
+    perform('ROUTE_STABLE_REGION'),
+    ...Array.from({ length: 7 }, () => perform('OPEN_METRICS')),
+  ],
+};
+
 export const rollbackReplay: Inc002ReplayFixture = {
   id: 'INC-002-ROLLBACK',
   seed: 2002,

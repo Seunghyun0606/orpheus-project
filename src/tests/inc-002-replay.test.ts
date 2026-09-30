@@ -13,6 +13,7 @@ import {
 import { validateScenarioCatalog, type Scenario } from '../scenario/index.ts';
 import {
   keysetUpdateReplay,
+  renewedRoutingReplay,
   rollbackReplay,
   temporaryRoutingReplay,
   type Inc002ReplayFixture,
@@ -56,6 +57,7 @@ describe('INC-002 Bad Deployment headless replays', () => {
     });
     expect(earlyRollback.ok).toBe(false);
     if (!earlyRollback.ok) expect(earlyRollback.code).toBe('ACTION_LOCKED');
+    expect(initial.signals.PAGER_SERVICE).toEqual({ value: 'Payment Gateway', revealed: true });
     expect(initial.signals.DEPLOYMENT_BUILD?.revealed).toBe(false);
     expect(initial.signals.ISSUER_KEY_ID?.revealed).toBe(false);
   });
@@ -85,13 +87,59 @@ describe('INC-002 Bad Deployment headless replays', () => {
     expect(result.state.completionReached).toBe(false);
   });
 
+  it('renews the routing timer without firing the previous window during relief', () => {
+    const scenario = loadInc002();
+    const beforeRenewedExpiry = replayCommands(
+      scenario,
+      { seed: 2004 },
+      renewedRoutingReplay.commands.slice(0, 7),
+    );
+    expect(beforeRenewedExpiry.ok).toBe(true);
+    if (!beforeRenewedExpiry.ok) throw new Error('Expected the renewed routing prefix to replay.');
+    expect(beforeRenewedExpiry.state.elapsedSeconds).toBe(190);
+    expect(beforeRenewedExpiry.state.signals.AUTH_ERROR_RATE?.value).toBe(5);
+    expect(beforeRenewedExpiry.events).toContainEqual(
+      expect.objectContaining({
+        type: 'event_cancelled',
+        atSeconds: 65,
+        sourceId: 'ROUTE_STABLE_REGION',
+        targetId: 'ROUTING_WINDOW_EXPIRES',
+      }),
+    );
+    expect(
+      beforeRenewedExpiry.events.some(
+        ({ type, sourceId }) => type === 'event_fired' && sourceId === 'ROUTING_WINDOW_EXPIRES',
+      ),
+    ).toBe(false);
+
+    const afterRenewedExpiry = replayDeterministically(scenario, renewedRoutingReplay);
+    expect(afterRenewedExpiry.state.elapsedSeconds).toBe(250);
+    expect(afterRenewedExpiry.state.signals.AUTH_ERROR_RATE?.value).toBe(32);
+    expect(
+      afterRenewedExpiry.events.filter(
+        ({ type, sourceId }) => type === 'event_fired' && sourceId === 'ROUTING_WINDOW_EXPIRES',
+      ),
+    ).toEqual([expect.objectContaining({ atSeconds: 245 })]);
+  });
+
   it('uses temporary routing and then rollback to contain the incompatible rollout', () => {
     const scenario = loadInc002();
+    const investigated = replayCommands(
+      scenario,
+      { seed: rollbackReplay.seed },
+      rollbackReplay.commands.slice(0, -1),
+    );
+    expect(investigated.ok).toBe(true);
+    if (!investigated.ok) throw new Error('Expected the pre-rollback investigation to replay.');
+    expect(investigated.state.signals.ISSUER_KEY_ID).toEqual({ value: 'K72', revealed: true });
+    expect(investigated.state.signals.VERIFIER_KEY_ID).toEqual({ value: 'K71', revealed: true });
+    expect(investigated.state.signals.DEPLOYMENT_BUILD).toEqual({ value: '1847', revealed: true });
+
     const result = replayDeterministically(scenario, rollbackReplay);
     expect(result.state.signals.LOG_REJECTION?.revealed).toBe(true);
-    expect(result.state.signals.ISSUER_KEY_ID).toEqual({ value: 'K72', revealed: true });
+    expect(result.state.signals.ISSUER_KEY_ID).toEqual({ value: 'K71', revealed: true });
     expect(result.state.signals.VERIFIER_KEY_ID).toEqual({ value: 'K71', revealed: true });
-    expect(result.state.signals.DEPLOYMENT_BUILD).toEqual({ value: '1847', revealed: true });
+    expect(result.state.signals.DEPLOYMENT_BUILD).toEqual({ value: '1846', revealed: true });
     expect(result.state.revealedEvidenceIds).toEqual([
       'KEYSET_MISMATCH_TRACE',
       'DEPLOYMENT_ORDER_RECORD',
@@ -132,6 +180,8 @@ describe('INC-002 Bad Deployment headless replays', () => {
     expect(result.state.resources.OPERATIONAL_RISK?.value).toBe(4);
     expect(result.state.resources.COST?.value).toBe(90);
     expect(result.state.signals.AUTH_ERROR_RATE?.value).toBe(0.5);
+    expect(result.state.signals.ISSUER_KEY_ID).toEqual({ value: 'K72', revealed: true });
+    expect(result.state.signals.VERIFIER_KEY_ID).toEqual({ value: 'K72', revealed: true });
     expect(result.state.resolutionReached).toBe(true);
     expect(result.state.completionReached).toBe(true);
 
