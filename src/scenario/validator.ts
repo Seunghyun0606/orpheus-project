@@ -8,6 +8,7 @@ import {
 } from './schema.ts';
 
 export const diagnosticCodes = {
+  emptyCatalog: 'EMPTY_CATALOG',
   yamlParse: 'YAML_PARSE',
   schemaInvalid: 'SCHEMA_INVALID',
   unknownEffectType: 'UNKNOWN_EFFECT_TYPE',

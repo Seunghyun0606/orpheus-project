@@ -66,6 +66,54 @@ describe('scenario catalog', () => {
     expect('scenarios' in result).toBe(false);
   });
 
+  it('reports a duplicate id even when that same file has invalid references', () => {
+    const invalidDuplicate = source('invalid-references.yaml').replace(
+      'id: INVALID-REFERENCES',
+      'id: INC-002-FIXTURE',
+    );
+    const result = validateScenarioCatalog([
+      { file: 'a-valid.yaml', source: source('valid-second-incident.yaml') },
+      { file: 'b-invalid-duplicate.yaml', source: invalidDuplicate },
+    ]);
+
+    expect(result.success).toBe(false);
+    if (result.success) throw new Error('Expected invalid catalog.');
+    expect(result.diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          file: 'b-invalid-duplicate.yaml',
+          path: '$.id',
+          code: diagnosticCodes.duplicateId,
+        }),
+        expect.objectContaining({
+          file: 'b-invalid-duplicate.yaml',
+          code: diagnosticCodes.unknownReference,
+        }),
+      ]),
+    );
+  });
+
+  it('rejects an empty catalog and a CLI directory with no scenarios', () => {
+    const result = validateScenarioCatalog([]);
+    expect(result.success).toBe(false);
+    if (result.success) throw new Error('Expected empty catalog to fail.');
+    expect(result.diagnostics).toEqual([
+      expect.objectContaining({ code: diagnosticCodes.emptyCatalog }),
+    ]);
+
+    const directory = mkdtempSync(path.join(tmpdir(), 'orpheus-empty-catalog-'));
+    try {
+      const command = spawnSync(process.execPath, ['scripts/validate-scenarios.mjs', directory], {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+      });
+      expect(command.status).toBe(1);
+      expect(command.stderr).toContain('[EMPTY_CATALOG]');
+    } finally {
+      rmdirSync(directory);
+    }
+  });
+
   it('fails the CLI when two otherwise valid scenario files have the same id', () => {
     const directory = mkdtempSync(path.join(tmpdir(), 'orpheus-catalog-'));
     const first = path.join(directory, 'a-first.yaml');

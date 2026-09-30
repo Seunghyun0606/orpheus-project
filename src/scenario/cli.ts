@@ -38,11 +38,6 @@ export async function runScenarioValidationCli(args: readonly string[]): Promise
     }
   }
 
-  if (files.length === 0) {
-    console.log(`No scenario YAML files found under: ${entries.join(', ')}`);
-    return 0;
-  }
-
   const sources: ScenarioSource[] = [];
   for (const file of files.sort()) {
     try {
