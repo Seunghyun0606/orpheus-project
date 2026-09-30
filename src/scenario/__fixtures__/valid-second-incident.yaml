@@ -1,0 +1,76 @@
+schemaVersion: 1
+contentVersion: 1.0.0
+id: INC-002-FIXTURE
+title: Second Incident Contract Fixture
+act: 1
+severity: SEV2
+services:
+  - id: TEST_API
+    name: Test API
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 15
+      revealed: true
+      serviceId: TEST_API
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+  flags:
+    - id: CAUSE_RESOLVED
+      value: false
+incident:
+  trigger:
+    id: TEST_TRIGGER
+    label: Test service errors cross a threshold
+  failureMechanisms:
+    - id: TEST_CAUSE
+      label: Test causal mechanism
+  symptoms:
+    - id: TEST_ERRORS
+      label: Test service errors rise
+actions:
+  - id: INSPECT_TEST_API
+    title: Inspect test service
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    effects:
+      - type: unlock_action
+        actionId: CONTAIN_TEST_CAUSE
+  - id: CONTAIN_TEST_CAUSE
+    title: Contain test cause
+    category: MODIFY
+    durationSeconds: 60
+    requirements:
+      - type: action_completed
+        actionId: INSPECT_TEST_API
+    effects:
+      - type: resolve_mechanism
+        mechanismId: TEST_CAUSE
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0
+resolution:
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: TEST_CAUSE
+  effects:
+    - type: set_flag
+      flagId: CAUSE_RESOLVED
+      value: true
+completion:
+  conditions:
+    - type: flag
+      flagId: CAUSE_RESOLVED
+      value: true
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Service recovery time
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final error rate
+      source: signal
+      refId: ERROR_RATE

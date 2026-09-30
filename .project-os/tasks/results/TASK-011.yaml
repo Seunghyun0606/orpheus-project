@@ -1,0 +1,43 @@
+task: TASK-011
+status: pass
+summary: Added a validated multi-incident catalog for bundled YAML and the validation
+  CLI, with cross-file scenario-id diagnostics and a second incident contract fixture.
+files_changed:
+- src/scenario/catalog.ts
+- src/scenario/bundled-catalog.ts
+- src/scenario/cli.ts
+- src/scenario/inc-001.ts
+- src/scenario/index.ts
+- src/scenario/catalog.test.ts
+- src/scenario/__fixtures__/valid-second-incident.yaml
+- specs/architecture/scenario-format.md
+verification:
+  catalog:
+    status: pass
+    detail: Two incident fixtures parse through one catalog; the second completes
+      a deterministic headless replay.
+  diagnostics:
+    status: pass
+    detail: Unit and CLI tests report duplicate scenario ids across files while retaining
+      independent invalid-reference diagnostics.
+  inc001_regression:
+    status: pass
+    detail: INC-001 continues to load from the validated bundled catalog, and both
+      existing replay fixtures pass.
+  full_tests:
+    status: pass
+    detail: Vitest passed 51 tests across ten files.
+  scenario_validation: pass
+  typecheck: pass
+  lint: pass
+  format: pass
+  diff_check: pass
+  web_build: pass
+followups:
+- Independent review and acceptance QA are required before TASK-011 completion evaluation.
+- INC-002 and INC-003 authored content, UI selection, and save-format changes remain
+  outside this task.
+commit: null
+kind: implementation
+role: developer
+actor: codex-developer

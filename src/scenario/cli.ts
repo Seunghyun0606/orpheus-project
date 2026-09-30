@@ -1,7 +1,7 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
-import { parseScenarioYaml } from './parser.ts';
+import { validateScenarioCatalog, type ScenarioSource } from './catalog.ts';
 import type { ScenarioDiagnostic } from './validator.ts';
 
 const yamlExtensions = new Set(['.yaml', '.yml']);
@@ -43,20 +43,21 @@ export async function runScenarioValidationCli(args: readonly string[]): Promise
     return 0;
   }
 
-  let invalidCount = 0;
+  const sources: ScenarioSource[] = [];
   for (const file of files.sort()) {
-    const source = await readFile(file, 'utf8');
-    const result = parseScenarioYaml(source, file);
-    if (!result.success) {
-      invalidCount += 1;
-      result.diagnostics.forEach(printDiagnostic);
+    try {
+      sources.push({ file, source: await readFile(file, 'utf8') });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`${file}:$ [IO_ERROR] ${message}`);
+      return 1;
     }
   }
 
-  if (invalidCount > 0) {
-    console.error(
-      `Scenario validation failed: ${invalidCount} of ${files.length} file(s) invalid.`,
-    );
+  const result = validateScenarioCatalog(sources);
+  if (!result.success) {
+    result.diagnostics.forEach(printDiagnostic);
+    console.error(`Scenario validation failed: ${files.length} file(s) checked.`);
     return 1;
   }
 

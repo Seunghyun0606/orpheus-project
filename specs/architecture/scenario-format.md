@@ -45,3 +45,12 @@ Validator는 가능한 모든 오류를 한 번에 수집하고, 각 오류에 f
 ## Compatibility
 
 첫 구현은 INC-001에 필요한 최소 schema에서 시작하되, version field와 discriminated effect/event types를 사용해 이후 Incident 확장이 breaking rewrite가 되지 않도록 한다.
+
+## M3 Incident Authoring Checklist
+
+- 새 Incident는 `src/scenario/data/incidents/` 아래의 독립 YAML 파일로 작성한다. 파일명과 별개로 `id`는 저장·replay에 쓰이는 안정된 고유값이며, 내용을 변경할 때 `contentVersion` 호환성을 확인한다.
+- `src/scenario/__fixtures__/valid-second-incident.yaml`은 두 번째 시나리오의 최소 계약 예제다. 본편 스토리 콘텐츠가 아니라 파서·카탈로그 검증용으로만 사용한다.
+- 서비스와 종속 관계, 초기 signal/resource/flag, trigger·failure mechanism·symptom, 행동과 비용·효과, resolution·completion, postmortem 입력을 정의한다. 필요하면 event, evidence, narrative를 추가한다.
+- 모든 참조 대상은 같은 시나리오에 선언하고 namespace별 id를 중복 없이 유지한다. 카탈로그는 여러 파일의 시나리오 id 중복까지 검사한다.
+- `npm run validate:scenarios`와 해당 Incident의 headless replay 테스트를 통과시킨다. Scenario, Narrative, Evidence를 React 조건문에 넣지 않는다.
+- MVP 콘텐츠는 UNKNOWN의 존재까지만 공개한다. NULL, ORPHEUS의 정체와 후반 반전은 추가하지 않는다.
