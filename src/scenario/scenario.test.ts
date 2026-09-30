@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import { diagnosticCodes, parseScenarioYaml } from './index.ts';
+import { diagnosticCodes, parseScenarioYaml, validateScenarioObject } from './index.ts';
 
 const fixture = (name: string) => path.resolve('src/scenario/__fixtures__', name);
 const readFixture = (name: string) => readFileSync(fixture(name), 'utf8');
@@ -80,6 +80,44 @@ describe('scenario contract', () => {
       expect.arrayContaining([
         expect.objectContaining({ code: diagnosticCodes.unknownEffectType }),
         expect.objectContaining({ code: diagnosticCodes.unknownEventType }),
+      ]),
+    );
+  });
+
+  it('rejects scheduling or cancelling a conditional event before play', () => {
+    const parsed = parseScenarioYaml(readFixture('valid-second-incident.yaml'));
+    expect(parsed.success).toBe(true);
+    if (!parsed.success) throw new Error('Expected valid second incident fixture.');
+
+    const scenario = structuredClone(parsed.scenario);
+    scenario.events.push({
+      id: 'CONDITIONAL_ONLY',
+      type: 'conditional',
+      targetServiceId: 'TEST_API',
+      conditions: [{ type: 'signal', signalId: 'ERROR_RATE', operator: 'gte', value: 0 }],
+      once: true,
+      effects: [{ type: 'set_signal', signalId: 'ERROR_RATE', value: 0 }],
+    });
+    scenario.actions[0]?.effects.push(
+      { type: 'schedule_event', eventId: 'CONDITIONAL_ONLY' },
+      { type: 'cancel_event', eventId: 'CONDITIONAL_ONLY' },
+    );
+
+    const result = validateScenarioObject(scenario, 'wrong-event-kind.yaml');
+    expect(result.success).toBe(false);
+    if (result.success) throw new Error('Expected invalid event target.');
+    expect(result.diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          file: 'wrong-event-kind.yaml',
+          path: '$.actions[0].effects[1].eventId',
+          code: diagnosticCodes.invalidEventTargetType,
+        }),
+        expect.objectContaining({
+          file: 'wrong-event-kind.yaml',
+          path: '$.actions[0].effects[2].eventId',
+          code: diagnosticCodes.invalidEventTargetType,
+        }),
       ]),
     );
   });

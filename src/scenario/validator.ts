@@ -13,6 +13,7 @@ export const diagnosticCodes = {
   schemaInvalid: 'SCHEMA_INVALID',
   unknownEffectType: 'UNKNOWN_EFFECT_TYPE',
   unknownEventType: 'UNKNOWN_EVENT_TYPE',
+  invalidEventTargetType: 'INVALID_EVENT_TARGET_TYPE',
   duplicateId: 'DUPLICATE_ID',
   unknownReference: 'UNKNOWN_REFERENCE',
 } as const;
@@ -67,6 +68,9 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
   const flags = new Set(scenario.initialState.flags.map(({ id }) => id));
   const actions = new Set(scenario.actions.map(({ id }) => id));
   const events = new Set(scenario.events.map(({ id }) => id));
+  const timerEvents = new Set(
+    scenario.events.filter(({ type }) => type === 'timer').map(({ id }) => id),
+  );
   const evidence = new Set(scenario.evidence.map(({ id }) => id));
   const narratives = new Set(scenario.narratives.map(({ id }) => id));
   const mechanisms = new Set(scenario.incident.failureMechanisms.map(({ id }) => id));
@@ -153,6 +157,14 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
       case 'schedule_event':
       case 'cancel_event':
         requireReference(`${path}.eventId`, effect.eventId, events, 'event');
+        if (events.has(effect.eventId) && !timerEvents.has(effect.eventId)) {
+          diagnostics.push({
+            file,
+            path: `${path}.eventId`,
+            code: diagnosticCodes.invalidEventTargetType,
+            message: `${effect.type} requires a timer event; ${JSON.stringify(effect.eventId)} is conditional.`,
+          });
+        }
         break;
       case 'unlock_action':
         requireReference(`${path}.actionId`, effect.actionId, actions, 'action');
