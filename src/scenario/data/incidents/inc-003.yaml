@@ -1,0 +1,404 @@
+schemaVersion: 1
+contentVersion: 1.0.0
+id: INC-003
+title: Queue Backlog
+act: 1
+severity: SEV2
+
+services:
+  - id: RECEIPT_DELIVERY
+    name: Receipt Delivery
+    dependsOn: [RECEIPT_WORKER]
+  - id: RECEIPT_WORKER
+    name: Receipt Worker
+    dependsOn: [RECEIPT_QUEUE]
+  - id: RECEIPT_QUEUE
+    name: Receipt Queue
+    dependsOn: [PAYMENT_API]
+  - id: PAYMENT_API
+    name: Payment API
+
+initialState:
+  signals:
+    - id: QUEUE_DEPTH
+      value: 18420
+      revealed: true
+      serviceId: RECEIPT_QUEUE
+    - id: OLDEST_MESSAGE_AGE
+      value: 23
+      revealed: true
+      serviceId: RECEIPT_QUEUE
+    - id: RECEIPT_DELAY
+      value: 24
+      revealed: true
+      serviceId: RECEIPT_DELIVERY
+    - id: PAGER_SERVICE
+      value: Receipt Worker
+      revealed: true
+      serviceId: RECEIPT_WORKER
+    - id: PAGER_THRESHOLD
+      value: Oldest receipt message > 15m
+      revealed: true
+      serviceId: RECEIPT_QUEUE
+    - id: ACK_RATE
+      value: 12
+      serviceId: RECEIPT_WORKER
+    - id: RETRY_RATE
+      value: 880
+      serviceId: RECEIPT_WORKER
+    - id: WORKER_CPU
+      value: 38
+      serviceId: RECEIPT_WORKER
+    - id: LOG_REJECTION
+      value: 'receipt parser rejected the same message on repeated attempts'
+      serviceId: RECEIPT_WORKER
+    - id: TRACED_MESSAGE_ID
+      value: batch-781/message-44
+      serviceId: RECEIPT_QUEUE
+    - id: TRACED_MESSAGE_SCHEMA
+      value: legacy_v3
+      serviceId: RECEIPT_QUEUE
+    - id: TRACED_EXPECTED_SCHEMA
+      value: receipt_v4
+      serviceId: RECEIPT_WORKER
+    - id: TRACED_SOURCE_BATCH
+      value: batch-781
+      serviceId: RECEIPT_QUEUE
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+
+incident:
+  trigger:
+    id: PARTNER_BATCH_781_INGESTED
+    label: Partner batch 781 enters the receipt queue
+    description: One legacy-format receipt reaches a partition processed by Receipt Worker.
+  contributingFactors:
+    - id: UNBOUNDED_MESSAGE_RETRY
+      label: Parser failures are retried without moving the message aside
+  failureMechanisms:
+    - id: POISON_MESSAGE_HEAD_OF_LINE
+      label: A malformed receipt blocks progress in its queue partition
+      description: The same legacy-format message repeatedly fails parsing ahead of valid receipts.
+  symptoms:
+    - id: RECEIPT_BACKLOG
+      label: Queue depth and oldest-message age exceed their normal range
+    - id: LATE_RECEIPTS
+      label: Customers wait for payment receipts while payments still succeed
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Repeated parser attempts consume worker capacity without acknowledging messages
+
+actions:
+  - id: OPEN_LOGS
+    title: Open Receipt Worker logs
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+    effects:
+      - type: reveal_signal
+        signalId: LOG_REJECTION
+      - type: unlock_action
+        actionId: TRACE_RETRY
+
+  - id: OPEN_METRICS
+    title: Inspect queue and worker metrics
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: ACK_RATE
+      - type: reveal_signal
+        signalId: RETRY_RATE
+      - type: reveal_signal
+        signalId: WORKER_CPU
+
+  - id: TRACE_RETRY
+    title: Trace the repeatedly rejected receipt
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: TRACED_MESSAGE_ID
+      - type: reveal_signal
+        signalId: TRACED_MESSAGE_SCHEMA
+      - type: reveal_signal
+        signalId: TRACED_EXPECTED_SCHEMA
+      - type: reveal_evidence
+        evidenceId: REPEATED_MESSAGE_TRACE
+
+  - id: COMPARE_BATCH
+    title: Compare partner batch 781 with accepted receipts
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 16
+    effects:
+      - type: reveal_signal
+        signalId: TRACED_SOURCE_BATCH
+      - type: reveal_evidence
+        evidenceId: PARTNER_BATCH_RECORD
+      - type: unlock_action
+        actionId: QUARANTINE_MESSAGE
+      - type: unlock_action
+        actionId: ADD_DEAD_LETTER_RULE
+
+  - id: SCALE_CONSUMERS
+    title: Add temporary receipt consumers
+    category: MITIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - resourceId: COST
+        amount: 180
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - type: cancel_event
+        eventId: BACKLOG_REBOUNDS
+      - type: schedule_event
+        eventId: BACKLOG_REBOUNDS
+    temporaryEffects:
+      - id: EXTRA_CONSUMER_WINDOW
+        durationSeconds: 180
+        apply:
+          - type: set_signal
+            signalId: QUEUE_DEPTH
+            value: 5900
+          - type: set_signal
+            signalId: OLDEST_MESSAGE_AGE
+            value: 6
+          - type: set_signal
+            signalId: RECEIPT_DELAY
+            value: 9
+          - type: set_signal
+            signalId: ACK_RATE
+            value: 140
+
+  - id: QUARANTINE_MESSAGE
+    title: Quarantine the malformed receipt for reconciliation
+    category: MODIFY
+    durationSeconds: 90
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: action_completed
+        actionId: COMPARE_BATCH
+      - type: signal_revealed
+        signalId: TRACED_MESSAGE_ID
+      - type: signal_revealed
+        signalId: TRACED_MESSAGE_SCHEMA
+      - type: signal_revealed
+        signalId: TRACED_EXPECTED_SCHEMA
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - resourceId: OPERATIONAL_RISK
+        amount: 12
+    effects:
+      - type: resolve_mechanism
+        mechanismId: POISON_MESSAGE_HEAD_OF_LINE
+      - type: cancel_event
+        eventId: BACKLOG_REBOUNDS
+      - type: set_signal
+        signalId: QUEUE_DEPTH
+        value: 1200
+      - type: set_signal
+        signalId: OLDEST_MESSAGE_AGE
+        value: 2
+      - type: set_signal
+        signalId: RECEIPT_DELAY
+        value: 3
+      - type: set_signal
+        signalId: ACK_RATE
+        value: 220
+      - type: set_signal
+        signalId: RETRY_RATE
+        value: 10
+
+  - id: ADD_DEAD_LETTER_RULE
+    title: Add a scoped dead-letter rule for the malformed format
+    category: MODIFY
+    durationSeconds: 150
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: action_completed
+        actionId: COMPARE_BATCH
+      - type: signal_revealed
+        signalId: TRACED_MESSAGE_ID
+      - type: signal_revealed
+        signalId: TRACED_MESSAGE_SCHEMA
+      - type: signal_revealed
+        signalId: TRACED_EXPECTED_SCHEMA
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 48
+      - resourceId: COST
+        amount: 100
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: resolve_mechanism
+        mechanismId: POISON_MESSAGE_HEAD_OF_LINE
+      - type: cancel_event
+        eventId: BACKLOG_REBOUNDS
+      - type: set_signal
+        signalId: QUEUE_DEPTH
+        value: 1800
+      - type: set_signal
+        signalId: OLDEST_MESSAGE_AGE
+        value: 3
+      - type: set_signal
+        signalId: RECEIPT_DELAY
+        value: 4
+      - type: set_signal
+        signalId: ACK_RATE
+        value: 180
+      - type: set_signal
+        signalId: RETRY_RATE
+        value: 12
+
+  - id: COMMUNICATE_STATUS
+    title: Communicate the receipt delay
+    category: COMMUNICATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+
+events:
+  - id: BACKLOG_REBOUNDS
+    type: timer
+    delaySeconds: 180
+    targetServiceId: RECEIPT_QUEUE
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: POISON_MESSAGE_HEAD_OF_LINE
+    effects:
+      - type: set_signal
+        signalId: QUEUE_DEPTH
+        value: 24000
+      - type: set_signal
+        signalId: OLDEST_MESSAGE_AGE
+        value: 31
+      - type: set_signal
+        signalId: RECEIPT_DELAY
+        value: 34
+      - type: set_signal
+        signalId: ACK_RATE
+        value: 8
+      - type: set_signal
+        signalId: RETRY_RATE
+        value: 1100
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 30
+
+evidence:
+  - id: REPEATED_MESSAGE_TRACE
+    title: Repeated receipt retry trace
+    description: One legacy-format message is retried ahead of valid receipts.
+  - id: PARTNER_BATCH_RECORD
+    title: Partner batch comparison
+    description: Batch 781 contains the malformed receipt while adjacent batches use the accepted format.
+
+resolution:
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: POISON_MESSAGE_HEAD_OF_LINE
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+
+completion:
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: QUEUE_DEPTH
+      operator: lte
+      value: 1800
+    - type: signal
+      signalId: OLDEST_MESSAGE_AGE
+      operator: lte
+      value: 3
+
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Service recovery time
+      source: elapsed_time
+    - id: FINAL_QUEUE_DEPTH
+      label: Final receipt queue depth
+      source: signal
+      refId: QUEUE_DEPTH
+    - id: FINAL_OLDEST_AGE
+      label: Final oldest-message age
+      source: signal
+      refId: OLDEST_MESSAGE_AGE
+    - id: CUSTOMER_DAMAGE
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: OPERATIONAL_EXPOSURE
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: SCALE_COUNT
+      label: Temporary consumer scale count
+      source: action_count
+      refId: SCALE_CONSUMERS
+    - id: QUARANTINE_COUNT
+      label: Quarantined message count
+      source: action_count
+      refId: QUARANTINE_MESSAGE
+    - id: DEAD_LETTER_RULE_COUNT
+      label: Dead-letter rule count
+      source: action_count
+      refId: ADD_DEAD_LETTER_RULE
+    - id: COMMUNICATION_COUNT
+      label: Status update count
+      source: action_count
+      refId: COMMUNICATE_STATUS
