@@ -1,0 +1,53 @@
+task: TASK-012
+status: pass
+summary: Authored INC-002 Bad Deployment as validated scenario data with an incident
+  brief, three deterministic replay paths, deployment investigation, temporary routing
+  relief, delayed recurrence, two causal interventions, and action-derived postmortem
+  inputs.
+files_changed:
+- specs/feature/inc-002-incident-brief.md
+- src/scenario/data/incidents/inc-002.yaml
+- src/tests/fixtures/inc-002-replays.ts
+- src/tests/inc-002-replay.test.ts
+verification:
+  acceptance: pass
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios validates both bundled incident files with
+      stable IDs and no unresolved references.
+  inc002_replays:
+    status: pass
+    detail: Four headless tests cover locked premature intervention, temporary relief
+      and recurrence, rollback containment, and key-set update containment; identical
+      seed and actions produce identical state and events.
+  different_consequences:
+    status: pass
+    detail: Rollback path completes at 250 seconds with customer impact 79 and risk
+      20; update path completes at 295 seconds with customer impact 103 and risk 4.
+  postmortem:
+    status: pass
+    detail: Replay tests verify action-derived routing intervention, resolved mechanism,
+      communication action, and customer-impact metrics without right-or-wrong labels.
+  narrative_boundary:
+    status: pass
+    detail: Authored scenario reveals operational deployment evidence only and no
+      later-act identities or twists.
+  full_tests:
+    status: pass
+    detail: npm test passed 58 tests across 11 files.
+  inc001_regression:
+    status: pass
+    detail: npm run test:replays passed both existing INC-001 replay fixtures.
+  typecheck: pass
+  lint: pass
+  format: pass
+  web_build: pass
+  diff_check: pass
+followups:
+- Independent review and QA remain required before TASK-012 completion evaluation.
+- Shared desktop incident selection and cross-incident UNKNOWN narrative are assigned
+  to later M3 tasks.
+commit: 56519b5
+kind: implementation
+role: developer
+actor: codex-developer
