@@ -1,0 +1,55 @@
+task: TASK-013
+status: pass
+summary: Authored INC-003 Queue Backlog as a validated scenario with a prior incident
+  brief, investigable queue evidence, temporary consumer relief and timed rebound,
+  two causal containment options, and deterministic headless replays.
+files_changed:
+- specs/feature/inc-003-incident-brief.md
+- src/scenario/data/incidents/inc-003.yaml
+- src/tests/fixtures/inc-003-replays.ts
+- src/tests/inc-003-replay.test.ts
+verification:
+  acceptance: pass
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios passed all three bundled incident files with
+      stable IDs and no unresolved references.
+  inc003_replays:
+    status: pass
+    detail: Five headless tests cover intervention gates, temporary relief and rebound,
+      renewed timer behavior, quarantine resolution, dead-letter resolution, and same-seed
+      replay determinism.
+  different_consequences:
+    status: pass
+    detail: Quarantine path completes at 265 seconds with customer impact 78 and operational
+      risk 18; dead-letter path completes at 295 seconds with customer impact 106
+      and risk 4.
+  investigation_and_postmortem:
+    status: pass
+    detail: Logs, retry trace, and batch comparison reveal separate queue evidence;
+      tests verify action-derived postmortem metrics, communication, and non-resolving
+      intervention reporting without right-or-wrong labels.
+  narrative_boundary:
+    status: pass
+    detail: Authored scenario exposes operational queue evidence only and no later-act
+      identity or experiment.
+  full_tests:
+    status: pass
+    detail: npm test passed 64 tests across 12 files.
+  inc001_regression:
+    status: pass
+    detail: npm run test:replays passed both existing INC-001 fixtures.
+  typecheck: pass
+  lint: pass
+  format: pass
+  web_build: pass
+  diff_check: pass
+followups:
+- Independent review and acceptance QA remain required before TASK-013 completion
+  evaluation.
+- Cross-incident UNKNOWN narrative and shared desktop incident selection belong to
+  later M3 tasks.
+commit: b486b0f
+kind: implementation
+role: developer
+actor: codex-developer
