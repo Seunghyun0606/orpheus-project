@@ -1,0 +1,32 @@
+task: TASK-012
+status: pass
+summary: INC-002 Bad Deployment satisfies TASK-012 acceptance at e2b8961. The authored
+  scenario validates, headless paths demonstrate temporary relief, renewed routing,
+  delayed recurrence, and two causal resolutions with distinct customer impact. Independent
+  review and QA found no critical issues.
+files_changed: []
+verification:
+  implementation_result: pass
+  automated_tests: pass
+  independent_review: pass
+  acceptance_evidence: pass
+  critical_issues: 0
+  scenario_validation: pass
+  inc001_inc002_replays: 7_passed
+  full_tests: 59_passed
+  typecheck: pass
+  lint: pass
+  format: pass
+  diff_check: pass
+followups:
+- Shared desktop incident selection and cross-incident UNKNOWN narrative belong to
+  later M3 tasks.
+commit: e2b8961
+decision: PASS
+quality:
+  passed: true
+  missing: []
+  failed: []
+kind: evaluation
+role: evaluator
+actor: codex-task012-evaluator

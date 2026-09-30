@@ -1,0 +1,49 @@
+task: TASK-012
+status: pass
+summary: Independent acceptance QA passed at HEAD e2b8961. INC-002 validates, replays
+  deterministically through temporary relief and two distinct causal interventions,
+  and keeps deployment telemetry consistent with the intervention taken.
+files_changed: []
+verification:
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios validated both bundled incident YAML files.
+  reference_diagnostics:
+    status: pass
+    detail: In-memory negative probes reported UNKNOWN_REFERENCE at the changed action
+      eventId path and DUPLICATE_ID for a repeated INC-002 catalog id.
+  investigation:
+    status: pass
+    detail: Pager service is initially visible while deployment and key evidence start
+      hidden. Causal actions require the trace and deployment comparison.
+  repeated_routing:
+    status: pass
+    detail: Independent headless replay with two routing actions held the authorization
+      error rate at 5 through second 190; the prior timer did not fire. One recurrence
+      fired at second 245 after the renewed window ended.
+  causal_paths:
+    status: pass
+    detail: Rollback completed with build 1846 and matching K71 identifiers; key-set
+      update completed with build 1847 and matching K72 identifiers. The paths have
+      different elapsed time, impact, risk, cost, and postmortem action counts.
+  deterministic_replay:
+    status: pass
+    detail: Same seed and ordered rollback commands produced byte-equal replay results
+      in an independent headless probe; authored tests cover all fixtures.
+  postmortem_and_narrative:
+    status: pass
+    detail: Action-derived metrics and communication counts reflect replay outcomes;
+      content has no NULL, ORPHEUS identity, or later-act disclosure.
+  inc001_regression:
+    status: pass
+    detail: npm run test:replays passed both existing INC-001 fixtures.
+  quality_commands:
+    status: pass
+    detail: npm test passed 59/59 across 11 files; typecheck, lint, format check,
+      web build, scenario validation, and git diff --check passed.
+critical_issues: 0
+followups: []
+commit: e2b8961
+kind: qa
+role: qa
+actor: codex-task012-qa

@@ -1,0 +1,47 @@
+task: TASK-012
+status: pass
+summary: Automated and independent headless verification passed for INC-002 at HEAD
+  e2b8961, including renewed routing, delayed recurrence, causal resolution, postmortem
+  metrics, and existing INC-001 regressions.
+files_changed: []
+verification:
+  acceptance: pass
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios passed for both bundled incident files.
+  full_tests:
+    status: pass
+    detail: npm test passed 11 files and 59 tests.
+  inc001_replays:
+    status: pass
+    detail: npm run test:replays passed 2/2 INC-001 replay fixtures.
+  inc002_replays:
+    status: pass
+    detail: Authored INC-002 tests cover intervention gates, temporary relief and
+      recurrence, timer renewal, rollback, key-set update, deterministic replay, and
+      action-derived postmortem inputs.
+  independent_edge_probe:
+    status: pass
+    detail: Two routing actions at seconds 0 and 65 kept error rate 5 at second 190,
+      then produced one recurrence at second 245. Rollback cancelled recurrence through
+      second 370; final key and build signals matched each causal path.
+  typecheck:
+    status: pass
+    detail: npm run typecheck passed.
+  lint:
+    status: pass
+    detail: npm run lint passed with zero warnings.
+  format:
+    status: pass
+    detail: npm run format:check passed.
+  web_build:
+    status: pass
+    detail: npm run build:web passed, transforming 208 modules.
+  diff_check:
+    status: pass
+    detail: git diff --check passed.
+followups: []
+commit: e2b8961
+kind: test
+role: qa
+actor: codex-task012-qa
