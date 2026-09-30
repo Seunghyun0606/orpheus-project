@@ -1,0 +1,44 @@
+task: TASK-011
+status: pass
+summary: Independent acceptance QA passed at HEAD 54090a1. The second Incident fixture
+  loads through the shared validated catalog, replays deterministically, and invalid
+  catalog content is rejected before play.
+files_changed: []
+verification:
+  second_incident_fixture:
+    status: pass
+    detail: Catalog tests load INC-001-TEST and INC-002-FIXTURE through validateScenarioCatalog.
+      The second fixture replays inspection and root-cause containment twice with
+      seed 29, producing equal results and completion.
+  catalog_diagnostics:
+    status: pass
+    detail: Tests report DUPLICATE_ID and UNKNOWN_REFERENCE together, including when
+      the duplicate file itself has broken references. Empty catalog input returns
+      EMPTY_CATALOG, and the CLI rejects an empty scenario directory.
+  conditional_event_targets:
+    status: pass
+    detail: The new negative test verifies that schedule_event and cancel_event targeting
+      a conditional event each produce INVALID_EVENT_TARGET_TYPE with the file and
+      exact effect path before play.
+  inc001_regression:
+    status: pass
+    detail: npm run test:replays passed both existing INC-001 replay fixtures. Their
+      fixture and test files have no diff from implementation commit 11db6f8 through
+      HEAD 54090a1.
+  domain_boundary:
+    status: pass
+    detail: Static inspection found no React or Tauri imports or incident-id branch
+      in the engine. The existing INC-001 adapter resolves its id from the catalog.
+  quality_commands:
+    status: pass
+    detail: Targeted Vitest 15/15, full Vitest 54/54, typecheck, lint, scenario validation,
+      format check, git diff --check, and Vite web build all passed. Build output
+      was directed outside the working tree.
+critical_issues: 0
+followups:
+- Authored INC-002 Bad Deployment content belongs to TASK-012. Current bundled scenario
+  validation checks one authored file, INC-001.
+commit: 54090a1
+kind: qa
+role: qa
+actor: codex-task011-qa

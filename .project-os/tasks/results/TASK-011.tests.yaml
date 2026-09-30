@@ -1,0 +1,50 @@
+task: TASK-011
+status: pass
+summary: Automated acceptance checks passed after the conditional-event target validation
+  fix at HEAD 54090a1.
+files_changed: []
+verification:
+  targeted_catalog_validator_and_replay:
+    status: pass
+    detail: npm run test -- src/scenario/catalog.test.ts src/scenario/scenario.test.ts
+      src/tests/inc-001-replay.test.ts passed 3 files and 15 tests.
+  full_tests:
+    status: pass
+    detail: npm test passed 10 files and 54 tests (54/54).
+  inc001_replays:
+    status: pass
+    detail: npm run test:replays passed 2/2 existing INC-001 replay fixtures.
+  catalog_diagnostics:
+    status: pass
+    detail: Catalog tests cover duplicate scenario IDs alongside invalid references
+      in the same input and empty catalog/empty CLI directory rejection.
+  conditional_event_negative_test:
+    status: pass
+    detail: The new scenario contract test rejects both scheduling and cancelling
+      a conditional event with INVALID_EVENT_TARGET_TYPE diagnostics at the offending
+      action effect paths.
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios passed for the one bundled authored file.
+  typecheck:
+    status: pass
+    detail: npm run typecheck passed.
+  lint:
+    status: pass
+    detail: npm run lint passed with zero warnings.
+  format:
+    status: pass
+    detail: npm run format:check passed.
+  diff_check:
+    status: pass
+    detail: git diff --check passed.
+  web_build:
+    status: pass
+    detail: npm run build:web -- --outDir <unique external temp directory> passed;
+      Vite transformed 207 modules and produced the production bundle.
+followups:
+- Actual INC-002 story data is TASK-012 scope and was not part of this QA.
+commit: 54090a1
+kind: test
+role: qa
+actor: codex-task011-qa
