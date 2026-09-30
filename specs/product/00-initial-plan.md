@@ -531,10 +531,12 @@ Incident 예:
 
 ```text
 INC-001 Connection Saturation
-INC-002 Queue Backlog
-INC-003 Memory Leak
-INC-004 Bad Deployment
+INC-002 Bad Deployment
+INC-003 Queue Backlog
+Memory Leak (MVP 이후, Incident ID 미정)
 ```
+
+M3의 세 Incident MVP에는 위의 INC-001~003만 포함한다. Memory Leak은 이후 콘텐츠로 미루며, ID는 해당 작업을 정의할 때 정한다.
 
 초기에는 대부분 실제 장애다.
 
@@ -2449,6 +2451,8 @@ INC-001 Connection Saturation
 INC-002 Bad Deployment
 INC-003 Queue Backlog
 ```
+
+이 ID와 구성이 M3의 기준이다. ACT 1의 다른 Incident 예시는 MVP 범위나 ID를 변경하지 않는다.
 
 Narrative는:
 

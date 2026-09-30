@@ -1,0 +1,21 @@
+id: DEC-004
+title: Fix M3 incident identities to the three-incident MVP list
+status: active
+date: '2026-09-30'
+applies_to:
+  - M3
+context: >-
+  The initial plan's ACT 1 example list assigned INC-002 to Queue Backlog,
+  INC-003 to Memory Leak, and INC-004 to Bad Deployment, while its MVP section
+  and the active M3 milestone assigned INC-002 to Bad Deployment and INC-003
+  to Queue Backlog. These assignments cannot both be canonical.
+decision: >-
+  By explicit human approval, the M3 MVP keeps INC-001 Connection Saturation,
+  INC-002 Bad Deployment, and INC-003 Queue Backlog. Memory Leak is deferred
+  beyond M3 and has no assigned incident ID yet.
+consequences:
+  - The M3 milestone and TASK-012/TASK-013 contracts retain their current ids and scope.
+  - ACT 1 examples do not override the MVP incident identities.
+  - A later planning decision must assign an id and scope before authoring Memory Leak.
+  - Existing INC-001 content, replay, and saves are unchanged.
+supersedes: null

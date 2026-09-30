@@ -30,6 +30,7 @@ relevant_files:
 active_decisions:
   - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
   - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+  - .project-os/decisions/DEC-004-m3-incident-identity.yaml
 
 acceptance:
   - INC-002 validates with stable ids and no unresolved references.

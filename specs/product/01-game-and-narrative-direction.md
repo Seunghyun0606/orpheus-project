@@ -66,7 +66,7 @@ Act 7의 경영진 오도는 여러 Incident 동안 유지한다. NULL 역시 �
 
 ## MVP Narrative Boundary
 
-MVP는 세 Incident를 통해 UNKNOWN의 존재와 의도적인 흔적만 제시한다. NULL이라는 이름, ORPHEUS의 정체, Production Experiment와 후반 반전은 공개하지 않는다.
+MVP는 INC-001 Connection Saturation, INC-002 Bad Deployment, INC-003 Queue Backlog의 세 Incident를 통해 UNKNOWN의 존재와 의도적인 흔적만 제시한다. Memory Leak은 MVP 이후로 미룬다. NULL이라는 이름, ORPHEUS의 정체, Production Experiment와 후반 반전은 공개하지 않는다.
 
 ## Ending Set
 
