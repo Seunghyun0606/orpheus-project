@@ -1,0 +1,47 @@
+task: TASK-013
+status: pass
+summary: Independent acceptance QA passed at HEAD 0a946f7. INC-003 validates and replays
+  deterministically through temporary relief, rebound, renewal, and two distinct causal
+  containment paths. The postmortem now reports response cost from the COST resource.
+files_changed: []
+verification:
+  acceptance: pass
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios passed all three bundled incident YAML files
+      with stable ids and no unresolved references.
+  response_paths:
+    status: pass
+    detail: Quarantine fixture completed at 265 seconds with impact 78, risk 18, and
+      cost 180; dead-letter fixture completed at 295 seconds with impact 106, risk
+      4, and cost 100. Headless probes also recovered after a rebound at second 180
+      and confirmed renewed scaling prevents the prior timer from firing.
+  postmortem:
+    status: pass
+    detail: Independent replay confirmed EXPENDITURE source resource refId COST and
+      values 180 for quarantine and 100 for dead-letter, equal to final COST state.
+      Authored tests assert both values. Action counts, communication, evidence, and
+      non-resolving temporary mitigation reflect performed actions without right-or-wrong
+      labels.
+  determinism:
+    status: pass
+    detail: Repeated identical-seed ordered replays produced byte-equal results for
+      both causal paths; authored fixtures assert equal state and event logs.
+  narrative_boundary:
+    status: pass
+    detail: INC-003 scenario contains operational queue evidence and no NULL, ORPHEUS
+      identity, or later-act disclosure.
+  regressions:
+    status: pass
+    detail: INC-001/002/003 targeted replay suites passed 12 tests across 3 files;
+      npm run test:replays passed both INC-001 fixtures.
+  quality_commands:
+    status: pass
+    detail: npm test passed 64 tests across 12 files; typecheck, lint, format check,
+      web build, scenario validation, and git diff --check passed.
+critical_issues: 0
+followups: []
+commit: 0a946f7
+kind: qa
+role: qa
+actor: codex-task013-qa

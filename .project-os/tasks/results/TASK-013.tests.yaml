@@ -1,0 +1,48 @@
+task: TASK-013
+status: pass
+summary: Automated and independent headless verification passed for INC-003 at HEAD
+  0a946f7, including the response-cost postmortem correction and existing incident
+  regressions.
+files_changed: []
+verification:
+  acceptance: pass
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios passed for 3 bundled incident files.
+  full_tests:
+    status: pass
+    detail: npm test passed 12 files and 64 tests.
+  incident_replays:
+    status: pass
+    detail: Targeted INC-001, INC-002, and INC-003 replay tests passed 3 files and
+      12 tests; npm run test:replays passed 2 existing INC-001 fixtures.
+  inc003_cost_probe:
+    status: pass
+    detail: Independent quarantine and dead-letter replays produced EXPENDITURE metrics
+      180 and 100 respectively, both sourced from COST and equal to final COST state;
+      repeated identical seed and action order produced byte-equal replay results.
+  inc003_edge_probes:
+    status: pass
+    detail: Direct causal paths, renewed scaling, rejected locked actions, and recovery
+      after the second-180 rebound behaved consistently with authored scenario and
+      shared engine contracts.
+  typecheck:
+    status: pass
+    detail: npm run typecheck passed.
+  lint:
+    status: pass
+    detail: npm run lint passed with zero warnings.
+  format:
+    status: pass
+    detail: npm run format:check passed.
+  web_build:
+    status: pass
+    detail: npm run build:web passed, transforming 209 modules.
+  diff_check:
+    status: pass
+    detail: git diff --check passed.
+followups: []
+commit: 0a946f7
+kind: test
+role: qa
+actor: codex-task013-qa
