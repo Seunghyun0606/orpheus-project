@@ -382,6 +382,10 @@ postmortem:
       label: Customer impact
       source: resource
       refId: CUSTOMER_IMPACT
+    - id: EXPENDITURE
+      label: Response cost
+      source: resource
+      refId: COST
     - id: OPERATIONAL_EXPOSURE
       label: Operational risk
       source: resource

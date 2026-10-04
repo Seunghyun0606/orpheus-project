@@ -167,6 +167,7 @@ describe('INC-003 Queue Backlog headless replays', () => {
       expect.objectContaining({ id: 'POISON_MESSAGE_HEAD_OF_LINE', resolved: true }),
     );
     expect(report.metrics.find(({ id }) => id === 'CUSTOMER_DAMAGE')?.value).toBe(78);
+    expect(report.metrics.find(({ id }) => id === 'EXPENDITURE')?.value).toBe(180);
     expect(report.metrics.find(({ id }) => id === 'QUARANTINE_COUNT')?.value).toBe(1);
   });
 
@@ -187,5 +188,6 @@ describe('INC-003 Queue Backlog headless replays', () => {
     expect(report.communicationActions.map(({ id }) => id)).toEqual(['COMMUNICATE_STATUS']);
     expect(report.metrics.find(({ id }) => id === 'DEAD_LETTER_RULE_COUNT')?.value).toBe(1);
     expect(report.metrics.find(({ id }) => id === 'CUSTOMER_DAMAGE')?.value).toBe(106);
+    expect(report.metrics.find(({ id }) => id === 'EXPENDITURE')?.value).toBe(100);
   });
 });
