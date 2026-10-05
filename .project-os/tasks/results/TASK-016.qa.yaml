@@ -1,0 +1,34 @@
+task: TASK-016
+status: pass
+summary: Independent QA passed on committed HEAD 2c0ee0f after the save-concurrency
+  correction. All three incident routes, local progress, slot protection, keyboard
+  behavior, and builds passed automated acceptance checks.
+files_changed: []
+verification:
+  acceptance: pass
+  three_incident_flow:
+    status: pass
+    detail: UI tests start, complete, and revisit INC-001, INC-002, and INC-003, including
+      review after remount and cross-incident Evidence projection.
+  persistence:
+    status: pass
+    detail: Tests cover confirmation/cancel/resume, malformed and incompatible slot
+      preservation, changed other-incident slot, changed same-incident slot, and a
+      concurrent slot switch to the currently played incident.
+  accessibility:
+    status: pass
+    detail: Automated UI checks cover desk focus, confirmation-dialog focus and Tab
+      wrap, Escape cancel, text status cues, and existing display controls.
+  quality_commands:
+    status: pass
+    detail: Independent QA reran npm test (115/115 in 16 files), scenario validation
+      (8 files), lint, format check, and npm run build:desktop (including typecheck
+      and web build). All commands exited 0 and produced the native release executable.
+critical_issues: 0
+followups:
+- Interactive native GUI smoke and visual accessibility scan remain TASK-017 scope.
+- Vite's uncompressed chunk-size warning is non-blocking.
+commit: 2c0ee0f
+kind: qa
+role: qa
+actor: codex-task016-independent-qa

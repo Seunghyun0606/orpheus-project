@@ -1,0 +1,54 @@
+task: TASK-016
+status: pass
+summary: Connected INC-001, INC-002, and INC-003 to one scenario-driven incident desk.
+  Players can start, complete, continue, and review replay-verified completed records.
+  The original single incident save slot requires explicit confirmation before cross-incident
+  replacement and protects malformed, incompatible, or concurrently changed saves.
+  Separate campaign progress remains versioned.
+files_changed:
+- .project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml
+- README.md
+- src/app/App.tsx
+- src/app/AppShell.tsx
+- src/app/Postmortem.tsx
+- src/main.tsx
+- src/persistence/index.ts
+- src/persistence/save.ts
+- src/store/incident-session.ts
+- src/app/App.test.tsx
+- src/app/AppShell.test.tsx
+- src/tests/vertical-slice.test.tsx
+- src/ui/base.css
+verification:
+  acceptance: pass
+  three_incident_flow:
+    status: pass
+    detail: UI tests complete each bundled incident to postmortem, review it in the
+      same app and after remount, and carry discoveries into the next incident. Production
+      React contains no incident-ID branches.
+  persistence:
+    status: pass
+    detail: Save/load retains the original incident key and replay verification. Cross-incident
+      replacement requires confirmation; changed slot bytes require reconfirmation
+      even when another window changes the slot to the current incident. Malformed
+      and unsupported saves remain untouched.
+  access:
+    status: pass
+    detail: The desk restores focus on return. The confirmation dialog traps keyboard
+      focus, supports Escape, and names the slot being replaced. Review-only records
+      hide mutating controls and preserve in-progress sessions.
+  tests: 115_passed_in_16_files
+  typecheck: pass
+  lint: pass
+  format: pass
+  scenario_validation: 8_yaml_passed
+  web_build: pass
+  native_build: pass
+  project_doctor: pass
+followups:
+- TASK-017 should perform interactive native desktop QA at M3 exit.
+- Vite reports a non-blocking uncompressed chunk-size warning.
+commit: 2c0ee0f
+kind: implementation
+role: developer
+actor: codex-developer

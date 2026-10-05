@@ -1,0 +1,32 @@
+task: TASK-016
+status: pass
+summary: Automated verification passed for committed TASK-016 implementation 2c0ee0f.
+files_changed: []
+verification:
+  acceptance: pass
+  full_tests:
+    status: pass
+    detail: npm test passed 16 files and 115 tests.
+  three_incident_ui:
+    status: pass
+    detail: AppShell tests cover all three complete routes, archive review after remount,
+      cross-incident Evidence, partial-session preservation, save-slot confirmation,
+      cancellation, resume, malformed and incompatible saves, and concurrent changes
+      to another or the current incident slot.
+  typecheck: pass
+  lint: pass
+  format: pass
+  scenario_validation: 8_yaml_passed
+  web_build: pass
+  native_build:
+    status: pass
+    detail: npm run build:desktop produced the release executable without bundling.
+  project_doctor: pass
+  diff_check: pass
+critical_issues: 0
+followups:
+- Native interactive play and visual accessibility scan remain TASK-017 scope.
+commit: 2c0ee0f
+kind: test
+role: qa
+actor: codex-task016-qa
