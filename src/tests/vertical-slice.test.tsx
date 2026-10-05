@@ -50,11 +50,11 @@ describe('INC-001 complete vertical slice', () => {
 
     await activate('Inspect PostgreSQL');
     await activate('Inspect database sessions');
-    const findings = screen.getByRole('table', { name: 'Newly revealed database observations' });
+    const findings = screen.getByRole('table', { name: 'Newly revealed incident observations' });
     expect(within(findings).getByText('164')).toBeInTheDocument();
     expect(within(findings).getByText('idle in transaction')).toBeInTheDocument();
 
-    const databaseTab = screen.getByRole('tab', { name: /Database/ });
+    const databaseTab = screen.getByRole('tab', { name: /Diagnostics/ });
     await reachByTab(databaseTab);
     await user.keyboard('{ArrowRight}');
     expect(screen.getByRole('tab', { name: /Status/ })).toHaveFocus();

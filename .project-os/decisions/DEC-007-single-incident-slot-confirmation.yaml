@@ -1,0 +1,24 @@
+id: DEC-007
+title: Keep one incident save slot with explicit cross-incident overwrite confirmation
+status: active
+date: "2026-10-05"
+applies_to:
+  - global
+context: >-
+  TASK-016 makes all three M3 incidents playable in one desktop. The existing
+  orpheus.incident.v1 key stores a single incident, so saving a different one
+  would replace the previous saved session. The human selected the single-slot
+  option with confirmation rather than adding per-incident save keys.
+decision: >-
+  Retain the original incident key and save envelope. Verify the existing save
+  before a write. If it belongs to another incident, require an explicit
+  confirmation naming that incident; reject malformed or unsupported slot data
+  without erasing it. Keep completed and discovered cross-incident progress in
+  the separately approved versioned campaign-progress store.
+consequences:
+  - Existing INC-001 saves remain in the same location and can be resumed.
+  - One explicit save may replace another incident's single-slot state only
+    after confirmation; the campaign discovery record remains separate.
+  - Concurrent slot changes require a fresh confirmation before replacement.
+  - This does not provide simultaneous durable partial saves for every incident.
+supersedes: null

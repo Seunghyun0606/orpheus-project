@@ -1,8 +1,8 @@
 # Orpheus
 
 Orpheus is a desktop narrative techno-thriller built with Tauri, React, and TypeScript.
-The repository contains a playable INC-001 desktop slice, validated scenario data, and a
-deterministic headless incident engine. The session runs from the Pager alert through investigation,
+The repository contains a shared desktop for the three M3 incidents, validated scenario data, and a
+deterministic headless incident engine. Each session runs from the Pager alert through investigation,
 recovery, saved evidence, and an action-derived postmortem.
 
 ## Prerequisites
@@ -26,9 +26,10 @@ npm run dev:desktop
 
 ## Desktop vertical-slice run
 
-Start with `npm run dev:desktop` (or `npm run dev` for browser QA). The initial Pager shows
-`SEV1`, Payment API, and the error-rate alert. Use the investigation tabs with Tab and arrow keys,
-then activate actions with Enter or Space:
+Start with `npm run dev:desktop` (or `npm run dev` for browser QA). The incident desk lists
+INC-001, INC-002, and INC-003. Select **Start INC-001** for the original vertical slice: its
+Pager shows `SEV1`, Payment API, and the error-rate alert. Use the investigation tabs with Tab
+and arrow keys, then activate actions with Enter or Space:
 
 1. Open Payment API logs, inspect PostgreSQL, and inspect database sessions. The session table
    reveals 164 stale `idle in transaction` sessions, then unlocks the termination action.
@@ -67,8 +68,8 @@ npm run build:desktop
 The three MVP incident YAML files author team messages, a communication action, and a delayed
 delegation. Open **War Room** to read reports and pending work; delegated work occupies one team
 capacity slot until its authored ETA. Reports can be incomplete or conflicting and are not marked
-correct or incorrect. The same panel and engine rules apply to all three incidents, although the
-current desktop still starts in INC-001 until the multi-incident selection task is complete.
+correct or incorrect. The same panel and engine rules apply to all three incidents. Return to the
+incident desk at any time; completed records can be reviewed there.
 
 INC-001 remains at content version 1.1.0; INC-002/003 now use 1.2.0 for their UNKNOWN discovery
 paths. Existing 1.0.0 and 1.1.0 saves are verified against frozen original scenarios before
@@ -78,9 +79,14 @@ again to keep the migrated version. Unsupported or altered saves are rejected.
 Discoveries also enter the separate, versioned `orpheus.campaign-progress.v1` local record. The
 Evidence tab projects recovered artifacts and UNKNOWN trigger history across incidents from
 replay-verified records, even after an incident is restarted. This record never overwrites
-`orpheus.incident.v1`. An older incident save can be imported into the discovery record with
-**Load**. INC-002/003 can currently be exercised headlessly or with an injected session store;
-desktop incident selection remains a later M3 task. No later-act identity is revealed here.
+`orpheus.incident.v1`. The desktop retains one incident save slot. The desk can resume its saved
+incident, and saving a different incident requires explicit confirmation before that slot is
+replaced. If the slot changes while confirmation is open, confirmation is requested again. A
+malformed or incompatible slot is reported and preserved rather than silently erased.
+Completed/discovered progress is kept in the separate campaign record, so all three records can
+be revisited after restart. Reviewing an archived record is read-only and does not replace an
+unfinished response in memory. An older incident save can be imported into the discovery record with
+**Load**. No later-act identity is revealed here.
 
 ## M2 verification map
 

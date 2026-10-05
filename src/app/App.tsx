@@ -31,7 +31,7 @@ const defaultSessionStore = createIncidentSessionStore(inc001Scenario, 1001, und
 const tools: readonly { id: ToolId; label: string; shortcut: string }[] = [
   { id: 'logs', label: 'Logs', shortcut: '01' },
   { id: 'metrics', label: 'Metrics', shortcut: '02' },
-  { id: 'database', label: 'Database', shortcut: '03' },
+  { id: 'database', label: 'Diagnostics', shortcut: '03' },
   { id: 'status', label: 'Status', shortcut: '04' },
   { id: 'evidence', label: 'Evidence', shortcut: '05' },
   { id: 'war-room', label: 'War Room', shortcut: '06' },
@@ -39,6 +39,8 @@ const tools: readonly { id: ToolId; label: string; shortcut: string }[] = [
 
 export interface AppProps {
   store?: StoreApi<IncidentSessionState>;
+  onBackToDesk?: () => void;
+  reviewOnly?: boolean;
 }
 
 function humanize(id: string): string {
@@ -118,6 +120,7 @@ function chooseTool(action: IncidentSessionState['scenario']['actions'][number])
   const text = `${action.id} ${action.title}`.toLowerCase();
   if (text.includes('log')) return 'logs';
   if (text.includes('metric')) return 'metrics';
+  if (action.category === 'DIAGNOSE' || action.category === 'INVESTIGATE') return 'database';
   if (text.includes('database') || text.includes('postgres') || text.includes('session')) {
     return 'database';
   }
@@ -160,19 +163,26 @@ function recoveryCopy(state: IncidentSessionState['incident']): {
   };
 }
 
-export function App({ store = defaultSessionStore }: AppProps) {
+export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = false }: AppProps) {
   const session = useStore(store);
   const [presentationPreferences, setPresentationPreferences] = useState(
     readPresentationPreferences,
   );
   const [activeTool, setActiveTool] = useState<ToolId>('metrics');
   const [activeNarrativeId, setActiveNarrativeId] = useState<string | null>(null);
+  const [overwritePrompt, setOverwritePrompt] = useState<{
+    scenarioId: string;
+    message: string;
+  } | null>(null);
   const [viewMode, setViewMode] = useState<'incident' | 'postmortem'>(
     store.getState().incident.completionReached ? 'postmortem' : 'incident',
   );
   const narrativeContinueRef = useRef<HTMLButtonElement>(null);
   const postmortemReturnRef = useRef<HTMLButtonElement>(null);
   const warRoomTabRef = useRef<HTMLButtonElement>(null);
+  const confirmOverwriteRef = useRef<HTMLButtonElement>(null);
+  const saveTriggerRef = useRef<HTMLButtonElement>(null);
+  const hadOverwriteDialog = useRef(false);
   const activeNarrative = session.scenario.narratives.find(({ id }) => id === activeNarrativeId);
   const availableActions = selectAvailableActions(session);
   const revealedSignals = selectRevealedSignals(session);
@@ -205,6 +215,16 @@ export function App({ store = defaultSessionStore }: AppProps) {
   useEffect(() => {
     if (activeNarrative !== undefined) narrativeContinueRef.current?.focus();
   }, [activeNarrative]);
+
+  useEffect(() => {
+    if (overwritePrompt !== null) {
+      hadOverwriteDialog.current = true;
+      confirmOverwriteRef.current?.focus();
+    } else if (hadOverwriteDialog.current) {
+      saveTriggerRef.current?.focus();
+      hadOverwriteDialog.current = false;
+    }
+  }, [overwritePrompt]);
 
   useEffect(() => {
     if (
@@ -248,6 +268,70 @@ export function App({ store = defaultSessionStore }: AppProps) {
     setViewMode('incident');
   };
 
+  const requestSave = (trigger?: HTMLButtonElement) => {
+    if (trigger !== undefined) saveTriggerRef.current = trigger;
+    const result = session.save();
+    if (!result.ok && result.code === 'OVERWRITE_CONFIRMATION_REQUIRED') {
+      setOverwritePrompt(
+        result.existingScenarioId === undefined
+          ? null
+          : { scenarioId: result.existingScenarioId, message: result.message },
+      );
+    }
+  };
+
+  const confirmOverwrite = () => {
+    if (overwritePrompt === null) return;
+    const result = session.save(overwritePrompt.scenarioId);
+    setOverwritePrompt(
+      !result.ok &&
+        result.code === 'OVERWRITE_CONFIRMATION_REQUIRED' &&
+        result.existingScenarioId !== undefined
+        ? { scenarioId: result.existingScenarioId, message: result.message }
+        : null,
+    );
+  };
+
+  const overwriteDialog =
+    overwritePrompt === null ? null : (
+      <div className="narrative-overlay">
+        <section
+          aria-describedby="overwrite-description"
+          aria-labelledby="overwrite-title"
+          aria-modal="true"
+          className="narrative-dialog"
+          onKeyDown={(event) => {
+            if (event.key === 'Escape') setOverwritePrompt(null);
+            if (event.key === 'Tab') {
+              const buttons = event.currentTarget.querySelectorAll<HTMLButtonElement>('button');
+              const first = buttons[0];
+              const last = buttons[buttons.length - 1];
+              if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last?.focus();
+              } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first?.focus();
+              }
+            }
+          }}
+          role="alertdialog"
+        >
+          <span className="narrative-channel">Single local save slot</span>
+          <h2 id="overwrite-title">Replace the local save?</h2>
+          <p id="overwrite-description">
+            {overwritePrompt.message} Recovered campaign evidence remains separate.
+          </p>
+          <button onClick={() => setOverwritePrompt(null)} type="button">
+            Keep existing save
+          </button>
+          <button ref={confirmOverwriteRef} onClick={confirmOverwrite} type="button">
+            Confirm replacement
+          </button>
+        </section>
+      </div>
+    );
+
   const handleToolKeyDown = (event: KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
     let nextIndex: number;
     switch (event.key) {
@@ -278,26 +362,34 @@ export function App({ store = defaultSessionStore }: AppProps) {
   if (viewMode === 'postmortem' && session.incident.completionReached) {
     return (
       <>
-        <PresentationSettings
-          onChange={setPresentationPreferences}
-          preferences={presentationPreferences}
-        />
-        <Postmortem
-          report={computePostmortem(session.scenario, session.incident)}
-          persistenceNotice={session.persistenceNotice}
-          persistenceError={session.persistenceError?.message ?? null}
-          onSave={() => session.save()}
-          onLoad={loadSession}
-          onReturn={() => setViewMode('incident')}
-          onRestart={restartSession}
-        />
+        <div inert={overwritePrompt !== null}>
+          <PresentationSettings
+            onChange={setPresentationPreferences}
+            preferences={presentationPreferences}
+          />
+          <Postmortem
+            report={computePostmortem(session.scenario, session.incident)}
+            persistenceNotice={session.persistenceNotice}
+            persistenceError={session.persistenceError?.message ?? null}
+            onSave={requestSave}
+            onLoad={loadSession}
+            onReturn={() => setViewMode('incident')}
+            onRestart={restartSession}
+            onBackToDesk={onBackToDesk}
+            reviewOnly={reviewOnly}
+          />
+        </div>
+        {overwriteDialog}
       </>
     );
   }
 
   return (
     <>
-      <main className="operations-shell" inert={activeNarrative !== undefined}>
+      <main
+        className="operations-shell"
+        inert={activeNarrative !== undefined || overwritePrompt !== null}
+      >
         <PresentationSettings
           onChange={setPresentationPreferences}
           preferences={presentationPreferences}
@@ -306,6 +398,11 @@ export function App({ store = defaultSessionStore }: AppProps) {
           <div className="brand-lockup">
             <p className="eyebrow">VANTAGE SYSTEMS // PRODUCTION RELIABILITY</p>
             <p className="brand">ORPHEUS</p>
+            {onBackToDesk && (
+              <button className="desk-return" onClick={onBackToDesk} type="button">
+                Incident desk
+              </button>
+            )}
           </div>
           <div className="incident-identity">
             <span className="severity-badge">{session.scenario.severity}</span>
@@ -432,7 +529,7 @@ export function App({ store = defaultSessionStore }: AppProps) {
                 <div className="terminal-view">
                   <div className="view-heading">
                     <div>
-                      <span>Payment request stream</span>
+                      <span>Incident event stream</span>
                       <h2>Incident logs</h2>
                     </div>
                     <span className="stream-state">● LIVE BUFFER</span>
@@ -485,23 +582,22 @@ export function App({ store = defaultSessionStore }: AppProps) {
                 <div>
                   <div className="view-heading">
                     <div>
-                      <span>PostgreSQL diagnostics</span>
-                      <h2>Session investigation</h2>
+                      <span>Diagnostic observations</span>
+                      <h2>Investigation detail</h2>
                     </div>
                     <span className="stream-state">● QUERY CONSOLE</span>
                   </div>
                   {newDiscoveries.length === 0 ? (
                     <div className="empty-state">
                       <span aria-hidden="true">⌁</span>
-                      <strong>No session detail captured</strong>
+                      <strong>No investigation detail captured</strong>
                       <p>
-                        Inspect PostgreSQL, then inspect database sessions to reveal active
-                        findings.
+                        Use observation and investigation actions to reveal additional findings.
                       </p>
                     </div>
                   ) : (
                     <table className="discovery-table">
-                      <caption>Newly revealed database observations</caption>
+                      <caption>Newly revealed incident observations</caption>
                       <thead>
                         <tr>
                           <th scope="col">Observation</th>
@@ -728,14 +824,20 @@ export function App({ store = defaultSessionStore }: AppProps) {
               </div>
             )}
 
-            <div className="session-controls" aria-label="Local session save controls" role="group">
-              <button onClick={() => session.save()} type="button">
-                Save session
-              </button>
-              <button onClick={loadSession} type="button">
-                Load saved session
-              </button>
-            </div>
+            {!reviewOnly && (
+              <div
+                className="session-controls"
+                aria-label="Local session save controls"
+                role="group"
+              >
+                <button onClick={(event) => requestSave(event.currentTarget)} type="button">
+                  Save session
+                </button>
+                <button onClick={loadSession} type="button">
+                  Load saved session
+                </button>
+              </div>
+            )}
             {session.persistenceNotice !== null && (
               <p aria-label="Session persistence" className="persistence-notice" role="status">
                 {session.persistenceNotice}
@@ -748,9 +850,11 @@ export function App({ store = defaultSessionStore }: AppProps) {
               </div>
             )}
 
-            <button className="restart-button" onClick={restartSession} type="button">
-              Restart incident session
-            </button>
+            {!reviewOnly && (
+              <button className="restart-button" onClick={restartSession} type="button">
+                Restart incident session
+              </button>
+            )}
           </aside>
         </div>
       </main>
@@ -779,6 +883,7 @@ export function App({ store = defaultSessionStore }: AppProps) {
           </section>
         </div>
       )}
+      {overwriteDialog}
     </>
   );
 }

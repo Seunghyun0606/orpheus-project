@@ -130,11 +130,17 @@ export type SaveErrorCode =
   | 'INCOMPATIBLE_SCHEMA'
   | 'INCOMPATIBLE_CONTENT'
   | 'SCENARIO_MISMATCH'
-  | 'REPLAY_MISMATCH';
+  | 'REPLAY_MISMATCH'
+  | 'OVERWRITE_CONFIRMATION_REQUIRED';
 
 export type SaveResult<T> =
   | { readonly ok: true; readonly value: T }
-  | { readonly ok: false; readonly code: SaveErrorCode; readonly message: string };
+  | {
+      readonly ok: false;
+      readonly code: SaveErrorCode;
+      readonly message: string;
+      readonly existingScenarioId?: string;
+    };
 
 export interface RestoredSession {
   readonly seed: number;
@@ -240,4 +246,36 @@ export function decodeSave(raw: string, scenario: Scenario): SaveResult<Restored
       migratedFromContentVersion: replayScenario.contentVersion,
     },
   };
+}
+
+export interface SavedSlot {
+  readonly scenario: Scenario;
+  readonly restored: RestoredSession;
+}
+
+export function inspectSavedSlot(
+  raw: string,
+  catalog: ReadonlyMap<string, Scenario>,
+): SaveResult<SavedSlot> {
+  let value: unknown;
+  try {
+    value = JSON.parse(raw);
+  } catch {
+    return fail('MALFORMED_SAVE', 'The saved session is not valid JSON.');
+  }
+  if (
+    value === null ||
+    typeof value !== 'object' ||
+    Array.isArray(value) ||
+    !('scenarioId' in value) ||
+    typeof value.scenarioId !== 'string'
+  ) {
+    return fail('MALFORMED_SAVE', 'The saved session has no incident identifier.');
+  }
+  const scenario = catalog.get(value.scenarioId);
+  if (scenario === undefined) {
+    return fail('INCOMPATIBLE_CONTENT', 'The saved session references an unknown incident.');
+  }
+  const restored = decodeSave(raw, scenario);
+  return restored.ok ? { ok: true, value: { scenario, restored: restored.value } } : restored;
 }

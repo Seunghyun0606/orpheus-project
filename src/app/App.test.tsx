@@ -96,8 +96,8 @@ describe('INC-001 operations desktop', () => {
     metrics.focus();
 
     await user.keyboard('{ArrowRight}');
-    expect(screen.getByRole('tab', { name: /Database/ })).toHaveFocus();
-    expect(screen.getByRole('heading', { name: 'Session investigation' })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /Diagnostics/ })).toHaveFocus();
+    expect(screen.getByRole('heading', { name: 'Investigation detail' })).toBeInTheDocument();
     await user.keyboard('{End}');
     expect(screen.getByRole('tab', { name: /War Room/ })).toHaveFocus();
     await user.keyboard('{ArrowLeft}');
@@ -174,12 +174,12 @@ describe('INC-001 operations desktop', () => {
     const { user } = renderIncident(707);
 
     await perform(user, 'Inspect PostgreSQL');
-    expect(screen.getByText('No session detail captured')).toBeInTheDocument();
+    expect(screen.getByText('No investigation detail captured')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Inspect database sessions' })).toBeEnabled();
 
     await perform(user, 'Inspect database sessions');
 
-    const findings = screen.getByRole('table', { name: 'Newly revealed database observations' });
+    const findings = screen.getByRole('table', { name: 'Newly revealed incident observations' });
     expect(within(findings).getByText('164')).toBeInTheDocument();
     expect(within(findings).getByText('idle in transaction')).toBeInTheDocument();
     expect(within(findings).getByText('47m')).toBeInTheDocument();

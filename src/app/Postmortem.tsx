@@ -6,10 +6,12 @@ export interface PostmortemProps {
   readonly report: PostmortemReport;
   readonly persistenceNotice: string | null;
   readonly persistenceError: string | null;
-  readonly onSave: () => void;
+  readonly onSave: (trigger: HTMLButtonElement) => void;
   readonly onLoad: () => void;
   readonly onReturn: () => void;
   readonly onRestart: () => void;
+  readonly onBackToDesk?: () => void;
+  readonly reviewOnly?: boolean;
 }
 
 function formatElapsed(totalSeconds: number): string {
@@ -48,6 +50,8 @@ export function Postmortem({
   onLoad,
   onReturn,
   onRestart,
+  onBackToDesk,
+  reviewOnly = false,
 }: PostmortemProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
 
@@ -69,12 +73,19 @@ export function Postmortem({
           </p>
         </div>
         <div className="postmortem-header-actions">
+          {onBackToDesk && (
+            <button onClick={onBackToDesk} type="button">
+              Incident desk
+            </button>
+          )}
           <button onClick={onReturn} type="button">
             Return to incident record
           </button>
-          <button onClick={onRestart} type="button">
-            Restart incident
-          </button>
+          {!reviewOnly && (
+            <button onClick={onRestart} type="button">
+              Restart incident
+            </button>
+          )}
         </div>
       </header>
 
@@ -240,14 +251,16 @@ export function Postmortem({
       </section>
 
       <footer className="postmortem-footer">
-        <div className="session-controls" aria-label="Local session save controls" role="group">
-          <button onClick={onSave} type="button">
-            Save session
-          </button>
-          <button onClick={onLoad} type="button">
-            Load saved session
-          </button>
-        </div>
+        {!reviewOnly && (
+          <div className="session-controls" aria-label="Local session save controls" role="group">
+            <button onClick={(event) => onSave(event.currentTarget)} type="button">
+              Save session
+            </button>
+            <button onClick={onLoad} type="button">
+              Load saved session
+            </button>
+          </div>
+        )}
         {persistenceNotice !== null && (
           <p className="persistence-notice" role="status">
             {persistenceNotice}

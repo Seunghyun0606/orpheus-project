@@ -15,6 +15,7 @@ import {
   decodeSave,
   encodeCampaignProgress,
   encodeSave,
+  inspectSavedSlot,
   type CampaignProgress,
   type SaveErrorCode,
   type SaveResult,
@@ -31,6 +32,7 @@ export interface IncidentSessionError {
 export interface IncidentPersistenceError {
   readonly code: SaveErrorCode;
   readonly message: string;
+  readonly existingScenarioId?: string;
 }
 
 export interface IncidentSessionState {
@@ -43,8 +45,10 @@ export interface IncidentSessionState {
   readonly campaignProgress: CampaignProgress;
   readonly campaignProgressError: IncidentPersistenceError | null;
   readonly performAction: (actionId: string) => CommandResult;
-  readonly save: () => SaveResult<void>;
+  readonly save: (confirmedExistingScenarioId?: string) => SaveResult<void>;
   readonly load: () => SaveResult<void>;
+  readonly refreshCampaignProgress: () => SaveResult<void>;
+  readonly restoreArchivedIncident: () => SaveResult<void>;
   readonly restart: (seed?: number) => void;
 }
 
@@ -118,6 +122,7 @@ export function createIncidentSessionStore(
   storage: SaveStorage = createLocalSaveStorage(),
   progressOptions?: CampaignProgressOptions,
 ): StoreApi<IncidentSessionState> {
+  let pendingOverwriteRaw: string | null = null;
   let initialProgress: CampaignProgress = new Map();
   let initialProgressError: IncidentPersistenceError | null = null;
   let progressReadFailed = false;
@@ -163,7 +168,10 @@ export function createIncidentSessionStore(
     );
     const novel =
       incident.revealedEvidenceIds.some((id) => !discoveredEvidence.has(id)) ||
-      incident.triggeredNarrativeIds.some((id) => !triggeredNarratives.has(id));
+      incident.triggeredNarrativeIds.some((id) => !triggeredNarratives.has(id)) ||
+      (incident.completionReached &&
+        (!previous.incident.completionReached ||
+          !snapshots.some(({ incident: saved }) => saved.completionReached)));
     if (!novel && !forceWrite) {
       return {
         campaignProgress: previous.campaignProgress,
@@ -215,8 +223,50 @@ export function createIncidentSessionStore(
 
       return result;
     },
-    save: () => {
+    save: (confirmedExistingScenarioId) => {
       const current = get();
+      let existingRaw: string | null;
+      try {
+        existingRaw = storage.read();
+      } catch {
+        pendingOverwriteRaw = null;
+        const error = {
+          code: 'STORAGE_ERROR',
+          message: 'Local storage could not read the existing session.',
+        } as const;
+        set({ persistenceError: error, persistenceNotice: null });
+        return { ok: false, ...error };
+      }
+      if (existingRaw !== null) {
+        const catalog = progressOptions?.catalog ?? new Map([[scenario.id, scenario]]);
+        const existing = inspectSavedSlot(existingRaw, catalog);
+        if (!existing.ok) {
+          pendingOverwriteRaw = null;
+          const error = { code: existing.code, message: existing.message };
+          set({ persistenceError: error, persistenceNotice: null });
+          return { ok: false, ...error };
+        }
+        const staleConfirmation =
+          confirmedExistingScenarioId !== undefined &&
+          (confirmedExistingScenarioId !== existing.value.scenario.id ||
+            pendingOverwriteRaw !== existingRaw);
+        if (
+          staleConfirmation ||
+          (confirmedExistingScenarioId === undefined && existing.value.scenario.id !== scenario.id)
+        ) {
+          pendingOverwriteRaw = existingRaw;
+          const error = {
+            code: 'OVERWRITE_CONFIRMATION_REQUIRED',
+            message: staleConfirmation
+              ? `The single save slot changed while confirmation was open. It now contains ${existing.value.scenario.id}. Confirm again before replacing it with ${scenario.id}.`
+              : `The single save slot contains ${existing.value.scenario.id}. Confirm before replacing it with ${scenario.id}.`,
+            existingScenarioId: existing.value.scenario.id,
+          } as const;
+          set({ persistenceError: null, persistenceNotice: null });
+          return { ok: false, ...error };
+        }
+      }
+      pendingOverwriteRaw = null;
       try {
         storage.write(encodeSave(current.scenario, current.seed, current.incident));
       } catch {
@@ -269,6 +319,51 @@ export function createIncidentSessionStore(
             ? 'Saved session restored.'
             : `Saved session restored from content ${restored.value.migratedFromContentVersion}. Save again to keep the updated version.`,
         ...archive({ ...get(), seed: restored.value.seed }, restored.value.incident),
+      });
+      return { ok: true, value: undefined };
+    },
+    refreshCampaignProgress: () => {
+      if (progressOptions === undefined) return { ok: true, value: undefined };
+      try {
+        const raw = progressOptions.storage.read();
+        const result =
+          raw === null
+            ? { ok: true as const, value: new Map() }
+            : decodeCampaignProgress(raw, progressOptions.catalog);
+        if (!result.ok) {
+          progressReadFailed = true;
+          set({ campaignProgressError: { code: result.code, message: result.message } });
+          return result;
+        }
+        progressReadFailed = false;
+        set({ campaignProgress: result.value, campaignProgressError: null });
+        return { ok: true, value: undefined };
+      } catch {
+        progressReadFailed = true;
+        const error = {
+          code: 'STORAGE_ERROR',
+          message: 'Local storage could not read campaign discoveries.',
+        } as const;
+        set({ campaignProgressError: error });
+        return { ok: false, ...error };
+      }
+    },
+    restoreArchivedIncident: () => {
+      const snapshots = get().campaignProgress.get(scenario.id) ?? [];
+      const archived = [...snapshots].reverse().find(({ incident }) => incident.completionReached);
+      if (archived === undefined) {
+        return {
+          ok: false,
+          code: 'SAVE_NOT_FOUND',
+          message: 'No completed incident archive was found.',
+        };
+      }
+      set({
+        seed: archived.seed,
+        incident: structuredClone(archived.incident),
+        lastError: null,
+        persistenceError: null,
+        persistenceNotice: 'Completed incident restored from campaign discoveries.',
       });
       return { ok: true, value: undefined };
     },
