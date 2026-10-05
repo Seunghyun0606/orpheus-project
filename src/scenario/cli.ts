@@ -25,37 +25,46 @@ function printDiagnostic(diagnostic: ScenarioDiagnostic): void {
 }
 
 export async function runScenarioValidationCli(args: readonly string[]): Promise<number> {
-  const entries = args.length > 0 ? [...args] : ['src/scenario/data'];
-  const files: string[] = [];
+  // Current and frozen legacy content share incident IDs but must each be
+  // valid catalogs. Explicit CLI paths retain the original single-catalog rule.
+  const groups = args.length > 0 ? [[...args]] : [['src/scenario/data'], ['src/scenario/legacy']];
+  let fileCount = 0;
+  let failed = false;
+  for (const entries of groups) {
+    const files: string[] = [];
+    for (const entry of entries) {
+      try {
+        files.push(...(await collectYamlFiles(entry)));
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error(`${entry}:$ [IO_ERROR] ${message}`);
+        return 1;
+      }
+    }
 
-  for (const entry of entries) {
-    try {
-      files.push(...(await collectYamlFiles(entry)));
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      console.error(`${entry}:$ [IO_ERROR] ${message}`);
-      return 1;
+    const sources: ScenarioSource[] = [];
+    for (const file of files.sort()) {
+      try {
+        sources.push({ file, source: await readFile(file, 'utf8') });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error(`${file}:$ [IO_ERROR] ${message}`);
+        return 1;
+      }
+    }
+
+    fileCount += files.length;
+    const result = validateScenarioCatalog(sources);
+    if (!result.success) {
+      result.diagnostics.forEach(printDiagnostic);
+      failed = true;
     }
   }
-
-  const sources: ScenarioSource[] = [];
-  for (const file of files.sort()) {
-    try {
-      sources.push({ file, source: await readFile(file, 'utf8') });
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      console.error(`${file}:$ [IO_ERROR] ${message}`);
-      return 1;
-    }
-  }
-
-  const result = validateScenarioCatalog(sources);
-  if (!result.success) {
-    result.diagnostics.forEach(printDiagnostic);
-    console.error(`Scenario validation failed: ${files.length} file(s) checked.`);
+  if (failed) {
+    console.error(`Scenario validation failed: ${fileCount} file(s) checked.`);
     return 1;
   }
 
-  console.log(`Scenario validation passed: ${files.length} file(s).`);
+  console.log(`Scenario validation passed: ${fileCount} file(s).`);
   return 0;
 }

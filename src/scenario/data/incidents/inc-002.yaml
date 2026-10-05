@@ -1,5 +1,5 @@
 schemaVersion: 1
-contentVersion: 1.0.0
+contentVersion: 1.1.0
 id: INC-002
 title: Bad Deployment
 act: 1
@@ -260,7 +260,51 @@ actions:
       - resourceId: CUSTOMER_IMPACT
         amount: 12
 
+  - id: UPDATE_WAR_ROOM
+    title: Share an investigation update with the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+
+  - id: ASK_SAM_CHECK_KEYSET
+    title: Ask Sam to inspect the verifier key set
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: SAM_ACK
+      - type: schedule_event
+        eventId: SAM_KEYSET_RESULT
+    delegation:
+      roleId: SAM
+      eventId: SAM_KEYSET_RESULT
+      capacityResourceId: TEAM_CAPACITY
+
 events:
+  - id: SAM_KEYSET_RESULT
+    type: timer
+    delaySeconds: 120
+    effects:
+      - type: reveal_signal
+        signalId: VERIFIER_KEY_ID
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: SAM_KEYSET_REPORT
+
   - id: ROUTING_WINDOW_EXPIRES
     type: timer
     delaySeconds: 180
@@ -286,6 +330,35 @@ evidence:
   - id: DEPLOYMENT_ORDER_RECORD
     title: Deployment comparison
     description: Build 1847 switched issuer keys before the verifier key set was ready.
+
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: JIN
+      name: Jin / Support
+    - id: SAM
+      name: Sam / Platform
+    - id: OPERATOR
+      name: Operator
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: The checkout alert is real. We still need to separate issuer failures from gateway load.
+      initial: true
+    - id: JIN_REPORT
+      roleId: JIN
+      text: Customers report failed payments; Support cannot yet tell whether retries also succeeded.
+      initial: true
+    - id: SAM_ACK
+      roleId: SAM
+      text: I will compare the verifier key set with the active issuer. ETA two minutes.
+    - id: SAM_KEYSET_REPORT
+      roleId: SAM
+      text: Verifier still accepts K71. The active issuer may already be issuing K72.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: Status update sent. Cause is still under investigation.
 
 resolution:
   conditions:

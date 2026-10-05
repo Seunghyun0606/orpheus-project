@@ -81,7 +81,9 @@ describe('INC-001 complete vertical slice', () => {
     expect(screen.getByText('Corrupted log entry')).toBeInTheDocument();
 
     await activate('Save session');
-    expect(screen.getByRole('status')).toHaveTextContent('Session saved locally.');
+    expect(screen.getByRole('status', { name: 'Session persistence' })).toHaveTextContent(
+      'Session saved locally.',
+    );
     await activate('Restart incident session');
     expect(screen.getByTestId('elapsed-time')).toHaveTextContent('00:00');
     await activate('Load saved session');

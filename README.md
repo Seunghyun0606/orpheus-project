@@ -62,6 +62,19 @@ npm run build:desktop
 
 `npm run build:desktop` compiles the native application without producing an installer.
 
+## War Room and saved progress
+
+The three MVP incident YAML files author team messages, a communication action, and a delayed
+delegation. Open **War Room** to read reports and pending work; delegated work occupies one team
+capacity slot until its authored ETA. Reports can be incomplete or conflicting and are not marked
+correct or incorrect. The same panel and engine rules apply to all three incidents, although the
+current desktop still starts in INC-001 until the multi-incident selection task is complete.
+
+INC-001/002/003 content is now version 1.1.0. An existing 1.0.0 local save is verified against its
+frozen original scenario, then its action log is replayed into 1.1.0. Loading does not overwrite
+the original slot; save again to keep the migrated version. Unsupported or altered saves are
+rejected without changing the active incident.
+
 ## M2 verification map
 
 | M2 exit criterion                                    | Repeatable evidence                                                                                                                                                                                                                                                 |
@@ -75,7 +88,8 @@ Run the full quality command set above and the desktop build for the final M2 ch
 structured TASK-010 result in `.project-os/tasks/results` records actual command outcomes and
 independent review/QA decisions.
 
-The scenario validation command recursively checks `src/scenario/data` by default. Pass one or
+The scenario validation command checks current content and frozen legacy content (six files) by
+default. Pass one or
 more YAML files or directories to validate authored content elsewhere:
 
 ```sh

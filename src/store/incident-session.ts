@@ -158,7 +158,10 @@ export function createIncidentSessionStore(
         incident: restored.value.incident,
         lastError: null,
         persistenceError: null,
-        persistenceNotice: 'Saved session restored.',
+        persistenceNotice:
+          restored.value.migratedFromContentVersion === undefined
+            ? 'Saved session restored.'
+            : `Saved session restored from content ${restored.value.migratedFromContentVersion}. Save again to keep the updated version.`,
       });
       return { ok: true, value: undefined };
     },

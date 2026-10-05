@@ -713,7 +713,7 @@ export function App({ store = defaultSessionStore }: AppProps) {
               </button>
             </div>
             {session.persistenceNotice !== null && (
-              <p className="persistence-notice" role="status">
+              <p aria-label="Session persistence" className="persistence-notice" role="status">
                 {session.persistenceNotice}
               </p>
             )}

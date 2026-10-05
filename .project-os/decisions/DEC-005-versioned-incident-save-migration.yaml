@@ -1,0 +1,22 @@
+id: DEC-005
+title: Preserve incident saves through verified versioned replay migration
+status: active
+date: "2026-10-05"
+applies_to:
+  - global
+context: >-
+  TASK-014 adds initially available War Room actions to INC-001, INC-002, and INC-003.
+  Replaying a 1.0.0 save directly against 1.1.0 changes the initial unlocked-action
+  set and fails strict state comparison. The human approved preserving existing saves.
+decision: >-
+  Keep exact validated 1.0.0 scenario snapshots as replay authorities. On load,
+  verify a legacy save against its original scenario before replaying its command
+  log against the approved 1.1.0 target. Reject unsupported versions and tampered
+  or non-replayable saves. Never overwrite the local slot merely by loading it;
+  write the upgraded save only when the player explicitly saves again.
+consequences:
+  - Existing progress and pending scheduled work can continue in the new content.
+  - Frozen snapshots must remain byte-identical and are validated in tests and CLI.
+  - New content migrations require an explicit target mapping and replay tests.
+  - The incident save envelope remains at schema version 1.
+supersedes: null

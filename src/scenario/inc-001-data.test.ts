@@ -65,6 +65,8 @@ describe('INC-001 authored scenario', () => {
       'SCALE_API',
       'ROLLBACK',
       'INSPECT_DB',
+      'UPDATE_WAR_ROOM',
+      'ASK_JIN_CONFIRM_IMPACT',
     ]);
     expect(action(scenario, 'INSPECT_DB').effects).toContainEqual({
       type: 'unlock_action',

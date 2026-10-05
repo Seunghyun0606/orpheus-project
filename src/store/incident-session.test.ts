@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
+import { createIncidentState } from '../engine/index.ts';
+import { encodeSave } from '../persistence/save.ts';
+import { getLegacyScenarioForMigration } from '../scenario/legacy-catalog.ts';
 import { inc001Scenario } from '../scenario/index.ts';
 import type { SaveStorage } from '../persistence/index.ts';
 import {
@@ -14,7 +17,7 @@ describe('INC-001 browser incident session', () => {
 
     expect(store.getState().scenario).toMatchObject({
       id: 'INC-001',
-      contentVersion: '1.0.0',
+      contentVersion: '1.1.0',
     });
     expect(selectAvailableActions(store.getState()).map(({ id }) => id)).toEqual([
       'OPEN_LOGS',
@@ -23,6 +26,8 @@ describe('INC-001 browser incident session', () => {
       'SCALE_API',
       'ROLLBACK',
       'INSPECT_DB',
+      'UPDATE_WAR_ROOM',
+      'ASK_JIN_CONFIRM_IMPACT',
     ]);
     expect(selectRevealedSignals(store.getState()).map(({ id }) => id)).not.toContain(
       'STALE_SESSION_COUNT',
@@ -98,6 +103,26 @@ describe('INC-001 browser incident session', () => {
     expect(store.getState().load().ok).toBe(true);
     expect(store.getState().incident).toEqual(savedState);
     expect(store.getState().incident.revealedEvidenceIds).toContain('CORRUPTED_LOG_ENTRY');
+  });
+
+  it('loads a verified old save without overwriting the slot until the player saves again', () => {
+    const legacy = getLegacyScenarioForMigration('INC-001', '1.0.0', '1.1.0');
+    if (legacy === undefined) throw new Error('Missing legacy INC-001');
+    let saved = encodeSave(legacy, 117, createIncidentState(legacy, { seed: 117 }));
+    const oldSave = saved;
+    const storage: SaveStorage = {
+      read: () => saved,
+      write: (value) => {
+        saved = value;
+      },
+    };
+    const store = createIncidentSessionStore(inc001Scenario, 117, storage);
+    expect(store.getState().load().ok).toBe(true);
+    expect(store.getState().incident.contentVersion).toBe('1.1.0');
+    expect(store.getState().persistenceNotice).toContain('restored from content 1.0.0');
+    expect(saved).toBe(oldSave);
+    expect(store.getState().save().ok).toBe(true);
+    expect(JSON.parse(saved).contentVersion).toBe('1.1.0');
   });
 
   it('leaves the active incident unchanged when a save is incompatible or malformed', () => {

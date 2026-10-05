@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { createIncidentState, executeCommand, replayCommands } from '../engine/index.ts';
 import { decodeSave, encodeSave } from '../persistence/save.ts';
+import { getLegacyScenarioForMigration } from '../scenario/legacy-catalog.ts';
 import {
   getScenario,
   validateScenarioObject,
@@ -15,8 +16,66 @@ import { App } from '../app/App.tsx';
 
 afterEach(cleanup);
 
+describe.each([
+  ['INC-001', 'ASK_JIN_CONFIRM_IMPACT', 'JIN_IMPACT_RESULT', 'JIN_IMPACT_REPORT'],
+  ['INC-002', 'ASK_SAM_CHECK_KEYSET', 'SAM_KEYSET_RESULT', 'SAM_KEYSET_REPORT'],
+  ['INC-003', 'ASK_JIN_CONFIRM_IMPACT', 'JIN_IMPACT_RESULT', 'JIN_IMPACT_REPORT'],
+] as const)('%s bundled War Room', (id, actionId, eventId, messageId) => {
+  it('schedules authored work, persists it, and reports at the exact ETA', () => {
+    const scenario = getScenario(id);
+    if (scenario === undefined) throw new Error(`Missing ${id}`);
+    let state = createIncidentState(scenario, { seed: 147 });
+    expect(selectWarRoom({ scenario, incident: state }).messages).toHaveLength(2);
+    state = perform(state, scenario, actionId);
+    expect(state.resources.TEAM_CAPACITY?.value).toBe(2);
+    expect(state.scheduledWork).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: 'timer_event', eventId, dueAtSeconds: 120 }),
+      ]),
+    );
+    const restored = decodeSave(encodeSave(scenario, 147, state), scenario);
+    if (!restored.ok) throw new Error(restored.message);
+    expect(restored.value.incident).toEqual(state);
+    state = restored.value.incident;
+    while (state.elapsedSeconds < 120) state = perform(state, scenario, 'OPEN_METRICS');
+    expect(state.resources.TEAM_CAPACITY?.value).toBe(3);
+    expect(state.eventLog).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ type: 'war_room_message', targetId: messageId, atSeconds: 120 }),
+      ]),
+    );
+    expect(selectWarRoom({ scenario, incident: state }).pending).toHaveLength(0);
+    const replay = replayCommands(
+      scenario,
+      { seed: 147 },
+      state.replayLog.map(({ command }) => command),
+    );
+    expect(replay.ok).toBe(true);
+    expect(replay.state).toEqual(state);
+  });
+});
+
+it('makes bundled INC-001 team communication playable from the shared desktop', async () => {
+  const scenario = getScenario('INC-001');
+  if (scenario === undefined) throw new Error('Missing INC-001');
+  const store = createIncidentSessionStore(scenario, 148, {
+    read: () => null,
+    write: () => undefined,
+  });
+  const user = userEvent.setup();
+  render(<App store={store} />);
+  await user.click(screen.getByRole('button', { name: 'Ask Jin to confirm customer impact' }));
+  expect(screen.getByRole('tab', { name: /War Room/ })).toHaveFocus();
+  expect(screen.getByRole('list', { name: 'Pending delegated work' })).toHaveTextContent(
+    'ETA +01:40',
+  );
+  expect(screen.getByRole('list', { name: 'War Room messages' })).toHaveTextContent(
+    'I will verify customer reports',
+  );
+});
+
 function warRoomFixture(id: 'INC-002' | 'INC-003'): Scenario {
-  const bundled = getScenario(id);
+  const bundled = getLegacyScenarioForMigration(id, '1.0.0', '1.1.0');
   if (bundled === undefined) throw new Error(`Missing ${id}`);
   const candidate = structuredClone(bundled);
   candidate.contentVersion = '1.0.1-test';
@@ -257,7 +316,7 @@ it('rejects capacity refunds hidden in temporary effects and invalid resource bo
 });
 
 it('documents why adding initially available War Room actions to shipped content needs a save decision', () => {
-  const original = getScenario('INC-002');
+  const original = getLegacyScenarioForMigration('INC-002', '1.0.0', '1.1.0');
   if (original === undefined) throw new Error('Missing bundled incident');
   const oldSave = encodeSave(original, 155, createIncidentState(original, { seed: 155 }));
   const expanded = warRoomFixture('INC-002');

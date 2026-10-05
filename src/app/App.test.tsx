@@ -197,7 +197,9 @@ describe('INC-001 operations desktop', () => {
     expect(screen.queryByText('02:23:11 / UNKNOWN: Good.')).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Save session' }));
-    expect(screen.getByRole('status')).toHaveTextContent('Session saved locally.');
+    expect(screen.getByRole('status', { name: 'Session persistence' })).toHaveTextContent(
+      'Session saved locally.',
+    );
     await user.click(screen.getByRole('button', { name: 'Restart incident session' }));
     expect(screen.getByTestId('elapsed-time')).toHaveTextContent('00:00');
     await user.click(screen.getByRole('tab', { name: /Evidence/ }));

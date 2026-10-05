@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { replayCommands, type IncidentState } from '../engine/index.ts';
+import { getLegacyScenarioForMigration } from '../scenario/legacy-catalog.ts';
 import { effectSchema, idSchema, type Scenario } from '../scenario/schema.ts';
 
 export const SAVE_SCHEMA_VERSION = 1;
@@ -138,6 +139,7 @@ export type SaveResult<T> =
 export interface RestoredSession {
   readonly seed: number;
   readonly incident: IncidentState;
+  readonly migratedFromContentVersion?: string;
 }
 
 function fail<T>(code: SaveErrorCode, message: string): SaveResult<T> {
@@ -187,8 +189,14 @@ export function decodeSave(raw: string, scenario: Scenario): SaveResult<Restored
   if (header.scenarioId !== scenario.id) {
     return fail('SCENARIO_MISMATCH', 'This save belongs to a different incident.');
   }
-  if (header.contentVersion !== scenario.contentVersion) {
-    return fail('INCOMPATIBLE_CONTENT', 'This save uses a different scenario content version.');
+  const replayScenario =
+    header.contentVersion === scenario.contentVersion
+      ? scenario
+      : typeof header.contentVersion === 'string'
+        ? getLegacyScenarioForMigration(scenario.id, header.contentVersion, scenario.contentVersion)
+        : undefined;
+  if (replayScenario === undefined) {
+    return fail('INCOMPATIBLE_CONTENT', 'This save uses an unsupported scenario content version.');
   }
 
   const parsed = saveEnvelopeSchema.safeParse(decoded);
@@ -199,14 +207,14 @@ export function decodeSave(raw: string, scenario: Scenario): SaveResult<Restored
   const { seed, incident } = parsed.data;
   if (
     incident.scenarioId !== scenario.id ||
-    incident.contentVersion !== scenario.contentVersion ||
+    incident.contentVersion !== replayScenario.contentVersion ||
     incident.replayLog.some(({ sequence }, index) => sequence !== index)
   ) {
     return fail('REPLAY_MISMATCH', 'The saved state and replay metadata disagree.');
   }
 
   const replay = replayCommands(
-    scenario,
+    replayScenario,
     { seed },
     incident.replayLog.map(({ command }) => command),
   );
@@ -214,5 +222,22 @@ export function decodeSave(raw: string, scenario: Scenario): SaveResult<Restored
     return fail('REPLAY_MISMATCH', 'The saved state cannot be reproduced from its action log.');
   }
 
-  return { ok: true, value: { seed, incident } };
+  if (replayScenario === scenario) return { ok: true, value: { seed, incident } };
+
+  const migrated = replayCommands(
+    scenario,
+    { seed },
+    incident.replayLog.map(({ command }) => command),
+  );
+  if (!migrated.ok) {
+    return fail('INCOMPATIBLE_CONTENT', 'This verified save cannot replay with current content.');
+  }
+  return {
+    ok: true,
+    value: {
+      seed,
+      incident: migrated.state,
+      migratedFromContentVersion: replayScenario.contentVersion,
+    },
+  };
 }

@@ -52,7 +52,7 @@ Validator는 가능한 모든 오류를 한 번에 수집하고, 각 오류에 f
 
 위임 행동은 `DELEGATE` category와 `delegation` metadata (`roleId`, `eventId`, `capacityResourceId`)를 선언한다. 유효한 위임은 사용 가능한 capacity가 1 이상이라는 requirement, -1 capacity cost, 종료 시 +1을 복구하는 취소 불가능한 timer event, 그리고 해당 timer를 예약하는 effect를 가져야 한다. Timer의 delay는 행동 duration보다 길어야 한다. 진행 중 작업은 기존 `scheduledWork`, 메시지 이력은 기존 `eventLog`에 남으므로 새로운 저장 상태 필드는 필요하지 않다.
 
-기존 번들 Incident에 새 행동이나 초기 메시지를 넣는 것은 과거 저장의 replay 비교 결과에 영향을 줄 수 있다. 호환성 정책이 결정되기 전까지 번들 콘텐츠 변경을 별도 승인 없이 적용하지 않는다.
+TASK-014의 승인된 호환성 정책은 기존 1.0.0 YAML을 변경 불가능한 재생 기준으로 보존하고 현재 Incident를 1.1.0으로 올리는 것이다. 불러오기는 먼저 1.0.0 규칙으로 저장을 검증한 뒤 같은 행동 기록을 1.1.0 규칙으로 재생한다. 재생할 수 없는 상태는 거부하며, 불러오기 자체는 저장 슬롯을 덮어쓰지 않는다. 다음 저장 명령에서만 업그레이드된 상태를 기록한다. 이후 콘텐츠 버전 변경은 새 기준과 대상 버전을 명시해야 한다.
 
 ## M3 Incident Authoring Checklist
 

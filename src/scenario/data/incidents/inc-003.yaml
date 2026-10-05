@@ -1,5 +1,5 @@
 schemaVersion: 1
-contentVersion: 1.0.0
+contentVersion: 1.1.0
 id: INC-003
 title: Queue Backlog
 act: 1
@@ -306,7 +306,49 @@ actions:
       - resourceId: CUSTOMER_IMPACT
         amount: 12
 
+  - id: UPDATE_WAR_ROOM
+    title: Share the receipt-delay investigation status
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+
+  - id: ASK_JIN_CONFIRM_IMPACT
+    title: Ask Jin to confirm the customer impact
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: JIN_ACK
+      - type: schedule_event
+        eventId: JIN_IMPACT_RESULT
+    delegation:
+      roleId: JIN
+      eventId: JIN_IMPACT_RESULT
+      capacityResourceId: TEAM_CAPACITY
+
 events:
+  - id: JIN_IMPACT_RESULT
+    type: timer
+    delaySeconds: 120
+    effects:
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: JIN_IMPACT_REPORT
+
   - id: BACKLOG_REBOUNDS
     type: timer
     delaySeconds: 180
@@ -341,6 +383,33 @@ evidence:
   - id: PARTNER_BATCH_RECORD
     title: Partner batch comparison
     description: Batch 781 contains the malformed receipt while adjacent batches use the accepted format.
+
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: JIN
+      name: Jin / Support
+    - id: OPERATOR
+      name: Operator
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Queue depth is rising. We do not yet know whether the workers are slow or one message is blocking progress.
+      initial: true
+    - id: JIN_REPORT
+      roleId: JIN
+      text: Receipts are late, but Support has not confirmed that payments failed.
+      initial: true
+    - id: JIN_ACK
+      roleId: JIN
+      text: I will check incoming payment reports. ETA two minutes.
+    - id: JIN_IMPACT_REPORT
+      roleId: JIN
+      text: Payments are completing. Customers are waiting for receipts; some tickets describe this as a payment outage.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: War Room update sent. Receipt delay is confirmed; payment impact remains under review.
 
 resolution:
   conditions:
