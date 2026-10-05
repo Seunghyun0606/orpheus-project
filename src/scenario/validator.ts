@@ -18,6 +18,7 @@ export const diagnosticCodes = {
   duplicateId: 'DUPLICATE_ID',
   unknownReference: 'UNKNOWN_REFERENCE',
   invalidNarrativeSource: 'INVALID_NARRATIVE_SOURCE',
+  invalidNarrativeOrder: 'INVALID_NARRATIVE_ORDER',
   prohibitedMvpReveal: 'PROHIBITED_MVP_REVEAL',
 } as const;
 
@@ -400,70 +401,60 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
     );
   });
 
-  if (scenario.act === 1) {
-    const prohibited =
-      /\b(?:NULL(?:_\d+)?|ORPHEUS|PRODUCTION EXPERIMENT|SOFT CONTROL|THE BOARD)\b/i;
-    const copy: readonly { path: string; text: string }[] = [
-      { path: '$.title', text: scenario.title },
-      ...scenario.services.map((item, index) => ({
-        path: `$.services[${index}].name`,
-        text: item.name,
-      })),
-      ...scenario.initialState.signals.flatMap((item, index) =>
-        typeof item.value === 'string'
-          ? [{ path: `$.initialState.signals[${index}].value`, text: item.value }]
-          : [],
-      ),
-      ...[
-        ['contributingFactors', scenario.incident.contributingFactors],
-        ['failureMechanisms', scenario.incident.failureMechanisms],
-        ['symptoms', scenario.incident.symptoms],
-        ['amplifiers', scenario.incident.amplifiers],
-      ].flatMap(([name, items]) =>
-        (items as Scenario['incident']['symptoms']).flatMap((item, index) => [
-          { path: `$.incident.${name}[${index}].label`, text: item.label },
-          ...(item.description === undefined
-            ? []
-            : [{ path: `$.incident.${name}[${index}].description`, text: item.description }]),
-        ]),
-      ),
-      { path: '$.incident.trigger.label', text: scenario.incident.trigger.label },
-      ...(scenario.incident.trigger.description === undefined
-        ? []
-        : [
-            { path: '$.incident.trigger.description', text: scenario.incident.trigger.description },
-          ]),
-      ...scenario.actions.map((item, index) => ({
-        path: `$.actions[${index}].title`,
-        text: item.title,
-      })),
-      ...scenario.evidence.flatMap((item, index) => [
-        { path: `$.evidence[${index}].title`, text: item.title },
-        { path: `$.evidence[${index}].description`, text: item.description },
-      ]),
-      ...scenario.narratives.flatMap((item, index) => [
-        { path: `$.narratives[${index}].title`, text: item.title },
-        { path: `$.narratives[${index}].body`, text: item.body },
-      ]),
-      ...scenario.warRoom.messages.map((item, index) => ({
-        path: `$.warRoom.messages[${index}].text`,
-        text: item.text,
-      })),
-      ...scenario.postmortem.scoringInputs.map((item, index) => ({
-        path: `$.postmortem.scoringInputs[${index}].label`,
-        text: item.label,
-      })),
-    ];
-    for (const { path, text } of copy) {
-      if (prohibited.test(text)) {
+  const narrativeDependencies = new Map(
+    scenario.narratives.map((narrative, index) => [
+      narrative.id,
+      narrative.conditions.flatMap((condition, conditionIndex) => {
+        if (condition.type !== 'evidence') return [];
+        const source = scenario.evidence.find(
+          ({ id }) => id === condition.evidenceId,
+        )?.sourceNarrativeId;
+        return source === undefined
+          ? []
+          : [{ source, path: `$.narratives[${index}].conditions[${conditionIndex}].evidenceId` }];
+      }),
+    ]),
+  );
+  const visitedNarratives = new Set<string>();
+  const visitingNarratives = new Set<string>();
+  const checkNarrativeOrder = (id: string): void => {
+    if (visitedNarratives.has(id)) return;
+    visitingNarratives.add(id);
+    for (const { source, path } of narrativeDependencies.get(id) ?? []) {
+      if (visitingNarratives.has(source)) {
         diagnostics.push({
           file,
           path,
-          code: diagnosticCodes.prohibitedMvpReveal,
-          message: 'Act 1 narrative content discloses a later-campaign reveal.',
+          code: diagnosticCodes.invalidNarrativeOrder,
+          message: `Narrative ${JSON.stringify(id)} depends on evidence from itself or a later narrative in a cycle.`,
         });
+      } else if (narrativeDependencies.has(source)) {
+        checkNarrativeOrder(source);
       }
     }
+    visitingNarratives.delete(id);
+    visitedNarratives.add(id);
+  };
+  scenario.narratives.forEach(({ id }) => checkNarrativeOrder(id));
+
+  if (scenario.act === 1) {
+    const prohibited =
+      /(?:^|[^A-Za-z0-9])(?:NULL(?:_\d+)?|ORPHEUS|PRODUCTION[ _-]+EXPERIMENT|SOFT[ _-]+CONTROL|BOARD)(?=$|[^A-Za-z0-9])/i;
+    const scan = (value: unknown, path: readonly PropertyKey[]): void => {
+      if (typeof value === 'string' && prohibited.test(value)) {
+        diagnostics.push({
+          file,
+          path: formatDataPath(path),
+          code: diagnosticCodes.prohibitedMvpReveal,
+          message: 'Act 1 content discloses a later-campaign reveal.',
+        });
+      } else if (Array.isArray(value)) {
+        value.forEach((item, index) => scan(item, [...path, index]));
+      } else if (value !== null && typeof value === 'object') {
+        Object.entries(value).forEach(([key, item]) => scan(item, [...path, key]));
+      }
+    };
+    scan(scenario, []);
   }
 
   const allEffects: ScenarioEffect[] = [

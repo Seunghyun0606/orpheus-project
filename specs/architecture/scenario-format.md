@@ -56,7 +56,7 @@ TASK-014의 승인된 호환성 정책은 기존 1.0.0 YAML을 변경 불가능�
 
 TASK-015는 INC-002/003의 1.1.0 원본을 추가로 동결하고 현재 콘텐츠를 1.2.0으로 올린다. 1.0.0·1.1.0 저장은 각각의 원본 규칙으로 먼저 검증한 뒤 현재 버전으로 재생한다. 기본 validator는 현행 catalog와 버전별 legacy catalog를 따로 검사하며, legacy에서는 같은 Incident ID라도 버전이 다르면 허용한다.
 
-초기 UNKNOWN 단서는 `narratives.conditions`가 실제로 공개된 운영·War Room evidence를 요구하고 `narratives.effects`가 발견물을 공개한다. `sourceNarrativeId`는 실제로 그 evidence를 공개하는 narrative를 가리켜야 한다. Act 1의 플레이어 노출 문구에 후반 정체·실험·Board 반전을 넣으면 validator가 실패한다.
+초기 UNKNOWN 단서는 `narratives.conditions`가 실제로 공개된 운영·War Room evidence를 요구하고 `narratives.effects`가 발견물을 공개한다. `sourceNarrativeId`는 실제로 그 evidence를 공개하는 narrative를 가리켜야 하며, narrative 간 evidence 의존 순환은 거부한다. Act 1의 표시 문구와 UI에 노출될 수 있는 안정 ID에 후반 정체·실험·Board 반전을 넣으면 validator가 실패한다.
 
 ## M3 Incident Authoring Checklist
 

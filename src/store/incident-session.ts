@@ -120,6 +120,7 @@ export function createIncidentSessionStore(
 ): StoreApi<IncidentSessionState> {
   let initialProgress: CampaignProgress = new Map();
   let initialProgressError: IncidentPersistenceError | null = null;
+  let progressReadFailed = false;
   if (progressOptions !== undefined) {
     try {
       const raw = progressOptions.storage.read();
@@ -129,6 +130,7 @@ export function createIncidentSessionStore(
         else initialProgressError = { code: decoded.code, message: decoded.message };
       }
     } catch {
+      progressReadFailed = true;
       initialProgressError = {
         code: 'STORAGE_ERROR',
         message: `Local storage could not read ${CAMPAIGN_PROGRESS_KEY}.`,
@@ -143,6 +145,7 @@ export function createIncidentSessionStore(
   ): Pick<IncidentSessionState, 'campaignProgress' | 'campaignProgressError'> => {
     if (
       progressOptions === undefined ||
+      progressReadFailed ||
       (previous.campaignProgressError !== null &&
         previous.campaignProgressError.code !== 'STORAGE_ERROR')
     ) {

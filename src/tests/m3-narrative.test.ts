@@ -79,6 +79,40 @@ describe('M3 UNKNOWN discovery routes', () => {
     if (!disclosure.success)
       expect(disclosure.diagnostics.map(({ code }) => code)).toContain('PROHIBITED_MVP_REVEAL');
 
+    const roleDisclosure = structuredClone(scenario);
+    roleDisclosure.warRoom.roles[0]!.name = 'ORPHEUS / Observer';
+    const roleResult = validateScenarioObject(roleDisclosure);
+    expect(roleResult.success).toBe(false);
+    if (!roleResult.success)
+      expect(roleResult.diagnostics).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'PROHIBITED_MVP_REVEAL',
+            path: '$.warRoom.roles[0].name',
+          }),
+        ]),
+      );
+
+    const idDisclosure = structuredClone(scenario);
+    idDisclosure.evidence[0]!.id = 'ORPHEUS_SECRET';
+    const idResult = validateScenarioObject(idDisclosure);
+    expect(idResult.success).toBe(false);
+    if (!idResult.success)
+      expect(idResult.diagnostics).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ code: 'PROHIBITED_MVP_REVEAL', path: '$.evidence[0].id' }),
+        ]),
+      );
+
+    const selfDependency = structuredClone(scenario);
+    selfDependency.narratives[0]!.conditions = [
+      { type: 'evidence', evidenceId: 'UNATTRIBUTED_DEPLOYMENT_NOTE' },
+    ];
+    const ordering = validateScenarioObject(selfDependency);
+    expect(ordering.success).toBe(false);
+    if (!ordering.success)
+      expect(ordering.diagnostics.map(({ code }) => code)).toContain('INVALID_NARRATIVE_ORDER');
+
     const broken = structuredClone(scenario);
     broken.evidence.find(({ id }) => id === 'UNATTRIBUTED_DEPLOYMENT_NOTE')!.sourceNarrativeId =
       'UNKNOWN_MISSING';
@@ -117,6 +151,36 @@ describe('separate versioned campaign progress', () => {
     expect(corrupt.getState().campaignProgressError?.code).toBe('MALFORMED_SAVE');
     expect(corrupt.getState().performAction('COMPARE_DEPLOYMENT').ok).toBe(true);
     expect(progress).toBe('{');
+  });
+
+  it('never overwrites preexisting progress after a transient read failure', () => {
+    const scenario = getScenario('INC-002');
+    if (scenario === undefined) throw new Error('Missing INC-002');
+    const preexisting = JSON.stringify({
+      schemaVersion: 1,
+      incidentSaves: { unrelated: ['saved'] },
+    });
+    let raw = preexisting;
+    let writes = 0;
+    const progressStorage: SaveStorage = {
+      read: () => {
+        throw new Error('Transient read failure');
+      },
+      write: (value) => {
+        writes += 1;
+        raw = value;
+      },
+    };
+    const incidentStorage: SaveStorage = { read: () => null, write: () => {} };
+    const store = createIncidentSessionStore(scenario, 1515, incidentStorage, {
+      storage: progressStorage,
+      catalog: scenarioCatalog,
+    });
+    expect(store.getState().campaignProgressError?.code).toBe('STORAGE_ERROR');
+    expect(store.getState().performAction('COMPARE_DEPLOYMENT').ok).toBe(true);
+    expect(store.getState().save().ok).toBe(true);
+    expect(raw).toBe(preexisting);
+    expect(writes).toBe(0);
   });
 
   it('restores prior evidence across incidents without writing the original incident slot', () => {
