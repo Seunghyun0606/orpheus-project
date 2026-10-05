@@ -1,0 +1,35 @@
+task: TASK-015
+status: pass
+summary: TASK-015 acceptance is met at committed HEAD eb71def. All three MVP incidents
+  have data-authored investigable UNKNOWN routes, replay-verified cross-incident evidence
+  persists in a separate versioned store, and existing Incident saves remain compatible.
+  Independent review and QA passed after correcting initial findings.
+files_changed: []
+verification:
+  implementation_result: pass
+  implementation_addendum: pass
+  automated_tests: pass
+  independent_review: pass
+  acceptance_evidence: pass
+  critical_issues: 0
+  scenario_validation: 8_yaml_passed
+  full_tests: 104_passed
+  typecheck: pass
+  lint: pass
+  format: pass
+  web_build: pass
+  native_build: pass
+  project_doctor: pass
+followups:
+- TASK-016 must provide in-app entry and completion for all three incidents.
+- Final M3 QA should exercise the native app interactively.
+- The non-blocking web chunk-size warning remains.
+commit: eb71def
+decision: PASS
+quality:
+  passed: true
+  missing: []
+  failed: []
+kind: evaluation
+role: evaluator
+actor: codex-task015-evaluator

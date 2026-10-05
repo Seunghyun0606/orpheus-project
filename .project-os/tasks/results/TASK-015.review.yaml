@@ -1,0 +1,39 @@
+task: TASK-015
+status: pass
+summary: Independent review of committed HEAD eb71def finds no remaining material
+  defect in the three-incident UNKNOWN discovery routes, separate versioned campaign
+  progress, or legacy replay compatibility.
+files_changed: []
+verification:
+  acceptance:
+    status: pass
+    detail: The three authored incidents each expose an investigable UNKNOWN clue.
+      Shared evidence and narrative selectors project discoveries across incidents
+      without incident-ID conditionals or later-act disclosure.
+  persistence:
+    status: pass
+    detail: Campaign progress uses a separate versioned key and verifies each archived
+      incident save through the existing replay decoder. A failed archive read prevents
+      later writes from overwriting previous progress; explicit incident saves remain
+      on the original key.
+  content_validation:
+    status: pass
+    detail: Act-1 validation scans scenario strings and IDs for prohibited reveals,
+      checks narrative-to-evidence references, and rejects cyclic narrative evidence
+      prerequisites. Frozen 1.0.0 and 1.1.0 content remains available for replay verification.
+  automated_checks:
+    status: pass
+    detail: Reviewer independently ran 27 focused narrative, save, and legacy-catalog
+      tests, all passing; scenario validation passed for eight YAML files, and git
+      diff --check passed.
+review:
+  findings: []
+  residual_risk: low
+critical_issues: 0
+followups:
+- Future narrative authoring may need more precise dependency analysis when the same
+  evidence has both a narrative source and an external reveal path.
+commit: eb71def
+kind: review
+role: reviewer
+actor: codex-task015-reviewer

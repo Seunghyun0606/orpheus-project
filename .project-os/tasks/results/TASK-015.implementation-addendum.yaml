@@ -1,0 +1,19 @@
+task: TASK-015
+status: pass
+summary: Independent review of the initial implementation found two preservation and content-validation gaps. Both were corrected in eb71def without changing the approved separate-store decision.
+commit: eb71def
+corrected:
+  - A campaign-progress read exception now blocks writes for that session, preventing accidental overwrite of preexisting cross-incident artifacts.
+  - Act 1 content validation scans all strings, including player-visible role names and stable IDs, for prohibited early reveals.
+  - Narrative evidence dependency cycles are rejected before play.
+verification:
+  full_tests: 104_passed_in_15_files
+  scenario_validation: 8_yaml_passed
+  typecheck: pass
+  lint: pass
+  format: pass
+  native_build: pass
+  project_doctor: pass
+  diff_check: pass
+followups:
+  - Independent reviewer and QA must re-check eb71def before completion evaluation.

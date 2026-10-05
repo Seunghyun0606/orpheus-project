@@ -1,0 +1,44 @@
+task: TASK-015
+status: pass
+summary: Automated TASK-015 verification passed independently at committed HEAD eb71def.
+files_changed: []
+verification:
+  acceptance: pass
+  full_tests:
+    status: pass
+    detail: npm test passed 15 files and 104 tests.
+  targeted_tests:
+    status: pass
+    detail: npm test -- src/tests/m3-narrative.test.ts src/persistence/save.test.ts
+      src/scenario/legacy-catalog.test.ts src/app/App.test.tsx passed four files and
+      39 tests.
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios passed all eight current and versioned legacy
+      YAML files.
+  typecheck:
+    status: pass
+    detail: npm run typecheck passed.
+  lint:
+    status: pass
+    detail: npm run lint passed with zero warnings.
+  format:
+    status: pass
+    detail: npm run format:check passed.
+  web_build:
+    status: pass
+    detail: npm run build:web passed; Vite reported only a non-blocking large-chunk
+      warning.
+  project_doctor:
+    status: pass
+    detail: projectctl doctor reported consistent Project OS structure and backlog
+      references.
+  diff_check:
+    status: pass
+    detail: git diff --check passed.
+critical_issues: 0
+followups: []
+commit: eb71def
+kind: test
+role: qa
+actor: codex-task015-qa

@@ -1,0 +1,48 @@
+task: TASK-015
+status: pass
+summary: Independent acceptance QA passed at committed HEAD eb71def. All three bundled
+  incidents have action-gated UNKNOWN discovery routes, and the separate versioned
+  progress archive preserves verified evidence and narrative history across incidents
+  without overwriting the original incident slot.
+files_changed: []
+verification:
+  acceptance: pass
+  discovery_routes:
+    status: pass
+    detail: Headless tests replay INC-001, INC-002, and INC-003 routes deterministically.
+      INC-002 and INC-003 require authored operational evidence plus timed War Room
+      reports before their UNKNOWN narrative and evidence appear.
+  cross_incident_progress:
+    status: pass
+    detail: Store tests restore prior artifacts and narrative history from all three
+      incidents after restart, including divergent investigation runs. The original
+      incident slot remains untouched until an explicit session save. Shared Evidence
+      UI renders prior-incident discoveries.
+  compatibility_and_integrity:
+    status: pass
+    detail: Frozen 1.0.0 and 1.1.0 scenario authorities verify old saves before current-content
+      replay. Tampered, unsupported, malformed, and unknown-incident progress are
+      rejected. A transient progress-read failure cannot overwrite existing archive
+      data even after a later save.
+  narrative_guardrails:
+    status: pass
+    detail: Validation rejects invalid narrative references and self-dependent ordering.
+      Act 1 string fields, including War Room role names and evidence IDs, reject
+      prohibited later-campaign disclosures; current content validates as UNKNOWN-only.
+  quality_commands:
+    status: pass
+    detail: npm test passed 104 tests across 15 files; targeted narrative/save/legacy/UI
+      tests passed 39 tests across four files; eight YAML files validated; typecheck,
+      lint, format check, web build, git diff --check, and projectctl doctor passed
+      at HEAD eb71def.
+critical_issues: 0
+followups:
+- Native interactive M3 play was not part of this independent QA run; final M3 QA
+  remains TASK-017 scope.
+- In-app selection and completion of all three incidents remains TASK-016 scope.
+- A transient progress-read failure preserves disk data but requires a new store session
+  to retry reading it.
+commit: eb71def
+kind: qa
+role: qa
+actor: codex-task015-qa
