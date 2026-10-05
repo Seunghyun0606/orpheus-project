@@ -56,6 +56,26 @@ export interface RevealedSignalView {
   readonly serviceId?: string;
 }
 
+export interface WarRoomMessageView {
+  readonly sequence: number;
+  readonly atSeconds: number;
+  readonly sender: string;
+  readonly text: string;
+}
+
+export interface PendingDelegationView {
+  readonly scheduleSequence: number;
+  readonly role: string;
+  readonly title: string;
+  readonly dueAtSeconds: number;
+}
+
+export interface WarRoomView {
+  readonly messages: readonly WarRoomMessageView[];
+  readonly pending: readonly PendingDelegationView[];
+  readonly capacity: readonly { resourceId: string; current: number; max?: number }[];
+}
+
 function toSessionError(result: Extract<CommandResult, { ok: false }>): IncidentSessionError {
   return {
     code: result.code,
@@ -183,4 +203,58 @@ export function selectRevealedSignals(state: IncidentSessionState): readonly Rev
       },
     ];
   });
+}
+
+export function selectWarRoom(
+  state: Pick<IncidentSessionState, 'scenario' | 'incident'>,
+): WarRoomView {
+  const { scenario, incident } = state;
+  const roleName = (id: string) =>
+    scenario.warRoom.roles.find((role) => role.id === id)?.name ?? id;
+  const messages: WarRoomMessageView[] = scenario.warRoom.messages
+    .filter((message) => message.initial)
+    .map((message, index) => ({
+      sequence: -scenario.warRoom.messages.length + index,
+      atSeconds: 0,
+      sender: roleName(message.roleId),
+      text: message.text,
+    }));
+  for (const event of incident.eventLog) {
+    if (event.type !== 'war_room_message') continue;
+    const message = scenario.warRoom.messages.find((item) => item.id === event.targetId);
+    if (message === undefined) continue;
+    messages.push({
+      sequence: event.sequence,
+      atSeconds: event.atSeconds,
+      sender: roleName(message.roleId),
+      text: message.text,
+    });
+  }
+
+  const pending = incident.scheduledWork.flatMap((work) => {
+    if (work.kind !== 'timer_event') return [];
+    const action = scenario.actions.find((item) => item.delegation?.eventId === work.eventId);
+    if (action?.delegation === undefined) return [];
+    return [
+      {
+        scheduleSequence: work.scheduleSequence,
+        role: roleName(action.delegation.roleId),
+        title: action.title,
+        dueAtSeconds: work.dueAtSeconds,
+      },
+    ];
+  });
+
+  const capacity = [
+    ...new Set(
+      scenario.actions.flatMap((action) =>
+        action.delegation === undefined ? [] : [action.delegation.capacityResourceId],
+      ),
+    ),
+  ].map((resourceId) => ({
+    resourceId,
+    current: incident.resources[resourceId]?.value ?? 0,
+    max: scenario.initialState.resources.find((resource) => resource.id === resourceId)?.max,
+  }));
+  return { messages, pending, capacity };
 }

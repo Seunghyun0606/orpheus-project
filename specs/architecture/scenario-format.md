@@ -46,6 +46,14 @@ Validator는 가능한 모든 오류를 한 번에 수집하고, 각 오류에 f
 
 첫 구현은 INC-001에 필요한 최소 schema에서 시작하되, version field와 discriminated effect/event types를 사용해 이후 Incident 확장이 breaking rewrite가 되지 않도록 한다.
 
+## War Room authoring contract
+
+`warRoom.roles`는 표시 이름과 안정적인 역할 ID를, `warRoom.messages`는 역할 ID와 작성된 문구를 정의한다. `initial: true` 메시지는 시작 시 보이며, 나머지는 `post_message` effect가 실행될 때만 이벤트 로그에 기록된다. 문구는 불확실하거나 서로 상충할 수 있으며 엔진은 진실 여부를 판정하지 않는다.
+
+위임 행동은 `DELEGATE` category와 `delegation` metadata (`roleId`, `eventId`, `capacityResourceId`)를 선언한다. 유효한 위임은 사용 가능한 capacity가 1 이상이라는 requirement, -1 capacity cost, 종료 시 +1을 복구하는 취소 불가능한 timer event, 그리고 해당 timer를 예약하는 effect를 가져야 한다. Timer의 delay는 행동 duration보다 길어야 한다. 진행 중 작업은 기존 `scheduledWork`, 메시지 이력은 기존 `eventLog`에 남으므로 새로운 저장 상태 필드는 필요하지 않다.
+
+기존 번들 Incident에 새 행동이나 초기 메시지를 넣는 것은 과거 저장의 replay 비교 결과에 영향을 줄 수 있다. 호환성 정책이 결정되기 전까지 번들 콘텐츠 변경을 별도 승인 없이 적용하지 않는다.
+
 ## M3 Incident Authoring Checklist
 
 - 새 Incident는 `src/scenario/data/incidents/` 아래의 독립 YAML 파일로 작성한다. 파일명과 별개로 `id`는 저장·replay에 쓰이는 안정된 고유값이며, 내용을 변경할 때 `contentVersion` 호환성을 확인한다.

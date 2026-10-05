@@ -55,6 +55,7 @@ export type EngineEventType =
   | 'action_unlocked'
   | 'evidence_revealed'
   | 'narrative_triggered'
+  | 'war_room_message'
   | 'mechanism_resolved'
   | 'temporary_effect_started'
   | 'temporary_effect_expired'

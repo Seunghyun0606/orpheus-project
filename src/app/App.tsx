@@ -8,6 +8,7 @@ import {
   createIncidentSessionStore,
   selectAvailableActions,
   selectRevealedSignals,
+  selectWarRoom,
   type IncidentSessionState,
 } from '../store/incident-session.ts';
 import { Postmortem } from './Postmortem.tsx';
@@ -17,7 +18,7 @@ import {
   savePresentationPreferences,
 } from './presentation-settings.ts';
 
-type ToolId = 'logs' | 'metrics' | 'database' | 'status' | 'evidence';
+type ToolId = 'logs' | 'metrics' | 'database' | 'status' | 'evidence' | 'war-room';
 
 const defaultSessionStore = createIncidentSessionStore(inc001Scenario, 1001);
 
@@ -27,6 +28,7 @@ const tools: readonly { id: ToolId; label: string; shortcut: string }[] = [
   { id: 'database', label: 'Database', shortcut: '03' },
   { id: 'status', label: 'Status', shortcut: '04' },
   { id: 'evidence', label: 'Evidence', shortcut: '05' },
+  { id: 'war-room', label: 'War Room', shortcut: '06' },
 ];
 
 export interface AppProps {
@@ -98,12 +100,15 @@ function describeEvent(event: EngineEvent): string {
       return 'Incident recovery state reached';
     case 'narrative_triggered':
       return `Log anomaly detected: ${humanize(event.sourceId ?? 'narrative')}`;
+    case 'war_room_message':
+      return `War Room message: ${humanize(event.targetId ?? 'message')}`;
     default:
       return humanize(event.type);
   }
 }
 
 function chooseTool(action: IncidentSessionState['scenario']['actions'][number]): ToolId {
+  if (action.category === 'DELEGATE' || action.category === 'COMMUNICATE') return 'war-room';
   const text = `${action.id} ${action.title}`.toLowerCase();
   if (text.includes('log')) return 'logs';
   if (text.includes('metric')) return 'metrics';
@@ -161,6 +166,7 @@ export function App({ store = defaultSessionStore }: AppProps) {
   );
   const narrativeContinueRef = useRef<HTMLButtonElement>(null);
   const postmortemReturnRef = useRef<HTMLButtonElement>(null);
+  const warRoomTabRef = useRef<HTMLButtonElement>(null);
   const activeNarrative = session.scenario.narratives.find(({ id }) => id === activeNarrativeId);
   const availableActions = selectAvailableActions(session);
   const revealedSignals = selectRevealedSignals(session);
@@ -172,6 +178,8 @@ export function App({ store = defaultSessionStore }: AppProps) {
     return initial?.revealed === false;
   });
   const recentEvents = session.incident.eventLog.slice(-8).reverse();
+  const warRoom = selectWarRoom(session);
+  const latestWarRoomMessage = warRoom.messages.at(-1);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -211,7 +219,9 @@ export function App({ store = defaultSessionStore }: AppProps) {
     } else if (result.state.completionReached) {
       setViewMode('postmortem');
     } else if (action !== undefined) {
-      setActiveTool(chooseTool(action));
+      const nextTool = chooseTool(action);
+      setActiveTool(nextTool);
+      if (nextTool === 'war-room') warRoomTabRef.current?.focus();
     }
   };
 
@@ -392,6 +402,7 @@ export function App({ store = defaultSessionStore }: AppProps) {
                   className={activeTool === tool.id ? 'tool-tab tool-tab--active' : 'tool-tab'}
                   id={`tool-tab-${tool.id}`}
                   key={tool.id}
+                  ref={tool.id === 'war-room' ? warRoomTabRef : undefined}
                   onClick={() => setActiveTool(tool.id)}
                   onKeyDown={(event) => handleToolKeyDown(event, index)}
                   role="tab"
@@ -566,7 +577,65 @@ export function App({ store = defaultSessionStore }: AppProps) {
                   )}
                 </div>
               )}
+
+              {activeTool === 'war-room' && (
+                <div>
+                  <div className="view-heading">
+                    <div>
+                      <span>Team response channel</span>
+                      <h2>War Room</h2>
+                    </div>
+                    <span className="stream-state">● {warRoom.pending.length} PENDING</span>
+                  </div>
+                  <div className="war-room-summary">
+                    {warRoom.capacity.map(({ resourceId, current, max }) => (
+                      <p key={resourceId}>
+                        {humanize(resourceId)}: {current}
+                        {max === undefined ? '' : ` / ${max}`}
+                      </p>
+                    ))}
+                    {warRoom.pending.length === 0 ? (
+                      <p>No delegated work pending.</p>
+                    ) : (
+                      <ul aria-label="Pending delegated work">
+                        {warRoom.pending.map((work) => (
+                          <li key={work.scheduleSequence}>
+                            {work.role}: {work.title} · ETA +
+                            {formatElapsed(
+                              Math.max(0, work.dueAtSeconds - session.incident.elapsedSeconds),
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                  {warRoom.messages.length === 0 ? (
+                    <p className="activity-empty">No team messages yet.</p>
+                  ) : (
+                    <ol className="war-room-messages" aria-label="War Room messages">
+                      {warRoom.messages.map((message) => (
+                        <li key={message.sequence}>
+                          <time>{formatElapsed(message.atSeconds)}</time>
+                          <strong>{message.sender}</strong>
+                          <p>{message.text}</p>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                  <p className="war-room-hint">
+                    Delegate and communicate using the available actions.
+                  </p>
+                </div>
+              )}
             </div>
+
+            {session.scenario.warRoom.messages.length > 0 && (
+              <p aria-label="War Room updates" className="screen-reader-only" role="status">
+                {latestWarRoomMessage === undefined
+                  ? ''
+                  : `War Room message from ${latestWarRoomMessage.sender}: ${latestWarRoomMessage.text} ${warRoom.pending.length} delegated jobs pending.`}
+              </p>
+            )}
 
             <section className="activity-strip" aria-labelledby="activity-title">
               <div className="activity-heading">

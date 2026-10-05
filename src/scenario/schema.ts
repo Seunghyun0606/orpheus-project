@@ -108,6 +108,9 @@ const revealEvidenceEffectSchema = z
 const triggerNarrativeEffectSchema = z
   .object({ type: z.literal('trigger_narrative'), narrativeId: idSchema })
   .strict();
+const postMessageEffectSchema = z
+  .object({ type: z.literal('post_message'), messageId: idSchema })
+  .strict();
 const resolveMechanismEffectSchema = z
   .object({ type: z.literal('resolve_mechanism'), mechanismId: idSchema })
   .strict();
@@ -123,6 +126,7 @@ export const effectSchema = z.discriminatedUnion('type', [
   unlockActionEffectSchema,
   revealEvidenceEffectSchema,
   triggerNarrativeEffectSchema,
+  postMessageEffectSchema,
   resolveMechanismEffectSchema,
 ]);
 
@@ -196,6 +200,28 @@ const actionSchema = z
     costs: z.array(resourceCostSchema).default([]),
     effects: z.array(effectSchema).default([]),
     temporaryEffects: z.array(temporaryEffectSchema).default([]),
+    delegation: z
+      .object({ roleId: idSchema, eventId: idSchema, capacityResourceId: idSchema })
+      .strict()
+      .optional(),
+  })
+  .strict();
+
+const warRoomSchema = z
+  .object({
+    roles: z.array(z.object({ id: idSchema, name: z.string().min(1) }).strict()).default([]),
+    messages: z
+      .array(
+        z
+          .object({
+            id: idSchema,
+            roleId: idSchema,
+            text: z.string().min(1),
+            initial: z.boolean().default(false),
+          })
+          .strict(),
+      )
+      .default([]),
   })
   .strict();
 
@@ -304,6 +330,7 @@ export const scenarioSchema = z
     events: z.array(eventSchema).default([]),
     evidence: z.array(evidenceSchema).default([]),
     narratives: z.array(narrativeSchema).default([]),
+    warRoom: warRoomSchema.default({ roles: [], messages: [] }),
     resolution: conditionGroupSchema,
     completion: conditionGroupSchema,
     postmortem: z.object({ scoringInputs: z.array(scoringInputSchema).min(1) }).strict(),

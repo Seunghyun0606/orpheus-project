@@ -295,6 +295,9 @@ function applyEffects(
       case 'trigger_narrative':
         triggerNarrative(state, scenario, effect.narrativeId);
         break;
+      case 'post_message':
+        emit(state, 'war_room_message', { sourceId, targetId: effect.messageId });
+        break;
       case 'resolve_mechanism':
         if (addUnique(state.resolvedMechanismIds, effect.mechanismId)) {
           emit(state, 'mechanism_resolved', { sourceId, targetId: effect.mechanismId });

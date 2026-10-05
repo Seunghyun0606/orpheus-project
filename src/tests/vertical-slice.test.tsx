@@ -75,6 +75,8 @@ describe('INC-001 complete vertical slice', () => {
     const activeTabAfterReturn = screen.getByRole('tab', { selected: true });
     await reachByTab(activeTabAfterReturn);
     await user.keyboard('{End}');
+    expect(screen.getByRole('tab', { name: /War Room/ })).toHaveFocus();
+    await user.keyboard('{ArrowLeft}');
     expect(screen.getByRole('tab', { name: /Evidence/ })).toHaveFocus();
     expect(screen.getByText('Corrupted log entry')).toBeInTheDocument();
 
@@ -89,6 +91,8 @@ describe('INC-001 complete vertical slice', () => {
     const metricsTab = screen.getByRole('tab', { name: /Metrics/ });
     await reachByTab(metricsTab);
     await user.keyboard('{End}');
+    expect(screen.getByRole('tab', { name: /War Room/ })).toHaveFocus();
+    await user.keyboard('{ArrowLeft}');
     expect(screen.getByRole('tab', { name: /Evidence/ })).toHaveFocus();
     expect(screen.getByText('Corrupted log entry')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Restart Payment API' })).toBeDisabled();

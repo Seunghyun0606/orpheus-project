@@ -14,6 +14,7 @@ export const diagnosticCodes = {
   unknownEffectType: 'UNKNOWN_EFFECT_TYPE',
   unknownEventType: 'UNKNOWN_EVENT_TYPE',
   invalidEventTargetType: 'INVALID_EVENT_TARGET_TYPE',
+  invalidDelegation: 'INVALID_DELEGATION',
   duplicateId: 'DUPLICATE_ID',
   unknownReference: 'UNKNOWN_REFERENCE',
 } as const;
@@ -74,6 +75,9 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
   const evidence = new Set(scenario.evidence.map(({ id }) => id));
   const narratives = new Set(scenario.narratives.map(({ id }) => id));
   const mechanisms = new Set(scenario.incident.failureMechanisms.map(({ id }) => id));
+  const roles = new Set(scenario.warRoom.roles.map(({ id }) => id));
+  const messages = new Set(scenario.warRoom.messages.map(({ id }) => id));
+  const delegatedEventIds = new Set<string>();
 
   const addDuplicateDiagnostics = <T extends { id: string }>(
     values: readonly T[],
@@ -175,6 +179,9 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
       case 'trigger_narrative':
         requireReference(`${path}.narrativeId`, effect.narrativeId, narratives, 'narrative');
         break;
+      case 'post_message':
+        requireReference(`${path}.messageId`, effect.messageId, messages, 'War Room message');
+        break;
       case 'resolve_mechanism':
         requireReference(
           `${path}.mechanismId`,
@@ -194,6 +201,11 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
   addDuplicateDiagnostics(scenario.events, '$.events', 'event');
   addDuplicateDiagnostics(scenario.evidence, '$.evidence', 'evidence');
   addDuplicateDiagnostics(scenario.narratives, '$.narratives', 'narrative');
+  addDuplicateDiagnostics(scenario.warRoom.roles, '$.warRoom.roles', 'War Room role');
+  addDuplicateDiagnostics(scenario.warRoom.messages, '$.warRoom.messages', 'War Room message');
+  scenario.warRoom.messages.forEach((message, index) =>
+    requireReference(`$.warRoom.messages[${index}].roleId`, message.roleId, roles, 'War Room role'),
+  );
 
   const causalGroups = [
     ['contributingFactors', scenario.incident.contributingFactors],
@@ -228,6 +240,87 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
 
   scenario.actions.forEach((action, actionIndex) => {
     const base = `$.actions[${actionIndex}]`;
+    if (action.category === 'DELEGATE' && action.delegation === undefined) {
+      diagnostics.push({
+        file,
+        path: `${base}.delegation`,
+        code: diagnosticCodes.invalidDelegation,
+        message: 'A DELEGATE action requires delegation metadata.',
+      });
+    }
+    if (action.delegation !== undefined) {
+      const { roleId, eventId, capacityResourceId } = action.delegation;
+      if (delegatedEventIds.has(eventId)) {
+        diagnostics.push({
+          file,
+          path: `${base}.delegation.eventId`,
+          code: diagnosticCodes.invalidDelegation,
+          message: `Timer ${JSON.stringify(eventId)} is already assigned to another delegation.`,
+        });
+      }
+      delegatedEventIds.add(eventId);
+      requireReference(`${base}.delegation.roleId`, roleId, roles, 'War Room role');
+      requireReference(`${base}.delegation.eventId`, eventId, timerEvents, 'timer event');
+      requireReference(
+        `${base}.delegation.capacityResourceId`,
+        capacityResourceId,
+        resources,
+        'resource',
+      );
+      const timer = scenario.events.find(
+        (event): event is Extract<Scenario['events'][number], { type: 'timer' }> =>
+          event.id === eventId && event.type === 'timer',
+      );
+      const capacity = scenario.initialState.resources.find(
+        (resource) => resource.id === capacityResourceId,
+      );
+      const capacityCosts = action.costs.filter((cost) => cost.resourceId === capacityResourceId);
+      const capacityRestores = timer?.effects.filter(
+        (effect) => effect.type === 'change_resource' && effect.resourceId === capacityResourceId,
+      );
+      const valid =
+        action.category === 'DELEGATE' &&
+        action.effects.some(
+          (effect) => effect.type === 'schedule_event' && effect.eventId === eventId,
+        ) &&
+        capacity?.min === 0 &&
+        capacity.value >= 1 &&
+        (capacity.max === undefined || capacity.value <= capacity.max) &&
+        capacityCosts.length === 1 &&
+        capacityCosts[0]?.amount === -1 &&
+        !action.effects.some(
+          (effect) => effect.type === 'change_resource' && effect.resourceId === capacityResourceId,
+        ) &&
+        !action.temporaryEffects.some((temporary) =>
+          [...temporary.apply, ...temporary.expire].some(
+            (effect) =>
+              effect.type === 'change_resource' && effect.resourceId === capacityResourceId,
+          ),
+        ) &&
+        action.requirements.some(
+          (condition) =>
+            condition.type === 'resource' &&
+            condition.resourceId === capacityResourceId &&
+            condition.operator === 'gte' &&
+            condition.value >= 1,
+        ) &&
+        timer !== undefined &&
+        timer.delaySeconds > action.durationSeconds &&
+        timer.cancellationConditions.length === 0 &&
+        capacityRestores?.length === 1 &&
+        capacityRestores[0]?.type === 'change_resource' &&
+        capacityRestores[0].amount === 1 &&
+        !timer.effects.some((effect) => effect.type === 'trigger_narrative');
+      if (!valid) {
+        diagnostics.push({
+          file,
+          path: `${base}.delegation`,
+          code: diagnosticCodes.invalidDelegation,
+          message:
+            'Delegation requires a DELEGATE action, capacity >= 1, a -1 capacity cost, and a non-cancellable timer after action completion that restores +1 capacity.',
+        });
+      }
+    }
     action.requirements.forEach((condition, index) =>
       validateCondition(condition, `${base}.requirements[${index}]`),
     );
@@ -290,6 +383,38 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
       validateEffect(effect, `${base}.effects[${index}]`),
     );
   });
+
+  const allEffects: ScenarioEffect[] = [
+    ...scenario.actions.flatMap((action) => [
+      ...action.effects,
+      ...action.temporaryEffects.flatMap((temporary) => [...temporary.apply, ...temporary.expire]),
+    ]),
+    ...scenario.events.flatMap((event) => event.effects),
+    ...scenario.narratives.flatMap((narrative) => narrative.effects),
+    ...scenario.resolution.effects,
+    ...scenario.completion.effects,
+  ];
+  for (const eventId of delegatedEventIds) {
+    if (
+      allEffects.filter((effect) => effect.type === 'schedule_event' && effect.eventId === eventId)
+        .length !== 1
+    ) {
+      diagnostics.push({
+        file,
+        path: '$.events',
+        code: diagnosticCodes.invalidDelegation,
+        message: `Delegation timer ${JSON.stringify(eventId)} must be scheduled by exactly one effect.`,
+      });
+    }
+    if (allEffects.some((effect) => effect.type === 'cancel_event' && effect.eventId === eventId)) {
+      diagnostics.push({
+        file,
+        path: '$.events',
+        code: diagnosticCodes.invalidDelegation,
+        message: `Delegation timer ${JSON.stringify(eventId)} cannot be cancelled because capacity must be restored.`,
+      });
+    }
+  }
 
   (['resolution', 'completion'] as const).forEach((key) => {
     scenario[key].conditions.forEach((condition, index) =>

@@ -500,6 +500,63 @@ input:focus-visible,
   background-size: 100% 2.25rem;
 }
 
+.war-room-summary {
+  border-bottom: 1px solid var(--line);
+  padding: 0.8rem 1rem;
+  color: var(--cyan);
+  font-size: 0.7rem;
+}
+
+.war-room-summary p {
+  margin: 0.3rem 0;
+}
+.war-room-summary ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+.war-room-summary li {
+  margin-top: 0.35rem;
+}
+.war-room-messages {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.war-room-messages li {
+  border-bottom: 1px solid var(--line);
+  padding: 0.75rem 1rem;
+}
+.war-room-messages time {
+  color: var(--muted);
+  font-size: 0.62rem;
+}
+.war-room-messages strong {
+  margin-left: 0.8rem;
+  color: var(--cyan);
+  font-size: 0.68rem;
+}
+.war-room-messages p {
+  margin: 0.4rem 0 0;
+  color: var(--white);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+.war-room-hint {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+
+.screen-reader-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .view-heading {
   min-height: 4.25rem;
   background: rgba(8, 16, 15, 0.94);

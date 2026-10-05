@@ -63,11 +63,13 @@ describe('INC-001 operations desktop', () => {
     expect(screen.getByRole('tab', { name: /Database/ })).toHaveFocus();
     expect(screen.getByRole('heading', { name: 'Session investigation' })).toBeInTheDocument();
     await user.keyboard('{End}');
+    expect(screen.getByRole('tab', { name: /War Room/ })).toHaveFocus();
+    await user.keyboard('{ArrowLeft}');
     expect(screen.getByRole('tab', { name: /Evidence/ })).toHaveFocus();
     await user.keyboard('{Home}');
     expect(screen.getByRole('tab', { name: /Logs/ })).toHaveFocus();
     await user.keyboard('{ArrowLeft}');
-    expect(screen.getByRole('tab', { name: /Evidence/ })).toHaveFocus();
+    expect(screen.getByRole('tab', { name: /War Room/ })).toHaveFocus();
     expect(screen.getAllByRole('tab').filter((tab) => tab.tabIndex === 0)).toHaveLength(1);
   });
 
