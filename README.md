@@ -62,6 +62,8 @@ npm run build:desktop
 ```
 
 `npm run build:desktop` compiles the native application without producing an installer.
+The [M3 QA evidence map](docs/M3_QA_EVIDENCE.md) distinguishes repeatable automated
+checks from the remaining native interactive inspection and human milestone gate.
 
 ## War Room and saved progress
 

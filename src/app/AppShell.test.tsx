@@ -126,11 +126,21 @@ describe('three-incident desktop', () => {
       const scenario = getScenario(id);
       if (scenario === undefined) throw new Error(`Missing ${id}`);
       expect(screen.getByRole('heading', { name: scenario.title })).toBeInTheDocument();
+      let unknownSeen = false;
       for (const name of actions) {
         await user.click(screen.getByRole('button', { name }));
+        if (name.startsWith('Ask ')) {
+          expect(screen.getByRole('heading', { name: 'War Room' })).toBeInTheDocument();
+          expect(screen.getByRole('list', { name: 'Pending delegated work' })).toBeInTheDocument();
+        }
         const hint = screen.queryByRole('dialog');
-        if (hint) await user.click(within(hint).getByRole('button', { name: 'Continue incident' }));
+        if (hint) {
+          expect(hint).toHaveTextContent('UNKNOWN');
+          unknownSeen = true;
+          await user.click(within(hint).getByRole('button', { name: 'Continue incident' }));
+        }
       }
+      expect(unknownSeen).toBe(true);
       expect(screen.getByRole('heading', { name: 'Incident postmortem' })).toBeInTheDocument();
       expect(progress.read()).not.toBeNull();
       await user.click(screen.getByRole('button', { name: 'Incident desk' }));
