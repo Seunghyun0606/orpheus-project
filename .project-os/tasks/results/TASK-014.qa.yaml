@@ -1,0 +1,39 @@
+task: TASK-014
+status: pass
+summary: Independent acceptance QA passed at committed HEAD 32d6383. The shared War
+  Room validates and executes delayed delegation across all three bundled incidents,
+  preserves pending work and communication through replay and save/load, and verifies
+  approved 1.0.0-to-1.1.0 save migration before restoring current content.
+files_changed: []
+verification:
+  acceptance: pass
+  authored_delegation:
+    status: pass
+    detail: INC-001, INC-002, and INC-003 tests exercise authored 120-second results,
+      one-slot team capacity use and refund, pending-work display, messages, and deterministic
+      replay. Shared UI keyboard and communication tests cover INC-001 bundled content
+      and INC-002/003 scenario fixtures.
+  legacy_migration:
+    status: pass
+    detail: Frozen 1.0.0 scenario blob hashes and old-action rules are checked for
+      all three incidents. Completed old saves migrate across INC-001/002/003; an
+      INC-001 pending recurrence timer survives; altered legacy state and unsupported
+      versions are rejected. INC-001 store coverage confirms loading leaves the local
+      slot unchanged until explicit save.
+  quality_commands:
+    status: pass
+    detail: npm test passed 91 tests across 14 files; scenario validation passed six
+      current and legacy YAML files; typecheck, lint, format check, web build, git
+      diff --check, and projectctl doctor passed at HEAD 32d6383.
+  native_build:
+    status: pass
+    detail: npm run build:desktop completed a release build and produced src-tauri/target/release/orpheus-desktop.exe.
+      Native in-app play was not exercised in this QA run.
+critical_issues: 0
+followups:
+- Multi-incident desktop selection remains TASK-016 scope.
+- Native in-app play and visual inspection remain for final M3 verification.
+commit: 32d6383
+kind: qa
+role: qa
+actor: codex-task014-qa

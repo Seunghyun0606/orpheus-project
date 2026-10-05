@@ -1,0 +1,45 @@
+task: TASK-014
+status: pass
+summary: Final automated verification passed at committed HEAD 32d6383 for TASK-014
+  War Room behavior, save migration, and project quality gates.
+files_changed: []
+verification:
+  acceptance: pass
+  full_tests:
+    status: pass
+    detail: npm test passed 14 files and 91 tests.
+  targeted_tests:
+    status: pass
+    detail: War Room, save, legacy catalog, and incident session suites passed four
+      files and 37 tests; npm run test:replays passed both INC-001 fixtures.
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios passed all six current and legacy YAML files.
+  typecheck:
+    status: pass
+    detail: npm run typecheck passed.
+  lint:
+    status: pass
+    detail: npm run lint passed with zero warnings.
+  format:
+    status: pass
+    detail: npm run format:check passed.
+  web_build:
+    status: pass
+    detail: npm run build passed, including typecheck and Vite production build.
+  native_build:
+    status: pass
+    detail: npm run build:desktop passed, compiling the Tauri release executable at
+      src-tauri/target/release/orpheus-desktop.exe.
+  project_doctor:
+    status: pass
+    detail: projectctl doctor reported consistent Project OS structure and references.
+  diff_check:
+    status: pass
+    detail: git diff --check passed.
+critical_issues: 0
+followups: []
+commit: 32d6383
+kind: test
+role: qa
+actor: codex-task014-qa
