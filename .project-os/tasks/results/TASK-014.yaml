@@ -1,0 +1,55 @@
+task: TASK-014
+status: pass
+summary: Added validated, deterministic War Room messages and delayed team delegation
+  to all three MVP incidents. Preserved 1.0.0 saves through approved versioned replay
+  verification and migration to 1.1.0 without a save-envelope schema change.
+files_changed:
+- src/scenario/schema.ts
+- src/scenario/validator.ts
+- src/scenario/data/incidents/inc-001.yaml
+- src/scenario/data/incidents/inc-002.yaml
+- src/scenario/data/incidents/inc-003.yaml
+- src/scenario/legacy/
+- src/scenario/legacy-catalog.ts
+- src/engine/simulation.ts
+- src/store/incident-session.ts
+- src/app/App.tsx
+- src/persistence/save.ts
+- src/tests/war-room.test.tsx
+- src/persistence/save.test.ts
+verification:
+  acceptance: pass
+  authored_delegation:
+    status: pass
+    detail: All three bundled incidents schedule a 120-second result, consume one
+      team capacity slot, restore it on completion, and post authored messages.
+  deterministic_replay_and_persistence:
+    status: pass
+    detail: Pending delegation and communication history survive replay and save/load;
+      completed 1.0.0 progress for INC-001/002/003 and a pending INC-001 timer migrate
+      after strict original-version verification. Tampered saves are rejected.
+  desktop_and_keyboard:
+    status: pass
+    detail: Shared War Room panel exposes messages, ETA, capacity, and action controls;
+      keyboard focus and live announcement behavior are tested.
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios passed 6 current and frozen legacy YAML files.
+  full_tests:
+    status: pass
+    detail: npm test passed 91 tests across 14 files.
+  typecheck: pass
+  lint: pass
+  format: pass
+  web_build: pass
+  native_build: pass
+  project_doctor: pass
+followups:
+- Independent review and acceptance QA must be recorded before completion evaluation.
+- Multi-incident desktop selection remains TASK-016 scope.
+- Web build exceeds the 500 kB uncompressed chunk warning threshold; gzip output is
+  about 148 kB.
+commit: e0738ad
+kind: implementation
+role: developer
+actor: codex-developer
