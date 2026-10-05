@@ -1,0 +1,56 @@
+task: TASK-015
+status: pass
+summary: Authored investigable UNKNOWN evidence routes in INC-002 and INC-003 alongside
+  the existing INC-001 hook. Added a separate replay-verified, versioned cross-incident
+  discovery record and shared Evidence projection while preserving the original single-Incident
+  save slot.
+files_changed:
+- src/scenario/data/incidents/inc-002.yaml
+- src/scenario/data/incidents/inc-003.yaml
+- src/scenario/legacy/
+- src/scenario/legacy-catalog.ts
+- src/scenario/catalog.ts
+- src/scenario/validator.ts
+- src/persistence/campaign-progress.ts
+- src/store/incident-session.ts
+- src/app/App.tsx
+- src/tests/m3-narrative.test.ts
+verification:
+  acceptance: pass
+  three_incident_narrative:
+    status: pass
+    detail: All three authored investigation routes trigger only UNKNOWN messages
+      and evidence from actual action-driven replay; INC-002/003 require operational
+      records and delayed War Room reports.
+  save_compatibility:
+    status: pass
+    detail: Exact 1.1.0 INC-002/003 snapshots are frozen and hash-tested; 1.0.0/1.1.0
+      saves verify before replay to current versions. The separate campaign record
+      verifies archived Incident states and leaves the original save slot untouched.
+  cross_incident_projection:
+    status: pass
+    detail: Evidence and narrative history survive new Incident stores, restart divergence,
+      and restore; a UI test displays prior-incident artifacts in the shared Evidence
+      board.
+  content_validation:
+    status: pass
+    detail: Invalid narrative references and prohibited early reveal text produce
+      diagnostics. Default CLI validates eight current and legacy YAML files.
+  full_tests:
+    status: pass
+    detail: npm test passed 103 tests across 15 files.
+  typecheck: pass
+  lint: pass
+  format: pass
+  web_build: pass
+  native_build: pass
+  project_doctor: pass
+followups:
+- Independent review and acceptance QA are required before completion evaluation.
+- Desktop multi-incident selection remains TASK-016 scope; native in-app visual play
+  was not exercised in this implementation run.
+- Web build reports a non-blocking uncompressed chunk-size warning.
+commit: 061fbc9
+kind: implementation
+role: developer
+actor: codex-developer
