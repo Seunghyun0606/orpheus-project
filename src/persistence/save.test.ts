@@ -120,7 +120,7 @@ describe('1.0.0 scenario save migration', () => {
       const restored = decodeSave(saved, current);
       if (!restored.ok) throw new Error(`${restored.code}: ${restored.message}`);
       expect(restored.value.migratedFromContentVersion).toBe('1.0.0');
-      expect(restored.value.incident.contentVersion).toBe('1.1.0');
+      expect(restored.value.incident.contentVersion).toBe(current.contentVersion);
       expect(restored.value.incident.completionReached).toBe(oldReplay.state.completionReached);
       expect(restored.value.incident.revealedEvidenceIds).toEqual(
         oldReplay.state.revealedEvidenceIds,
@@ -178,5 +178,27 @@ describe('1.0.0 scenario save migration', () => {
         contentVersion: '2.0.0',
       }),
     ).toMatchObject({ ok: false, code: 'INCOMPATIBLE_CONTENT' });
+  });
+});
+
+describe('1.1.0 narrative-content migration', () => {
+  it.each([
+    ['INC-002', ['OPEN_LOGS', 'TRACE_AUTH_REQUEST', 'COMPARE_DEPLOYMENT']],
+    ['INC-003', ['OPEN_LOGS', 'TRACE_RETRY', 'COMPARE_BATCH']],
+  ] as const)('verifies and migrates %s without losing prior artifacts', (id, actions) => {
+    const current = getScenario(id);
+    const legacy = getLegacyScenarioForMigration(id, '1.1.0', '1.2.0');
+    if (current === undefined || legacy === undefined) throw new Error(`Missing ${id} versions`);
+    const replay = replayCommands(
+      legacy,
+      { seed: 1515 },
+      actions.map((actionId) => ({ type: 'perform_action' as const, actionId })),
+    );
+    if (!replay.ok) throw new Error(`Failed ${id} legacy replay`);
+    const restored = decodeSave(encodeSave(legacy, 1515, replay.state), current);
+    if (!restored.ok) throw new Error(restored.message);
+    expect(restored.value.migratedFromContentVersion).toBe('1.1.0');
+    expect(restored.value.incident.contentVersion).toBe('1.2.0');
+    expect(restored.value.incident.revealedEvidenceIds).toEqual(replay.state.revealedEvidenceIds);
   });
 });

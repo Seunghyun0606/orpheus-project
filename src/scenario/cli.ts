@@ -1,7 +1,11 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
-import { validateScenarioCatalog, type ScenarioSource } from './catalog.ts';
+import {
+  validateScenarioCatalog,
+  validateVersionedScenarioCatalog,
+  type ScenarioSource,
+} from './catalog.ts';
 import type { ScenarioDiagnostic } from './validator.ts';
 
 const yamlExtensions = new Set(['.yaml', '.yml']);
@@ -25,12 +29,12 @@ function printDiagnostic(diagnostic: ScenarioDiagnostic): void {
 }
 
 export async function runScenarioValidationCli(args: readonly string[]): Promise<number> {
-  // Current and frozen legacy content share incident IDs but must each be
-  // valid catalogs. Explicit CLI paths retain the original single-catalog rule.
+  // Current content uses unique incident IDs; frozen content uses unique
+  // incident ID and version pairs. Explicit paths retain the single-catalog rule.
   const groups = args.length > 0 ? [[...args]] : [['src/scenario/data'], ['src/scenario/legacy']];
   let fileCount = 0;
   let failed = false;
-  for (const entries of groups) {
+  for (const [groupIndex, entries] of groups.entries()) {
     const files: string[] = [];
     for (const entry of entries) {
       try {
@@ -54,7 +58,10 @@ export async function runScenarioValidationCli(args: readonly string[]): Promise
     }
 
     fileCount += files.length;
-    const result = validateScenarioCatalog(sources);
+    const result =
+      args.length === 0 && groupIndex === 1
+        ? validateVersionedScenarioCatalog(sources)
+        : validateScenarioCatalog(sources);
     if (!result.success) {
       result.diagnostics.forEach(printDiagnostic);
       failed = true;

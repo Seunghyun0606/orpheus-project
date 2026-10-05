@@ -3,10 +3,13 @@ import { useStore } from 'zustand';
 import type { StoreApi } from 'zustand/vanilla';
 
 import { computePostmortem, type EngineEvent, type ScalarValue } from '../engine/index.ts';
-import { inc001Scenario } from '../scenario/index.ts';
+import { CAMPAIGN_PROGRESS_KEY, createLocalSaveStorage } from '../persistence/index.ts';
+import { inc001Scenario, scenarioCatalog } from '../scenario/index.ts';
 import {
   createIncidentSessionStore,
   selectAvailableActions,
+  selectCampaignEvidence,
+  selectCampaignNarratives,
   selectRevealedSignals,
   selectWarRoom,
   type IncidentSessionState,
@@ -20,7 +23,10 @@ import {
 
 type ToolId = 'logs' | 'metrics' | 'database' | 'status' | 'evidence' | 'war-room';
 
-const defaultSessionStore = createIncidentSessionStore(inc001Scenario, 1001);
+const defaultSessionStore = createIncidentSessionStore(inc001Scenario, 1001, undefined, {
+  storage: createLocalSaveStorage(CAMPAIGN_PROGRESS_KEY),
+  catalog: scenarioCatalog,
+});
 
 const tools: readonly { id: ToolId; label: string; shortcut: string }[] = [
   { id: 'logs', label: 'Logs', shortcut: '01' },
@@ -179,6 +185,8 @@ export function App({ store = defaultSessionStore }: AppProps) {
   });
   const recentEvents = session.incident.eventLog.slice(-8).reverse();
   const warRoom = selectWarRoom(session);
+  const campaignEvidence = selectCampaignEvidence(session);
+  const campaignNarratives = selectCampaignNarratives(session);
   const latestWarRoomMessage = warRoom.messages.at(-1);
 
   useEffect(() => {
@@ -552,11 +560,9 @@ export function App({ store = defaultSessionStore }: AppProps) {
                       <span>Recovered artifacts</span>
                       <h2>Evidence board</h2>
                     </div>
-                    <span className="stream-state">
-                      ● {session.incident.revealedEvidenceIds.length} DISCOVERED
-                    </span>
+                    <span className="stream-state">● {campaignEvidence.length} DISCOVERED</span>
                   </div>
-                  {session.incident.revealedEvidenceIds.length === 0 ? (
+                  {campaignEvidence.length === 0 ? (
                     <div className="empty-state">
                       <span aria-hidden="true">◇</span>
                       <strong>No evidence recovered</strong>
@@ -564,16 +570,34 @@ export function App({ store = defaultSessionStore }: AppProps) {
                     </div>
                   ) : (
                     <div className="evidence-grid">
-                      {session.scenario.evidence
-                        .filter(({ id }) => session.incident.revealedEvidenceIds.includes(id))
-                        .map((item) => (
-                          <article className="evidence-card" key={item.id}>
-                            <span>{item.id}</span>
-                            <h3>{item.title}</h3>
-                            <p>{item.description}</p>
-                          </article>
-                        ))}
+                      {campaignEvidence.map((item) => (
+                        <article className="evidence-card" key={`${item.scenarioId}:${item.id}`}>
+                          <span>
+                            {item.scenarioId} / {item.id}
+                          </span>
+                          <h3>{item.title}</h3>
+                          <p>{item.description}</p>
+                        </article>
+                      ))}
                     </div>
+                  )}
+                  {campaignNarratives.length > 0 && (
+                    <section aria-label="Recovered anomaly history">
+                      <h3>Recovered anomaly history</h3>
+                      <ol>
+                        {campaignNarratives.map((item) => (
+                          <li key={`${item.scenarioId}:${item.id}`}>
+                            {item.scenarioId} / {item.title}: {item.body}
+                          </li>
+                        ))}
+                      </ol>
+                    </section>
+                  )}
+                  {session.campaignProgressError && (
+                    <p role="alert">
+                      Campaign discoveries could not be restored:{' '}
+                      {session.campaignProgressError.message}
+                    </p>
                   )}
                 </div>
               )}

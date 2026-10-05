@@ -1,5 +1,5 @@
 schemaVersion: 1
-contentVersion: 1.1.0
+contentVersion: 1.2.0
 id: INC-003
 title: Queue Backlog
 act: 1
@@ -348,6 +348,8 @@ events:
         amount: 1
       - type: post_message
         messageId: JIN_IMPACT_REPORT
+      - type: reveal_evidence
+        evidenceId: SUPPORT_IMPACT_REPORT
 
   - id: BACKLOG_REBOUNDS
     type: timer
@@ -383,6 +385,13 @@ evidence:
   - id: PARTNER_BATCH_RECORD
     title: Partner batch comparison
     description: Batch 781 contains the malformed receipt while adjacent batches use the accepted format.
+  - id: SUPPORT_IMPACT_REPORT
+    title: Support impact report
+    description: Jin confirms that receipts are delayed while payment transactions still complete.
+  - id: REDACTED_QUEUE_MARKER
+    title: Redacted queue marker
+    description: A transient UNKNOWN marker points to a request preceding batch 781.
+    sourceNarrativeId: UNKNOWN_QUEUE_MARKER
 
 warRoom:
   roles:
@@ -410,6 +419,21 @@ warRoom:
     - id: STATUS_SENT
       roleId: OPERATOR
       text: War Room update sent. Receipt delay is confirmed; payment impact remains under review.
+
+narratives:
+  - id: UNKNOWN_QUEUE_MARKER
+    title: Redacted queue marker
+    body: 'UNKNOWN: check the request that arrived before batch 781.'
+    conditions:
+      - type: evidence
+        evidenceId: REPEATED_MESSAGE_TRACE
+      - type: evidence
+        evidenceId: PARTNER_BATCH_RECORD
+      - type: evidence
+        evidenceId: SUPPORT_IMPACT_REPORT
+    effects:
+      - type: reveal_evidence
+        evidenceId: REDACTED_QUEUE_MARKER
 
 resolution:
   conditions:

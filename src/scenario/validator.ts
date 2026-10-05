@@ -17,6 +17,8 @@ export const diagnosticCodes = {
   invalidDelegation: 'INVALID_DELEGATION',
   duplicateId: 'DUPLICATE_ID',
   unknownReference: 'UNKNOWN_REFERENCE',
+  invalidNarrativeSource: 'INVALID_NARRATIVE_SOURCE',
+  prohibitedMvpReveal: 'PROHIBITED_MVP_REVEAL',
 } as const;
 
 export type DiagnosticCode = (typeof diagnosticCodes)[keyof typeof diagnosticCodes];
@@ -372,6 +374,20 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
         narratives,
         'narrative',
       );
+      const source = scenario.narratives.find(({ id }) => id === item.sourceNarrativeId);
+      if (
+        source !== undefined &&
+        !source.effects.some(
+          (effect) => effect.type === 'reveal_evidence' && effect.evidenceId === item.id,
+        )
+      ) {
+        diagnostics.push({
+          file,
+          path: `$.evidence[${index}].sourceNarrativeId`,
+          code: diagnosticCodes.invalidNarrativeSource,
+          message: `Narrative ${JSON.stringify(item.sourceNarrativeId)} does not reveal evidence ${JSON.stringify(item.id)}.`,
+        });
+      }
     }
   });
   scenario.narratives.forEach((narrative, narrativeIndex) => {
@@ -383,6 +399,72 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
       validateEffect(effect, `${base}.effects[${index}]`),
     );
   });
+
+  if (scenario.act === 1) {
+    const prohibited =
+      /\b(?:NULL(?:_\d+)?|ORPHEUS|PRODUCTION EXPERIMENT|SOFT CONTROL|THE BOARD)\b/i;
+    const copy: readonly { path: string; text: string }[] = [
+      { path: '$.title', text: scenario.title },
+      ...scenario.services.map((item, index) => ({
+        path: `$.services[${index}].name`,
+        text: item.name,
+      })),
+      ...scenario.initialState.signals.flatMap((item, index) =>
+        typeof item.value === 'string'
+          ? [{ path: `$.initialState.signals[${index}].value`, text: item.value }]
+          : [],
+      ),
+      ...[
+        ['contributingFactors', scenario.incident.contributingFactors],
+        ['failureMechanisms', scenario.incident.failureMechanisms],
+        ['symptoms', scenario.incident.symptoms],
+        ['amplifiers', scenario.incident.amplifiers],
+      ].flatMap(([name, items]) =>
+        (items as Scenario['incident']['symptoms']).flatMap((item, index) => [
+          { path: `$.incident.${name}[${index}].label`, text: item.label },
+          ...(item.description === undefined
+            ? []
+            : [{ path: `$.incident.${name}[${index}].description`, text: item.description }]),
+        ]),
+      ),
+      { path: '$.incident.trigger.label', text: scenario.incident.trigger.label },
+      ...(scenario.incident.trigger.description === undefined
+        ? []
+        : [
+            { path: '$.incident.trigger.description', text: scenario.incident.trigger.description },
+          ]),
+      ...scenario.actions.map((item, index) => ({
+        path: `$.actions[${index}].title`,
+        text: item.title,
+      })),
+      ...scenario.evidence.flatMap((item, index) => [
+        { path: `$.evidence[${index}].title`, text: item.title },
+        { path: `$.evidence[${index}].description`, text: item.description },
+      ]),
+      ...scenario.narratives.flatMap((item, index) => [
+        { path: `$.narratives[${index}].title`, text: item.title },
+        { path: `$.narratives[${index}].body`, text: item.body },
+      ]),
+      ...scenario.warRoom.messages.map((item, index) => ({
+        path: `$.warRoom.messages[${index}].text`,
+        text: item.text,
+      })),
+      ...scenario.postmortem.scoringInputs.map((item, index) => ({
+        path: `$.postmortem.scoringInputs[${index}].label`,
+        text: item.label,
+      })),
+    ];
+    for (const { path, text } of copy) {
+      if (prohibited.test(text)) {
+        diagnostics.push({
+          file,
+          path,
+          code: diagnosticCodes.prohibitedMvpReveal,
+          message: 'Act 1 narrative content discloses a later-campaign reveal.',
+        });
+      }
+    }
+  }
 
   const allEffects: ScenarioEffect[] = [
     ...scenario.actions.flatMap((action) => [

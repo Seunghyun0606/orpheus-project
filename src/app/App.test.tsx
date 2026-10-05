@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import type { SaveStorage } from '../persistence/index.ts';
-import { inc001Scenario } from '../scenario/index.ts';
+import { getScenario, inc001Scenario, scenarioCatalog } from '../scenario/index.ts';
 import { createIncidentSessionStore } from '../store/incident-session.ts';
 import { App } from './App.tsx';
 import { presentationStorageKey } from './presentation-settings.ts';
@@ -27,6 +27,42 @@ async function perform(user: ReturnType<typeof userEvent.setup>, actionName: str
 }
 
 describe('INC-001 operations desktop', () => {
+  it('shows prior-incident discoveries from the separate campaign archive in the shared Evidence tab', async () => {
+    let progress: string | null = null;
+    const progressStorage: SaveStorage = {
+      read: () => progress,
+      write: (value) => {
+        progress = value;
+      },
+    };
+    const incidentStorage: SaveStorage = { read: () => null, write: () => {} };
+    const first = createIncidentSessionStore(inc001Scenario, 701, incidentStorage, {
+      storage: progressStorage,
+      catalog: scenarioCatalog,
+    });
+    for (const actionId of [
+      'OPEN_LOGS',
+      'INSPECT_DB',
+      'INSPECT_SESSIONS',
+      'TERMINATE_STALE_SESSIONS',
+    ]) {
+      expect(first.getState().performAction(actionId).ok).toBe(true);
+    }
+    const secondScenario = getScenario('INC-002');
+    if (secondScenario === undefined) throw new Error('Missing INC-002');
+    const second = createIncidentSessionStore(secondScenario, 702, incidentStorage, {
+      storage: progressStorage,
+      catalog: scenarioCatalog,
+    });
+    const user = userEvent.setup();
+    render(<App store={second} />);
+    await user.click(screen.getByRole('tab', { name: /Evidence/ }));
+    expect(screen.getByRole('heading', { name: 'Corrupted log entry' })).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('region', { name: 'Recovered anomaly history' })).getByRole('list'),
+    ).toHaveTextContent('UNKNOWN: Good.');
+  });
+
   it('persists display controls independently of the incident and restores them after remount', async () => {
     const { user, unmount } = renderIncident();
 

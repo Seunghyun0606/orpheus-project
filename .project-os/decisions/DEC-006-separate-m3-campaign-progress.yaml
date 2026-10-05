@@ -1,0 +1,22 @@
+id: DEC-006
+title: Preserve M3 discoveries in a separate versioned local progress store
+status: active
+date: "2026-10-05"
+applies_to:
+  - global
+context: >-
+  TASK-015 must retain evidence from multiple incidents, while the existing
+  orpheus.incident.v1 slot stores only one incident. The human selected a
+  separate versioned campaign-progress store instead of migrating that slot.
+decision: >-
+  Keep the existing incident save key and envelope unchanged. Add a distinct
+  local, schema-versioned progress key whose incident records are verified
+  through the existing save decoder and versioned replay authorities. Project
+  discovered evidence and narrative history from those records, and never
+  infer discoveries solely from an incident identifier.
+consequences:
+  - Older incident saves remain readable and are not overwritten on load.
+  - Cross-incident progress can be recovered independently of the active slot.
+  - Unknown or non-replayable progress records are rejected, not silently used.
+  - Future campaign-state fields require explicit schema evolution.
+supersedes: null

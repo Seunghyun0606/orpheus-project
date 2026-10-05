@@ -1,5 +1,5 @@
 schemaVersion: 1
-contentVersion: 1.1.0
+contentVersion: 1.2.0
 id: INC-002
 title: Bad Deployment
 act: 1
@@ -304,6 +304,8 @@ events:
         amount: 1
       - type: post_message
         messageId: SAM_KEYSET_REPORT
+      - type: reveal_evidence
+        evidenceId: SAM_KEYSET_COMPARISON
 
   - id: ROUTING_WINDOW_EXPIRES
     type: timer
@@ -330,6 +332,13 @@ evidence:
   - id: DEPLOYMENT_ORDER_RECORD
     title: Deployment comparison
     description: Build 1847 switched issuer keys before the verifier key set was ready.
+  - id: SAM_KEYSET_COMPARISON
+    title: Platform key-set comparison
+    description: Sam's War Room report confirms that the verifier still accepts K71.
+  - id: UNATTRIBUTED_DEPLOYMENT_NOTE
+    title: Unattributed deployment annotation
+    description: A transient UNKNOWN annotation links build 1847 to an unexplained change notice.
+    sourceNarrativeId: UNKNOWN_DEPLOYMENT_NOTE
 
 warRoom:
   roles:
@@ -359,6 +368,21 @@ warRoom:
     - id: STATUS_SENT
       roleId: OPERATOR
       text: Status update sent. Cause is still under investigation.
+
+narratives:
+  - id: UNKNOWN_DEPLOYMENT_NOTE
+    title: Unattributed deployment annotation
+    body: "UNKNOWN: deployment 1847 isn't what they told you."
+    conditions:
+      - type: evidence
+        evidenceId: KEYSET_MISMATCH_TRACE
+      - type: evidence
+        evidenceId: DEPLOYMENT_ORDER_RECORD
+      - type: evidence
+        evidenceId: SAM_KEYSET_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: UNATTRIBUTED_DEPLOYMENT_NOTE
 
 resolution:
   conditions:

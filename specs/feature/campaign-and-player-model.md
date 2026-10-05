@@ -11,6 +11,8 @@
 - 행동에서 파생한 player behavior model
 - 결말 판정에 필요한 최종 flag
 
+M3의 최소 진행 기록은 이 전체 모델에 앞서 도입한다. 기존 단일 Incident 저장 키 `orpheus.incident.v1`은 유지하고, 별도 `orpheus.campaign-progress.v1`에 버전별 Incident 발견 스냅샷을 보존한다. 각 스냅샷은 원본 또는 현행 시나리오로 행동 기록과 상태가 일치하는지 검증한 뒤 Evidence와 Narrative 이력을 투영한다. 새로운 발견 때 자동 기록하되, 기존 Incident 슬롯은 명시적 저장 명령이 있어야만 바뀐다. 재시작으로 서로 다른 조사 경로를 밟아도 앞서 찾은 단서는 유지한다. 이는 alignment·player model·ending 상태를 아직 도입하지 않는다.
+
 숨은 변수의 원시 숫자는 플레이어에게 직접 노출하지 않는다. UI는 관계 변화, 조직 반응과 이용 가능한 행동으로 상태를 전달한다.
 
 ## Behavior Model

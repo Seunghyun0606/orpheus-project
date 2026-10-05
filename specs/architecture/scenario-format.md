@@ -54,6 +54,10 @@ Validator는 가능한 모든 오류를 한 번에 수집하고, 각 오류에 f
 
 TASK-014의 승인된 호환성 정책은 기존 1.0.0 YAML을 변경 불가능한 재생 기준으로 보존하고 현재 Incident를 1.1.0으로 올리는 것이다. 불러오기는 먼저 1.0.0 규칙으로 저장을 검증한 뒤 같은 행동 기록을 1.1.0 규칙으로 재생한다. 재생할 수 없는 상태는 거부하며, 불러오기 자체는 저장 슬롯을 덮어쓰지 않는다. 다음 저장 명령에서만 업그레이드된 상태를 기록한다. 이후 콘텐츠 버전 변경은 새 기준과 대상 버전을 명시해야 한다.
 
+TASK-015는 INC-002/003의 1.1.0 원본을 추가로 동결하고 현재 콘텐츠를 1.2.0으로 올린다. 1.0.0·1.1.0 저장은 각각의 원본 규칙으로 먼저 검증한 뒤 현재 버전으로 재생한다. 기본 validator는 현행 catalog와 버전별 legacy catalog를 따로 검사하며, legacy에서는 같은 Incident ID라도 버전이 다르면 허용한다.
+
+초기 UNKNOWN 단서는 `narratives.conditions`가 실제로 공개된 운영·War Room evidence를 요구하고 `narratives.effects`가 발견물을 공개한다. `sourceNarrativeId`는 실제로 그 evidence를 공개하는 narrative를 가리켜야 한다. Act 1의 플레이어 노출 문구에 후반 정체·실험·Board 반전을 넣으면 validator가 실패한다.
+
 ## M3 Incident Authoring Checklist
 
 - 새 Incident는 `src/scenario/data/incidents/` 아래의 독립 YAML 파일로 작성한다. 파일명과 별개로 `id`는 저장·replay에 쓰이는 안정된 고유값이며, 내용을 변경할 때 `contentVersion` 호환성을 확인한다.

@@ -34,25 +34,39 @@ describe('frozen 1.0.0 replay authorities', () => {
 
   it.each(snapshots)('keeps all 1.0.0 %s action rules unchanged in 1.1.0', (id) => {
     const legacy = getLegacyScenarioForMigration(id, '1.0.0', '1.1.0');
-    const current = getScenario(id);
-    if (legacy === undefined || current === undefined) throw new Error(`Missing ${id} versions`);
-    expect(current.contentVersion).toBe('1.1.0');
-    expect(current.initialState).toEqual(legacy.initialState);
-    expect(current.services).toEqual(legacy.services);
-    expect(current.incident).toEqual(legacy.incident);
-    expect(current.resolution).toEqual(legacy.resolution);
-    expect(current.completion).toEqual(legacy.completion);
-    expect(current.narratives).toEqual(legacy.narratives);
-    expect(current.evidence).toEqual(legacy.evidence);
-    expect(current.postmortem).toEqual(legacy.postmortem);
+    const version11 =
+      id === 'INC-001' ? getScenario(id) : getLegacyScenarioForMigration(id, '1.1.0', '1.2.0');
+    if (legacy === undefined || version11 === undefined) throw new Error(`Missing ${id} versions`);
+    expect(version11.contentVersion).toBe('1.1.0');
+    expect(version11.initialState).toEqual(legacy.initialState);
+    expect(version11.services).toEqual(legacy.services);
+    expect(version11.incident).toEqual(legacy.incident);
+    expect(version11.resolution).toEqual(legacy.resolution);
+    expect(version11.completion).toEqual(legacy.completion);
+    expect(version11.narratives).toEqual(legacy.narratives);
+    expect(version11.evidence).toEqual(legacy.evidence);
+    expect(version11.postmortem).toEqual(legacy.postmortem);
     for (const oldAction of legacy.actions) {
-      expect(current.actions.find(({ id: actionId }) => actionId === oldAction.id)).toEqual(
+      expect(version11.actions.find(({ id: actionId }) => actionId === oldAction.id)).toEqual(
         oldAction,
       );
     }
     for (const oldEvent of legacy.events) {
-      expect(current.events.find(({ id: eventId }) => eventId === oldEvent.id)).toEqual(oldEvent);
+      expect(version11.events.find(({ id: eventId }) => eventId === oldEvent.id)).toEqual(oldEvent);
     }
+  });
+
+  it.each([
+    ['INC-002', 'inc-002.v1.1.0.yaml', 'e15777aa75e7d0d77242f8ec5e4504589d03359a'],
+    ['INC-003', 'inc-003.v1.1.0.yaml', '64ee8497846694789c1fc6eba0ed4a0164beeb6c'],
+  ] as const)('preserves exact shipped %s 1.1.0 bytes', (id, file, expectedHash) => {
+    const bytes = Buffer.from(
+      readFileSync(path.resolve('src/scenario/legacy', file), 'utf8').replace(/\r\n/g, '\n'),
+      'utf8',
+    );
+    const hash = createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+    expect(hash).toBe(expectedHash);
+    expect(getLegacyScenarioForMigration(id, '1.1.0', '1.2.0')?.contentVersion).toBe('1.1.0');
   });
 
   it('does not silently apply a 1.0.0 snapshot to unapproved target versions', () => {

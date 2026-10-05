@@ -134,7 +134,7 @@ tasks:
   role: developer
   milestone: M3
   priority: P1
-  status: ready
+  status: active
   depends_on:
   - TASK-012
   - TASK-013

@@ -70,10 +70,17 @@ capacity slot until its authored ETA. Reports can be incomplete or conflicting a
 correct or incorrect. The same panel and engine rules apply to all three incidents, although the
 current desktop still starts in INC-001 until the multi-incident selection task is complete.
 
-INC-001/002/003 content is now version 1.1.0. An existing 1.0.0 local save is verified against its
-frozen original scenario, then its action log is replayed into 1.1.0. Loading does not overwrite
-the original slot; save again to keep the migrated version. Unsupported or altered saves are
-rejected without changing the active incident.
+INC-001 remains at content version 1.1.0; INC-002/003 now use 1.2.0 for their UNKNOWN discovery
+paths. Existing 1.0.0 and 1.1.0 saves are verified against frozen original scenarios before
+replay into current content. Loading does not overwrite the original single-incident slot; save
+again to keep the migrated version. Unsupported or altered saves are rejected.
+
+Discoveries also enter the separate, versioned `orpheus.campaign-progress.v1` local record. The
+Evidence tab projects recovered artifacts and UNKNOWN trigger history across incidents from
+replay-verified records, even after an incident is restarted. This record never overwrites
+`orpheus.incident.v1`. An older incident save can be imported into the discovery record with
+**Load**. INC-002/003 can currently be exercised headlessly or with an injected session store;
+desktop incident selection remains a later M3 task. No later-act identity is revealed here.
 
 ## M2 verification map
 
@@ -88,7 +95,7 @@ Run the full quality command set above and the desktop build for the final M2 ch
 structured TASK-010 result in `.project-os/tasks/results` records actual command outcomes and
 independent review/QA decisions.
 
-The scenario validation command checks current content and frozen legacy content (six files) by
+The scenario validation command checks current content and frozen legacy content (eight files) by
 default. Pass one or
 more YAML files or directories to validate authored content elsewhere:
 
