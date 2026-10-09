@@ -104,7 +104,9 @@ These are future tests, not new APIs already covered by the current legacy suite
   identity/counts. Verify gated exposure and native persistence separately.
 
 Production eligibility, expiry/replacement and response mappings are not fixture
-arithmetic. Prediction-deviation meaning is separately pending in
-[DEC-022's proposal](../../.project-os/decisions/proposals/DEC-022-prediction-deviation-policy.yaml).
+arithmetic. Prediction-deviation mismatch rate is separately approved by
+[DEC-022](../../.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml)
+and specified in the [prediction draft](player-prediction.md); the two metrics
+retain distinct exposures and eligibility definitions.
 Independent architecture review, acceptance QA and Project OS evaluation remain
 required before declaring TASK-018 complete or starting dependent implementation.

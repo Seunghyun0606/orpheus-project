@@ -79,12 +79,15 @@ gate for material architecture/schema/migration decisions. In particular:
 - DEC-021 approves comparing actual eligible actions with a previously exposed
   recommendation, including manual execution. No response/expiry contributes no
   sample; counts pool over eligible responses, not all exposed recommendations.
+- DEC-022 approves predictionDeviation as mismatching eligible responses divided
+  by all eligible responses to valid recorded prediction exposures. Confidence
+  does not weight mismatches; UNKNOWN/gated-off predictions supply no samples.
 - Specify versioned action classifications and behavior denominators, prediction
   inputs/confidence, branch predicates, and ending overlap/tie/no-match policy.
   Test-only fixture thresholds are not approved production balance.
 
 No dependent task may implement a pending decision by guesswork. Keep approved
-DEC-001/003/005/006/007/009/010/011/012/013/014/015/016/017/018/019/020/021 boundaries unless a separate decision supersedes them.
+DEC-001/003/005/006/007/009/010/011/012/013/014/015/016/017/018/019/020/021/022 boundaries unless a separate decision supersedes them.
 Do not declare TASK-018 accepted with unresolved required contract choices.
 
 ## Exit-criterion verification map
@@ -126,8 +129,10 @@ DEC-020 approves empirical context-choice prediction, specified in the
 [prediction review draft](../specs/architecture/player-prediction.md).
 DEC-021 approves action-based recommendation response, specified in the
 [response review draft](../specs/architecture/recommendation-responses.md).
-DEC-022 proposes the next gate: prediction-deviation mismatch rate or mean
-empirical rarity of the chosen actions against recorded prior counts.
+DEC-022 approves the pooled prediction mismatch rate, specified separately from
+confidence in the [prediction draft](../specs/architecture/player-prediction.md).
+DEC-023 proposes the next gate: binary authored safety/damage preference rates
+or mean normalized authored preference intensities per eligible tradeoff choice.
 Existing-save checks do not constitute acceptance of the proposed new campaign
 system; remaining policies and independent review/QA are still required.
 
@@ -136,7 +141,7 @@ tasks. It does not change runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-Next: continue active TASK-018 and obtain the prediction-deviation meaning decision,
+Next: continue active TASK-018 and obtain the safety/damage preference formula decision,
 then resolve remaining domain policies and envelope review plus independent review/QA before
 dependent implementation. No approved storage decision should be mistaken for
 acceptance of the entire contract or authorization to infer missing history.

@@ -10,8 +10,9 @@ denominators are approved by DEC-016; Gate 9 current-attempt evidence-before-act
 qualification is approved by DEC-017; Gate 10 distinct investigation depth is
 approved by DEC-018; Gate 11 unresolved ending ties/no-match is approved by DEC-019.
 Gate 12 empirical prediction/confidence is approved by DEC-020; Gate 13
-action-based recommendation response is approved by DEC-021. Gate 14
-prediction-deviation meaning remains pending.
+action-based recommendation response is approved by DEC-021; Gate 14 pooled
+prediction mismatch rate is approved by DEC-022. Gate 15 safety/damage preference
+observation formulas remain pending.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -513,15 +514,17 @@ UNKNOWN-only, with no invented past acceptance observations.
 The [recommendation response review draft](recommendation-responses.md) specifies
 exposure, matching, counts, identity/transaction boundaries and future fixtures.
 
-## Gate 14 — prediction-deviation meaning (pending)
+## Gate 14 — prediction-deviation meaning (approved)
 
 [DEC-022's proposal](../../.project-os/decisions/proposals/DEC-022-prediction-deviation-policy.yaml)
-compares a top-action mismatch rate with a continuous empirical rarity measure:
+compares a top-action mismatch rate with a continuous empirical rarity measure.
+The human selected **A**, recorded in
+[DEC-022](../../.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml):
 
-- **A — recommended:** divide accepted eligible responses differing from their
+- **A — approved:** divide accepted eligible responses differing from their
   recorded exposed prediction by all eligible responses, pooled under DEC-014.
   Matching the predicted action contributes no deviation irrespective of confidence.
-- **B:** for each eligible response, calculate `1 - prior chosen-action share`
+- **B — not selected:** for each eligible response, calculate `1 - prior chosen-action share`
   from the recorded empirical candidate counts and average across eligible
   responses with equal response weight. This measures rarity, not a mismatch rate
   or calibrated probability; following the top action can still be nonzero.
@@ -534,10 +537,39 @@ These are test-only measures, not production thresholds or narrative scores.
 Both require actual valid prior prediction exposure and an eligible new accepted
 response with compatible authored identity/context. UNKNOWN, gated-off content,
 no eligible response, imported/inherited history, duplicates, timers and archive
-review cannot manufacture samples. No denominator is unavailable, not observed
-zero; malformed or unsupported required definitions are diagnostics. Neither
-option chooses production response/reveal mappings, automatic alignment effects
+review cannot manufacture samples. With no eligible response denominator, the
+measure is unavailable, not observed zero. Malformed or unsupported required
+definitions are diagnostics. Neither option chooses production response/reveal
+mappings, automatic alignment effects
 or moral quality. Recommendation matching remains separately approved by DEC-021.
+The [prediction review draft](player-prediction.md) now specifies the approved
+mismatch projection, availability, provenance/transaction boundaries and fixtures.
+
+## Gate 15 — safety/damage preference observations (pending)
+
+[DEC-023's proposal](../../.project-os/decisions/proposals/DEC-023-preference-observation-policy.yaml)
+compares two meanings of safetyPreference and collateralDamageTolerance:
+
+- **A — recommended:** independent binary per-metric observations at authored
+  tradeoff opportunities. Pool positive choices divided by eligible choices
+  under DEC-014; intensity does not increase a sample's weight.
+- **B:** independent finite normalized authored preference values per eligible
+  tradeoff choice, averaged with equal weight per choice across attempts. This
+  measures intensity, not a binary preference rate; normalization needs review.
+
+Both require verified pre-action information and availability, validated per-metric
+definitions and genuine new accepted choice provenance. A bad outcome cannot
+retroactively prove a player's tolerance for harm the player did not know about.
+Actual customer impact, operational risk and campaign collateralDamage remain
+distinct from behavioral preference. Neither preference is automatically the
+complement of the other, and operational action labels do not prove moral intent.
+
+No eligible observations means unavailable, not neutral/safe or damage-tolerant.
+Missing/invalid required context, classification or normalization definitions
+yield diagnostics. Genuine choices in unfinished/abandoned attempts remain;
+imports, inherited prefixes, duplicates, rejected commands, timers and archive
+review add none. No production mappings, coefficients, thresholds or hidden-value
+effect amounts are chosen here. The existing UNKNOWN-only MVP remains unchanged.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -599,7 +631,7 @@ contracts before use:
 | aiRecommendationAcceptanceRate               | Matching next eligible responses / eligible responses to recorded recommendations under DEC-021                  | No response/expiry is not rejection; MVP has no recorded recommendation opportunity.                        |
 | safetyPreference / collateralDamageTolerance | Approved authored observations from action intent/context and resulting effects                                  | Operational risk is not automatically a moral score; formula and normalization pending.                     |
 | companyReportingRate / nullCooperationRate   | Classified accepted responses / eligible authored response opportunities                                         | Support status is not automatically corporate allegiance; MVP has no explicit NULL cooperation opportunity. |
-| predictionDeviation                          | Accepted eligible actions compared with the prior recorded valid prediction                                      | Prediction shown, action availability, model version and confidence must be recorded first.                 |
+| predictionDeviation                          | Mismatching eligible responses / eligible responses to recorded valid predictions under DEC-022                  | Prediction shown, action availability, model version and confidence must be recorded first.                 |
 
 No data should manufacture recommendation acceptance, NULL cooperation or
 prediction deviation from existing UNKNOWN hints. DEC-011 permits imported
@@ -618,8 +650,10 @@ support and exact definition contracts remain under review; fixed story
 percentages and a score-model fallback are not the policy. See the
 [prediction draft](player-prediction.md). DEC-021 separately approves recommendation
 acceptance through actual eligible action matching, specified in the
-[response draft](recommendation-responses.md). DEC-022 proposes the meaning of
-predictionDeviation; neither mismatch rate nor empirical rarity is selected.
+[response draft](recommendation-responses.md). DEC-022 approves predictionDeviation
+as pooled mismatches divided by eligible responses to recorded valid prediction
+exposures, not a rarity score. DEC-023 separately proposes formulas for safety
+preference and collateral damage tolerance; neither option is selected.
 Branch evaluation consumes approved state and validated predicates and returns
 eligible content plus diagnostic explanations,
 not grading or raw hidden numeric UI.
@@ -670,9 +704,9 @@ discovery-only adoption, checkpoint continuation, IndexedDB commits, pooled
 behavior rates, once-per-run authored effects and operational restart/rollback
 denominators, current-attempt evidence qualification and distinct investigation
 depth, unresolved ending ambiguity, empirical prediction/confidence and action-based
-recommendation response are approved. Prediction-deviation meaning and other
-required policies still need decisions; detailed persistence/effect/behavior/
-prediction/response/ending drafts still need review.
+recommendation response and pooled prediction mismatch rate are approved.
+Safety/damage preference formulas and other required policies still need decisions;
+detailed persistence/effect/behavior/prediction/response/ending drafts still need review.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

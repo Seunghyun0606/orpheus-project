@@ -1,0 +1,34 @@
+id: DEC-022
+title: Measure predictionDeviation as a pooled eligible-response mismatch rate
+status: active
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  The human selected option A: divide eligible actions differing from the exposed
+  prediction by all eligible responses. Empirical rarity of a chosen action is a
+  different measure and is not the approved meaning of predictionDeviation.
+decision: >-
+  Each eligible new accepted response to a valid recorded prediction exposure
+  contributes one denominator sample. A different authored action identity adds
+  one mismatch; the predicted identity adds none, regardless of confidence. Sum
+  compatible mismatch and eligible-response counts across official attempts before
+  division under DEC-014. No eligible responses means unavailable, not zero.
+human_approval:
+  selected_option: A
+  instruction: '예측과 다른 유효 행동 수 ÷ 전체 유효 응답 수(권장).'
+proposal: .project-os/decisions/proposals/DEC-022-prediction-deviation-policy.yaml
+consequences:
+  - Require actual valid prior prediction exposure, same-run/attempt provenance, an available eligible candidate identity and compatible authored definitions.
+  - Preserve prediction identity/action, confidence, context/counts, availability, versions and ordered history boundary before the response; later inputs cannot rewrite it.
+  - Confidence does not weight mismatches; following the predicted identity gives zero mismatch even if its empirical share is below one.
+  - Count at most one associated response per identified prediction opportunity; duplicates, rejected actions, imports, inherited prefixes, timers and archive review add none.
+  - UNKNOWN, gated-off or invalid predictions cannot create prediction-deviation samples; missing required definitions yield diagnostics, not invented observed zero behavior.
+  - Retain genuine eligible new responses in unfinished/abandoned official attempts; equal command bytes in distinct genuine opportunities are not duplicate identity.
+  - Exact-head resume retains identity without recounting; confirmed checkpoint attempts count only new qualified responses, not inherited exposures or prefixes.
+  - Prediction deviation is distinct from recommendation acceptance and from numeric alignment/AI_DEPENDENCY effects; it does not prove intent or moral quality.
+  - Commit response identities/counts with accepted history under DEC-013; failed/conflicting writes cannot acknowledge new official observations.
+  - Exact response eligibility, opportunity validity/replacement, action equivalence and production thresholds remain reviewed authored data, not selected tuning here.
+  - Preserve both legacy save stores and the UNKNOWN-only MVP; TASK-018 still requires remaining contracts, independent review, acceptance QA and evaluation.
+supersedes: null

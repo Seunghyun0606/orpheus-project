@@ -6,6 +6,7 @@ their review and fixture boundaries, not runtime schema or production tuning.
 DEC-017 also approves current-attempt investigation for evidence-before-action.
 DEC-018 approves distinct observation counts averaged across eligible attempts.
 DEC-021 approves matching eligible actions to recorded recommendation exposures.
+DEC-022 approves predictionDeviation as pooled eligible-response mismatches.
 Other metrics retain explicitly pending eligibility/formula decisions.
 
 ## Approved operational rates
@@ -184,9 +185,10 @@ Additional investigation-depth fixtures for TASK-019/020/021 must cover:
 Fractions are arithmetic-only fixtures, not prediction confidence or ending
 thresholds. Ethical intent and remaining response eligibility definitions still
 require reviewed contracts. DEC-020 approves empirical context-choice prediction;
-its [review draft](player-prediction.md) does not automatically define deviation.
+its [review draft](player-prediction.md) now specifies DEC-022's approved mismatch
+rate separately from confidence and recommendation acceptance.
 DEC-021 approves action-based recommendation response counting, specified in the
-[response draft](recommendation-responses.md); DEC-022 separately proposes the
-meaning of predictionDeviation and remains unselected.
+[response draft](recommendation-responses.md). DEC-023 separately proposes safety
+preference and collateral damage tolerance formulas; neither option is selected.
 Existing UNKNOWN messages cannot stand in for recommendation or NULL cooperation
 observations. Independent review and acceptance QA remain pending.

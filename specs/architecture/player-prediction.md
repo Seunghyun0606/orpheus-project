@@ -2,6 +2,7 @@
 
 Status: [DEC-020](../../.project-os/decisions/DEC-020-empirical-context-action-prediction.yaml)
 approves empirical context-choice frequencies, not a behavioral scoring model.
+DEC-022 separately approves predictionDeviation as a pooled response mismatch rate.
 This is a logical contract and fixture plan, not a runtime type/schema or a
 completed TASK-022. Exact authoring fields, comparable contexts, support limits
 and reveal gates remain under review; no production balance is chosen here.
@@ -72,8 +73,9 @@ calculation under the same eligibility rules. It must never enter its own prior
 prediction or retrospectively alter that exposure. Confidence can rise, fall or
 remain unchanged; do not script a decline after every unexpected action.
 Prediction deviation requires an actual recorded valid prediction exposure and
-an eligible response; exact response eligibility remains under review. A predicted
-action is not automatically an AI recommendation or evidence of its acceptance.
+an eligible response; exact response eligibility remains under review. The approved
+mismatch-rate contract is below. A prediction is not automatically an AI
+recommendation or evidence of its acceptance.
 
 UNKNOWN and gated-off calculations add no invented deviation/acceptance samples.
 Existing UNKNOWN messages are narrative artifacts, not prediction records. Keep
@@ -81,6 +83,55 @@ all three bundled incidents unchanged and use late-act contexts only in isolated
 non-production fixtures. Durable exposures and responses follow the approved
 ledger transaction boundary; failed/conflicting commits cannot acknowledge new
 official observations or overwrite the last committed prediction.
+
+## Approved prediction-deviation projection
+
+[DEC-022](../../.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml)
+defines the behavior measure independently from prediction confidence:
+
+`predictionDeviation = total mismatching eligible responses / total eligible responses`
+
+An eligible new accepted response must refer to a valid actual prior prediction
+exposure in the same campaign run and attempt. Validate the chosen candidate
+identity, availability and compatible response/opportunity rules against the
+verified pre-response context. Preserve the exposure's predicted identity,
+confidence/support, versions and ordered history boundary. The responding input
+and its outcomes must not enter that exposure's original calculation.
+
+The predicted identity yields no mismatch; a different eligible authored identity
+yields one. Confidence cannot weight that binary observation. In a fixture with
+prior `restart=3`, `rollback=1`, an eligible restart response yields `0/1` deviation
+and rollback yields `1/1`, not rarity values `1/4` or `3/4`. This distinction is
+not a moral judgement or a calibrated chance of future behavior.
+
+Pool compatible raw counts across official attempts, including unfinished and
+abandoned attempts, under DEC-014. With no eligible response the rate is
+unavailable; supported responses with no mismatches yield observed zero. A
+prediction calculated but not exposed, UNKNOWN, gated-off content, no response
+or expiry supplies no positive/negative sample. Invalid references or unavailable
+required definitions/context are diagnostics, not fabricated zero observations.
+Exact exposure acknowledgement, response eligibility, validity/replacement and
+action-equivalence definitions still require review; do not guess which response
+belongs to ambiguous opportunities or assume every command is eligible.
+
+An identified prediction opportunity contributes at most one associated response
+sample. Further actions do not revise that sample; redisplay, replay and duplicate
+delivery add none. Exact-head resume retains the original same-attempt identity;
+a confirmed new checkpoint baseline cannot promote inherited exposure or history
+into a new response. Imports, archive review, rejected inputs, timers and delegated
+outcomes alone provide no player responses. Distinct genuine new opportunities
+may each contribute even if their accepted commands have identical bytes.
+
+Associate source input/response identity and derived counts with committed history
+under DEC-013's transaction boundary. A failed or conflicting commit cannot
+acknowledge new official samples; reconcile lost acknowledgements by identity.
+Recommendation acceptance under DEC-021 remains a separate metric. Sharing an
+action identity does not establish the required exposure for either metric or
+automatically grant a numeric campaign effect. Operational actions and costs
+are retained once, not dispatched again for prediction comparison.
+One accepted action can independently qualify for each metric only when both
+distinct exposure/eligibility contracts are satisfied; a recommendation match
+must not be copied into a prediction-deviation sample or vice versa.
 
 ## Required TASK-021/022 verification fixtures
 
@@ -106,11 +157,28 @@ These are proposed tests of the future APIs, not tests already implemented:
   duplicate committed exposures/samples. Verify actual browser/native integration
   separately from pure headless prediction arithmetic.
 
+Additional deviation fixtures must cover the future projection APIs:
+
+- An exposed valid prediction followed by a matching versus different eligible
+  candidate: supported `0/1` versus `1/1`, regardless of confidence.
+- One mismatch in two eligible responses and another in ten: pooled `2/12`,
+  not the mean of per-attempt percentages; retain abandoned official attempts.
+- Hidden/UNKNOWN/invalid predictions, absent exposure, no eligible response,
+  imports and inherited checkpoint prefixes: no invented observed-zero samples.
+- Rejected, duplicate or later unrelated inputs, repeated display and archive
+  review: preserve the original one-response association without recounting.
+- Missing/unsupported rules, unavailable candidate identity and ambiguous
+  association: diagnostic, never guessed mismatch or rewritten exposure.
+- Exact-head resume versus confirmed new baseline and distinct genuine new
+  opportunities: preserve provenance, count only eligible new response identity.
+- Later actions/outcomes, transaction abort/conflict and lost acknowledgement:
+  no causal leakage, retroactive confidence editing or duplicated committed counts.
+
 Minimum counts and numbers here are fixture inputs, not production calibration.
 Recommendation response policy is separately approved by
 [DEC-021](../../.project-os/decisions/DEC-021-action-based-recommendation-response.yaml),
-specified in the [response draft](recommendation-responses.md). Prediction-deviation
-meaning remains pending in
-[DEC-022's proposal](../../.project-os/decisions/proposals/DEC-022-prediction-deviation-policy.yaml).
+specified in the [response draft](recommendation-responses.md). DEC-022 approves
+the mismatch-rate meaning of predictionDeviation, not the remaining authored
+response/reveal mappings or a rarity-based scoring fallback.
 Independent architecture review, acceptance QA and Project OS evaluation remain
 required before TASK-018 completion or dependent runtime implementation.

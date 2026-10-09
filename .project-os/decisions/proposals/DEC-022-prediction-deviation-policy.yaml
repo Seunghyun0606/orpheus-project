@@ -1,6 +1,6 @@
 id: DEC-022
 title: Choose the meaning of predictionDeviation
-status: proposed
+status: resolved
 date: '2026-10-10'
 applies_to:
   - M4
@@ -11,9 +11,10 @@ context: >-
   departures from the displayed top action and measuring the empirical rarity of
   the chosen action give different values even when the player follows the top
   prediction, affecting future behavior predicates and ending inputs.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml
 options:
   - key: A
     label: Pooled rate of eligible responses differing from the exposed prediction
