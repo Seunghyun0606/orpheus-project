@@ -1,6 +1,6 @@
 id: DEC-025
 title: Choose availability composition for validated campaign conditions
-status: proposed
+status: resolved
 date: '2026-10-10'
 applies_to:
   - M4
@@ -11,8 +11,9 @@ context: >-
   has no observed value. ALL(false, unavailable) and ANY(true, unavailable)
   can yield different branch/ending eligibility under different logical policies,
   even with identical validated definitions and recorded inputs.
-decision: Pending human selection; neither alternative is approved or implemented.
-chosen_option: null
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
+chosen_option: A
+decision_record: .project-os/decisions/DEC-025-strict-predicate-availability.yaml
 recommended_option: A
 options:
   - key: A

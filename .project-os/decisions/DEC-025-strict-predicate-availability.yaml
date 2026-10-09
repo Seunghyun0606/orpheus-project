@@ -1,0 +1,34 @@
+id: DEC-025
+title: Require every referenced observation before evaluating campaign conditions
+status: active
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  Independent architecture review identified an undefined availability
+  composition policy. The human selected option A: stop condition evaluation
+  when any referenced runtime observation is unavailable, even when a known
+  sibling could otherwise determine a boolean result.
+decision: >-
+  Validate the complete condition definition and every reference first. Require
+  all observations referenced by that condition before boolean composition.
+  A valid but unavailable referenced observation produces a diagnostic, not a
+  boolean or three-valued short-circuit result. ALL(false, unavailable) and
+  ANY(true, unavailable) both diagnose. Only fully available supported operands
+  use ordinary ALL/ANY/NOT boolean logic, including nested conditions.
+human_approval:
+  selected_option: A
+  instruction: '참조 값 하나라도 미확정이면 조건 판정 중단(권장).'
+proposal: .project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml
+consequences:
+  - Validate non-decisive operands too; invalid references, malformed required context and unsupported definition versions remain diagnostics.
+  - Unavailable is distinct from observed zero and false; never manufacture a neutral value or historical observation.
+  - Required observations are the statically referenced leaves of each validated condition, including all nested children; evaluation order cannot hide their absence.
+  - Boolean composition and diagnostics are deterministic under recorded definitions and verified context, with no future-action or wall-clock input.
+  - A diagnostic condition cannot silently exclude an ending candidate or grant a branch, effect or ending flag; DEC-019 permits no fallback ending.
+  - Persist only approved verified transitions under DEC-013; diagnostic evaluation is read-only and preserves committed state.
+  - Truth tables, nesting, operand permutations and invalid/unavailable/zero distinctions require reviewed future fixtures before acceptance.
+  - This choice does not select production thresholds, priority values, opportunity lifecycles, freshness limits or campaign effect amounts.
+  - Existing runtime, legacy stores and UNKNOWN-only MVP remain unchanged; TASK-018 still requires detailed contract closure and independent recheck.
+supersedes: null

@@ -88,12 +88,16 @@ gate for material architecture/schema/migration decisions. In particular:
 - DEC-024 approves eligible explicit reporting/cooperation responses, with separate
   per-metric opportunities and at most one response sample each. Unrelated
   investigation, no response and expiry do not dilute these rates.
+- DEC-025 requires every referenced observation before condition composition;
+  unavailable leaves diagnose even under a decisive known sibling. The
+  [condition contract](../specs/architecture/condition-evaluation.md) specifies
+  strict ALL/ANY/NOT truth tables and future fixtures; no implicit three-valued policy.
 - Specify versioned action classifications and behavior denominators, prediction
   inputs/confidence, branch predicates, and ending overlap/tie/no-match policy.
   Test-only fixture thresholds are not approved production balance.
 
 No dependent task may implement a pending decision by guesswork. Keep approved
-DEC-001/003/005/006/007/009/010/011/012/013/014/015/016/017/018/019/020/021/022/023/024 boundaries unless a separate decision supersedes them.
+DEC-001/003/005/006/007/009/010/011/012/013/014/015/016/017/018/019/020/021/022/023/024/025 boundaries unless a separate decision supersedes them.
 Do not declare TASK-018 accepted with unresolved required contract choices.
 
 ## Exit-criterion verification map
@@ -156,11 +160,13 @@ pre-approval observations; this plan and DEC-008 record the later human decision
 The [independent review](../.project-os/planning/TASK-018.independent-review-checkpoint.yaml)
 requests changes, and [independent QA](../.project-os/planning/TASK-018.independent-qa-checkpoint.yaml)
 verifies proposal consistency and legacy safeguards, not final acceptance.
-Next: obtain the human choice for
-[predicate availability composition](../.project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml)
-and close remaining detailed contract findings before dependent implementation.
+The human now approved strict
+[predicate availability](../.project-os/decisions/DEC-025-strict-predicate-availability.yaml);
+the detailed truth-table contract still requires independent recheck.
+Next: recheck that correction and close remaining detailed contract findings
+before dependent implementation.
 Direct contract and
-DEC-009–024 references are now declared in dependent task context metadata;
+DEC-009–025 references are now declared in dependent task context metadata;
 budget-truncated context output does not replace reading required source files.
 Do not invent pending authoring rules or approve
 material findings silently. Approved formula/storage decisions are not acceptance

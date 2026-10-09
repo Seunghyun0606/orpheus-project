@@ -21,6 +21,7 @@ scope:
 depends_on:
   - 'TASK-019'
 specs:
+  - 'specs/architecture/condition-evaluation.md'
   - 'specs/architecture/campaign-intelligence-contract.md'
   - 'specs/architecture/campaign-ledger-persistence.md'
   - 'specs/architecture/campaign-effect-application.md'
@@ -56,6 +57,7 @@ active_decisions:
   - '.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml'
   - '.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml'
   - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
+  - '.project-os/decisions/DEC-025-strict-predicate-availability.yaml'
 
 acceptance:
   - 'Round-trip and reload retain approved campaign state, hidden values, flags, evidence, and replay metadata.'

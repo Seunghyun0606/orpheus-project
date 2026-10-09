@@ -96,9 +96,12 @@ automatic damage/risk conversions. Reporting/cooperation will count eligible
 responses to explicit available opportunities, excluding unrelated investigation
 and no response. Detailed contracts still need independent review/QA before
 implementation. Human-authorized independent review/QA has checked proposal and
-legacy compatibility; final acceptance remains blocked by the pending
-[predicate availability composition](.project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml)
-decision and detailed contract closure. No M4 runtime API is certified by those checks.
+legacy compatibility. Strict
+[predicate availability](.project-os/decisions/DEC-025-strict-predicate-availability.yaml)
+is now human-approved: any unavailable referenced value diagnoses, even under a
+decisive boolean sibling. Its [condition contract](specs/architecture/condition-evaluation.md)
+needs independent recheck and remaining detailed contract closure before final
+acceptance. No M4 runtime API is certified by those checks.
 
 ## War Room and saved progress
 

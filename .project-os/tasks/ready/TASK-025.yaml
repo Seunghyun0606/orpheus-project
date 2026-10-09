@@ -25,6 +25,7 @@ depends_on:
   - 'TASK-023'
   - 'TASK-024'
 specs:
+  - 'specs/architecture/condition-evaluation.md'
   - 'specs/architecture/campaign-intelligence-contract.md'
   - 'specs/architecture/campaign-ledger-persistence.md'
   - 'specs/architecture/campaign-effect-application.md'
@@ -66,6 +67,7 @@ active_decisions:
   - '.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml'
   - '.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml'
   - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
+  - '.project-os/decisions/DEC-025-strict-predicate-availability.yaml'
 
 acceptance:
   - 'Campaign state, flags, values, evidence, progression and model-version compatibility have deterministic persistence/replay evidence.'

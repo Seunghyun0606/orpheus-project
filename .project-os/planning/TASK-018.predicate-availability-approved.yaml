@@ -1,0 +1,56 @@
+task: TASK-018
+kind: architecture_proposal_progress
+role: architect
+actor: codex-task018-architect
+status: awaiting_independent_recheck
+date: '2026-10-10'
+base_commit: 522e60e07e5a44a65ad75223999c7b31136a337e
+summary: >-
+  Recorded human option A as active DEC-025 and resolved its comparison proposal.
+  Added strict condition availability, full-tree required observations,
+  ALL/ANY/NOT truth tables, nested/invalid-input diagnostics and future fixtures.
+  Updated current docs and all eight task contexts. Historical independent
+  checkpoints keep their original findings. No runtime/storage/canonical state
+  or immutable result changes; final TASK-018 acceptance remains pending.
+approved_decision: .project-os/decisions/DEC-025-strict-predicate-availability.yaml
+condition_contract: specs/architecture/condition-evaluation.md
+historical_review: .project-os/planning/TASK-018.independent-review-checkpoint.yaml
+historical_qa: .project-os/planning/TASK-018.independent-qa-checkpoint.yaml
+review_execution_authorization: .project-os/planning/TASK-018.review-qa-execution-request.yaml
+verification:
+  root_full_existing_tests: 116_tests_16_files_passed
+  root_scenario_validation: 8_files_passed
+  project_doctor: pass
+  applicable_format_check: pass
+  diff_check: pass
+  root_documented_truth_table_and_nested_example_audit: 9_binary_pairs_3_not_cases_passed_static_only
+  root_task_and_context_reference_audit: all_eight_tasks_reference_active_dec025_and_condition_contract
+  generated_context_limit: Still truncated; metadata reference checks do not prove complete resource body loading.
+  independent_recheck: pending
+  final_contract_acceptance: pending
+  native_new_indexeddb_or_new_m4_api_tests: not_performed_or_implemented
+known_risks:
+  - Approval selects availability semantics, not final authored schemas, production tuning, priority values or opportunity lifecycle behavior.
+  - Historical R1 checkpoints are preserved; detailed corrective contract needs independent recheck, not retroactive PASS.
+  - Existing test passes cover unchanged runtime safeguards, not an implemented condition evaluator or new ledger.
+remaining_work:
+  - Independently recheck strict truth tables, static validation, nested references and ending/branch consumer boundaries.
+  - Close reviewable representation details and identify any remaining material outcome policy for a human gate rather than guessing.
+  - Obtain final contract acceptance evidence and Project OS handoffs/evaluation before dependent implementation.
+files_changed:
+  - .project-os/decisions/DEC-025-strict-predicate-availability.yaml
+  - .project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml
+  - .project-os/planning/TASK-018.predicate-availability-approved.yaml
+  - .project-os/tasks/ready/TASK-018.yaml
+  - .project-os/tasks/ready/TASK-019.yaml
+  - .project-os/tasks/ready/TASK-020.yaml
+  - .project-os/tasks/ready/TASK-021.yaml
+  - .project-os/tasks/ready/TASK-022.yaml
+  - .project-os/tasks/ready/TASK-023.yaml
+  - .project-os/tasks/ready/TASK-024.yaml
+  - .project-os/tasks/ready/TASK-025.yaml
+  - specs/architecture/condition-evaluation.md
+  - specs/architecture/ending-resolution.md
+  - specs/architecture/campaign-intelligence-contract.md
+  - docs/M4_IMPLEMENTATION_PLAN.md
+  - README.md

@@ -22,6 +22,7 @@ depends_on:
   - 'TASK-019'
   - 'TASK-021'
 specs:
+  - 'specs/architecture/condition-evaluation.md'
   - 'specs/architecture/campaign-intelligence-contract.md'
   - 'specs/architecture/player-behavior-rates.md'
   - 'specs/architecture/player-prediction.md'
@@ -60,6 +61,7 @@ active_decisions:
   - '.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml'
   - '.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml'
   - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
+  - '.project-os/decisions/DEC-025-strict-predicate-availability.yaml'
 
 acceptance:
   - 'Branch and prediction output is deterministic and traceable to validated data and approved model inputs.'

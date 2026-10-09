@@ -13,7 +13,8 @@ Gate 12 empirical prediction/confidence is approved by DEC-020; Gate 13
 action-based recommendation response is approved by DEC-021; Gate 14 pooled
 prediction mismatch rate is approved by DEC-022; Gate 15 independent preference
 rates are approved by DEC-023; Gate 16 explicit reporting/cooperation responses
-are approved by DEC-024. Detailed authoring contracts and independent review/QA
+are approved by DEC-024. Gate 17 strict predicate availability is approved by
+DEC-025. Detailed authoring contracts and independent review/QA
 remain pending; no further behavior-formula option is selected by implication.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
@@ -634,7 +635,7 @@ contract. Both name the original candidate and separately inspected safe fixes.
 Dependent task references and umbrella persistence wording were corrected; generated
 context remains truncated and required declared source files must be read directly.
 
-## Gate 17 — predicate availability composition (pending human decision)
+## Gate 17 — predicate availability composition (option A approved)
 
 [DEC-025's proposal](../../.project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml)
 records review finding R1. A valid metric with no eligible samples is unavailable,
@@ -643,18 +644,22 @@ not zero. It is not yet defined whether `ALL(false, unavailable)` or
 explicit three-valued composition. Those alternatives can change branch/ending
 eligibility, not merely serialization or production tuning.
 
-- **A — proposed:** require every referenced runtime observation; any unavailable
+- **A — approved:** require every referenced runtime observation; any unavailable
   leaf makes the condition diagnostic, even with a decisive known sibling.
-- **B — proposed:** use validated three-valued ALL/ANY/NOT rules; a decisive false
+- **B — not selected:** use validated three-valued ALL/ANY/NOT rules; a decisive false
   ALL sibling or true ANY sibling produces a known result, while an indeterminate
   final condition diagnoses.
 
-Neither option is selected. Both statically validate all references/definitions,
+The human selected A, recorded in
+[DEC-025](../../.project-os/decisions/DEC-025-strict-predicate-availability.yaml).
+Both alternatives statically validate all references/definitions,
 including non-decisive operands. Malformed required context, invalid references
 or unsupported definition versions remain diagnostics, never ordinary unavailable
 leaves. Neither grants a fallback ending or silently drops an unresolved candidate
-under DEC-019. Required truth tables and nested/order-permutation fixtures must
-follow the human choice. No runtime or production thresholds change here.
+under DEC-019. The [condition review draft](condition-evaluation.md) now specifies
+strict ALL/ANY/NOT truth tables, nested/all-reference availability and required
+fixtures. Independent recheck and remaining detailed contract closure are still
+required; no runtime or production thresholds change here.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -799,6 +804,7 @@ independent review. Unresolved material findings must receive separate approval;
 production mappings, thresholds and unimplemented APIs are not certified here.
 Independent architecture review has requested changes; QA has verified proposal
 consistency and existing safeguards, not final acceptance or these proposed new
-APIs. Predicate composition remains at Gate 17, and later required detailed
-contracts still need closure. No result should mark TASK-018 complete merely
+APIs. Predicate composition now has explicit human approval through DEC-025;
+its detailed contract requires recheck and later required contracts still need
+closure. No result should mark TASK-018 complete merely
 because this text or passing legacy tests exist.

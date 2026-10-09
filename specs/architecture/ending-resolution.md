@@ -24,15 +24,18 @@ Required observations retain availability/provenance. A known false predicate
 is different from unavailable/indeterminate context. Do not turn an unsupported
 rate into zero or infer that a missing final action was never taken. A malformed
 definition or unavailable required observation must yield a diagnostic, not a
-valid no-match result. Predicate composition/availability details still need
-contract review; no guessed truth table may enter production implicitly.
+valid no-match result. DEC-025 now requires every referenced observation in each
+complete condition tree before boolean composition, including nested children.
 
-Independent review identified this composition gap as blocking finding R1.
-[DEC-025's proposal](../../.project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml)
-compares strict required-observation validation with explicit three-valued
-composition for valid unavailable leaves; neither alternative is selected.
-All references and definition versions must still validate under either choice.
-Do not implement an implicit short-circuit or eager policy while this is pending.
+Independent review identified this composition gap as finding R1; the human chose
+strict availability in
+[DEC-025](../../.project-os/decisions/DEC-025-strict-predicate-availability.yaml).
+The [condition contract](condition-evaluation.md) specifies ALL/ANY/NOT truth
+tables, nesting, static validation and consumer/fixture boundaries. False AND
+unavailable and true OR unavailable both diagnose; no short-circuit omission
+is permitted. A diagnostic ending condition cannot silently become a false
+candidate, valid no-match or another winner. Detailed contract recheck remains
+required; this is not an implemented resolver or final review PASS.
 
 ## Result boundaries
 
