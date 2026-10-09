@@ -1,7 +1,8 @@
 # Campaign intelligence contract — TASK-018 proposal
 
 Status: **partially decided contract proposal**. Gate 1 storage authority is
-approved by DEC-009; Gate 2 attempt contribution remains pending. No runtime
+approved by DEC-009; Gate 2 retry contribution is approved by DEC-010. Gate 3
+legacy discovery adoption remains pending. No runtime
 type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -17,6 +18,8 @@ DEC-007 preserves cross-incident save confirmation. DEC-008 approves M4 task
 definition only, not campaign history, migrations, model formulas or thresholds.
 DEC-009 separately approves retaining both existing stores and adding a distinct
 versioned campaign ledger. It does not approve the remaining policies below.
+DEC-010 approves new official attempts in the same campaign, preserving earlier
+accepted history. It does not authorize reconstruction of missing legacy history.
 
 The three production MVP incidents remain UNKNOWN-only. Framework fixtures may
 describe later-act systems without making those systems visible in MVP UI.
@@ -82,10 +85,11 @@ updating the M3 union automatically creates official ledger observations. Any
 adoption of legacy artifacts requires a separately approved import policy. A
 corrupt ledger must not silently fall back to that union as a new official history.
 
-## Gate 2 — restart and replay contribution (pending)
+## Gate 2 — restart and replay contribution (option A approved)
 
-[DEC-010's proposal](../../.project-os/decisions/proposals/DEC-010-campaign-attempt-policy.yaml)
-asks how new incident attempts affect the official campaign. No option is selected:
+[DEC-010](../../.project-os/decisions/DEC-010-append-official-campaign-attempts.yaml)
+records human selection of A. The original alternatives are retained below for
+comparison; B is not selected:
 
 - **A — recommended:** append every official restart/replay as a distinct attempt
   in the same run. Keep accepted actions from abandoned attempts; do not replace
@@ -97,8 +101,8 @@ asks how new incident attempts affect the official campaign. No option is select
   practice artifacts into the official ledger.
 
 For example, an attempt accepts `OPEN_LOGS`, then a service restart action. A UI
-incident restart is a boundary: A creates a second official attempt; B creates
-practice while retaining the first official attempt. Identical seed and commands
+incident restart is a boundary: approved A creates a second official attempt;
+the unselected B would create isolated practice. Identical seed and commands
 in a genuinely new attempt are not duplicate delivery. Conversely, redisplaying
 or replay-verifying the original saved attempt is not additional player action.
 The UI restart boundary is not itself a restart-service observation.
@@ -107,7 +111,53 @@ Both options preserve history. Neither authorizes retroactive run identity for
 old saves, erasing old attempts, double completion/evidence awards, numeric
 weighting or ending thresholds. Loading an older incident checkpoint against an
 existing ledger head and adopting ambiguous legacy snapshots remain separate
-pending policies. Choosing A or B alone does not resolve them.
+pending policies. DEC-010 alone does not resolve them. No automatic old-save
+association or inherited-prefix accounting follows from approving future retries.
+
+### Retry acceptance cases for the later implementation
+
+- Two identified official attempts with the same seed and command list retain
+  two accepted histories; failed/abandoned attempts are not replaced by a later
+  successful one. Numeric contribution still follows the pending authored rules.
+- Repeated delivery of the same identified input is idempotent; the same identity
+  with a different payload is a conflict, not a second attempt. Replay byte
+  equality is not sufficient identity for these two cases.
+- Archive review, checkpoint validation and redisplay produce no new accepted
+  actions. A playable retry and a headless verification replay are distinct.
+- UI incident restart creates a boundary but is not a service restart command.
+  Restart/rollback behavior uses accepted command classifications, not clicks.
+- Evidence and completion cannot silently award repeat bonuses; exact per-run
+  versus per-attempt authored effect scope still needs the reviewed contract.
+
+## Gate 3 — legacy discovery adoption (pending)
+
+[DEC-011's proposal](../../.project-os/decisions/proposals/DEC-011-legacy-campaign-adoption.yaml)
+compares explicit discovery-only adoption with keeping the old archive outside
+official ledger eligibility. Neither option is selected or implemented.
+
+- **A — recommended:** preview and explicitly adopt source-verified evidence and
+  narrative records into a selected run, tagged as imported discoveries. Their
+  membership can satisfy authored discovery-presence predicates; do not execute
+  historical discovery effects, infer behavior or alignment, or transfer incident
+  completion, Act progression or ending flags. Keep source versions, bytes and
+  known provenance limits. Repeat import must not count a discovery again.
+- **B:** retain all existing archive/load behavior without an import into the
+  new ledger. Only identified new play supplies its official discoveries; old
+  archive entries alone do not satisfy official evidence/ending predicates.
+
+The current decoder verifies source content and then may replay target content.
+Import must not mistake additional target discoveries for those present in the
+source. Furthermore, M3 `encodeCampaignProgress` re-encodes decoded snapshots at
+their catalog version and does not store independent migration lineage. If an
+older original is unavailable, retain that limitation; do not claim that a
+current-version snapshot proves when the player originally found an artifact.
+Verification proves the available snapshot, not missing historical chronology.
+
+Both options preserve existing bytes and M3 behavior. Neither chooses which
+divergent path was the official campaign. Neither permits silent partial import
+of malformed records or fallback from a corrupt new ledger. Older-checkpoint
+continuation remains a separate policy: loading does not by itself roll back
+accepted campaign history or assign absent attempt identity.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -129,7 +179,7 @@ accepted player commands. Idempotency identity and hashing/canonicalization rule
 need versioned test fixtures; a checksum is not authentication or a save-security
 guarantee.
 
-Gate 2 determines whether restart adds an official attempt or isolated practice;
+DEC-010 requires new official retries to append distinct attempts;
 no replacement of accepted history is authorized. Also pending: how loading an
 older incident slot relates to an existing campaign head. A legacy save cannot
 supply an absent campaign association by guessing.
@@ -144,9 +194,10 @@ tracks input provenance and approved behavior-model/definition versions.
 Authored data would define transition effects, unlock prerequisites and allowed
 references. Completion is a verified transition, not an arbitrary incident ID.
 Effects must have explicit application identity so duplicate replay/import does
-not apply them twice. Numeric ranges, initial values, aggregation and restart
-contribution rules are pending contract decisions; no tuning values are chosen
-here. A new-run baseline is not an observation about missing legacy behavior.
+not apply them twice. Retry history is retained under DEC-010. Numeric ranges,
+initial values, aggregation weights and per-effect award scope remain pending;
+no tuning values are chosen here. A new-run baseline is not an observation about
+missing legacy behavior.
 
 ### Behavior observations and denominator proposals
 
@@ -158,7 +209,7 @@ must be reviewed and approved before use:
 
 | Metric                                       | Proposed numerator / denominator or observation                                        | Missing source concern                                                                                      |
 | -------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| restartRate / rollbackRate                   | Classified accepted restart/rollback actions divided by approved eligible action count | Incident restart UI vs restart service action are distinct; campaign restart policy pending.                |
+| restartRate / rollbackRate                   | Classified accepted restart/rollback actions divided by approved eligible action count | Official retry histories are retained under DEC-010; UI restart is not a service restart observation.       |
 | evidenceBeforeActionRate                     | Eligible interventions with relevant evidence already found / eligible interventions   | Relevant evidence and intervention classes must be authored.                                                |
 | averageInvestigationDepth                    | Approved distinct investigation observations per canonical attempt, then aggregate     | Alternate attempts and repeated observations require an explicit policy.                                    |
 | aiRecommendationAcceptanceRate               | Accepted exposed recommendation / eligible recorded recommendation opportunities       | MVP has no recorded recommendation opportunity.                                                             |
@@ -219,8 +270,8 @@ behavior must be specified after the storage choice.
 | Ending framework                                | TASK-023: ten endings, positive/exclusion/boundary fixtures, overlap/ties/no match, unsupported final context and references                                     |
 | Desktop/native integration and final acceptance | TASK-024/025: persistence and read-only archive isolation, all three UNKNOWN-only paths, supported native minimum/enlarged text, independent review and QA       |
 
-TASK-018 acceptance remains pending: storage authority is approved, but attempt
-contribution and other required policies need decisions. Independent architecture
-review and final acceptance QA have not
-approved this draft. Existing tests verify current safeguards, not these proposed
+TASK-018 acceptance remains pending: storage authority and official retry history
+are approved, but legacy adoption and other required policies need decisions.
+Independent architecture review and final acceptance QA have not approved this
+draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

@@ -1,0 +1,33 @@
+id: DEC-010
+title: Append official incident retries without replacing campaign history
+status: active
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  DEC-009 approves a distinct versioned campaign ledger while preserving both
+  existing stores. The human separately selected option A for restart and
+  replay contribution: accumulate retries in the same campaign and retain
+  earlier accepted actions, rather than treating retries as isolated practice.
+decision: >-
+  A new official incident restart or playable replay creates a distinct attempt
+  within the same campaign run. Preserve accepted history from prior attempts,
+  including abandoned attempts. A genuinely new attempt can contribute new
+  observations even when its seed and commands match an earlier attempt.
+  Loading, replay verification, projection and archive review are not themselves
+  new accepted player actions and must not count an existing attempt again.
+human_approval:
+  selected_option: A
+  instruction: '같은 캠페인에 재시도 이력 누적, 이전 행동 유지(권장).'
+proposal: .project-os/decisions/proposals/DEC-010-campaign-attempt-policy.yaml
+consequences:
+  - Explicit run and attempt identity is required; equal seed or replay bytes alone cannot establish identity.
+  - Official retries do not erase past accepted actions, consequences or model observations.
+  - UI incident restart is an attempt boundary, not a restart-service command for restartRate.
+  - Duplicate delivery and redisplay must be distinguished from genuine new attempts.
+  - Completion and evidence award idempotency scopes and numeric aggregation weights still require the reviewed contract.
+  - This does not retroactively assign run identity or action chronology to M3 snapshots.
+  - Legacy import, older checkpoint association, exact schema and conflict policy remain pending.
+  - TASK-018 remains active pending remaining decisions, independent review, acceptance QA and Project OS evaluation.
+supersedes: null

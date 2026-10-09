@@ -1,6 +1,6 @@
 id: DEC-010
 title: Choose whether incident retries contribute to the official campaign
-status: proposed
+status: resolved
 date: '2026-10-09'
 applies_to:
   - M4
@@ -12,9 +12,14 @@ context: >-
   identity. M4 must not infer whether these are additional official actions,
   replacement history or practice. The policy changes behavior observations,
   hidden effects and eventual ending eligibility.
-decision: Pending human selection; neither option is approved or implemented.
+decision: >-
+  The human selected option A: official retries append distinct attempts in the
+  same campaign and preserve previously accepted actions. DEC-010's active
+  record captures this approval without choosing legacy import, checkpoint
+  association, numeric weighting or an exact runtime envelope.
+decision_record: .project-os/decisions/DEC-010-append-official-campaign-attempts.yaml
 recommended_option: A
-chosen_option: null
+chosen_option: A
 options:
   - key: A
     label: Append every official attempt within the same campaign

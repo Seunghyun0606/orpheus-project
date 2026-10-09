@@ -43,8 +43,9 @@ are done. TASK-018 is already active as architect; do not claim it again.
 TASK-018 must distinguish proposals from approved contracts and stop at a human
 gate for material architecture/schema/migration decisions. In particular:
 
-- Decide how a campaign run and its ordered accepted inputs are identified;
-  define restart, alternate-route, duplicate import and archive-review semantics.
+- DEC-010 now approves retaining official retries as distinct attempts in the
+  same campaign. Exact run/input identity, older-checkpoint continuation,
+  duplicate import and archive-review contracts still require specification.
 - Specify legacy recovery without manufacturing action order or model data from
   discovery snapshots. Define unavailable/insufficient observations explicitly.
 - Storage authority is now separately approved by DEC-009: preserve existing
@@ -56,7 +57,7 @@ gate for material architecture/schema/migration decisions. In particular:
   Test-only fixture thresholds are not approved production balance.
 
 No dependent task may implement a pending decision by guesswork. Keep approved
-DEC-001/003/005/006/007/009 boundaries unless a separate decision supersedes them.
+DEC-001/003/005/006/007/009/010 boundaries unless a separate decision supersedes them.
 Do not declare TASK-018 accepted with unresolved required contract choices.
 
 ## Exit-criterion verification map
@@ -79,8 +80,9 @@ Use the supported native 960 x 640 minimum and enlarged text; do not infer
 
 TASK-018 has now been claimed as architect. Its
 [campaign intelligence contract](../specs/architecture/campaign-intelligence-contract.md)
-is partially decided: DEC-009 records option A for separate ledger authority;
-DEC-010 proposes the next gate for official retry versus isolated practice.
+is partially decided: DEC-009 approves separate ledger authority and DEC-010
+approves appending official retries without replacing earlier actions. DEC-011
+proposes the next gate for explicit legacy discovery-only adoption versus archive-only retention.
 Existing-save checks do not constitute acceptance of the proposed new campaign
 system; remaining policies and independent review/QA are still required.
 
@@ -89,7 +91,7 @@ tasks. It does not change runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-Next: continue active TASK-018 and obtain the attempt contribution decision,
-then resolve remaining import/domain policies and independent review/QA before
+Next: continue active TASK-018 and obtain the legacy adoption decision,
+then resolve remaining checkpoint/domain policies and independent review/QA before
 dependent implementation. No approved storage decision should be mistaken for
 acceptance of the entire contract or authorization to infer missing history.

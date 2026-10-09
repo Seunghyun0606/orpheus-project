@@ -67,8 +67,9 @@ and their limitations. M3 completion is human-approved; the
 [M4 implementation plan](docs/M4_IMPLEMENTATION_PLAN.md) defines TASK-018–025.
 M4 runtime implementation has not started. TASK-018 (architect) is active; its
 [contract proposal](specs/architecture/campaign-intelligence-contract.md) records
-human approval of a separate campaign ledger while retaining existing stores.
-Retry/practice contribution and further policies still require decisions and
+human approval of a separate campaign ledger and official retry history retained
+within the same campaign, while preserving existing stores. Legacy discovery
+adoption and further policies still require decisions and
 independent review/QA before implementation.
 
 ## War Room and saved progress
