@@ -1,0 +1,54 @@
+id: TASK-023
+title: "Implement authored ending conditions and deterministic priority resolution"
+role: developer
+milestone: M4
+priority: P0
+status: ready
+
+objective: "Resolve the defined ending set through validated data using campaign state, final incident state, and final actions."
+why: "Endings must express cumulative consequences without a hardcoded good/bad/true result or premature final campaign expansion."
+
+scope:
+  include:
+    - "Implement the approved ending schema, predicates, priority/tie/no-match policy, and a pure resolver."
+    - "Define deterministic test fixtures for CONTINUITY, LIBERATION, WHISTLEBLOWER, SHUTDOWN, CUSTODIAN, NULL, THE BOARD, THE FIRE, STATUS QUO and REWRITE."
+    - "Validate flags, evidence, action, model-version and ending references with actionable diagnostics."
+    - "Keep ending fixture thresholds explicitly test-only until balance/content decisions are approved."
+  exclude:
+    - "Implementing the full BLACKOUT incident, epilogues, or exposing ending content in the current MVP."
+    - "Inventing production thresholds, substituting a new single objective for REWRITE, or labeling endings good/bad/true."
+
+depends_on:
+  - "TASK-019"
+  - "TASK-021"
+  - "TASK-022"
+specs:
+  - "specs/feature/campaign-and-player-model.md"
+  - "specs/architecture/system-architecture.md"
+  - "specs/product/01-game-and-narrative-direction.md"
+  - "docs/M4_IMPLEMENTATION_PLAN.md"
+relevant_files:
+  - "src/engine/"
+  - "src/scenario/"
+  - "scripts/validate-scenarios.mjs"
+  - "src/tests/"
+active_decisions:
+  - ".project-os/decisions/DEC-001-data-driven-headless-domain.yaml"
+  - ".project-os/decisions/DEC-003-deterministic-local-first.yaml"
+  - ".project-os/decisions/DEC-005-versioned-incident-save-migration.yaml"
+  - ".project-os/decisions/DEC-006-separate-m3-campaign-progress.yaml"
+  - ".project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml"
+  - ".project-os/decisions/DEC-008-m3-completion-m4-planning.yaml"
+
+acceptance:
+  - "All ten named endings have repeatable positive and exclusion/boundary fixtures."
+  - "Resolver consumes only explicit validated inputs and data priority; equal/overlapping/no-match cases have approved tested behavior."
+  - "Invalid references, unsupported versions, missing final context and malformed definitions cannot silently pick an ending."
+  - "Framework preserves moral ambiguity and required reveal order; no React or incident-specific logic owns ending selection."
+verification:
+  - "Run ending fixtures, overlapping/tie/no-match and invalid-reference tests; full tests/typecheck/lint/content validation."
+  - "Obtain independent review and acceptance QA."
+
+human_gate: false
+risk: high
+

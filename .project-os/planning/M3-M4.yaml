@@ -1,0 +1,63 @@
+id: PLAN-M4-001
+kind: planning
+role: planner
+actor: codex-m4-planner
+status: pass
+date: '2026-10-09'
+base_commit: 634351c
+summary: >-
+  Applied the human-approved M3 closure and registered eight bounded M4 task
+  definitions. Recorded approval in DEC-008, retained immutable task evidence,
+  and made TASK-018 the next eligible architect task. No runtime code, save
+  schema, persisted user data, or production narrative content was changed.
+human_approval:
+  option: A
+  label: M3 종료 승인 및 M4 작업 정의 시작
+  decision: .project-os/decisions/DEC-008-m3-completion-m4-planning.yaml
+  scope: Milestone closure and task definition only; material architecture and migrations require separate approval.
+state_transition:
+  M3: completed
+  M4: active
+  current_milestone: M4
+  active_tasks: []
+  task_statuses: Existing TASK-001 through TASK-017 remain done; new TASK-018 through TASK-025 are ready.
+  authority: >-
+    Explicit human milestone approval, recorded by the single planning writer
+    following the repository's approved M2-to-M3 planning transition precedent.
+    No task was claimed, self-approved or completed; future claim/completion
+    changes must use projectctl claim/evaluate and independent handoffs.
+files_changed:
+  - .project-os/decisions/DEC-008-m3-completion-m4-planning.yaml
+  - .project-os/milestones/M3.yaml
+  - .project-os/milestones/M4.yaml
+  - .project-os/state/current.yaml
+  - .project-os/state/roadmap.yaml
+  - .project-os/state/backlog.yaml
+  - .project-os/tasks/ready/TASK-018.yaml
+  - .project-os/tasks/ready/TASK-019.yaml
+  - .project-os/tasks/ready/TASK-020.yaml
+  - .project-os/tasks/ready/TASK-021.yaml
+  - .project-os/tasks/ready/TASK-022.yaml
+  - .project-os/tasks/ready/TASK-023.yaml
+  - .project-os/tasks/ready/TASK-024.yaml
+  - .project-os/tasks/ready/TASK-025.yaml
+  - docs/M4_IMPLEMENTATION_PLAN.md
+  - docs/M3_QA_EVIDENCE.md
+  - README.md
+verification:
+  project_doctor: pass
+  task_contract_reference_and_state_consistency: pass
+  dependency_cycle_and_duplicate_id_checks: pass
+  format_check: pass
+  diff_check: pass
+  next_architect_task: TASK-018
+  immutable_results: Existing results were not edited; completion approval is a separate decision record.
+  runtime_tests: Not rerun for this documentation/planning-only change; prior M3 outcomes remain in TASK-017 records.
+known_risks:
+  - M3 discovery snapshots cannot automatically supply a canonical campaign action timeline or complete player observations.
+  - Campaign run identity, restart semantics, schema evolution, formulas and prediction policies must be resolved before dependent implementation.
+  - Prior native screen-reader/audio and save-edge-case limitations remain documented, not newly claimed as tested.
+remaining_work:
+  - Claim TASK-018 as architect and prepare reviewed campaign contracts and concrete human-gate options.
+  - Implement and independently verify M4 tasks only after required decisions and dependencies are satisfied.
+next_recommended_step: projectctl next --role architect

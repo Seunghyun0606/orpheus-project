@@ -62,8 +62,11 @@ npm run build:desktop
 ```
 
 `npm run build:desktop` compiles the native application without producing an installer.
-The [M3 QA evidence map](docs/M3_QA_EVIDENCE.md) distinguishes repeatable automated
-checks from the remaining native interactive inspection and human milestone gate.
+The [M3 QA evidence map](docs/M3_QA_EVIDENCE.md) records automated and native checks
+and their limitations. M3 completion is human-approved; the
+[M4 implementation plan](docs/M4_IMPLEMENTATION_PLAN.md) defines TASK-018–025.
+M4 implementation has not started. Its first eligible task is TASK-018 (architect),
+which must obtain separate approval for material architecture or migration choices.
 
 ## War Room and saved progress
 

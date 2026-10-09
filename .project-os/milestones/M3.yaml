@@ -1,6 +1,6 @@
 id: M3
 name: Three-Incident MVP
-status: active
+status: completed
 objective: Validate reusable content authoring and an early narrative arc across three distinct incidents.
 entry_criteria:
   - M2 exit criteria are satisfied.
@@ -17,5 +17,13 @@ tasks:
   - TASK-015
   - TASK-016
   - TASK-017
+completion_evidence:
+  - .project-os/tasks/results/TASK-017.evaluation.yaml
+  - .project-os/tasks/results/TASK-017.review.yaml
+  - .project-os/tasks/results/TASK-017.qa.yaml
+  - docs/M3_QA_EVIDENCE.md
+  - docs/TASK-017_NATIVE_QA.md
+completion_approved_at: '2026-10-09'
+completion_decision: .project-os/decisions/DEC-008-m3-completion-m4-planning.yaml
 human_gate:
   required_on_completion: true

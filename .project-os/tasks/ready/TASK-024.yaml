@@ -1,0 +1,55 @@
+id: TASK-024
+title: "Integrate campaign projections with the shared desktop safely"
+role: developer
+milestone: M4
+priority: P0
+status: ready
+
+objective: "Connect the approved campaign systems through adapters while preserving the playable MVP and its accessibility and reveal boundaries."
+why: "Headless systems need tested UI/adapters without making React the campaign authority or leaking hidden state."
+
+scope:
+  include:
+    - "Connect campaign persistence, progress, evidence and authored eligibility through store adapters."
+    - "Add approved projections for progression and appropriately gated prediction/ending framework demonstrations using test content."
+    - "Preserve desk navigation, archived read-only review, live-session isolation, single-slot confirmation and legacy restore."
+    - "Exercise keyboard, enlarged text, reduced motion and non-color state cues on affected screens."
+  exclude:
+    - "Production late-act content, story-completion percentages, raw hidden-variable dashboards and irreversible player-state reset."
+    - "Enabling prediction/ending in MVP incidents without an approved content gate."
+
+depends_on:
+  - "TASK-020"
+  - "TASK-022"
+  - "TASK-023"
+specs:
+  - "specs/feature/campaign-and-player-model.md"
+  - "specs/architecture/system-architecture.md"
+  - "specs/product/01-game-and-narrative-direction.md"
+  - "docs/M4_IMPLEMENTATION_PLAN.md"
+relevant_files:
+  - "src/app/"
+  - "src/store/"
+  - "src/ui/"
+  - "src/persistence/"
+  - "src/tests/"
+active_decisions:
+  - ".project-os/decisions/DEC-001-data-driven-headless-domain.yaml"
+  - ".project-os/decisions/DEC-003-deterministic-local-first.yaml"
+  - ".project-os/decisions/DEC-005-versioned-incident-save-migration.yaml"
+  - ".project-os/decisions/DEC-006-separate-m3-campaign-progress.yaml"
+  - ".project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml"
+  - ".project-os/decisions/DEC-008-m3-completion-m4-planning.yaml"
+
+acceptance:
+  - "Accepted domain results drive projections; UI does not duplicate transition, branch, model or ending rules."
+  - "Remount/reload and repeated archive visits preserve campaign/evidence/history without duplicated contributions."
+  - "All three MVP paths, UNKNOWN-only reveal checks, archived review, save protections and keyboard regressions pass."
+  - "Gated fixture screens are accessible at supported native minimum and 150 percent text without blocking controls."
+verification:
+  - "Run adapter/component/end-to-end, archive isolation, save/reload and accessibility tests plus complete quality commands and native inspection."
+  - "Obtain independent review and acceptance QA."
+
+human_gate: false
+risk: high
+

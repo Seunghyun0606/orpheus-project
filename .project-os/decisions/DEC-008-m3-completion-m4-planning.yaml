@@ -1,0 +1,26 @@
+id: DEC-008
+title: Close the verified M3 MVP and begin M4 task definition
+status: active
+date: '2026-10-09'
+applies_to:
+  - global
+context: >-
+  TASK-017 passed implementation, independent test, review, acceptance QA and
+  Project OS evaluation at candidate d7aa8fc. The native evidence records all
+  three incident routes and the final executable provenance, with explicit
+  limitations. The human selected option A, M3 completion approval and M4 task
+  definition, after the separate milestone gate.
+decision: >-
+  Accept M3 completion based on its recorded evidence, retain all immutable
+  TASK-017 handoffs, and activate the already planned Campaign Intelligence
+  Systems milestone for bounded task definition. Define TASK-018 through
+  TASK-025 without implementing a new save schema or choosing campaign history,
+  model formulas, prediction policy, or production ending thresholds. Material
+  architecture and migration choices require separate human decisions.
+consequences:
+  - M3 is completed and M4 is active; existing task completion statuses are unchanged.
+  - TASK-018 is the next eligible architect task; dependent developer tasks remain ready but ineligible until their dependencies are done.
+  - Existing incident and separate discovery saves retain DEC-005/006/007 protections.
+  - MVP content stays UNKNOWN-only; M4 framework fixtures do not authorize later-act production reveals or full-campaign expansion.
+  - This approval does not authorize production release, destructive save conversion, or push.
+supersedes: null

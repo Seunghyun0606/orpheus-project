@@ -1,0 +1,52 @@
+id: TASK-020
+title: "Persist approved campaign state without losing existing progress"
+role: developer
+milestone: M4
+priority: P0
+status: ready
+
+objective: "Add local-first campaign persistence and any separately approved migration while preserving existing incident and discovery data."
+why: "The expanded campaign model must survive restart without discarding older saves or inventing player history."
+
+scope:
+  include:
+    - "Implement only the persistence structure and migration policy approved in TASK-018."
+    - "Validate schema/content versions and replay provenance before accepting imported state."
+    - "Cover legacy progress import, campaign reload, pending incident continuation, interrupted writes, incompatible saves, and original-byte preservation."
+    - "Keep incident-slot confirmation and separate discovery persistence behavior unless a later explicit decision supersedes it."
+  exclude:
+    - "Choosing storage keys, destructive conversion, auto-overwrite, or new migration semantics without human approval."
+    - "Cloud sync or resets of user saves for testing."
+
+depends_on:
+  - "TASK-019"
+specs:
+  - "specs/feature/campaign-and-player-model.md"
+  - "specs/architecture/system-architecture.md"
+  - "specs/product/01-game-and-narrative-direction.md"
+  - "docs/M4_IMPLEMENTATION_PLAN.md"
+relevant_files:
+  - "src/persistence/"
+  - "src/store/"
+  - "src/tests/"
+  - "src/scenario/"
+active_decisions:
+  - ".project-os/decisions/DEC-001-data-driven-headless-domain.yaml"
+  - ".project-os/decisions/DEC-003-deterministic-local-first.yaml"
+  - ".project-os/decisions/DEC-005-versioned-incident-save-migration.yaml"
+  - ".project-os/decisions/DEC-006-separate-m3-campaign-progress.yaml"
+  - ".project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml"
+  - ".project-os/decisions/DEC-008-m3-completion-m4-planning.yaml"
+
+acceptance:
+  - "Round-trip and reload retain approved campaign state, hidden values, flags, evidence, and replay metadata."
+  - "Old incident/discovery fixtures remain readable and are preserved according to approved migration rules."
+  - "Corrupt, unsupported, tampered, duplicate or divergent records fail safely without silently replacing valid data."
+  - "Import/reload does not double-count campaign contributions or fabricate unsupported history."
+verification:
+  - "Run migration, save/load, malformed/incompatible data, interruption and deterministic replay tests plus existing save protections."
+  - "Obtain independent review and acceptance QA; native data overwrite requires action-time permission."
+
+human_gate: false
+risk: high
+

@@ -1,8 +1,9 @@
 # M3 exit verification (TASK-017)
 
-Status: automated and native verification complete. Independent handoffs and
-the human decision are recorded separately. This evidence map does not approve
-M3 completion; M3 remains active until its configured human gate is resolved.
+Status: automated and native verification complete; M3 completion was approved
+by the human on 2026-10-09. [DEC-008](../.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml)
+records the separate completion decision. The original TASK-017 handoffs remain
+unchanged and describe verification before that approval.
 
 | M3 exit criterion                                                                 | Repeatable evidence                                                                                                                                                                                                                                                                                                                            | Current result                              |
 | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
@@ -52,6 +53,7 @@ and cross-incident confirmation/cancel; automated tests cover confirmed
 replacement, malformed saves, and concurrent slot changes. Native minimums
 remain 960 x 640: this is not a claim of native 320px support or inspection.
 
-TASK-017 results may establish verified readiness. M3 closure and the next
-milestone's scope still require a separate human decision; no roadmap transition
-or later-campaign content is authorized by these checks alone.
+TASK-017 established verified readiness, not automatic milestone closure. The
+later human approval closes M3 and authorizes M4 task definition, recorded in
+DEC-008 and the [M4 plan](M4_IMPLEMENTATION_PLAN.md). It does not authorize a new
+save migration, later-campaign production content, or release.
