@@ -82,8 +82,10 @@ commands from their denominator. Evidence-before-action will require relevant
 investigation from earlier new inputs in the same attempt; imported or inherited
 knowledge alone does not qualify it. Investigation depth will average distinct
 investigation items per eligible attempt; repeated queries remain in history but
-do not increase depth for the same item. Ending ambiguity and further policies
-still require decisions and independent QA before implementation.
+do not increase depth for the same item. Ending top ties and no matching conditions
+will remain unresolved with diagnostics, without an automatic default ending.
+Prediction/confidence and further policies still require decisions and independent
+QA before implementation.
 
 ## War Room and saved progress
 

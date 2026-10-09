@@ -8,7 +8,8 @@ Gate 6 pooled player rates are approved by DEC-014; Gate 7 once-per-run authored
 campaign effects are approved by DEC-015; Gate 8 operational restart/rollback
 denominators are approved by DEC-016; Gate 9 current-attempt evidence-before-action
 qualification is approved by DEC-017; Gate 10 distinct investigation depth is
-approved by DEC-018. Gate 11 ending tie/no-match policy remains pending.
+approved by DEC-018; Gate 11 unresolved ending ties/no-match is approved by DEC-019.
+Gate 12 prediction/confidence model policy remains pending.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -42,6 +43,8 @@ DEC-017 requires relevant supporting observations from earlier new investigation
 inputs in the same attempt for evidence-before-action, not inherited membership alone.
 DEC-018 averages per-attempt distinct investigation observation counts over eligible
 official attempts, preserving repeated query history without repeating depth units.
+DEC-019 keeps ending top ties and valid no-match unresolved with diagnostics,
+without a default ending or new ending flag. Invalid context is not valid no-match.
 
 The three production MVP incidents remain UNKNOWN-only. Framework fixtures may
 describe later-act systems without making those systems visible in MVP UI.
@@ -425,16 +428,17 @@ DEC-014's already approved pooled rates. No production thresholds are proposed.
 The [behavior review draft](player-behavior-rates.md) now specifies the approved
 key/count boundaries, eligible attempt coverage and depth verification fixtures.
 
-## Gate 11 — ending ambiguity and no-match (pending)
+## Gate 11 — ending ambiguity and no-match (approved)
 
 [DEC-019's proposal](../../.project-os/decisions/proposals/DEC-019-ending-ambiguity-policy.yaml)
 asks how to resolve equally preferred eligible endings and valid no-match final
-contexts. Neither option is selected:
+contexts. The human selected **A**, recorded in
+[DEC-019](../../.project-os/decisions/DEC-019-unresolved-ending-ambiguity.yaml):
 
-- **A — recommended:** uniquely preferred eligible matches resolve through authored
+- **A — approved:** uniquely preferred eligible matches resolve through authored
   priority; top ties return an ambiguity diagnostic, no matching condition returns
   unresolved. No automatic ending or new ending flag in those cases.
-- **B:** add validated authored tie order and an explicit fallback ending reference.
+- **B — not selected:** add validated authored tie order and an explicit fallback ending reference.
   Top ties use that order; valid fully evaluated no-match can select the designated
   fallback despite its ordinary conditions not matching. No implicit file order.
 
@@ -449,6 +453,29 @@ TASK-023 must cover all ten named endings and positive/exclusion/boundary cases,
 overlap, ties, no-match and invalid/unavailable context. No production thresholds,
 priority values, tie order, fallback identity or late-act content is chosen here.
 This framework remains invisible in the current UNKNOWN-only MVP.
+The [ending review draft](ending-resolution.md) specifies explicit final context,
+result variants, resolution/flag boundaries and the required fixture matrix.
+
+## Gate 12 — prediction and confidence model (pending)
+
+[DEC-020's proposal](../../.project-os/decisions/proposals/DEC-020-prediction-model-policy.yaml)
+compares two deterministic action-derived models. Neither option is selected:
+
+- **A — recommended:** comparable recorded action frequencies among currently
+  available authored candidates; a unique top candidate's confidence is its
+  share of eligible samples. Empty/insufficient samples or a top tie give UNKNOWN.
+- **B:** an authored versioned score over available approved behavior/context
+  inputs; a unique top candidate's confidence is its share of eligible score
+  total. This can generalize to contexts without direct prior choices, but needs
+  reviewed coefficients/support rules. Missing support, zero total or tie give UNKNOWN.
+
+Neither empirical share nor normalized score is a calibrated probability. Neither
+uses fixed narrative percentages, a live AI service or fabricated legacy choices.
+Context/candidate definitions, minimum support and production coefficients remain
+unselected. Record model/context/support and actual prediction exposure before a
+responding command; later actions cannot rewrite the earlier prediction. Existing
+UNKNOWN hints are not recommendation/deviation opportunities. Keep late-act
+fixtures non-production and the three bundled incidents UNKNOWN-only.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -522,17 +549,19 @@ historical alignment, model rates or recommendation observations.
 Prediction input would be approved behavior observations, authored candidate
 actions and explicit model/version context. Output would be a valid predicted
 action or UNKNOWN, confidence/availability and traceable supporting observations.
-Confidence thresholds, minimum samples and update formula remain pending; fixed
-story percentages are not the policy. Branch evaluation consumes approved state
-and validated predicates and returns eligible content plus diagnostic explanations,
+DEC-020 compares empirical context frequencies with authored behavioral scores;
+neither prediction model is selected. Thresholds, minimum support and exact
+definition contracts remain pending; fixed story percentages are not the policy.
+Branch evaluation consumes approved state and validated predicates and returns
+eligible content plus diagnostic explanations,
 not grading or raw hidden numeric UI.
 
 Ending resolution would consume approved campaign state, final incident state,
 final actions and versioned authored ending definitions/priority. It must have
-deterministic fixtures for all ten named endings. DEC-019 compares unresolved
-tie/no-match diagnostics with an explicit authored tie order/fallback; neither
-option is selected. Invalid or unavailable required context cannot supply a
-default result. Ending thresholds and predicate/priority contracts still require
+deterministic fixtures for all ten named endings. DEC-019 approves unresolved
+top-tie/no-match diagnostics, with no default ending. Invalid or unavailable
+required context cannot supply a result or masquerade as valid no-match.
+Ending thresholds and predicate/priority contracts still require
 review and approval. Fixture thresholds are test-only, not production balance.
 
 ## Legacy import, failures and rollback proposals
@@ -572,8 +601,9 @@ TASK-018 acceptance remains pending: storage authority, official retry history,
 discovery-only adoption, checkpoint continuation, IndexedDB commits, pooled
 behavior rates, once-per-run authored effects and operational restart/rollback
 denominators, current-attempt evidence qualification and distinct investigation
-depth are approved. Ending ambiguity and other required policies still need decisions;
-detailed persistence/effect/behavior drafts still need review.
+depth and unresolved ending ambiguity are approved. Prediction/confidence and
+other required policies still need decisions; detailed persistence/effect/behavior/
+ending drafts still need review.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

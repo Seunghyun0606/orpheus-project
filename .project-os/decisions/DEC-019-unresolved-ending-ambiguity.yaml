@@ -1,0 +1,33 @@
+id: DEC-019
+title: Keep ending top ties and no-match unresolved without automatic endings
+status: active
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  Authored priority resolves a unique preferred eligible ending, but does not
+  identify a winner for equally preferred top matches or no matching conditions.
+  The human selected option A: preserve these unresolved outcomes with diagnostics.
+decision: >-
+  Resolve an ending only when explicit validated final context, authored conditions
+  and priority yield a uniquely preferred eligible ending. Equally preferred top
+  matches return an ambiguity diagnostic; valid context with no matching conditions
+  returns unresolved. Neither grants an ending flag or substitutes a default ending.
+  Missing/invalid/unsupported context remains a diagnostic, not valid no-match.
+human_approval:
+  selected_option: A
+  instruction: '미확정으로 유지하고 진단 제공, 자동 엔딩 없음(권장).'
+proposal: .project-os/decisions/proposals/DEC-019-ending-ambiguity-policy.yaml
+consequences:
+  - No fallback ending, file-order winner, alphabetical tie breaker or hardcoded STATUS QUO is approved.
+  - Only equally preferred top matches cause a tie; lower-precedence matches cannot displace a unique preferred eligible result.
+  - Required predicates distinguish known false from unavailable/indeterminate; missing behavior cannot become zero.
+  - Deterministic evaluation uses explicit campaign state, final incident state, final actions and recorded definition versions.
+  - Preserve resolution status, matched candidate/priority provenance and diagnostic explanations; do not expose hidden raw scores to players.
+  - Loading, archive review or unresolved/invalid evaluation cannot grant new ending flags.
+  - All ten endings require deterministic positive, exclusion/boundary, overlap, tie, no-match and invalid-context fixtures.
+  - No production thresholds, priority values, final campaign content or good/bad/true labels are selected.
+  - The current MVP remains UNKNOWN-only; late-act ending fixtures are non-production.
+  - TASK-018 remains active pending remaining contracts, independent review, acceptance QA and evaluation.
+supersedes: null

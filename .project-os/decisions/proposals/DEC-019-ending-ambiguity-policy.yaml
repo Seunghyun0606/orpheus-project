@@ -1,6 +1,6 @@
 id: DEC-019
 title: Choose ending tie and no-match resolution policy
-status: proposed
+status: resolved
 date: '2026-10-10'
 applies_to:
   - M4
@@ -11,9 +11,10 @@ context: >-
   can resolve multiple eligible endings when one has uniquely highest precedence,
   but cannot alone choose between equally preferred matches or when none match.
   Silently choosing STATUS QUO or relying on file order changes ending semantics.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-019-unresolved-ending-ambiguity.yaml
 options:
   - key: A
     label: Preserve unresolved ties and no-match outcomes with diagnostics
