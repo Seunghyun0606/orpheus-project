@@ -1,6 +1,6 @@
 id: DEC-012
 title: Choose official continuation from older or unassociated incident checkpoints
-status: proposed
+status: resolved
 date: '2026-10-09'
 applies_to:
   - M4
@@ -12,9 +12,14 @@ context: >-
   history, while DEC-011 permits discovery-only adoption and does not authorize
   using saved action prefixes as official historical observations. Continuing
   from an old checkpoint therefore needs an explicit gameplay and provenance policy.
-decision: Pending human selection; neither option is approved or implemented.
+decision: >-
+  The human selected option A: after confirmation, restore an eligible verified
+  unfinished checkpoint as a new official attempt while retaining earlier
+  campaign history and counting only subsequent accepted actions. The active
+  DEC-012 record does not choose storage transactions, exact schema or weights.
+decision_record: .project-os/decisions/DEC-012-confirmed-checkpoint-attempts.yaml
 recommended_option: A
-chosen_option: null
+chosen_option: A
 options:
   - key: A
     label: Explicitly branch an eligible unfinished checkpoint as a new official attempt

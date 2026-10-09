@@ -2,8 +2,9 @@
 
 Status: **partially decided contract proposal**. Gate 1 storage authority is
 approved by DEC-009; Gate 2 retry contribution is approved by DEC-010; Gate 3
-discovery-only adoption is approved by DEC-011. Gate 4 checkpoint continuation
-remains pending. No runtime type, schema, storage key, migration, content or player
+discovery-only adoption is approved by DEC-011; Gate 4 confirmed checkpoint
+attempts are approved by DEC-012. Gate 5 ledger commit mechanism remains pending.
+No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
 task has independent review, acceptance QA and Project OS evaluation.
@@ -22,6 +23,8 @@ DEC-010 approves new official attempts in the same campaign, preserving earlier
 accepted history. It does not authorize reconstruction of missing legacy history.
 DEC-011 approves explicit source-verified discovery adoption only. It does not
 import historical effects, behavior, completion or official checkpoint association.
+DEC-012 separately approves eligible unfinished checkpoint baselines as confirmed
+new attempts, preserving prior history and counting only subsequently accepted inputs.
 
 The three production MVP incidents remain UNKNOWN-only. Framework fixtures may
 describe later-act systems without making those systems visible in MVP UI.
@@ -178,11 +181,11 @@ accepted campaign history or assign absent attempt identity.
 - Report invalid/unsupported records without silent partial adoption. The exact
   envelope, source-change checks and durable import mechanics remain pending.
 
-## Gate 4 — older checkpoint continuation (pending)
+## Gate 4 — older checkpoint continuation (option A approved)
 
-[DEC-012's proposal](../../.project-os/decisions/proposals/DEC-012-campaign-checkpoint-continuation.yaml)
-asks how official play may continue from an older or unassociated incident save.
-Neither option is selected or implemented:
+[DEC-012](../../.project-os/decisions/DEC-012-confirmed-checkpoint-attempts.yaml)
+records human selection of A. The original alternatives are retained below;
+B is not selected. Runtime continuation is not implemented:
 
 - **A — recommended:** an exactly matched, explicitly associated live attempt
   head resumes without another attempt. Otherwise preview and confirm an eligible,
@@ -201,13 +204,68 @@ award; a playable retry begins from the authored initial state. Validate scenari
 eligibility before any official continuation, so a checkpoint cannot bypass Act
 gates. Original content replay and approved target migration still apply.
 
-Under proposed A, the baseline records the verified restored incident state,
+Under approved A, the baseline records the verified restored incident state,
 seed/RNG, pending work and inherited replay boundary with source provenance;
 those are simulation inputs, not new official behavior. Future command batches
 must distinguish inherited state from newly accepted actions and effect deltas.
 Restoring a baseline must not silently adopt its artifacts into campaign membership:
 DEC-011 requires a separate explicit adoption. Exact association fields, envelope
 and conflict/commit mechanics still require the final reviewed contract.
+
+### Checkpoint acceptance cases for the later implementation
+
+- Resume a matched and explicitly associated live head without appending another
+  attempt or counting its saved commands again. Bytes without an explicit
+  association do not prove identity, even if they match a known attempt.
+- Preview/confirm an eligible unfinished older checkpoint as a distinct attempt.
+  Keep later accepted history; record inherited replay/event boundaries and
+  baseline resources so new input effects do not recount prior totals.
+- Preserve pending work and RNG state in deterministic continuation. Timers due
+  during a new command are outcomes of that command, not extra player commands.
+- A completed or currently ineligible checkpoint cannot create completion or Act
+  unlocks. Invalid or changed source data must not silently replace confirmed data.
+- Repeated validation, archive review or loading alone creates no new accepted
+  action. A separately confirmed new attempt is distinct from duplicate delivery.
+- Checkpoint-derived artifacts do not silently enter campaign membership or run
+  historical discovery effects; DEC-011 adoption remains explicit.
+
+## Gate 5 — ledger commit mechanism (pending)
+
+[DEC-013's proposal](../../.project-os/decisions/proposals/DEC-013-campaign-ledger-commit-policy.yaml)
+compares two mechanisms for the separate ledger. Neither is selected. Both keep
+the original incident and M3 discovery stores in localStorage unchanged:
+
+- **A — recommended:** a new versioned IndexedDB authority, using a readwrite
+  transaction for the revision check and complete ledger update. A new asynchronous
+  adapter acknowledges only transaction completion, not one successful request.
+- **B:** a distinct localStorage envelope with required exclusive Web Locks for
+  every participating M4 writer. Re-read and check revision inside that lock;
+  refuse official writes when locking is unavailable. No unlocked fallback.
+
+A is recommended for a ledger whose history and projections need coherent
+concurrent updates; B limits storage-format changes but needs cooperative locking
+and rewrites the whole envelope. These are architecture proposals, not measured
+platform capabilities. The normative reference is the
+[IndexedDB transaction specification](https://w3c.github.io/IndexedDB/#transaction-concept),
+and the alternative uses the
+[Web Locks exclusive mode](https://w3c.github.io/web-locks/#modes-and-scheduling).
+Actual browser and Tauri WebView support must be verified in TASK-020/024/025.
+
+The proposed commit boundary is identical for either option: prepare a validated
+candidate, compare the expected committed revision under the selected protection,
+persist input identities plus derived state and associations, then publish official
+success. A stale revision or storage failure preserves the last committed state
+and surfaces a diagnostic. A repeated committed input acknowledges the existing
+result, not a new observation. A different payload under reused identity conflicts.
+An interrupted/ambiguous acknowledgement is reconciled against committed identity
+on reload, not treated as permission to apply the action again.
+
+This boundary covers the new ledger only. An explicit old-slot save remains a
+separate operation; its association cannot be trusted without checking actual
+verified bytes. No cross-key atomicity, unbounded storage, automatic dual-write,
+backend fallback, deletion or physical-disk durability promise is proposed. Exact
+envelope fields and version axes must be finalized in the reviewed contract after
+this choice; model formula and production balance decisions remain separate.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -229,10 +287,10 @@ accepted player commands. Idempotency identity and hashing/canonicalization rule
 need versioned test fixtures; a checksum is not authentication or a save-security
 guarantee.
 
-DEC-010 requires new official retries to append distinct attempts;
-no replacement of accepted history is authorized. Also pending: how loading an
-older incident slot relates to an existing campaign head. A legacy save cannot
-supply an absent campaign association by guessing.
+DEC-010 requires new official retries to append distinct attempts; DEC-012
+defines confirmed checkpoint-based attempts without recounting inherited inputs.
+No replacement of accepted history is authorized. Exact association fields and
+commit protocol remain pending; a legacy save cannot supply absent identity by guessing.
 
 ### Campaign state and effects
 
@@ -321,9 +379,9 @@ behavior must be specified after the storage choice.
 | Ending framework                                | TASK-023: ten endings, positive/exclusion/boundary fixtures, overlap/ties/no match, unsupported final context and references                                                   |
 | Desktop/native integration and final acceptance | TASK-024/025: persistence and read-only archive isolation, all three UNKNOWN-only paths, supported native minimum/enlarged text, independent review and QA                     |
 
-TASK-018 acceptance remains pending: storage authority, official retry history
-and discovery-only adoption are approved; checkpoint continuation and other
-required policies still need decisions.
+TASK-018 acceptance remains pending: storage authority, official retry history,
+discovery-only adoption and checkpoint continuation are approved. Ledger commit
+mechanism and other required policies still need decisions.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

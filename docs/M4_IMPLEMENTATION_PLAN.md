@@ -44,7 +44,8 @@ TASK-018 must distinguish proposals from approved contracts and stop at a human
 gate for material architecture/schema/migration decisions. In particular:
 
 - DEC-010 now approves retaining official retries as distinct attempts in the
-  same campaign. Exact run/input identity, older-checkpoint continuation,
+  same campaign. DEC-012 approves confirmed checkpoint-based new attempts without
+  erasing history or recounting the inherited prefix. Exact run/input identity,
   duplicate import and archive-review contracts still require specification.
 - DEC-011 now approves explicit adoption of verified legacy evidence/narrative
   membership only, with provenance limits and no historical effects, behavior or
@@ -58,7 +59,7 @@ gate for material architecture/schema/migration decisions. In particular:
   Test-only fixture thresholds are not approved production balance.
 
 No dependent task may implement a pending decision by guesswork. Keep approved
-DEC-001/003/005/006/007/009/010/011 boundaries unless a separate decision supersedes them.
+DEC-001/003/005/006/007/009/010/011/012 boundaries unless a separate decision supersedes them.
 Do not declare TASK-018 accepted with unresolved required contract choices.
 
 ## Exit-criterion verification map
@@ -83,8 +84,9 @@ TASK-018 has now been claimed as architect. Its
 [campaign intelligence contract](../specs/architecture/campaign-intelligence-contract.md)
 is partially decided: DEC-009 approves separate ledger authority and DEC-010
 approves appending official retries without replacing earlier actions. DEC-011
-approves explicit discovery-only legacy adoption; DEC-012 proposes the next
-gate for older-checkpoint continuation without rolling back campaign history.
+approves explicit discovery-only legacy adoption; DEC-012 approves confirmed
+checkpoint-based attempts without rolling back campaign history. DEC-013 proposes
+the next gate: transactional IndexedDB versus locked localStorage for the new ledger.
 Existing-save checks do not constitute acceptance of the proposed new campaign
 system; remaining policies and independent review/QA are still required.
 
@@ -93,7 +95,7 @@ tasks. It does not change runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-Next: continue active TASK-018 and obtain the checkpoint continuation decision,
+Next: continue active TASK-018 and obtain the ledger commit mechanism decision,
 then resolve remaining envelope/domain policies and independent review/QA before
 dependent implementation. No approved storage decision should be mistaken for
 acceptance of the entire contract or authorization to infer missing history.

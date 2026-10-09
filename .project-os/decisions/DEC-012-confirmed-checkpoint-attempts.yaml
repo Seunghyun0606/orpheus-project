@@ -1,0 +1,34 @@
+id: DEC-012
+title: Confirm checkpoint-based official attempts without rolling back history
+status: active
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  Existing incident checkpoints contain no campaign association and may precede
+  the future ledger's accepted history. The human selected option A: restore
+  older or unassociated unfinished checkpoints as confirmed new attempts,
+  retaining earlier official history rather than rolling it back.
+decision: >-
+  An exactly matched, explicitly associated live attempt head resumes without
+  creating another attempt. Otherwise preview and confirm a currently eligible,
+  source-verified unfinished checkpoint as a new official attempt in the selected
+  campaign. Retain all prior accepted history. The restored incident state and
+  replay prefix form a provenance-bearing simulation baseline; only subsequent
+  accepted commands and incremental consequences create new observations.
+  Discovery adoption remains separately explicit under DEC-011.
+human_approval:
+  selected_option: A
+  instruction: '확인 후 새 시도로 복원, 이전 누적 유지(권장).'
+proposal: .project-os/decisions/proposals/DEC-012-campaign-checkpoint-continuation.yaml
+consequences:
+  - Equal seed, replay bytes, elapsed time or archive order do not establish campaign association.
+  - Restoring does not erase accepted history or recount inherited commands and numeric effects.
+  - Preserve verified baseline RNG, pending work and replay boundary for deterministic continuation.
+  - Verify original content and use only approved target migrations; scenario eligibility cannot be bypassed.
+  - A completed checkpoint is read-only review, not a completion award; playable retries start from authored initial state.
+  - Invalid or mismatched associations fail explicitly without fallback or source rewrites.
+  - Exact envelope, conflict and durable commit mechanics and aggregation weights remain pending.
+  - TASK-018 remains active pending remaining contracts, independent review, acceptance QA and evaluation.
+supersedes: null
