@@ -1,0 +1,28 @@
+task: TASK-018
+kind: independent_review_execution_request
+role: architect
+actor: codex-task018-architect
+status: awaiting_human_authorization
+date: '2026-10-10'
+context: >-
+  TASK-018 and Project OS require independent architecture review and acceptance
+  QA. The architect's static audits and existing compatibility tests cannot
+  substitute for independent checks of the proposed M4 contracts. Sub-agent
+  delegation requires explicit authorization before any agents are started.
+requested_scope:
+  - Separate reviewer audits contracts against active decisions, task acceptance, source/replay authorities and data/narrative boundaries.
+  - Separate QA agent checks acceptance coverage, references, fixture arithmetic, existing compatibility safeguards and accurately stated verification limits.
+  - Both report findings and evidence against a named candidate commit; do not implement runtime, change state/storage, or edit immutable results during these checks.
+  - Review gaps or material policy choices are reported, not guessed or silently approved; architect fixes only authorized safe issues afterward.
+options:
+  - key: A
+    label: Authorize separate review and QA sub-agents for the bounded checks
+  - key: B
+    label: Keep automated delegation disabled and obtain human independent review and QA
+selected_option: null
+recommended_option: A
+limitations:
+  - No review/QA sub-agent is started by this request.
+  - Neither option grants task acceptance, authorizes dependent implementation or selects production balance/policy.
+  - Native/new IndexedDB capability verification and unimplemented M4 API tests remain future implementation obligations, not current passes.
+  - Canonical task state and immutable result submission follow Project OS transition rules only after actual evidence exists.

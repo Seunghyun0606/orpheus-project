@@ -1,6 +1,6 @@
 id: DEC-024
 title: Choose sample units for company reporting and NULL cooperation rates
-status: proposed
+status: resolved
 date: '2026-10-10'
 applies_to:
   - M4
@@ -11,9 +11,10 @@ context: >-
   a share of all activity while a relevant opportunity is available can differ:
   investigation commands may dilute the latter even if followed by reporting.
   These are behavior inputs, not automatic corporate/NULL alignment effects.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml
 options:
   - key: A
     label: Count only eligible responses to explicit reporting or cooperation opportunities

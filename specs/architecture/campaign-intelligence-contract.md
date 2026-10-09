@@ -12,7 +12,9 @@ approved by DEC-018; Gate 11 unresolved ending ties/no-match is approved by DEC-
 Gate 12 empirical prediction/confidence is approved by DEC-020; Gate 13
 action-based recommendation response is approved by DEC-021; Gate 14 pooled
 prediction mismatch rate is approved by DEC-022; Gate 15 independent preference
-rates are approved by DEC-023. Gate 16 reporting/cooperation sample units remain pending.
+rates are approved by DEC-023; Gate 16 explicit reporting/cooperation responses
+are approved by DEC-024. Detailed authoring contracts and independent review/QA
+remain pending; no further behavior-formula option is selected by implication.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -575,17 +577,19 @@ effect amounts are chosen here. The existing UNKNOWN-only MVP remains unchanged.
 The [preference rate review draft](preference-rates.md) specifies independent
 denominators, verified pre-action information, provenance and future fixture coverage.
 
-## Gate 16 — reporting/cooperation sample units (pending)
+## Gate 16 — reporting/cooperation sample units (approved)
 
 [DEC-024's proposal](../../.project-os/decisions/proposals/DEC-024-affiliation-rate-samples.yaml)
-compares two meanings of companyReportingRate and nullCooperationRate:
+compares two meanings of companyReportingRate and nullCooperationRate.
+The human selected **A**, recorded in
+[DEC-024](../../.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml):
 
-- **A — recommended:** count eligible new accepted responses to explicit valid
+- **A — approved:** count eligible new accepted responses to explicit valid
   available reporting/cooperation opportunities. An authored reporting/cooperation
   response is positive, another eligible explicit response negative; unrelated
   observations and no response supply no sample. At most one response per
   identified opportunity for that metric.
-- **B:** count all new accepted commands while a relevant authored opportunity
+- **B — not selected:** count all new accepted commands while a relevant authored opportunity
   is actually available. Reporting/cooperation commands are positive, other
   activity, including investigation, negative. This measures activity share;
   multiple distinct commands during one opportunity can each contribute.
@@ -603,6 +607,23 @@ numeric alignment effects, production classifications, opportunity validity/reus
 thresholds or reveal gates. Expiry alone, timers, imported/inherited history,
 duplicates, rejected inputs and archive review add no choices. The current MVP
 and both legacy stores stay unchanged.
+The [reporting/cooperation review draft](affiliation-rates.md) specifies independent
+opportunities, response counts, provenance, persistence and future fixture coverage.
+
+## Independent review handoff — execution authorization pending
+
+The basic formula families for all ten player behavior fields are now separately
+approved. This is not approval of every authoring predicate, persisted envelope
+or production threshold. Remaining detailed definitions, compatibility boundaries
+and acceptance coverage require independent scrutiny before dependent work.
+
+The [execution request](../../.project-os/planning/TASK-018.review-qa-execution-request.yaml)
+asks permission to delegate bounded read-only architecture review and acceptance
+QA to separate agents, or to obtain human independent review without automated
+delegation. No agent has been started for these checks. The architect's current
+static audits and legacy test passes are not independent acceptance evidence.
+Neither option authorizes runtime/storage changes, canonical state mutation or
+task completion; material findings return to the human gate.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -663,7 +684,7 @@ contracts before use:
 | averageInvestigationDepth                    | Per-attempt distinct investigation observation counts averaged over eligible attempts under DEC-018              | Supported zero-investigation attempts count; empty/unsupported attempts do not.                             |
 | aiRecommendationAcceptanceRate               | Matching next eligible responses / eligible responses to recorded recommendations under DEC-021                  | No response/expiry is not rejection; MVP has no recorded recommendation opportunity.                        |
 | safetyPreference / collateralDamageTolerance | Independent positive choices / eligible authored pre-action tradeoff choices per metric under DEC-023            | Raw operational risk/customer damage is not a preference score; mappings still require review.              |
-| companyReportingRate / nullCooperationRate   | Classified accepted responses / eligible authored response opportunities                                         | Support status is not automatically corporate allegiance; MVP has no explicit NULL cooperation opportunity. |
+| companyReportingRate / nullCooperationRate   | Classified positives / eligible responses to explicit authored opportunities per metric under DEC-024            | Support status is not automatically corporate allegiance; MVP has no explicit NULL cooperation opportunity. |
 | predictionDeviation                          | Mismatching eligible responses / eligible responses to recorded valid predictions under DEC-022                  | Prediction shown, action availability, model version and confidence must be recorded first.                 |
 
 No data should manufacture recommendation acceptance, NULL cooperation or
@@ -687,8 +708,9 @@ acceptance through actual eligible action matching, specified in the
 as pooled mismatches divided by eligible responses to recorded valid prediction
 exposures, not a rarity score. DEC-023 approves independent authored-choice rates
 for safety preference and collateral damage tolerance, specified in the
-[preference draft](preference-rates.md). DEC-024 separately proposes reporting/
-cooperation sample units; neither option is selected.
+[preference draft](preference-rates.md). DEC-024 approves explicit reporting/
+cooperation response sample units, specified in the
+[reporting/cooperation draft](affiliation-rates.md).
 Branch evaluation consumes approved state and validated predicates and returns
 eligible content plus diagnostic explanations,
 not grading or raw hidden numeric UI.
@@ -740,9 +762,10 @@ behavior rates, once-per-run authored effects and operational restart/rollback
 denominators, current-attempt evidence qualification and distinct investigation
 depth, unresolved ending ambiguity, empirical prediction/confidence and action-based
 recommendation response, pooled prediction mismatch rate and independent preference
-rates are approved. Reporting/cooperation sample units and other required policies
-still need decisions; detailed persistence/effect/behavior/preference/prediction/
-response/ending drafts still need review.
+rates and explicit reporting/cooperation response units are approved. Detailed
+persistence/effect/behavior/preference/prediction/response/ending drafts still need
+independent review. Unresolved material findings must receive separate approval;
+production mappings, thresholds and unimplemented APIs are not certified here.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

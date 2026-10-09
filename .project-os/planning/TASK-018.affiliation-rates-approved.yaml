@@ -1,0 +1,71 @@
+task: TASK-018
+kind: architecture_proposal_progress
+role: architect
+actor: codex-task018-architect
+status: awaiting_human_authorization
+date: '2026-10-10'
+base_commit: 1d961b9
+summary: >-
+  Recorded approval of explicit reporting/cooperation response units as active
+  DEC-024, and resolved its comparison proposal. Added the affiliation review
+  draft covering separate opportunities, pooled counts, unavailable/zero,
+  provenance and replay/commit boundaries. Basic formula families for all ten
+  behavior fields now have human decisions, but detailed authoring and contract
+  acceptance remain unapproved. Requested bounded independent review/QA execution
+  authorization; no agents were started. No runtime, schema, storage, migration
+  or production balance was changed.
+approved_decision: .project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml
+historical_progress: .project-os/planning/TASK-018.preference-rates-approved.yaml
+proposal: specs/architecture/campaign-intelligence-contract.md
+affiliation_contract: specs/architecture/affiliation-rates.md
+review_request: .project-os/planning/TASK-018.review-qa-execution-request.yaml
+gate:
+  type: architecture_change
+  question: Authorize separate bounded independent review and QA agents, or obtain human independent checks without automated delegation?
+  selected_option: null
+  recommended_option: A
+  remaining_work:
+    - Independent review and acceptance QA of detailed contracts and all TASK-018 criteria.
+    - Address authored classification/relevance/freshness, opportunity and predicate/priority findings without guessing material choices.
+    - Verify actual IndexedDB capability/failure and new APIs only during later implementation; do not count existing safeguards as those passes.
+verification:
+  current_compatibility_tests:
+    status: pass
+    detail: >-
+      npm test -- src/persistence/save.test.ts src/tests/m3-narrative.test.ts
+      src/tests/war-room.test.tsx src/app/AppShell.test.tsx passed 43 tests in
+      four files during this phase. These cover existing safeguards, not newly
+      proposed affiliation, opportunity or ledger APIs.
+  current_scenario_validation: 8_yaml_files_passed
+  project_doctor: pass
+  applicable_format_check: pass
+  decision_context_formula_coverage_arithmetic_and_link_audit: pass_root_static_audit_not_independent_qa
+  protected_runtime_state_and_immutable_records: unchanged
+  native_inspection: not_run_for_this_documentation_only_step
+  new_storage_capability_checks: not_run
+  independent_architecture_review: pending_not_started
+  independent_acceptance_qa: pending_not_started
+  full_task_acceptance: pending
+  new_runtime_schema_or_migration: not_implemented
+files_changed:
+  - .project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml
+  - .project-os/decisions/proposals/DEC-024-affiliation-rate-samples.yaml
+  - .project-os/tasks/ready/TASK-018.yaml
+  - .project-os/planning/TASK-018.review-qa-execution-request.yaml
+  - .project-os/planning/TASK-018.affiliation-rates-approved.yaml
+  - specs/architecture/affiliation-rates.md
+  - specs/architecture/preference-rates.md
+  - specs/architecture/player-behavior-rates.md
+  - specs/architecture/campaign-intelligence-contract.md
+  - docs/M4_IMPLEMENTATION_PLAN.md
+  - README.md
+known_risks:
+  - Basic formula approval is not final contract acceptance, complete authored mappings or proof of implemented M4 behavior.
+  - Reporting/cooperation observations do not automatically grant alignment effects; known opportunity provenance and explicit response classifications are still needed.
+  - Architect self-audits cannot replace required independent review or QA; execution authorization is still pending.
+  - Current tests cannot certify unimplemented M4 APIs or native storage capability.
+remaining_work:
+  - Obtain explicit review/QA delegation authorization or human independent evidence.
+  - Resolve detailed contract/acceptance findings and gate any material new policy or migration choice.
+  - Supply finalized contract references to dependent tasks before implementation.
+  - Submit final structured evidence and use Project OS evaluation only after acceptance is satisfied.

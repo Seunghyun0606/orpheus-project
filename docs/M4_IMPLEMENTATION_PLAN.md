@@ -85,12 +85,15 @@ gate for material architecture/schema/migration decisions. In particular:
 - DEC-023 approves independent positive/eligible-choice rates for safety preference
   and damage tolerance at authored pre-action tradeoffs. They are not complements,
   mean intensity scores or automatic conversions from customer damage/risk.
+- DEC-024 approves eligible explicit reporting/cooperation responses, with separate
+  per-metric opportunities and at most one response sample each. Unrelated
+  investigation, no response and expiry do not dilute these rates.
 - Specify versioned action classifications and behavior denominators, prediction
   inputs/confidence, branch predicates, and ending overlap/tie/no-match policy.
   Test-only fixture thresholds are not approved production balance.
 
 No dependent task may implement a pending decision by guesswork. Keep approved
-DEC-001/003/005/006/007/009/010/011/012/013/014/015/016/017/018/019/020/021/022/023 boundaries unless a separate decision supersedes them.
+DEC-001/003/005/006/007/009/010/011/012/013/014/015/016/017/018/019/020/021/022/023/024 boundaries unless a separate decision supersedes them.
 Do not declare TASK-018 accepted with unresolved required contract choices.
 
 ## Exit-criterion verification map
@@ -136,8 +139,11 @@ DEC-022 approves the pooled prediction mismatch rate, specified separately from
 confidence in the [prediction draft](../specs/architecture/player-prediction.md).
 DEC-023 approves independent preference rates, specified in the
 [preference review draft](../specs/architecture/preference-rates.md).
-DEC-024 proposes the next gate: reporting/cooperation samples from relevant explicit
-decision responses or all accepted activity while an authored opportunity is available.
+DEC-024 approves explicit reporting/cooperation response units, specified in the
+[affiliation review draft](../specs/architecture/affiliation-rates.md).
+Basic formula families are approved; detailed contracts and acceptance still need
+independent review/QA. The next gate is bounded review/QA execution authorization,
+recorded in the [request](../.project-os/planning/TASK-018.review-qa-execution-request.yaml).
 Existing-save checks do not constitute acceptance of the proposed new campaign
 system; remaining policies and independent review/QA are still required.
 
@@ -146,7 +152,8 @@ tasks. It does not change runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-Next: continue active TASK-018 and obtain the reporting/cooperation sample-unit decision,
-then resolve remaining domain policies and envelope review plus independent review/QA before
-dependent implementation. No approved storage decision should be mistaken for
-acceptance of the entire contract or authorization to infer missing history.
+Next: obtain explicit authorization for separate review/QA agent delegation, or
+human independent checks, then address the detailed contract/acceptance findings
+before dependent implementation. Do not invent pending authoring rules or approve
+material findings silently. Approved formula/storage decisions are not acceptance
+of the entire contract or authorization to infer missing history.

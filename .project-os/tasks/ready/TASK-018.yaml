@@ -30,6 +30,7 @@ specs:
   - 'specs/architecture/player-prediction.md'
   - 'specs/architecture/recommendation-responses.md'
   - 'specs/architecture/preference-rates.md'
+  - 'specs/architecture/affiliation-rates.md'
   - 'specs/feature/campaign-and-player-model.md'
   - 'specs/architecture/system-architecture.md'
   - 'specs/product/01-game-and-narrative-direction.md'
@@ -63,6 +64,7 @@ active_decisions:
   - '.project-os/decisions/DEC-021-action-based-recommendation-response.yaml'
   - '.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml'
   - '.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml'
+  - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
 
 acceptance:
   - 'The contract maps all four M4 exit criteria to later tasks and defines input provenance and determinism boundaries.'

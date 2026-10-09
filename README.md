@@ -92,8 +92,10 @@ or expiry does not count as rejection. Prediction deviation will pool mismatchin
 responses divided by eligible responses to valid exposed predictions, without
 confidence weighting. Safety preference and damage tolerance will use independent
 positive/eligible-choice rates at authored tradeoffs, not intensity scores or
-automatic damage/risk conversions. Reporting/cooperation sample units and further
-policies still need decisions; independent review/QA is required before implementation.
+automatic damage/risk conversions. Reporting/cooperation will count eligible
+responses to explicit available opportunities, excluding unrelated investigation
+and no response. Detailed contracts still need independent review/QA before
+implementation; bounded review/QA delegation awaits explicit authorization.
 
 ## War Room and saved progress
 

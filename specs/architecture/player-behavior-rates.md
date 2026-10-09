@@ -8,7 +8,8 @@ DEC-018 approves distinct observation counts averaged across eligible attempts.
 DEC-021 approves matching eligible actions to recorded recommendation exposures.
 DEC-022 approves predictionDeviation as pooled eligible-response mismatches.
 DEC-023 approves independent safety/damage preference choice rates.
-Other metrics retain explicitly pending eligibility/formula decisions.
+DEC-024 approves explicit reporting/cooperation response rates. Detailed authored
+eligibility and definition contracts still require independent review.
 
 ## Approved operational rates
 
@@ -191,7 +192,7 @@ rate separately from confidence and recommendation acceptance.
 DEC-021 approves action-based recommendation response counting, specified in the
 [response draft](recommendation-responses.md). DEC-023 approves independent safety
 preference and collateral damage tolerance rates, specified in the
-[preference draft](preference-rates.md). DEC-024 separately proposes reporting/
-cooperation sample units and remains unselected.
+[preference draft](preference-rates.md). DEC-024 approves explicit reporting/
+cooperation responses, specified in the [affiliation draft](affiliation-rates.md).
 Existing UNKNOWN messages cannot stand in for recommendation or NULL cooperation
 observations. Independent review and acceptance QA remain pending.

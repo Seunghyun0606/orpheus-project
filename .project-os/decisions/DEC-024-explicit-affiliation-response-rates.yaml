@@ -1,0 +1,36 @@
+id: DEC-024
+title: Measure company reporting and NULL cooperation through explicit opportunity responses
+status: active
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  The human selected option A: count valid responses to explicit reporting or
+  cooperation opportunities, not all activity while those opportunities are open.
+  Unrelated investigation must not dilute these decision-response proportions.
+decision: >-
+  For each metric, use a valid authored available opportunity and its eligible
+  new accepted decision response. A classified reporting/cooperation choice is
+  positive; another eligible explicit response is negative. Pool compatible
+  positive and eligible-response counts under DEC-014. Unrelated observations,
+  no response or expiry alone provide no sample. Each identified opportunity
+  contributes at most one associated response sample for that metric; no eligible
+  responses means unavailable, not zero.
+human_approval:
+  selected_option: A
+  instruction: '명시된 보고·협력 기회의 유효 응답만 계산(권장).'
+proposal: .project-os/decisions/proposals/DEC-024-affiliation-rate-samples.yaml
+consequences:
+  - Retain separate authored opportunity, availability, eligibility and positive predicates for companyReportingRate and nullCooperationRate; they are not complements.
+  - Require verified pre-action context, known available opportunity and source input/run/attempt/version provenance before counting a response.
+  - Generic communication, Support status and operational risk are not automatically allegiance; existing UNKNOWN hints or inaccessible branches cannot create NULL opportunities.
+  - An eligible explicit non-reporting/non-cooperation response can yield supported zero; lack of eligible observations cannot be converted into zero or neutrality.
+  - Retain genuine new eligible responses in unfinished/abandoned official attempts; source identity and opportunity association prevent repeated projection or delivery from counting again.
+  - Rejected inputs, imports, inherited prefixes, timers and archive review add none; exact-head resume preserves identity and new checkpoints contribute only new qualified responses.
+  - Missing/invalid/unsupported required definitions and ambiguous/conflicting associations yield diagnostics, not guessed matches, negatives or latest-version reinterpretation.
+  - Response observations and numeric corporate/NULL alignment effects remain separate; classifying behavior does not automatically grant an effect or dispatch another action.
+  - Commit accepted history, response identity and projections together under DEC-013; conflict/abort cannot acknowledge new official samples.
+  - Production opportunity/action mappings, validity/reuse, reveal gates, thresholds and alignment amounts remain reviewed authored data, not selected tuning here.
+  - Both legacy stores and the UNKNOWN-only MVP remain unchanged; TASK-018 still requires detailed contracts, independent review, acceptance QA and evaluation.
+supersedes: null

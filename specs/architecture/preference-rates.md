@@ -107,7 +107,9 @@ These tests belong to future APIs, not the current legacy compatibility suite:
   history and raw counts; native capability/exposure checks remain separate.
 
 Fractions are arithmetic fixtures, not production balance or preference intensity.
-Company-reporting/NULL-cooperation sample units remain separately pending in
-[DEC-024's proposal](../../.project-os/decisions/proposals/DEC-024-affiliation-rate-samples.yaml).
+Company-reporting/NULL-cooperation response units are separately approved by
+[DEC-024](../../.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml)
+and specified in the [affiliation draft](affiliation-rates.md); the metrics retain
+independent opportunity/eligibility definitions.
 Independent architecture review, acceptance QA and Project OS evaluation remain
 required before TASK-018 completion or dependent runtime implementation.
