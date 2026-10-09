@@ -1,0 +1,47 @@
+id: DEC-015
+title: Choose authored campaign effect scope across official retries
+status: proposed
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  DEC-010 retains every official attempt and DEC-014 pools eligible behavior
+  samples. Neither choice determines whether an authored numeric discovery,
+  narrative or incident-completion effect can recur on a later official attempt.
+  Membership sets alone cannot determine effect application identity. The scope
+  can change hidden values and later branch/ending eligibility without changing
+  the retained action history, so it requires a separate human decision.
+decision: Pending human selection; neither option is approved or implemented.
+recommended_option: A
+chosen_option: null
+options:
+  - key: A
+    label: Apply each authored discovery, narrative and completion effect once per campaign run
+    details: >-
+      A qualifying native event can apply its stable authored effect identity at
+      most once within the campaign run, across all official attempts. Record an
+      application receipt; later qualifying retries retain their actions and
+      events but do not increase the same effect again. This prevents repeating
+      one discovery or completion from multiplying its numeric campaign award.
+  - key: B
+    label: Apply each authored discovery, narrative and completion effect once per official attempt
+    details: >-
+      Each distinct official attempt can apply the same stable authored effect
+      identity once when its qualifying native event occurs. Keep discovery and
+      completed-incident membership deduplicated across the campaign, but retain
+      repeated numeric contributions. Repeated investigations or completions can
+      therefore change hidden values and later eligibility again.
+invariants:
+  - No new numeric values, thresholds, moral grading or production content are selected here.
+  - The scope concerns authored campaign discovery, narrative and completion effects, not incident simulation effects.
+  - Newly accepted actions, eligible behavior samples and action-driven resource/impact deltas remain retained under DEC-010/014.
+  - Reject duplicate application receipts within the selected scope; conflicting payloads under reused identity fail closed.
+  - Import, replay projection, inherited prefixes, load, archive review and duplicate delivery cannot themselves award effects.
+  - DEC-011 imported membership carries no historical numeric award or fabricated application receipt.
+  - Membership alone does not trigger a later award; only a genuinely new qualifying native event may do so under authored predicates and the chosen scope.
+  - Evidence/narrative/completion membership remains deduplicated independently of numeric effect receipts.
+  - Authored effect identity must remain stable across compatible content versions; merely bumping a version cannot reset receipts or reaward effects.
+  - Changed effect semantics require explicit version/compatibility treatment, not silent replacement or retroactive recalculation.
+proposal_document: specs/architecture/campaign-intelligence-contract.md
+supersedes: null

@@ -4,7 +4,8 @@ Status: **partially decided contract proposal**. Gate 1 storage authority is
 approved by DEC-009; Gate 2 retry contribution is approved by DEC-010; Gate 3
 discovery-only adoption is approved by DEC-011; Gate 4 confirmed checkpoint
 attempts are approved by DEC-012; Gate 5 IndexedDB commits are approved by DEC-013.
-Gate 6 player rate aggregation remains pending.
+Gate 6 pooled player rates are approved by DEC-014. Gate 7 authored campaign
+effect scope remains pending.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -28,6 +29,8 @@ DEC-012 separately approves eligible unfinished checkpoint baselines as confirme
 new attempts, preserving prior history and counting only subsequently accepted inputs.
 DEC-013 chooses IndexedDB transactions for the new ledger only, with revision
 checks and acknowledgement after commit; both legacy localStorage stores remain.
+DEC-014 pools metric-specific eligible observations across official attempts
+before computing rates. It does not choose effect awards or non-rate formulas.
 
 The three production MVP incidents remain UNKNOWN-only. Framework fixtures may
 describe later-act systems without making those systems visible in MVP UI.
@@ -273,16 +276,16 @@ failure fixtures for the chosen mechanism. Its detailed schema still needs revie
 model formula and production balance decisions remain separate. No runtime
 database, migration or adapter has been implemented by this documentation step.
 
-## Gate 6 — behavior rate aggregation (pending)
+## Gate 6 — behavior rate aggregation (approved)
 
 [DEC-014's proposal](../../.project-os/decisions/proposals/DEC-014-player-rate-aggregation.yaml)
-asks how metric-specific eligible observations from retained official attempts
-are weighted. Neither option is selected:
+records the comparison of metric-specific weighting options. The human selected
+**A**, recorded in [DEC-014](../../.project-os/decisions/DEC-014-pooled-player-behavior-rates.yaml):
 
-- **A — recommended:** pool eligible numerators and denominators across attempts,
+- **A — approved:** pool eligible numerators and denominators across attempts,
   then divide. Every eligible sample has equal influence; longer attempts with
   more samples contribute more to the resulting rate.
-- **B:** compute each eligible attempt's rate, then average those rates with equal
+- **B — not selected:** compute each eligible attempt's rate, then average those rates with equal
   attempt weight. A short eligible attempt has the same influence as a long one.
 
 An arithmetic-only fixture has one positive observation in two eligible samples
@@ -293,8 +296,40 @@ and prediction inputs. These numbers are not ending thresholds or production tun
 Both options retain eligible new observations from unfinished/abandoned attempts;
 no-sample attempts add no weight and an entirely unsupported metric is unavailable,
 not zero. Imported artifacts and inherited prefixes create no historical samples.
-Exact metric classifications, non-rate investigation depth/intent formulas, authored
-effect scopes, confidence and ending policy remain separate contract work.
+Retain raw metric-specific counts and definition versions. Recompute compatible
+rates from those counts, not rounded per-attempt rates. Genuine new accepted
+commands in different official attempts contribute even if their bytes match;
+duplicate delivery of the same committed input does not. Do not silently mix
+incompatible classification versions. Exact metric classifications, non-rate
+investigation depth/intent formulas, authored effect scopes, confidence and ending
+policy remain separate contract work.
+
+## Gate 7 — authored campaign effect scope (pending)
+
+[DEC-015's proposal](../../.project-os/decisions/proposals/DEC-015-campaign-effect-award-scope.yaml)
+compares effects from qualifying native discovery, narrative and incident-completion
+events across official retries. Neither option is selected:
+
+- **A — recommended:** apply each stable authored effect identity once per
+  campaign run. A later qualifying retry retains its observations and events but
+  cannot multiply the same numeric campaign award.
+- **B:** apply each stable authored effect identity once per distinct official
+  attempt. Membership stays deduplicated, but repeating discoveries/completions
+  can again affect hidden values and later branch/ending eligibility.
+
+This does not discard accepted retry behavior or action-driven resource/impact
+deltas, and it does not change incident simulation effects. Application receipts
+are distinct from evidence/narrative/completed-incident membership. A content
+version bump must not automatically reset a stable effect identity. Conflicting
+payloads under reused identity fail closed; changing authored semantics requires
+explicit compatibility treatment, not retroactive recalculation.
+
+DEC-011 imports membership only: no numeric award or fabricated effect receipt.
+Import, load, inherited replay, projection, archive review and duplicate delivery
+cannot themselves award effects. Membership alone does not trigger a later award;
+only a genuinely new qualifying native event can do so under authored predicates
+and the chosen scope. No balance values, thresholds or production effects are
+chosen in this proposal.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -333,7 +368,7 @@ Authored data would define transition effects, unlock prerequisites and allowed
 references. Completion is a verified transition, not an arbitrary incident ID.
 Effects must have explicit application identity so duplicate replay/import does
 not apply them twice. Retry history is retained under DEC-010. Numeric ranges,
-initial values, aggregation weights and per-effect award scope remain pending;
+initial values, non-rate formulas and per-effect award scope remain pending;
 no tuning values are chosen here. A new-run baseline is not an observation about
 missing legacy behavior.
 
@@ -342,8 +377,9 @@ missing legacy behavior.
 Use the pre-action verified state and accepted command, not UI clicks or wording.
 Metrics retain a value/availability indication, sample counts and classification
 version. Absent eligible samples must not silently become observed zero rates.
-The following are formula proposals; exact eligible classifications and weights
-must be reviewed and approved before use:
+DEC-014 fixes rate weighting as pooled eligible counts. The following are formula
+proposals; exact eligible classifications and non-rate formulas still require
+review and approval before use:
 
 | Metric                                       | Proposed numerator / denominator or observation                                        | Missing source concern                                                                                      |
 | -------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -412,9 +448,9 @@ review and fixture requirements; no physical implementation is present.
 | Desktop/native integration and final acceptance | TASK-024/025: persistence and read-only archive isolation, all three UNKNOWN-only paths, supported native minimum/enlarged text, independent review and QA                     |
 
 TASK-018 acceptance remains pending: storage authority, official retry history,
-discovery-only adoption, checkpoint continuation and IndexedDB commits are approved.
-Behavior aggregation and other required policies still need decisions; the
-detailed persistence draft still needs review.
+discovery-only adoption, checkpoint continuation, IndexedDB commits and pooled
+behavior rates are approved. Authored effect scope and other required policies
+still need decisions; the detailed persistence draft still needs review.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

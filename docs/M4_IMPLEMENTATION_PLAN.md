@@ -55,12 +55,15 @@ gate for material architecture/schema/migration decisions. In particular:
   transactional revision-checked commits for it only. The detailed envelope and
   association/import mechanics are now a review draft; the M3 closure
   approval alone did not authorize them.
+- DEC-014 approves pooled eligible numerators/denominators across official attempts,
+  including unfinished and abandoned attempts; no eligible samples means unavailable.
+  This does not choose authored effect award scope or non-rate formulas.
 - Specify versioned action classifications and behavior denominators, prediction
   inputs/confidence, branch predicates, and ending overlap/tie/no-match policy.
   Test-only fixture thresholds are not approved production balance.
 
 No dependent task may implement a pending decision by guesswork. Keep approved
-DEC-001/003/005/006/007/009/010/011/012/013 boundaries unless a separate decision supersedes them.
+DEC-001/003/005/006/007/009/010/011/012/013/014 boundaries unless a separate decision supersedes them.
 Do not declare TASK-018 accepted with unresolved required contract choices.
 
 ## Exit-criterion verification map
@@ -89,7 +92,9 @@ approves explicit discovery-only legacy adoption; DEC-012 approves confirmed
 checkpoint-based attempts without rolling back campaign history. DEC-013 approves
 IndexedDB for the new ledger only. Its
 [persistence contract](../specs/architecture/campaign-ledger-persistence.md) is a
-review draft. DEC-014 proposes the next gate for player rate aggregation.
+review draft. DEC-014 approves pooled eligible behavior rates. DEC-015 proposes
+the next gate: authored discovery/narrative/completion effects once per campaign
+run or once per official attempt.
 Existing-save checks do not constitute acceptance of the proposed new campaign
 system; remaining policies and independent review/QA are still required.
 
@@ -98,7 +103,7 @@ tasks. It does not change runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-Next: continue active TASK-018 and obtain the rate aggregation decision,
+Next: continue active TASK-018 and obtain the authored effect scope decision,
 then resolve remaining domain policies and envelope review plus independent review/QA before
 dependent implementation. No approved storage decision should be mistaken for
 acceptance of the entire contract or authorization to infer missing history.

@@ -1,6 +1,6 @@
 id: DEC-014
 title: Choose player behavior rate aggregation across official attempts
-status: proposed
+status: resolved
 date: '2026-10-09'
 applies_to:
   - M4
@@ -11,9 +11,10 @@ context: >-
   Keeping history does not choose its model weighting. Pooling eligible samples
   and averaging per-attempt rates can produce different branch and prediction
   inputs from the same retained history. The choice must be versioned, not inferred.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-014-pooled-player-behavior-rates.yaml
 options:
   - key: A
     label: Pool eligible numerators and denominators across all official attempts

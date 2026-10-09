@@ -1,0 +1,32 @@
+id: DEC-014
+title: Pool eligible player behavior samples across official attempts
+status: active
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  DEC-010 retains official attempt histories; DEC-011/012 exclude imported
+  discoveries and inherited command prefixes from new behavior observations.
+  The human selected option A for weighting supported behavior rates.
+decision: >-
+  For each supported rate and approved definition version, sum eligible positive
+  observations and eligible sample counts across all official attempts, then
+  divide the pooled numerator by the pooled denominator. Include eligible new
+  observations from unfinished and abandoned attempts. Do not average per-attempt
+  rates, replace history with the latest attempt or manufacture missing samples.
+human_approval:
+  selected_option: A
+  instruction: '전체 유효 표본을 합산한 뒤 비율 계산(권장).'
+proposal: .project-os/decisions/proposals/DEC-014-player-rate-aggregation.yaml
+consequences:
+  - Each eligible sample has equal weight; longer attempts with more eligible samples have more influence.
+  - Preserve raw metric-specific numerators, denominators and definition versions for deterministic recomputation.
+  - A zero denominator means unavailable, not an observed zero; empty attempts add no weight.
+  - Rejected commands, duplicate delivery, archive review, imported artifacts and inherited prefixes add no new behavior samples.
+  - Genuine newly accepted commands in distinct official attempts are not deduplicated by equal bytes.
+  - Unsupported MVP recommendation, NULL cooperation and prediction observations remain unavailable.
+  - Eligibility classifications, non-rate depth/intent formulas, authored effect scopes, confidence and ending thresholds are not selected by this decision.
+  - Mixing incompatible definition versions without an approved conversion is not authorized.
+  - TASK-018 remains active pending remaining contracts, independent review, acceptance QA and evaluation.
+supersedes: null

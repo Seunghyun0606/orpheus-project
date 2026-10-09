@@ -73,7 +73,9 @@ verified legacy evidence/narrative membership is also approved, without importin
 past behavior or completion. Confirmed checkpoint-based attempts preserve prior
 history and count only new actions. The new ledger will use approved IndexedDB
 transactions; both existing localStorage stores remain unchanged. Its detailed
-contract, behavior weighting and further policies still require review/decisions
+contract still requires review. Supported behavior rates will pool all eligible
+samples across official attempts; no samples means unavailable, not zero. Authored
+effect scopes and further policies still require decisions
 and independent QA before implementation.
 
 ## War Room and saved progress
