@@ -4,8 +4,9 @@ Status: **partially decided contract proposal**. Gate 1 storage authority is
 approved by DEC-009; Gate 2 retry contribution is approved by DEC-010; Gate 3
 discovery-only adoption is approved by DEC-011; Gate 4 confirmed checkpoint
 attempts are approved by DEC-012; Gate 5 IndexedDB commits are approved by DEC-013.
-Gate 6 pooled player rates are approved by DEC-014. Gate 7 authored campaign
-effect scope remains pending.
+Gate 6 pooled player rates are approved by DEC-014; Gate 7 once-per-run authored
+campaign effects are approved by DEC-015. Gate 8 restart/rollback denominators
+remain pending.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -31,6 +32,8 @@ DEC-013 chooses IndexedDB transactions for the new ledger only, with revision
 checks and acknowledgement after commit; both legacy localStorage stores remain.
 DEC-014 pools metric-specific eligible observations across official attempts
 before computing rates. It does not choose effect awards or non-rate formulas.
+DEC-015 approves each stable authored discovery/narrative/completion effect at
+most once per campaign run, without dropping new retry behavior or simulation costs.
 
 The three production MVP incidents remain UNKNOWN-only. Framework fixtures may
 describe later-act systems without making those systems visible in MVP UI.
@@ -104,7 +107,8 @@ comparison; B is not selected:
 
 - **A — recommended:** append every official restart/replay as a distinct attempt
   in the same run. Keep accepted actions from abandoned attempts; do not replace
-  past history. Exact aggregation weights and award scopes remain pending.
+  past history. DEC-014/015 separately approve pooled rates and once-per-run
+  discovery/narrative/completion effects; classifications and balance remain pending.
 - **B:** isolate restart/replay as practice. Preserve the official attempt for
   resume; practice does not affect official hidden values, evidence, unlocks,
   model or endings. Starting a new official campaign is explicit and preserves
@@ -137,8 +141,8 @@ association or inherited-prefix accounting follows from approving future retries
   actions. A playable retry and a headless verification replay are distinct.
 - UI incident restart creates a boundary but is not a service restart command.
   Restart/rollback behavior uses accepted command classifications, not clicks.
-- Evidence and completion cannot silently award repeat bonuses; exact per-run
-  versus per-attempt authored effect scope still needs the reviewed contract.
+- Evidence and completion effects follow DEC-015's once-per-run scope; verify
+  receipt identity separately from membership and retained new behavior.
 
 ## Gate 3 — legacy discovery adoption (option A approved)
 
@@ -300,20 +304,21 @@ Retain raw metric-specific counts and definition versions. Recompute compatible
 rates from those counts, not rounded per-attempt rates. Genuine new accepted
 commands in different official attempts contribute even if their bytes match;
 duplicate delivery of the same committed input does not. Do not silently mix
-incompatible classification versions. Exact metric classifications, non-rate
-investigation depth/intent formulas, authored effect scopes, confidence and ending
-policy remain separate contract work.
+incompatible classification versions. DEC-015 separately approves authored effect
+scope. Exact metric classifications, non-rate investigation depth/intent formulas,
+confidence and ending policy remain separate contract work.
 
-## Gate 7 — authored campaign effect scope (pending)
+## Gate 7 — authored campaign effect scope (approved)
 
 [DEC-015's proposal](../../.project-os/decisions/proposals/DEC-015-campaign-effect-award-scope.yaml)
 compares effects from qualifying native discovery, narrative and incident-completion
-events across official retries. Neither option is selected:
+events across official retries. The human selected **A**, recorded in
+[DEC-015](../../.project-os/decisions/DEC-015-once-per-run-campaign-effects.yaml):
 
-- **A — recommended:** apply each stable authored effect identity once per
+- **A — approved:** apply each stable authored effect identity once per
   campaign run. A later qualifying retry retains its observations and events but
   cannot multiply the same numeric campaign award.
-- **B:** apply each stable authored effect identity once per distinct official
+- **B — not selected:** apply each stable authored effect identity once per distinct official
   attempt. Membership stays deduplicated, but repeating discoveries/completions
   can again affect hidden values and later branch/ending eligibility.
 
@@ -330,6 +335,31 @@ cannot themselves award effects. Membership alone does not trigger a later award
 only a genuinely new qualifying native event can do so under authored predicates
 and the chosen scope. No balance values, thresholds or production effects are
 chosen in this proposal.
+The [effect application review draft](campaign-effect-application.md) specifies
+the approved receipt boundary, new-event eligibility, import/baseline separation
+and required fixtures. A normal retry with an already-applied compatible effect
+is retained, not rejected; only the repeated numeric award is suppressed.
+
+## Gate 8 — restart and rollback denominators (pending)
+
+[DEC-016's proposal](../../.project-os/decisions/proposals/DEC-016-operational-rate-denominators.yaml)
+asks whether these two operational action rates describe the share of operational
+interventions or the share of all accepted gameplay commands. Neither is selected:
+
+- **A — recommended:** count explicitly classified operational interventions
+  as the denominator. Information gathering and communication do not dilute
+  restart/rollback choices; validated authored classification decides eligibility.
+- **B:** count all newly accepted gameplay commands, including observation,
+  investigation, communication and delegation, as the denominator.
+
+An arithmetic-only fixture contains one service restart, one rollback, one other
+operational intervention and six information/communication commands. A yields
+`1/3` for each rate; B yields `1/9`. Both pool eligible counts under DEC-014,
+exclude inherited/rejected/duplicate inputs and report no eligible denominator
+as unavailable. This is not an ending threshold or production balance decision.
+UI incident restart remains an attempt boundary, not a service-restart numerator.
+This gate does not select evidence-before-action, investigation depth, intent or
+prediction formulas, or alter once-per-run campaign effects under DEC-015.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -366,9 +396,10 @@ tracks input provenance and approved behavior-model/definition versions.
 
 Authored data would define transition effects, unlock prerequisites and allowed
 references. Completion is a verified transition, not an arbitrary incident ID.
-Effects must have explicit application identity so duplicate replay/import does
-not apply them twice. Retry history is retained under DEC-010. Numeric ranges,
-initial values, non-rate formulas and per-effect award scope remain pending;
+Effects use explicit run-scoped application identity under DEC-015 so replay,
+imports and later qualifying retries do not apply the same authored discovery,
+narrative or completion effect twice. New accepted retry history remains under
+DEC-010. Numeric ranges, initial values and non-rate formulas remain pending;
 no tuning values are chosen here. A new-run baseline is not an observation about
 missing legacy behavior.
 
@@ -448,9 +479,10 @@ review and fixture requirements; no physical implementation is present.
 | Desktop/native integration and final acceptance | TASK-024/025: persistence and read-only archive isolation, all three UNKNOWN-only paths, supported native minimum/enlarged text, independent review and QA                     |
 
 TASK-018 acceptance remains pending: storage authority, official retry history,
-discovery-only adoption, checkpoint continuation, IndexedDB commits and pooled
-behavior rates are approved. Authored effect scope and other required policies
-still need decisions; the detailed persistence draft still needs review.
+discovery-only adoption, checkpoint continuation, IndexedDB commits, pooled
+behavior rates and once-per-run authored effects are approved. Metric eligibility
+and other required policies still need decisions; detailed persistence/effect
+drafts still need review.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

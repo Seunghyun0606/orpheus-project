@@ -1,0 +1,34 @@
+id: DEC-015
+title: Apply authored discovery, narrative and completion effects once per campaign run
+status: active
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  DEC-010 retains official retries and DEC-014 pools eligible behavior samples.
+  Neither determines repeated numeric discovery, narrative or completion awards.
+  The human selected option A: the same authored effect applies only once across
+  the campaign run, not once again on every official attempt.
+decision: >-
+  A genuinely new qualifying native discovery, narrative or completion event may
+  apply its stable authored campaign effect identity at most once per campaign
+  run. Keep application receipts separate from discovery/completion membership.
+  Later qualifying retries retain their accepted history and events but do not
+  multiply the same numeric award. Preserve receipts across compatible content
+  versions; a version bump alone cannot reset them.
+human_approval:
+  selected_option: A
+  instruction: '같은 효과는 캠페인 전체에서 한 번만 적용(권장).'
+proposal: .project-os/decisions/proposals/DEC-015-campaign-effect-award-scope.yaml
+consequences:
+  - The scope applies to authored campaign discovery/narrative/completion effects, not incident simulation effects.
+  - Keep newly accepted retry actions, eligible behavior samples and action-driven resource/impact deltas under DEC-010/014.
+  - Imported membership has no historical numeric award or fabricated application receipt under DEC-011.
+  - Import, load, inherited prefixes, projection, archive review and duplicate delivery cannot themselves award effects.
+  - Membership alone does not trigger an award; an eligible new native event must satisfy authored predicates.
+  - Persist effect receipt and derived state together under DEC-013; do not acknowledge a failed write as an applied award.
+  - Reused input identity with conflicting payload or incompatible authored effect semantics fails closed without overwriting prior state.
+  - This does not choose numerical amounts, initial values, metric classifications, confidence or ending thresholds.
+  - Detailed contracts still require independent review, acceptance QA and Project OS evaluation before TASK-018 completion.
+supersedes: null

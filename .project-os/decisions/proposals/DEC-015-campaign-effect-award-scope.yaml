@@ -1,6 +1,6 @@
 id: DEC-015
 title: Choose authored campaign effect scope across official retries
-status: proposed
+status: resolved
 date: '2026-10-09'
 applies_to:
   - M4
@@ -12,9 +12,10 @@ context: >-
   Membership sets alone cannot determine effect application identity. The scope
   can change hidden values and later branch/ending eligibility without changing
   the retained action history, so it requires a separate human decision.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-015-once-per-run-campaign-effects.yaml
 options:
   - key: A
     label: Apply each authored discovery, narrative and completion effect once per campaign run

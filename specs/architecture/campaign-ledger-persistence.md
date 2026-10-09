@@ -55,8 +55,11 @@ A baseline is a simulation prerequisite, not a hidden-value or behavior award.
 The replay validator checks operations in recorded order and reproduces attempt
 state, emitted events, accepted observation boundaries and projections using
 recorded definitions. Stored projections are verified caches, not an independent
-source for inventing history. Exact effect award scopes remain a pending authored
-domain policy, not a persistence default.
+source for inventing history. DEC-015 scopes authored discovery/narrative/completion
+effects to once per run. Store their application receipts with the same committed
+record as derived state; membership alone cannot prove a numeric award. The
+[effect application review draft](campaign-effect-application.md) defines related
+provenance, compatibility and failure fixtures.
 
 ## Commit port and acknowledgement
 
@@ -116,6 +119,6 @@ commit-before-ack reload, source changes, explicit import and preservation of ol
 bytes. TASK-024/025 verify actual browser/native capability and UI state published
 only after commit; injected tests alone do not prove WebView support.
 
-The detailed schema must be reviewed alongside the pending model/effect/ending
+The detailed schema must be reviewed alongside the effect draft and pending model/ending
 contracts before dependent implementation. Do not evaluate TASK-018 as complete
 from this draft or from tests of the unchanged legacy adapters.
