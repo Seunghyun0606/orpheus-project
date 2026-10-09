@@ -7,7 +7,8 @@ attempts are approved by DEC-012; Gate 5 IndexedDB commits are approved by DEC-0
 Gate 6 pooled player rates are approved by DEC-014; Gate 7 once-per-run authored
 campaign effects are approved by DEC-015; Gate 8 operational restart/rollback
 denominators are approved by DEC-016; Gate 9 current-attempt evidence-before-action
-qualification is approved by DEC-017. Gate 10 investigation depth remains pending.
+qualification is approved by DEC-017; Gate 10 distinct investigation depth is
+approved by DEC-018. Gate 11 ending tie/no-match policy remains pending.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -39,6 +40,8 @@ DEC-016 fixes restart/rollback denominators as eligible operational intervention
 not information or communication commands; classifications remain versioned data.
 DEC-017 requires relevant supporting observations from earlier new investigation
 inputs in the same attempt for evidence-before-action, not inherited membership alone.
+DEC-018 averages per-attempt distinct investigation observation counts over eligible
+official attempts, preserving repeated query history without repeating depth units.
 
 The three production MVP incidents remain UNKNOWN-only. Framework fixtures may
 describe later-act systems without making those systems visible in MVP UI.
@@ -393,14 +396,15 @@ presence eligibility under DEC-011 nor DEC-015 effect awards or DEC-016 rates.
 The [behavior rate draft](player-behavior-rates.md) specifies provenance, pre-action
 ordering, exact-head/baseline distinctions and evidence-before-action fixtures.
 
-## Gate 10 — investigation depth counting (pending)
+## Gate 10 — investigation depth counting (approved)
 
 [DEC-018's proposal](../../.project-os/decisions/proposals/DEC-018-investigation-depth-counting.yaml)
-compares two meanings of averageInvestigationDepth. Neither is selected:
+compares two meanings of averageInvestigationDepth. The human selected **A**,
+recorded in [DEC-018](../../.project-os/decisions/DEC-018-distinct-investigation-depth.yaml):
 
-- **A — recommended:** distinct authored investigation observation keys per
+- **A — approved:** distinct authored investigation observation keys per
   eligible official attempt; repeating the same key does not deepen that attempt.
-- **B:** all accepted commands explicitly classified as qualifying investigation
+- **B — not selected:** all accepted commands explicitly classified as qualifying investigation
   per eligible attempt; repeated queries count, one command is one unit.
 
 Both proposals divide total depth units by eligible official attempt count, with
@@ -418,6 +422,33 @@ new distinct official attempt can investigate the same key again; deduplication
 is within each attempt, unlike DEC-015 numeric effect receipts. This is neither
 a causal-graph longest path nor an action-frequency rate, and does not change
 DEC-014's already approved pooled rates. No production thresholds are proposed.
+The [behavior review draft](player-behavior-rates.md) now specifies the approved
+key/count boundaries, eligible attempt coverage and depth verification fixtures.
+
+## Gate 11 — ending ambiguity and no-match (pending)
+
+[DEC-019's proposal](../../.project-os/decisions/proposals/DEC-019-ending-ambiguity-policy.yaml)
+asks how to resolve equally preferred eligible endings and valid no-match final
+contexts. Neither option is selected:
+
+- **A — recommended:** uniquely preferred eligible matches resolve through authored
+  priority; top ties return an ambiguity diagnostic, no matching condition returns
+  unresolved. No automatic ending or new ending flag in those cases.
+- **B:** add validated authored tie order and an explicit fallback ending reference.
+  Top ties use that order; valid fully evaluated no-match can select the designated
+  fallback despite its ordinary conditions not matching. No implicit file order.
+
+Both require explicit versioned campaign/final context and condition/priority
+definitions. A unique preferred eligible match is distinct from a top tie;
+lower-precedence matches do not create ambiguity. Missing context, unavailable
+required observations, unsupported versions, invalid references and malformed
+definitions are diagnostics, not no-match cases eligible for fallback. Do not
+coerce unknown behavior to zero or secretly choose STATUS QUO.
+
+TASK-023 must cover all ten named endings and positive/exclusion/boundary cases,
+overlap, ties, no-match and invalid/unavailable context. No production thresholds,
+priority values, tie order, fallback identity or late-act content is chosen here.
+This framework remains invisible in the current UNKNOWN-only MVP.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -475,7 +506,7 @@ contracts before use:
 | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | restartRate / rollbackRate                   | Classified accepted restart/rollback actions divided by eligible operational interventions under DEC-016         | Official retry histories are retained under DEC-010; UI restart is not a service restart observation.       |
 | evidenceBeforeActionRate                     | Eligible interventions with prior relevant new same-attempt investigation / eligible interventions under DEC-017 | Relevant evidence and intervention classes must be authored.                                                |
-| averageInvestigationDepth                    | Investigation units per eligible attempt, then average; counting policy pending DEC-018                          | Alternate attempts and repeated observations require an explicit policy.                                    |
+| averageInvestigationDepth                    | Per-attempt distinct investigation observation counts averaged over eligible attempts under DEC-018              | Supported zero-investigation attempts count; empty/unsupported attempts do not.                             |
 | aiRecommendationAcceptanceRate               | Accepted exposed recommendation / eligible recorded recommendation opportunities                                 | MVP has no recorded recommendation opportunity.                                                             |
 | safetyPreference / collateralDamageTolerance | Approved authored observations from action intent/context and resulting effects                                  | Operational risk is not automatically a moral score; formula and normalization pending.                     |
 | companyReportingRate / nullCooperationRate   | Classified accepted responses / eligible authored response opportunities                                         | Support status is not automatically corporate allegiance; MVP has no explicit NULL cooperation opportunity. |
@@ -498,11 +529,11 @@ not grading or raw hidden numeric UI.
 
 Ending resolution would consume approved campaign state, final incident state,
 final actions and versioned authored ending definitions/priority. It must have
-deterministic fixtures for all ten named endings. Proposed safeguards: report
-no match as unresolved rather than silently selecting STATUS QUO; reject ambiguous
-priority ties unless a separately approved data-driven tie policy exists. Ending
-thresholds, exact overlap policy and eligibility of unavailable observations
-remain pending. Fixture thresholds are test-only, not production balance.
+deterministic fixtures for all ten named endings. DEC-019 compares unresolved
+tie/no-match diagnostics with an explicit authored tie order/fallback; neither
+option is selected. Invalid or unavailable required context cannot supply a
+default result. Ending thresholds and predicate/priority contracts still require
+review and approval. Fixture thresholds are test-only, not production balance.
 
 ## Legacy import, failures and rollback proposals
 
@@ -540,9 +571,9 @@ review and fixture requirements; no physical implementation is present.
 TASK-018 acceptance remains pending: storage authority, official retry history,
 discovery-only adoption, checkpoint continuation, IndexedDB commits, pooled
 behavior rates, once-per-run authored effects and operational restart/rollback
-denominators and current-attempt evidence qualification are approved. Investigation
-depth and other required policies still need decisions; detailed persistence/effect/
-behavior drafts still need review.
+denominators, current-attempt evidence qualification and distinct investigation
+depth are approved. Ending ambiguity and other required policies still need decisions;
+detailed persistence/effect/behavior drafts still need review.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

@@ -1,0 +1,35 @@
+id: DEC-018
+title: Average distinct investigation observations per eligible official attempt
+status: active
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  The design requires averageInvestigationDepth. DEC-014 chooses pooled action
+  rates, not the investigation depth unit. The human selected option A: count
+  distinct investigation items within each eligible attempt, not repeated queries.
+decision: >-
+  Count each authored investigation observation key from new accepted
+  investigation inputs once within an eligible official attempt. Divide the sum
+  of these per-attempt unique counts by the number of eligible attempts, with
+  each eligible attempt weighted equally. An eligible attempt has supported
+  versioned investigation definitions and at least one new accepted player
+  command. Include eligible zero-investigation, unfinished and abandoned attempts.
+human_approval:
+  selected_option: A
+  instruction: '같은 시도의 서로 다른 조사 항목만 계산(권장).'
+proposal: .project-os/decisions/proposals/DEC-018-investigation-depth-counting.yaml
+consequences:
+  - Repeated investigation commands retain their history but do not increase depth for the same authored observation key within that attempt.
+  - Authored distinct targets or diagnostic contexts may have distinct keys; labels and command byte differences alone do not establish a new observation.
+  - Deduplication is per attempt; a genuinely distinct official attempt may investigate the same key anew.
+  - Supported eligible attempts without investigation contribute zero; empty or unsupported attempts supply no denominator sample.
+  - No eligible attempts means unavailable, not observed zero; report unsupported coverage explicitly.
+  - Retain per-attempt keys/counts and applicable definition/provenance versions; do not silently mix incompatible definitions.
+  - Rejected commands, duplicates, imported artifacts, inherited prefixes, archive review, navigation and standalone timers add no investigation units.
+  - This is observations per eligible attempt, not a causal-graph path, moral score, action-frequency rate or campaign numeric award.
+  - DEC-014 pooled rates, DEC-015 once-per-run effects and DEC-017 support qualification remain unchanged.
+  - Production keys/classifications, freshness, ethical intent, prediction confidence and ending policies require their separate reviewed contracts.
+  - TASK-018 remains active pending remaining contracts, independent review, acceptance QA and evaluation.
+supersedes: null

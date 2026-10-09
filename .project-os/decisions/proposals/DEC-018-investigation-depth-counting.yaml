@@ -1,6 +1,6 @@
 id: DEC-018
 title: Choose investigation depth counting and per-attempt average
-status: proposed
+status: resolved
 date: '2026-10-10'
 applies_to:
   - M4
@@ -11,9 +11,10 @@ context: >-
   chooses pooled action rates, not this observations-per-attempt measure.
   Counting unique investigated dimensions versus every investigation command
   yields different branch/prediction inputs and incentives for repeated queries.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-018-distinct-investigation-depth.yaml
 options:
   - key: A
     label: Count distinct authored investigation observations per eligible attempt, then average

@@ -4,6 +4,7 @@ Status: DEC-014 approves pooled eligible counts and DEC-016 approves operational
 intervention denominators for restartRate/rollbackRate. This document specifies
 their review and fixture boundaries, not runtime schema or production tuning.
 DEC-017 also approves current-attempt investigation for evidence-before-action.
+DEC-018 approves distinct observation counts averaged across eligible attempts.
 Other metrics retain explicitly pending eligibility/formula decisions.
 
 ## Approved operational rates
@@ -103,6 +104,43 @@ negative. No eligible intervention means unavailable. Do not retroactively
 change an earlier intervention when evidence is obtained later, or infer missing
 historical investigation from a current revealed-state snapshot.
 
+## Approved investigation depth
+
+Retain the set of authored investigation observation keys attributable to new
+accepted investigation inputs in each eligible official attempt. A key counts
+once in that attempt. Different command bytes, event IDs, display labels or a
+compatible content version bump do not themselves create distinct keys. Authored
+target/context dimensions must validate and define their identities explicitly;
+do not infer them from every changed metric value or evidence title.
+
+`averageInvestigationDepth = sum of per-attempt distinct key counts / eligible attempt count`
+
+An eligible attempt has supported versioned investigation definitions and at least
+one new accepted player command. If it has no qualifying investigation, its count
+is zero. Empty attempts and unsupported definitions provide no denominator sample;
+retain diagnostics/unsupported coverage rather than presenting partial coverage
+as universally observed behavior. No eligible attempt means unavailable.
+Eligible unfinished/abandoned attempts remain included and receive equal weight.
+This measure is observations per attempt, not the action-frequency ratios of
+DEC-014. Rates still pool their own eligible command samples.
+
+Repeated queries remain accepted actions and retain their time, cost and outcomes;
+only duplicate observation keys within the same attempt are excluded from depth.
+A new distinct official attempt can investigate a key again. This is different
+from DEC-015's campaign-wide effect receipt: suppressing an already-applied numeric
+discovery effect cannot suppress a qualifying new investigation observation.
+
+Preserve each key's verified new source input/event and definition version. A
+delegated result must become available and trace to a new accepted qualifying
+investigation input in this attempt. An inherited delegation does not become new
+investigation merely because its result arrives during a later command. Merely
+requesting work or importing a revealed-state snapshot does not prove an observation.
+Inherited prefixes and baseline discoveries add no depth.
+Exact-head resume retains the existing same-attempt key set without recounting;
+a confirmed checkpoint-based new attempt starts its new-observation set empty.
+Reject invalid references/conflicting semantics; no silent version mixing or
+fabricated legacy keys. No production observation mapping is added here.
+
 ## Required verification (new APIs not implemented here)
 
 | Case                                                                           | Expected result / owner                                               |
@@ -129,8 +167,21 @@ Additional evidence-before-action fixtures for TASK-019/020/021 must cover:
 - Missing/invalid rules, no eligible intervention, duplicates, replay and commit
   failures: diagnostic/unavailable/idempotent behavior as applicable.
 
+Additional investigation-depth fixtures for TASK-019/020/021 must cover:
+
+- Three investigation commands yielding two distinct keys in one eligible
+  attempt, and another eligible attempt with no investigation: depth `(2+0)/2=1`.
+- Repeated commands for one key: preserve all accepted inputs/outcomes, one depth
+  unit; different valid authored keys contribute separately.
+- Same key in a distinct official attempt: count anew there, not as a repeated
+  campaign numeric award; abandoned attempts remain included.
+- No new accepted commands or only inherited/imported observations: no eligible
+  attempt sample; supported new action with no investigation: eligible zero.
+- Unsupported definitions, changed/conflicting key semantics, resume, duplicate
+  delivery and transaction failures: coverage/diagnostic/idempotency boundaries.
+
 Fractions are arithmetic-only fixtures, not prediction confidence or ending
-thresholds. Investigation depth, ethical intent, recommendation/response
+thresholds. Ethical intent, recommendation/response
 opportunities and prediction formulas still require their reviewed contracts.
 Existing UNKNOWN messages cannot stand in for recommendation or NULL cooperation
 observations. Independent review and acceptance QA remain pending.
