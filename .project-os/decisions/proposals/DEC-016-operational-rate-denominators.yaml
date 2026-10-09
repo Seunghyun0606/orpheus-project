@@ -1,6 +1,6 @@
 id: DEC-016
 title: Choose eligible denominator for restart and rollback rates
-status: proposed
+status: resolved
 date: '2026-10-09'
 applies_to:
   - M4
@@ -11,9 +11,10 @@ context: >-
   Including observation and communication commands dilutes these rates even
   when the operational interventions are unchanged. The choice affects later
   authored branches and prediction inputs, not just display formatting.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-016-operational-intervention-rate-denominators.yaml
 options:
   - key: A
     label: Count eligible operational interventions only

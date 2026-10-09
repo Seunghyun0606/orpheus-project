@@ -76,9 +76,10 @@ transactions; both existing localStorage stores remain unchanged. Its detailed
 contract still requires review. Supported behavior rates will pool all eligible
 samples across official attempts; no samples means unavailable, not zero. The same
 authored discovery/narrative/completion effect will apply once per campaign run,
-without dropping new retry actions or simulation costs. Metric eligibility and
-further policies still require decisions
-and independent QA before implementation.
+without dropping new retry actions or simulation costs. Restart/rollback rates
+will use operational interventions only, excluding information and communication
+commands from their denominator. Other metric qualifications and further policies
+still require decisions and independent QA before implementation.
 
 ## War Room and saved progress
 

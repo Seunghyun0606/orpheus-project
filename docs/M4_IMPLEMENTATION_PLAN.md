@@ -61,12 +61,15 @@ gate for material architecture/schema/migration decisions. In particular:
 - DEC-015 separately approves once-per-run authored discovery/narrative/completion
   effects, while keeping genuine new retry behavior and action-driven costs.
   The effect receipt and membership are separate; imports grant no historical award.
+- DEC-016 approves operational intervention denominators for restart/rollback rates.
+  Information-only commands do not dilute these rates; authored classifications
+  and other behavior metric contracts still require review.
 - Specify versioned action classifications and behavior denominators, prediction
   inputs/confidence, branch predicates, and ending overlap/tie/no-match policy.
   Test-only fixture thresholds are not approved production balance.
 
 No dependent task may implement a pending decision by guesswork. Keep approved
-DEC-001/003/005/006/007/009/010/011/012/013/014/015 boundaries unless a separate decision supersedes them.
+DEC-001/003/005/006/007/009/010/011/012/013/014/015/016 boundaries unless a separate decision supersedes them.
 Do not declare TASK-018 accepted with unresolved required contract choices.
 
 ## Exit-criterion verification map
@@ -98,8 +101,10 @@ IndexedDB for the new ledger only. Its
 review draft. DEC-014 approves pooled eligible behavior rates; DEC-015 approves
 once-per-run authored discovery/narrative/completion effects. The
 [effect application contract](../specs/architecture/campaign-effect-application.md)
-is a review draft. DEC-016 proposes the next gate: whether restart/rollback rates
-use operational interventions or all accepted gameplay commands as denominators.
+is a review draft. DEC-016 approves operational restart/rollback denominators,
+specified in the [behavior rate draft](../specs/architecture/player-behavior-rates.md).
+DEC-017 proposes the next gate: fresh current-attempt investigation versus already
+available verified knowledge for evidence-before-action qualification.
 Existing-save checks do not constitute acceptance of the proposed new campaign
 system; remaining policies and independent review/QA are still required.
 
@@ -108,7 +113,7 @@ tasks. It does not change runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-Next: continue active TASK-018 and obtain the restart/rollback denominator decision,
+Next: continue active TASK-018 and obtain the evidence-before-action qualification decision,
 then resolve remaining domain policies and envelope review plus independent review/QA before
 dependent implementation. No approved storage decision should be mistaken for
 acceptance of the entire contract or authorization to infer missing history.

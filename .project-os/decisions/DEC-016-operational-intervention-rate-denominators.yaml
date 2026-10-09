@@ -1,0 +1,32 @@
+id: DEC-016
+title: Use operational interventions as restart and rollback denominators
+status: active
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  DEC-014 pools eligible behavior counts but does not select their denominator.
+  The human selected option A: restart and rollback rates describe the share
+  of operational interventions, not the share of all gameplay commands.
+decision: >-
+  Divide explicitly classified service restart or rollback commands by newly
+  accepted, eligible operational intervention commands. Versioned authored data
+  defines actions that mitigate or modify the system. Observation, diagnosis,
+  communication and information-only delegation do not dilute these rates.
+  Pool eligible raw counts across official attempts under DEC-014.
+human_approval:
+  selected_option: A
+  instruction: '운영 조치만 분모에 포함(권장).'
+proposal: .project-os/decisions/proposals/DEC-016-operational-rate-denominators.yaml
+consequences:
+  - Numerators must be subsets of the eligible denominator; categories and labels alone do not replace authored classification.
+  - Record metric-specific counts and applicable classification/formula versions for deterministic recomputation.
+  - With no eligible intervention the rate is unavailable, not zero; missing or invalid classification cannot masquerade as an observed zero.
+  - UI incident restart creates an attempt boundary, not a service-restart observation.
+  - Retain genuine new actions in unfinished, abandoned and repeated official attempts; equal bytes are not duplicate identity.
+  - Rejected commands, duplicates, inherited prefixes, imports, timers, archive review and navigation supply no new player-command samples.
+  - Incident simulation effects, timing and DEC-015 once-per-run campaign awards remain unchanged.
+  - This does not select evidence-before-action qualification, investigation depth, ethical intent, prediction confidence or ending thresholds.
+  - TASK-018 remains active pending remaining contracts, independent review, acceptance QA and evaluation.
+supersedes: null
