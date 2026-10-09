@@ -11,8 +11,8 @@ qualification is approved by DEC-017; Gate 10 distinct investigation depth is
 approved by DEC-018; Gate 11 unresolved ending ties/no-match is approved by DEC-019.
 Gate 12 empirical prediction/confidence is approved by DEC-020; Gate 13
 action-based recommendation response is approved by DEC-021; Gate 14 pooled
-prediction mismatch rate is approved by DEC-022. Gate 15 safety/damage preference
-observation formulas remain pending.
+prediction mismatch rate is approved by DEC-022; Gate 15 independent preference
+rates are approved by DEC-023. Gate 16 reporting/cooperation sample units remain pending.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -545,15 +545,17 @@ or moral quality. Recommendation matching remains separately approved by DEC-021
 The [prediction review draft](player-prediction.md) now specifies the approved
 mismatch projection, availability, provenance/transaction boundaries and fixtures.
 
-## Gate 15 — safety/damage preference observations (pending)
+## Gate 15 — safety/damage preference observations (approved)
 
 [DEC-023's proposal](../../.project-os/decisions/proposals/DEC-023-preference-observation-policy.yaml)
-compares two meanings of safetyPreference and collateralDamageTolerance:
+compares two meanings of safetyPreference and collateralDamageTolerance.
+The human selected **A**, recorded in
+[DEC-023](../../.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml):
 
-- **A — recommended:** independent binary per-metric observations at authored
+- **A — approved:** independent binary per-metric observations at authored
   tradeoff opportunities. Pool positive choices divided by eligible choices
   under DEC-014; intensity does not increase a sample's weight.
-- **B:** independent finite normalized authored preference values per eligible
+- **B — not selected:** independent finite normalized authored preference values per eligible
   tradeoff choice, averaged with equal weight per choice across attempts. This
   measures intensity, not a binary preference rate; normalization needs review.
 
@@ -570,6 +572,37 @@ yield diagnostics. Genuine choices in unfinished/abandoned attempts remain;
 imports, inherited prefixes, duplicates, rejected commands, timers and archive
 review add none. No production mappings, coefficients, thresholds or hidden-value
 effect amounts are chosen here. The existing UNKNOWN-only MVP remains unchanged.
+The [preference rate review draft](preference-rates.md) specifies independent
+denominators, verified pre-action information, provenance and future fixture coverage.
+
+## Gate 16 — reporting/cooperation sample units (pending)
+
+[DEC-024's proposal](../../.project-os/decisions/proposals/DEC-024-affiliation-rate-samples.yaml)
+compares two meanings of companyReportingRate and nullCooperationRate:
+
+- **A — recommended:** count eligible new accepted responses to explicit valid
+  available reporting/cooperation opportunities. An authored reporting/cooperation
+  response is positive, another eligible explicit response negative; unrelated
+  observations and no response supply no sample. At most one response per
+  identified opportunity for that metric.
+- **B:** count all new accepted commands while a relevant authored opportunity
+  is actually available. Reporting/cooperation commands are positive, other
+  activity, including investigation, negative. This measures activity share;
+  multiple distinct commands during one opportunity can each contribute.
+
+In a test-only fixture where a reporting opportunity remains available through
+one unrelated observation then one eligible report, A gives `1/1`; B gives `1/2`.
+Both pool compatible samples under DEC-014, count each source once per applicable
+metric, and keep reporting/cooperation definitions independent. No available
+eligible sample means unavailable, not zero. Missing/invalid required definitions
+and ambiguous associations are diagnostics, not guessed observations.
+
+Support status and generic communication are not automatic corporate allegiance;
+old UNKNOWN hints do not fabricate NULL opportunities. Neither option selects
+numeric alignment effects, production classifications, opportunity validity/reuse,
+thresholds or reveal gates. Expiry alone, timers, imported/inherited history,
+duplicates, rejected inputs and archive review add no choices. The current MVP
+and both legacy stores stay unchanged.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -629,7 +662,7 @@ contracts before use:
 | evidenceBeforeActionRate                     | Eligible interventions with prior relevant new same-attempt investigation / eligible interventions under DEC-017 | Relevant evidence and intervention classes must be authored.                                                |
 | averageInvestigationDepth                    | Per-attempt distinct investigation observation counts averaged over eligible attempts under DEC-018              | Supported zero-investigation attempts count; empty/unsupported attempts do not.                             |
 | aiRecommendationAcceptanceRate               | Matching next eligible responses / eligible responses to recorded recommendations under DEC-021                  | No response/expiry is not rejection; MVP has no recorded recommendation opportunity.                        |
-| safetyPreference / collateralDamageTolerance | Approved authored observations from action intent/context and resulting effects                                  | Operational risk is not automatically a moral score; formula and normalization pending.                     |
+| safetyPreference / collateralDamageTolerance | Independent positive choices / eligible authored pre-action tradeoff choices per metric under DEC-023            | Raw operational risk/customer damage is not a preference score; mappings still require review.              |
 | companyReportingRate / nullCooperationRate   | Classified accepted responses / eligible authored response opportunities                                         | Support status is not automatically corporate allegiance; MVP has no explicit NULL cooperation opportunity. |
 | predictionDeviation                          | Mismatching eligible responses / eligible responses to recorded valid predictions under DEC-022                  | Prediction shown, action availability, model version and confidence must be recorded first.                 |
 
@@ -652,8 +685,10 @@ percentages and a score-model fallback are not the policy. See the
 acceptance through actual eligible action matching, specified in the
 [response draft](recommendation-responses.md). DEC-022 approves predictionDeviation
 as pooled mismatches divided by eligible responses to recorded valid prediction
-exposures, not a rarity score. DEC-023 separately proposes formulas for safety
-preference and collateral damage tolerance; neither option is selected.
+exposures, not a rarity score. DEC-023 approves independent authored-choice rates
+for safety preference and collateral damage tolerance, specified in the
+[preference draft](preference-rates.md). DEC-024 separately proposes reporting/
+cooperation sample units; neither option is selected.
 Branch evaluation consumes approved state and validated predicates and returns
 eligible content plus diagnostic explanations,
 not grading or raw hidden numeric UI.
@@ -704,9 +739,10 @@ discovery-only adoption, checkpoint continuation, IndexedDB commits, pooled
 behavior rates, once-per-run authored effects and operational restart/rollback
 denominators, current-attempt evidence qualification and distinct investigation
 depth, unresolved ending ambiguity, empirical prediction/confidence and action-based
-recommendation response and pooled prediction mismatch rate are approved.
-Safety/damage preference formulas and other required policies still need decisions;
-detailed persistence/effect/behavior/prediction/response/ending drafts still need review.
+recommendation response, pooled prediction mismatch rate and independent preference
+rates are approved. Reporting/cooperation sample units and other required policies
+still need decisions; detailed persistence/effect/behavior/preference/prediction/
+response/ending drafts still need review.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

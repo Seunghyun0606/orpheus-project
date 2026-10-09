@@ -90,8 +90,10 @@ give UNKNOWN. Recommendation acceptance will compare the next eligible accepted
 action with the exposed recommendation, including manual execution; no response
 or expiry does not count as rejection. Prediction deviation will pool mismatching
 responses divided by eligible responses to valid exposed predictions, without
-confidence weighting. Safety/damage preference formulas and further policies
-still need decisions; independent review/QA is required before implementation.
+confidence weighting. Safety preference and damage tolerance will use independent
+positive/eligible-choice rates at authored tradeoffs, not intensity scores or
+automatic damage/risk conversions. Reporting/cooperation sample units and further
+policies still need decisions; independent review/QA is required before implementation.
 
 ## War Room and saved progress
 

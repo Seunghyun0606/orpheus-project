@@ -1,0 +1,35 @@
+id: DEC-023
+title: Measure safety and damage preferences as independent pooled authored-choice rates
+status: active
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  The human selected option A: calculate the proportion of choices classified for
+  each preference at explicit authored opportunities. Mean normalized preference
+  intensity is not approved, and neither metric is a moral grade or raw damage.
+decision: >-
+  For each metric, versioned authored pre-action tradeoff/opportunity rules define
+  eligible new accepted choices and positive classifications. Sum compatible
+  positives and eligible choices across official attempts before division under
+  DEC-014. safetyPreference and collateralDamageTolerance retain independent
+  definitions and denominators; neither is automatically one minus the other.
+  No eligible choices means unavailable, not observed zero.
+human_approval:
+  selected_option: A
+  instruction: '명시된 선택 기회에서 각 성향에 해당하는 행동의 비율 계산(권장).'
+proposal: .project-os/decisions/proposals/DEC-023-preference-observation-policy.yaml
+consequences:
+  - Require verified pre-action information/availability and new accepted choice provenance; unavailable branches and hidden future outcomes cannot supply preference observations.
+  - Use explicit per-metric authored eligibility and positive predicates, not action labels, generic categories, raw operational risk or customer impact.
+  - Intensity does not weight a sample; retain raw compatible counts and do not average per-attempt percentages.
+  - Actual customer impact, simulation risk and campaign safety/damage values remain distinct observations/effects, not automatic preference scores or moral rankings.
+  - Genuine eligible choices in unfinished and abandoned official attempts remain counted; supported eligible choices with no positives yield observed zero.
+  - Missing/invalid references, classifications, required context or incompatible definitions yield diagnostics, not invented neutral/safe/harm-tolerant samples.
+  - Rejected/duplicate inputs, imports, inherited prefixes, timers and archive review add none; exact-head resume preserves identity and new checkpoint attempts count only new choices.
+  - Preserve source input, metric/opportunity provenance and definition versions; repeated projection cannot count the same source observation again.
+  - Commit identities/history/projections together under DEC-013; failed/conflicting writes cannot acknowledge new official observations.
+  - Production opportunity mappings, thresholds, hidden-value effect amounts and normalization coefficients are not selected; no intensity fallback or good/bad/true labels.
+  - Both legacy stores and the UNKNOWN-only MVP remain unchanged; TASK-018 still requires remaining contracts, independent review, acceptance QA and evaluation.
+supersedes: null

@@ -1,6 +1,6 @@
 id: DEC-023
 title: Choose observation formulas for safety preference and collateral damage tolerance
-status: proposed
+status: resolved
 date: '2026-10-10'
 applies_to:
   - M4
@@ -11,9 +11,10 @@ context: >-
   A frequency of qualifying choices and a mean normalized authored intensity
   describe different tendencies. Neither formula follows from approved restart,
   investigation, recommendation or prediction rates, and both can affect branches.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml
 options:
   - key: A
     label: Pooled binary preference rates at explicit authored tradeoff opportunities
