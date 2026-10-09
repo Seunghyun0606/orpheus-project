@@ -1,55 +1,80 @@
 id: TASK-025
-title: "Verify campaign intelligence against M4 exit criteria"
+title: 'Verify campaign intelligence against M4 exit criteria'
 role: developer
 milestone: M4
 priority: P0
 status: ready
 
-objective: "Produce independently checked evidence for every M4 exit criterion and compatibility promise."
-why: "Framework implementation alone does not establish deterministic campaign behavior or preserved player progress."
+objective: 'Produce independently checked evidence for every M4 exit criterion and compatibility promise.'
+why: 'Framework implementation alone does not establish deterministic campaign behavior or preserved player progress.'
 
 scope:
   include:
-    - "Map all M4 exit criteria to automated fixtures and observed integration/native evidence."
-    - "Run full quality checks covering campaign transitions, save/migrations, player behavior, branches/predictions and all ten endings."
-    - "Reverify the three-incident MVP, UNKNOWN-only boundary, supported display controls and save-slot protection."
-    - "Request independent review, acceptance QA and evaluator handoffs, distinguishing future content work from tested framework readiness."
+    - 'Map all M4 exit criteria to automated fixtures and observed integration/native evidence.'
+    - 'Run full quality checks covering campaign transitions, save/migrations, player behavior, branches/predictions and all ten endings.'
+    - 'Reverify the three-incident MVP, UNKNOWN-only boundary, supported display controls and save-slot protection.'
+    - 'Request independent review, acceptance QA and evaluator handoffs, distinguishing future content work from tested framework readiness.'
   exclude:
-    - "Starting M5 or approving full-campaign/release scope implicitly."
-    - "Overstating native, screen-reader/audio, migration or balance coverage."
+    - 'Starting M5 or approving full-campaign/release scope implicitly.'
+    - 'Overstating native, screen-reader/audio, migration or balance coverage.'
 
 depends_on:
-  - "TASK-020"
-  - "TASK-021"
-  - "TASK-022"
-  - "TASK-023"
-  - "TASK-024"
+  - 'TASK-020'
+  - 'TASK-021'
+  - 'TASK-022'
+  - 'TASK-023'
+  - 'TASK-024'
 specs:
-  - "specs/feature/campaign-and-player-model.md"
-  - "specs/architecture/system-architecture.md"
-  - "specs/product/01-game-and-narrative-direction.md"
-  - "docs/M4_IMPLEMENTATION_PLAN.md"
+  - 'specs/architecture/campaign-intelligence-contract.md'
+  - 'specs/architecture/campaign-ledger-persistence.md'
+  - 'specs/architecture/campaign-effect-application.md'
+  - 'specs/architecture/player-behavior-rates.md'
+  - 'specs/architecture/player-prediction.md'
+  - 'specs/architecture/recommendation-responses.md'
+  - 'specs/architecture/preference-rates.md'
+  - 'specs/architecture/affiliation-rates.md'
+  - 'specs/architecture/ending-resolution.md'
+  - 'specs/feature/campaign-and-player-model.md'
+  - 'specs/architecture/system-architecture.md'
+  - 'specs/product/01-game-and-narrative-direction.md'
+  - 'docs/M4_IMPLEMENTATION_PLAN.md'
 relevant_files:
-  - "src/tests/"
-  - "docs/"
-  - "README.md"
-  - ".project-os/tasks/results/"
+  - 'src/tests/'
+  - 'docs/'
+  - 'README.md'
+  - '.project-os/tasks/results/'
 active_decisions:
-  - ".project-os/decisions/DEC-001-data-driven-headless-domain.yaml"
-  - ".project-os/decisions/DEC-003-deterministic-local-first.yaml"
-  - ".project-os/decisions/DEC-005-versioned-incident-save-migration.yaml"
-  - ".project-os/decisions/DEC-006-separate-m3-campaign-progress.yaml"
-  - ".project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml"
-  - ".project-os/decisions/DEC-008-m3-completion-m4-planning.yaml"
+  - '.project-os/decisions/DEC-001-data-driven-headless-domain.yaml'
+  - '.project-os/decisions/DEC-003-deterministic-local-first.yaml'
+  - '.project-os/decisions/DEC-005-versioned-incident-save-migration.yaml'
+  - '.project-os/decisions/DEC-006-separate-m3-campaign-progress.yaml'
+  - '.project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml'
+  - '.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml'
+  - '.project-os/decisions/DEC-009-separate-m4-campaign-ledger.yaml'
+  - '.project-os/decisions/DEC-010-append-official-campaign-attempts.yaml'
+  - '.project-os/decisions/DEC-011-explicit-legacy-discovery-adoption.yaml'
+  - '.project-os/decisions/DEC-012-confirmed-checkpoint-attempts.yaml'
+  - '.project-os/decisions/DEC-013-transactional-indexeddb-campaign-ledger.yaml'
+  - '.project-os/decisions/DEC-014-pooled-player-behavior-rates.yaml'
+  - '.project-os/decisions/DEC-015-once-per-run-campaign-effects.yaml'
+  - '.project-os/decisions/DEC-016-operational-intervention-rate-denominators.yaml'
+  - '.project-os/decisions/DEC-017-current-attempt-evidence-before-action.yaml'
+  - '.project-os/decisions/DEC-018-distinct-investigation-depth.yaml'
+  - '.project-os/decisions/DEC-019-unresolved-ending-ambiguity.yaml'
+  - '.project-os/decisions/DEC-020-empirical-context-action-prediction.yaml'
+  - '.project-os/decisions/DEC-021-action-based-recommendation-response.yaml'
+  - '.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml'
+  - '.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml'
+  - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
 
 acceptance:
-  - "Campaign state, flags, values, evidence, progression and model-version compatibility have deterministic persistence/replay evidence."
-  - "Action-derived behavior and prediction/branch results are reproducible; every named ending has deterministic coverage."
-  - "Current MVP remains playable and UNKNOWN-only, and no critical review finding remains."
-  - "Each native/automated claim names its provenance and limitations; any material follow-on scope choice is referred to a human gate."
+  - 'Campaign state, flags, values, evidence, progression and model-version compatibility have deterministic persistence/replay evidence.'
+  - 'Action-derived behavior and prediction/branch results are reproducible; every named ending has deterministic coverage.'
+  - 'Current MVP remains playable and UNKNOWN-only, and no critical review finding remains.'
+  - 'Each native/automated claim names its provenance and limitations; any material follow-on scope choice is referred to a human gate.'
 verification:
-  - "Run build, lint, format:check, typecheck, full tests, replays, scenario validation, build:desktop, diff check and projectctl doctor."
-  - "Perform native desktop inspection and publish separate implementation, test, independent review, QA and evaluation handoffs."
+  - 'Run build, lint, format:check, typecheck, full tests, replays, scenario validation, build:desktop, diff check and projectctl doctor.'
+  - 'Perform native desktop inspection and publish separate implementation, test, independent review, QA and evaluation handoffs.'
 
 human_gate: false
 risk: high

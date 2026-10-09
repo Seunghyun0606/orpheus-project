@@ -1,52 +1,74 @@
 id: TASK-022
-title: "Resolve data-driven branches and deterministic prediction feedback"
+title: 'Resolve data-driven branches and deterministic prediction feedback'
 role: developer
 milestone: M4
 priority: P0
 status: ready
 
-objective: "Use approved campaign and player-model inputs for validated branch eligibility and reproducible prediction feedback."
-why: "The narrative must react to accumulated behavior while preserving reveal order and keeping recommendations distinct from judgment."
+objective: 'Use approved campaign and player-model inputs for validated branch eligibility and reproducible prediction feedback.'
+why: 'The narrative must react to accumulated behavior while preserving reveal order and keeping recommendations distinct from judgment.'
 
 scope:
   include:
-    - "Implement authored conditions over evidence, flags, hidden values and behavior with actionable invalid-reference diagnostics."
-    - "Implement the approved prediction/confidence policy and update feedback from actual accepted actions."
-    - "Use explicit non-production fixtures for late-act prediction and reveal gates; preserve current UNKNOWN-only bundles."
-    - "Verify missing evidence, low sample confidence, unavailable actions, ties and UNKNOWN predictions."
+    - 'Implement authored conditions over evidence, flags, hidden values and behavior with actionable invalid-reference diagnostics.'
+    - 'Implement the approved prediction/confidence policy and update feedback from actual accepted actions.'
+    - 'Use explicit non-production fixtures for late-act prediction and reveal gates; preserve current UNKNOWN-only bundles.'
+    - 'Verify missing evidence, low sample confidence, unavailable actions, ties and UNKNOWN predictions.'
   exclude:
-    - "Runtime-generated story, arbitrary confidence animation, realtime AI integration or new late-act production content."
-    - "Changing the prediction policy, confidence semantics, or reveal order without the relevant human decision."
+    - 'Runtime-generated story, arbitrary confidence animation, realtime AI integration or new late-act production content.'
+    - 'Changing the prediction policy, confidence semantics, or reveal order without the relevant human decision.'
 
 depends_on:
-  - "TASK-019"
-  - "TASK-021"
+  - 'TASK-019'
+  - 'TASK-021'
 specs:
-  - "specs/feature/campaign-and-player-model.md"
-  - "specs/architecture/system-architecture.md"
-  - "specs/product/01-game-and-narrative-direction.md"
-  - "docs/M4_IMPLEMENTATION_PLAN.md"
+  - 'specs/architecture/campaign-intelligence-contract.md'
+  - 'specs/architecture/player-behavior-rates.md'
+  - 'specs/architecture/player-prediction.md'
+  - 'specs/architecture/recommendation-responses.md'
+  - 'specs/architecture/preference-rates.md'
+  - 'specs/architecture/affiliation-rates.md'
+  - 'specs/feature/campaign-and-player-model.md'
+  - 'specs/architecture/system-architecture.md'
+  - 'specs/product/01-game-and-narrative-direction.md'
+  - 'docs/M4_IMPLEMENTATION_PLAN.md'
 relevant_files:
-  - "src/engine/"
-  - "src/scenario/"
-  - "scripts/validate-scenarios.mjs"
-  - "src/tests/"
+  - 'src/engine/'
+  - 'src/scenario/'
+  - 'scripts/validate-scenarios.mjs'
+  - 'src/tests/'
 active_decisions:
-  - ".project-os/decisions/DEC-001-data-driven-headless-domain.yaml"
-  - ".project-os/decisions/DEC-003-deterministic-local-first.yaml"
-  - ".project-os/decisions/DEC-005-versioned-incident-save-migration.yaml"
-  - ".project-os/decisions/DEC-006-separate-m3-campaign-progress.yaml"
-  - ".project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml"
-  - ".project-os/decisions/DEC-008-m3-completion-m4-planning.yaml"
+  - '.project-os/decisions/DEC-001-data-driven-headless-domain.yaml'
+  - '.project-os/decisions/DEC-003-deterministic-local-first.yaml'
+  - '.project-os/decisions/DEC-005-versioned-incident-save-migration.yaml'
+  - '.project-os/decisions/DEC-006-separate-m3-campaign-progress.yaml'
+  - '.project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml'
+  - '.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml'
+  - '.project-os/decisions/DEC-009-separate-m4-campaign-ledger.yaml'
+  - '.project-os/decisions/DEC-010-append-official-campaign-attempts.yaml'
+  - '.project-os/decisions/DEC-011-explicit-legacy-discovery-adoption.yaml'
+  - '.project-os/decisions/DEC-012-confirmed-checkpoint-attempts.yaml'
+  - '.project-os/decisions/DEC-013-transactional-indexeddb-campaign-ledger.yaml'
+  - '.project-os/decisions/DEC-014-pooled-player-behavior-rates.yaml'
+  - '.project-os/decisions/DEC-015-once-per-run-campaign-effects.yaml'
+  - '.project-os/decisions/DEC-016-operational-intervention-rate-denominators.yaml'
+  - '.project-os/decisions/DEC-017-current-attempt-evidence-before-action.yaml'
+  - '.project-os/decisions/DEC-018-distinct-investigation-depth.yaml'
+  - '.project-os/decisions/DEC-019-unresolved-ending-ambiguity.yaml'
+  - '.project-os/decisions/DEC-020-empirical-context-action-prediction.yaml'
+  - '.project-os/decisions/DEC-021-action-based-recommendation-response.yaml'
+  - '.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml'
+  - '.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml'
+  - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
 
 acceptance:
-  - "Branch and prediction output is deterministic and traceable to validated data and approved model inputs."
-  - "Unavailable actions, unknown flags/evidence/model versions and invalid conditions are rejected or handled exactly as specified."
-  - "Fixtures test investigation, safety, reporting and dependency branches without calling any route correct or incorrect."
-  - "Current INC-001/002/003 remain UNKNOWN-only; prediction is not exposed ahead of its approved narrative gate."
+  - 'Branch and prediction output is deterministic and traceable to validated data and approved model inputs.'
+  - 'Unavailable actions, unknown flags/evidence/model versions and invalid conditions are rejected or handled exactly as specified.'
+  - 'Fixtures test investigation, safety, reporting and dependency branches without calling any route correct or incorrect.'
+  - 'Current INC-001/002/003 remain UNKNOWN-only; prediction is not exposed ahead of its approved narrative gate.'
 verification:
-  - "Run branch, confidence/deviation, eligibility/reference and reveal-order tests; validate current/frozen YAML and replay all MVP incidents."
-  - "Obtain independent review and acceptance QA."
+  - 'Run branch, confidence/deviation, eligibility/reference and reveal-order tests; validate current/frozen YAML and replay all MVP incidents.'
+  - 'Obtain independent review and acceptance QA.'
 
 human_gate: false
 risk: high

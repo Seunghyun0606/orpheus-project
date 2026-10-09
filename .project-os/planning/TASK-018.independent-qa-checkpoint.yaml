@@ -1,0 +1,54 @@
+task: TASK-018
+kind: independent_qa_checkpoint
+role: qa
+actor: codex-task018-independent-qa
+source_agent: /root/task018_independent_qa
+recorded_by: codex-task018-architect
+candidate_commit: 76be475493c4f387636c19c3d11e49de272b2efc
+status: proposal_consistency_verified_acceptance_pending
+date: '2026-10-10'
+summary: >-
+  Independent read-only QA verified proposal/source consistency, arithmetic,
+  references and existing safeguards. Final acceptance remains pending detailed
+  contract closure and independent architecture approval. The architect records
+  the separate QA report; this is not final immutable Project OS QA or completion.
+acceptance:
+  four_m4_exit_criteria: mapped_to_later_tasks
+  snapshots_not_canonical_history: correctly_distinguished_source_and_regression_match
+  denominators_unavailable_prediction_and_ending_ambiguity: approved_families_consistent
+  separate_approved_decisions: all_22_declared_references_exist_and_are_active
+  independent_verification: performed_proposal_level_only
+  final_contract_acceptance: pending
+findings:
+  - Dependent metadata lacked direct approved contract and DEC-009 through DEC-024 references at candidate; root's narrow correction was independently rechecked through actual context generation.
+  - Root's umbrella persistence clarification was independently verified as consistent with separate ledger and legacy/settings authorities.
+  - Canonical input/association representation, predicate composition/availability, priority representation and exposure/opportunity lifecycle remain unverified framework details, not missing production balance or future native test failures.
+verification:
+  targeted_legacy_tests:
+    command: npm test -- src/persistence/save.test.ts src/tests/m3-narrative.test.ts src/tests/war-room.test.tsx src/app/AppShell.test.tsx
+    result: 43_tests_4_files_passed
+  full_existing_tests:
+    command: npm test
+    result: 116_tests_16_files_passed
+  scenario_validation:
+    command: npm run validate:scenarios
+    result: 8_files_passed
+  project_doctor: pass_including_after_safe_corrections
+  format_check: pass_at_observed_checkpoint
+  diff_check: pass_at_observed_checkpoint
+  utf8_reference_link_arithmetic_audits: pass
+  dependent_context_generation:
+    tasks: TASK-019 through TASK-025
+    result: declared_corrected_references_retained
+    limit: All responses are budget-truncated; only three or four resource bodies are included, so required source files still need direct reading.
+evidence:
+  - docs/M4_IMPLEMENTATION_PLAN.md:99 at candidate
+  - specs/architecture/campaign-intelligence-contract.md:747 at candidate
+  - src/persistence/campaign-progress.ts:25 and 72
+  - src/tests/m3-narrative.test.ts:127
+safe_fix_provenance: Independently checked root's scoped working-tree delta, not a final corrected candidate commit.
+limitations:
+  - QA edited no runtime, save, state or result files.
+  - No browser/native inspection, actual IndexedDB transaction or unimplemented campaign/model/ending API test occurred.
+  - Context reference retention does not imply every required resource body was included.
+  - No detailed framework policy was selected and no final TASK-018 completion is claimed.

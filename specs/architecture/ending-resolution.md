@@ -27,6 +27,13 @@ definition or unavailable required observation must yield a diagnostic, not a
 valid no-match result. Predicate composition/availability details still need
 contract review; no guessed truth table may enter production implicitly.
 
+Independent review identified this composition gap as blocking finding R1.
+[DEC-025's proposal](../../.project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml)
+compares strict required-observation validation with explicit three-valued
+composition for valid unavailable leaves; neither alternative is selected.
+All references and definition versions must still validate under either choice.
+Do not implement an implicit short-circuit or eager policy while this is pending.
+
 ## Result boundaries
 
 The proposed result variants are resolved, ambiguous, no-match and diagnostic.

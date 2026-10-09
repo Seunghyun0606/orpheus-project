@@ -142,18 +142,26 @@ DEC-023 approves independent preference rates, specified in the
 DEC-024 approves explicit reporting/cooperation response units, specified in the
 [affiliation review draft](../specs/architecture/affiliation-rates.md).
 Basic formula families are approved; detailed contracts and acceptance still need
-independent review/QA. The next gate is bounded review/QA execution authorization,
+independent review/QA. Bounded read-only review/QA execution is now human-authorized,
 recorded in the [request](../.project-os/planning/TASK-018.review-qa-execution-request.yaml).
 Existing-save checks do not constitute acceptance of the proposed new campaign
 system; remaining policies and independent review/QA are still required.
 
-This phase only closes the approved M3 milestone and registers eight bounded
-tasks. It does not change runtime code, save content, hidden scores, formula
+Initial M4 planning closed the approved M3 milestone and registered eight bounded
+tasks. Subsequent TASK-018 documentation and context corrections do not change
+runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-Next: obtain explicit authorization for separate review/QA agent delegation, or
-human independent checks, then address the detailed contract/acceptance findings
-before dependent implementation. Do not invent pending authoring rules or approve
+The [independent review](../.project-os/planning/TASK-018.independent-review-checkpoint.yaml)
+requests changes, and [independent QA](../.project-os/planning/TASK-018.independent-qa-checkpoint.yaml)
+verifies proposal consistency and legacy safeguards, not final acceptance.
+Next: obtain the human choice for
+[predicate availability composition](../.project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml)
+and close remaining detailed contract findings before dependent implementation.
+Direct contract and
+DEC-009–024 references are now declared in dependent task context metadata;
+budget-truncated context output does not replace reading required source files.
+Do not invent pending authoring rules or approve
 material findings silently. Approved formula/storage decisions are not acceptance
 of the entire contract or authorization to infer missing history.

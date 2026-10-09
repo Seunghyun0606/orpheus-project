@@ -1,0 +1,45 @@
+id: DEC-025
+title: Choose availability composition for validated campaign conditions
+status: proposed
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  Independent architecture review of candidate 76be475 found that condition
+  composition is still undefined. A supported metric with no eligible samples
+  has no observed value. ALL(false, unavailable) and ANY(true, unavailable)
+  can yield different branch/ending eligibility under different logical policies,
+  even with identical validated definitions and recorded inputs.
+decision: Pending human selection; neither alternative is approved or implemented.
+chosen_option: null
+recommended_option: A
+options:
+  - key: A
+    label: Diagnose any unavailable observation referenced by a condition
+    details: >-
+      Validate the entire definition and all references first. For a condition,
+      require every referenced runtime observation before applying boolean
+      composition. Any valid but unavailable observation makes that condition
+      diagnostic even when a known sibling could determine a boolean result.
+      ALL(false, unavailable) and ANY(true, unavailable) both diagnose.
+  - key: B
+    label: Use explicit three-valued composition for valid unavailable observations
+    details: >-
+      Validate the entire definition and all references first. Treat valid but
+      unavailable observations as indeterminate leaves. ALL(false, indeterminate)
+      is false; ANY(true, indeterminate) is true, independent of operand order.
+      ALL(true, indeterminate), ANY(false, indeterminate) and NOT(indeterminate)
+      remain indeterminate and diagnose when a boolean decision is required.
+invariants:
+  - Both choices statically validate every reference and definition, including operands whose values would not determine the result.
+  - Invalid references, malformed required context and unsupported definition versions remain diagnostics; neither choice hides these as ordinary unavailable leaves.
+  - Unavailable is not observed zero, false, refusal, neutral allegiance or a guessed historical value.
+  - Composition is pure, versioned, independent of operand/file order, and uses verified recorded context without future action leakage.
+  - DEC-019 still requires unresolved ending ties/no-match, no fallback and no ending grant from unresolved required context; no ambiguous candidate may be silently dropped.
+  - Either choice requires explicit ALL/ANY/NOT truth tables, nested/order-permutation fixtures and branch/ending integration review before acceptance.
+  - No production thresholds, priorities, reveal gates, opportunity lifecycle or numeric campaign effects are selected by this question.
+  - Existing runtime, legacy stores and UNKNOWN-only MVP content remain unchanged; TASK-018 stays active.
+proposal_document: specs/architecture/campaign-intelligence-contract.md
+review_evidence: .project-os/planning/TASK-018.independent-review-checkpoint.yaml
+supersedes: null

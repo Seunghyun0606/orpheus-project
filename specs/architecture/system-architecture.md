@@ -42,6 +42,15 @@ Tauri shell
 
 저장은 local-first다. Save envelope에는 schema version, content version, campaign state, incident history, evidence, player model, settings, narrative/ending flags와 replay metadata를 포함한다. 마이그레이션이 없는 incompatible save는 조용히 손상시키지 않고 명확한 오류를 반환한다.
 
+위 목록은 제품 전체의 보존 요구사항이며 단일 envelope로 합친다는 뜻은 아니다.
+M4의 승인된 DEC-009/013에 따라 기존 Incident 슬롯과 M3 발견 저장소는 그대로
+유지하고, 정식 캠페인 원장만 별도 버전별 IndexedDB authority에 저장한다.
+Settings는 기존 저장 authority에 남으며 새 원장에 중복 저장하지 않는다.
+새 원장의 transaction은 기존 두 localStorage 저장소를 포함하지 않는다.
+구체적인 버전·원장·호환성 계약과 현재 검토 상태는
+[campaign intelligence contract](campaign-intelligence-contract.md)와
+[ledger persistence draft](campaign-ledger-persistence.md)를 따른다.
+
 ## Validation Boundary
 
 빌드 또는 전용 `validate:scenarios` 명령은 schema, duplicate id, invalid reference, unknown flag, missing signal/action, invalid narrative condition와 ending reference를 검사한다. 파싱된 이후의 engine 입력은 validated type으로 취급한다.

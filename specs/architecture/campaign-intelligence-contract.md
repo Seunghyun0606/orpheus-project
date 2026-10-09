@@ -610,20 +610,51 @@ and both legacy stores stay unchanged.
 The [reporting/cooperation review draft](affiliation-rates.md) specifies independent
 opportunities, response counts, provenance, persistence and future fixture coverage.
 
-## Independent review handoff — execution authorization pending
+## Independent review handoff — read-only delegation authorized
 
 The basic formula families for all ten player behavior fields are now separately
 approved. This is not approval of every authoring predicate, persisted envelope
 or production threshold. Remaining detailed definitions, compatibility boundaries
 and acceptance coverage require independent scrutiny before dependent work.
 
-The [execution request](../../.project-os/planning/TASK-018.review-qa-execution-request.yaml)
-asks permission to delegate bounded read-only architecture review and acceptance
-QA to separate agents, or to obtain human independent review without automated
-delegation. No agent has been started for these checks. The architect's current
-static audits and legacy test passes are not independent acceptance evidence.
-Neither option authorizes runtime/storage changes, canonical state mutation or
+The human selected A in the
+[execution request](../../.project-os/planning/TASK-018.review-qa-execution-request.yaml),
+authorizing separate bounded read-only architecture review and acceptance QA
+agents against candidate `76be475`. Their evidence must distinguish the committed
+candidate from any subsequent architect fixes. The architect's static audits and
+legacy test passes alone are not independent acceptance evidence. This execution
+approval does not authorize runtime/storage changes, canonical state mutation or
 task completion; material findings return to the human gate.
+
+The [independent review checkpoint](../../.project-os/planning/TASK-018.independent-review-checkpoint.yaml)
+requests changes, while the
+[independent QA checkpoint](../../.project-os/planning/TASK-018.independent-qa-checkpoint.yaml)
+verifies proposal consistency and existing safeguards without accepting the final
+contract. Both name the original candidate and separately inspected safe fixes.
+Dependent task references and umbrella persistence wording were corrected; generated
+context remains truncated and required declared source files must be read directly.
+
+## Gate 17 — predicate availability composition (pending human decision)
+
+[DEC-025's proposal](../../.project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml)
+records review finding R1. A valid metric with no eligible samples is unavailable,
+not zero. It is not yet defined whether `ALL(false, unavailable)` or
+`ANY(true, unavailable)` must diagnose, or may produce a known boolean through
+explicit three-valued composition. Those alternatives can change branch/ending
+eligibility, not merely serialization or production tuning.
+
+- **A — proposed:** require every referenced runtime observation; any unavailable
+  leaf makes the condition diagnostic, even with a decisive known sibling.
+- **B — proposed:** use validated three-valued ALL/ANY/NOT rules; a decisive false
+  ALL sibling or true ANY sibling produces a known result, while an indeterminate
+  final condition diagnoses.
+
+Neither option is selected. Both statically validate all references/definitions,
+including non-decisive operands. Malformed required context, invalid references
+or unsupported definition versions remain diagnostics, never ordinary unavailable
+leaves. Neither grants a fallback ending or silently drops an unresolved candidate
+under DEC-019. Required truth tables and nested/order-permutation fixtures must
+follow the human choice. No runtime or production thresholds change here.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -766,6 +797,8 @@ rates and explicit reporting/cooperation response units are approved. Detailed
 persistence/effect/behavior/preference/prediction/response/ending drafts still need
 independent review. Unresolved material findings must receive separate approval;
 production mappings, thresholds and unimplemented APIs are not certified here.
-Independent architecture review and final acceptance QA have not approved this
-draft. Existing tests verify current safeguards, not these proposed
-new APIs. No result should mark TASK-018 complete merely because this text exists.
+Independent architecture review has requested changes; QA has verified proposal
+consistency and existing safeguards, not final acceptance or these proposed new
+APIs. Predicate composition remains at Gate 17, and later required detailed
+contracts still need closure. No result should mark TASK-018 complete merely
+because this text or passing legacy tests exist.

@@ -1,53 +1,76 @@
 id: TASK-023
-title: "Implement authored ending conditions and deterministic priority resolution"
+title: 'Implement authored ending conditions and deterministic priority resolution'
 role: developer
 milestone: M4
 priority: P0
 status: ready
 
-objective: "Resolve the defined ending set through validated data using campaign state, final incident state, and final actions."
-why: "Endings must express cumulative consequences without a hardcoded good/bad/true result or premature final campaign expansion."
+objective: 'Resolve the defined ending set through validated data using campaign state, final incident state, and final actions.'
+why: 'Endings must express cumulative consequences without a hardcoded good/bad/true result or premature final campaign expansion.'
 
 scope:
   include:
-    - "Implement the approved ending schema, predicates, priority/tie/no-match policy, and a pure resolver."
-    - "Define deterministic test fixtures for CONTINUITY, LIBERATION, WHISTLEBLOWER, SHUTDOWN, CUSTODIAN, NULL, THE BOARD, THE FIRE, STATUS QUO and REWRITE."
-    - "Validate flags, evidence, action, model-version and ending references with actionable diagnostics."
-    - "Keep ending fixture thresholds explicitly test-only until balance/content decisions are approved."
+    - 'Implement the approved ending schema, predicates, priority/tie/no-match policy, and a pure resolver.'
+    - 'Define deterministic test fixtures for CONTINUITY, LIBERATION, WHISTLEBLOWER, SHUTDOWN, CUSTODIAN, NULL, THE BOARD, THE FIRE, STATUS QUO and REWRITE.'
+    - 'Validate flags, evidence, action, model-version and ending references with actionable diagnostics.'
+    - 'Keep ending fixture thresholds explicitly test-only until balance/content decisions are approved.'
   exclude:
-    - "Implementing the full BLACKOUT incident, epilogues, or exposing ending content in the current MVP."
-    - "Inventing production thresholds, substituting a new single objective for REWRITE, or labeling endings good/bad/true."
+    - 'Implementing the full BLACKOUT incident, epilogues, or exposing ending content in the current MVP.'
+    - 'Inventing production thresholds, substituting a new single objective for REWRITE, or labeling endings good/bad/true.'
 
 depends_on:
-  - "TASK-019"
-  - "TASK-021"
-  - "TASK-022"
+  - 'TASK-019'
+  - 'TASK-021'
+  - 'TASK-022'
 specs:
-  - "specs/feature/campaign-and-player-model.md"
-  - "specs/architecture/system-architecture.md"
-  - "specs/product/01-game-and-narrative-direction.md"
-  - "docs/M4_IMPLEMENTATION_PLAN.md"
+  - 'specs/architecture/campaign-intelligence-contract.md'
+  - 'specs/architecture/ending-resolution.md'
+  - 'specs/architecture/player-behavior-rates.md'
+  - 'specs/architecture/player-prediction.md'
+  - 'specs/architecture/recommendation-responses.md'
+  - 'specs/architecture/preference-rates.md'
+  - 'specs/architecture/affiliation-rates.md'
+  - 'specs/feature/campaign-and-player-model.md'
+  - 'specs/architecture/system-architecture.md'
+  - 'specs/product/01-game-and-narrative-direction.md'
+  - 'docs/M4_IMPLEMENTATION_PLAN.md'
 relevant_files:
-  - "src/engine/"
-  - "src/scenario/"
-  - "scripts/validate-scenarios.mjs"
-  - "src/tests/"
+  - 'src/engine/'
+  - 'src/scenario/'
+  - 'scripts/validate-scenarios.mjs'
+  - 'src/tests/'
 active_decisions:
-  - ".project-os/decisions/DEC-001-data-driven-headless-domain.yaml"
-  - ".project-os/decisions/DEC-003-deterministic-local-first.yaml"
-  - ".project-os/decisions/DEC-005-versioned-incident-save-migration.yaml"
-  - ".project-os/decisions/DEC-006-separate-m3-campaign-progress.yaml"
-  - ".project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml"
-  - ".project-os/decisions/DEC-008-m3-completion-m4-planning.yaml"
+  - '.project-os/decisions/DEC-001-data-driven-headless-domain.yaml'
+  - '.project-os/decisions/DEC-003-deterministic-local-first.yaml'
+  - '.project-os/decisions/DEC-005-versioned-incident-save-migration.yaml'
+  - '.project-os/decisions/DEC-006-separate-m3-campaign-progress.yaml'
+  - '.project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml'
+  - '.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml'
+  - '.project-os/decisions/DEC-009-separate-m4-campaign-ledger.yaml'
+  - '.project-os/decisions/DEC-010-append-official-campaign-attempts.yaml'
+  - '.project-os/decisions/DEC-011-explicit-legacy-discovery-adoption.yaml'
+  - '.project-os/decisions/DEC-012-confirmed-checkpoint-attempts.yaml'
+  - '.project-os/decisions/DEC-013-transactional-indexeddb-campaign-ledger.yaml'
+  - '.project-os/decisions/DEC-014-pooled-player-behavior-rates.yaml'
+  - '.project-os/decisions/DEC-015-once-per-run-campaign-effects.yaml'
+  - '.project-os/decisions/DEC-016-operational-intervention-rate-denominators.yaml'
+  - '.project-os/decisions/DEC-017-current-attempt-evidence-before-action.yaml'
+  - '.project-os/decisions/DEC-018-distinct-investigation-depth.yaml'
+  - '.project-os/decisions/DEC-019-unresolved-ending-ambiguity.yaml'
+  - '.project-os/decisions/DEC-020-empirical-context-action-prediction.yaml'
+  - '.project-os/decisions/DEC-021-action-based-recommendation-response.yaml'
+  - '.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml'
+  - '.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml'
+  - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
 
 acceptance:
-  - "All ten named endings have repeatable positive and exclusion/boundary fixtures."
-  - "Resolver consumes only explicit validated inputs and data priority; equal/overlapping/no-match cases have approved tested behavior."
-  - "Invalid references, unsupported versions, missing final context and malformed definitions cannot silently pick an ending."
-  - "Framework preserves moral ambiguity and required reveal order; no React or incident-specific logic owns ending selection."
+  - 'All ten named endings have repeatable positive and exclusion/boundary fixtures.'
+  - 'Resolver consumes only explicit validated inputs and data priority; equal/overlapping/no-match cases have approved tested behavior.'
+  - 'Invalid references, unsupported versions, missing final context and malformed definitions cannot silently pick an ending.'
+  - 'Framework preserves moral ambiguity and required reveal order; no React or incident-specific logic owns ending selection.'
 verification:
-  - "Run ending fixtures, overlapping/tie/no-match and invalid-reference tests; full tests/typecheck/lint/content validation."
-  - "Obtain independent review and acceptance QA."
+  - 'Run ending fixtures, overlapping/tie/no-match and invalid-reference tests; full tests/typecheck/lint/content validation.'
+  - 'Obtain independent review and acceptance QA.'
 
 human_gate: false
 risk: high
