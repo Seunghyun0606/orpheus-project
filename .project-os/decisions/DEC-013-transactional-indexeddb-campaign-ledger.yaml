@@ -1,0 +1,34 @@
+id: DEC-013
+title: Commit the separate campaign ledger through IndexedDB transactions
+status: active
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  DEC-009/010/011/012 establish separate ledger authority, retained official
+  retry histories, explicit discovery-only adoption and confirmed checkpoint
+  attempts. The human selected option A for physical storage and concurrent
+  writes: use IndexedDB for the new ledger only, not a replacement for old saves.
+decision: >-
+  Use a distinct versioned IndexedDB authority and asynchronous injected adapter.
+  Within one readwrite transaction, check expected committed revision and write
+  the validated ledger update with input identities, projections and checkpoint
+  associations. Acknowledge and publish official state only after transaction
+  completion. Abort conflicting or failed commits without silent merge or
+  overwrite; preserve both existing localStorage keys in their original roles.
+human_approval:
+  selected_option: A
+  instruction: '새 원장만 IndexedDB 트랜잭션으로 구현(권장).'
+proposal: .project-os/decisions/proposals/DEC-013-campaign-ledger-commit-policy.yaml
+consequences:
+  - An individual request success is not the official commit acknowledgement.
+  - Stable input identities reconcile duplicates and interrupted acknowledgements without applying an action twice.
+  - The transaction covers only the new ledger, not the old incident and discovery keys.
+  - No localStorage or memory fallback for failed official ledger writes is approved.
+  - Do not delete, truncate, mirror or migrate either existing store on open or failure.
+  - Exact versioned envelope and association contracts require review; model formulas and thresholds remain separate decisions.
+  - Browser and Tauri capability, transaction abort, revision conflict and reload tests are required before acceptance.
+  - Logical commit completion is not an unlimited quota, hardware-failure durability or authentication guarantee.
+  - TASK-018 remains active pending remaining policies, independent review, acceptance QA and evaluation.
+supersedes: null

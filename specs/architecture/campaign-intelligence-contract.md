@@ -3,7 +3,8 @@
 Status: **partially decided contract proposal**. Gate 1 storage authority is
 approved by DEC-009; Gate 2 retry contribution is approved by DEC-010; Gate 3
 discovery-only adoption is approved by DEC-011; Gate 4 confirmed checkpoint
-attempts are approved by DEC-012. Gate 5 ledger commit mechanism remains pending.
+attempts are approved by DEC-012; Gate 5 IndexedDB commits are approved by DEC-013.
+Gate 6 player rate aggregation remains pending.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -25,6 +26,8 @@ DEC-011 approves explicit source-verified discovery adoption only. It does not
 import historical effects, behavior, completion or official checkpoint association.
 DEC-012 separately approves eligible unfinished checkpoint baselines as confirmed
 new attempts, preserving prior history and counting only subsequently accepted inputs.
+DEC-013 chooses IndexedDB transactions for the new ledger only, with revision
+checks and acknowledgement after commit; both legacy localStorage stores remain.
 
 The three production MVP incidents remain UNKNOWN-only. Framework fixtures may
 describe later-act systems without making those systems visible in MVP UI.
@@ -229,11 +232,11 @@ and conflict/commit mechanics still require the final reviewed contract.
 - Checkpoint-derived artifacts do not silently enter campaign membership or run
   historical discovery effects; DEC-011 adoption remains explicit.
 
-## Gate 5 — ledger commit mechanism (pending)
+## Gate 5 — ledger commit mechanism (option A approved)
 
-[DEC-013's proposal](../../.project-os/decisions/proposals/DEC-013-campaign-ledger-commit-policy.yaml)
-compares two mechanisms for the separate ledger. Neither is selected. Both keep
-the original incident and M3 discovery stores in localStorage unchanged:
+[DEC-013](../../.project-os/decisions/DEC-013-transactional-indexeddb-campaign-ledger.yaml)
+records human selection of A. The original alternatives remain below for
+comparison; B is not selected. Both preserve the legacy localStorage stores:
 
 - **A — recommended:** a new versioned IndexedDB authority, using a readwrite
   transaction for the revision check and complete ledger update. A new asynchronous
@@ -251,7 +254,7 @@ and the alternative uses the
 [Web Locks exclusive mode](https://w3c.github.io/web-locks/#modes-and-scheduling).
 Actual browser and Tauri WebView support must be verified in TASK-020/024/025.
 
-The proposed commit boundary is identical for either option: prepare a validated
+The approved commit boundary for A is: prepare a validated
 candidate, compare the expected committed revision under the selected protection,
 persist input identities plus derived state and associations, then publish official
 success. A stale revision or storage failure preserves the last committed state
@@ -263,9 +266,35 @@ on reload, not treated as permission to apply the action again.
 This boundary covers the new ledger only. An explicit old-slot save remains a
 separate operation; its association cannot be trusted without checking actual
 verified bytes. No cross-key atomicity, unbounded storage, automatic dual-write,
-backend fallback, deletion or physical-disk durability promise is proposed. Exact
-envelope fields and version axes must be finalized in the reviewed contract after
-this choice; model formula and production balance decisions remain separate.
+backend fallback, deletion or physical-disk durability promise is proposed.
+The [ledger persistence review draft](campaign-ledger-persistence.md) now specifies
+version axes, record/provenance boundaries, association, replay validation and
+failure fixtures for the chosen mechanism. Its detailed schema still needs review;
+model formula and production balance decisions remain separate. No runtime
+database, migration or adapter has been implemented by this documentation step.
+
+## Gate 6 — behavior rate aggregation (pending)
+
+[DEC-014's proposal](../../.project-os/decisions/proposals/DEC-014-player-rate-aggregation.yaml)
+asks how metric-specific eligible observations from retained official attempts
+are weighted. Neither option is selected:
+
+- **A — recommended:** pool eligible numerators and denominators across attempts,
+  then divide. Every eligible sample has equal influence; longer attempts with
+  more samples contribute more to the resulting rate.
+- **B:** compute each eligible attempt's rate, then average those rates with equal
+  attempt weight. A short eligible attempt has the same influence as a long one.
+
+An arithmetic-only fixture has one positive observation in two eligible samples
+on the first attempt and one in ten on the second. A gives `2/12 = 1/6`; B gives
+`(1/2 + 1/10)/2 = 3/10`. The different rates can affect later authored branches
+and prediction inputs. These numbers are not ending thresholds or production tuning.
+
+Both options retain eligible new observations from unfinished/abandoned attempts;
+no-sample attempts add no weight and an entirely unsupported metric is unavailable,
+not zero. Imported artifacts and inherited prefixes create no historical samples.
+Exact metric classifications, non-rate investigation depth/intent formulas, authored
+effect scopes, confidence and ending policy remain separate contract work.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -289,8 +318,9 @@ guarantee.
 
 DEC-010 requires new official retries to append distinct attempts; DEC-012
 defines confirmed checkpoint-based attempts without recounting inherited inputs.
-No replacement of accepted history is authorized. Exact association fields and
-commit protocol remain pending; a legacy save cannot supply absent identity by guessing.
+No replacement of accepted history is authorized. DEC-013 fixes the commit
+mechanism; the detailed association/envelope draft still requires review. A legacy
+save cannot supply absent identity by guessing.
 
 ### Campaign state and effects
 
@@ -350,7 +380,8 @@ remain pending. Fixture thresholds are test-only, not production balance.
 
 ## Legacy import, failures and rollback proposals
 
-DEC-011 approves adoption scope only; exact storage and commit mechanics are pending.
+DEC-011 approves adoption scope and DEC-013 the IndexedDB commit boundary. The
+detailed envelope and source-change checks remain under contract review.
 Read/validate originals before any import. Preserve original bytes and content
 provenance; do not use only migrated target-state output to invent old discoveries
 or side effects. A candidate import should report verified artifacts, retained
@@ -364,8 +395,9 @@ an error, not pretend that an action was durably saved. Reload checks need defin
 revision/conflict behavior; a read-compare-write over localStorage is not atomic.
 Rollback preserves the two original keys, but an old client cannot understand
 new campaign history. No automatic dual-write, truncation, erase or destructive
-reset is approved. Atomicity, concurrent-writer policy and explicit import commit
-behavior must be specified after the storage choice.
+reset is approved. DEC-013 provides new-ledger transactional revision checks,
+not atomicity across old stores. The persistence draft defines the remaining
+review and fixture requirements; no physical implementation is present.
 
 ## Verification and acceptance map
 
@@ -380,8 +412,9 @@ behavior must be specified after the storage choice.
 | Desktop/native integration and final acceptance | TASK-024/025: persistence and read-only archive isolation, all three UNKNOWN-only paths, supported native minimum/enlarged text, independent review and QA                     |
 
 TASK-018 acceptance remains pending: storage authority, official retry history,
-discovery-only adoption and checkpoint continuation are approved. Ledger commit
-mechanism and other required policies still need decisions.
+discovery-only adoption, checkpoint continuation and IndexedDB commits are approved.
+Behavior aggregation and other required policies still need decisions; the
+detailed persistence draft still needs review.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

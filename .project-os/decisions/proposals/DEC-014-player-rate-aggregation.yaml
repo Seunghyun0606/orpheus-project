@@ -1,0 +1,52 @@
+id: DEC-014
+title: Choose player behavior rate aggregation across official attempts
+status: proposed
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  Official attempts and earlier accepted actions are retained under DEC-010;
+  restored prefixes and legacy imports are not new behavior under DEC-011/012.
+  Keeping history does not choose its model weighting. Pooling eligible samples
+  and averaging per-attempt rates can produce different branch and prediction
+  inputs from the same retained history. The choice must be versioned, not inferred.
+decision: Pending human selection; neither option is approved or implemented.
+recommended_option: A
+chosen_option: null
+options:
+  - key: A
+    label: Pool eligible numerators and denominators across all official attempts
+    details: >-
+      For each supported rate, sum eligible positive observations and eligible
+      samples across official attempts before division. Each eligible sample has
+      equal weight, so longer attempts with more samples have more influence.
+      Include unfinished and abandoned attempts' eligible new observations;
+      retained history is not replaced by the latest or most successful attempt.
+  - key: B
+    label: Average eligible per-attempt rates with equal attempt weight
+    details: >-
+      Compute each attempt's rate from eligible new observations, then take the
+      arithmetic mean over attempts with at least one eligible sample for that
+      metric. All such attempts have equal influence regardless of sample count.
+      Retain unfinished and abandoned attempt contributions. A short retry can
+      therefore influence the rate as much as a long investigation.
+example:
+  purpose: Arithmetic fixture only; not production balancing or an ending threshold.
+  attempts:
+    - positive_observations: 1
+      eligible_samples: 2
+    - positive_observations: 1
+      eligible_samples: 10
+  option_A: '2/12 = 1/6'
+  option_B: '(1/2 + 1/10)/2 = 3/10'
+invariants:
+  - Record metric-specific eligible classifications and raw sample counts with definition versions.
+  - No eligible sample means unavailable, not an observed zero; an empty attempt adds no denominator or average weight.
+  - Restored command prefixes, imported artifacts, archive review, duplicate delivery and rejected commands add no new behavior samples.
+  - Genuine newly accepted actions in distinct official attempts are not deduplicated by equal command bytes.
+  - Unsupported MVP AI recommendation, NULL cooperation and prediction observations remain unavailable.
+  - Imported discovery membership alone does not prove historical evidence-before-action or create a past behavior sample.
+  - This rate-weighting choice does not select action classifications, non-rate depth/intent formulas, hidden-effect awards, prediction confidence or ending thresholds.
+proposal_document: specs/architecture/campaign-intelligence-contract.md
+supersedes: null

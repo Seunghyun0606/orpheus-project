@@ -71,8 +71,10 @@ human approval of a separate campaign ledger and official retry history retained
 within the same campaign, while preserving existing stores. Explicit adoption of
 verified legacy evidence/narrative membership is also approved, without importing
 past behavior or completion. Confirmed checkpoint-based attempts preserve prior
-history and count only new actions. The ledger commit mechanism and further
-policies still require decisions and independent review/QA before implementation.
+history and count only new actions. The new ledger will use approved IndexedDB
+transactions; both existing localStorage stores remain unchanged. Its detailed
+contract, behavior weighting and further policies still require review/decisions
+and independent QA before implementation.
 
 ## War Room and saved progress
 

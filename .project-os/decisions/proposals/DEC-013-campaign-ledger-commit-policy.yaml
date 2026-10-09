@@ -1,6 +1,6 @@
 id: DEC-013
 title: Choose the separate campaign ledger commit and concurrent-writer mechanism
-status: proposed
+status: resolved
 date: '2026-10-09'
 applies_to:
   - M4
@@ -12,9 +12,14 @@ context: >-
   not replace later official history. The new ledger must commit accepted inputs,
   projections and attempt/checkpoint associations coherently while leaving both
   old localStorage stores in their existing roles.
-decision: Pending human selection; neither option is approved or implemented.
+decision: >-
+  The human selected option A: use a separate versioned IndexedDB ledger with
+  revision-checked transactional commits, preserving both existing localStorage
+  stores. The active DEC-013 record captures that boundary. Runtime storage
+  is not implemented by resolving this proposal.
+decision_record: .project-os/decisions/DEC-013-transactional-indexeddb-campaign-ledger.yaml
 recommended_option: A
-chosen_option: null
+chosen_option: A
 options:
   - key: A
     label: Separate IndexedDB ledger with transactional revision-checked commits
