@@ -1,39 +1,57 @@
 # M3 exit verification (TASK-017)
 
-Status: in progress. This is an evidence map, not M3 completion approval. The
-milestone remains active until independent acceptance QA, native desktop
-inspection, and its configured human completion gate are resolved.
+Status: automated and native verification complete. Independent handoffs and
+the human decision are recorded separately. This evidence map does not approve
+M3 completion; M3 remains active until its configured human gate is resolved.
 
-| M3 exit criterion                                                                 | Repeatable evidence                                                                                                                                                                                                                                                                                                                                                   | Current result                                            |
-| --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| INC-001, INC-002, and INC-003 are fully playable                                  | `src/app/AppShell.test.tsx` starts each scenario, follows its authored investigation path, observes UNKNOWN, reaches postmortem, and revisits the archive after remount. `src/tests/vertical-slice.test.tsx` covers the original keyboard-driven INC-001 path.                                                                                                        | Automated UI pass; native interactive inspection pending. |
-| Shared engine and UI contain no scenario-specific React logic                     | `src/app/AppShell.tsx` enumerates the scenario catalog; `src/app/App.tsx` renders state and authored action data. `npm run lint` checks the headless engine boundary. Search production React for `INC-001`, `INC-002`, or `INC-003` to audit branching.                                                                                                              | Static inspection and automated tests pass.               |
-| Evidence, narrative, War Room communication, and delegation work across incidents | `src/tests/m3-narrative.test.ts` replays all UNKNOWN discovery routes and verifies cross-incident evidence persistence. `src/tests/war-room.test.tsx` checks all three authored delegated jobs, exact ETA, team capacity, save/restore, and deterministic replay. `src/app/AppShell.test.tsx` observes delegated pending work and recovered UNKNOWN in the shared UI. | Automated engine and UI pass.                             |
-| MVP reveals UNKNOWN without ORPHEUS identity                                      | `npm run validate:scenarios` validates current and frozen scenario YAML. `src/tests/m3-narrative.test.ts` checks the UNKNOWN-only discovery routes and rejects premature identity disclosure in scenario fields.                                                                                                                                                      | Automated content boundary pass.                          |
+| M3 exit criterion                                                                 | Repeatable evidence                                                                                                                                                                                                                                                                                                                            | Current result                              |
+| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| INC-001, INC-002, and INC-003 are fully playable                                  | `src/app/AppShell.test.tsx` starts each scenario, follows its authored investigation path, observes UNKNOWN, reaches postmortem, and revisits the archive after remount. `src/tests/vertical-slice.test.tsx` covers keyboard-driven INC-001. [Native inspection](TASK-017_NATIVE_QA.md) records all three desktop routes and restored records. | Automated and native paths pass.            |
+| Shared engine and UI contain no scenario-specific React logic                     | `src/app/AppShell.tsx` enumerates the scenario catalog; `src/app/App.tsx` renders state and authored action data. `npm run lint` checks the headless engine boundary. Search production React for `INC-001`, `INC-002`, or `INC-003` to audit branching.                                                                                       | Static inspection and automated tests pass. |
+| Evidence, narrative, War Room communication, and delegation work across incidents | `src/tests/m3-narrative.test.ts` verifies persistent UNKNOWN discoveries. `src/tests/war-room.test.tsx` covers delegated jobs, exact ETA, capacity, save/restore, and replay. Native inspection observes delegation, results, communication, and cross-incident evidence.                                                                      | Automated and native checks pass.           |
+| MVP reveals UNKNOWN without ORPHEUS identity                                      | `npm run validate:scenarios` validates current and frozen scenario YAML. `src/tests/m3-narrative.test.ts` checks the UNKNOWN-only discovery routes and rejects premature identity disclosure in scenario fields.                                                                                                                               | Automated content boundary pass.            |
 
 ## Quality command set
 
-Run `npm run build`, `npm run lint`, `npm run format:check`, `npm run typecheck`,
-`npm test`, `npm run test:replays`, `npm run validate:scenarios`,
-`npm run build:desktop`, `git diff --check`, and `projectctl doctor` against the
-same candidate commit. TASK-016's committed acceptance record passed 115 tests
-in 16 files and produced a native release executable. TASK-017 strengthens the
-three-incident UI assertions; its final command outcomes must be recorded in
-its own result before evaluation.
+The TASK-017 source candidate passed:
 
-## Native inspection still required
+- `npm test`: 116 tests in 16 files.
+- `npm run test:replays`: 2 tests.
+- `npm run validate:scenarios`: 8 current/frozen YAML files.
+- `npm run lint`, `npm run format:check`, and `npm run typecheck`.
+- `npm run build` and `npm run build:desktop`; the executable was rebuilt after
+  the recovery-copy and responsive-layout corrections.
+- `git diff --check` and `projectctl doctor`.
 
-The Tauri release binary compiled, but a successful build is not a GUI smoke
-test. On this TASK-017 run, Computer Use failed to connect to the Windows native
-pipe on the initial call, after a short retry, and after resetting its JavaScript
-session. No native window screenshot or interaction was observed. Do not report
-native visual, keyboard, 320px/150% text, or complete desktop play as passed on
-that basis.
+An initial full-test run overlapped other checks and a native build: one
+vertical-slice test exceeded its five-second timeout. The isolated rerun passed
+all 116 tests without increasing the timeout or changing that test. This failed
+attempt is retained as a resource-contention limitation. Vite's uncompressed
+chunk-size warning is non-blocking.
 
-When the native helper is available, inspect the incident desk, all three paths
-through postmortem, UNKNOWN evidence and War Room updates, save-slot confirmation,
-keyboard focus, reduced motion/CRT-off/text scaling, and narrow-window overflow.
-Avoid overwriting a pre-existing save unless the approved in-app confirmation is
-deliberately accepted. Then request independent review and acceptance QA, and
-present the separate M3 completion decision to the human gate. Do not update the
-M3 roadmap state before that decision.
+## Findings closed during verification
+
+- Recovery copy used any delayed event as proof of expired mitigation. It now
+  checks `temporary_effect_expired`; a delegation-only regression prevents the
+  misleading message. Native INC-002 stays in diagnosis after Sam returns, while
+  INC-001 correctly reports recurrence when restart expires.
+- A sticky service rail covered evidence/actions when responsive panels moved
+  into later rows. Those layouts now use normal flow. Native retests confirm
+  uncovered evidence/actions at 150% and the action grid at 100% text.
+
+## Native evidence boundary and remaining decision
+
+The [native log](TASK-017_NATIVE_QA.md) distinguishes desktop observations from
+automated coverage and identifies the inspected executable by SHA-256. The
+earlier pipe connection failure was a blocked attempt, superseded by actual
+native interactions. Independent agents audit this evidence but must not claim
+to have personally performed the primary agent's native inputs.
+
+The original save was not overwritten. Native inspection covered legacy load
+and cross-incident confirmation/cancel; automated tests cover confirmed
+replacement, malformed saves, and concurrent slot changes. Native minimums
+remain 960 x 640: this is not a claim of native 320px support or inspection.
+
+TASK-017 results may establish verified readiness. M3 closure and the next
+milestone's scope still require a separate human decision; no roadmap transition
+or later-campaign content is authorized by these checks alone.

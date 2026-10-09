@@ -151,6 +151,28 @@ describe('INC-001 operations desktop', () => {
     expect(screen.getByText('310')).toBeInTheDocument();
   });
 
+  it('keeps diagnosis open when delegation finishes without temporary mitigation', async () => {
+    const scenario = getScenario('INC-002');
+    if (scenario === undefined) throw new Error('Missing INC-002');
+    const store = createIncidentSessionStore(scenario, 704, {
+      read: () => null,
+      write: () => {},
+    });
+    expect(store.getState().performAction('ASK_SAM_CHECK_KEYSET').ok).toBe(true);
+    for (let index = 0; index < 4; index += 1) {
+      expect(store.getState().performAction('OPEN_LOGS').ok).toBe(true);
+    }
+    expect(store.getState().incident.eventLog).toEqual(
+      expect.arrayContaining([expect.objectContaining({ type: 'event_fired' })]),
+    );
+    render(<App store={store} />);
+    expect(screen.getAllByText('Diagnosis in progress')).toHaveLength(2);
+    expect(screen.queryByText('Degradation active')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Temporary relief ended while the underlying cause remained open.'),
+    ).not.toBeInTheDocument();
+  });
+
   it('makes recurrence legible after the temporary recovery window expires', async () => {
     const { user } = renderIncident(705);
 

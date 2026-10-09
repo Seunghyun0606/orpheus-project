@@ -148,7 +148,7 @@ function recoveryCopy(state: IncidentSessionState['incident']): {
     };
   }
 
-  if (state.eventLog.some(({ type }) => type === 'event_fired')) {
+  if (state.eventLog.some(({ type }) => type === 'temporary_effect_expired')) {
     return {
       label: 'Degradation active',
       detail: 'Temporary relief ended while the underlying cause remained open.',

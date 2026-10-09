@@ -1372,6 +1372,10 @@ input:focus-visible,
     grid-column: 1 / -1;
   }
 
+  .service-rail {
+    position: static;
+  }
+
   .action-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1478,6 +1482,10 @@ input:focus-visible,
     grid-column: 1 / -1;
   }
 
+  :root:is([data-text-scale='large'], [data-text-scale='extra-large']) .service-rail {
+    position: static;
+  }
+
   :root:is([data-text-scale='large'], [data-text-scale='extra-large']) .action-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1491,6 +1499,11 @@ input:focus-visible,
 
   :root:is([data-text-scale='large'], [data-text-scale='extra-large']) .action-list {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  :root:is([data-text-scale='large'], [data-text-scale='extra-large']) .service-rail,
+  :root:is([data-text-scale='large'], [data-text-scale='extra-large']) .action-rail {
+    position: static;
   }
 }
 
