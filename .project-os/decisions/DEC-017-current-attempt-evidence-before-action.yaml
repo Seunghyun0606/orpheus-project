@@ -1,0 +1,33 @@
+id: DEC-017
+title: Require current-attempt investigation for evidence-before-action observations
+status: active
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  DEC-011 permits source-verified discovery adoption and DEC-012 verified
+  checkpoint baselines, but neither proves investigation in a new attempt.
+  The human selected option A for evidenceBeforeActionRate qualification.
+decision: >-
+  A newly accepted eligible intervention qualifies positively only when
+  versioned authored relevance rules identify supporting observations from
+  earlier new accepted investigation inputs in the same official attempt.
+  Prior-attempt or imported membership and inherited checkpoint observations
+  alone do not qualify this metric. Pool eligible counts under DEC-014.
+human_approval:
+  selected_option: A
+  instruction: '이번 시도에서 새로 조사한 관련 근거만 인정(권장).'
+proposal: .project-os/decisions/proposals/DEC-017-evidence-before-action-qualification.yaml
+consequences:
+  - Supporting observations must precede the intervention; an intervention cannot satisfy its own pre-action check through its resulting evidence.
+  - Only a new accepted eligible intervention supplies a denominator sample; imports and baselines supply none.
+  - Existing discovery membership remains usable for approved campaign presence predicates; no evidence is removed.
+  - Relevance and eligible interventions require versioned authored references, not arbitrary artifacts or action labels.
+  - Missing or invalid required relevance definitions yield a diagnostic, not a manufactured negative observation.
+  - With an eligible intervention and verified absence of qualifying investigation the observation is negative; no eligible samples means unavailable, not zero.
+  - Rejected commands, duplicate delivery and inherited inputs do not create new behavior observations.
+  - Historical behavior, alignment, numeric effects and completion are not reconstructed from old saves.
+  - Investigation depth, freshness/expiry rules, ethical intent, prediction confidence and ending thresholds remain separate contract work.
+  - TASK-018 remains active pending remaining contracts, independent review, acceptance QA and evaluation.
+supersedes: null

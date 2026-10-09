@@ -3,6 +3,7 @@
 Status: DEC-014 approves pooled eligible counts and DEC-016 approves operational
 intervention denominators for restartRate/rollbackRate. This document specifies
 their review and fixture boundaries, not runtime schema or production tuning.
+DEC-017 also approves current-attempt investigation for evidence-before-action.
 Other metrics retain explicitly pending eligibility/formula decisions.
 
 ## Approved operational rates
@@ -62,8 +63,45 @@ of absent historical inputs.
 
 DEC-015's suppression of a repeated discovery effect does not suppress a genuine
 new behavior sample. Imported membership under DEC-011 is not historic behavior;
-whether it qualifies a future action's evidence-before-action observation is the
-separate pending DEC-017 question.
+it cannot alone qualify evidence-before-action under DEC-017. This does not
+remove membership or its eligibility for approved discovery-presence predicates.
+
+## Approved evidence-before-action qualification
+
+Use a metric-specific authored definition of eligible interventions and relevant
+supporting observations. DEC-016 defines the restart/rollback denominator; it
+does not silently select eligibility for every other metric. For each new
+accepted eligible intervention, inspect the verified pre-action context and
+earlier new investigation inputs in the same official attempt. The numerator
+counts interventions with qualifying relevant support; the denominator counts
+eligible interventions. Pool these counts under DEC-014.
+
+Relevant diagnostic signals or evidence must be linked by validated authored
+references, not titles, arbitrary artifact count or generic action categories.
+Retain supporting input/event identity, attempt identity, ordered observation
+boundary and applicable rule version so the result is explainable and replayable.
+Exact record fields and relevance/freshness definitions remain under review;
+no expiry interval or automatic permanent validity is chosen here.
+
+An observation must be available before the intervention. Its resulting evidence
+cannot qualify that same intervention. A pending delegated investigation alone
+is not a received observation; any actual returned support needs its verified
+source, availability order and authored relevance. Outcome events are not extra
+player-command samples.
+
+An inherited checkpoint prefix, prior attempt or adopted legacy membership alone
+cannot be positive support. A later new investigation can qualify only through
+its verified new observation, not by recounting inherited events. Exact-head
+resume preserves the same attempt's already recorded new inputs; it neither
+erases their provenance nor produces another sample on load. A confirmed new
+checkpoint-based attempt retains the prefix as baseline, not fresh investigation.
+
+Where eligibility and relevance rules are valid and an eligible intervention has
+no qualifying prior support, record a negative observation. If required rules or
+versions are missing/invalid, return a diagnostic instead of fabricating a
+negative. No eligible intervention means unavailable. Do not retroactively
+change an earlier intervention when evidence is obtained later, or infer missing
+historical investigation from a current revealed-state snapshot.
 
 ## Required verification (new APIs not implemented here)
 
@@ -77,6 +115,19 @@ separate pending DEC-017 question.
 | UI restart, rejected action, inherited prefix, timer, import or archive review | No extra command samples; TASK-019/020/021                            |
 | Missing classification, invalid numerator subset or incompatible version       | Diagnostic, no guessed or clamped projection; TASK-021                |
 | Ledger conflict, abort or commit-before-ack reload                             | Counts and identities remain coherent, no double sample; TASK-020/021 |
+
+Additional evidence-before-action fixtures for TASK-019/020/021 must cover:
+
+- Relevant new investigation before an eligible intervention: positive sample.
+- Unrelated investigation, imported membership or inherited prefix alone:
+  negative for a valid eligible intervention, not fabricated past behavior.
+- Evidence obtained during or after the intervention: no retroactive positive.
+- Exact-head resume versus confirmed new checkpoint-based attempt: preserve
+  original same-attempt support, do not promote inherited support to fresh input.
+- Pending delegation versus verified returned support before the intervention:
+  no positive observation from merely scheduling work.
+- Missing/invalid rules, no eligible intervention, duplicates, replay and commit
+  failures: diagnostic/unavailable/idempotent behavior as applicable.
 
 Fractions are arithmetic-only fixtures, not prediction confidence or ending
 thresholds. Investigation depth, ethical intent, recommendation/response

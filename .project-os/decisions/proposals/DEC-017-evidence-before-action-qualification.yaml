@@ -1,6 +1,6 @@
 id: DEC-017
 title: Choose what qualifies evidence before a newly accepted intervention
-status: proposed
+status: resolved
 date: '2026-10-09'
 applies_to:
   - M4
@@ -12,9 +12,10 @@ context: >-
   attempt. A newly accepted intervention can be measured as preceded by a fresh
   investigation or by already available relevant knowledge; these are different
   behavioral meanings with different branch/prediction inputs.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-017-current-attempt-evidence-before-action.yaml
 options:
   - key: A
     label: Require qualifying investigation from new accepted inputs in the current attempt

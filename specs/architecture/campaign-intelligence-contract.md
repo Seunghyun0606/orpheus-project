@@ -6,8 +6,8 @@ discovery-only adoption is approved by DEC-011; Gate 4 confirmed checkpoint
 attempts are approved by DEC-012; Gate 5 IndexedDB commits are approved by DEC-013.
 Gate 6 pooled player rates are approved by DEC-014; Gate 7 once-per-run authored
 campaign effects are approved by DEC-015; Gate 8 operational restart/rollback
-denominators are approved by DEC-016. Gate 9 evidence-before-action qualification
-remains pending.
+denominators are approved by DEC-016; Gate 9 current-attempt evidence-before-action
+qualification is approved by DEC-017. Gate 10 investigation depth remains pending.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -37,6 +37,8 @@ DEC-015 approves each stable authored discovery/narrative/completion effect at
 most once per campaign run, without dropping new retry behavior or simulation costs.
 DEC-016 fixes restart/rollback denominators as eligible operational interventions,
 not information or communication commands; classifications remain versioned data.
+DEC-017 requires relevant supporting observations from earlier new investigation
+inputs in the same attempt for evidence-before-action, not inherited membership alone.
 
 The three production MVP incidents remain UNKNOWN-only. Framework fixtures may
 describe later-act systems without making those systems visible in MVP UI.
@@ -367,16 +369,17 @@ prediction formulas, or alter once-per-run campaign effects under DEC-015.
 The [behavior rate review draft](player-behavior-rates.md) specifies count,
 classification/provenance and verification boundaries for the approved rates.
 
-## Gate 9 — evidence-before-action qualification (pending)
+## Gate 9 — evidence-before-action qualification (approved)
 
 [DEC-017's proposal](../../.project-os/decisions/proposals/DEC-017-evidence-before-action-qualification.yaml)
 distinguishes fresh investigation behavior from acting with existing verified
-knowledge. Neither option is selected:
+knowledge. The human selected **A**, recorded in
+[DEC-017](../../.project-os/decisions/DEC-017-current-attempt-evidence-before-action.yaml):
 
-- **A — recommended:** qualify relevant supporting investigation from earlier
+- **A — approved:** qualify relevant supporting investigation from earlier
   newly accepted inputs in the same official attempt. Imported membership,
   earlier attempts and inherited checkpoint observations alone do not qualify.
-- **B:** qualify relevant knowledge already available in the verified pre-action
+- **B — not selected:** qualify relevant knowledge already available in the verified pre-action
   context, including approved imported membership, earlier official discoveries
   or inherited baseline observations. No fresh investigation is required.
 
@@ -387,6 +390,34 @@ authored predicates. Evidence produced during the intervention cannot satisfy
 its own pre-action check. Missing/invalid required predicates are a diagnostic,
 not an invented negative sample. This gate changes neither general discovery
 presence eligibility under DEC-011 nor DEC-015 effect awards or DEC-016 rates.
+The [behavior rate draft](player-behavior-rates.md) specifies provenance, pre-action
+ordering, exact-head/baseline distinctions and evidence-before-action fixtures.
+
+## Gate 10 — investigation depth counting (pending)
+
+[DEC-018's proposal](../../.project-os/decisions/proposals/DEC-018-investigation-depth-counting.yaml)
+compares two meanings of averageInvestigationDepth. Neither is selected:
+
+- **A — recommended:** distinct authored investigation observation keys per
+  eligible official attempt; repeating the same key does not deepen that attempt.
+- **B:** all accepted commands explicitly classified as qualifying investigation
+  per eligible attempt; repeated queries count, one command is one unit.
+
+Both proposals divide total depth units by eligible official attempt count, with
+each attempt weighted equally. An eligible attempt has supported investigation
+definitions and at least one new accepted player command. An eligible attempt
+without investigation contributes zero; an empty or unsupported attempt does not
+provide a denominator. With no eligible attempt the result is unavailable, not zero.
+Include eligible unfinished/abandoned attempts and report unsupported coverage.
+
+In an arithmetic fixture, one attempt has three investigation commands covering
+two distinct keys, another has a new action but no investigation. A gives `1`
+observation per eligible attempt; B gives `1.5` commands per eligible attempt.
+Imported/inherited observations and replay/duplicates add no units. Under A a
+new distinct official attempt can investigate the same key again; deduplication
+is within each attempt, unlike DEC-015 numeric effect receipts. This is neither
+a causal-graph longest path nor an action-frequency rate, and does not change
+DEC-014's already approved pooled rates. No production thresholds are proposed.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -440,15 +471,15 @@ restart/rollback denominators as operational interventions. Other qualifications
 exact authored classifications and non-rate formulas still require their reviewed
 contracts before use:
 
-| Metric                                       | Proposed numerator / denominator or observation                                                          | Missing source concern                                                                                      |
-| -------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| restartRate / rollbackRate                   | Classified accepted restart/rollback actions divided by eligible operational interventions under DEC-016 | Official retry histories are retained under DEC-010; UI restart is not a service restart observation.       |
-| evidenceBeforeActionRate                     | Qualifying relevant pre-action support / eligible interventions; qualification pending DEC-017           | Relevant evidence and intervention classes must be authored.                                                |
-| averageInvestigationDepth                    | Approved distinct investigation observations per canonical attempt, then aggregate                       | Alternate attempts and repeated observations require an explicit policy.                                    |
-| aiRecommendationAcceptanceRate               | Accepted exposed recommendation / eligible recorded recommendation opportunities                         | MVP has no recorded recommendation opportunity.                                                             |
-| safetyPreference / collateralDamageTolerance | Approved authored observations from action intent/context and resulting effects                          | Operational risk is not automatically a moral score; formula and normalization pending.                     |
-| companyReportingRate / nullCooperationRate   | Classified accepted responses / eligible authored response opportunities                                 | Support status is not automatically corporate allegiance; MVP has no explicit NULL cooperation opportunity. |
-| predictionDeviation                          | Accepted eligible actions compared with the prior recorded valid prediction                              | Prediction shown, action availability, model version and confidence must be recorded first.                 |
+| Metric                                       | Proposed numerator / denominator or observation                                                                  | Missing source concern                                                                                      |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| restartRate / rollbackRate                   | Classified accepted restart/rollback actions divided by eligible operational interventions under DEC-016         | Official retry histories are retained under DEC-010; UI restart is not a service restart observation.       |
+| evidenceBeforeActionRate                     | Eligible interventions with prior relevant new same-attempt investigation / eligible interventions under DEC-017 | Relevant evidence and intervention classes must be authored.                                                |
+| averageInvestigationDepth                    | Investigation units per eligible attempt, then average; counting policy pending DEC-018                          | Alternate attempts and repeated observations require an explicit policy.                                    |
+| aiRecommendationAcceptanceRate               | Accepted exposed recommendation / eligible recorded recommendation opportunities                                 | MVP has no recorded recommendation opportunity.                                                             |
+| safetyPreference / collateralDamageTolerance | Approved authored observations from action intent/context and resulting effects                                  | Operational risk is not automatically a moral score; formula and normalization pending.                     |
+| companyReportingRate / nullCooperationRate   | Classified accepted responses / eligible authored response opportunities                                         | Support status is not automatically corporate allegiance; MVP has no explicit NULL cooperation opportunity. |
+| predictionDeviation                          | Accepted eligible actions compared with the prior recorded valid prediction                                      | Prediction shown, action availability, model version and confidence must be recorded first.                 |
 
 No data should manufacture recommendation acceptance, NULL cooperation or
 prediction deviation from existing UNKNOWN hints. DEC-011 permits imported
@@ -509,8 +540,9 @@ review and fixture requirements; no physical implementation is present.
 TASK-018 acceptance remains pending: storage authority, official retry history,
 discovery-only adoption, checkpoint continuation, IndexedDB commits, pooled
 behavior rates, once-per-run authored effects and operational restart/rollback
-denominators are approved. Evidence qualification and other required policies
-still need decisions; detailed persistence/effect/behavior drafts still need review.
+denominators and current-attempt evidence qualification are approved. Investigation
+depth and other required policies still need decisions; detailed persistence/effect/
+behavior drafts still need review.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

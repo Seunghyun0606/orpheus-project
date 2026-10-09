@@ -78,7 +78,9 @@ samples across official attempts; no samples means unavailable, not zero. The sa
 authored discovery/narrative/completion effect will apply once per campaign run,
 without dropping new retry actions or simulation costs. Restart/rollback rates
 will use operational interventions only, excluding information and communication
-commands from their denominator. Other metric qualifications and further policies
+commands from their denominator. Evidence-before-action will require relevant
+investigation from earlier new inputs in the same attempt; imported or inherited
+knowledge alone does not qualify it. Investigation depth and further policies
 still require decisions and independent QA before implementation.
 
 ## War Room and saved progress

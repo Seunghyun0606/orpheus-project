@@ -1,0 +1,65 @@
+task: TASK-018
+kind: architecture_proposal_progress
+role: architect
+actor: codex-task018-architect
+status: awaiting_human_decision
+date: '2026-10-10'
+base_commit: 1dfa39b
+summary: >-
+  Re-inspected the clean repository after interruption; the prior DEC-017
+  approval was not yet recorded. Resolved it as active current-attempt
+  investigation qualification and extended the behavior contract with provenance,
+  pre-action ordering, baseline/head-resume distinctions and fixture requirements.
+  Proposed DEC-018 investigation depth counting; neither option is selected.
+  No runtime, schema, storage, migration or production balance was changed.
+approved_decision: .project-os/decisions/DEC-017-current-attempt-evidence-before-action.yaml
+historical_progress: .project-os/planning/TASK-018.operational-denominators-approved.yaml
+proposal: specs/architecture/campaign-intelligence-contract.md
+behavior_contract: specs/architecture/player-behavior-rates.md
+decision_proposal: .project-os/decisions/proposals/DEC-018-investigation-depth-counting.yaml
+gate:
+  type: architecture_change
+  question: Count distinct investigation observations or every qualifying investigation command per eligible attempt?
+  selected_option: null
+  recommended_option: A
+  remaining_policies:
+    - Investigation depth, authored relevance/freshness and ethical intent formulas.
+    - Detailed envelope/effect/behavior review and actual IndexedDB capability/failure verification.
+    - Prediction/confidence, branch availability and ending resolution policies.
+verification:
+  current_compatibility_tests:
+    status: pass
+    detail: >-
+      npm test -- src/persistence/save.test.ts src/tests/m3-narrative.test.ts
+      src/tests/war-room.test.tsx src/app/AppShell.test.tsx passed 43 tests in
+      four files during this phase. These cover current safeguards, not new M4 APIs.
+  current_scenario_validation: 8_yaml_files_passed
+  project_doctor: pass
+  applicable_format_check: pass
+  decision_context_arithmetic_and_link_audit: pass
+  protected_runtime_state_and_immutable_records: unchanged
+  native_inspection: not_run_for_this_documentation_only_step
+  new_storage_capability_checks: not_run
+  independent_architecture_review: pending
+  independent_acceptance_qa: pending
+  full_task_acceptance: pending
+  new_runtime_schema_or_migration: not_implemented
+files_changed:
+  - .project-os/decisions/DEC-017-current-attempt-evidence-before-action.yaml
+  - .project-os/decisions/proposals/DEC-017-evidence-before-action-qualification.yaml
+  - .project-os/decisions/proposals/DEC-018-investigation-depth-counting.yaml
+  - .project-os/planning/TASK-018.evidence-qualification-approved.yaml
+  - .project-os/tasks/ready/TASK-018.yaml
+  - specs/architecture/player-behavior-rates.md
+  - specs/architecture/campaign-intelligence-contract.md
+  - docs/M4_IMPLEMENTATION_PLAN.md
+  - README.md
+known_risks:
+  - Current-attempt qualification does not choose expiry intervals or production relevance mappings.
+  - Distinct observations and repeated query counts give different investigation-depth inputs; do not assume either pending option.
+  - Current compatibility tests cannot certify unimplemented M4 APIs or native storage capability.
+remaining_work:
+  - Obtain the investigation-depth decision without implementing a pending choice.
+  - Finalize remaining contracts and obtain independent architecture review and acceptance QA.
+  - Supply finalized contract references to dependent tasks before implementation.
+  - Submit final structured evidence and use Project OS evaluation only after acceptance is satisfied.
