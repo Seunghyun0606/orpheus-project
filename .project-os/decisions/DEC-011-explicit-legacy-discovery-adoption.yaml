@@ -1,0 +1,36 @@
+id: DEC-011
+title: Explicitly adopt verified legacy discoveries without reconstructing behavior
+status: active
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  Existing incident and discovery saves lack canonical run identity and global
+  chronology. DEC-009 preserves them alongside a separate future campaign
+  ledger, and DEC-010 preserves future identified official retry histories.
+  The human selected option A for legacy adoption: verified evidence and
+  narrative records may be explicitly imported, without inventing past behavior.
+decision: >-
+  Preview and explicitly adopt source-authority verified evidence and narrative
+  records into a selected campaign run. Tag them as imported discoveries and
+  retain available source bytes, versions and provenance limitations. Their
+  membership may satisfy authored discovery-presence predicates. Do not
+  retroactively execute discovery effects or import behavior rates, alignment,
+  historical numeric effects, incident completion, Act progression or ending
+  flags. Additional artifacts generated only by target-content replay are not
+  discoveries present in the source. Unknown original lineage remains unknown.
+human_approval:
+  selected_option: A
+  instruction: '검증된 증거·서사만 명시적으로 이관(권장).'
+proposal: .project-os/decisions/proposals/DEC-011-legacy-campaign-adoption.yaml
+consequences:
+  - Preserve both existing keys and original bytes; reading alone does not import or rewrite them.
+  - Do not combine overlapping or divergent snapshots into a canonical past action stream.
+  - Verification proves the available source snapshot, not missing original observation time or migration lineage.
+  - Repeat import must not re-award the same discovery; imported membership is not a new accepted action.
+  - Malformed, unsupported or non-replayable records cannot silently produce partial imports or fallback history.
+  - Older checkpoint continuation, exact envelope, conflict and commit mechanics remain pending.
+  - Numeric classifications, prediction confidence and ending balance are not approved by this adoption scope.
+  - TASK-018 stays active until remaining contracts, independent review, acceptance QA and Project OS evaluation are satisfied.
+supersedes: null

@@ -1,6 +1,6 @@
 id: DEC-011
 title: Choose the scope of legacy discoveries adopted by the M4 campaign ledger
-status: proposed
+status: resolved
 date: '2026-10-09'
 applies_to:
   - M4
@@ -12,9 +12,14 @@ context: >-
   target-content discoveries during migration; existing progress re-encoding
   does not retain an independent original migration lineage. DEC-010 approves
   future identified retries, not reconstruction of ambiguous past behavior.
-decision: Pending human selection; neither option is approved or implemented.
+decision: >-
+  The human selected option A: explicitly adopt verified legacy evidence and
+  narrative records only. The active DEC-011 record limits this approval to
+  discovery adoption, not reconstruction of behavior, historical numeric
+  effects, completion or checkpoint continuation. Runtime import is not implemented.
+decision_record: .project-os/decisions/DEC-011-explicit-legacy-discovery-adoption.yaml
 recommended_option: A
-chosen_option: null
+chosen_option: A
 options:
   - key: A
     label: Explicitly adopt verified legacy evidence and narrative records only

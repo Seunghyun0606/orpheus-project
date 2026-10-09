@@ -1,9 +1,9 @@
 # Campaign intelligence contract — TASK-018 proposal
 
 Status: **partially decided contract proposal**. Gate 1 storage authority is
-approved by DEC-009; Gate 2 retry contribution is approved by DEC-010. Gate 3
-legacy discovery adoption remains pending. No runtime
-type, schema, storage key, migration, content or player
+approved by DEC-009; Gate 2 retry contribution is approved by DEC-010; Gate 3
+discovery-only adoption is approved by DEC-011. Gate 4 checkpoint continuation
+remains pending. No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
 task has independent review, acceptance QA and Project OS evaluation.
@@ -20,6 +20,8 @@ DEC-009 separately approves retaining both existing stores and adding a distinct
 versioned campaign ledger. It does not approve the remaining policies below.
 DEC-010 approves new official attempts in the same campaign, preserving earlier
 accepted history. It does not authorize reconstruction of missing legacy history.
+DEC-011 approves explicit source-verified discovery adoption only. It does not
+import historical effects, behavior, completion or official checkpoint association.
 
 The three production MVP incidents remain UNKNOWN-only. Framework fixtures may
 describe later-act systems without making those systems visible in MVP UI.
@@ -82,7 +84,7 @@ holds an incident checkpoint under its confirmation rules; the M3 store retains
 verified alternate discovery snapshots; the new ledger would hold explicitly
 associated, ordered campaign inputs and their derived state. Neither reading nor
 updating the M3 union automatically creates official ledger observations. Any
-adoption of legacy artifacts requires a separately approved import policy. A
+adoption of legacy artifacts follows DEC-011's explicit discovery-only scope. A
 corrupt ledger must not silently fall back to that union as a new official history.
 
 ## Gate 2 — restart and replay contribution (option A approved)
@@ -129,11 +131,11 @@ association or inherited-prefix accounting follows from approving future retries
 - Evidence and completion cannot silently award repeat bonuses; exact per-run
   versus per-attempt authored effect scope still needs the reviewed contract.
 
-## Gate 3 — legacy discovery adoption (pending)
+## Gate 3 — legacy discovery adoption (option A approved)
 
-[DEC-011's proposal](../../.project-os/decisions/proposals/DEC-011-legacy-campaign-adoption.yaml)
-compares explicit discovery-only adoption with keeping the old archive outside
-official ledger eligibility. Neither option is selected or implemented.
+[DEC-011](../../.project-os/decisions/DEC-011-explicit-legacy-discovery-adoption.yaml)
+records human selection of A. The original alternatives are retained for
+comparison; B is not selected. Runtime import is not implemented.
 
 - **A — recommended:** preview and explicitly adopt source-verified evidence and
   narrative records into a selected run, tagged as imported discoveries. Their
@@ -158,6 +160,54 @@ divergent path was the official campaign. Neither permits silent partial import
 of malformed records or fallback from a corrupt new ledger. Older-checkpoint
 continuation remains a separate policy: loading does not by itself roll back
 accepted campaign history or assign absent attempt identity.
+
+### Discovery import acceptance cases for the later implementation
+
+- Validate available source bytes against their source replay authority before
+  proposing adoption. A source with no discovery cannot gain an imported artifact
+  solely because replay against newer content reveals one.
+- Divergent or overlapping snapshots can contribute verified discovery membership
+  with provenance, never a fabricated official action stream or historic alignment.
+- Adoption is explicit and scoped to a selected run after preview; reading or
+  loading the old slot is not consent to mutate that run. Re-import and subsequent
+  rediscovery must not duplicate membership or retroactive discovery awards.
+- Preserve unknown original lineage, source versions and available bytes. A
+  re-encoded current-version M3 record is not proof of its original migration path.
+- Imported narrative history is not a blanket copy of incident/narrative/ending
+  flags. No completion or Act unlock follows solely from a completed source save.
+- Report invalid/unsupported records without silent partial adoption. The exact
+  envelope, source-change checks and durable import mechanics remain pending.
+
+## Gate 4 — older checkpoint continuation (pending)
+
+[DEC-012's proposal](../../.project-os/decisions/proposals/DEC-012-campaign-checkpoint-continuation.yaml)
+asks how official play may continue from an older or unassociated incident save.
+Neither option is selected or implemented:
+
+- **A — recommended:** an exactly matched, explicitly associated live attempt
+  head resumes without another attempt. Otherwise preview and confirm an eligible,
+  verified unfinished checkpoint as the baseline for a new official attempt in
+  the selected campaign. Preserve earlier history; only newly accepted commands
+  and their incremental consequences contribute new observations. Do not recount
+  the inherited replay prefix or import historic numeric effects.
+- **B:** official resume requires the associated live attempt head. Old or
+  unassociated saves remain loadable outside official contribution through the
+  existing legacy flow. Official retries start from the authored initial state;
+  discovery-only import remains independently available under DEC-011.
+
+Both options prohibit rolling back campaign history or guessing association from
+seed, replay bytes or time. A completed checkpoint is review, not a completion
+award; a playable retry begins from the authored initial state. Validate scenario
+eligibility before any official continuation, so a checkpoint cannot bypass Act
+gates. Original content replay and approved target migration still apply.
+
+Under proposed A, the baseline records the verified restored incident state,
+seed/RNG, pending work and inherited replay boundary with source provenance;
+those are simulation inputs, not new official behavior. Future command batches
+must distinguish inherited state from newly accepted actions and effect deltas.
+Restoring a baseline must not silently adopt its artifacts into campaign membership:
+DEC-011 requires a separate explicit adoption. Exact association fields, envelope
+and conflict/commit mechanics still require the final reviewed contract.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -218,8 +268,8 @@ must be reviewed and approved before use:
 | predictionDeviation                          | Accepted eligible actions compared with the prior recorded valid prediction            | Prediction shown, action availability, model version and confidence must be recorded first.                 |
 
 No data should manufacture recommendation acceptance, NULL cooperation or
-prediction deviation from existing UNKNOWN hints. Imported artifacts may affect
-evidence eligibility under a separately approved import policy, but do not prove
+prediction deviation from existing UNKNOWN hints. DEC-011 permits imported
+discovery membership to satisfy authored presence predicates, but it does not prove
 historical alignment, model rates or recommendation observations.
 
 ### Prediction, branching and endings
@@ -242,6 +292,7 @@ remain pending. Fixture thresholds are test-only, not production balance.
 
 ## Legacy import, failures and rollback proposals
 
+DEC-011 approves adoption scope only; exact storage and commit mechanics are pending.
 Read/validate originals before any import. Preserve original bytes and content
 provenance; do not use only migrated target-state output to invent old discoveries
 or side effects. A candidate import should report verified artifacts, retained
@@ -260,18 +311,19 @@ behavior must be specified after the storage choice.
 
 ## Verification and acceptance map
 
-| Evidence required                               | Owner / fixture coverage                                                                                                                                         |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Current guarantees                              | Existing `save.test.ts`, `m3-narrative.test.ts`, `war-room.test.tsx`, `AppShell.test.tsx`; frozen YAML validation                                                |
-| Input identity and idempotency                  | TASK-019: duplicate input vs distinct identical attempt, missing/reordered input, rejected command, reload/archive review                                        |
-| Campaign progression and hidden effects         | TASK-019: completion/unlock/evidence/flag tests, effect replay without duplication; TASK-020/024 round-trip projections                                          |
-| Legacy compatibility                            | TASK-020: overlapping/divergent snapshots, original vs migrated provenance, unsupported schema/content, corrupt/tampered data, interrupted import, repeat import |
-| Action-derived model and branches               | TASK-021/022: eligible denominators, zero/missing observations, changed model versions, predictions before actions, unavailable actions and reveal gates         |
-| Ending framework                                | TASK-023: ten endings, positive/exclusion/boundary fixtures, overlap/ties/no match, unsupported final context and references                                     |
-| Desktop/native integration and final acceptance | TASK-024/025: persistence and read-only archive isolation, all three UNKNOWN-only paths, supported native minimum/enlarged text, independent review and QA       |
+| Evidence required                               | Owner / fixture coverage                                                                                                                                                       |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Current guarantees                              | Existing `save.test.ts`, `m3-narrative.test.ts`, `war-room.test.tsx`, `AppShell.test.tsx`; frozen YAML validation                                                              |
+| Input identity and idempotency                  | TASK-019: duplicate input vs distinct identical attempt, missing/reordered input, rejected command, reload/archive review                                                      |
+| Campaign progression and hidden effects         | TASK-019: completion/unlock/evidence/flag tests, effect replay without duplication; TASK-020/024 round-trip projections                                                        |
+| Legacy compatibility                            | TASK-020: overlapping/divergent snapshots, original vs migrated provenance, explicit discovery-only adoption, older checkpoint policy, invalid data, interrupted/repeat import |
+| Action-derived model and branches               | TASK-021/022: eligible denominators, zero/missing observations, changed model versions, predictions before actions, unavailable actions and reveal gates                       |
+| Ending framework                                | TASK-023: ten endings, positive/exclusion/boundary fixtures, overlap/ties/no match, unsupported final context and references                                                   |
+| Desktop/native integration and final acceptance | TASK-024/025: persistence and read-only archive isolation, all three UNKNOWN-only paths, supported native minimum/enlarged text, independent review and QA                     |
 
-TASK-018 acceptance remains pending: storage authority and official retry history
-are approved, but legacy adoption and other required policies need decisions.
+TASK-018 acceptance remains pending: storage authority, official retry history
+and discovery-only adoption are approved; checkpoint continuation and other
+required policies still need decisions.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

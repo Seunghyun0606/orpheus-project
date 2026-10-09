@@ -46,18 +46,19 @@ gate for material architecture/schema/migration decisions. In particular:
 - DEC-010 now approves retaining official retries as distinct attempts in the
   same campaign. Exact run/input identity, older-checkpoint continuation,
   duplicate import and archive-review contracts still require specification.
-- Specify legacy recovery without manufacturing action order or model data from
-  discovery snapshots. Define unavailable/insufficient observations explicitly.
+- DEC-011 now approves explicit adoption of verified legacy evidence/narrative
+  membership only, with provenance limits and no historical effects, behavior or
+  completion. Exact import mechanics and unavailable observations need specification.
 - Storage authority is now separately approved by DEC-009: preserve existing
-  stores and add a distinct versioned campaign ledger. Exact envelope, legacy
-  import and compatibility/rollback policies remain pending; the M3 closure
+  stores and add a distinct versioned campaign ledger. Exact envelope, import
+  commit and compatibility/rollback policies remain pending; the M3 closure
   approval alone did not authorize them.
 - Specify versioned action classifications and behavior denominators, prediction
   inputs/confidence, branch predicates, and ending overlap/tie/no-match policy.
   Test-only fixture thresholds are not approved production balance.
 
 No dependent task may implement a pending decision by guesswork. Keep approved
-DEC-001/003/005/006/007/009/010 boundaries unless a separate decision supersedes them.
+DEC-001/003/005/006/007/009/010/011 boundaries unless a separate decision supersedes them.
 Do not declare TASK-018 accepted with unresolved required contract choices.
 
 ## Exit-criterion verification map
@@ -82,7 +83,8 @@ TASK-018 has now been claimed as architect. Its
 [campaign intelligence contract](../specs/architecture/campaign-intelligence-contract.md)
 is partially decided: DEC-009 approves separate ledger authority and DEC-010
 approves appending official retries without replacing earlier actions. DEC-011
-proposes the next gate for explicit legacy discovery-only adoption versus archive-only retention.
+approves explicit discovery-only legacy adoption; DEC-012 proposes the next
+gate for older-checkpoint continuation without rolling back campaign history.
 Existing-save checks do not constitute acceptance of the proposed new campaign
 system; remaining policies and independent review/QA are still required.
 
@@ -91,7 +93,7 @@ tasks. It does not change runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-Next: continue active TASK-018 and obtain the legacy adoption decision,
-then resolve remaining checkpoint/domain policies and independent review/QA before
+Next: continue active TASK-018 and obtain the checkpoint continuation decision,
+then resolve remaining envelope/domain policies and independent review/QA before
 dependent implementation. No approved storage decision should be mistaken for
 acceptance of the entire contract or authorization to infer missing history.
