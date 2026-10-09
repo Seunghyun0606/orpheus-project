@@ -84,8 +84,10 @@ knowledge alone does not qualify it. Investigation depth will average distinct
 investigation items per eligible attempt; repeated queries remain in history but
 do not increase depth for the same item. Ending top ties and no matching conditions
 will remain unresolved with diagnostics, without an automatic default ending.
-Prediction/confidence and further policies still require decisions and independent
-QA before implementation.
+Prediction will use comparable historical action frequencies, with confidence as
+the unique top action's empirical sample share; insufficient support or top ties
+give UNKNOWN. Recommendation response measurement and further policies still
+require decisions; independent review/QA remains required before implementation.
 
 ## War Room and saved progress
 

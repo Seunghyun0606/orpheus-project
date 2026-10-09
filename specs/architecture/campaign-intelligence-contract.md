@@ -9,7 +9,8 @@ campaign effects are approved by DEC-015; Gate 8 operational restart/rollback
 denominators are approved by DEC-016; Gate 9 current-attempt evidence-before-action
 qualification is approved by DEC-017; Gate 10 distinct investigation depth is
 approved by DEC-018; Gate 11 unresolved ending ties/no-match is approved by DEC-019.
-Gate 12 prediction/confidence model policy remains pending.
+Gate 12 empirical prediction/confidence is approved by DEC-020. Gate 13
+recommendation response measurement remains pending.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -456,26 +457,56 @@ This framework remains invisible in the current UNKNOWN-only MVP.
 The [ending review draft](ending-resolution.md) specifies explicit final context,
 result variants, resolution/flag boundaries and the required fixture matrix.
 
-## Gate 12 — prediction and confidence model (pending)
+## Gate 12 — prediction and confidence model (approved)
 
 [DEC-020's proposal](../../.project-os/decisions/proposals/DEC-020-prediction-model-policy.yaml)
-compares two deterministic action-derived models. Neither option is selected:
+compares two deterministic action-derived models. The human selected **A**, recorded
+in [DEC-020](../../.project-os/decisions/DEC-020-empirical-context-action-prediction.yaml):
 
-- **A — recommended:** comparable recorded action frequencies among currently
+- **A — approved:** comparable recorded action frequencies among currently
   available authored candidates; a unique top candidate's confidence is its
   share of eligible samples. Empty/insufficient samples or a top tie give UNKNOWN.
-- **B:** an authored versioned score over available approved behavior/context
+- **B — not selected:** an authored versioned score over available approved behavior/context
   inputs; a unique top candidate's confidence is its share of eligible score
   total. This can generalize to contexts without direct prior choices, but needs
   reviewed coefficients/support rules. Missing support, zero total or tie give UNKNOWN.
 
 Neither empirical share nor normalized score is a calibrated probability. Neither
 uses fixed narrative percentages, a live AI service or fabricated legacy choices.
-Context/candidate definitions, minimum support and production coefficients remain
-unselected. Record model/context/support and actual prediction exposure before a
+Context/candidate definitions, minimum support and production reveal rules remain
+under review; score coefficients are not part of the selected model. Record
+model/context/support and actual prediction exposure before a
 responding command; later actions cannot rewrite the earlier prediction. Existing
 UNKNOWN hints are not recommendation/deviation opportunities. Keep late-act
 fixtures non-production and the three bundled incidents UNKNOWN-only.
+The [prediction review draft](player-prediction.md) specifies empirical selection,
+compatible sample provenance, causal boundaries, exposure and future fixture coverage.
+
+## Gate 13 — recommendation response measurement (pending)
+
+[DEC-021's proposal](../../.project-os/decisions/proposals/DEC-021-recommendation-response-policy.yaml)
+separates actual following behavior from explicit recommendation acceptance:
+
+- **A — recommended:** compare the next eligible new accepted action while a
+  recorded recommendation opportunity remains valid. The recommended action is
+  positive, another eligible response negative; manual execution can count.
+- **B:** count only explicit accepted accept/reject responses associated with
+  that opportunity. A matching manual action without such a response adds no
+  recommendation acceptance sample; a UI click alone is not an accepted input.
+
+For a fixture exposing a valid rollback recommendation followed by a matching
+manual rollback, A produces `1/1`; B produces no eligible response and an unavailable
+rate, not `0/1`. Neither option claims causal motivation. No response/expiry is not
+rejection, unrelated observation commands need not consume an opportunity, and
+response eligibility/validity must be versioned authored data. Both pool eligible
+counts under DEC-014, associate at most one sample with an opportunity, and
+preserve genuine operational actions/costs without double counting.
+
+Only actual gated exposure can supply an opportunity. A prediction is not
+automatically a recommendation; UNKNOWN hints do not count. This gate chooses
+neither numeric AI_DEPENDENCY effects nor prediction-deviation eligibility,
+production thresholds or reveal conditions. Current bundled incidents stay
+UNKNOWN-only, with no invented past acceptance observations.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -549,9 +580,13 @@ historical alignment, model rates or recommendation observations.
 Prediction input would be approved behavior observations, authored candidate
 actions and explicit model/version context. Output would be a valid predicted
 action or UNKNOWN, confidence/availability and traceable supporting observations.
-DEC-020 compares empirical context frequencies with authored behavioral scores;
-neither prediction model is selected. Thresholds, minimum support and exact
-definition contracts remain pending; fixed story percentages are not the policy.
+DEC-020 approves empirical comparable-context action frequencies with the unique
+top count's eligible sample share. Empty/insufficient support and top ties give
+UNKNOWN; invalid required context produces diagnostics. Thresholds, minimum
+support and exact definition contracts remain under review; fixed story
+percentages and a score-model fallback are not the policy. See the
+[prediction draft](player-prediction.md). DEC-021 separately proposes how recorded
+recommendation responses contribute acceptance samples; neither option is selected.
 Branch evaluation consumes approved state and validated predicates and returns
 eligible content plus diagnostic explanations,
 not grading or raw hidden numeric UI.
@@ -601,9 +636,9 @@ TASK-018 acceptance remains pending: storage authority, official retry history,
 discovery-only adoption, checkpoint continuation, IndexedDB commits, pooled
 behavior rates, once-per-run authored effects and operational restart/rollback
 denominators, current-attempt evidence qualification and distinct investigation
-depth and unresolved ending ambiguity are approved. Prediction/confidence and
-other required policies still need decisions; detailed persistence/effect/behavior/
-ending drafts still need review.
+depth, unresolved ending ambiguity and empirical prediction/confidence are approved.
+Recommendation response measurement and other required policies still need
+decisions; detailed persistence/effect/behavior/prediction/ending drafts still need review.
 Independent architecture review and final acceptance QA have not approved this
 draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

@@ -27,6 +27,7 @@ specs:
   - 'specs/architecture/campaign-effect-application.md'
   - 'specs/architecture/player-behavior-rates.md'
   - 'specs/architecture/ending-resolution.md'
+  - 'specs/architecture/player-prediction.md'
   - 'specs/feature/campaign-and-player-model.md'
   - 'specs/architecture/system-architecture.md'
   - 'specs/product/01-game-and-narrative-direction.md'
@@ -56,6 +57,7 @@ active_decisions:
   - '.project-os/decisions/DEC-017-current-attempt-evidence-before-action.yaml'
   - '.project-os/decisions/DEC-018-distinct-investigation-depth.yaml'
   - '.project-os/decisions/DEC-019-unresolved-ending-ambiguity.yaml'
+  - '.project-os/decisions/DEC-020-empirical-context-action-prediction.yaml'
 
 acceptance:
   - 'The contract maps all four M4 exit criteria to later tasks and defines input provenance and determinism boundaries.'

@@ -182,6 +182,8 @@ Additional investigation-depth fixtures for TASK-019/020/021 must cover:
 
 Fractions are arithmetic-only fixtures, not prediction confidence or ending
 thresholds. Ethical intent, recommendation/response
-opportunities and prediction formulas still require their reviewed contracts.
+opportunities still require reviewed contracts. DEC-020 approves empirical
+context-choice prediction; its [review draft](player-prediction.md) does not
+automatically choose recommendation response or deviation eligibility.
 Existing UNKNOWN messages cannot stand in for recommendation or NULL cooperation
 observations. Independent review and acceptance QA remain pending.

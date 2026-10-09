@@ -73,12 +73,15 @@ gate for material architecture/schema/migration decisions. In particular:
 - DEC-019 approves unresolved ending top ties and valid no-match diagnostics,
   without automatic fallback or ending flags. Invalid/unavailable final context
   is a diagnostic, not a no-match eligible for a default result.
+- DEC-020 approves comparable-context historical choice frequencies and a unique
+  top candidate's empirical share among currently available candidates. Empty or
+  insufficient support and top ties return UNKNOWN; no score-model fallback.
 - Specify versioned action classifications and behavior denominators, prediction
   inputs/confidence, branch predicates, and ending overlap/tie/no-match policy.
   Test-only fixture thresholds are not approved production balance.
 
 No dependent task may implement a pending decision by guesswork. Keep approved
-DEC-001/003/005/006/007/009/010/011/012/013/014/015/016/017/018/019 boundaries unless a separate decision supersedes them.
+DEC-001/003/005/006/007/009/010/011/012/013/014/015/016/017/018/019/020 boundaries unless a separate decision supersedes them.
 Do not declare TASK-018 accepted with unresolved required contract choices.
 
 ## Exit-criterion verification map
@@ -116,8 +119,10 @@ DEC-017 approves current-attempt new investigation for evidence-before-action.
 DEC-018 approves distinct observation counts averaged across eligible attempts.
 DEC-019 approves unresolved ending top ties/no-match, specified in the
 [ending resolution draft](../specs/architecture/ending-resolution.md).
-DEC-020 proposes the next gate: empirical context-choice frequencies or an authored
-behavioral score model for deterministic prediction and confidence.
+DEC-020 approves empirical context-choice prediction, specified in the
+[prediction review draft](../specs/architecture/player-prediction.md).
+DEC-021 proposes the next gate: recommendation acceptance from actual eligible
+following actions or only explicit accept/reject responses.
 Existing-save checks do not constitute acceptance of the proposed new campaign
 system; remaining policies and independent review/QA are still required.
 
@@ -126,7 +131,7 @@ tasks. It does not change runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-Next: continue active TASK-018 and obtain the prediction/confidence model decision,
+Next: continue active TASK-018 and obtain the recommendation response decision,
 then resolve remaining domain policies and envelope review plus independent review/QA before
 dependent implementation. No approved storage decision should be mistaken for
 acceptance of the entire contract or authorization to infer missing history.

@@ -1,0 +1,47 @@
+id: DEC-021
+title: Choose how accepted behavior responds to an exposed AI recommendation
+status: proposed
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  The design measures actual AI recommendation acceptance, separately from
+  prediction deviation. An exposed recommendation followed by the same manual
+  operational action may count as following it, or only an explicitly recorded
+  accept/reject response may count. These produce different behavior samples and
+  future AI-dependency branch/ending inputs, so neither may be inferred silently.
+decision: Pending human selection; neither option is approved or implemented.
+recommended_option: A
+chosen_option: null
+options:
+  - key: A
+    label: Compare the next eligible accepted action with the exposed recommendation
+    details: >-
+      For a validated recorded recommendation opportunity, use the next new
+      accepted player action classified as an eligible response while that
+      opportunity remains valid. Matching the authored recommended action identity
+      is a positive sample, another eligible response is a negative sample.
+      Manual execution counts without a separate accept button. Unrelated
+      information commands need not consume the opportunity; expiry or no eligible
+      response supplies no sample, not rejection.
+  - key: B
+    label: Count only explicit accept or reject responses
+    details: >-
+      Require a separately recorded explicit accepted response associated with
+      the recommendation opportunity. Accept is positive and reject is negative;
+      matching manual operational actions without that explicit response do not
+      contribute recommendation acceptance samples. A UI click without an
+      accepted engine input cannot supply a sample. Operational action history
+      and costs remain separate and cannot be counted twice.
+invariants:
+  - Record actual gated recommendation exposure, recommended action identity, availability, run/attempt, ordered input boundary and definition version before a response.
+  - A prediction is not automatically a recommendation; UNKNOWN hints or unavailable/gated-off recommendations provide no opportunity.
+  - Count at most one response sample per identified opportunity; duplicate delivery, review, import and inherited prefixes add none.
+  - Use pooled eligible positive/response counts under DEC-014; no eligible response denominator means unavailable, not zero.
+  - Reject invalid references, conflicting response identity and unsupported definitions with diagnostics rather than silently inventing negative samples.
+  - Eligibility, expiry, opportunity replacement and action-equivalence definitions require validated versioned authoring; no production thresholds are chosen here.
+  - This choice does not define predictionDeviation or numeric AI_DEPENDENCY effects, prove causal motivation, or alter restart/rollback denominators.
+  - Both existing save stores remain unchanged; current MVP has no such exposures and remains UNKNOWN-only.
+proposal_document: specs/architecture/campaign-intelligence-contract.md
+supersedes: null

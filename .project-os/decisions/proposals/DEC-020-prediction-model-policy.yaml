@@ -1,6 +1,6 @@
 id: DEC-020
 title: Choose deterministic prediction and confidence model family
-status: proposed
+status: resolved
 date: '2026-10-10'
 applies_to:
   - M4
@@ -11,9 +11,10 @@ context: >-
   a prediction formula. Comparable recorded choice frequencies and an authored
   behavioral scoring model can generalize differently from the same history and
   give confidence numbers different meanings. TASK-022 requires approved policy.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-020-empirical-context-action-prediction.yaml
 options:
   - key: A
     label: Predict from comparable recorded action frequencies with empirical share

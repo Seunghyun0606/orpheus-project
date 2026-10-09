@@ -1,0 +1,35 @@
+id: DEC-020
+title: Predict from comparable recorded action frequencies with empirical confidence
+status: active
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  The human selected option A: predict from actual behavior frequencies in similar
+  situations. Behavioral score normalization and empirical choice share have
+  different meanings; only the empirical model family is approved.
+decision: >-
+  Validated versioned authored rules define comparable pre-action contexts and
+  eligible candidate action identities. Pool eligible new historical choices in
+  that context among currently available candidates. Predict the uniquely most
+  frequent candidate when authored minimum sample requirements are met. Its
+  confidence is its count divided by the eligible candidate sample total.
+  Empty/insufficient support or a top tie returns UNKNOWN, not an invented prior.
+human_approval:
+  selected_option: A
+  instruction: '비슷한 상황의 실제 행동 빈도 기반(권장).'
+proposal: .project-os/decisions/proposals/DEC-020-prediction-model-policy.yaml
+consequences:
+  - Confidence is an empirical share, not a calibrated probability, moral score or guarantee of future behavior.
+  - Retain eligible new choices from unfinished and abandoned official attempts; pool compatible samples without per-attempt averaging.
+  - Rejected/duplicate inputs, imports, inherited prefixes, timers and archive review add no new choice samples; distinct official attempts can contribute identical genuine choices.
+  - Filter historical choices to currently available authored candidate identities; an unavailable action cannot win or inflate the eligible denominator.
+  - Record context, candidate availability, counts/support and model/definition versions before the responding accepted action; later actions cannot rewrite its prior prediction.
+  - Invalid/missing references, classifications or incompatible required versions yield diagnostics, not fabricated zero support or predictions.
+  - An actual recorded valid exposure/opportunity is required for prediction-deviation observations; UNKNOWN or gated-off predictions do not manufacture samples.
+  - Existing UNKNOWN hints are neither recommendations nor prediction exposures; current MVP incidents remain UNKNOWN-only.
+  - No live AI, network inference, direct Math.random, fixed story percentages, scoring coefficients or score-based fallback are authorized.
+  - Exact comparable-context definitions, candidate mappings, minimum sample values and production reveal conditions still require reviewed versioned authoring.
+  - TASK-018 remains active pending remaining contracts, independent review, acceptance QA and evaluation; no new runtime or persistence schema is implemented by this decision.
+supersedes: null
