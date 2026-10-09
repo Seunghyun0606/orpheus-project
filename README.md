@@ -86,8 +86,10 @@ do not increase depth for the same item. Ending top ties and no matching conditi
 will remain unresolved with diagnostics, without an automatic default ending.
 Prediction will use comparable historical action frequencies, with confidence as
 the unique top action's empirical sample share; insufficient support or top ties
-give UNKNOWN. Recommendation response measurement and further policies still
-require decisions; independent review/QA remains required before implementation.
+give UNKNOWN. Recommendation acceptance will compare the next eligible accepted
+action with the exposed recommendation, including manual execution; no response
+or expiry does not count as rejection. Prediction-deviation meaning and further
+policies still need decisions; independent review/QA is required before implementation.
 
 ## War Room and saved progress
 

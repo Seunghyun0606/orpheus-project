@@ -1,6 +1,6 @@
 id: DEC-021
 title: Choose how accepted behavior responds to an exposed AI recommendation
-status: proposed
+status: resolved
 date: '2026-10-10'
 applies_to:
   - M4
@@ -11,9 +11,10 @@ context: >-
   operational action may count as following it, or only an explicitly recorded
   accept/reject response may count. These produce different behavior samples and
   future AI-dependency branch/ending inputs, so neither may be inferred silently.
-decision: Pending human selection; neither option is approved or implemented.
+decision: Human selected option A; runtime implementation and final contract acceptance remain pending.
 recommended_option: A
-chosen_option: null
+chosen_option: A
+decision_record: .project-os/decisions/DEC-021-action-based-recommendation-response.yaml
 options:
   - key: A
     label: Compare the next eligible accepted action with the exposed recommendation

@@ -107,7 +107,10 @@ These are proposed tests of the future APIs, not tests already implemented:
   separately from pure headless prediction arithmetic.
 
 Minimum counts and numbers here are fixture inputs, not production calibration.
-Recommendation response policy is separately pending in
-[DEC-021's proposal](../../.project-os/decisions/proposals/DEC-021-recommendation-response-policy.yaml).
+Recommendation response policy is separately approved by
+[DEC-021](../../.project-os/decisions/DEC-021-action-based-recommendation-response.yaml),
+specified in the [response draft](recommendation-responses.md). Prediction-deviation
+meaning remains pending in
+[DEC-022's proposal](../../.project-os/decisions/proposals/DEC-022-prediction-deviation-policy.yaml).
 Independent architecture review, acceptance QA and Project OS evaluation remain
 required before TASK-018 completion or dependent runtime implementation.
