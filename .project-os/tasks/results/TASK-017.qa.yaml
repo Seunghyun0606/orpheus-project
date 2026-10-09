@@ -1,0 +1,66 @@
+task: TASK-017
+status: pass
+summary: Independent acceptance QA confirms the three-incident MVP readiness through
+  automated execution, static inspection, and an audited native inspection log. M3
+  remains active pending its human completion decision.
+files_changed: []
+verification:
+  acceptance: pass
+  complete_incident_paths:
+    status: pass
+    detail: Automated UI tests start all three incidents, discover UNKNOWN, reach
+      postmortem, and reopen completed records after remount. The primary agent's
+      native log records INC-001 and INC-003 full routes on the final executable;
+      INC-002 full route ran before CSS-only changes and its matching archive and
+      final action layout were inspected afterward. Independent headless replay reproduced
+      all documented postmortem outcomes.
+  shared_domain_and_ui:
+    status: pass
+    detail: Production React contains no literal INC-001/002/003 branching. Engine
+      has no React imports or direct Math.random calls. Catalog-driven actions, diagnostics,
+      and narrative state serve all three incidents.
+  evidence_and_war_room:
+    status: pass
+    detail: Tests verify cross-incident evidence persistence, authored UNKNOWN triggers,
+      exact delegated ETA, capacity refund, pending-work save/load, deterministic
+      replay, and playable communication. Native log observes delegation and returned
+      reports, communication, evidence, and archive reconstruction.
+  reveal_boundary:
+    status: pass
+    detail: Eight YAML files validate; narrative tests reject premature identity disclosures
+      and broken references. Native UNKNOWN messages match authored content. No ORPHEUS
+      identity disclosure is evidenced.
+  persistence_and_accessibility:
+    status: pass
+    detail: Audited native save confirmation/cancel, keyboard focus and Escape, legacy
+      1.0.0 slot migration without rewrite, original slot preservation, CRT-off/reduced-animation/150-percent
+      text, restored preferences, and minimum-window scrolling. Confirmed overwrite,
+      corrupt saves, and concurrent slot changes have automated coverage, not native-user-data
+      exercise.
+  findings_closed:
+    status: pass
+    detail: Delayed delegation no longer reports expired temporary mitigation; regression
+      test passes. Responsive service/action rails use normal flow when panels wrap;
+      final native layout retests recorded uncovered Evidence and actions at minimum
+      width and enlarged text.
+  provenance:
+    status: pass
+    detail: Audited docs/M3_QA_EVIDENCE.md and docs/TASK-017_NATIVE_QA.md against
+      source and candidate d7aa8fc. Independently checked release SHA-256 A88523CBE359A662197CA1B36FB33197BF469D4436C8037C1F678016B2AD4249
+      and configured native minimum 960x640. Native observations belong to the primary
+      agent; independent QA personally exercised automated checks and audited recorded
+      native evidence without claiming to have performed native inputs.
+critical_issues: 0
+followups:
+- Native screenshots were observed in the primary tool session but are not archived
+  in repository files.
+- Native 320px, complete screen-reader/audio auditing, and native overwrite/corrupt/concurrency
+  checks are not claimed.
+- Initial concurrent full-test attempt had a five-second keyboard-test timeout; isolated
+  rerun passed 116 tests with unchanged timeout.
+- Vite's uncompressed chunk warning is non-blocking.
+- Obtain the separate M3 completion human decision before roadmap transition.
+commit: d7aa8fcd40e7f8ef4706c75be9617e8c6eb936ed
+kind: qa
+role: qa
+actor: codex-task017-independent-qa

@@ -1,0 +1,54 @@
+task: TASK-017
+status: pass
+summary: Verified the three-incident MVP through repeatable automated checks and actual
+  native desktop play. Corrected misleading recovery copy for delegation events and
+  sticky service-rail overlap in narrow/enlarged layouts. Recorded native routes,
+  replayed archives, preserved legacy save loading, keyboard/display checks, binary
+  provenance, and limits. M3 completion remains a human decision.
+files_changed:
+- README.md
+- docs/M3_QA_EVIDENCE.md
+- docs/TASK-017_NATIVE_QA.md
+- src/app/AppShell.test.tsx
+- src/app/App.test.tsx
+- src/app/App.tsx
+- src/ui/base.css
+verification:
+  acceptance: pass
+  three_incident_flow: pass
+  shared_engine_and_ui: pass
+  evidence_and_war_room: pass
+  unknown_only_boundary: pass
+  tests: 116_passed_in_16_files
+  replay_tests: 2_passed
+  scenario_validation: 8_yaml_passed
+  typecheck: pass
+  lint: pass
+  format: pass
+  web_build: pass
+  native_build: pass
+  native_inspection:
+    status: pass
+    evidence: docs/TASK-017_NATIVE_QA.md
+    executable_sha256: A88523CBE359A662197CA1B36FB33197BF469D4436C8037C1F678016B2AD4249
+    detail: All three complete routes observed. Final executable fully exercised INC-001/INC-003;
+      INC-002 core route preceded the CSS-only fix and its archive replay and narrow
+      action layout were verified on the final executable. Existing incident save
+      was loaded and preserved, not overwritten.
+  project_doctor: pass
+  diff_check: pass
+  milestone_status: active_pending_human_completion_approval
+critical_issues: 0
+followups:
+- Independent review and acceptance QA are recorded as separate handoffs.
+- M3 closure and M4 task definition require the human completion decision.
+- Native minimum is 960 x 640; no native 320px or full screen-reader audit claim.
+- Confirmed overwrite and concurrent or malformed slots have automated rather than
+  user-data native coverage.
+- Initial overlapping full-test run timed out once; isolated rerun passed all 116
+  tests unchanged.
+- Vite uncompressed chunk-size warning remains non-blocking.
+commit: d7aa8fcd40e7f8ef4706c75be9617e8c6eb936ed
+kind: implementation
+role: developer
+actor: codex-task017-developer

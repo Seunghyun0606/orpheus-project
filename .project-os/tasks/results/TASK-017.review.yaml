@@ -1,0 +1,62 @@
+task: TASK-017
+status: pass
+summary: Independent source and evidence review found no remaining blocking defect.
+  The delegation recovery-copy error and responsive sticky-rail overlap are resolved;
+  native outcomes are attributed to the primary agent's observed inputs rather than
+  this reviewer's own inspection.
+commit: d7aa8fcd40e7f8ef4706c75be9617e8c6eb936ed
+files_changed: []
+verification:
+  acceptance:
+    status: pass
+    detail: All M3 criteria have automated coverage and explicitly attributed native
+      evidence. The catalog and shared desktop support three incident paths, replay-verified
+      archives, cross-incident discoveries, delegation and communication. M3 remains
+      active pending its separate human completion gate.
+  independent_regression:
+    status: pass
+    detail: This reviewer independently reran App.test.tsx, AppShell.test.tsx, m3-narrative.test.ts
+      and war-room.test.tsx; 46 tests in 4 files passed. Earlier focused checks also
+      passed 33 tests in 3 files and the 13-test App regression suite.
+  source_boundary:
+    status: pass
+    detail: Production React contains no INC-001, INC-002 or INC-003 literal branching.
+      Slot confirmation compares pending raw bytes, malformed saves remain preserved,
+      and archived review uses a separate store. Scenario tests validate the UNKNOWN-only
+      boundary and deterministic discovery persistence.
+  native_evidence_audit:
+    status: pass
+    detail: The reviewer read TASK-017_NATIVE_QA.md and M3_QA_EVIDENCE.md, independently
+      matched the executable SHA-256 A88523CBE359A662197CA1B36FB33197BF469D4436C8037C1F678016B2AD4249,
+      and checked the declared 960x640 native minimum against tauri.conf.json. Route
+      action counts and elapsed times match authored durations. INC-002 full play
+      occurred before the CSS-only correction, with archive reconstruction and layout
+      retest on the final binary; this distinction is documented.
+review:
+  findings: []
+  resolved_findings:
+  - severity: P2
+    detail: Delayed delegation results were mistaken for expired mitigation by recoveryCopy.
+      The branch now requires temporary_effect_expired, and an independently rerun
+      delegation-only regression plus existing recurrence checks passed.
+  - severity: P2
+    detail: Sticky service rails could overlay later workspace or full-row actions
+      in responsive layouts. The affected default and enlarged-text media rules now
+      use static positioning; native retest outcomes are documented by the primary
+      observer.
+  residual_risk: low
+critical_issues: 0
+followups:
+- This reviewer audited source, automated regressions and the primary agent's native
+  observation log; this reviewer did not personally perform native inputs or observe
+  those tool screenshots.
+- Native confirmed replacement, corrupt saves and concurrent writers were not exercised
+  against user data; their passing evidence is automated. Browser localStorage still
+  has no atomic compare-and-swap across windows.
+- Native inspection covers the supported 960x640 minimum and 150 percent text, not
+  native 320px support, a full screen-reader audit or audio audit.
+- The M3 completion and next milestone scope remain separate human decisions. No architecture,
+  roadmap, immutable result or canonical state was changed by this review.
+kind: review
+role: reviewer
+actor: codex-task017-independent-reviewer

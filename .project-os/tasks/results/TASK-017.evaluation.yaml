@@ -1,0 +1,78 @@
+task: TASK-017
+status: pass
+decision: PASS
+summary: TASK-017 establishes verified readiness at candidate d7aa8fc. Implementation,
+  independent test, review and acceptance-QA handoffs agree on objective evidence
+  for all M3 exit criteria, with zero remaining critical issues. This evaluator also
+  performed the independent code review and is separate from the developer; the acceptance-QA
+  agent is separate from both. This PASS applies to TASK-017 only and does not close
+  M3.
+commit: d7aa8fcd40e7f8ef4706c75be9617e8c6eb936ed
+files_changed: []
+verification:
+  acceptance:
+    status: pass
+    detail: Reviewed the assigned task, evaluator role policy, all four published
+      handoffs, quality policy and M3 definition. All required objective checks are
+      evidenced; the configured M3 human completion decision is kept separate.
+  playable_incidents:
+    status: pass
+    detail: Automated UI paths start all three incidents, find UNKNOWN, reach postmortem
+      and reopen completed archives. The primary developer's actual native routes
+      are recorded with executable provenance; independent QA replayed those exact
+      routes and reproduced their outcomes. Final INC-002 full core play predates
+      only the CSS correction, followed by final-binary archive and layout inspection.
+  shared_engine_and_ui:
+    status: pass
+    detail: Catalog-authored content runs through shared UI and headless simulation
+      without literal incident-ID branching in production React. Deterministic replays
+      and existing save migration remain verified.
+  evidence_narrative_war_room:
+    status: pass
+    detail: Cross-incident discoveries, UNKNOWN triggers, delegated ETA and capacity
+      refunds, pending-job save/load, communication and completed archive reconstruction
+      have automated evidence and documented native observations.
+  reveal_boundary:
+    status: pass
+    detail: Eight current and frozen YAML files validate. Independent QA and narrative
+      tests confirm UNKNOWN-only disclosure and reject premature identity disclosures
+      and broken references.
+  quality_checks:
+    status: pass
+    detail: Independent isolated full suite passed 116 tests in 16 files, replay command
+      passed two tests, and content validation passed eight files. Typecheck, lint,
+      formatting, web build, native build, diff check and Project OS doctor are recorded
+      as passing. The evaluator personally reran 46 focused tests while reviewing
+      the final fixes.
+  native_provenance:
+    status: pass
+    detail: Reviewer/evaluator and QA independently matched the final release SHA-256
+      A88523CBE359A662197CA1B36FB33197BF469D4436C8037C1F678016B2AD4249 to the native
+      log. Native inputs and live screenshots were observed by the primary agent;
+      independent roles audited the log, source and reproduced outcomes without claiming
+      direct native observation.
+  critical_issues: 0
+  milestone_status:
+    status: pass
+    detail: M3 is active and its required_on_completion human gate remains unresolved.
+      No milestone or roadmap transition is authorized by this task verdict.
+critical_issues: 0
+quality:
+  passed: true
+  missing: []
+  failed: []
+followups:
+- Obtain the configured M3 human completion decision before closing M3 or defining
+  an expanded next milestone scope.
+- An initial full-test attempt under concurrent build/check load timed out the existing
+  five-second vertical-slice test; isolated rerun passed with no test or timeout change.
+  Vite's chunk-size warning is non-blocking.
+- Native inspection covers supported 960x640 minimum and enlarged text. No native
+  320px, complete screen-reader/audio audit, or native user-data confirmed-overwrite/corrupt/concurrent-writer
+  exercise is claimed; save edge cases have automated coverage.
+- Native screenshots were viewed in the primary tool session but are not archived
+  as repository artifacts. Browser localStorage has no atomic compare-and-swap across
+  windows.
+kind: evaluation
+role: evaluator
+actor: codex-task017-review-evaluator

@@ -1,0 +1,46 @@
+task: TASK-017
+status: pass
+summary: Independent automated verification passed for candidate d7aa8fc; native build
+  provenance and recorded desktop outcomes were audited separately.
+files_changed: []
+verification:
+  acceptance: pass
+  full_tests:
+    status: pass
+    detail: Independent isolated npm test passed 116 tests in 16 files. The initial
+      concurrent run passed 115 tests and timed out the vertical-slice test at five
+      seconds while other checks and the native build overlapped; the isolated rerun
+      passed without changing that test or its timeout.
+  replay_tests:
+    status: pass
+    detail: npm run test:replays passed two tests. Independently replayed the three
+      exact native-log action sequences against current YAML; elapsed times, final
+      signals, customer impact, risk, action counts, mechanism resolution, and UNKNOWN
+      narratives match the recorded native outcomes.
+  scenario_validation:
+    status: pass
+    detail: npm run validate:scenarios passed eight current and frozen YAML files.
+  lint: pass
+  format: pass
+  typecheck: pass
+  web_build:
+    status: pass
+    detail: Independent npm run build passed including typecheck; the final CSS extension
+      also passed lint and formatting. Native build embeds the final CSS. Vite's 572.59
+      kB uncompressed chunk warning is non-blocking.
+  native_build_provenance:
+    status: pass
+    detail: Audited the primary agent's final native build and desktop log, and independently
+      hashed the release executable as A88523CBE359A662197CA1B36FB33197BF469D4436C8037C1F678016B2AD4249.
+      QA agent did not personally build or operate the native window.
+  project_doctor: pass
+  diff_check: pass
+critical_issues: 0
+followups:
+- The five-second keyboard vertical-slice test can time out under concurrent build/check
+  load; isolated verification passed.
+- M3 completion still requires the configured human gate.
+commit: d7aa8fcd40e7f8ef4706c75be9617e8c6eb936ed
+kind: test
+role: qa
+actor: codex-task017-qa
