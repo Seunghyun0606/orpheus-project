@@ -638,8 +638,9 @@ context remains truncated and required declared source files must be read direct
 ## Gate 17 — predicate availability composition (option A approved)
 
 [DEC-025's proposal](../../.project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml)
-records review finding R1. A valid metric with no eligible samples is unavailable,
-not zero. It is not yet defined whether `ALL(false, unavailable)` or
+records the original review finding R1. A valid metric with no eligible samples
+is unavailable, not zero. Before human selection, it was undefined whether
+`ALL(false, unavailable)` or
 `ANY(true, unavailable)` must diagnose, or may produce a known boolean through
 explicit three-valued composition. Those alternatives can change branch/ending
 eligibility, not merely serialization or production tuning.
@@ -662,6 +663,17 @@ fixtures. Independent recheck and remaining detailed contract closure are still
 required; no runtime or production thresholds change here.
 
 ## Proposed domain contracts (pending review and decisions)
+
+The [definition interface draft](campaign-definition-contract.md) specifies typed
+condition references/comparisons, authored campaign/behavior rules, explicit
+freshness/opportunity validity/association and actual-presentation acknowledgement,
+plus a priority-rank representation without production ranks. The
+[record interface draft](campaign-record-contract.md) specifies logical operation
+shapes, canonical equality, source/slot association and revision-checked ports.
+These close representation gaps as proposals for independent review, not new
+runtime schemas or implicit production policies. Missing/ambiguous authored rules
+remain diagnostics; no permanent-validity, fixed-expiry or latest-display default
+is introduced. Final contract acceptance is still pending.
 
 ### Input and replay identity
 

@@ -22,6 +22,8 @@ scope:
 depends_on:
   - 'TASK-017'
 specs:
+  - 'specs/architecture/campaign-definition-contract.md'
+  - 'specs/architecture/campaign-record-contract.md'
   - 'specs/architecture/condition-evaluation.md'
   - 'specs/architecture/campaign-intelligence-contract.md'
   - 'specs/architecture/campaign-ledger-persistence.md'

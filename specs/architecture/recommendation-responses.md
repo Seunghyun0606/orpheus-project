@@ -24,6 +24,13 @@ ambiguous overlapping opportunities, or create opportunities from old snapshots.
 Unresolved associations or invalid/unsupported required definitions are diagnostics,
 not negative response samples. These policy gaps block affected implementation.
 
+The [definition interface draft](campaign-definition-contract.md) now makes these
+rules required authored data, with unique validated response association or a
+diagnostic rather than a global expiry/replacement default. Its recording boundary
+requires actual presentation acknowledgement committed before a qualifying
+official response; preparation/calculation alone does not expose a recommendation.
+This candidate needs independent review and later physical integration tests.
+
 ## Matching an accepted response
 
 While an opportunity remains valid, its next new accepted action classified as

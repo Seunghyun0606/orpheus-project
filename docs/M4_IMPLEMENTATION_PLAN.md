@@ -165,6 +165,10 @@ The human now approved strict
 the detailed truth-table contract still requires independent recheck.
 Next: recheck that correction and close remaining detailed contract findings
 before dependent implementation.
+The [definition](../specs/architecture/campaign-definition-contract.md) and
+[record](../specs/architecture/campaign-record-contract.md) interface candidates
+now specify the remaining typed/association/priority/freshness representations;
+independent recheck must confirm them before treating the handoff as ready.
 Direct contract and
 DEC-009–025 references are now declared in dependent task context metadata;
 budget-truncated context output does not replace reading required source files.

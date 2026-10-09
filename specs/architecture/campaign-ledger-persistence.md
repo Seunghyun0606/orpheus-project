@@ -5,6 +5,11 @@ an implementation-contract draft for review, not a runtime schema or a completed
 TASK-018 handoff. No IndexedDB database has been opened by this documentation step.
 Pending behavior/ending policies cannot be selected by storage code.
 
+The [logical record interface draft](campaign-record-contract.md) now specifies
+operation/canonical-equality/association and read/prepare/commit representations.
+It preserves the approved authority boundaries and still requires independent
+review; it is not a physical schema or permission to open/migrate a database.
+
 ## Authority and version boundaries
 
 The new IndexedDB authority stores official campaign runs. Both existing

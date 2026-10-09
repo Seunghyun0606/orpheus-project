@@ -1,0 +1,156 @@
+# Campaign definition interfaces — TASK-018 review draft
+
+This is a proposed logical authoring contract under DEC-001/003/009–025, not a
+runtime schema or production content. Exact field spellings may be translated
+to TypeScript/Zod without changing these semantics. A supported version resolves
+to immutable validated data; unknown versions never resolve to the latest data.
+
+## Typed condition tree and reference registry
+
+A condition definition has an explicit ID/version and one tagged tree:
+
+- `all`: a nonempty `children` list of conditions.
+- `any`: a nonempty `children` list of conditions.
+- `not`: exactly one `child` condition.
+- `compare`: a registered typed `reference`, `operator` and typed `expected` value.
+
+Comparison operators are `eq`, `ne`, `gt`, `gte`, `lt`, `lte`. Ordered comparisons
+require finite numbers; booleans and declared string/enumeration values allow
+only equality/inequality with the same type. Unknown operators, mixed types,
+nonfinite values and undeclared references diagnose. Do not coerce strings,
+round metric values before comparison, or evaluate executable expressions.
+
+Each registry entry identifies its namespace/key, value type, definition version
+and allowed evaluation context. Namespaces cover Act, completed-incident/evidence
+membership, narrative/ending flags, alignment/hidden values, behavior metrics and
+explicit registered scenario/final-action/context observations. A definition must
+declare references to the relevant scenario/model/flag/evidence catalog; no
+arbitrary object path, property lookup, UI callback or inferred action label is
+allowed. A final-action observation additionally needs its validated final-attempt
+context; a pre-action observation cannot read future final results.
+
+The context distinguishes available typed values from valid unavailable values
+with coverage/reason/provenance. Malformed absent required context is diagnostic,
+not an empty collection or default false. For a declared authoritative membership
+collection, verified absence is known false; missing collection authority is not.
+An unsupported or unknown registry entry is not an available observation.
+All ten behavior fields retain their own approved sample counts/availability.
+
+The [strict condition contract](condition-evaluation.md) governs every tree:
+validate all references and require all referenced observations before composition.
+Expose context/definition/reference diagnostics to tools without raw hidden values
+or story-completion percentages in player UI. Registry and tree versions are part
+of replay authority, not interchangeable with physical database versions.
+
+## Campaign and behavior definitions
+
+Campaign data explicitly supplies definition version, initial Act, allowed
+incidents/Acts, initial alignment/hidden values and flags/membership, transition
+conditions and stable authored effect IDs/deltas. Required initial numeric values
+are finite authored inputs, not invented zeros or production tuning in this doc.
+References and any authored ranges must validate; no implicit clamping occurs.
+Act/incident eligibility is a condition tree, not incident-ID code. Completion
+effects require verified new completion events under DEC-012/015; a completed
+legacy checkpoint cannot grant official progression.
+
+Behavior data supplies an ID/version and scenario-version-specific classifications:
+operational intervention, restart/rollback subsets, investigation source/result
+rules and stable investigation keys. Validate numerator subset relationships.
+Investigation support for evidence-before-action has required `relevance` and
+`freshness` conditions evaluated at the intervention's pre-action boundary over
+earlier new same-attempt observations. Both must be explicit; neither missing
+freshness nor prior membership establishes permanent valid support. Current
+simulation elapsed time or verified state can be registered as authored context;
+wall-clock time and unrecorded information cannot supply freshness.
+
+Investigation results retain their new accepted source input and returned-result
+boundary. Pending requests are not observations; inherited delegation outcomes
+cannot become new investigation merely by arriving during a later command.
+Distinct investigation keys remain per-attempt under DEC-018; numeric effect
+receipts remain per-run under DEC-015. Classification, key, relevance and freshness
+changes need explicit compatible definitions, not reinterpretation of old inputs.
+
+## Opportunities and response association
+
+Versioned opportunity data declares ID, kind, applicable metric, actual information
+or presentation requirements, availability and continuing-validity conditions,
+eligible response identities/conditions and the metric's positive/matching rule.
+Recommendation/prediction kinds additionally retain the exposed action/result,
+candidate availability and historical calculation boundary. Reporting/cooperation
+and preference definitions must declare the known pre-action choice information;
+old UNKNOWN text is not such a declaration. Missing mandatory rules diagnose.
+
+No global timeout, permanent-validity or latest-opportunity-wins default exists.
+Any expiry, replacement or continuing-validity rule is explicit versioned authored
+data using verified context. Replacement must identify its authorized predecessor
+and rule; a new display does not silently supersede another opportunity. Reuse
+cannot reopen an already-consumed response identity. Expiry/no response adds no
+positive or negative sample. Production rule values remain unselected.
+
+Before a new accepted choice, validate current opportunity and response eligibility
+against the verified pre-action state. Association records the opportunity ID,
+metric and source input. A uniquely applicable validated opportunity can match a
+manually executed action without an accept button. Ambiguous overlapping applicable
+opportunities diagnose unless a validated authored association rule uniquely
+resolves them; never infer a choice by timestamp, display order or caller preference.
+Zero applicable valid opportunities adds no response sample, not a rejection;
+invalid required definitions/context remain diagnostics, not zero applicability.
+
+At most one response is consumed per identified recommendation/prediction/reporting/
+cooperation opportunity for its metric. Preference reuse/consumption must also be
+explicitly authored; every observation still deduplicates source input per metric.
+Distinct metrics require their own valid contexts, not copied observations. One
+operational command/cost is retained once even when independently qualifying for
+more than one metric. No classification automatically grants alignment/effects.
+
+## Actual presentation and durable response eligibility
+
+The adapter can prepare a result without treating it as an exposure. Its logical
+record retains result/context/history/definition identity, separate from an actual
+presentation acknowledgement. The acknowledgement identifies the prepared result,
+attempt and verified presentation/gate context and occurs after actual presentation,
+before any qualifying response. A computation, hidden panel, archive replay or
+queued render cannot acknowledge visibility. The adapter must substantiate its
+acknowledgement with integration/native tests; this is not proof of human attention
+or a security/authentication guarantee.
+
+The acknowledged opportunity and identity must be committed under DEC-013 before
+the adapter accepts a qualifying official response against it. Persisting a prepared
+result alone cannot create a sample. Until acknowledgement is committed, a proposed
+response cannot be acknowledged as an official sample; the adapter surfaces pending
+or failure rather than guessing exposure or adding an acceptance/rejection. Commit
+failure preserves prior official state, including previously valid opportunities.
+Presentation can have happened before a failed commit; do not claim the player did
+not see it. Reconcile/retry its stable acknowledgement identity without redisplay
+creating another opportunity. Exact-head resume preserves identities; a new
+checkpoint baseline cannot turn inherited presentations into new samples.
+
+Physical rendering/acknowledgement order and lost-ack recovery need TASK-020/024/025
+verification separately from pure response matching. No DOM/IndexedDB atomicity is
+promised. Lifecycle rules remain authored, not imposed by this recording boundary.
+
+## Ending precedence representation
+
+Each ending has a unique ID, recorded definition version, condition tree and
+`priorityRank`: a nonnegative safe integer, where a smaller rank is preferred.
+This is the representation of authored precedence, not a production ordering of
+the ten endings; no ranks for production IDs are assigned here. Equal ranks are
+valid and can create the top tie required by DEC-019; neither filename nor ID
+breaks a tie. Validate all requested definitions, references and context, including
+lower-ranked conditions. Any diagnostic condition prevents manufacturing a winner
+by omission. With all conditions known, choose the unique lowest-rank match, retain
+top ties as ambiguous, and valid no-match as unresolved without fallback.
+
+Test-only ranks can prove order-independent resolution without establishing good,
+bad or true endings. Numeric priority direction is now explicit; serialization
+changes cannot silently reverse previously recorded authored precedence.
+
+## Verification handoff
+
+TASK-019/021/022/023 must exercise typed references/operators, arity, unavailable vs
+invalid context, fresh same-attempt support, unique/ambiguous response association,
+missing lifecycle rules, known information, and all ending precedence cases.
+TASK-020/024/025 must exercise committed acknowledgement before response, actual
+gated visibility, abort/lost-ack recovery and legacy/prefix isolation. These are
+future tests, not newly passing APIs. Independent review/QA and final contract
+acceptance remain necessary before dependent implementation.

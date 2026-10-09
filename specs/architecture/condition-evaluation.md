@@ -5,6 +5,10 @@ approves strict referenced-observation availability, not three-valued logical
 short-circuiting. This is a logical contract and future fixture plan; no runtime
 schema, evaluator, save field or production condition is implemented here.
 
+The [definition interface draft](campaign-definition-contract.md) defines typed
+reference/comparison trees and registry boundaries for review. It must preserve
+this approved availability policy, not choose an alternative during serialization.
+
 ## Validation and required observations
 
 The pure evaluator consumes a supported versioned authored condition and verified
@@ -60,9 +64,10 @@ a three-valued boolean algebra: U is rejected before composition.
 
 For validated multi-child ALL/ANY, first require every referenced observation;
 then ALL is true only when every child is true and ANY when at least one is true.
-NOT requires its one validated child. Operator arity must be explicit in the
-reviewed authoring schema; do not add an implicit identity value for a malformed
-empty group. Exact serialization/field names remain an implementation-contract
+ALL/ANY require a nonempty list of validated condition children; NOT requires
+exactly one validated condition child. Invalid arity diagnoses; do not add an
+implicit identity value for a malformed empty group. The runtime authoring schema
+must enforce these constraints. Exact serialization/field names remain an implementation-contract
 review obligation, not a reason to select different availability semantics.
 
 `ALL(F, ANY(T, U))` and `ANY(T, ALL(F, U))` both diagnose. They cannot be reduced

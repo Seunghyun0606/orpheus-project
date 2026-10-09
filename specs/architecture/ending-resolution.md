@@ -3,8 +3,9 @@
 Status: DEC-019 approves unresolved top ties and no-match without automatic
 endings. This document specifies review, replay and fixture boundaries within
 that decision; no resolver, save field or production ending content is implemented.
-Priority representation, exact predicate schema and production balance still
-require their reviewed versioned definitions.
+The proposed priority and typed-condition representation now appears in the
+[definition interface draft](campaign-definition-contract.md). Independent
+review and production balance remain separate obligations.
 
 ## Explicit context and definitions
 
@@ -17,8 +18,10 @@ approved presence rules; they do not supply final completion or missing behavior
 Definitions name ending IDs, conditions and priority precedence. Validate all
 flag/evidence/action/model references and supported versions before resolution.
 No ordering derives from file layout, object keys, alphabetic IDs or the UI.
-Priority direction and serialization must be explicit in the reviewed definition
-contract, with fixtures; this draft chooses no numeric production priorities.
+The proposed candidate representation is `priorityRank`, a nonnegative safe
+integer with smaller ranks preferred. Equal ranks are allowed for DEC-019's top
+tie. This representation assigns no production ranks and must be checked with
+order-independent fixtures; no file ordering or latest definition substitution.
 
 Required observations retain availability/provenance. A known false predicate
 is different from unavailable/indeterminate context. Do not turn an unsupported

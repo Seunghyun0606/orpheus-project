@@ -11,6 +11,10 @@ DEC-023 approves independent safety/damage preference choice rates.
 DEC-024 approves explicit reporting/cooperation response rates. Detailed authored
 eligibility and definition contracts still require independent review.
 
+The [definition interface draft](campaign-definition-contract.md) now specifies
+versioned classifications and required evidence relevance/freshness conditions.
+No permanent freshness or production interval follows from a missing rule.
+
 ## Approved operational rates
 
 For a compatible definition version, retain three raw counts per official attempt:
