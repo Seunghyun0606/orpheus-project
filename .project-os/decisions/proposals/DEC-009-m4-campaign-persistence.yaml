@@ -1,0 +1,40 @@
+id: DEC-009
+title: Choose M4 campaign persistence authority without inventing legacy history
+status: proposed
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  Existing incident saves are replay verified, while the separate M3 discovery
+  envelope contains per-incident snapshot arrays from potentially divergent
+  restarts. Neither records campaign run identity or global chronology. M4 needs
+  explicit campaign history and versioned model state without silently treating
+  snapshot unions as canonical player behavior.
+decision: Pending human selection; neither option is approved or implemented.
+recommended_option: A
+chosen_option: null
+options:
+  - key: A
+    label: Preserve both existing stores and add a distinct versioned campaign ledger
+    details: >-
+      Candidate key orpheus.campaign.v1. Keep orpheus.incident.v1 and
+      orpheus.campaign-progress.v1 in their existing roles; define verified,
+      explicitly scoped legacy evidence import and new canonical run history.
+      Additional envelopes need explicit authority and conflict handling, not
+      assumed cross-key atomicity.
+  - key: B
+    label: Add a v2 discovery/campaign envelope and migrate verified legacy progress explicitly
+    details: >-
+      Candidate key orpheus.campaign-progress.v2. Unite new campaign history and
+      discovery projections in the new authority while retaining original v1
+      bytes for compatibility/rollback. Legacy snapshot ambiguity still requires
+      policy; no automatic conversion or continuous v1 mirroring is approved.
+invariants:
+  - Preserve the existing incident slot and confirmation/legacy replay protections.
+  - Do not rewrite, delete or silently reinterpret old bytes merely by loading them.
+  - Retain original content provenance, not only migrated target-state output.
+  - Unsupported observations cannot be invented from UNKNOWN hints or discovery unions.
+  - Choosing storage does not approve restart semantics, model formulas, prediction policy or ending balance.
+proposal_document: specs/architecture/campaign-intelligence-contract.md
+supersedes: null

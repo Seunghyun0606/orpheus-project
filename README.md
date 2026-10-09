@@ -65,8 +65,9 @@ npm run build:desktop
 The [M3 QA evidence map](docs/M3_QA_EVIDENCE.md) records automated and native checks
 and their limitations. M3 completion is human-approved; the
 [M4 implementation plan](docs/M4_IMPLEMENTATION_PLAN.md) defines TASK-018–025.
-M4 implementation has not started. Its first eligible task is TASK-018 (architect),
-which must obtain separate approval for material architecture or migration choices.
+M4 runtime implementation has not started. TASK-018 (architect) is active; its
+[contract proposal](specs/architecture/campaign-intelligence-contract.md) awaits
+a human storage-authority choice and further policy review before implementation.
 
 ## War Room and saved progress
 

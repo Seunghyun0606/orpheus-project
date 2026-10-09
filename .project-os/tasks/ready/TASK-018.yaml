@@ -22,6 +22,7 @@ scope:
 depends_on:
   - "TASK-017"
 specs:
+  - "specs/architecture/campaign-intelligence-contract.md"
   - "specs/feature/campaign-and-player-model.md"
   - "specs/architecture/system-architecture.md"
   - "specs/product/01-game-and-narrative-direction.md"

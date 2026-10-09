@@ -162,16 +162,16 @@ tasks:
   - TASK-016
   human_gate: false
 - id: TASK-018
-  title: "Define campaign intelligence contracts and compatibility decisions"
+  title: Define campaign intelligence contracts and compatibility decisions
   role: architect
   milestone: M4
   priority: P0
-  status: ready
+  status: active
   depends_on:
   - TASK-017
   human_gate: false
 - id: TASK-019
-  title: "Implement deterministic campaign transitions and authored progression"
+  title: Implement deterministic campaign transitions and authored progression
   role: developer
   milestone: M4
   priority: P0
@@ -180,7 +180,7 @@ tasks:
   - TASK-018
   human_gate: false
 - id: TASK-020
-  title: "Persist approved campaign state without losing existing progress"
+  title: Persist approved campaign state without losing existing progress
   role: developer
   milestone: M4
   priority: P0
@@ -189,7 +189,7 @@ tasks:
   - TASK-019
   human_gate: false
 - id: TASK-021
-  title: "Derive versioned player behavior from accepted action history"
+  title: Derive versioned player behavior from accepted action history
   role: developer
   milestone: M4
   priority: P0
@@ -198,7 +198,7 @@ tasks:
   - TASK-019
   human_gate: false
 - id: TASK-022
-  title: "Resolve data-driven branches and deterministic prediction feedback"
+  title: Resolve data-driven branches and deterministic prediction feedback
   role: developer
   milestone: M4
   priority: P0
@@ -208,7 +208,7 @@ tasks:
   - TASK-021
   human_gate: false
 - id: TASK-023
-  title: "Implement authored ending conditions and deterministic priority resolution"
+  title: Implement authored ending conditions and deterministic priority resolution
   role: developer
   milestone: M4
   priority: P0
@@ -219,7 +219,7 @@ tasks:
   - TASK-022
   human_gate: false
 - id: TASK-024
-  title: "Integrate campaign projections with the shared desktop safely"
+  title: Integrate campaign projections with the shared desktop safely
   role: developer
   milestone: M4
   priority: P0
@@ -230,7 +230,7 @@ tasks:
   - TASK-023
   human_gate: false
 - id: TASK-025
-  title: "Verify campaign intelligence against M4 exit criteria"
+  title: Verify campaign intelligence against M4 exit criteria
   role: developer
   milestone: M4
   priority: P0

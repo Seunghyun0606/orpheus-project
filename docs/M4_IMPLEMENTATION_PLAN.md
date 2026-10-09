@@ -75,6 +75,12 @@ Use the supported native 960 x 640 minimum and enlarged text; do not infer
 
 ## Current phase result and next step
 
+TASK-018 has now been claimed as architect. Its
+[campaign intelligence contract](../specs/architecture/campaign-intelligence-contract.md)
+is an unapproved proposal: the first human gate selects storage authority.
+Existing-save checks do not constitute acceptance of the proposed new campaign
+system; remaining policies and independent review/QA are still required.
+
 This phase only closes the approved M3 milestone and registers eight bounded
 tasks. It does not change runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
