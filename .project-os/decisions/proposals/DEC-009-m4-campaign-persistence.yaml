@@ -1,6 +1,6 @@
 id: DEC-009
 title: Choose M4 campaign persistence authority without inventing legacy history
-status: proposed
+status: resolved
 date: '2026-10-09'
 applies_to:
   - M4
@@ -11,9 +11,13 @@ context: >-
   restarts. Neither records campaign run identity or global chronology. M4 needs
   explicit campaign history and versioned model state without silently treating
   snapshot unions as canonical player behavior.
-decision: Pending human selection; neither option is approved or implemented.
+decision: >-
+  The human selected option A. The active decision records the limited storage
+  authority approval; remaining domain and migration policies are not approved
+  and no runtime implementation is introduced by resolving this proposal.
+decision_record: .project-os/decisions/DEC-009-separate-m4-campaign-ledger.yaml
 recommended_option: A
-chosen_option: null
+chosen_option: A
 options:
   - key: A
     label: Preserve both existing stores and add a distinct versioned campaign ledger

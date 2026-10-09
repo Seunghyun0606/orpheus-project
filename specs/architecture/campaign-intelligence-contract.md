@@ -1,7 +1,8 @@
 # Campaign intelligence contract — TASK-018 proposal
 
-Status: **proposal, not approved architecture**. First gate: M4 campaign storage
-authority. No runtime type, schema, storage key, migration, content or player
+Status: **partially decided contract proposal**. Gate 1 storage authority is
+approved by DEC-009; Gate 2 attempt contribution remains pending. No runtime
+type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
 task has independent review, acceptance QA and Project OS evaluation.
@@ -14,6 +15,8 @@ saves before replaying approved target content. DEC-006 keeps discovery progress
 separate from the incident slot; future state fields need explicit evolution.
 DEC-007 preserves cross-incident save confirmation. DEC-008 approves M4 task
 definition only, not campaign history, migrations, model formulas or thresholds.
+DEC-009 separately approves retaining both existing stores and adding a distinct
+versioned campaign ledger. It does not approve the remaining policies below.
 
 The three production MVP incidents remain UNKNOWN-only. Framework fixtures may
 describe later-act systems without making those systems visible in MVP UI.
@@ -52,7 +55,7 @@ viewed twice. Hashing replay bytes can identify the same imported payload but
 cannot establish distinct play identity. Combining prefixes or counting each
 snapshot's actions invents or duplicates behavior.
 
-## Gate 1 — storage authority options
+## Gate 1 — storage authority (option A approved)
 
 Both options preserve the original incident slot and old discovery bytes. Neither
 allows silent rewriting on load, deriving invented historical behavior, or
@@ -64,11 +67,47 @@ Key names below are candidates, not constants introduced by this document.
 | A — recommended | A distinct versioned campaign ledger (candidate `orpheus.campaign.v1`), while the two existing keys retain their current roles                                                                     | Lowest coupling to established M3 save readers; old desktop can still read old records without conversion | More than one local envelope; no cross-key atomicity. Define explicit evidence import/projection and separate authorities; legacy discoveries cannot automatically become canonical actions. |
 | B               | A new discovery/campaign envelope v2 (candidate `orpheus.campaign-progress.v2`) unifies the new campaign ledger and discovery provenance; retain v1 as the original read-only compatibility source | One new authority for campaign and discovery projections after validated import                           | More extensive envelope migration and projection changes; multiple legacy snapshots still need explicit treatment. v1 is not an automatic live mirror of later v2 gameplay.                  |
 
-Recommendation A is a proposal, **not a selected decision**. DEC-009's proposal
-records this gate. Choosing A or B does not by itself approve the remaining
-run/restart/import policy, behavior formulas, confidence policy or ending balance.
-After the choice, specify the exact schema/version matrix and remaining gates
-before implementing TASK-019/020.
+The human selected A, recorded in
+[DEC-009](../../.project-os/decisions/DEC-009-separate-m4-campaign-ledger.yaml).
+The alternatives above retain the original comparison; B is not selected.
+This is storage authority approval, not approval of the remaining run/restart/import
+policy, behavior formulas, confidence policy or ending balance. Specify the exact
+schema/version matrix and remaining gates before implementing TASK-019/020.
+
+The three authorities have distinct responsibilities: the existing single slot
+holds an incident checkpoint under its confirmation rules; the M3 store retains
+verified alternate discovery snapshots; the new ledger would hold explicitly
+associated, ordered campaign inputs and their derived state. Neither reading nor
+updating the M3 union automatically creates official ledger observations. Any
+adoption of legacy artifacts requires a separately approved import policy. A
+corrupt ledger must not silently fall back to that union as a new official history.
+
+## Gate 2 — restart and replay contribution (pending)
+
+[DEC-010's proposal](../../.project-os/decisions/proposals/DEC-010-campaign-attempt-policy.yaml)
+asks how new incident attempts affect the official campaign. No option is selected:
+
+- **A — recommended:** append every official restart/replay as a distinct attempt
+  in the same run. Keep accepted actions from abandoned attempts; do not replace
+  past history. Exact aggregation weights and award scopes remain pending.
+- **B:** isolate restart/replay as practice. Preserve the official attempt for
+  resume; practice does not affect official hidden values, evidence, unlocks,
+  model or endings. Starting a new official campaign is explicit and preserves
+  the old one. Existing M3 discovery behavior does not authorize importing
+  practice artifacts into the official ledger.
+
+For example, an attempt accepts `OPEN_LOGS`, then a service restart action. A UI
+incident restart is a boundary: A creates a second official attempt; B creates
+practice while retaining the first official attempt. Identical seed and commands
+in a genuinely new attempt are not duplicate delivery. Conversely, redisplaying
+or replay-verifying the original saved attempt is not additional player action.
+The UI restart boundary is not itself a restart-service observation.
+
+Both options preserve history. Neither authorizes retroactive run identity for
+old saves, erasing old attempts, double completion/evidence awards, numeric
+weighting or ending thresholds. Loading an older incident checkpoint against an
+existing ledger head and adopting ambiguous legacy snapshots remain separate
+pending policies. Choosing A or B alone does not resolve them.
 
 ## Proposed domain contracts (pending review and decisions)
 
@@ -90,10 +129,10 @@ accepted player commands. Idempotency identity and hashing/canonicalization rule
 need versioned test fixtures; a checksum is not authentication or a save-security
 guarantee.
 
-Pending human policy: whether restart continues one scored campaign as a new
-attempt, replaces a prior canonical attempt, or starts a separate practice/run.
-Also pending: how loading an older incident slot relates to an existing campaign
-head. A legacy save cannot supply an absent campaign association by guessing.
+Gate 2 determines whether restart adds an official attempt or isolated practice;
+no replacement of accepted history is authorized. Also pending: how loading an
+older incident slot relates to an existing campaign head. A legacy save cannot
+supply an absent campaign association by guessing.
 
 ### Campaign state and effects
 
@@ -180,7 +219,8 @@ behavior must be specified after the storage choice.
 | Ending framework                                | TASK-023: ten endings, positive/exclusion/boundary fixtures, overlap/ties/no match, unsupported final context and references                                     |
 | Desktop/native integration and final acceptance | TASK-024/025: persistence and read-only archive isolation, all three UNKNOWN-only paths, supported native minimum/enlarged text, independent review and QA       |
 
-TASK-018 acceptance remains pending: storage choice and other required policies
-need decisions; independent architecture review and final acceptance QA have not
+TASK-018 acceptance remains pending: storage authority is approved, but attempt
+contribution and other required policies need decisions. Independent architecture
+review and final acceptance QA have not
 approved this draft. Existing tests verify current safeguards, not these proposed
 new APIs. No result should mark TASK-018 complete merely because this text exists.

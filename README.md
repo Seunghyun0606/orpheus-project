@@ -66,8 +66,10 @@ The [M3 QA evidence map](docs/M3_QA_EVIDENCE.md) records automated and native ch
 and their limitations. M3 completion is human-approved; the
 [M4 implementation plan](docs/M4_IMPLEMENTATION_PLAN.md) defines TASK-018–025.
 M4 runtime implementation has not started. TASK-018 (architect) is active; its
-[contract proposal](specs/architecture/campaign-intelligence-contract.md) awaits
-a human storage-authority choice and further policy review before implementation.
+[contract proposal](specs/architecture/campaign-intelligence-contract.md) records
+human approval of a separate campaign ledger while retaining existing stores.
+Retry/practice contribution and further policies still require decisions and
+independent review/QA before implementation.
 
 ## War Room and saved progress
 

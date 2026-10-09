@@ -1,0 +1,33 @@
+id: DEC-009
+title: Preserve existing stores and add a separate versioned M4 campaign ledger
+status: active
+date: '2026-10-09'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  M3 discovery snapshots preserve artifacts from overlapping and divergent
+  incident attempts, but do not establish canonical campaign chronology or
+  behavior. The human selected option A, retaining existing saves and adding
+  a separate versioned campaign ledger, at the M4 storage authority gate.
+decision: >-
+  Preserve orpheus.incident.v1 and orpheus.campaign-progress.v1 in their existing
+  roles. Use a distinct versioned authority for future canonical campaign run
+  history and its derived state. Do not replace either existing envelope or
+  reinterpret discovery snapshot unions as player action history. The candidate
+  key orpheus.campaign.v1 is not a runtime constant introduced by this record;
+  the exact envelope and compatibility contract still require TASK-018 review.
+human_approval:
+  selected_option: A
+  instruction: '기존 저장 유지 + 별도 버전별 캠페인 원장 추가(권장).'
+proposal: .project-os/decisions/proposals/DEC-009-m4-campaign-persistence.yaml
+consequences:
+  - Existing incident confirmation, frozen replay verification and discovery persistence protections remain active.
+  - No existing bytes are rewritten, deleted or automatically converted on load.
+  - A future ledger must retain original provenance for explicitly approved verified legacy imports.
+  - Snapshot overlap or target-content replay cannot manufacture missing historical actions or observations.
+  - Cross-key atomicity and automatic dual-write or fallback are not approved.
+  - Restart and attempt contribution, older-slot association, exact schema and import/conflict policy remain pending.
+  - Model formulas, prediction confidence and ending balance are not approved by this storage choice.
+  - TASK-018 stays active pending remaining decisions, independent review, acceptance QA and evaluation; dependent implementation remains ineligible.
+supersedes: null
