@@ -1,7 +1,7 @@
 # TASK-021 — Versioned player behavior candidate
 
-Status: developer implementation and verification candidate, **not accepted**.
-Independent review, acceptance QA and configured Project OS evaluation are pending.
+Status: independently reviewed and QA-verified candidate, **not accepted**.
+Configured independent evidence evaluation and Project OS completion remain pending.
 DEC-029 approves model binding in new campaign definitions only; it does not approve
 attaching a model to older runs, production classifications or native integration.
 
@@ -115,8 +115,14 @@ an intervention to pass an authored 30-second freshness condition.
 The scoped correction rejects both IDs for direct and timer investigation results,
 without changing the scenario schema, frozen content, model formulas or storage.
 Four regressions cover both IDs and delivery kinds. Developer focused verification
-now passes 49 tests in two files. Independent revised-candidate verification and
-configured evaluation are still required; the original finding is not erased.
+now passes 49 tests in two files. Final candidate `895a05b` also tightens timer
+delegation references and asserts scenario validity in all four regressions.
+Independent review and QA PASS: 49 focused tests, 264 full tests in 23 files,
+typecheck, lint, formatting, eight scenario validations, web build, doctor and diff
+checks, run serially with unchanged timeouts. Reviewer used read-only Node
+reproductions; suites are attributed to QA. No failures or retries occurred in
+this independent session. Configured evaluation is still required; the original
+finding and developer timeout history are not erased.
 
 ## Known risks
 
@@ -136,7 +142,6 @@ configured evaluation are still required; the original finding is not erased.
 
 ## Remaining work and next recommended step
 
-Obtain separately authorized TASK-021 read-only independent review and acceptance QA
-against the committed candidate. Fix safe findings and gate any material policy change.
-Only independently attributed evidence and configured Project OS evaluation can complete
-TASK-021 and make TASK-022 eligible. M4 remains active; no push or release is implied.
+Submit the attributed final independent review, QA and tests for candidate `895a05b`.
+Only configured independent evidence evaluation can complete TASK-021 and make
+TASK-022 eligible. M4 remains active; no push or release is implied.

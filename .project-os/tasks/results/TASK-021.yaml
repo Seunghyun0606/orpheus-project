@@ -1,0 +1,53 @@
+task: TASK-021
+status: pass
+role: developer
+actor: codex-task021-developer
+commit: 895a05bd398a06a29368130574893e19e6df50d8
+date: '2026-10-11'
+summary: Implemented DEC-029 new-definition-only versioned behavior binding, four
+  deterministic metrics, strict authored rules and causal provenance. Six fields remain
+  unavailable without recorded opportunities; old model-less authorities and storage
+  stay unchanged. Independent review and QA passed after fixing the reproduced milestone-source
+  collision. This submission is not self-approved completion; configured evaluation
+  remains required.
+files_changed:
+- src/scenario/behavior.ts
+- src/scenario/campaign.ts
+- src/engine/player-model/behavior.ts
+- src/engine/campaign/transitions.ts
+- src/tests/fixtures/behavior.ts
+- src/tests/player-behavior.test.ts
+- src/tests/player-behavior-ledger.test.ts
+- docs/TASK-021_IMPLEMENTATION.md
+- docs/M4_IMPLEMENTATION_PLAN.md
+- specs/architecture/campaign-definition-contract.md
+- .project-os/decisions/DEC-029-behavior-model-binding.yaml
+- .project-os/tasks/ready/TASK-021.yaml
+- .project-os/planning/TASK-021.model-binding-gate.yaml
+- .project-os/planning/TASK-021.review-correction.yaml
+verification:
+  acceptance: pass
+  deterministic_history_metrics_and_provenance: pass
+  rejected_duplicate_empty_and_alternate_history_boundaries: pass
+  all_ten_fields_supported_or_explicitly_unavailable: pass
+  validated_classifications_versions_and_old_authority_preservation: pass
+  independent_review: pass
+  independent_qa: pass
+  focused_tests: 49_tests_in_2_files_passed
+  unit_test: pass
+  typecheck: pass
+  lint: pass
+  format: pass
+  scenario_validation: pass
+  web_build: pass_with_existing_nonblocking_chunk_warning
+  project_doctor: pass
+critical_issues: 0
+followups:
+- Obtain independent configured evidence evaluation before canonical completion.
+- Original 5913304 REWORK and resolved source collision are preserved, not erased.
+- No model attachment, opportunity migration, UI change, production model, native
+  storage or release is implied.
+- Full-history growth/per-event recomputation remain unbenchmarked; six opportunity-dependent
+  metrics require future supported operations.
+- Existing web build and dependency/security warnings remain outside scope.
+kind: implementation

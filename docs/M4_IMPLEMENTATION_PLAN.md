@@ -7,10 +7,11 @@ claimed through Project OS. DEC-029 records the human-approved new-definition-on
 model binding; older model-less records remain unchanged. The
 [TASK-021 candidate](TASK-021_IMPLEMENTATION.md) implements four supported behavior
 metrics and explicit unavailability for six opportunity-dependent fields.
-Independent review/QA and configured acceptance remain pending. No storage migration
-or native integration is performed.
-Candidate `5913304` passed 260 developer tests; separately bounded delegation is
-requested in the [TASK-021 review/QA gate](../.project-os/planning/TASK-021.review-qa-execution-request.yaml).
+Independent review/QA passed final candidate `895a05b` after correcting the
+milestone source-ID collision found in `5913304`. Independent QA passed 264 tests;
+configured evidence evaluation remains pending. No storage migration or native
+integration is performed. Attributed evidence follows the separately approved
+[TASK-021 review/QA gate](../.project-os/planning/TASK-021.review-qa-execution-request.yaml).
 The human approved M3 closure and M4 definition
 on 2026-10-09; [DEC-008](../.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml)
 records that approval. M4 remains active; TASK-019 completion is not M4 closure.

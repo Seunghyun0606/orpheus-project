@@ -10,7 +10,7 @@ immediate/uniquely attributable timer observations, required relevance/freshness
 conditions and strict registered pre-action context. No opportunity/exposure variants,
 production mappings, automatic model attachment or storage migration are introduced.
 See [candidate and limitations](../../docs/TASK-021_IMPLEMENTATION.md). Independent
-TASK-021 review/QA and Project OS acceptance are still pending.
+TASK-021 review/QA passed final candidate `895a05b`; Project OS evaluation remains pending.
 
 The original draft wording below is retained as the logical baseline/history; its
 pending TASK-018 review language is superseded by DEC-026, not by developer self-approval.

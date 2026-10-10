@@ -1,0 +1,38 @@
+task: TASK-021
+status: pass
+role: qa
+actor: codex-task021-qa-resume
+source_agent: /root/task021_qa_resume
+recorded_by: codex-task021-developer
+commit: 895a05bd398a06a29368130574893e19e6df50d8
+date: '2026-10-11'
+summary: >-
+  Actual independent acceptance QA PASS for all four criteria on the final
+  candidate. Original candidate REWORK is preserved separately despite passing
+  tests. The corrected source guard and four scenario-valid regressions resolve
+  the reproduced blocker without altering formulas, legacy records or storage.
+files_changed: []
+verification:
+  acceptance: pass
+  deterministic_history_metrics_and_provenance: pass
+  rejected_duplicate_empty_and_alternate_history_boundaries: pass
+  all_ten_fields_supported_or_explicitly_unavailable: pass
+  validated_classifications_versions_and_old_authority_preservation: pass
+  focused_tests: 49_tests_in_2_files_passed
+  independent_full_tests: 264_tests_in_23_files_passed
+  typecheck: pass
+  lint: pass
+  format: pass
+  scenario_validation: 8_files_passed
+  web_build: pass_with_existing_572_59_kB_chunk_warning
+  project_doctor: pass
+  diff_check: pass
+  pending_result_reload_lost_ack_abort_conflict_and_record_coexistence: pass
+  valid_scenario_reserved_source_regressions: pass
+critical_issues: 0
+followups:
+  - Final candidate checks ran serially with unchanged default timeouts; no failure, retry or timeout relaxation occurred in this independent session.
+  - Four metrics derive from supported authored inputs; six opportunity-dependent fields remain explicitly unavailable.
+  - Ledger checks used injected-memory IndexedDB only; no native or actual user-storage operations were performed.
+  - No production model, performance benchmark, real storage durability or security certification is claimed.
+  - QA changed no repository files, dependencies, commits or Project OS state.

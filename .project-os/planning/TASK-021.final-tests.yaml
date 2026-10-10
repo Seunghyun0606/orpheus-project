@@ -1,0 +1,33 @@
+task: TASK-021
+status: pass
+role: qa
+actor: codex-task021-qa-resume
+source_agent: /root/task021_qa_resume
+recorded_by: codex-task021-developer
+commit: 895a05bd398a06a29368130574893e19e6df50d8
+date: '2026-10-11'
+summary: Actual independent final-candidate automated checks, executed serially with unchanged default timeouts.
+files_changed: []
+verification:
+  acceptance: pass
+  unit_test:
+    status: pass
+    detail: npm test passed 264 tests in 23 files; focused behavior/ledger command passed 49 in 2.
+  focused_command: npm test -- src/tests/player-behavior.test.ts src/tests/player-behavior-ledger.test.ts
+  typecheck: pass
+  lint: pass
+  format: pass
+  scenario_validation:
+    status: pass
+    detail: validate:scenarios passed eight current/frozen files.
+  web_build:
+    status: pass
+    detail: build:web exited zero; existing 572.59 kB chunk warning remains.
+  project_doctor: pass
+  diff_check: pass
+critical_issues: 0
+followups:
+  - No independent-session test failures or retries; historical developer UI timeout remains in implementation documentation.
+  - Original candidate 5913304 passed 45 focused and 260 full tests but failed acceptance due to the reproduced source collision.
+  - Corrected dc7786c passed 49 focused and 264 full tests; final 895a05b reran all prescribed checks independently.
+  - Only injected-memory databases were exercised; no native, user-storage, performance or security certification.
