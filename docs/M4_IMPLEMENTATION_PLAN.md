@@ -27,9 +27,14 @@ adds strict authored rules and pure branch/prediction queries. Developer verific
 passed 310 tests, including 46 new cases and the twelve current MVP replay tests.
 Prediction calculation is not an actual exposure and creates no deviation sample.
 No production content, UI, operation variants or storage migration were added.
-TASK-022 remains active, not independently accepted; no TASK-022 agent delegation is
-authorized by the completed TASK-021 approvals. Its next gate is separately bounded
-independent review, QA and distinct evaluation.
+TASK-022 remains active, not accepted. The human separately authorized read-only
+review/QA and a distinct evaluator. Both independent reports now recommend
+[HUMAN_GATE](../.project-os/planning/TASK-022.deviation-sequencing-gate.yaml): positive
+exposure/response/deviation fixtures remain required but unimplemented, without explicit
+reassignment to a later task. Four numbered criteria pass for the pure queries and
+independent QA passed all 310 tests. That is not overall completion. Distinct final
+evaluation waits for the scope decision and final acceptable handoffs; TASK-023 is not
+started. No M4 exit obligation is silently waived.
 
 ## Scope and continuity
 

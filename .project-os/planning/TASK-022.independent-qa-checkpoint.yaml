@@ -1,0 +1,118 @@
+task: TASK-022
+kind: independent_acceptance_qa_checkpoint
+role: qa
+actor: codex-task022-qa
+source_agent: /root/task022_qa
+recorded_by: codex-task022-developer
+date: '2026-10-11'
+candidate_commit: 8ada150646227e75d52ec8e1b33be2b040abc476
+baseline_commit: b007817
+execution_head: 6984785437219229ecd47fb3e17fe2b23c1cb2b1
+outcome: HUMAN_GATE
+summary: >-
+  Actual independent QA verified all four numbered acceptance criteria for the
+  bounded read-only branch/prediction queries. Positive prediction-deviation
+  verification remains incomplete. Passing tests and delegation approval do not
+  waive that obligation or certify overall TASK-022 completion.
+candidate_integrity:
+  runtime_tests_equal_candidate: pass_git_diff_exit_0
+  current_frozen_content_ui_store_persistence_unchanged: pass_git_diff_exit_0
+  working_tree_clean_after_qa: true
+  changes_by_qa: none
+commands:
+  - command: npm test
+    exit_code: 0
+    result: 310_tests_in_24_files_passed
+    duration: 8.26s
+  - command: npm test -- src/tests/player-prediction.test.ts src/tests/inc-001-replay.test.ts src/tests/inc-002-replay.test.ts src/tests/inc-003-replay.test.ts
+    exit_code: 0
+    result: 58_tests_in_4_files_passed_46_new_12_mvp
+    duration: 2.49s
+  - command: npm test -- src/tests/m3-narrative.test.ts src/scenario/inc-001-data.test.ts
+    exit_code: 0
+    result: 13_tests_in_2_files_passed
+    duration: 1.16s
+  - command: npm run validate:scenarios
+    exit_code: 0
+    result: 8_current_frozen_files_passed
+  - command: npm run typecheck
+    exit_code: 0
+  - command: npm run lint
+    exit_code: 0
+  - command: npm run format:check
+    exit_code: 0
+  - command: npm run build
+    exit_code: 0
+    result: typecheck_and_web_build_passed
+    warning: Existing nonblocking minified JavaScript chunk warning, 572.59 kB.
+  - command: projectctl doctor
+    exit_code: 0
+  - command: git diff --check
+    exit_code: 0
+  - command: git diff --check b007817 8ada150646227e75d52ec8e1b33be2b040abc476
+    exit_code: 0
+acceptance:
+  AC1:
+    verdict: PASS
+    bounded_scope: deterministic_verified_read_only_query_output
+    evidence:
+      - Strict YAML round-trip and exact old model-less authority/record equality; no automatic attachment.
+      - Pooled 3/4 confidence becomes 3/5 after a subsequent rollback and 4/5 after a match without prior-output mutation.
+      - Genuine abandoned choices count; rejected/duplicate inputs, inherited checkpoint commands and imported discoveries do not.
+      - Pre-command causal contexts, exact-version mappings, renamed-action equivalence, forged-record rejection and unsupported-history diagnostics.
+      - Isolated memory-ledger reload reproduces results without a persisted prediction cache or duplicate samples.
+  AC2:
+    verdict: PASS
+    evidence:
+      - Unavailable candidates excluded from both winners and denominator; actual engine locks/requirements apply.
+      - Empty/insufficient support, top ties and lower-count ties have deterministic cases.
+      - Invalid/unavailable current and evaluated historical contexts diagnose; decisive siblings and unmet branch reveals do not hide required leaves.
+      - Twenty-one authored validation cases plus existing strict ALL/ANY/NOT, type, arity and observation truth-table tests.
+  AC3:
+    verdict: PASS
+    evidence:
+      - Investigation, safety, reporting and dependency branches have neutral fixture identities and false/true outcomes.
+      - Actual discovery changes eligibility while queries preserve run bytes and grant no route, effect or observation.
+    limitation: Not player-facing late-act screens or branch award transitions.
+  AC4:
+    verdict: PASS
+    evidence:
+      - Current/frozen production content and UI/store/persistence have no candidate changes.
+      - Twelve current MVP replay cases and thirteen separately executed narrative/reveal cases pass.
+      - Unmet prediction gate returns boundary only with no confidence/counts/samples/candidate identity/observations.
+      - Query callers remain domain tests, not early production UI exposures.
+verification_assessment:
+  completed:
+    - Branch/reference/eligibility and strict fixture YAML tests.
+    - Empirical confidence feedback, UNKNOWN, reveal and negative deviation assertions.
+    - Current/frozen YAML validation and all three current MVP replays.
+  not_completed:
+    - Actual prediction exposure and committed acknowledgement operations.
+    - Eligible response association and positive deviation 0/1 versus 1/1 fixtures.
+    - Pooled predictionDeviation 2/12 fixture.
+    - Exposure/response abort, conflict and lost-acknowledgement fixtures.
+    - Browser/native presentation acknowledgement integration.
+findings:
+  - id: QA-022-SCOPE-01
+    severity: material_acceptance_gap
+    disposition: HUMAN_GATE
+    evidence:
+      - TASK-022 verification explicitly requests confidence/deviation tests.
+      - The approved player-prediction baseline retains Required TASK-021/022 fixtures, including matching/different responses and pooled 2/12.
+      - DEC-030 separates calculation from exposure but does not explicitly reassign positive headless deviation obligations to a named later task.
+    assessment: Delegation permits independent assessment, not waiver; developer checkpoint wording cannot fulfill missing obligations.
+execution_and_limits:
+  heavy_checks: serial
+  timeouts: unchanged
+  source_state_results_dependencies_git_changes: none
+  actual_user_storage_native_ui_network_push_release: not_accessed_not_performed
+  further_delegation: none
+  metrics: Six opportunity-dependent fields remain unavailable; no positive deviation or recommendation response is certified.
+  performance: Prefix replay and whole-history growth are unbenchmarked.
+  fixture_balance: Not production calibration.
+next_recommended_step: Explicitly assign positive exposure/response/deviation work before unconditional completion; distinct final evaluation must follow final authorized handoffs.
+transcription_check:
+  source_agent: /root/task022_qa
+  outcome: CONFIRMED
+  assessment: Attribution, candidate, commands, counts, AC qualifications and overall HUMAN_GATE faithfully preserved; no completion or positive deviation claim.
+  new_tests_or_writes: none

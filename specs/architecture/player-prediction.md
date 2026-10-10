@@ -23,10 +23,13 @@ trees use the existing strict typed reference evaluator; no arbitrary callbacks/
 accepted command's own pre-command history prefix. It pools genuine official choices
 across attempts, filters to currently available candidates, and uses a unique top's
 count divided by the eligible total. UNKNOWN distinguishes empty candidates/history,
-insufficient support and a top tie. Invalid or unavailable required current/historical
-context diagnoses instead of silently dropping it. An unmet valid reveal returns
+insufficient support and a top tie. Invalid or unavailable required current context
+diagnoses instead of silently dropping it. An unmet valid reveal returns
 only a gated result and its boundary, without support/counts/confidence. Diagnostics
-still take precedence over a decisive sibling or hidden gate under DEC-025.
+for current predicates still take precedence over a decisive sibling or hidden gate
+under DEC-025. Historical predicates are evaluated only when calculation proceeds
+past reveal with available candidates; then unavailable required historical observations
+diagnose rather than being discarded. A gated result does not scan historical samples.
 
 Result support retains counts, current observations, candidate/action mappings and
 individual source run/attempt/operation/input/command identities with pre-history,

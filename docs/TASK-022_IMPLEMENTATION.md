@@ -4,6 +4,14 @@ Status: developer candidate, not independently accepted. TASK-022 remains active
 DEC-030 approves new-definition-only binding; it does not authorize automatic
 model attachment, old-run migration, agent delegation, release or push.
 
+Separately authorized [independent review](../.project-os/planning/TASK-022.independent-review-checkpoint.yaml)
+and [acceptance QA](../.project-os/planning/TASK-022.independent-qa-checkpoint.yaml)
+now both recommend HUMAN_GATE. All four numbered criteria pass for the bounded
+queries and independent QA passed 310 tests, but positive exposure/response/deviation
+verification remains incomplete. DEC-030 does not explicitly move those original
+TASK-021/022 obligations elsewhere. The [sequencing decision](../.project-os/planning/TASK-022.deviation-sequencing-gate.yaml)
+is required before unconditional completion; no final PASS records were submitted.
+
 ## Completed
 
 Strict optional branch/prediction data is pinned in the existing whole campaign
@@ -72,16 +80,19 @@ Final focused/full verification passed; these are developer checks, not independ
 
 ## Remaining work
 
-Obtain separately authorized read-only independent review and acceptance QA. Reviewers
-must assess the bounded query scope against TASK-022 acceptance, especially the distinction
-between confidence feedback and actual exposure/deviation. Fix safe findings; gate any
-new policy or material scope choice. Submit attributed evidence only after that work and
-obtain a distinct configured evaluator before Project OS completion. TASK-023 is not
-started and M4 is not closed.
+Resolve positive exposure/deviation verification sequencing explicitly. The reviewer
+found one low documentation overclaim: current predicate diagnostics precede reveal,
+whereas historical conditions are evaluated only after reveal and available-candidate
+checks. That wording is clarified without changing code or policy. No blocking query
+arithmetic/authority/reveal defect was identified. Preserve both HUMAN_GATE reports;
+do not turn passing suites into overall acceptance. Obtain final handoffs under the
+approved scope and a distinct configured evaluator before Project OS completion.
+TASK-023 is not started and M4 is not closed.
 
-Next recommended step: authorize separate reviewer, QA and distinct final evaluator
-for the pinned candidate; do not manufacture independent acceptance from these checks.
+Next recommended step: choose explicit task allocation for the missing positive
+exposure/response/deviation work; do not manufacture acceptance from these checks.
 The [bounded delegation request](../.project-os/planning/TASK-022.review-qa-evaluation-request.yaml)
 pins implementation commit `8ada150`. The human separately approved read-only
-review/QA and a distinct final evaluator; reviewer `/root/task022_review` and QA
-`/root/task022_qa` have now started. No acceptance is implied by this authorization.
+review/QA and a distinct final evaluator. Reviewer `/root/task022_review` and QA
+`/root/task022_qa` have finished with HUMAN_GATE recommendations. Final evaluation
+is deferred until the scope decision and final acceptable handoffs exist.
