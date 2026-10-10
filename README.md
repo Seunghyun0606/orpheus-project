@@ -103,14 +103,15 @@ and detailed definition/record interfaces have now passed independent logical
 review/QA at `7717c4d`. Final
 [contract approval](.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml)
 is now recorded. Independent evidence evaluation and Project OS accepted TASK-018;
-TASK-019 is active for bounded pure transitions, not platform storage or UI.
+TASK-019 is now accepted for bounded pure transitions, not platform storage or UI.
 No M4 runtime API is certified by those logical checks.
 
 TASK-019 now has a [pure campaign implementation candidate](docs/TASK-019_IMPLEMENTATION.md):
 strict authored definitions/conditions, replay-verified transitions, retries,
-once-per-run effects and confirmed source boundaries. Independent review found four
-defects, now repaired and independently rechecked; QA passes 176 tests. Compatible
-content-version effect coverage awaits a human decision; TASK-019 remains incomplete.
+once-per-run effects and confirmed source boundaries. Independent findings are
+resolved, including human-approved DEC-027 explicit compatible versions/shared effects.
+Independent QA passes 186 tests; configured independent evaluation accepted TASK-019.
+TASK-020 storage work is next eligible and remains unclaimed.
 There are no new persistence writes, production campaign content or UI integration.
 
 ## War Room and saved progress

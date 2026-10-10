@@ -1,10 +1,10 @@
 # M4 — Campaign Intelligence Systems
 
-Status: TASK-018 accepted through independent evidence evaluation and Project OS;
-TASK-019 is active for pure fixture-driven implementation. The human approved M3 closure and M4 definition
+Status: TASK-018 and TASK-019 accepted through independent evidence evaluation and Project OS;
+TASK-020 is next eligible but unclaimed. The human approved M3 closure and M4 definition
 on 2026-10-09; [DEC-008](../.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml)
-records that approval. M4 is active, but no M4 implementation task is complete or
-claimed by this planning update. M5 remains planned.
+records that approval. M4 remains active; TASK-019 completion is not M4 closure.
+M5 remains planned.
 
 ## Scope and continuity
 
@@ -175,14 +175,13 @@ The [definition](../specs/architecture/campaign-definition-contract.md) and
 now specify the reviewed typed/association/priority/freshness representations.
 These are logical contracts, not implemented runtime/storage or native test passes.
 
-TASK-019 subsequently added a
-[pure implementation candidate](TASK-019_IMPLEMENTATION.md), verified by 55 new
-fixture tests and 171 passing total tests. It remains active pending independent
-implementation acceptance; later task dependencies have not been accepted.
-Independent review/QA subsequently identified four safe defects, repaired in
-`d3e54f9` and independently rechecked with 176 passing full-suite tests. Compatible
-content-version effect representation and no-reaward coverage remain an acceptance
-gap awaiting the [human decision](../.project-os/planning/TASK-019.compatible-content-gate.yaml).
+TASK-019 subsequently added a [pure implementation](TASK-019_IMPLEMENTATION.md).
+Independent review/QA identified four safe defects, repaired in `d3e54f9`.
+The human approved DEC-027 compatible-content/shared-effect representation;
+implementation `7cb0a83` passed independent review and QA with 186 full-suite tests.
+Attributed handoffs at `5e5883b` and independent configured evaluation accepted
+TASK-019. TASK-020 is next eligible, not yet claimed. Older review checkpoints
+retain their original findings and test counts.
 No platform storage, UI integration or production campaign content was added.
 Direct contract and
 DEC-009–025 references are now declared in dependent task context metadata;

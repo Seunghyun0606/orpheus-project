@@ -1,7 +1,6 @@
 # TASK-019 — Pure campaign implementation candidate
 
-Status: DEC-027 compatibility candidate passed independent review and QA;
-configured Project OS evaluation pending.
+Status: accepted through independent review, QA and configured Project OS evaluation.
 TASK-018 was accepted through Project OS after independent evidence evaluation
 and human DEC-026 approval. This document does not accept TASK-019 or close M4.
 
@@ -129,6 +128,8 @@ runs and explicit pre/post-event predicates. Independent review passes with
 **70 campaign tests**; independent QA passes **186 tests in 19 files**, typecheck,
 lint, formatting and eight scenario validations. Root web build also passes with
 the existing non-blocking chunk-size warning. Older checkpoint verdicts remain
-historical. Next: submit attributed handoffs and obtain independent configured
-evaluation. Neither these checks nor this document claim TASK-020 or certify
-native/IndexedDB integration.
+historical. Attributed handoffs were committed at `5e5883b`; the independent
+evaluator accepted implementation `7cb0a83`, and `projectctl evaluate` applied the
+canonical PASS transition. See the [evaluation](../.project-os/tasks/results/TASK-019.evaluation.yaml).
+Next: eligible TASK-020 storage work. It remains unclaimed; no native/IndexedDB
+integration or M4 closure is certified here.
