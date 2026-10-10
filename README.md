@@ -101,8 +101,10 @@ is now human-approved: any unavailable referenced value diagnoses, even under a
 decisive boolean sibling. Its [condition contract](specs/architecture/condition-evaluation.md)
 and detailed definition/record interfaces have now passed independent logical
 review/QA at `7717c4d`. Final
-[contract approval](.project-os/decisions/proposals/DEC-026-reviewed-m4-contract-approval.yaml)
-and Project OS evaluation remain pending. No M4 runtime API is certified by those checks.
+[contract approval](.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml)
+is now recorded. Independent evidence evaluation and Project OS accepted TASK-018;
+TASK-019 is active for bounded pure transitions, not platform storage or UI.
+No M4 runtime API is certified by those logical checks.
 
 ## War Room and saved progress
 

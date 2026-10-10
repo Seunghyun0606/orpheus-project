@@ -1,6 +1,7 @@
 # M4 — Campaign Intelligence Systems
 
-Status: task definitions ready. The human approved M3 closure and M4 definition
+Status: TASK-018 accepted through independent evidence evaluation and Project OS;
+TASK-019 is active for pure fixture-driven implementation. The human approved M3 closure and M4 definition
 on 2026-10-09; [DEC-008](../.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml)
 records that approval. M4 is active, but no M4 implementation task is complete or
 claimed by this planning update. M5 remains planned.
@@ -166,9 +167,9 @@ the detailed truth-table contract has also passed independent recheck.
 The subsequent [logical review](../.project-os/planning/TASK-018.logical-contract-review-checkpoint.yaml)
 and [QA](../.project-os/planning/TASK-018.logical-contract-qa-checkpoint.yaml)
 both PASS candidate `7717c4d`, conditional on final human approval.
-Next: obtain [DEC-026 baseline approval](../.project-os/decisions/proposals/DEC-026-reviewed-m4-contract-approval.yaml),
-then submit final evidence and use configured Project OS evaluation before
-dependent implementation. Do not claim TASK-019 prematurely.
+The human approved [DEC-026 baseline v1](../.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml).
+Attributed final evidence and independent evaluation have now been submitted;
+Project OS accepted TASK-018 and TASK-019 was then claimed. No M4 closure is implied.
 The [definition](../specs/architecture/campaign-definition-contract.md) and
 [record](../specs/architecture/campaign-record-contract.md) interface candidates
 now specify the reviewed typed/association/priority/freshness representations.

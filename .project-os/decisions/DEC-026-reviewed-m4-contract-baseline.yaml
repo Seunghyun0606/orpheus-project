@@ -1,0 +1,25 @@
+id: DEC-026
+title: Approve the independently reviewed M4 logical contract baseline
+status: active
+date: '2026-10-10'
+applies_to: [M4]
+task: TASK-018
+context: Independent logical review and QA passed candidate 7717c4d; the human selected final baseline approval after evidence commit 7acee56.
+decision: >-
+  Accept logical contract v1 under DEC-009 through DEC-025. Submit attributed
+  implementation, review, QA and test evidence and evaluate TASK-018 through
+  Project OS before claiming eligible TASK-019. Implement TASK-019 only as its
+  bounded pure/headless fixture-driven campaign transitions.
+human_approval:
+  selected_option: A
+  instruction: '계약 최종 승인 후 Project OS 평가·TASK-019 진행.'
+candidate_commit: 7717c4d86c16b56967767f1c2e450b3077a7fd42
+evidence_commit: 7acee56
+proposal: .project-os/decisions/proposals/DEC-026-reviewed-m4-contract-approval.yaml
+consequences:
+  - Preserve legacy stores, source bytes, frozen replay and historical evidence; no destructive migration or source rewriting.
+  - Existing approved retry, import, effect, rate, availability and commit semantics remain unchanged.
+  - No production thresholds, initial values, ending ranks or opportunity lifecycle defaults are chosen.
+  - Logical acceptance is not runtime, actual IndexedDB capability, native verification or production-release approval.
+  - Later tasks retain independent review, acceptance QA and applicable human gates.
+supersedes: null

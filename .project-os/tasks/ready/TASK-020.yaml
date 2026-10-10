@@ -60,6 +60,7 @@ active_decisions:
   - '.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml'
   - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
   - '.project-os/decisions/DEC-025-strict-predicate-availability.yaml'
+  - '.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml'
 
 acceptance:
   - 'Round-trip and reload retain approved campaign state, hidden values, flags, evidence, and replay metadata.'

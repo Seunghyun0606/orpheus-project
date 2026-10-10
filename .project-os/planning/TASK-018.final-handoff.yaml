@@ -1,0 +1,29 @@
+task: TASK-018
+status: pass
+summary: >-
+  Completed the reviewed logical M4 domain/data/replay and compatibility contract.
+  DEC-026 records explicit final human approval. The original independent review
+  and QA checkpoints are preserved and transcribed into configured handoffs, not
+  retroactively rewritten. This result covers architecture, not runtime APIs.
+files_changed:
+  - specs/architecture/
+  - docs/M4_IMPLEMENTATION_PLAN.md
+  - README.md
+  - .project-os/decisions/
+  - .project-os/tasks/ready/
+  - .project-os/planning/
+verification:
+  acceptance: pass
+  exit_criteria_mapping: pass
+  chronology_and_import_provenance: pass
+  all_ten_behavior_fields: pass
+  prediction_ending_and_strict_conditions: pass
+  explicit_human_decisions: pass
+  independent_review: pass
+  independent_qa: pass
+  project_doctor: pass
+critical_issues: 0
+followups:
+  - Implement pure TASK-019 only after configured acceptance; no platform I/O or production tuning.
+  - New ledger, runtime metrics, prediction, ending and native tests belong to subsequent tasks.
+commit: 7acee56

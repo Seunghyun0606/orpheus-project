@@ -1,6 +1,11 @@
 # Campaign intelligence contract — TASK-018 proposal
 
-Status: **independently reviewed logical proposal, final human approval pending**.
+Status: **human-approved logical baseline v1 under DEC-026**.
+The human approved the independently reviewed candidate `7717c4d` after evidence
+commit `7acee56`. Independent evidence evaluation and Project OS then accepted
+TASK-018; TASK-019 is active for bounded pure implementation.
+Historical approval-pending descriptions below retain their candidate-time context.
+No M4 runtime or physical storage verification is implied.
 Gate 1 storage authority is
 approved by DEC-009; Gate 2 retry contribution is approved by DEC-010; Gate 3
 discovery-only adoption is approved by DEC-011; Gate 4 confirmed checkpoint

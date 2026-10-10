@@ -1,6 +1,6 @@
 id: DEC-026
 title: Approve the independently reviewed M4 logical contract baseline
-status: proposed
+status: resolved
 date: '2026-10-10'
 applies_to:
   - M4
@@ -10,8 +10,9 @@ context: >-
   PASS for the logical contract, conditional on final human approval and Project
   OS evidence/evaluation. No remaining blocking logical-contract gap was found.
   Runtime schemas, databases and M4 engines are still unimplemented.
-decision: Pending human selection; contract approval and task completion are not inferred from document or legacy-test passes.
-chosen_option: null
+decision: Human approved option A; active DEC-026 records the logical baseline. Project OS evaluation still determines task completion.
+chosen_option: A
+approved_decision: .project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml
 recommended_option: A
 candidate_commit: 7717c4d86c16b56967767f1c2e450b3077a7fd42
 logical_contract_version: 1
