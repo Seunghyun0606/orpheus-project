@@ -111,7 +111,8 @@ strict authored definitions/conditions, replay-verified transitions, retries,
 once-per-run effects and confirmed source boundaries. Independent findings are
 resolved, including human-approved DEC-027 explicit compatible versions/shared effects.
 Independent QA passes 186 tests; configured independent evaluation accepted TASK-019.
-TASK-020 storage work is next eligible and remains unclaimed.
+TASK-020 storage work is active, awaiting physical-layout approval before opening
+the separate database. Existing saves remain unchanged.
 There are no new persistence writes, production campaign content or UI integration.
 
 ## War Room and saved progress

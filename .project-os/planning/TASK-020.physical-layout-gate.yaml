@@ -1,0 +1,52 @@
+task: TASK-020
+kind: implementation_start_and_physical_layout_request
+role: developer
+actor: codex-task020-developer
+date: '2026-10-10'
+status: awaiting_human_physical_layout_approval
+base_commit: a182c1b
+completed:
+  - Re-read project bootstrap and actual clean repository state.
+  - Confirmed TASK-019 configured acceptance and selected eligible TASK-020 through Project OS.
+  - Claimed TASK-020 as developer through the configured transition.
+  - Inspected storage decisions, logical record contract, physical persistence draft and existing readers.
+findings:
+  - DEC-013 approves IndexedDB transactional writes only for the new ledger.
+  - DEC-026 accepts the logical contract, not an existing database upgrade or physical migration.
+  - Persistence draft proposes physical names but explicitly retains them as proposals.
+  - TASK-020 excludes choosing storage keys without human approval.
+  - Existing code has no new campaign IndexedDB adapter; prior implementation is not duplicated.
+verification:
+  repository_at_start: clean_main_ahead_47
+  source_and_decision_inspection: performed_read_only
+  new_runtime_storage_or_native_tests: not_performed_no_adapter_implemented
+known_risks:
+  - Choosing a physical name and object-store layout creates a persistent authority and cannot be inferred from logical acceptance.
+  - Opening or upgrading an existing database must not silently replace unknown schemas or valid stored data.
+gate:
+  type: architecture_change
+  selected_option: null
+  recommended_option: A
+  question: Approve the proposed physical IndexedDB layout for the separate campaign ledger?
+  options:
+    - key: A
+      label: Approve the proposed new ledger physical layout
+      scope:
+        database_name: orpheus.campaign
+        database_version: 1
+        object_store: runs
+        key_path: runId
+        record: Whole replay-validated CampaignRun with schemaVersion 1, history, projections and receipts.
+      safeguards:
+        - Create the declared layout only for a new database; reject unexpected existing versions or layouts.
+        - No automatic upgrade, deletion, replacement, fallback or legacy-store writes.
+        - Revision-checked transaction and duplicate reconciliation acknowledge only transaction completion.
+        - Native tests touching user saves still require separate action-time approval.
+    - key: B
+      label: Human specifies another physical name or layout before implementation
+      scope: Keep existing stores unchanged and defer the physical adapter until the human provides its layout.
+remaining_work:
+  - Implement only the approved adapter and legacy confirmation/provenance ports after selection.
+  - Add isolated round-trip, reload, conflict, interruption, corrupt/version rejection and source-byte preservation tests.
+  - Obtain separately authorized independent review and acceptance QA for TASK-020; TASK-019 delegation does not extend automatically.
+next_recommended_step: Human selection of the physical layout; no database is opened or rewritten by this checkpoint.
