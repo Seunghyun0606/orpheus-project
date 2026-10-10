@@ -1,0 +1,23 @@
+id: DEC-029
+title: Pin behavior model authority in new campaign definitions only
+status: active
+date: '2026-10-10'
+applies_to: [M4]
+task: TASK-021
+decision: >-
+  New campaign definition versions explicitly pin immutable behavior ID/version,
+  supported formula version and authored classification/rule data in the existing
+  whole definition authority. Model-enabled runs derive counts and provenance only
+  from new accepted official inputs. Older model-less definitions retain their
+  exact record/replay shape and unavailable metrics without attachment or backfill.
+human_approval:
+  selected_option: A
+  instruction: '새 캠페인부터 모델 버전 고정, 기존 기록 유지(권장).'
+request: .project-os/planning/TASK-021.model-binding-gate.yaml
+consequences:
+  - No physical layout change, migration, legacy store rewrite, frozen scenario change or UI exposure.
+  - Classification/relevance/freshness rules are non-production fixtures, not production tuning.
+  - Opportunity-dependent metrics remain unavailable without their separately supported recorded inputs.
+  - Model/classification changes require a new immutable campaign definition; no latest-version fallback.
+  - Implementation approval does not replace independent review, QA or Project OS evaluation.
+supersedes: null

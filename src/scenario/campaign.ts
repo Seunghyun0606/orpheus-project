@@ -12,6 +12,8 @@ import { canonicalJson } from '../engine/campaign/canonical.ts';
 import { scenarioVersionKey } from './catalog.ts';
 import { scenarioSchema, type Scenario } from './schema.ts';
 import { validateScenarioObject } from './validator.ts';
+import { behaviorDefinitionSchema, validateBehaviorDefinition, metricKeys } from './behavior.ts';
+export { metricKeys } from './behavior.ts';
 
 const id = z.string().min(1);
 const integer = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
@@ -29,24 +31,13 @@ export const valuesSchema = z
     collateralDamage: z.number().finite(),
   })
   .strict();
-export const metricKeys = [
-  'restartRate',
-  'rollbackRate',
-  'evidenceBeforeActionRate',
-  'aiRecommendationAcceptanceRate',
-  'averageInvestigationDepth',
-  'safetyPreference',
-  'collateralDamageTolerance',
-  'companyReportingRate',
-  'nullCooperationRate',
-  'predictionDeviation',
-] as const;
 export const campaignDefinitionSchema = z
   .object({
     schemaVersion: z.literal(1),
     id,
     version: id,
     replayVersion: z.literal(1),
+    behavior: behaviorDefinitionSchema.optional(),
     references: z.array(referenceSchema),
     initial: z
       .object({
@@ -157,6 +148,19 @@ export function validateCampaignDefinition(
     };
   const d = parsed.data;
   const issues: CampaignDiagnostic[] = [];
+  if (d.behavior)
+    issues.push(
+      ...validateBehaviorDefinition(
+        d.behavior,
+        d.incidents.flatMap((item) =>
+          campaignContentVersions(item).map((contentVersion) => ({
+            scenarioId: item.scenarioId,
+            contentVersion,
+          })),
+        ),
+        catalog,
+      ),
+    );
   const issue = (path: string): void => {
     issues.push({ code: 'INVALID_CAMPAIGN_REFERENCE', path });
   };

@@ -1,4 +1,21 @@
-# Campaign definition interfaces — TASK-018 review draft
+# Campaign definition interfaces — approved logical contract
+
+## TASK-021 implementation checkpoint
+
+DEC-026 accepted the logical baseline and DEC-029 approves immutable behavior binding
+only in new campaign definition versions. The optional `behavior` representation is
+implemented in `src/scenario/behavior.ts`; absent data leaves older authorities and
+records unchanged. Schema/formula version 1 supports explicit action classifications,
+immediate/uniquely attributable timer observations, required relevance/freshness
+conditions and strict registered pre-action context. No opportunity/exposure variants,
+production mappings, automatic model attachment or storage migration are introduced.
+See [candidate and limitations](../../docs/TASK-021_IMPLEMENTATION.md). Independent
+TASK-021 review/QA and Project OS acceptance are still pending.
+
+The original draft wording below is retained as the logical baseline/history; its
+pending TASK-018 review language is superseded by DEC-026, not by developer self-approval.
+
+## Original logical baseline
 
 This is a proposed logical authoring contract under DEC-001/003/009–025, not a
 runtime schema or production content. Exact field spellings may be translated

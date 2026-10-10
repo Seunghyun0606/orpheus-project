@@ -11,6 +11,15 @@ import type { Scenario } from '../../scenario/schema.ts';
 import { validateScenarioObject } from '../../scenario/validator.ts';
 import { createIncidentState, executeCommand, replayCommands } from '../simulation.ts';
 import type { IncidentState, EngineEvent } from '../types.ts';
+import {
+  createBehaviorState,
+  startBehaviorAttempt,
+  beginBehaviorCommand,
+  consumeBehaviorEvent,
+  type BehaviorState,
+  type BehaviorSource,
+} from '../player-model/behavior.ts';
+import type { BehaviorMetricKey } from '../../scenario/behavior.ts';
 import { canonicalJson } from './canonical.ts';
 import {
   evaluateCampaignCondition,
@@ -132,6 +141,7 @@ export interface CampaignRun {
   activeAttemptId: string | null;
   projection: CampaignProjection;
   effectReceipts: EffectReceipt[];
+  behavior?: BehaviorState;
   checkpointAssociations?: {
     operationId: string;
     attemptId: string;
@@ -192,10 +202,16 @@ function condition(
         value = p.endingFlags[ref.key]!;
         break;
       case 'metric':
-        observations[ref.id] = {
-          status: 'unavailable',
-          reason: 'No supported behavior projection in TASK-019',
-        };
+        {
+          const metric = run.behavior?.metrics[ref.key as BehaviorMetricKey];
+          observations[ref.id] =
+            metric?.status === 'available'
+              ? { status: 'available', value: metric.value }
+              : {
+                  status: 'unavailable',
+                  reason: metric?.reason ?? 'No supported behavior projection in TASK-019',
+                };
+        }
         continue;
     }
     observations[ref.id] = { status: 'available', value };
@@ -438,6 +454,7 @@ function apply(
         activeAttemptId: null,
         projection: JSON.parse(canonicalJson(definition.initial)) as CampaignProjection,
         effectReceipts: [],
+        ...(definition.behavior ? { behavior: createBehaviorState(definition.behavior) } : {}),
       },
     };
   }
@@ -491,6 +508,8 @@ function apply(
       acceptedInputIds: [],
     });
     next.activeAttemptId = op.attemptId;
+    if (definition.behavior && next.behavior)
+      startBehaviorAttempt(next.behavior, definition.behavior, op.attemptId, incident);
   } else if (op.kind === 'command') {
     const attempt = next.attempts.find((item) => item.id === op.attemptId);
     if (!attempt || next.activeAttemptId !== attempt.id || attempt.incident.completionReached)
@@ -511,10 +530,41 @@ function apply(
       return failure('INVALID_COMMAND_BOUNDARY');
     const result = executeCommand(attempt.incident, scenario, op.command);
     if (!result.ok) return failure('REJECTED_COMMAND', op.command.actionId);
+    const source: BehaviorSource | undefined = definition.behavior
+      ? {
+          runId: op.runId,
+          attemptId: op.attemptId,
+          inputId: op.inputId,
+          operationId: op.operationId,
+          operationSequence: op.sequence,
+          commandSequence: op.commandSequence,
+          actionId: op.command.actionId,
+          scenarioId: scenario.id,
+          contentVersion: scenario.contentVersion,
+          modelId: definition.behavior.id,
+          modelVersion: definition.behavior.version,
+          classificationVersion: definition.behavior.classificationVersion,
+          formulaVersion: definition.behavior.formulaVersion,
+        }
+      : undefined;
+    if (definition.behavior && next.behavior && source) {
+      const diagnostics = beginBehaviorCommand(
+        next.behavior,
+        definition.behavior,
+        source,
+        attempt.incident,
+      );
+      if (diagnostics.length) return { ok: false, diagnostics };
+    }
     attempt.incident = simulationJson(result.state);
     attempt.acceptedInputIds.push(op.inputId);
-    const error = projectEvents(definition, next, prior, attempt, op, result.events);
-    if (error) return error;
+    const delivered = new Map<string, BehaviorSource | null>();
+    for (const event of result.events) {
+      if (definition.behavior && next.behavior && source)
+        consumeBehaviorEvent(next.behavior, definition.behavior, source, event, delivered);
+      const error = projectEvents(definition, next, prior, attempt, op, [event]);
+      if (error) return error;
+    }
   } else if (op.kind === 'adopt') {
     if (op.legacySources !== undefined) {
       const bytes = legacySnapshotBytes(op.legacySources);
@@ -650,6 +700,22 @@ export function getCampaignProgression(
 ) {
   try {
     return getCampaignProgressionUnchecked(definition, catalog, run);
+  } catch {
+    return failure('INVALID_JSON_OR_RECORD');
+  }
+}
+
+// Tool/test access only: cached values are not trusted without whole-history replay.
+export function getCampaignBehavior(
+  definition: unknown,
+  catalog: ScenarioCatalog,
+  run: CampaignRun,
+) {
+  try {
+    const verified = replayCampaign(definition, catalog, run.operations);
+    if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
+      return failure('INVALID_PRIOR_RECORD');
+    return { ok: true as const, behavior: verified.run.behavior ?? null };
   } catch {
     return failure('INVALID_JSON_OR_RECORD');
   }
