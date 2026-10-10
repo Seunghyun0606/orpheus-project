@@ -2,7 +2,7 @@ task: TASK-019
 kind: independent_review_execution_request
 role: developer
 actor: codex-task019-developer
-status: awaiting_human_authorization
+status: authorized
 date: '2026-10-10'
 candidate_commit: 30e2132818b37ad2e7b301629130c11d2afe1d43
 context: >-
@@ -21,9 +21,11 @@ options:
     label: Authorize separate read-only TASK-019 review and QA agents
   - key: B
     label: Keep delegation disabled and obtain human independent review and QA
-selected_option: null
+selected_option: A
+human_approval:
+  instruction: 'TASK-019 읽기 전용 독립 리뷰·QA 위임 승인.'
 recommended_option: A
 limitations:
-  - No independent agents for TASK-019 have been started.
+  - The human authorizes only the bounded TASK-019 read-only checks listed above.
   - Authorization does not accept TASK-019, close M4 or authorize later task delegation.
   - New platform storage, native tests, production tuning and migration remain separate scoped tasks and gates.
