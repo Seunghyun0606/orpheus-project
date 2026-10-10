@@ -1,0 +1,52 @@
+task: TASK-019
+kind: implementation_progress
+role: developer
+actor: codex-task019-developer
+status: awaiting_independent_review_and_qa
+date: '2026-10-10'
+base_commit: 9236439
+candidate_commit: 30e2132818b37ad2e7b301629130c11d2afe1d43
+summary: >-
+  Implemented a bounded pure campaign candidate after TASK-018 independent
+  evaluation and configured acceptance. Added schema/reference validation,
+  strict condition availability, canonical operation identity, replay-verified
+  transitions, retries, once-per-run effects, authored progression, confirmed
+  same-version baselines and source-verified discovery membership. Root tests
+  pass; no independent implementation acceptance or dependent claim is inferred.
+files_changed:
+  - src/engine/campaign/canonical.ts
+  - src/engine/campaign/conditions.ts
+  - src/engine/campaign/transitions.ts
+  - src/scenario/campaign.ts
+  - src/tests/campaign-conditions.test.ts
+  - src/tests/campaign-transitions.test.ts
+  - src/tests/fixtures/campaign.ts
+  - docs/TASK-019_IMPLEMENTATION.md
+  - docs/M4_IMPLEMENTATION_PLAN.md
+  - README.md
+verification:
+  new_fixtures: 55_tests_passed
+  full_tests: 171_tests_in_18_files_passed
+  typecheck: pass
+  lint: pass
+  format: pass
+  existing_scenario_validation: 8_files_passed
+  web_build: pass_with_existing_nonblocking_chunk_warning
+  project_doctor: pass
+  diff_check: pass
+  domain_forbidden_imports_and_platform_random_time_calls: none_found_by_rg
+  independent_implementation_review: not_started
+  independent_acceptance_qa: not_started
+  native_new_database_and_legacy_store_io_tests: not_performed
+known_risks:
+  - Candidate APIs prepare pure state, not official committed success; no UI or new persistence writes.
+  - Supported operation subset excludes opportunity acknowledgement, slot association and resolved ending grants.
+  - Checkpoints require exact injected playable content version; target migration and physical source rechecks belong to TASK-020.
+  - Full-history replay performance is unmeasured.
+  - Review must assess remaining acceptance fixtures including cross-version effect compatibility; do not presume complete coverage.
+remaining_work:
+  - Obtain bounded read-only independent implementation review and acceptance QA authorization.
+  - Fix safe findings, add any missing acceptance fixtures and gate material changes instead of guessing.
+  - Submit final configured evidence and independent evaluation only after actual acceptance verification.
+  - Do not claim TASK-020 or mark TASK-019 complete from root tests alone.
+next_gate: .project-os/planning/TASK-019.review-qa-execution-request.yaml

@@ -1,0 +1,29 @@
+task: TASK-019
+kind: independent_review_execution_request
+role: developer
+actor: codex-task019-developer
+status: awaiting_human_authorization
+date: '2026-10-10'
+candidate_commit: 30e2132818b37ad2e7b301629130c11d2afe1d43
+context: >-
+  TASK-019 requires independent implementation review and acceptance QA.
+  Earlier explicit delegation approval was bounded to TASK-018 read-only
+  contract checks; it is not assumed to authorize subsequent implementation
+  agents. Root verification passes but cannot replace independent acceptance.
+requested_scope:
+  - Separate read-only reviewer checks new schemas/domain/provenance/compatibility against TASK-019 acceptance and approved DEC-001/003/009 through DEC-026.
+  - Separate read-only QA checks test coverage, independently reruns relevant automated verification and identifies missing fixtures or unsafe assumptions.
+  - Audit actual candidate code and documented limitations, especially once-per-run effects, alternate attempts, inherited boundaries and definition-version compatibility.
+  - Return findings and named evidence; no agent edits, storage writes, migrations, state transitions or commits.
+  - Root fixes only safe authorized findings; material policy or schema-migration changes return to a human gate.
+options:
+  - key: A
+    label: Authorize separate read-only TASK-019 review and QA agents
+  - key: B
+    label: Keep delegation disabled and obtain human independent review and QA
+selected_option: null
+recommended_option: A
+limitations:
+  - No independent agents for TASK-019 have been started.
+  - Authorization does not accept TASK-019, close M4 or authorize later task delegation.
+  - New platform storage, native tests, production tuning and migration remain separate scoped tasks and gates.
