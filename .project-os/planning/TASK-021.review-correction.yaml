@@ -1,0 +1,32 @@
+task: TASK-021
+kind: review_correction
+date: '2026-10-11'
+status: awaiting_revised_independent_verification
+original_candidate: 591330456dcbfa42749bb55eea18cf831c03f69e
+review_source: /root/task021_review_resume
+qa_source: /root/task021_qa_resume
+original_verdict: REWORK
+finding: >-
+  Engine milestone result sources resolution/completion could collide with direct
+  action or timer observation IDs. Read-only reproduction refreshed a T0 observation
+  with a T90 milestone, falsely passing an explicit 30-second freshness condition.
+original_qa:
+  focused_tests: 45_tests_in_2_files_passed
+  full_tests: 260_tests_in_23_files_passed
+  typecheck: pass
+  lint: pass
+  formatting: pass
+  scenario_validation: 8_files_passed
+  web_build: pass_with_existing_chunk_warning
+  project_doctor: pass
+  diff_check: pass
+  acceptance: rework_due_to_confirmed_source_collision
+correction:
+  - Reject both engine-owned source IDs for direct and timer investigation results.
+  - Add four regressions for both source IDs and both delivery kinds.
+  - Preserve model formulas, schema shape, frozen content and storage layout.
+developer_verification:
+  command: npm test -- src/tests/player-behavior.test.ts src/tests/player-behavior-ledger.test.ts
+  result: 49_tests_in_2_files_passed
+  timeout_changes: none
+remaining: Independent revised-candidate review, QA and configured evaluation.

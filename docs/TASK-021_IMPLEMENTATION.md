@@ -104,6 +104,20 @@ revision conflict and coexistence of old/new definition records. Only transactio
 completion acknowledges official history/counts; the adapter's approved layout and
 commit policy are unchanged.
 
+## Independent review correction — 2026-10-11
+
+Read-only independent review and QA requested REWORK for candidate `5913304` despite
+45 focused and 260 full tests passing. The result-source validator permitted the
+engine-owned milestone IDs `resolution` and `completion`. A reproduced direct
+observation at T0 was incorrectly refreshed by a milestone result at T90, allowing
+an intervention to pass an authored 30-second freshness condition.
+
+The scoped correction rejects both IDs for direct and timer investigation results,
+without changing the scenario schema, frozen content, model formulas or storage.
+Four regressions cover both IDs and delivery kinds. Developer focused verification
+now passes 49 tests in two files. Independent revised-candidate verification and
+configured evaluation are still required; the original finding is not erased.
+
 ## Known risks
 
 - Full-history replay, per-event recomputation and whole-record growth are not

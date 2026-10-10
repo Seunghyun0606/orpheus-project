@@ -3,17 +3,18 @@ kind: independent_review_qa_execution_request
 role: developer
 actor: codex-task021-developer
 date: '2026-10-10'
-status: awaiting_human_delegation_approval
+status: human_approved_read_only_delegation
 candidate_commit: 591330456dcbfa42749bb55eea18cf831c03f69e
 base_commit: 95629c1
 summary: >-
   DEC-029 option A is implemented and developer-verified. The immutable new-run
   behavior candidate preserves older records and has not been independently
-  accepted. TASK-020 delegation permission was bounded to TASK-020; no TASK-021
-  agent has been started. Request separately bounded read-only review and QA.
+  accepted. TASK-020 delegation permission was bounded to TASK-020. The human has
+  now separately approved option A for TASK-021 read-only independent review and QA.
 gate:
   type: architecture_change
-  selected_option: null
+  selected_option: A
+  human_instruction: '읽기 전용 독립 리뷰·QA 위임 승인.'
   recommended_option: A
   question: Delegate independent TASK-021 review and acceptance QA to separate read-only agents?
   options:
@@ -46,5 +47,19 @@ verification:
   diff_check: pass
   canonical_completion: not_performed
   actual_user_storage_or_native_ui: not_accessed
-  task021_agents: not_started
-next_recommended_step: Human selects the bounded independent review and QA execution policy.
+  task021_agents: approved_and_started
+delegated_agents:
+  reviewer: /root/task021_review
+  qa: /root/task021_qa
+resume:
+  date: '2026-10-11'
+  reason: Previous sessions unavailable after interruption; no final result artifacts exist.
+  reviewer: /root/task021_review_resume
+  qa: /root/task021_qa_resume
+  prior_interim_evidence:
+    - Original QA reported focused 45/2 and full 260/23 PASS plus prescribed diagnostics; final acceptance assessment was still pending.
+    - Original reviewer reported no blocker so far; review was not finalized and cannot be treated as PASS.
+  safeguards:
+    - Reuse the same approved read-only task scope and pinned candidate; no implementation change or new migration permission.
+    - Replace unavailable sessions only to finalize actual independent evidence; do not invent or duplicate immutable results.
+next_recommended_step: Receive independent handoffs, fix safe findings, and apply configured evaluation only after evidence is accepted.

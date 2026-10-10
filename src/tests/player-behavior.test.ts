@@ -619,6 +619,49 @@ describe('versioned player behavior from new identified official inputs', () => 
 });
 
 describe('strict behavior classifications and versioned observation rules', () => {
+  it.each([
+    ['resolution', 'action'],
+    ['completion', 'action'],
+    ['resolution', 'timer'],
+    ['completion', 'timer'],
+  ] as const)('rejects engine milestone source %s for %s observations', (sourceId, delivery) => {
+    const { d, m } = supported();
+    const scenario = structuredClone(inc001Scenario);
+    const rule = m.investigations[2]!;
+    if (rule.result.kind !== 'war_room_message') throw new Error('fixture result');
+    if (delivery === 'action') {
+      const action = scenario.actions.find((a) => a.id === 'UPDATE_WAR_ROOM')!;
+      m.actions.find((a) => a.actionId === action.id)!.actionId = sourceId;
+      action.id = sourceId;
+      rule.actionId = sourceId;
+      rule.result = {
+        kind: 'war_room_message',
+        messageId: 'OPERATOR_UPDATE',
+        delivery: { kind: 'action' },
+      };
+      // The same output from a milestone must not refresh this direct observation.
+      scenario.resolution.effects.push({ type: 'post_message', messageId: 'OPERATOR_UPDATE' });
+      scenario.completion.effects.push({ type: 'post_message', messageId: 'OPERATOR_UPDATE' });
+    } else {
+      const event = scenario.events.find((e) => e.id === 'JIN_IMPACT_RESULT')!;
+      const action = scenario.actions.find((a) => a.id === rule.actionId)!;
+      for (const effect of action.effects)
+        if (effect.type === 'schedule_event' && effect.eventId === event.id)
+          effect.eventId = sourceId;
+      event.id = sourceId;
+      rule.result.delivery = { kind: 'timer', eventId: sourceId };
+    }
+    const catalog = new Map([[scenarioVersionKey(scenario.id, scenario.contentVersion), scenario]]);
+    const result = validateCampaignDefinition(d, catalog);
+    expect(result.ok ? [] : result.diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'INVALID_BEHAVIOR_REFERENCE',
+          path: expect.stringContaining('ambiguousResultSource'),
+        }),
+      ]),
+    );
+  });
   it.each(['multiple-schedulers', 'source-id-collision'] as const)(
     'diagnoses ambiguous timer provenance: %s',
     (kind) => {

@@ -234,6 +234,9 @@ export function validateBehaviorDefinition(
             : scenario.events.some((e) => e.id === sourceId);
         if (
           ambiguousSource ||
+          // Milestone effects use these engine-owned source IDs, never action/timer origins.
+          sourceId === 'resolution' ||
+          sourceId === 'completion' ||
           scenario.id === sourceId ||
           scenario.narratives.some((n) => n.id === sourceId) ||
           scenario.actions.some((a) => a.temporaryEffects.some((t) => t.id === sourceId))
