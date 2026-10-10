@@ -2,7 +2,7 @@ task: TASK-020
 kind: independent_review_execution_request
 role: developer
 actor: codex-task020-developer
-status: awaiting_human_authorization
+status: authorized
 date: '2026-10-10'
 candidate_commit: fe2ba1c8cb7f8b9679ab4e86a2f84de9e56e1679
 context: >-
@@ -22,10 +22,16 @@ options:
     label: Authorize separate read-only TASK-020 review and QA agents
   - key: B
     label: Keep delegation disabled and obtain human independent review and QA
-selected_option: null
+selected_option: A
+human_approval:
+  instruction: 'TASK-020 읽기 전용 리뷰·QA 위임 승인.'
+execution:
+  independent_reviewer: /root/task020_review
+  independent_qa: /root/task020_qa
+  scope: Read-only source and isolated automated checks; no user storage or canonical state changes.
 recommended_option: A
 limitations:
   - This request neither accepts TASK-020 nor closes M4 or authorizes later delegation.
   - Actual platform storage and UI publication verification remain TASK-024/025 obligations with action-time permission for user saves.
   - Existing nonblocking build chunk warning and pre-existing source-map-js 1.2.1 high audit warning remain recorded, not automatically fixed or certified safe.
-next_recommended_step: Human selection before independent agent execution.
+next_recommended_step: Collect actual independent findings and acceptance evidence before any final handoff.

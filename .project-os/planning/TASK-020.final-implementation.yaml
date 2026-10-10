@@ -1,0 +1,43 @@
+task: TASK-020
+status: pass
+role: developer
+actor: codex-task020-developer
+commit: fe2ba1c8cb7f8b9679ab4e86a2f84de9e56e1679
+summary: >-
+  Implemented human-approved DEC-028 layout and approved read-only legacy
+  adoption/checkpoint ports. Independent review and acceptance QA pass the
+  bounded adapter candidate. Existing slots, frozen content and UI remain
+  unchanged. This handoff is not self-approved task completion.
+files_changed:
+  - src/persistence/campaign-ledger.ts
+  - src/persistence/campaign-legacy.ts
+  - src/engine/campaign/transitions.ts
+  - src/tests/campaign-ledger.test.ts
+  - src/tests/campaign-legacy.test.ts
+  - package.json
+  - package-lock.json
+  - docs/TASK-020_IMPLEMENTATION.md
+  - docs/M4_IMPLEMENTATION_PLAN.md
+  - specs/architecture/campaign-ledger-persistence.md
+  - .project-os/decisions/DEC-028-campaign-ledger-physical-layout.yaml
+verification:
+  acceptance: pass
+  transactional_round_trip_reload_and_hidden_projections: pass
+  exact_authority_and_legacy_source_byte_preservation: pass
+  revision_duplicate_divergence_and_interruption_safety: pass
+  no_fabricated_history_or_inherited_contributions: pass
+  independent_review: pass
+  independent_qa: pass
+  unit_test: pass
+  typecheck: pass
+  lint: pass
+  format: pass
+  scenario_validation: pass
+  web_build: pass_with_existing_nonblocking_chunk_warning
+  project_doctor: pass
+critical_issues: 0
+followups:
+  - Obtain independent evidence evaluation before canonical completion.
+  - TASK-024/025 must verify actual native storage and publication after transaction completion.
+  - No new target migrations, user-save access or security certification is implied.
+  - Pre-existing source-map-js 1.2.1 high audit warning remains unchanged.

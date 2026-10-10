@@ -1,0 +1,31 @@
+task: TASK-020
+status: pass
+role: qa
+actor: codex-task020-qa
+source_agent: /root/task020_qa
+recorded_by: codex-task020-developer
+commit: fe2ba1c8cb7f8b9679ab4e86a2f84de9e56e1679
+summary: >-
+  Independent acceptance QA PASS for the approved isolated adapter scope.
+  All four TASK-020 criteria map to actual tests and inspected code. Full-run
+  reload, frozen-source preservation, malformed/incompatible/conflicting records,
+  interrupted writes, duplicate reconciliation and no historical re-awards pass.
+files_changed: []
+verification:
+  acceptance: pass
+  independent_full_tests: 215_tests_in_21_files_passed
+  focused_tests: 29_tests_in_2_files_passed
+  typecheck: pass
+  lint: pass
+  format: pass
+  scenario_validation: 8_files_passed
+  diff_check: pass
+  round_trip_hidden_state_flags_evidence_history_receipts_and_associations: pass
+  source_authority_original_bytes_and_existing_save_protections: pass
+  corruption_version_conflict_concurrency_abort_and_quota_exception: pass
+  adoption_and_baseline_no_inherited_awards_or_inputs: pass
+critical_issues: 0
+followups:
+  - Optional strengthening is to cross inherited pending work's due boundary after ledger reload and compare uninterrupted replay.
+  - No browser/Tauri storage, user-save writes, native durability, real quota/blocked-open behavior or UI publication was verified.
+  - QA changed no files, dependencies, commits or Project OS state.
