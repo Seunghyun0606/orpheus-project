@@ -1,6 +1,7 @@
 # Campaign intelligence contract — TASK-018 proposal
 
-Status: **partially decided contract proposal**. Gate 1 storage authority is
+Status: **independently reviewed logical proposal, final human approval pending**.
+Gate 1 storage authority is
 approved by DEC-009; Gate 2 retry contribution is approved by DEC-010; Gate 3
 discovery-only adoption is approved by DEC-011; Gate 4 confirmed checkpoint
 attempts are approved by DEC-012; Gate 5 IndexedDB commits are approved by DEC-013.
@@ -14,8 +15,9 @@ action-based recommendation response is approved by DEC-021; Gate 14 pooled
 prediction mismatch rate is approved by DEC-022; Gate 15 independent preference
 rates are approved by DEC-023; Gate 16 explicit reporting/cooperation responses
 are approved by DEC-024. Gate 17 strict predicate availability is approved by
-DEC-025. Detailed authoring contracts and independent review/QA
-remain pending; no further behavior-formula option is selected by implication.
+DEC-025. Detailed authoring/record contracts have independent logical review and
+QA PASS at candidate `7717c4d`; final baseline approval through proposed DEC-026
+remains pending. No production tuning or runtime verification is implied.
 No runtime type, schema, storage key, migration, content or player
 behavior was changed while preparing this document. TASK-018 remains active;
 dependent implementation must not start until the contract is approved and the
@@ -627,13 +629,21 @@ legacy test passes alone are not independent acceptance evidence. This execution
 approval does not authorize runtime/storage changes, canonical state mutation or
 task completion; material findings return to the human gate.
 
-The [independent review checkpoint](../../.project-os/planning/TASK-018.independent-review-checkpoint.yaml)
+The initial [independent review checkpoint](../../.project-os/planning/TASK-018.independent-review-checkpoint.yaml)
 requests changes, while the
 [independent QA checkpoint](../../.project-os/planning/TASK-018.independent-qa-checkpoint.yaml)
 verifies proposal consistency and existing safeguards without accepting the final
 contract. Both name the original candidate and separately inspected safe fixes.
 Dependent task references and umbrella persistence wording were corrected; generated
 context remains truncated and required declared source files must be read directly.
+
+Subsequent [logical contract review](../../.project-os/planning/TASK-018.logical-contract-review-checkpoint.yaml)
+and [QA](../../.project-os/planning/TASK-018.logical-contract-qa-checkpoint.yaml)
+both PASS candidate `7717c4d` conditionally on final human contract approval.
+Earlier checkpoints keep their original findings; they are not retroactively
+rewritten. The [DEC-026 approval request](../../.project-os/decisions/proposals/DEC-026-reviewed-m4-contract-approval.yaml)
+is the next human gate. No final Project OS evaluation or task completion has
+occurred, and dependent work remains unclaimed.
 
 ## Gate 17 — predicate availability composition (option A approved)
 
@@ -659,10 +669,11 @@ or unsupported definition versions remain diagnostics, never ordinary unavailabl
 leaves. Neither grants a fallback ending or silently drops an unresolved candidate
 under DEC-019. The [condition review draft](condition-evaluation.md) now specifies
 strict ALL/ANY/NOT truth tables, nested/all-reference availability and required
-fixtures. Independent recheck and remaining detailed contract closure are still
-required; no runtime or production thresholds change here.
+fixtures. Independent logical recheck and detailed contract review have passed
+at candidate `7717c4d`; final human approval and Project OS evaluation remain
+required. No runtime or production thresholds change here.
 
-## Proposed domain contracts (pending review and decisions)
+## Logical domain contracts (reviewed candidate, final approval pending)
 
 The [definition interface draft](campaign-definition-contract.md) specifies typed
 condition references/comparisons, authored campaign/behavior rules, explicit
@@ -670,7 +681,7 @@ freshness/opportunity validity/association and actual-presentation acknowledgeme
 plus a priority-rank representation without production ranks. The
 [record interface draft](campaign-record-contract.md) specifies logical operation
 shapes, canonical equality, source/slot association and revision-checked ports.
-These close representation gaps as proposals for independent review, not new
+These close representation gaps as independently reviewed logical proposals, not new
 runtime schemas or implicit production policies. Missing/ambiguous authored rules
 remain diagnostics; no permanent-validity, fixed-expiry or latest-display default
 is introduced. Final contract acceptance is still pending.
@@ -711,8 +722,9 @@ references. Completion is a verified transition, not an arbitrary incident ID.
 Effects use explicit run-scoped application identity under DEC-015 so replay,
 imports and later qualifying retries do not apply the same authored discovery,
 narrative or completion effect twice. New accepted retry history remains under
-DEC-010. Numeric ranges, initial values and non-rate formulas remain pending;
-no tuning values are chosen here. A new-run baseline is not an observation about
+DEC-010. Production numeric ranges and initial values remain unselected;
+the definition interface requires explicit authored inputs rather than defaults.
+Approved behavior formulas remain unchanged. A new-run baseline is not an observation about
 missing legacy behavior.
 
 ### Behavior observations and denominator proposals
@@ -811,12 +823,11 @@ denominators, current-attempt evidence qualification and distinct investigation
 depth, unresolved ending ambiguity, empirical prediction/confidence and action-based
 recommendation response, pooled prediction mismatch rate and independent preference
 rates and explicit reporting/cooperation response units are approved. Detailed
-persistence/effect/behavior/preference/prediction/response/ending drafts still need
-independent review. Unresolved material findings must receive separate approval;
+persistence/effect/behavior/preference/prediction/response/ending contracts have
+independent logical review/QA evidence. Future material findings require separate approval;
 production mappings, thresholds and unimplemented APIs are not certified here.
-Independent architecture review has requested changes; QA has verified proposal
-consistency and existing safeguards, not final acceptance or these proposed new
-APIs. Predicate composition now has explicit human approval through DEC-025;
-its detailed contract requires recheck and later required contracts still need
-closure. No result should mark TASK-018 complete merely
-because this text or passing legacy tests exist.
+Independent review and QA now PASS the logical candidate, including DEC-025 and
+the detailed definition/record interfaces. Final human baseline approval through
+DEC-026 and configured Project OS evidence/evaluation remain pending. None of
+these checks certifies implemented M4 APIs or native/database behavior. No result
+should mark TASK-018 complete merely because this text or passing legacy tests exist.

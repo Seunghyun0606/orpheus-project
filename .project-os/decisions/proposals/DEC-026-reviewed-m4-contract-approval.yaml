@@ -1,0 +1,58 @@
+id: DEC-026
+title: Approve the independently reviewed M4 logical contract baseline
+status: proposed
+date: '2026-10-10'
+applies_to:
+  - M4
+task: TASK-018
+context: >-
+  Candidate 7717c4d has separate read-only architecture review and acceptance QA
+  PASS for the logical contract, conditional on final human approval and Project
+  OS evidence/evaluation. No remaining blocking logical-contract gap was found.
+  Runtime schemas, databases and M4 engines are still unimplemented.
+decision: Pending human selection; contract approval and task completion are not inferred from document or legacy-test passes.
+chosen_option: null
+recommended_option: A
+candidate_commit: 7717c4d86c16b56967767f1c2e450b3077a7fd42
+logical_contract_version: 1
+options:
+  - key: A
+    label: Approve the reviewed logical baseline and proceed through Project OS to TASK-019
+    details: >-
+      Accept the reviewed domain/data/replay, typed condition, authoring,
+      representation/association and persistence-port contracts as the M4 logical
+      baseline under existing active decisions. Submit actual structured task,
+      review and QA evidence and use configured evaluation before claiming eligible
+      TASK-019. Its implementation remains pure/headless and fixture-driven; this
+      approval does not bypass later reviews, storage/native tests or material gates.
+  - key: B
+    label: Keep TASK-018 active and obtain further human contract adjustments
+    details: >-
+      Do not approve the logical baseline or start dependent implementation.
+      Retain reviewed evidence and original data, and request specific human
+      contract feedback before preparing and independently checking a revision.
+contract_documents:
+  - specs/architecture/campaign-intelligence-contract.md
+  - specs/architecture/campaign-definition-contract.md
+  - specs/architecture/campaign-record-contract.md
+  - specs/architecture/campaign-ledger-persistence.md
+  - specs/architecture/campaign-effect-application.md
+  - specs/architecture/condition-evaluation.md
+  - specs/architecture/player-behavior-rates.md
+  - specs/architecture/player-prediction.md
+  - specs/architecture/recommendation-responses.md
+  - specs/architecture/preference-rates.md
+  - specs/architecture/affiliation-rates.md
+  - specs/architecture/ending-resolution.md
+review_evidence: .project-os/planning/TASK-018.logical-contract-review-checkpoint.yaml
+qa_evidence: .project-os/planning/TASK-018.logical-contract-qa-checkpoint.yaml
+invariants:
+  - Preserve existing localStorage authorities, source bytes/frozen replay and historical evidence; no destructive conversion or new-ledger migration is approved.
+  - DEC-009 through DEC-025 retain their approved retry/import/effect/rate/availability/commit semantics.
+  - Required authored rules and invalid/ambiguous context diagnose; no permanent freshness, fixed expiry, latest-opportunity-wins or automatic ending fallback.
+  - Logical priorityRank represents authored precedence only; no production ending ranks, hidden-value initial amounts or thresholds are selected.
+  - Actual presentation acknowledgement must precede qualifying official response and commit under DEC-013; no DOM/database or cross-store atomicity claimed.
+  - Existing automated passes prove unchanged safeguards, not implemented M4 APIs, actual IndexedDB capability or native behavior.
+  - Human approval is separate from task completion; Project OS transitions and later independent reviews/QA remain mandatory.
+  - No full-campaign, M5 or production-release scope is approved by either option.
+supersedes: null

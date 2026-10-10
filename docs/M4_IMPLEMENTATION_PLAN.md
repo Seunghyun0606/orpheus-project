@@ -145,11 +145,11 @@ DEC-023 approves independent preference rates, specified in the
 [preference review draft](../specs/architecture/preference-rates.md).
 DEC-024 approves explicit reporting/cooperation response units, specified in the
 [affiliation review draft](../specs/architecture/affiliation-rates.md).
-Basic formula families are approved; detailed contracts and acceptance still need
-independent review/QA. Bounded read-only review/QA execution is now human-authorized,
+Basic formula families are approved; detailed logical contracts now have independent
+review/QA evidence, with final human approval still pending. Read-only execution was human-authorized,
 recorded in the [request](../.project-os/planning/TASK-018.review-qa-execution-request.yaml).
 Existing-save checks do not constitute acceptance of the proposed new campaign
-system; remaining policies and independent review/QA are still required.
+system; new runtime/storage/native verification remains required in later tasks.
 
 Initial M4 planning closed the approved M3 milestone and registered eight bounded
 tasks. Subsequent TASK-018 documentation and context corrections do not change
@@ -157,18 +157,22 @@ runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-The [independent review](../.project-os/planning/TASK-018.independent-review-checkpoint.yaml)
+The initial [independent review](../.project-os/planning/TASK-018.independent-review-checkpoint.yaml)
 requests changes, and [independent QA](../.project-os/planning/TASK-018.independent-qa-checkpoint.yaml)
 verifies proposal consistency and legacy safeguards, not final acceptance.
 The human now approved strict
 [predicate availability](../.project-os/decisions/DEC-025-strict-predicate-availability.yaml);
-the detailed truth-table contract still requires independent recheck.
-Next: recheck that correction and close remaining detailed contract findings
-before dependent implementation.
+the detailed truth-table contract has also passed independent recheck.
+The subsequent [logical review](../.project-os/planning/TASK-018.logical-contract-review-checkpoint.yaml)
+and [QA](../.project-os/planning/TASK-018.logical-contract-qa-checkpoint.yaml)
+both PASS candidate `7717c4d`, conditional on final human approval.
+Next: obtain [DEC-026 baseline approval](../.project-os/decisions/proposals/DEC-026-reviewed-m4-contract-approval.yaml),
+then submit final evidence and use configured Project OS evaluation before
+dependent implementation. Do not claim TASK-019 prematurely.
 The [definition](../specs/architecture/campaign-definition-contract.md) and
 [record](../specs/architecture/campaign-record-contract.md) interface candidates
-now specify the remaining typed/association/priority/freshness representations;
-independent recheck must confirm them before treating the handoff as ready.
+now specify the reviewed typed/association/priority/freshness representations.
+These are logical contracts, not implemented runtime/storage or native test passes.
 Direct contract and
 DEC-009–025 references are now declared in dependent task context metadata;
 budget-truncated context output does not replace reading required source files.

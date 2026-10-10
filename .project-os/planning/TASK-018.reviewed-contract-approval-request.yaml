@@ -1,0 +1,46 @@
+task: TASK-018
+kind: architecture_proposal_progress
+role: architect
+actor: codex-task018-architect
+status: awaiting_human_contract_approval
+date: '2026-10-10'
+base_commit: 7717c4d86c16b56967767f1c2e450b3077a7fd42
+summary: >-
+  Separate authorized read-only agents passed the logical contract candidate,
+  with no blocking finding or remaining demonstrated outcome-policy gap. Recorded
+  their attributed checkpoints and requested final logical baseline approval as
+  DEC-026. No task completion or dependent implementation is self-approved.
+  Runtime/storage/canonical state and immutable historical results remain unchanged.
+independent_review: .project-os/planning/TASK-018.logical-contract-review-checkpoint.yaml
+independent_qa: .project-os/planning/TASK-018.logical-contract-qa-checkpoint.yaml
+gate:
+  type: architecture_change
+  proposal: .project-os/decisions/proposals/DEC-026-reviewed-m4-contract-approval.yaml
+  question: Approve reviewed logical contract v1 and proceed through Project OS to TASK-019, or keep TASK-018 for human adjustments?
+  selected_option: null
+  recommended_option: A
+verification:
+  independent_logical_review: pass_pending_human_approval
+  independent_logical_qa: pass_pending_human_approval
+  independent_full_existing_tests: 116_tests_16_files_passed
+  independent_scenario_validation: 8_files_passed
+  independent_reference_link_context_and_scope_audits: pass
+  independent_doctor_format_and_diff_checks: pass
+  new_runtime_native_indexeddb_or_migration_verification: not_implemented_or_performed
+  final_task_acceptance_and_evaluation: pending_human_approval_and_configured_handoffs
+known_risks:
+  - Logical readiness is not executed API, database capability, physical visibility or native verification.
+  - Production thresholds, initial amounts, ranks and lifecycle/freshness values remain authored future decisions, not defaults from missing data.
+  - Human approval will not bypass task evidence/evaluation or later independent review and relevant human gates.
+remaining_work:
+  - Obtain DEC-026 human selection; no dependent claim before approval and successful Project OS evaluation.
+  - Record approved contract status and submit final task/review/QA evidence through configured Project OS commands.
+  - If accepted, claim eligible TASK-019 and implement its bounded pure/headless fixture-driven campaign transitions.
+files_changed:
+  - .project-os/decisions/proposals/DEC-026-reviewed-m4-contract-approval.yaml
+  - .project-os/planning/TASK-018.logical-contract-review-checkpoint.yaml
+  - .project-os/planning/TASK-018.logical-contract-qa-checkpoint.yaml
+  - .project-os/planning/TASK-018.reviewed-contract-approval-request.yaml
+  - specs/architecture/campaign-intelligence-contract.md
+  - docs/M4_IMPLEMENTATION_PLAN.md
+  - README.md

@@ -1,0 +1,45 @@
+task: TASK-018
+kind: independent_qa_checkpoint
+role: qa
+actor: codex-task018-predicate-qa
+source_agent: /root/task018_predicate_qa
+recorded_by: codex-task018-architect
+candidate_commit: 7717c4d86c16b56967767f1c2e450b3077a7fd42
+status: pass_pending_human_contract_approval
+critical_issues: 0
+date: '2026-10-10'
+summary: >-
+  Independent read-only QA PASS for logical TASK-018 acceptance coverage,
+  conditional on final human approval and configured evidence/evaluation. No
+  blocking logical-contract gap remains. Root transcribes the agent's actual
+  verification; this checkpoint is not final immutable QA or task completion.
+acceptance:
+  four_m4_exit_criteria: covered_and_mapped
+  alternate_snapshots_vs_history_and_idempotency: explicit_no_fabricated_samples
+  ten_metrics_prediction_unavailable_and_ending_ambiguity: explicit_contracts
+  material_decisions: dec009_through_dec025_respected_no_production_or_lifecycle_defaults
+  independent_source_decision_and_fixture_plan_checks: pass_logical_scope
+verification:
+  full_existing_tests:
+    command: npm test
+    result: 116_tests_16_files_passed
+  scenario_validation:
+    command: npm run validate:scenarios
+    result: 8_files_passed
+  project_doctor: pass
+  global_and_explicit_format_checks: pass
+  diff_check: pass
+  utf8_audit:
+    local_markdown_links: 102_valid
+    task018_through_task025_references_and_context_metadata: retained
+    historical_findings_runtime_stores_and_canonical_state: unchanged
+verified_closure:
+  - Typed references, authored relevance/freshness and lifecycle rules, unique response association and strict condition availability.
+  - Actual presentation plus committed acknowledgement before official response eligibility; physical verification remains future work.
+  - Explicit priority direction and canonical operation/revision/checkpoint interfaces consistent with recorded decisions.
+findings: []
+limitations:
+  - QA made no edits or writes.
+  - No browser/native, physical IndexedDB or unimplemented M4 API tests occurred.
+  - PASS verifies architecture-document acceptance coverage, not runtime implementation or TASK-018 completion.
+  - Budget-truncated context metadata does not replace direct reading of required source files.

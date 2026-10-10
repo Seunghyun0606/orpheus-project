@@ -94,14 +94,15 @@ confidence weighting. Safety preference and damage tolerance will use independen
 positive/eligible-choice rates at authored tradeoffs, not intensity scores or
 automatic damage/risk conversions. Reporting/cooperation will count eligible
 responses to explicit available opportunities, excluding unrelated investigation
-and no response. Detailed contracts still need independent review/QA before
-implementation. Human-authorized independent review/QA has checked proposal and
+and no response. Human-authorized independent review/QA has checked logical contracts and
 legacy compatibility. Strict
 [predicate availability](.project-os/decisions/DEC-025-strict-predicate-availability.yaml)
 is now human-approved: any unavailable referenced value diagnoses, even under a
 decisive boolean sibling. Its [condition contract](specs/architecture/condition-evaluation.md)
-needs independent recheck and remaining detailed contract closure before final
-acceptance. No M4 runtime API is certified by those checks.
+and detailed definition/record interfaces have now passed independent logical
+review/QA at `7717c4d`. Final
+[contract approval](.project-os/decisions/proposals/DEC-026-reviewed-m4-contract-approval.yaml)
+and Project OS evaluation remain pending. No M4 runtime API is certified by those checks.
 
 ## War Room and saved progress
 
