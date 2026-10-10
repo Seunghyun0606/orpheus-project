@@ -174,6 +174,12 @@ The [definition](../specs/architecture/campaign-definition-contract.md) and
 [record](../specs/architecture/campaign-record-contract.md) interface candidates
 now specify the reviewed typed/association/priority/freshness representations.
 These are logical contracts, not implemented runtime/storage or native test passes.
+
+TASK-019 subsequently added a
+[pure implementation candidate](TASK-019_IMPLEMENTATION.md), verified by 55 new
+fixture tests and 171 passing total tests. It remains active pending independent
+implementation review/QA; later task dependencies have not been accepted.
+No platform storage, UI integration or production campaign content was added.
 Direct contract and
 DEC-009–025 references are now declared in dependent task context metadata;
 budget-truncated context output does not replace reading required source files.

@@ -106,6 +106,12 @@ is now recorded. Independent evidence evaluation and Project OS accepted TASK-01
 TASK-019 is active for bounded pure transitions, not platform storage or UI.
 No M4 runtime API is certified by those logical checks.
 
+TASK-019 now has a [pure campaign implementation candidate](docs/TASK-019_IMPLEMENTATION.md):
+strict authored definitions/conditions, replay-verified transitions, retries,
+once-per-run effects and confirmed source boundaries. Root verification passes
+171 tests; independent implementation review/QA and task acceptance remain pending.
+There are no new persistence writes, production campaign content or UI integration.
+
 ## War Room and saved progress
 
 The three MVP incident YAML files author team messages, a communication action, and a delayed
