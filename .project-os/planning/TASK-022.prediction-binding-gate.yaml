@@ -1,0 +1,66 @@
+task: TASK-022
+kind: implementation_planning_and_human_gate
+role: developer
+actor: codex-task022-developer
+date: '2026-10-11'
+status: awaiting_prediction_definition_binding_decision
+base_commit: d37d316
+summary: >-
+  Claimed eligible TASK-022 through projectctl after TASK-021 acceptance. Inspected
+  the approved logical prediction/condition/record contracts and existing strict
+  definition and behavior implementation. The empirical frequency/confidence family
+  is approved, but prediction definitions and their run binding are not implemented.
+  DEC-029 explicitly covers behavior authority in new definitions; applying a new
+  prediction authority to existing runs must not be silently inferred from it.
+observed_state:
+  campaign_definition: Strict version 1 with optional pinned behavior data; no prediction or dedicated branch definitions.
+  official_operations: create_start_checkpoint_command_adopt_associate_only
+  behavior_samples: Accepted-command identity and pre-event boundary exist, but no authored comparable-context or candidate mapping.
+  prediction_exposure: No implemented preparation or actual-presentation acknowledgement operation.
+  branch_conditions: Existing typed eligibility/effect conditions and verified behavior context are reusable.
+  legacy_and_model_less_records: Existing replay authority and record shapes must remain unchanged.
+approved_constraints:
+  - DEC-020 empirical comparable-context choice counts, currently available candidates, unique top and authored support requirements.
+  - Confidence is top count divided by eligible total; not a calibrated probability, score or scripted decline.
+  - DEC-022 deviation requires a real recorded valid exposure and eligible response; pure calculation cannot fabricate it.
+  - DEC-025 requires every referenced observation before condition composition; no short-circuit workaround for unavailable values.
+  - Non-production fixtures only; preserve all three UNKNOWN-only bundled incidents and frozen replay authorities.
+gate:
+  type: architecture_change
+  question: Bind new branch/prediction definitions only from new campaign versions, or first design an explicit existing-run connection contract?
+  options:
+    - key: A
+      label: New campaign definition versions only, preserve existing records
+      proposed_scope:
+        - Pin explicit versioned branch/prediction rules in the existing whole immutable campaign definition authority.
+        - Definitions without these fields preserve their exact authority, record and replay behavior; no automatic attachment, backfill or latest-version fallback.
+        - New definition versions may declare comparable contexts, candidate mappings, eligibility, support and reveal rules as strict validated data.
+        - Keep behavior classifications/formulas, original source bytes, both legacy stores and the existing physical ledger layout unchanged.
+        - Use pure/headless non-production fixtures, not new production reveal conditions or thresholds.
+        - Any actual presentation/response recording must still satisfy the approved exposure contract and separately verify adapter integration.
+        - No implicit migration, player-facing UI, live AI, production release, push or new agent delegation is authorized.
+      tradeoff: Existing runs do not automatically gain a prediction model; new model-enabled campaigns use a new immutable definition version.
+    - key: B
+      label: Design explicit existing-run compatibility first
+      proposed_scope:
+        - Keep current runtime and records unchanged while specifying a separate versioned connection contract.
+        - Define eligible source authorities, historical-context provenance, explicit confirmation and future-input boundaries before implementation.
+        - Obtain further review and human approval for any concrete migration or attachment; selecting B is not consent to rewrite user saves.
+      tradeoff: Adds compatibility design before the TASK-022 predictor implementation; no silent reinterpretation of old history.
+verification:
+  task_claim: projectctl_claim_TASK_022
+  scenario_validation:
+    command: npm run validate:scenarios
+    result: 8_files_passed
+  current_mvp_replays:
+    command: npm test -- src/tests/inc-001-replay.test.ts src/tests/inc-002-replay.test.ts src/tests/inc-003-replay.test.ts
+    result: 12_tests_in_3_files_passed
+  task022_acceptance: not_implemented_not_claimed
+  independent_review_qa_evaluation: not_performed_not_delegated
+  runtime_schema_content_dependencies_storage_changes: none
+remaining_work:
+  - Obtain the binding decision before introducing runtime definition or record fields.
+  - Implement the approved branch and predictor scope with deterministic causal fixtures.
+  - Validate references, unavailable candidates, support, ties, UNKNOWN, reveal gates and unchanged MVP replay.
+  - Obtain separately authorized independent review, QA and distinct evaluation before completion.
+next_recommended_step: Human selection of A or B; TASK-022 stays active without completion evidence.

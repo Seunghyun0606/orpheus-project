@@ -18,6 +18,14 @@ on 2026-10-09; [DEC-008](../.project-os/decisions/DEC-008-m3-completion-m4-plann
 records that approval. M4 remains active; TASK-019 completion is not M4 closure.
 M5 remains planned.
 
+TASK-022 was claimed through Project OS on 2026-10-11. Its kickoff verified eight
+scenario files and twelve current MVP replay tests. Runtime, content, dependencies
+and storage remain unchanged. The empirical policy is approved, but attaching new
+branch/prediction definition authority to runs requires an explicit
+[binding decision](../.project-os/planning/TASK-022.prediction-binding-gate.yaml).
+TASK-022 is active, not implemented or accepted; no TASK-022 agent delegation is
+authorized by the completed TASK-021 approvals.
+
 ## Scope and continuity
 
 Build the campaign, player behavior, branching/prediction, and ending framework
