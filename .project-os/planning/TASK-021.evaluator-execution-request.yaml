@@ -1,0 +1,40 @@
+task: TASK-021
+kind: independent_evaluator_execution_request
+role: developer
+actor: codex-task021-developer
+date: '2026-10-11'
+status: awaiting_distinct_evaluator_authorization
+candidate_commit: 895a05bd398a06a29368130574893e19e6df50d8
+evidence_commit: c432854ff63a0fe6e495fc221f1824ede58f7464
+summary: >-
+  Independent review and acceptance QA PASS are submitted and committed. The
+  reviewer also audited evidence accurately, but projectctl correctly rejects
+  that same actor as final evaluator of its own review. No completion occurred.
+  Existing authorization permits only the two read-only review/QA agents, with
+  no further delegation. A distinct evaluator requires explicit human approval.
+gate:
+  type: architecture_change
+  question: Authorize a distinct read-only TASK-021 evidence evaluator?
+  options:
+    - key: A
+      label: Authorize separate read-only evaluator
+      scope:
+        - A new actor that authored neither implementation, review nor QA reads committed task evidence and quality policy.
+        - Verify all acceptance criteria, attribution, unchanged source, original REWORK preservation and verification limits.
+        - Return an attributed PASS, REWORK or HUMAN_GATE verdict for root transcription through projectctl.
+        - No files, canonical state, git history, dependencies, user storage, native UI or further delegation may be changed by evaluator.
+        - No new feature, migration, production release or push permission is implied.
+    - key: B
+      label: Preserve active task pending independently supplied evaluation
+      scope:
+        - Retain submitted review and QA PASS without self-approved completion or TASK-022 advancement.
+        - Await a separately authored evaluation or revised human instruction.
+verification:
+  independent_review: pass
+  independent_qa: pass
+  focused_tests: 49_tests_in_2_files_passed
+  full_tests: 264_tests_in_23_files_passed
+  reviewer_evidence_audit: pass_but_not_eligible_completion_evaluation
+  configured_evaluation: rejected_actor_authored_own_review
+  canonical_completion: not_performed
+  actual_user_storage_or_native_ui: not_accessed

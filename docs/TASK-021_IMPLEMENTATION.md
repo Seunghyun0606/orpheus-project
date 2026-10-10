@@ -145,3 +145,10 @@ finding and developer timeout history are not erased.
 Submit the attributed final independent review, QA and tests for candidate `895a05b`.
 Only configured independent evidence evaluation can complete TASK-021 and make
 TASK-022 eligible. M4 remains active; no push or release is implied.
+
+The reviewer audited the submitted evidence successfully, but `projectctl`
+rejected that same actor as the completion evaluator of its own review. Canonical
+TASK-021 remains active; no evaluation result was stored. A distinct evaluator is
+required. The existing two-agent permission does not authorize another delegation,
+so [explicit evaluator approval](../.project-os/planning/TASK-021.evaluator-execution-request.yaml)
+is requested. Actor renaming cannot substitute for role separation.
