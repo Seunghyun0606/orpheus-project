@@ -1,0 +1,42 @@
+task: TASK-019
+status: pass
+role: developer
+actor: codex-task019-developer
+commit: 7cb0a832807d2f699e3bac6e143a330e51009882
+summary: >-
+  Implemented the bounded pure campaign domain, repaired independent review/QA
+  findings and implemented human-approved DEC-027 explicit compatible versions
+  with shared once-per-run effects. Existing source slots, frozen content and UI
+  are unchanged. Implementation PASS is a handoff, not self-approved completion.
+files_changed:
+  - src/engine/campaign/
+  - src/scenario/campaign.ts
+  - src/tests/campaign-conditions.test.ts
+  - src/tests/campaign-transitions.test.ts
+  - src/tests/campaign-compatibility.test.ts
+  - src/tests/fixtures/campaign.ts
+  - specs/architecture/campaign-definition-contract.md
+  - specs/architecture/campaign-effect-application.md
+  - docs/TASK-019_IMPLEMENTATION.md
+  - .project-os/decisions/DEC-027-explicit-compatible-campaign-content.yaml
+verification:
+  acceptance: pass
+  deterministic_replay: pass
+  provenance_idempotency_partial_and_alternate_runs: pass
+  authored_effects_and_act_progression: pass
+  platform_and_ui_independence: pass
+  explicit_compatible_content_and_shared_receipts: pass
+  independent_review: pass
+  independent_qa: pass
+  unit_test: pass
+  typecheck: pass
+  lint: pass
+  scenario_validation: pass
+  format: pass
+  web_build: pass_with_existing_nonblocking_chunk_warning
+  project_doctor: pass
+critical_issues: 0
+followups:
+  - Obtain independent evidence evaluation before canonical acceptance.
+  - TASK-020 must implement actual storage transactions, revision checks, lost acknowledgements and physical compatibility.
+  - Future behavior, prediction, ending and UI integration are not certified by this bounded domain handoff.
