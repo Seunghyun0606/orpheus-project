@@ -13,6 +13,7 @@ import {
 import { canonicalJson } from '../engine/campaign/canonical.ts';
 import { parseCampaignYaml, validateCampaignDefinition } from '../scenario/campaign.ts';
 import { metricKeys } from '../scenario/behavior.ts';
+import { validateScenarioObject } from '../scenario/validator.ts';
 import { encodeSave } from '../persistence/save.ts';
 import { replayCommands } from '../engine/simulation.ts';
 import { inc001Scenario } from '../scenario/inc-001.ts';
@@ -645,12 +646,14 @@ describe('strict behavior classifications and versioned observation rules', () =
     } else {
       const event = scenario.events.find((e) => e.id === 'JIN_IMPACT_RESULT')!;
       const action = scenario.actions.find((a) => a.id === rule.actionId)!;
+      action.delegation!.eventId = sourceId;
       for (const effect of action.effects)
         if (effect.type === 'schedule_event' && effect.eventId === event.id)
           effect.eventId = sourceId;
       event.id = sourceId;
       rule.result.delivery = { kind: 'timer', eventId: sourceId };
     }
+    expect(validateScenarioObject(scenario).success).toBe(true);
     const catalog = new Map([[scenarioVersionKey(scenario.id, scenario.contentVersion), scenario]]);
     const result = validateCampaignDefinition(d, catalog);
     expect(result.ok ? [] : result.diagnostics).toEqual(
