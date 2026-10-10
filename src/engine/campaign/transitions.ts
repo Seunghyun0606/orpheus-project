@@ -38,6 +38,9 @@ const common = {
   replayVersion: z.literal(1),
   canonicalVersion: z.literal(1),
 };
+const legacySourcesSchema = z
+  .object({ incident: z.string().nullable(), progress: z.string().nullable() })
+  .strict();
 export const campaignOperationSchema = z.discriminatedUnion('kind', [
   z.object({ ...common, kind: z.literal('create') }).strict(),
   z
@@ -77,6 +80,16 @@ export const campaignOperationSchema = z.discriminatedUnion('kind', [
       kind: z.literal('adopt'),
       confirmed: z.literal(true),
       sourceBytes: z.array(z.string()).min(1),
+      legacySources: legacySourcesSchema.optional(),
+    })
+    .strict(),
+  z
+    .object({
+      ...common,
+      kind: z.literal('associate'),
+      attemptId: id,
+      priorHead: z.string(),
+      sourceBytes: z.string(),
     })
     .strict(),
 ]);
@@ -119,6 +132,12 @@ export interface CampaignRun {
   activeAttemptId: string | null;
   projection: CampaignProjection;
   effectReceipts: EffectReceipt[];
+  checkpointAssociations?: {
+    operationId: string;
+    attemptId: string;
+    head: string;
+    sourceBytes: string;
+  }[];
 }
 export type CampaignResult =
   | { ok: true; disposition: 'candidate' | 'duplicate'; run: CampaignRun }
@@ -269,6 +288,45 @@ function sourceSnapshot(bytes: string, catalog: ScenarioCatalog) {
   if (!replay.ok || canonicalJson(simulationJson(replay.state)) !== canonicalJson(value.incident))
     return undefined;
   return { scenario, seed: value.seed, state: simulationJson(replay.state) };
+}
+export function verifyCampaignSource(bytes: string, catalog: ScenarioCatalog) {
+  try {
+    return sourceSnapshot(bytes, catalog);
+  } catch {
+    return undefined;
+  }
+}
+// Preserve old wrapper bytes as provenance, without treating its order as chronology.
+export function legacySnapshotBytes(input: unknown): string[] | undefined {
+  try {
+    const sources = legacySourcesSchema.parse(input);
+    const bytes: string[] = [];
+    if (sources.incident !== null) bytes.push(sources.incident);
+    if (sources.progress !== null) {
+      const progress = z
+        .object({
+          schemaVersion: z.literal(1),
+          incidentSaves: z.record(id, z.array(z.string()).min(1)),
+        })
+        .strict()
+        .parse(JSON.parse(sources.progress));
+      for (const key of Object.keys(progress.incidentSaves).sort())
+        for (const save of progress.incidentSaves[key]!) {
+          const header: unknown = JSON.parse(save);
+          if (
+            !header ||
+            typeof header !== 'object' ||
+            !('scenarioId' in header) ||
+            header.scenarioId !== key
+          )
+            return undefined;
+          bytes.push(save);
+        }
+    }
+    return bytes;
+  } catch {
+    return undefined;
+  }
 }
 const add = (items: string[], value: string): void => {
   if (!items.includes(value)) items.push(value);
@@ -458,6 +516,11 @@ function apply(
     const error = projectEvents(definition, next, prior, attempt, op, result.events);
     if (error) return error;
   } else if (op.kind === 'adopt') {
+    if (op.legacySources !== undefined) {
+      const bytes = legacySnapshotBytes(op.legacySources);
+      if (!bytes || canonicalJson(bytes) !== canonicalJson(op.sourceBytes))
+        return failure('INVALID_LEGACY_PROVENANCE');
+    }
     const sources = op.sourceBytes.map((bytes) => sourceSnapshot(bytes, catalog));
     if (sources.some((source) => !source)) return failure('INVALID_ADOPTION_SOURCE');
     for (const source of sources) {
@@ -474,6 +537,26 @@ function apply(
         )
           add(next.projection.narratives, item.id);
     }
+  } else if (op.kind === 'associate') {
+    const attempt = next.attempts.find((item) => item.id === op.attemptId);
+    const source = sourceSnapshot(op.sourceBytes, catalog);
+    if (
+      !attempt ||
+      next.activeAttemptId !== attempt.id ||
+      attempt.incident.completionReached ||
+      !source ||
+      op.priorHead !== campaignAttemptHead(attempt) ||
+      source.seed !== attempt.seed ||
+      canonicalJson(source.state) !== canonicalJson(attempt.incident)
+    )
+      return failure('INVALID_CHECKPOINT_ASSOCIATION');
+    next.checkpointAssociations ??= [];
+    next.checkpointAssociations.push({
+      operationId: op.operationId,
+      attemptId: attempt.id,
+      head: op.priorHead,
+      sourceBytes: op.sourceBytes,
+    });
   }
   next.operations.push(op);
   return { ok: true, disposition: 'candidate', run: next };
@@ -567,6 +650,44 @@ export function getCampaignProgression(
 ) {
   try {
     return getCampaignProgressionUnchecked(definition, catalog, run);
+  } catch {
+    return failure('INVALID_JSON_OR_RECORD');
+  }
+}
+
+export function resumeCampaignAssociation(
+  definition: unknown,
+  catalog: ScenarioCatalog,
+  run: CampaignRun,
+  associationId: string,
+  actualBytes: string,
+) {
+  try {
+    canonicalJson(run);
+    const verified = replayCampaign(definition, catalog, run.operations);
+    if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
+      return failure('INVALID_PRIOR_RECORD');
+    const association = run.checkpointAssociations?.find(
+      (item) => item.operationId === associationId,
+    );
+    const attempt = association && run.attempts.find((item) => item.id === association.attemptId);
+    const source = sourceSnapshot(actualBytes, catalog);
+    if (
+      !association ||
+      !attempt ||
+      attempt.id !== run.activeAttemptId ||
+      attempt.incident.completionReached ||
+      association.sourceBytes !== actualBytes ||
+      association.head !== campaignAttemptHead(attempt) ||
+      !source ||
+      source.seed !== attempt.seed ||
+      canonicalJson(source.state) !== canonicalJson(attempt.incident)
+    )
+      return failure('INVALID_CHECKPOINT_ASSOCIATION');
+    return {
+      ok: true as const,
+      attempt: verified.run.attempts.find((item) => item.id === attempt.id)!,
+    };
   } catch {
     return failure('INVALID_JSON_OR_RECORD');
   }

@@ -1,7 +1,8 @@
 # M4 — Campaign Intelligence Systems
 
 Status: TASK-018 and TASK-019 accepted through independent evidence evaluation and Project OS;
-TASK-020 is active, awaiting physical-layout approval before adapter implementation.
+TASK-020 is active; DEC-028 approves its physical layout and the implementation
+candidate awaits separately authorized independent review and QA.
 The human approved M3 closure and M4 definition
 on 2026-10-09; [DEC-008](../.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml)
 records that approval. M4 remains active; TASK-019 completion is not M4 closure.
@@ -183,8 +184,12 @@ implementation `7cb0a83` passed independent review and QA with 186 full-suite te
 Attributed handoffs at `5e5883b` and independent configured evaluation accepted
 TASK-019. TASK-020 was claimed through Project OS; its
 [physical-layout gate](../.project-os/planning/TASK-020.physical-layout-gate.yaml)
-preserves the distinction between approved IndexedDB use and the still-proposed
-database/store names. No database was opened or migrated. Older review checkpoints
+preserved the distinction between approved IndexedDB use and the then-proposed
+database/store names. The human subsequently approved DEC-028. The
+[TASK-020 candidate](TASK-020_IMPLEMENTATION.md) now provides transactional storage
+and explicit legacy ports with isolated in-memory tests. No actual user database
+was opened or migrated, no UI integration occurred, and independent acceptance
+is still pending. Older review checkpoints
 retain their original findings and test counts.
 No platform storage, UI integration or production campaign content was added.
 Direct contract and

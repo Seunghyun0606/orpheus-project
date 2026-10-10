@@ -1,4 +1,24 @@
-# Campaign ledger persistence — TASK-018 review draft
+# Campaign ledger persistence — approved contract and TASK-020 candidate
+
+## Current implementation checkpoint (2026-10-10)
+
+DEC-026 accepted the reviewed logical baseline; DEC-027 added explicit compatible
+content/shared-effect mappings. The human approved the proposed physical names and
+layout through DEC-028: database `orpheus.campaign`, version 1, store `runs`,
+keyPath `runId`, whole replay-validated schemaVersion 1 run records. This approval
+does not permit changing unexpected existing layouts or migrating either old key.
+
+The TASK-020 candidate implements the asynchronous adapter, read-only legacy
+preview/confirmed adoption/checkpoint ports and explicit live-head associations.
+Only isolated injected IndexedDB tests have executed; actual browser/Tauri
+storage, UI publication and independent acceptance remain unverified. See
+[implementation and limitations](../../docs/TASK-020_IMPLEMENTATION.md).
+
+The sections below retain the original TASK-018 review-draft wording for historical
+context. References there to pending review/physical names are superseded by
+DEC-026/027/028, not new permission for automatic migration or platform acceptance.
+
+## Original review draft
 
 Status: storage mechanism is approved by DEC-013; the detailed layout below is
 an implementation-contract draft for review, not a runtime schema or a completed

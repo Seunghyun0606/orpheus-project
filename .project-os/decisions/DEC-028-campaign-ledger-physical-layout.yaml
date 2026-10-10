@@ -1,0 +1,22 @@
+id: DEC-028
+title: Approve the separate campaign IndexedDB physical layout
+status: active
+date: '2026-10-10'
+applies_to: [M4]
+task: TASK-020
+decision: >-
+  Use database orpheus.campaign version 1, object store runs with keyPath runId,
+  storing whole replay-validated schemaVersion 1 CampaignRun records. Create the
+  declared layout only for a new database and reject unexpected existing versions
+  or layouts without upgrades, deletion, replacement or fallback. Preserve both
+  existing localStorage authorities and acknowledge revision-checked writes only
+  on transaction completion.
+human_approval:
+  selected_option: A
+  instruction: '제안된 이름·레이아웃 승인 후 구현.'
+request: .project-os/planning/TASK-020.physical-layout-gate.yaml
+consequences:
+  - No old-slot or discovery-store rewrite, automatic migration or cross-store transaction.
+  - Native tests touching user saves require separate action-time permission.
+  - Physical layout approval is not runtime, native or independent acceptance evidence.
+supersedes: null

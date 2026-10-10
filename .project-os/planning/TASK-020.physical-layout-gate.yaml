@@ -3,7 +3,7 @@ kind: implementation_start_and_physical_layout_request
 role: developer
 actor: codex-task020-developer
 date: '2026-10-10'
-status: awaiting_human_physical_layout_approval
+status: authorized_implementation_pending
 base_commit: a182c1b
 completed:
   - Re-read project bootstrap and actual clean repository state.
@@ -25,7 +25,8 @@ known_risks:
   - Opening or upgrading an existing database must not silently replace unknown schemas or valid stored data.
 gate:
   type: architecture_change
-  selected_option: null
+  selected_option: A
+  human_approval: '제안된 이름·레이아웃 승인 후 구현.'
   recommended_option: A
   question: Approve the proposed physical IndexedDB layout for the separate campaign ledger?
   options:
