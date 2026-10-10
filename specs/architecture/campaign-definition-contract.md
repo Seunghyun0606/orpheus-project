@@ -147,6 +147,32 @@ changes cannot silently reverse previously recorded authored precedence.
 
 ## Verification handoff
 
+### TASK-019 compatible-content representation (DEC-027)
+
+The human approved explicit compatibility inside the pinned definition, not
+automatic definition upgrades or migration. An incident retains its authored
+primary `contentVersion` and may declare `compatibleContentVersions`. All versions
+must be unique, resolve to exact validated scenario ID/version authorities and
+support declared discovery references. Catalog presence alone grants no eligibility.
+A start may explicitly select an allowed `contentVersion`; omission retains the
+authored primary, never the latest version. Confirmed baselines retain their exact
+allowed source version without target conversion. Each attempt's incident version
+and full scenario authority determine subsequent command replay.
+
+An effect's existing `trigger` applies to the primary version. Optional
+`additionalTriggers` explicitly name content version, event type and target in the
+same logical incident, sharing the effect ID, boundary, condition and entire delta
+body. No per-version delta override is allowed. Missing mappings do not automatically
+inherit a primary trigger. Validate every target/version and reject duplicate mappings.
+Multiple events may match one effect in a command batch, but the first qualifying
+event creates the sole run-wide receipt. Compatible retries retain new history and
+simulation costs while preserving the first receipt and delta.
+
+Existing single-version definitions retain their shape and authority; adding these
+fields to a running definition cannot silently change its pinned authority. No
+campaign-definition transition operation, legacy save rewrite, storage migration,
+production version declaration or tuning is introduced by this representation.
+
 TASK-019/021/022/023 must exercise typed references/operators, arity, unavailable vs
 invalid context, fresh same-attempt support, unique/ambiguous response association,
 missing lifecycle rules, known information, and all ending precedence cases.

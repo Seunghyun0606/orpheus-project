@@ -1,6 +1,11 @@
 import { z } from 'zod';
 
-import { validateCampaignDefinition, type CampaignDefinition } from '../../scenario/campaign.ts';
+import {
+  validateCampaignDefinition,
+  campaignContentVersions,
+  campaignEffectTriggers,
+  type CampaignDefinition,
+} from '../../scenario/campaign.ts';
 import { scenarioVersionKey } from '../../scenario/catalog.ts';
 import type { Scenario } from '../../scenario/schema.ts';
 import { validateScenarioObject } from '../../scenario/validator.ts';
@@ -42,6 +47,7 @@ export const campaignOperationSchema = z.discriminatedUnion('kind', [
       attemptId: id,
       incidentId: id,
       seed: z.number().int(),
+      contentVersion: id.optional(),
     })
     .strict(),
   z
@@ -187,9 +193,14 @@ function incidentScenario(
   definition: CampaignDefinition,
   catalog: ScenarioCatalog,
   incidentId: string,
+  contentVersion?: string,
 ) {
   const incident = definition.incidents.find((item) => item.id === incidentId);
-  return incident && catalog.get(scenarioVersionKey(incident.scenarioId, incident.contentVersion));
+  if (!incident) return undefined;
+  const version = contentVersion ?? incident.contentVersion;
+  return campaignContentVersions(incident).includes(version)
+    ? catalog.get(scenarioVersionKey(incident.scenarioId, version))
+    : undefined;
 }
 function eligible(definition: CampaignDefinition, run: CampaignRun, incidentId: string) {
   const incident = definition.incidents.find((item) => item.id === incidentId);
@@ -287,10 +298,15 @@ function projectEvents(
       add(next.projection.completed, attempt.incidentId);
     for (const effect of definition.effects) {
       const eventTarget = event.type === 'narrative_triggered' ? event.sourceId : event.targetId;
+      const incident = definition.incidents.find((item) => item.id === attempt.incidentId)!;
       if (
         effect.trigger.incidentId !== attempt.incidentId ||
-        effect.trigger.type !== event.type ||
-        effect.trigger.targetId !== eventTarget
+        !campaignEffectTriggers(effect, incident).some(
+          (trigger) =>
+            trigger.contentVersion === attempt.incident.contentVersion &&
+            trigger.type === event.type &&
+            trigger.targetId === eventTarget,
+        )
       )
         continue;
       const semantics = canonicalJson(effect);
@@ -381,13 +397,20 @@ function apply(
   if (op.kind === 'start' || op.kind === 'checkpoint') {
     if (next.attempts.some((item) => item.id === op.attemptId))
       return failure('CONFLICTING_ATTEMPT');
-    const scenario = incidentScenario(definition, catalog, op.incidentId);
+    const snapshot = op.kind === 'checkpoint' ? sourceSnapshot(op.sourceBytes, catalog) : undefined;
+    if (op.kind === 'checkpoint' && (!snapshot || snapshot.state.completionReached))
+      return failure('INVALID_CHECKPOINT');
+    const scenario = incidentScenario(
+      definition,
+      catalog,
+      op.incidentId,
+      op.kind === 'start' ? op.contentVersion : snapshot!.scenario.contentVersion,
+    );
     const content = definition.incidents.find((item) => item.id === op.incidentId);
     if (!scenario || !content) return failure('UNKNOWN_INCIDENT');
     const availability = eligible(definition, prior, op.incidentId);
     if (!availability.ok) return { ok: false, diagnostics: availability.diagnostics };
     if (!availability.value) return failure('INELIGIBLE_INCIDENT');
-    const snapshot = op.kind === 'checkpoint' ? sourceSnapshot(op.sourceBytes, catalog) : undefined;
     if (
       op.kind === 'checkpoint' &&
       (!snapshot ||
@@ -414,7 +437,12 @@ function apply(
     const attempt = next.attempts.find((item) => item.id === op.attemptId);
     if (!attempt || next.activeAttemptId !== attempt.id || attempt.incident.completionReached)
       return failure('INVALID_ATTEMPT_HEAD');
-    const scenario = incidentScenario(definition, catalog, attempt.incidentId)!;
+    const scenario = incidentScenario(
+      definition,
+      catalog,
+      attempt.incidentId,
+      attempt.incident.contentVersion,
+    )!;
     if (canonicalJson(scenario) !== attempt.scenarioAuthority)
       return failure('INCOMPATIBLE_SCENARIO');
     if (attempt.acceptedInputIds.includes(op.inputId)) return failure('CONFLICTING_INPUT');

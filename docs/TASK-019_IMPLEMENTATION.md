@@ -1,7 +1,7 @@
 # TASK-019 — Pure campaign implementation candidate
 
-Status: independent review requests rework; safe fixes verified, compatible-content
-representation awaiting human decision.
+Status: DEC-027 compatibility candidate passed independent review and QA;
+configured Project OS evaluation pending.
 TASK-018 was accepted through Project OS after independent evidence evaluation
 and human DEC-026 approval. This document does not accept TASK-019 or close M4.
 
@@ -87,7 +87,7 @@ Fixture data is outside production scenario data; its numbers are not balancing
 decisions. Existing scenario CLI validation does not yet claim a production
 campaign catalog.
 
-## Known risks and remaining work
+## Historical corrective checkpoint (before DEC-027 approval)
 
 - Independent review remains **REWORK** for compatible-content effect representation
   and no-reaward coverage. Corrective QA PASS covers the safe fixes, not task acceptance.
@@ -109,5 +109,26 @@ campaign catalog.
 - No native/new IndexedDB/concurrency/lost-ack tests occurred. Full-history replay
   before preparation favors correctness; performance/storage scaling is unmeasured.
 
-Next: obtain the human compatibility decision, implement only its approved scope,
-then repeat independent acceptance checks before final Project OS handoffs.
+These were the remaining risks at `d3e54f9`; the continuation below records the
+later human decision and verification, without rewriting the earlier findings.
+
+## DEC-027 continuation
+
+The human selected option A. The fixed campaign definition can now explicitly
+declare additional compatible content versions and shared effect triggers.
+Starts retain the primary unless another allowed version is explicitly selected;
+baselines and subsequent commands use their exact attempt version. Shared triggers
+reuse the same effect body and once-per-run receipt; no version-specific delta
+override or latest-version fallback exists. Old definitions, frozen content,
+Incident slots and UI remain unchanged.
+
+Ten new compatibility cases cover both version orders, two matching new events
+in one command batch, inherited variant baselines, original single-version history,
+unmapped effects, invalid mappings, conflicting authority/receipt data, alternate
+runs and explicit pre/post-event predicates. Independent review passes with
+**70 campaign tests**; independent QA passes **186 tests in 19 files**, typecheck,
+lint, formatting and eight scenario validations. Root web build also passes with
+the existing non-blocking chunk-size warning. Older checkpoint verdicts remain
+historical. Next: submit attributed handoffs and obtain independent configured
+evaluation. Neither these checks nor this document claim TASK-020 or certify
+native/IndexedDB integration.

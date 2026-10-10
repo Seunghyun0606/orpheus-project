@@ -1,0 +1,23 @@
+id: DEC-027
+title: Explicit compatible content and shared effects inside a pinned campaign definition
+status: active
+date: '2026-10-10'
+applies_to: [M4]
+task: TASK-019
+context: Independent review R4 identified missing compatible-version effect representation and coverage.
+decision: >-
+  Declare allowed immutable scenario versions and shared effect mappings inside
+  the fixed campaign definition. Keep source replay exact, attempts version-pinned
+  and receipts once per run. Reject incompatible semantics; add deterministic
+  cross-version no-reaward and conflicting-authority fixtures.
+human_approval:
+  selected_option: A
+  instruction: '고정 캠페인 정의에 허용 버전·공유 효과 매핑을 명시하고 검증 구현.'
+request: .project-os/planning/TASK-019.compatible-content-gate.yaml
+consequences:
+  - No automatic latest-version substitution or campaign-definition upgrade operation.
+  - Existing single-version definitions and replay histories retain their authority.
+  - Do not rewrite old slots, change frozen content or implement storage migration here.
+  - Amounts, initial values and content remain test-only; no production tuning.
+  - Independent review and acceptance QA are required before TASK-019 evaluation.
+supersedes: null

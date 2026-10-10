@@ -122,7 +122,7 @@ export function campaignFixture(advance = false): CampaignDefinition {
 }
 type OperationPayload =
   | { kind: 'create' }
-  | { kind: 'start'; attemptId: string; incidentId: string; seed: number }
+  | { kind: 'start'; attemptId: string; incidentId: string; seed: number; contentVersion?: string }
   | {
       kind: 'checkpoint';
       attemptId: string;
@@ -143,7 +143,7 @@ export function operation(run: CampaignRun | null, payload: OperationPayload): C
   const sequence = run ? run.revision + 1 : 0;
   return {
     operationId: 'op-' + sequence,
-    runId: 'fixture-run',
+    runId: run?.runId ?? 'fixture-run',
     sequence,
     definitionId: 'fixture-only',
     definitionVersion: 'fixture-v1',

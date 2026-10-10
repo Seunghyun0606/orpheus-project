@@ -68,6 +68,7 @@ export const campaignDefinitionSchema = z
             id,
             scenarioId: id,
             contentVersion: id,
+            compatibleContentVersions: z.array(id).min(1).optional(),
             act: integer,
             eligibility: conditionSchema,
           })
@@ -87,6 +88,18 @@ export const campaignDefinitionSchema = z
               targetId: id.optional(),
             })
             .strict(),
+          additionalTriggers: z
+            .array(
+              z
+                .object({
+                  contentVersion: id,
+                  type: z.enum(['evidence_revealed', 'narrative_triggered', 'completion_reached']),
+                  targetId: id.optional(),
+                })
+                .strict(),
+            )
+            .min(1)
+            .optional(),
           // Explicit authored boundary; there is no inferred pre/post condition policy.
           boundary: z.enum(['pre_command', 'post_event']),
           condition: conditionSchema,
@@ -101,6 +114,24 @@ export const campaignDefinitionSchema = z
   })
   .strict();
 export type CampaignDefinition = z.infer<typeof campaignDefinitionSchema>;
+export function campaignContentVersions(
+  incident: CampaignDefinition['incidents'][number],
+): string[] {
+  return [incident.contentVersion, ...(incident.compatibleContentVersions ?? [])];
+}
+export function campaignEffectTriggers(
+  effect: CampaignDefinition['effects'][number],
+  incident: CampaignDefinition['incidents'][number],
+) {
+  return [
+    {
+      contentVersion: incident.contentVersion,
+      type: effect.trigger.type,
+      ...(effect.trigger.targetId === undefined ? {} : { targetId: effect.trigger.targetId }),
+    },
+    ...(effect.additionalTriggers ?? []),
+  ];
+}
 export type CampaignDefinitionResult =
   { ok: true; definition: CampaignDefinition } | { ok: false; diagnostics: CampaignDiagnostic[] };
 
@@ -157,30 +188,33 @@ export function validateCampaignDefinition(
   for (const act of d.acts) conditions(act.eligibility, 'progression');
   for (const item of d.incidents) {
     if (!hasAct(item.act)) issue(item.id + '.act');
-    const scenario = catalog.get(scenarioVersionKey(item.scenarioId, item.contentVersion));
-    if (
-      !scenario ||
-      !scenarioSchema.safeParse(scenario).success ||
-      !validateScenarioObject(scenario).success ||
-      scenario.id !== item.scenarioId ||
-      scenario.contentVersion !== item.contentVersion
-    )
-      issue(item.id + '.scenario');
+    unique(campaignContentVersions(item), item.id + '.contentVersions');
+    for (const contentVersion of campaignContentVersions(item)) {
+      const scenario = catalog.get(scenarioVersionKey(item.scenarioId, contentVersion));
+      if (
+        !scenario ||
+        !scenarioSchema.safeParse(scenario).success ||
+        !validateScenarioObject(scenario).success ||
+        scenario.id !== item.scenarioId ||
+        scenario.contentVersion !== contentVersion
+      )
+        issue(item.id + '.scenario');
+    }
     conditions(item.eligibility, 'progression');
   }
   for (const item of [...d.evidence, ...d.narratives]) {
     const incidents = d.incidents.filter((candidate) => candidate.scenarioId === item.scenarioId);
     if (!incidents.length) issue(item.id);
     for (const incident of incidents) {
-      const scenario = catalog.get(
-        scenarioVersionKey(incident.scenarioId, incident.contentVersion),
-      );
-      if (
-        'evidenceId' in item
-          ? !scenario?.evidence.some((entry) => entry.id === item.evidenceId)
-          : !scenario?.narratives.some((entry) => entry.id === item.narrativeId)
-      )
-        issue(item.id);
+      for (const contentVersion of campaignContentVersions(incident)) {
+        const scenario = catalog.get(scenarioVersionKey(incident.scenarioId, contentVersion));
+        if (
+          'evidenceId' in item
+            ? !scenario?.evidence.some((entry) => entry.id === item.evidenceId)
+            : !scenario?.narratives.some((entry) => entry.id === item.narrativeId)
+        )
+          issue(item.id);
+      }
     }
   }
   for (const ref of d.references) {
@@ -211,16 +245,25 @@ export function validateCampaignDefinition(
     // Only TASK-023's verified resolved-ending transition may grant ending flags.
     if (Object.keys(effect.endingFlags).length) issue(effect.id + '.unsupportedEndingGrant');
     const incident = d.incidents.find((item) => item.id === effect.trigger.incidentId);
-    const scenario =
-      incident && catalog.get(scenarioVersionKey(incident.scenarioId, incident.contentVersion));
-    if (!incident || !scenario) issue(effect.id + '.trigger');
-    else if (effect.trigger.type === 'evidence_revealed') {
-      if (!scenario.evidence.some((item) => item.id === effect.trigger.targetId))
-        issue(effect.id + '.trigger.targetId');
-    } else if (effect.trigger.type === 'narrative_triggered') {
-      if (!scenario.narratives.some((item) => item.id === effect.trigger.targetId))
-        issue(effect.id + '.trigger.targetId');
-    } else if (effect.trigger.targetId !== undefined) issue(effect.id + '.trigger.targetId');
+    if (!incident) issue(effect.id + '.trigger');
+    else {
+      const triggers = campaignEffectTriggers(effect, incident);
+      unique(triggers.map(canonicalJson), effect.id + '.triggers');
+      for (const trigger of triggers) {
+        const scenario = catalog.get(
+          scenarioVersionKey(incident.scenarioId, trigger.contentVersion),
+        );
+        if (!campaignContentVersions(incident).includes(trigger.contentVersion) || !scenario)
+          issue(effect.id + '.trigger.contentVersion');
+        else if (trigger.type === 'evidence_revealed') {
+          if (!scenario.evidence.some((item) => item.id === trigger.targetId))
+            issue(effect.id + '.trigger.targetId');
+        } else if (trigger.type === 'narrative_triggered') {
+          if (!scenario.narratives.some((item) => item.id === trigger.targetId))
+            issue(effect.id + '.trigger.targetId');
+        } else if (trigger.targetId !== undefined) issue(effect.id + '.trigger.targetId');
+      }
+    }
     conditions(effect.condition, 'effect');
     for (const key of Object.keys(effect.narrativeFlags))
       if (!Object.hasOwn(d.initial.narrativeFlags, key))

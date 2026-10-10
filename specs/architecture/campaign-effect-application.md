@@ -72,6 +72,14 @@ or caller-supplied incident ID. Its membership stays distinct from effect receip
 
 ## Required fixtures (not executed against unimplemented APIs)
 
+TASK-019's DEC-027 implementation now represents explicit compatible versions
+and shared triggers within one immutable campaign definition, as specified in the
+[definition addendum](campaign-definition-contract.md#task-019-compatible-content-representation-dec-027).
+Pure compatibility fixtures cover both version orders, retained first receipts,
+two matching events in one command batch, exact-version baselines and diagnostic
+authority conflicts. This does not claim TASK-020 transaction or physical migration
+verification; independent TASK-019 acceptance remains required.
+
 | Case                                                             | Required result / owner                                                                          |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | First qualifying event, then same effect on a new official retry | One effect application, both histories retained; TASK-019                                        |
