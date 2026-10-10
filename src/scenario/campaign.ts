@@ -244,8 +244,11 @@ export function parseCampaignYaml(
   source: string,
   catalog: ReadonlyMap<string, Scenario>,
 ): CampaignDefinitionResult {
-  const document = parseDocument(source, { prettyErrors: false });
-  if (document.errors.length)
-    return { ok: false, diagnostics: [{ code: 'INVALID_CAMPAIGN_YAML', path: '$' }] };
-  return validateCampaignDefinition(document.toJS(), catalog);
+  try {
+    const document = parseDocument(source, { prettyErrors: false });
+    if (!document.errors.length) return validateCampaignDefinition(document.toJS(), catalog);
+  } catch {
+    // Parser/conversion failures, including alias limits, are invalid input, not engine crashes.
+  }
+  return { ok: false, diagnostics: [{ code: 'INVALID_CAMPAIGN_YAML', path: '$' }] };
 }

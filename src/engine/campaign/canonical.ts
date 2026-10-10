@@ -8,18 +8,20 @@ export function canonicalJson(value: unknown): string {
     if (
       Object.getPrototypeOf(value) !== Array.prototype ||
       Object.getOwnPropertySymbols(value).length ||
-      Object.keys(value).some(
-        (key) => !/^(0|[1-9][0-9]*)$/.test(key) || Number(key) >= value.length,
+      Object.getOwnPropertyNames(value).some(
+        (key) =>
+          key !== 'length' && (!/^(0|[1-9][0-9]*)$/.test(key) || Number(key) >= value.length),
       )
     )
       throw new Error('Unsupported JSON array');
-    for (let i = 0; i < value.length; i++)
-      if (
-        !Object.hasOwn(value, i) ||
-        !('value' in Object.getOwnPropertyDescriptor(value, String(i))!)
-      )
+    const items: string[] = [];
+    for (let i = 0; i < value.length; i++) {
+      const descriptor = Object.getOwnPropertyDescriptor(value, String(i));
+      if (!descriptor || !descriptor.enumerable || !('value' in descriptor))
         throw new Error('Sparse or executable JSON array');
-    return `[${value.map(canonicalJson).join(',')}]`;
+      items.push(canonicalJson(descriptor.value));
+    }
+    return `[${items.join(',')}]`;
   }
   if (
     typeof value === 'object' &&
@@ -27,11 +29,12 @@ export function canonicalJson(value: unknown): string {
     (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null)
   ) {
     if (Object.getOwnPropertySymbols(value).length) throw new Error('Symbol JSON key');
-    return `{${Object.keys(value)
+    return `{${Object.getOwnPropertyNames(value)
       .sort()
       .map((key) => {
         const descriptor = Object.getOwnPropertyDescriptor(value, key)!;
-        if (!('value' in descriptor)) throw new Error('Executable JSON property');
+        if (!descriptor.enumerable || !('value' in descriptor))
+          throw new Error('Unsupported or executable JSON property');
         return `${JSON.stringify(key)}:${canonicalJson(descriptor.value)}`;
       })
       .join(',')}}`;

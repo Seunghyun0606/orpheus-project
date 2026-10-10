@@ -11,6 +11,7 @@ import {
   type CampaignOperation,
 } from '../engine/campaign/transitions.ts';
 import { parseCampaignYaml, validateCampaignDefinition } from '../scenario/campaign.ts';
+import { scenarioVersionKey } from '../scenario/catalog.ts';
 import { inc001Scenario } from '../scenario/inc-001.ts';
 import { replayCommands } from '../engine/simulation.ts';
 import { campaignCatalog, campaignFixture, operation, always } from './fixtures/campaign.ts';
@@ -65,6 +66,58 @@ function snapshot(count: number): string {
 }
 
 describe('data-driven pure campaign transitions', () => {
+  it('rejects hidden properties and executable array overrides before public operation parsing', () => {
+    let calls = 0;
+    const executable = operation(null, { kind: 'create' });
+    Object.defineProperty(executable, 'sequence', {
+      enumerable: false,
+      get: () => {
+        calls++;
+        return 0;
+      },
+    });
+    const hidden = operation(null, { kind: 'create' });
+    Object.defineProperty(hidden, 'sequence', { enumerable: false, value: 0 });
+    for (const invalid of [executable, hidden]) {
+      expect(prepareCampaignOperation(campaignFixture(), campaignCatalog, null, invalid).ok).toBe(
+        false,
+      );
+      expect(replayCampaign(campaignFixture(), campaignCatalog, [invalid]).ok).toBe(false);
+    }
+    const run = start();
+    const sources = [snapshot(4)];
+    Object.defineProperty(sources, 'map', {
+      value: () => {
+        calls++;
+        return ['123'];
+      },
+    });
+    expect(() => canonicalJson(sources)).toThrow();
+    expect(
+      prepareCampaignOperation(
+        campaignFixture(),
+        campaignCatalog,
+        run,
+        operation(run, { kind: 'adopt', sourceBytes: sources, confirmed: true }),
+      ).ok,
+    ).toBe(false);
+    const hiddenIndex = [1];
+    Object.defineProperty(hiddenIndex, '0', { enumerable: false, value: 1 });
+    expect(() => canonicalJson(hiddenIndex)).toThrow();
+    expect(calls).toBe(0);
+    expect(run.projection.evidence).toEqual([]);
+  });
+  it('returns a YAML diagnostic rather than throwing on excessive alias expansion', () => {
+    const refs = (name: string) =>
+      Array(11)
+        .fill('*' + name)
+        .join(', ');
+    const yaml = `a: &a [1]\nb: &b [${refs('a')}]\nc: &c [${refs('b')}]\nd: [${refs('c')}]\n`;
+    expect(parseCampaignYaml(yaml, campaignCatalog)).toEqual({
+      ok: false,
+      diagnostics: [{ code: 'INVALID_CAMPAIGN_YAML', path: '$' }],
+    });
+  });
   it('parses YAML and rejects schema/version/unknown reference/duplicate/missing initial values', () => {
     const fixture = campaignFixture();
     expect(parseCampaignYaml(stringify(fixture), campaignCatalog).ok).toBe(true);
@@ -191,10 +244,18 @@ describe('data-driven pure campaign transitions', () => {
     expect(getCampaignProgression(d, campaignCatalog, run)).toMatchObject({
       ok: true,
       incidents: [
-        { id: 'stage-one', result: { ok: true } },
+        { id: 'stage-one', result: { ok: true, value: false } },
         { id: 'stage-two', result: { ok: true, value: true } },
       ],
     });
+    expect(
+      prepareCampaignOperation(
+        d,
+        campaignCatalog,
+        run,
+        operation(run, { kind: 'start', attemptId: 'past', incidentId: 'stage-one', seed: 1 }),
+      ),
+    ).toMatchObject({ ok: false, diagnostics: [{ code: 'INELIGIBLE_INCIDENT' }] });
     expect(
       apply(
         run,
@@ -279,6 +340,58 @@ describe('data-driven pure campaign transitions', () => {
       ).toBe(false);
     }
     expect(run.projection.evidence).toEqual([]);
+  });
+  it.each([
+    ['scenario ID', 'FORGED-SOURCE', inc001Scenario.contentVersion],
+    ['content version', inc001Scenario.id, 'not-real-version'],
+  ])(
+    'rejects mismatched source %s authorities for adoption and checkpoint restoration',
+    (_label, scenarioId, contentVersion) => {
+      const catalog = new Map(campaignCatalog);
+      catalog.set(scenarioVersionKey(scenarioId, contentVersion), inc001Scenario);
+      const bytes = (count: number) =>
+        JSON.stringify({ ...JSON.parse(snapshot(count)), scenarioId, contentVersion });
+      const run = start();
+      const before = canonicalJson(run);
+      for (const op of [
+        operation(run, { kind: 'adopt', sourceBytes: [snapshot(4), bytes(4)], confirmed: true }),
+        operation(run, {
+          kind: 'checkpoint',
+          attemptId: 'forged',
+          incidentId: 'stage-one',
+          sourceBytes: bytes(3),
+          confirmed: true,
+        }),
+      ]) {
+        expect(prepareCampaignOperation(campaignFixture(), catalog, run, op).ok).toBe(false);
+        expect(replayCampaign(campaignFixture(), catalog, [...run.operations, op]).ok).toBe(false);
+      }
+      expect(canonicalJson(run)).toBe(before);
+    },
+  );
+  it('preserves unavailable-leaf diagnostics even when the current Act blocks execution', () => {
+    const d = campaignFixture();
+    d.incidents[1]!.eligibility = {
+      type: 'any',
+      children: [always, { type: 'compare', reference: 'metric', operator: 'gte', expected: 0 }],
+    };
+    const run = start(d);
+    const expected = {
+      ok: false,
+      diagnostics: [{ code: 'UNAVAILABLE_OBSERVATION', path: 'metric' }],
+    };
+    expect(getCampaignProgression(d, campaignCatalog, run)).toMatchObject({
+      ok: true,
+      incidents: [{ id: 'stage-one' }, { id: 'stage-two', result: expected }],
+    });
+    expect(
+      prepareCampaignOperation(
+        d,
+        campaignCatalog,
+        run,
+        operation(run, { kind: 'start', attemptId: 'early', incidentId: 'stage-two', seed: 1 }),
+      ),
+    ).toMatchObject(expected);
   });
   it('unavailable metric under a decisive sibling diagnoses without awarding another route/effect', () => {
     const d = campaignFixture();

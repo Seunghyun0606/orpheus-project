@@ -197,12 +197,16 @@ function eligible(definition: CampaignDefinition, run: CampaignRun, incidentId: 
     return { ok: false as const, diagnostics: [{ code: 'UNKNOWN_INCIDENT', path: incidentId }] };
   const act = definition.acts.find((item) => item.id === incident.act)!;
   // Compose before evaluation so a decisive false cannot hide unavailable leaves.
-  return condition(
+  const result = condition(
     definition,
     run,
     { type: 'all', children: [act.eligibility, incident.eligibility] },
     'progression',
   );
+  // Evaluate every authored leaf before applying the shared executable Act gate.
+  return result.ok
+    ? { ...result, value: result.value && incident.act === run.projection.act }
+    : result;
 }
 function sourceSnapshot(bytes: string, catalog: ScenarioCatalog) {
   const envelope = z
@@ -224,7 +228,13 @@ function sourceSnapshot(bytes: string, catalog: ScenarioCatalog) {
   if (!parsed.success) return undefined;
   const value = parsed.data;
   const scenario = catalog.get(scenarioVersionKey(value.scenarioId, value.contentVersion));
-  if (!scenario || !validateScenarioObject(scenario).success) return undefined;
+  if (
+    !scenario ||
+    scenario.id !== value.scenarioId ||
+    scenario.contentVersion !== value.contentVersion ||
+    !validateScenarioObject(scenario).success
+  )
+    return undefined;
   const prefix = z
     .object({
       replayLog: z.array(
@@ -376,8 +386,7 @@ function apply(
     if (!scenario || !content) return failure('UNKNOWN_INCIDENT');
     const availability = eligible(definition, prior, op.incidentId);
     if (!availability.ok) return { ok: false, diagnostics: availability.diagnostics };
-    if (!availability.value || content.act !== prior.projection.act)
-      return failure('INELIGIBLE_INCIDENT');
+    if (!availability.value) return failure('INELIGIBLE_INCIDENT');
     const snapshot = op.kind === 'checkpoint' ? sourceSnapshot(op.sourceBytes, catalog) : undefined;
     if (
       op.kind === 'checkpoint' &&
