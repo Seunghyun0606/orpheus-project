@@ -1,0 +1,53 @@
+task: TASK-022
+kind: independent_review_qa_and_distinct_evaluation_request
+role: developer
+actor: codex-task022-developer
+date: '2026-10-11'
+status: awaiting_human_delegation_authorization
+candidate_commit: 8ada150646227e75d52ec8e1b33be2b040abc476
+base_commit: b007817
+implementation_checkpoint: .project-os/planning/TASK-022.implementation-candidate.yaml
+summary: >-
+  DEC-030 option A is implemented and committed. Developer checks pass, but no
+  independent TASK-022 acceptance exists. Prior task delegation and the binding
+  approval do not authorize new agents. Resume inspected clean main at candidate
+  8ada150 without repeating implemented changes; only this request remains.
+gate:
+  type: architecture_change
+  recommended_option: A
+  question: Authorize separate read-only TASK-022 review, acceptance QA and a distinct final evaluator?
+  options:
+    - key: A
+      label: Authorize bounded independent review, QA and distinct evaluation
+      scope:
+        - Separate reviewer and QA agents inspect the pinned candidate, task acceptance, active decisions and relevant contracts.
+        - Review raw pooled counts, exact authority binding, causal pre-command contexts, explicit comparability, candidate availability, support, UNKNOWN, diagnostics and reveal gates.
+        - Review old-record equality, legacy/checkpoint/import isolation and unchanged current/frozen MVP content.
+        - Assess the bounded query scope honestly; confidence feedback is implemented, but actual exposure/response operations and positive prediction-deviation projection are not.
+        - Run existing read-only diagnostics and prescribed automated tests with injected isolated memory databases only; retain exact outcomes and attributed findings.
+        - Agents do not edit tracked files, task results, state, dependencies or git history, and do not access actual user storage/native save slots, push or release.
+        - No further delegation, production mappings, migration, policy change or implied completion is authorized.
+        - After actual final review and QA handoffs are committed, a third genuinely distinct evaluator audits all acceptance and evidence; reviewer, QA and developer cannot substitute for that evaluator.
+        - Primary agent transcribes real attributed handoffs and uses configured projectctl submission/evaluation rules; any material finding requires its own Human Gate.
+    - key: B
+      label: Retain the candidate and await external independent evidence
+      scope:
+        - Keep TASK-022 active without spawning agents or self-certifying completion.
+        - Await a human-provided independent review/QA/evaluation plan or evidence; do not proceed to TASK-023.
+developer_verification:
+  full_tests: 310_tests_in_24_files_passed
+  new_cases_plus_mvp_replays: 58_tests_in_4_files_passed
+  new_cases: 46_passed
+  current_mvp_replays: 12_passed
+  typecheck_lint_format: pass
+  scenario_validation: 8_current_frozen_files_passed
+  web_build: pass_existing_nonblocking_chunk_warning
+  project_doctor_diff_check: pass
+  actual_exposure_response_native_tests: not_implemented_not_claimed
+  actual_user_storage: not_accessed
+  independent_review_qa_evaluation: not_performed
+  canonical_completion: not_performed
+known_risks:
+  - Prefix replay and whole-history growth are unbenchmarked.
+  - Six opportunity-dependent behavior metrics remain unavailable until supported committed presentation/response provenance exists.
+next_recommended_step: Await the Human Gate answer before any TASK-022 delegation.
