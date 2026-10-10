@@ -178,7 +178,11 @@ These are logical contracts, not implemented runtime/storage or native test pass
 TASK-019 subsequently added a
 [pure implementation candidate](TASK-019_IMPLEMENTATION.md), verified by 55 new
 fixture tests and 171 passing total tests. It remains active pending independent
-implementation review/QA; later task dependencies have not been accepted.
+implementation acceptance; later task dependencies have not been accepted.
+Independent review/QA subsequently identified four safe defects, repaired in
+`d3e54f9` and independently rechecked with 176 passing full-suite tests. Compatible
+content-version effect representation and no-reaward coverage remain an acceptance
+gap awaiting the [human decision](../.project-os/planning/TASK-019.compatible-content-gate.yaml).
 No platform storage, UI integration or production campaign content was added.
 Direct contract and
 DEC-009–025 references are now declared in dependent task context metadata;

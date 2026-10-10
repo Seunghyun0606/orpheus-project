@@ -108,8 +108,9 @@ No M4 runtime API is certified by those logical checks.
 
 TASK-019 now has a [pure campaign implementation candidate](docs/TASK-019_IMPLEMENTATION.md):
 strict authored definitions/conditions, replay-verified transitions, retries,
-once-per-run effects and confirmed source boundaries. Root verification passes
-171 tests; independent implementation review/QA and task acceptance remain pending.
+once-per-run effects and confirmed source boundaries. Independent review found four
+defects, now repaired and independently rechecked; QA passes 176 tests. Compatible
+content-version effect coverage awaits a human decision; TASK-019 remains incomplete.
 There are no new persistence writes, production campaign content or UI integration.
 
 ## War Room and saved progress

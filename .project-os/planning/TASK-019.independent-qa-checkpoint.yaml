@@ -1,0 +1,41 @@
+task: TASK-019
+kind: independent_qa_checkpoint
+role: qa
+actor: codex-task019-qa
+source_agent: /root/task019_qa
+recorded_by: codex-task019-developer
+date: '2026-10-10'
+original_candidate_commit: 30e2132818b37ad2e7b301629130c11d2afe1d43
+corrected_candidate_commit: d3e54f9813954128ecd6484128c7c71061796e3c
+status: safe_fixes_pass_task_acceptance_pending
+initial_verdict: REWORK
+corrective_verdict: Safe-fix recheck PASS; TASK-019 is not accepted.
+findings:
+  - id: Q1
+    severity: high
+    issue: A forged source envelope could import genuine discoveries under false provenance.
+    status: fixed_and_independently_rechecked
+    evidence: Exact source ID/version equality required for adoption and checkpoint; failed batches preserve prior record.
+  - id: Q2
+    severity: medium
+    issue: Excessive YAML aliases escaped document conversion as an uncaught exception.
+    status: fixed_and_independently_rechecked
+    evidence: Nested alias regression and stdin probe return INVALID_CAMPAIGN_YAML.
+verified_review_fixes:
+  - Canonicalization rejects hidden getters and array overrides without calling them.
+  - Progression agrees with executable Act eligibility and retains unavailable-leaf diagnostics.
+verification:
+  initial_full_tests: 171_tests_in_18_files_passed
+  corrected_full_tests: 176_tests_in_18_files_passed
+  corrected_typecheck: pass
+  corrected_lint: pass
+  corrected_format: pass
+  corrected_scenario_validation: 8_files_passed
+  corrected_diff_check: pass
+  stdin_yaml_and_executable_property_probes: pass_zero_executable_calls
+remaining_work:
+  - Resolve R4 compatible-content representation and stable-effect no-reaward coverage through the human gate.
+  - Re-run independent acceptance after the approved implementation; no final acceptance is inferred here.
+limitations:
+  - Agent made no edits, commits, saves or canonical state changes.
+  - No native, IndexedDB, durable save or physical migration verification claimed.

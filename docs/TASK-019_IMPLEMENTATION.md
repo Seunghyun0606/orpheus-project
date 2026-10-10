@@ -1,6 +1,7 @@
 # TASK-019 — Pure campaign implementation candidate
 
-Status: implemented candidate awaiting independent review and acceptance QA.
+Status: independent review requests rework; safe fixes verified, compatible-content
+representation awaiting human decision.
 TASK-018 was accepted through Project OS after independent evidence evaluation
 and human DEC-026 approval. This document does not accept TASK-019 or close M4.
 
@@ -66,6 +67,17 @@ associations; TASK-024 supplies UI/publication integration.
 - `npm run build`: passed (existing non-blocking chunk-size warning).
 - `projectctl doctor` and `git diff --check`: passed.
 
+The original implementation figures above apply to `30e2132`. Independent review
+and QA subsequently found executable-property bypass, source-envelope authority
+mismatch, query/execution Act inconsistency and uncaught YAML alias conversion.
+Those defects were repaired in `d3e54f9`; independent corrective review confirmed
+closure. Focused suites now pass **60 tests**, and independent QA reran the full
+suite: **176 tests in 18 files passed**, with typecheck, lint, formatting and eight
+scenario validations passing. Existing saves and platform/UI code were untouched.
+Attributed [review](../.project-os/planning/TASK-019.independent-review-checkpoint.yaml)
+and [QA](../.project-os/planning/TASK-019.independent-qa-checkpoint.yaml) preserve
+the original findings and distinguish corrective verification from acceptance.
+
 The new tests exercise YAML/schema/references, truth tables/nesting/availability,
 canonical payload behavior, hidden effects/alignment/flags, Act unlocks,
 deterministic state/event replay, duplicate/conflicting inputs, retained unfinished
@@ -77,8 +89,9 @@ campaign catalog.
 
 ## Known risks and remaining work
 
-- Independent review and QA have **not** examined this implementation candidate.
-  Do not submit a final PASS or advance TASK-020 based only on these root-run tests.
+- Independent review remains **REWORK** for compatible-content effect representation
+  and no-reaward coverage. Corrective QA PASS covers the safe fixes, not task acceptance.
+  Do not submit a final task PASS or advance TASK-020 yet.
 - This is the bounded campaign subset, not the entire future ledger operation
   union. Opportunity acknowledgements, slot associations and resolved endings
   are not supported operations yet.
@@ -90,10 +103,11 @@ campaign catalog.
   no historical samples or neutral zeros are manufactured.
 - Cross-version authored effect compatibility needs explicit verification against
   the immutable recorded definition authority, not automatic version substitution.
-  Independent review must check the bounded candidate and identify any missing
-  TASK-019 acceptance fixture rather than presume readiness.
+  This is the demonstrated remaining review gap. A proposed explicit compatibility
+  representation is recorded in the [human gate](../.project-os/planning/TASK-019.compatible-content-gate.yaml),
+  not implemented or approved by the corrective checks.
 - No native/new IndexedDB/concurrency/lost-ack tests occurred. Full-history replay
   before preparation favors correctness; performance/storage scaling is unmeasured.
 
-Next: obtain bounded independent read-only implementation review and acceptance QA;
-fix safe findings and escalate material decisions before final Project OS handoffs.
+Next: obtain the human compatibility decision, implement only its approved scope,
+then repeat independent acceptance checks before final Project OS handoffs.

@@ -24,6 +24,10 @@ options:
 selected_option: A
 human_approval:
   instruction: 'TASK-019 읽기 전용 독립 리뷰·QA 위임 승인.'
+execution:
+  independent_reviewer: /root/task019_review
+  independent_qa: /root/task019_qa
+  scope: Read-only source and automated evidence checks; no edits, storage writes or canonical state changes.
 recommended_option: A
 limitations:
   - The human authorizes only the bounded TASK-019 read-only checks listed above.
