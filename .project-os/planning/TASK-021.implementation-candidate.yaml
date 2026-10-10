@@ -5,6 +5,7 @@ actor: codex-task021-developer
 status: awaiting_independent_review_and_qa
 date: '2026-10-10'
 base_commit: 95629c1
+candidate_commit: 591330456dcbfa42749bb55eea18cf831c03f69e
 summary: >-
   Implemented DEC-029 new-definition-only immutable behavior binding, four supported
   deterministic metrics, strict authored classifications and investigation rules,

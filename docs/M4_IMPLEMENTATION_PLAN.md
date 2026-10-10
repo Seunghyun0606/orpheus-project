@@ -9,6 +9,8 @@ model binding; older model-less records remain unchanged. The
 metrics and explicit unavailability for six opportunity-dependent fields.
 Independent review/QA and configured acceptance remain pending. No storage migration
 or native integration is performed.
+Candidate `5913304` passed 260 developer tests; separately bounded delegation is
+requested in the [TASK-021 review/QA gate](../.project-os/planning/TASK-021.review-qa-execution-request.yaml).
 The human approved M3 closure and M4 definition
 on 2026-10-09; [DEC-008](../.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml)
 records that approval. M4 remains active; TASK-019 completion is not M4 closure.

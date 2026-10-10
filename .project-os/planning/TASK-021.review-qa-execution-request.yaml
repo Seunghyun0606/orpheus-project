@@ -1,0 +1,50 @@
+task: TASK-021
+kind: independent_review_qa_execution_request
+role: developer
+actor: codex-task021-developer
+date: '2026-10-10'
+status: awaiting_human_delegation_approval
+candidate_commit: 591330456dcbfa42749bb55eea18cf831c03f69e
+base_commit: 95629c1
+summary: >-
+  DEC-029 option A is implemented and developer-verified. The immutable new-run
+  behavior candidate preserves older records and has not been independently
+  accepted. TASK-020 delegation permission was bounded to TASK-020; no TASK-021
+  agent has been started. Request separately bounded read-only review and QA.
+gate:
+  type: architecture_change
+  selected_option: null
+  recommended_option: A
+  question: Delegate independent TASK-021 review and acceptance QA to separate read-only agents?
+  options:
+    - key: A
+      label: Authorize bounded read-only independent review and QA
+      scope:
+        - Separate reviewer and QA agents inspect the pinned candidate, task acceptance, active decisions and relevant source contracts.
+        - Run existing read-only diagnostics and prescribed automated suites, using injected memory databases only; report attributed evidence and exact command outcomes.
+        - Review model binding, old-record equality, raw counts, unavailable fields, causal pre-action/result boundaries, provenance and exact-version compatibility.
+        - Review failure/reload/duplicate/revision boundaries and reproduce the observed existing UI timing sensitivity without weakening test timeouts or acceptance.
+        - Agents do not edit tracked files, canonical state, task results, dependencies or git history; no push, production release, actual user storage or native save operations.
+        - Agents report findings to the primary agent; no further delegation or automatic model/opportunity migration is authorized.
+        - Independent evidence must precede final handoffs and separately configured evaluation; developer checks alone cannot complete TASK-021.
+    - key: B
+      label: Defer delegation and retain the verified implementation candidate
+      scope:
+        - Keep the committed candidate and current active task without self-approved completion or proceeding to TASK-022.
+        - Await a human-provided independent review/QA plan or evidence; do not manufacture reviewer identity.
+verification:
+  focused_new_cases: 45_tests_in_2_files_passed
+  full_suite_latest: 260_tests_in_23_files_passed
+  earlier_concurrent_run: 259_passed_1_existing_ui_5000ms_timeout
+  unchanged_timeout_reruns: full_260_passed_without_concurrent_build_lint
+  typecheck: pass
+  lint: pass
+  formatting: pass
+  scenario_validation: 8_files_passed
+  web_build: pass_existing_nonblocking_chunk_warning
+  project_doctor: pass
+  diff_check: pass
+  canonical_completion: not_performed
+  actual_user_storage_or_native_ui: not_accessed
+  task021_agents: not_started
+next_recommended_step: Human selects the bounded independent review and QA execution policy.
