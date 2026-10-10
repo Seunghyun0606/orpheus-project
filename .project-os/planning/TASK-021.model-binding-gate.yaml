@@ -1,0 +1,56 @@
+task: TASK-021
+kind: implementation_start_and_model_binding_request
+role: developer
+actor: codex-task021-developer
+date: '2026-10-10'
+status: awaiting_human_model_binding_decision
+base_commit: 38f2488
+completed:
+  - Re-read project bootstrap and actual clean repository state, main ahead 52.
+  - Confirmed TASK-020 configured completion and selected eligible TASK-021 through Project OS.
+  - Claimed TASK-021 through the configured developer transition.
+  - Inspected approved behavior formulas, exact definition authority, current unavailable metric handling and save replay validation.
+  - Ran the unchanged baseline suite, 215 tests in 21 files passed.
+findings:
+  - src/scenario/campaign.ts has strict schemaVersion 1 campaign definitions and ten metric reference keys, but no behavior definition or formula/classification version binding.
+  - src/engine/campaign/transitions.ts pins complete definitionAuthority and reports every metric unavailable in the current campaign evaluator.
+  - src/persistence/campaign-ledger.ts requires whole-record replay equality under the exact pinned definition; adding a model to a live definition cannot silently preserve its authority.
+  - Approved logical contracts require immutable recorded model/classification/formula versions and forbid latest-version reinterpretation or manufactured samples.
+  - Existing legacy discovery snapshots and inherited command prefixes cannot supply new behavior inputs under DEC-011/012/014/017/018.
+  - No existing-user database has been inspected; the question concerns compatibility of the supported older record format, not a claim that user campaign ledgers exist.
+gate:
+  type: architecture_change
+  selected_option: null
+  recommended_option: A
+  question: How should the first behavior-model version be bound without reinterpreting model-less campaign records?
+  options:
+    - key: A
+      label: Pin the immutable behavior definition in new campaign definitions; preserve model-less records
+      scope:
+        - New campaign definition versions explicitly carry immutable behavior ID/version, supported formula version and authored classification/rule data.
+        - Pin the complete behavior data in the existing full definition authority at run creation; reject unknown or altered versions.
+        - New model-enabled runs derive raw counts, provenance and verified projections from their new accepted official inputs only.
+        - Older model-less definition versions keep their exact replay shape and unavailable official metrics; no automatic model attachment, backfill or conversion.
+        - Keep IndexedDB layout, both legacy stores, frozen scenarios and UI unchanged; no new key or physical migration.
+        - Use non-production fixtures for classifications and rules; no ethical weights or production freshness/response defaults.
+    - key: B
+      label: Design an explicit model attachment/migration contract for existing formal runs first
+      scope:
+        - Preserve current runtime and original records while separately specifying a confirmed versioned transition and its replay authority.
+        - Decide the approved historical observation boundary, whether prior identified commands can contribute, and unsupported coverage explicitly.
+        - Gate that detailed migration contract before implementation; do not infer retroactive samples, mutate pinned definitions or touch legacy snapshots.
+verification:
+  baseline_full_tests: 215_tests_in_21_files_passed
+  runtime_or_schema_edits: none
+  actual_user_storage_or_migration: not_performed
+  task021_independent_agents: not_started_not_authorized
+known_risks:
+  - Silently binding a latest model can change replay-verified projections or metric-based eligibility for older definitions.
+  - Reconstructing behavior from discovery unions or checkpoint prefixes would violate approved provenance boundaries.
+  - TASK-020 delegation approval does not authorize TASK-021 independent agents.
+remaining_work:
+  - Implement the selected approved binding policy and strict behavior data validation.
+  - Add deterministic formulas, counts, explanations and availability tests without manufactured opportunity/exposure history.
+  - Verify version changes, zero denominators, duplicates, rejected inputs, alternate runs, baselines and replay.
+  - Obtain separately authorized independent review and acceptance QA before final Project OS evaluation.
+next_recommended_step: Human selects the model binding/compatibility policy before runtime changes.

@@ -2,8 +2,10 @@
 
 Status: TASK-018, TASK-019 and TASK-020 accepted through independent evidence
 evaluation and Project OS. DEC-028 approves TASK-020's physical layout; its
-bounded adapter acceptance does not certify native integration. TASK-021 is next
-eligible and remains unclaimed.
+bounded adapter acceptance does not certify native integration. TASK-021 is now
+claimed through Project OS. Its model binding/older-record compatibility policy
+is awaiting the [human decision](../.project-os/planning/TASK-021.model-binding-gate.yaml);
+no behavior runtime or storage migration has been implemented at this checkpoint.
 The human approved M3 closure and M4 definition
 on 2026-10-09; [DEC-008](../.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml)
 records that approval. M4 remains active; TASK-019 completion is not M4 closure.
