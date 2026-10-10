@@ -19,12 +19,17 @@ records that approval. M4 remains active; TASK-019 completion is not M4 closure.
 M5 remains planned.
 
 TASK-022 was claimed through Project OS on 2026-10-11. Its kickoff verified eight
-scenario files and twelve current MVP replay tests. Runtime, content, dependencies
-and storage remain unchanged. The empirical policy is approved, but attaching new
-branch/prediction definition authority to runs requires an explicit
-[binding decision](../.project-os/planning/TASK-022.prediction-binding-gate.yaml).
-TASK-022 is active, not implemented or accepted; no TASK-022 agent delegation is
-authorized by the completed TASK-021 approvals.
+scenario files and twelve current MVP replay tests. The human subsequently approved
+[DEC-030](../.project-os/decisions/DEC-030-branch-prediction-binding.yaml): branch and
+prediction rules are pinned in new campaign definition versions only; old authorities
+and records remain unchanged. The [TASK-022 developer candidate](TASK-022_IMPLEMENTATION.md)
+adds strict authored rules and pure branch/prediction queries. Developer verification
+passed 310 tests, including 46 new cases and the twelve current MVP replay tests.
+Prediction calculation is not an actual exposure and creates no deviation sample.
+No production content, UI, operation variants or storage migration were added.
+TASK-022 remains active, not independently accepted; no TASK-022 agent delegation is
+authorized by the completed TASK-021 approvals. Its next gate is separately bounded
+independent review, QA and distinct evaluation.
 
 ## Scope and continuity
 

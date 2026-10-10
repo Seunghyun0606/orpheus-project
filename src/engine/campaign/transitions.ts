@@ -166,12 +166,10 @@ function simulationJson(state: IncidentState): IncidentState {
 export function campaignAttemptHead(attempt: CampaignAttempt): string {
   return canonicalJson(attempt.incident);
 }
-function condition(
+export function campaignObservations(
   definition: CampaignDefinition,
   run: CampaignRun,
-  tree: Condition,
-  kind: 'effect' | 'progression',
-) {
+): Record<string, Observation> {
   const p = run.projection;
   const observations: Record<string, Observation> = Object.create(null) as Record<
     string,
@@ -216,12 +214,20 @@ function condition(
     }
     observations[ref.id] = { status: 'available', value };
   }
+  return observations;
+}
+function condition(
+  definition: CampaignDefinition,
+  run: CampaignRun,
+  tree: Condition,
+  kind: 'effect' | 'progression' | 'branch',
+) {
   return evaluateCampaignCondition(tree, definition.references, {
     definitionVersion: definition.version,
     kind,
     runId: run.runId,
     boundary: run.revision,
-    observations,
+    observations: campaignObservations(definition, run),
   });
 }
 function incidentScenario(
@@ -716,6 +722,37 @@ export function getCampaignBehavior(
     if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
       return failure('INVALID_PRIOR_RECORD');
     return { ok: true as const, behavior: verified.run.behavior ?? null };
+  } catch {
+    return failure('INVALID_JSON_OR_RECORD');
+  }
+}
+
+// Read-only tool/test query. Evaluation grants no route, observation or effect.
+export function getCampaignBranches(
+  definition: unknown,
+  catalog: ScenarioCatalog,
+  run: CampaignRun,
+) {
+  try {
+    const verified = replayCampaign(definition, catalog, run.operations);
+    if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
+      return failure('INVALID_PRIOR_RECORD');
+    const validated = validateCampaignDefinition(definition, catalog);
+    if (!validated.ok) return validated;
+    return {
+      ok: true as const,
+      boundary: run.revision,
+      branches: (validated.definition.branches ?? []).map((branch) => ({
+        id: branch.id,
+        version: branch.version,
+        result: condition(
+          validated.definition,
+          verified.run,
+          { type: 'all', children: [branch.eligibility, branch.reveal] },
+          'branch',
+        ),
+      })),
+    };
   } catch {
     return failure('INVALID_JSON_OR_RECORD');
   }

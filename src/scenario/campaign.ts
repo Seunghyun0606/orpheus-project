@@ -13,6 +13,7 @@ import { scenarioVersionKey } from './catalog.ts';
 import { scenarioSchema, type Scenario } from './schema.ts';
 import { validateScenarioObject } from './validator.ts';
 import { behaviorDefinitionSchema, validateBehaviorDefinition, metricKeys } from './behavior.ts';
+import { predictionDefinitionSchema, validatePredictionDefinition } from './prediction.ts';
 export { metricKeys } from './behavior.ts';
 
 const id = z.string().min(1);
@@ -38,6 +39,15 @@ export const campaignDefinitionSchema = z
     version: id,
     replayVersion: z.literal(1),
     behavior: behaviorDefinitionSchema.optional(),
+    prediction: predictionDefinitionSchema.optional(),
+    branches: z
+      .array(
+        z
+          .object({ id, version: id, eligibility: conditionSchema, reveal: conditionSchema })
+          .strict(),
+      )
+      .min(1)
+      .optional(),
     references: z.array(referenceSchema),
     initial: z
       .object({
@@ -147,7 +157,39 @@ export function validateCampaignDefinition(
       ),
     };
   const d = parsed.data;
+  // Validate catalog entries before traversing reference arrays. Bad authorities
+  // are diagnostics, not an exception during prediction/branch authoring.
+  const scenarioFor = (scenarioId: string, contentVersion: string) => {
+    const checked = scenarioSchema.safeParse(
+      catalog.get(scenarioVersionKey(scenarioId, contentVersion)),
+    );
+    return checked.success ? checked.data : undefined;
+  };
   const issues: CampaignDiagnostic[] = [];
+  if (d.prediction)
+    issues.push(
+      ...validatePredictionDefinition(
+        d.prediction,
+        d.incidents.flatMap((item) =>
+          campaignContentVersions(item).map((contentVersion) => ({
+            scenarioId: item.scenarioId,
+            contentVersion,
+          })),
+        ),
+        catalog,
+        d.references,
+      ),
+    );
+  if (d.branches) {
+    if (new Set(d.branches.map((b) => b.id)).size !== d.branches.length)
+      issues.push({ code: 'INVALID_BRANCH_REFERENCE', path: 'branches' });
+    for (const branch of d.branches) {
+      if (branch.version !== d.version)
+        issues.push({ code: 'INVALID_BRANCH_REFERENCE', path: branch.id + '.version' });
+      for (const tree of [branch.eligibility, branch.reveal])
+        issues.push(...validateConditionReferences(tree, d.references, d.version, 'branch'));
+    }
+  }
   if (d.behavior)
     issues.push(
       ...validateBehaviorDefinition(
@@ -194,7 +236,7 @@ export function validateCampaignDefinition(
     if (!hasAct(item.act)) issue(item.id + '.act');
     unique(campaignContentVersions(item), item.id + '.contentVersions');
     for (const contentVersion of campaignContentVersions(item)) {
-      const scenario = catalog.get(scenarioVersionKey(item.scenarioId, contentVersion));
+      const scenario = scenarioFor(item.scenarioId, contentVersion);
       if (
         !scenario ||
         !scenarioSchema.safeParse(scenario).success ||
@@ -211,7 +253,7 @@ export function validateCampaignDefinition(
     if (!incidents.length) issue(item.id);
     for (const incident of incidents) {
       for (const contentVersion of campaignContentVersions(incident)) {
-        const scenario = catalog.get(scenarioVersionKey(incident.scenarioId, contentVersion));
+        const scenario = scenarioFor(incident.scenarioId, contentVersion);
         if (
           'evidenceId' in item
             ? !scenario?.evidence.some((entry) => entry.id === item.evidenceId)
@@ -254,9 +296,7 @@ export function validateCampaignDefinition(
       const triggers = campaignEffectTriggers(effect, incident);
       unique(triggers.map(canonicalJson), effect.id + '.triggers');
       for (const trigger of triggers) {
-        const scenario = catalog.get(
-          scenarioVersionKey(incident.scenarioId, trigger.contentVersion),
-        );
+        const scenario = scenarioFor(incident.scenarioId, trigger.contentVersion);
         if (!campaignContentVersions(incident).includes(trigger.contentVersion) || !scenario)
           issue(effect.id + '.trigger.contentVersion');
         else if (trigger.type === 'evidence_revealed') {

@@ -3,7 +3,7 @@ kind: implementation_planning_and_human_gate
 role: developer
 actor: codex-task022-developer
 date: '2026-10-11'
-status: awaiting_prediction_definition_binding_decision
+status: human_approved_new_definition_only_binding
 base_commit: d37d316
 summary: >-
   Claimed eligible TASK-022 through projectctl after TASK-021 acceptance. Inspected
@@ -27,6 +27,8 @@ approved_constraints:
   - Non-production fixtures only; preserve all three UNKNOWN-only bundled incidents and frozen replay authorities.
 gate:
   type: architecture_change
+  selected_option: A
+  human_instruction: '새 캠페인 정의에만 고정, 기존 기록 유지(권장).'
   question: Bind new branch/prediction definitions only from new campaign versions, or first design an explicit existing-run connection contract?
   options:
     - key: A
@@ -63,4 +65,8 @@ remaining_work:
   - Implement the approved branch and predictor scope with deterministic causal fixtures.
   - Validate references, unavailable candidates, support, ties, UNKNOWN, reveal gates and unchanged MVP replay.
   - Obtain separately authorized independent review, QA and distinct evaluation before completion.
-next_recommended_step: Human selection of A or B; TASK-022 stays active without completion evidence.
+next_recommended_step: Implement approved new-definition-only rules, then obtain independent review and QA before acceptance.
+implementation_checkpoint:
+  date: '2026-10-11'
+  record: .project-os/planning/TASK-022.implementation-candidate.yaml
+  note: The observed state and verification above describe kickoff; the later developer candidate is not independent acceptance.

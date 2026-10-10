@@ -65,6 +65,10 @@ active_decisions:
   - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
   - '.project-os/decisions/DEC-025-strict-predicate-availability.yaml'
   - '.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml'
+  - '.project-os/decisions/DEC-027-explicit-compatible-campaign-content.yaml'
+  - '.project-os/decisions/DEC-028-campaign-ledger-physical-layout.yaml'
+  - '.project-os/decisions/DEC-029-behavior-model-binding.yaml'
+  - '.project-os/decisions/DEC-030-branch-prediction-binding.yaml'
 
 acceptance:
   - 'Branch and prediction output is deterministic and traceable to validated data and approved model inputs.'

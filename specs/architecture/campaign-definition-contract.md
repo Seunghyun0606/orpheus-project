@@ -1,5 +1,33 @@
 # Campaign definition interfaces — approved logical contract
 
+## TASK-022 implementation checkpoint
+
+DEC-030 pins optional `branches` and `prediction` in new immutable campaign definition
+versions only. Absence preserves older authorities and exact replay record shapes;
+adding or changing a model in an existing authority is rejected by whole-record replay.
+There is no connection/migration operation, latest-version fallback or new storage field.
+
+Each branch has a unique `id`, the campaign `version`, and explicit typed `eligibility`
+and `reveal` trees. `getCampaignBranches` verifies the official record before evaluating
+both trees with strict registered campaign observations, including evidence, flags,
+hidden values and available behavior. Results grant no route/effect and diagnose
+unavailable leaves even behind an unmet reveal. They are internal tool/test results,
+not player-facing hidden-value disclosures.
+
+The optional predictor declares exact model/classification/formula versions, comparable
+contexts, stable candidates, minimum support and explicit coverage for every allowed
+content version. Supported mappings validate typed references, context/reveal predicates,
+action IDs and candidate eligibility. Unsupported historical coverage diagnoses rather
+than claiming a complete empirical model. [Prediction schema and boundary details](player-prediction.md)
+describe the headless candidate. Its samples share immutable version metadata in the
+result header and retain their individual pre-command context and source identities.
+
+No opportunity, actual exposure acknowledgement or response variant is implemented by
+this checkpoint. Querying results cannot provide recommendation acceptance or prediction
+deviation observations. No production mappings, UI, old-save rewrite or native verification
+were introduced. [TASK-022](../../docs/TASK-022_IMPLEMENTATION.md) remains a developer
+candidate pending independent review/QA and distinct evaluation.
+
 ## TASK-021 implementation checkpoint
 
 DEC-026 accepted the logical baseline and DEC-029 approves immutable behavior binding

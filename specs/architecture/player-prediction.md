@@ -1,5 +1,54 @@
 # Player prediction — TASK-018 review draft
 
+## TASK-022 implementation checkpoint
+
+DEC-026 accepted the logical baseline. DEC-030 separately approves immutable
+branch/prediction binding only in new campaign definition versions. The developer
+candidate implements strict optional `prediction` and `branches` authoring plus
+read-only headless queries; it does not attach them to old runs. Existing model-less
+authorities and replay records retain their exact shape. Independent TASK-022
+review, acceptance QA and evaluation are still pending.
+
+`src/scenario/prediction.ts` defines schema/formula version 1, explicit model and
+classification versions, comparable context IDs, stable candidate IDs and positive
+integer minimum support. Each allowed scenario/content version has explicit supported
+or unsupported coverage. Supported mappings declare typed context references,
+`when`, `reveal`, action-to-candidate choices and each choice's `eligible` condition.
+Shared context IDs and candidate mappings, not action labels, establish equivalence.
+Campaign references must permit branch evaluation; scenario references name declared
+elapsed time, signals, resources, flags, evidence or signal visibility. All condition
+trees use the existing strict typed reference evaluator; no arbitrary callbacks/paths.
+
+`getCampaignPrediction` verifies whole-record replay and reconstructs every eligible
+accepted command's own pre-command history prefix. It pools genuine official choices
+across attempts, filters to currently available candidates, and uses a unique top's
+count divided by the eligible total. UNKNOWN distinguishes empty candidates/history,
+insufficient support and a top tie. Invalid or unavailable required current/historical
+context diagnoses instead of silently dropping it. An unmet valid reveal returns
+only a gated result and its boundary, without support/counts/confidence. Diagnostics
+still take precedence over a decisive sibling or hidden gate under DEC-025.
+
+Result support retains counts, current observations, candidate/action mappings and
+individual source run/attempt/operation/input/command identities with pre-history,
+event and context boundaries. The immutable result header retains campaign authority,
+model/formula/classification versions and the current calculation boundary shared by
+its samples. Later accepted commands may change a new result; prior results are not
+mutated. Reload derives the same result from committed history without a cache field.
+
+This calculation is not an exposure, recommendation or branch award. No prepared-result,
+actual-presentation acknowledgement or response operation was added. `predictionDeviation`
+and the other five opportunity-dependent behavior fields remain unavailable; tests prove
+that querying a predicted/UNKNOWN/gated result adds no sample. Positive exposure/response
+fixtures and browser/native acknowledgement must follow the reviewed integration
+contract, not be simulated by this query. Fixture support thresholds and late-act
+conditions are not production balance. See [implementation and verification limits](../../docs/TASK-022_IMPLEMENTATION.md).
+
+## Original logical baseline and future exposure fixtures
+
+The historical review language below is superseded by DEC-026 and the bounded
+checkpoint above. Its exposure/response fixtures remain future work, not newly passing
+runtime APIs or a claim of TASK-022 acceptance.
+
 Status: [DEC-020](../../.project-os/decisions/DEC-020-empirical-context-action-prediction.yaml)
 approves empirical context-choice frequencies, not a behavioral scoring model.
 DEC-022 separately approves predictionDeviation as a pooled response mismatch rate.

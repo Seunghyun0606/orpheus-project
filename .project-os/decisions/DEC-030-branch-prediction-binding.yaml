@@ -1,0 +1,23 @@
+id: DEC-030
+title: Pin branch and prediction rules in new campaign definitions only
+status: active
+date: '2026-10-11'
+applies_to: [M4]
+task: TASK-022
+decision: >-
+  Explicit versioned branch and prediction rules belong to the existing whole
+  immutable campaign definition authority in new definition versions only.
+  Existing authorities and records retain their exact replay behavior without
+  automatic attachment, backfill, migration or latest-version substitution.
+human_approval:
+  selected_option: A
+  instruction: '새 캠페인 정의에만 고정, 기존 기록 유지(권장).'
+request: .project-os/planning/TASK-022.prediction-binding-gate.yaml
+consequences:
+  - Retain DEC-020 empirical prediction, DEC-022 actual-exposure deviation and DEC-025 strict availability semantics.
+  - Use validated non-production context, candidate, eligibility, support and reveal fixtures; no production balance or early disclosure.
+  - Preserve existing behavior formulas/classifications, physical ledger layout, legacy stores and frozen content.
+  - Calculation is not exposure; actual adapter presentation and response acknowledgement require separate integration verification.
+  - No push, release, user-save migration or new agent delegation is authorized.
+  - Independent review, QA and distinct evaluation remain required before completion.
+supersedes: null
