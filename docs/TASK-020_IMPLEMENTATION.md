@@ -1,6 +1,8 @@
 # TASK-020 — Campaign persistence candidate
 
-Status: implementation candidate; **not accepted**. TASK-020 remains active.
+Status: accepted through independent review, QA and configured Project OS evaluation.
+Acceptance is limited to the approved isolated persistence/compatibility adapter;
+native integration and M4 completion are not certified.
 DEC-028 records the human's approval of the physical layout. Existing incident and
 discovery stores, frozen scenarios and UI are unchanged. No production campaign
 definition is created and no old progress is automatically adopted.
@@ -64,8 +66,11 @@ association refusal. Existing legacy save/overwrite protection suites still pass
 
 ## Known risks and remaining work
 
-- Independent review, acceptance QA and evaluator handoffs remain required. Earlier
-  TASK-019 delegation permission does not extend to TASK-020.
+- Independent review, acceptance QA and evaluator handoffs now PASS the candidate
+  `fe2ba1c`, after separately authorized TASK-020 read-only delegation. Their
+  attributed handoffs were committed at `450006d`; the independently reasoned
+  [evaluation](../.project-os/tasks/results/TASK-020.evaluation.yaml) was applied
+  through Project OS, not a manual canonical edit or developer self-approval.
 - Memory tests do not prove native WebView capabilities, power-loss durability,
   real quota behavior, blocked upgrades or UI publication. TASK-024/025 integration
   must verify them; action-time permission is needed before touching user saves.
@@ -82,7 +87,13 @@ association refusal. Existing legacy save/overwrite protection suites still pass
   for `source-map-js@1.2.1` (GHSA-68fv-2mgg-jv7q). Its locked version predates this
   change; no broad dependency/security update was performed or certified.
 
-Next recommended step: separately authorize read-only TASK-020 independent review
-and QA against the candidate commit, address safe findings, then use configured
-Project OS submission/evaluation rules. Do not mark TASK-020 or M4 complete from
-developer tests alone.
+Independent QA reran 215 tests in 21 files, the two focused suites (29 tests),
+typecheck, lint, formatting and eight scenario validations; all passed. Independent
+review ran the two focused suites and found no blocking defects. Its command also
+named a nonexistent third test path; no third suite is claimed. Optional future
+strengthening is to advance reloaded inherited work across its due boundary and
+compare with uninterrupted replay. Existing warnings and platform limits remain.
+
+Next recommended step: eligible TASK-021 behavior derivation under its approved
+contracts. No later-task delegation, native user-save access, migration policy,
+production release or M4 closure follows from TASK-020 acceptance.

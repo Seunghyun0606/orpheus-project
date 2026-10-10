@@ -10,8 +10,10 @@ does not permit changing unexpected existing layouts or migrating either old key
 
 The TASK-020 candidate implements the asynchronous adapter, read-only legacy
 preview/confirmed adoption/checkpoint ports and explicit live-head associations.
-Only isolated injected IndexedDB tests have executed; actual browser/Tauri
-storage, UI publication and independent acceptance remain unverified. See
+Independent review and acceptance QA passed the isolated adapter, and Project OS
+accepted TASK-020 using an independently attributed evaluation. Only injected
+memory databases were exercised; actual browser/Tauri storage and UI publication
+remain unverified. See
 [implementation and limitations](../../docs/TASK-020_IMPLEMENTATION.md).
 
 The sections below retain the original TASK-018 review-draft wording for historical
