@@ -82,4 +82,6 @@ started and M4 is not closed.
 Next recommended step: authorize separate reviewer, QA and distinct final evaluator
 for the pinned candidate; do not manufacture independent acceptance from these checks.
 The [bounded delegation request](../.project-os/planning/TASK-022.review-qa-evaluation-request.yaml)
-pins implementation commit `8ada150`; no TASK-022 agent has been started.
+pins implementation commit `8ada150`. The human separately approved read-only
+review/QA and a distinct final evaluator; reviewer `/root/task022_review` and QA
+`/root/task022_qa` have now started. No acceptance is implied by this authorization.

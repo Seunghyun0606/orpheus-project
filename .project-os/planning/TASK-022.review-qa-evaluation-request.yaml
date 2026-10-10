@@ -3,7 +3,7 @@ kind: independent_review_qa_and_distinct_evaluation_request
 role: developer
 actor: codex-task022-developer
 date: '2026-10-11'
-status: awaiting_human_delegation_authorization
+status: human_approved_read_only_delegation
 candidate_commit: 8ada150646227e75d52ec8e1b33be2b040abc476
 base_commit: b007817
 implementation_checkpoint: .project-os/planning/TASK-022.implementation-candidate.yaml
@@ -14,6 +14,8 @@ summary: >-
   8ada150 without repeating implemented changes; only this request remains.
 gate:
   type: architecture_change
+  selected_option: A
+  human_instruction: '별도 리뷰·QA·평가자 위임 승인.'
   recommended_option: A
   question: Authorize separate read-only TASK-022 review, acceptance QA and a distinct final evaluator?
   options:
@@ -50,4 +52,8 @@ developer_verification:
 known_risks:
   - Prefix replay and whole-history growth are unbenchmarked.
   - Six opportunity-dependent behavior metrics remain unavailable until supported committed presentation/response provenance exists.
-next_recommended_step: Await the Human Gate answer before any TASK-022 delegation.
+delegated_agents:
+  reviewer: /root/task022_review
+  qa: /root/task022_qa
+  evaluator: distinct_agent_to_start_only_after_final_committed_handoffs
+next_recommended_step: Obtain actual independent findings, fix safe issues, then request the distinct evaluator to audit committed final handoffs.
