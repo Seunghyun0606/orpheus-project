@@ -1,7 +1,7 @@
 task: TASK-021
 kind: review_correction
 date: '2026-10-11'
-status: independently_verified_awaiting_evaluation
+status: independently_verified_and_accepted
 original_candidate: 591330456dcbfa42749bb55eea18cf831c03f69e
 review_source: /root/task021_review_resume
 qa_source: /root/task021_qa_resume
@@ -36,4 +36,9 @@ final_verification:
   focused_tests: 49_tests_in_2_files_passed
   full_tests: 264_tests_in_23_files_passed
   regression_quality: All four fixtures validate as scenarios, including renamed delegation metadata.
-remaining: Configured independent evidence evaluation; no self-approved completion.
+completion:
+  evaluator: codex-task021-evaluator
+  source_agent: /root/task021_evaluator
+  result: PASS_applied_through_projectctl
+  date: '2026-10-11'
+remaining: Future native integration and opportunity-dependent metrics; no M4 closure or release implied.

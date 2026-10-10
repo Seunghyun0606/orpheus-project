@@ -1,15 +1,16 @@
 # M4 — Campaign Intelligence Systems
 
-Status: TASK-018, TASK-019 and TASK-020 accepted through independent evidence
+Status: TASK-018, TASK-019, TASK-020 and TASK-021 accepted through independent evidence
 evaluation and Project OS. DEC-028 approves TASK-020's physical layout; its
-bounded adapter acceptance does not certify native integration. TASK-021 is now
-claimed through Project OS. DEC-029 records the human-approved new-definition-only
+bounded adapter acceptance does not certify native integration. TASK-021 completed
+through Project OS on 2026-10-11. DEC-029 records the human-approved new-definition-only
 model binding; older model-less records remain unchanged. The
 [TASK-021 candidate](TASK-021_IMPLEMENTATION.md) implements four supported behavior
 metrics and explicit unavailability for six opportunity-dependent fields.
 Independent review/QA passed final candidate `895a05b` after correcting the
 milestone source-ID collision found in `5913304`. Independent QA passed 264 tests;
-configured evidence evaluation remains pending. No storage migration or native
+distinct evaluator `codex-task021-evaluator` accepted all four criteria and Project OS
+recorded PASS. TASK-022 is now eligible. No storage migration or native
 integration is performed. Attributed evidence follows the separately approved
 [TASK-021 review/QA gate](../.project-os/planning/TASK-021.review-qa-execution-request.yaml).
 The human approved M3 closure and M4 definition

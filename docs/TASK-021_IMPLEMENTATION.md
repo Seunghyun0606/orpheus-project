@@ -1,7 +1,7 @@
 # TASK-021 — Versioned player behavior candidate
 
-Status: independently reviewed and QA-verified candidate, **not accepted**.
-Configured independent evidence evaluation and Project OS completion remain pending.
+Status: **accepted** through distinct independent evaluation and Project OS on 2026-10-11.
+Final source candidate `895a05b`; submitted independent evidence `c432854`.
 DEC-029 approves model binding in new campaign definitions only; it does not approve
 attaching a model to older runs, production classifications or native integration.
 
@@ -121,8 +121,9 @@ Independent review and QA PASS: 49 focused tests, 264 full tests in 23 files,
 typecheck, lint, formatting, eight scenario validations, web build, doctor and diff
 checks, run serially with unchanged timeouts. Reviewer used read-only Node
 reproductions; suites are attributed to QA. No failures or retries occurred in
-this independent session. Configured evaluation is still required; the original
-finding and developer timeout history are not erased.
+this independent session. Distinct evaluation subsequently accepted all four
+criteria through Project OS; the original finding and developer timeout history
+are not erased.
 
 ## Known risks
 
@@ -142,13 +143,18 @@ finding and developer timeout history are not erased.
 
 ## Remaining work and next recommended step
 
-Submit the attributed final independent review, QA and tests for candidate `895a05b`.
-Only configured independent evidence evaluation can complete TASK-021 and make
-TASK-022 eligible. M4 remains active; no push or release is implied.
+TASK-021 is done. The four attributed implementation/review/QA/test records and
+the distinct evaluator's accepted result remain in `.project-os/tasks/results/`.
+`projectctl next --role developer` identifies TASK-022 (branches and deterministic
+prediction feedback). M4 remains active; no push or release is implied.
 
-The reviewer audited the submitted evidence successfully, but `projectctl`
-rejected that same actor as the completion evaluator of its own review. Canonical
-TASK-021 remains active; no evaluation result was stored. A distinct evaluator is
-required. The existing two-agent permission does not authorize another delegation,
-so [explicit evaluator approval](../.project-os/planning/TASK-021.evaluator-execution-request.yaml)
-is requested. Actor renaming cannot substitute for role separation.
+Historically, the reviewer audited submitted evidence successfully, but `projectctl`
+rejected that same actor as the completion evaluator of its own review without a
+canonical transition. The human then granted
+[explicit evaluator approval](../.project-os/planning/TASK-021.evaluator-execution-request.yaml).
+A genuinely separate actor (`codex-task021-evaluator`, source agent
+`/root/task021_evaluator`) independently evaluated the unchanged candidate and
+submitted evidence. Root transcribed its verdict; `projectctl evaluate` applied
+PASS and cleared TASK-021 from current tasks. Actor renaming was not used to
+bypass role separation. No native/user storage or runtime changes occurred during
+evaluation.
