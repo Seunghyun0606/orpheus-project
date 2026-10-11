@@ -15,6 +15,7 @@ scope:
     - 'Use explicit non-production fixtures for late-act prediction and reveal gates; preserve current UNKNOWN-only bundles.'
     - 'Verify missing evidence, low sample confidence, unavailable actions, ties and UNKNOWN predictions.'
   exclude:
+    - 'Actual presentation acknowledgement, eligible response lifecycle and positive predictionDeviation fixtures are assigned to TASK-024/025 by DEC-031, not waived.'
     - 'Runtime-generated story, arbitrary confidence animation, realtime AI integration or new late-act production content.'
     - 'Changing the prediction policy, confidence semantics, or reveal order without the relevant human decision.'
 
@@ -69,6 +70,7 @@ active_decisions:
   - '.project-os/decisions/DEC-028-campaign-ledger-physical-layout.yaml'
   - '.project-os/decisions/DEC-029-behavior-model-binding.yaml'
   - '.project-os/decisions/DEC-030-branch-prediction-binding.yaml'
+  - '.project-os/decisions/DEC-031-prediction-verification-sequencing.yaml'
 
 acceptance:
   - 'Branch and prediction output is deterministic and traceable to validated data and approved model inputs.'
@@ -76,7 +78,7 @@ acceptance:
   - 'Fixtures test investigation, safety, reporting and dependency branches without calling any route correct or incorrect.'
   - 'Current INC-001/002/003 remain UNKNOWN-only; prediction is not exposed ahead of its approved narrative gate.'
 verification:
-  - 'Run branch, confidence/deviation, eligibility/reference and reveal-order tests; validate current/frozen YAML and replay all MVP incidents.'
+  - 'Run branch, empirical confidence feedback, no-exposure deviation guards, eligibility/reference and reveal-order tests; validate current/frozen YAML and replay all MVP incidents. Positive exposure/response/deviation obligations remain mandatory in TASK-024/025 under DEC-031.'
   - 'Obtain independent review and acceptance QA.'
 
 human_gate: false

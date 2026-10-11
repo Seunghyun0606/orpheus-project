@@ -36,6 +36,14 @@ independent QA passed all 310 tests. That is not overall completion. Distinct fi
 evaluation waits for the scope decision and final acceptable handoffs; TASK-023 is not
 started. No M4 exit obligation is silently waived.
 
+The human subsequently approved DEC-031 option A: evaluate TASK-022's pure queries
+after final independent handoffs and distinct evaluation; explicitly allocate actual
+prediction acknowledgement/eligible responses, positive `0/1`, `1/1`, pooled `2/12`
+deviation and abort/conflict/lost-ack fixtures to TASK-024. TASK-025 must audit these
+and actual gated integration/native evidence before M4 completion. Task definitions
+now declare these requirements. No runtime, old-record, schema or lifecycle default
+was changed by this sequencing approval; the original HUMAN_GATE reports remain intact.
+
 ## Scope and continuity
 
 Build the campaign, player behavior, branching/prediction, and ending framework

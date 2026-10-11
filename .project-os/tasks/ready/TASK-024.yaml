@@ -10,6 +10,8 @@ why: 'Headless systems need tested UI/adapters without making React the campaign
 
 scope:
   include:
+    - 'Under DEC-031, implement actual prediction presentation acknowledgement committed before eligible responses, retaining exact calculation/context/version identity and authored response eligibility.'
+    - 'Implement positive predictionDeviation fixtures: matching 0/1, differing 1/1 and pooled 2/12, plus one-response identity, causal boundaries, baseline/import exclusion and abort/conflict/lost-ack recovery. Calculation alone grants no sample.'
     - 'Connect campaign persistence, progress, evidence and authored eligibility through store adapters.'
     - 'Add approved projections for progression and appropriately gated prediction/ending framework demonstrations using test content.'
     - 'Preserve desk navigation, archived read-only review, live-session isolation, single-slot confirmation and legacy restore.'
@@ -70,13 +72,17 @@ active_decisions:
   - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
   - '.project-os/decisions/DEC-025-strict-predicate-availability.yaml'
   - '.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml'
+  - '.project-os/decisions/DEC-030-branch-prediction-binding.yaml'
+  - '.project-os/decisions/DEC-031-prediction-verification-sequencing.yaml'
 
 acceptance:
+  - 'DEC-031 prediction exposure/response/deviation obligations have executable positive and failure/recovery evidence with actual committed presentation provenance; no sample is inferred from calculation, redisplay or inherited/imported history.'
   - 'Accepted domain results drive projections; UI does not duplicate transition, branch, model or ending rules.'
   - 'Remount/reload and repeated archive visits preserve campaign/evidence/history without duplicated contributions.'
   - 'All three MVP paths, UNKNOWN-only reveal checks, archived review, save protections and keyboard regressions pass.'
   - 'Gated fixture screens are accessible at supported native minimum and 150 percent text without blocking controls.'
 verification:
+  - 'Run actual exposure acknowledgement, response association, positive 0/1 versus 1/1, pooled 2/12 and abort/conflict/lost-ack fixtures; substantiate gated presentation and durable acknowledgement through adapter/native tests.'
   - 'Run adapter/component/end-to-end, archive isolation, save/reload and accessibility tests plus complete quality commands and native inspection.'
   - 'Obtain independent review and acceptance QA.'
 

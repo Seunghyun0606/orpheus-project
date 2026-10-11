@@ -9,6 +9,17 @@ read-only headless queries; it does not attach them to old runs. Existing model-
 authorities and replay records retain their exact shape. Independent TASK-022
 review, acceptance QA and evaluation are still pending.
 
+DEC-031 now explicitly assigns verification stages after independent review/QA
+identified the original positive-deviation gap. TASK-022 is evaluated for pure
+queries, empirical confidence feedback and no-exposure deviation guards only.
+TASK-024 must implement actual presentation acknowledgement committed before eligible
+responses, positive `0/1` versus `1/1` and pooled `2/12` deviation, provenance/one-response
+boundaries, and abort/conflict/lost-ack recovery. TASK-025 must independently audit
+these and actual gated adapter/native evidence before M4 completion. These tests
+remain mandatory and unimplemented, not waived by query acceptance. DEC-022 semantics
+are unchanged; concrete new recording/schema/lifecycle choices still require their
+applicable review and Human Gates.
+
 `src/scenario/prediction.ts` defines schema/formula version 1, explicit model and
 classification versions, comparable context IDs, stable candidate IDs and positive
 integer minimum support. Each allowed scenario/content version has explicit supported
@@ -186,6 +197,12 @@ distinct exposure/eligibility contracts are satisfied; a recommendation match
 must not be copied into a prediction-deviation sample or vice versa.
 
 ## Required TASK-021/022 verification fixtures
+
+Allocation checkpoint: under DEC-031, arithmetic, eligibility, history and no-exposure
+guards belong to TASK-022; actual exposure/response and all positive deviation/recovery
+fixtures below belong to TASK-024 implementation and TASK-025 verification. Historical
+heading retained for provenance; it no longer implies positive projection is implemented
+or required for bounded TASK-022 completion. All remain required for M4.
 
 These are proposed tests of the future APIs, not tests already implemented:
 

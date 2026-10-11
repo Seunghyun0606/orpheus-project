@@ -1,0 +1,25 @@
+id: DEC-031
+title: Evaluate TASK-022 pure queries and retain positive prediction-deviation obligations in TASK-024/025
+status: active
+date: '2026-10-11'
+applies_to: [M4]
+tasks: [TASK-022, TASK-024, TASK-025]
+decision: >-
+  Evaluate TASK-022 as validated read-only branch/prediction calculation and
+  confidence feedback from accepted history, with negative no-exposure deviation
+  guards. Assign actual prediction presentation acknowledgement, eligible response
+  recording and positive deviation/failure/recovery fixtures explicitly to
+  TASK-024; TASK-025 independently audits these and native/integration evidence
+  before M4 completion. This is sequencing, not waiver or proof of missing tests.
+human_approval:
+  selected_option: A
+  instruction: 'TASK-022는 계산 범위로 평가, 노출·편차는 TASK-024/025에 명시.'
+request: .project-os/planning/TASK-022.deviation-sequencing-gate.yaml
+consequences:
+  - TASK-022 still requires final independent review/QA and a distinct configured evaluator before canonical completion.
+  - TASK-024 must cover actual committed acknowledgement before eligible responses, matching 0/1 and differing 1/1, pooled 2/12, causal boundaries and abort/conflict/lost-ack recovery.
+  - TASK-025 must verify these mandatory obligations plus actual gated integration/native evidence; no M4 exit requirement is waived.
+  - Keep DEC-022 mismatch semantics, DEC-025 strict availability, DEC-030 new-definition-only binding and all existing compatibility/reveal protections.
+  - Calculation cannot manufacture visibility or response observations; six opportunity-dependent fields remain unavailable until supported committed provenance exists.
+  - No concrete new operation/schema/lifecycle defaults, automatic migration, production tuning, push or release is approved by this sequencing decision.
+supersedes: null

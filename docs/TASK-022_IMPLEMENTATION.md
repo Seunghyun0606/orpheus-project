@@ -12,6 +12,13 @@ verification remains incomplete. DEC-030 does not explicitly move those original
 TASK-021/022 obligations elsewhere. The [sequencing decision](../.project-os/planning/TASK-022.deviation-sequencing-gate.yaml)
 is required before unconditional completion; no final PASS records were submitted.
 
+The human subsequently approved DEC-031 option A. TASK-022 is now evaluated for
+pure query calculation, empirical confidence feedback and no-exposure deviation
+guards. TASK-024 explicitly owns actual acknowledgement/eligible responses and positive
+deviation/recovery fixtures; TASK-025 audits them before M4 completion. The original
+HUMAN_GATE findings remain historical evidence, not rewritten PASS results. Final
+independent confirmation and distinct evaluation are still required for TASK-022.
+
 ## Completed
 
 Strict optional branch/prediction data is pinned in the existing whole campaign
@@ -80,7 +87,7 @@ Final focused/full verification passed; these are developer checks, not independ
 
 ## Remaining work
 
-Resolve positive exposure/deviation verification sequencing explicitly. The reviewer
+DEC-031 resolves positive exposure/deviation verification sequencing explicitly. The reviewer
 found one low documentation overclaim: current predicate diagnostics precede reveal,
 whereas historical conditions are evaluated only after reveal and available-candidate
 checks. That wording is clarified without changing code or policy. No blocking query
@@ -89,8 +96,8 @@ do not turn passing suites into overall acceptance. Obtain final handoffs under 
 approved scope and a distinct configured evaluator before Project OS completion.
 TASK-023 is not started and M4 is not closed.
 
-Next recommended step: choose explicit task allocation for the missing positive
-exposure/response/deviation work; do not manufacture acceptance from these checks.
+Next recommended step: obtain final independent handoffs and distinct evaluation
+under DEC-031; do not certify the missing TASK-024/025 exposure/response/deviation work.
 The [bounded delegation request](../.project-os/planning/TASK-022.review-qa-evaluation-request.yaml)
 pins implementation commit `8ada150`. The human separately approved read-only
 review/QA and a distinct final evaluator. Reviewer `/root/task022_review` and QA

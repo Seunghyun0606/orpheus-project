@@ -28,6 +28,12 @@ deviation observations. No production mappings, UI, old-save rewrite or native v
 were introduced. [TASK-022](../../docs/TASK-022_IMPLEMENTATION.md) remains a developer
 candidate pending independent review/QA and distinct evaluation.
 
+DEC-031 explicitly assigns actual prediction presentation acknowledgement, eligible
+responses and positive deviation/failure/recovery fixtures to TASK-024 and their
+independent integration/native audit to TASK-025. TASK-022 is evaluated for pure
+queries only; no exposure obligation is waived or represented as passing. The
+actual-presentation and response contracts below remain mandatory before M4 completion.
+
 ## TASK-021 implementation checkpoint
 
 DEC-026 accepted the logical baseline and DEC-029 approves immutable behavior binding

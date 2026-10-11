@@ -3,7 +3,7 @@ kind: verification_scope_and_sequencing_human_gate
 role: developer
 actor: codex-task022-developer
 date: '2026-10-11'
-status: awaiting_human_decision
+status: human_approved_query_evaluation_and_explicit_follow_on_obligations
 candidate_commit: 8ada150646227e75d52ec8e1b33be2b040abc476
 summary: >-
   Independently authorized reviewer and QA both recommend HUMAN_GATE. Four numbered
@@ -20,6 +20,8 @@ resolved_safe_finding:
   runtime_or_policy_change: none
 gate:
   type: architecture_change
+  selected_option: A
+  human_instruction: 'TASK-022는 계산 범위로 평가, 노출·편차는 TASK-024/025에 명시.'
   question: Explicitly allocate positive exposure/response/deviation work to TASK-024/025, or retain it within TASK-022?
   recommended_option: A
   options:
@@ -44,4 +46,9 @@ current_safeguards:
   task023: not_started
   m4: active_not_closed
   push_release_user_storage: not_performed
-next_recommended_step: Await the explicit verification-scope decision.
+approval_checkpoint:
+  decision: .project-os/decisions/DEC-031-prediction-verification-sequencing.yaml
+  action: Explicit task/plan/contract allocation only; runtime, tests, old records and original HUMAN_GATE reports are unchanged.
+  task022: Final independently confirmed query handoffs and distinct evaluation remain required.
+  task024_025: Missing positive fixtures remain mandatory, not passed or waived.
+next_recommended_step: Obtain final read-only review/QA confirmation under DEC-031, commit attributed handoffs and obtain distinct evaluation.

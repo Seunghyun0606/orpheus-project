@@ -10,6 +10,7 @@ why: 'Framework implementation alone does not establish deterministic campaign b
 
 scope:
   include:
+    - 'Under DEC-031, independently audit TASK-024 actual prediction acknowledgement, eligible responses, positive deviation and failure/recovery fixtures; TASK-022 query acceptance alone cannot satisfy them.'
     - 'Map all M4 exit criteria to automated fixtures and observed integration/native evidence.'
     - 'Run full quality checks covering campaign transitions, save/migrations, player behavior, branches/predictions and all ten endings.'
     - 'Reverify the three-incident MVP, UNKNOWN-only boundary, supported display controls and save-slot protection.'
@@ -71,13 +72,17 @@ active_decisions:
   - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
   - '.project-os/decisions/DEC-025-strict-predicate-availability.yaml'
   - '.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml'
+  - '.project-os/decisions/DEC-030-branch-prediction-binding.yaml'
+  - '.project-os/decisions/DEC-031-prediction-verification-sequencing.yaml'
 
 acceptance:
+  - 'Actual committed prediction exposure/response and positive 0/1, 1/1, pooled 2/12 deviation are independently verified along with causal/no-duplicate and abort/conflict/lost-ack boundaries; missing evidence prevents M4 completion.'
   - 'Campaign state, flags, values, evidence, progression and model-version compatibility have deterministic persistence/replay evidence.'
   - 'Action-derived behavior and prediction/branch results are reproducible; every named ending has deterministic coverage.'
   - 'Current MVP remains playable and UNKNOWN-only, and no critical review finding remains.'
   - 'Each native/automated claim names its provenance and limitations; any material follow-on scope choice is referred to a human gate.'
 verification:
+  - 'Audit DEC-031 positive exposure/response/deviation obligations and actual adapter/native acknowledgement evidence separately from pure prediction arithmetic; do not certify missing provenance or waive these checks.'
   - 'Run build, lint, format:check, typecheck, full tests, replays, scenario validation, build:desktop, diff check and projectctl doctor.'
   - 'Perform native desktop inspection and publish separate implementation, test, independent review, QA and evaluation handoffs.'
 
