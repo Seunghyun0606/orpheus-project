@@ -1,0 +1,29 @@
+task: TASK-024
+kind: bounded_read_only_review
+role: reviewer
+actor: codex-task024-domain-reviewer
+source_agent: /root/task024_domain_review
+recorded_by: /root
+date: '2026-10-12'
+commit: 6b1a8fcea868cf0eaac19db361e8c55371031d24
+status: pass_for_implementation_candidate_only
+reported_findings:
+  - severity: P1
+    issue: Prepared/engine availability could incorrectly count an action excluded by current authored prediction choice eligibility.
+    reproduction: ROLLBACK eligible elapsed<=0; prepare/ACK at 0, OPEN_LOGS to 30, then ROLLBACK was incorrectly counted 1/1.
+    correction: Shared current when/reveal/all-choice validation on ACK/response/display; original prediction/confidence preserved; response current context retained.
+    disposition: Reviewer confirmed corrected.
+  - severity: P2
+    issue: Implicit latest preparation hid valid guidance when another metric was prepared or consumed.
+    correction: Valid prepared list, explicit selectedPreparationId and reselect existing guidance; no latest response association or redisplay contribution.
+    disposition: Reviewer confirmed corrected in final candidate review.
+reviewed_invariants:
+  - Exact submitted operation verified before publication; recommendation action identity displayed.
+  - v1 compatibility, duplicate/conflicting identity and ambiguous association defenses.
+  - Atomic command/response and preserved preparation confidence.
+reported_tests:
+  related_domain_ledger_prediction_behavior: 127 tests in 4 files passed, 7.13s after P1 correction.
+  final_full_suite: Deferred to distinct QA agent, not claimed as reviewer execution.
+blocking_findings_in_candidate_scope: none_remaining_reported
+acceptance_limit: Native entry/profile, actual gated durable ACK/reload and 960x640/150 percent layout are missing; TASK-024 overall completion withheld.
+mutation_boundary: Reviewer changed no file, commit, canonical state, actual user storage or native input.

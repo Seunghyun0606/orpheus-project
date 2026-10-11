@@ -1,0 +1,44 @@
+task: TASK-024
+kind: isolated_native_fixture_profile_gate
+role: developer
+actor: codex-task024-developer
+source_agent: /root
+date: '2026-10-12'
+status: awaiting_human_decision
+candidate: 6b1a8fcea868cf0eaac19db361e8c55371031d24
+safe_step_completed:
+  - New-only v2 domain, injected transaction adapter and opt-in fixture screen candidate committed.
+  - Independent candidate review and automated QA passed; full 409 tests and all quality checks pass.
+  - Canonical TASK-024/M4 remain active; TASK-025 unclaimed.
+  - Computer-use skill initialization and lightweight list_apps succeeded; no matching Orpheus app returned.
+  - No native launch/input, user save/database/profile access, overwrite or deletion occurred.
+why_required: DEC-033 preserves normal user storage and approves fixture-first recording, not an actual native user-store mutation. Required native evidence needs an explicitly isolated native entry/profile. No default MVP campaign model, late-game gate or real ending may be enabled to obtain it.
+local_configuration_evidence:
+  main_identifier: com.vantage.orpheus
+  native_minimum: 960x640
+  schema_source: node_modules/@tauri-apps/cli/config.schema.json
+  identifier_contract: Distinct identifiers are used for the WebView data directory path.
+  dataDirectory_contract: Config value is relative to appDataDir/window label; Windows supported.
+gate:
+  type: architecture_change
+  question: Add a separate native QA application entry and isolated WebView profile for TASK-024, or have the human prepare the isolated environment first?
+  selected_option: null
+  options:
+    - key: A
+      label: Separate native QA entry/profile, preserve normal app and saves
+      proposed_scope:
+        - Add an explicitly invoked test-only frontend entry and Tauri override; do not import fixture authorities into the normal production entry.
+        - QA identifier com.vantage.orpheus.qa.task024, window label qa024, title Orpheus QA - TASK-024, dataDirectory task024-fixtures-v1 relative to the distinct QA app's data directory.
+        - Separate QA frontend output and Cargo target/artifacts from normal dist and src-tauri/target; preserve existing default scripts/config/binary and permission/security settings.
+        - Use actual native IndexedDB only inside that new isolated WebView profile, fresh explicit fixture run identities and unchanged campaign database/store layout.
+        - Launch/control only the uniquely returned QA window; inspect actual gated confirmation, durable ACK/reload, 960x640/150 percent, keyboard/reduced-motion and read-only archive paths.
+        - Do not access main user stores, replace saves, reset or delete profiles, enable production late-act content, grant endings or perform actual REWRITE.
+        - Retain native failure evidence and request a new gate for any additional material scope or permission decision.
+    - key: B
+      label: Preserve candidate; human prepares isolated native QA environment
+      proposed_scope:
+        - Do not add or launch the proposed native test application/profile yet.
+        - Preserve committed candidate and pending acceptance; resume when an explicit isolated target/environment is supplied.
+        - Native requirements are not waived; TASK-024/025 and M4 completion remain pending.
+not_authorized_by_either_option:
+  - Main user storage mutation, overwrite, deletion, security/credential changes, push, release or M4 closure.

@@ -6,8 +6,12 @@ or durable response provenance in the existing v1 runtime. DEC-031 explicitly do
 not approve concrete recording/schema/lifecycle changes. The
 [record-version gate](../.project-os/planning/TASK-024.presentation-record-gate.yaml)
 proposes new-campaign-only v2 records while preserving v1, or a separately reviewed
-v1-compatible extension. No TASK-024 runtime/storage/UI change is implemented pending
-that decision. TASK-025 remains unclaimed and M4 remains active.
+v1-compatible extension. At that pre-approval checkpoint, no TASK-024
+runtime/storage/UI change had been implemented. DEC-033 subsequently approved
+new-only v2 and candidate `6b1a8fce` now implements that bounded scope. Independent
+candidate review, automated QA and distinct bounded evaluation passed; actual
+isolated native verification and full acceptance remain pending. TASK-025 remains
+unclaimed and M4 remains active.
 
 TASK-023 was claimed through Project OS on 2026-10-11. The human approved DEC-032:
 ending rules are pinned only in new immutable campaign definitions; existing records
@@ -71,7 +75,10 @@ and a serial 310-test rerun. Handoffs committed at `fbb5a8f` passed distinct eva
 by `/root/task022_evaluator`; Project OS completed TASK-022 on 2026-10-11. Original
 HUMAN_GATE checkpoints remain unchanged. At that checkpoint TASK-023 was eligible;
 it has since been claimed as described above.
-TASK-024/025 positive exposure/deviation obligations remain unimplemented and mandatory.
+At the TASK-022 completion checkpoint, TASK-024/025 positive exposure/deviation
+obligations remained unimplemented and mandatory. TASK-024 has since implemented
+the automated candidate fixtures; actual native provenance and the TASK-025 audit
+remain mandatory, not waived.
 
 ## Scope and continuity
 
@@ -274,3 +281,8 @@ opt-in transactional adapter/fixture screen. Developer verification passed 409
 tests plus quality/web/native build checks. Native gated presentation/storage and
 960×640/150% inspection remain unverified. TASK-024 is active; TASK-025 and M4
 completion remain pending, with no production campaign activation or release.
+Independent candidate review and QA of `6b1a8fce` passed, including QA's direct
+409-test full suite. Distinct bounded evaluation agrees that native portions of
+AC1/AC3 and native AC5 remain pending. The proposed
+[isolated native QA entry/profile](../.project-os/planning/TASK-024.native-fixture-gate.yaml)
+requires a human decision before implementation or launch.

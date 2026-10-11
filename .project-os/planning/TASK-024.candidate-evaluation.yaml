@@ -1,0 +1,27 @@
+task: TASK-024
+kind: bounded_read_only_candidate_evaluation
+role: evaluator
+actor: codex-task024-candidate-evaluator
+source_agent: /root/task024_candidate_evaluator
+recorded_by: /root
+date: '2026-10-12'
+commit: 6b1a8fcea868cf0eaac19db361e8c55371031d24
+status: bounded_candidate_pass_final_acceptance_pending
+acceptance:
+  AC1: Automated provenance, positive rates and recovery met; actual native exposure and durability pending.
+  AC2: Domain-authoritative projections met in candidate scope.
+  AC3: Fake IndexedDB and component remount/archive checks met; actual WebView restart/reload pending.
+  AC4: Independent full QA verified default MVP, UNKNOWN boundary and save protection regressions.
+  AC5: Native 960x640 / 150 percent inspection pending; DOM cues are not native layout evidence.
+evidence_attribution:
+  reviewed_contract_implementation_and_git: Direct read-only evaluator audit.
+  focused_29_tests_9_28s_full_409_tests_32_95s: Direct execution by codex-task024-candidate-qa, not evaluator execution.
+  quality_checks: QA-attributed typecheck, lint, format, scenario validation, web build, doctor and diff checks passed.
+  P1_P2_recheck: Direct candidate review by codex-task024-domain-reviewer.
+  desktop_build: Parent developer evidence only; not independent execution or native observation.
+remaining:
+  - Approved isolated native entry/profile and actual gated presentation, committed ACK, eligible action and restart/reload preservation.
+  - Native 960x640 / 150 percent, keyboard, reduced-motion and read-only archive inspection.
+  - Final configured Project OS evaluation after complete native acceptance evidence.
+state_boundary: TASK-024 active, TASK-025 ready and unclaimed, M4 active, M5 planned; no completion or waiver.
+mutation_boundary: Evaluator changed no file, commit, canonical state, user storage or native app input.

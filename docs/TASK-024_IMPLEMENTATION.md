@@ -60,7 +60,25 @@ Developer full verification on 2026-10-12: **409 tests / 28 files passed**,
 scenario validation files, web build and Tauri `--no-bundle` desktop build passed.
 Web chunk warning persists (579.14 kB); native linker emitted a warning, not an
 error. Building a native binary is not observing its UI or proving durable native
-ACKs. Final independent candidate checks are still required.
+ACKs. At that developer checkpoint, final independent candidate checks were
+still pending. The subsequent results below are attributed separately.
+
+Independent candidate verification of commit `6b1a8fce` on 2026-10-12:
+
+- `codex-task024-domain-reviewer` confirmed P1/P2 corrections and reported no
+  remaining blockers in the implementation candidate scope.
+- `codex-task024-candidate-qa` directly passed 29 focused tests / 3 files (9.28s)
+  and the default full suite, 409 tests / 28 files (32.95s). Typecheck, lint,
+  formatting, eight scenario files, web build, doctor and diff checks passed.
+- `codex-task024-candidate-evaluator` audited the contract, implementation and
+  attributed evidence read-only: bounded candidate PASS, overall TASK-024 PENDING.
+  Native portions of AC1/AC3 and native AC5 remain unmet. The evaluator does not
+  claim the QA commands as its own execution.
+
+These bounded planning records are not immutable final task acceptance records:
+[review](../.project-os/planning/TASK-024.candidate-review.yaml),
+[QA](../.project-os/planning/TASK-024.candidate-qa.yaml),
+[evaluation](../.project-os/planning/TASK-024.candidate-evaluation.yaml).
 
 Focused tests cover prediction `0/1`, `1/1`, pooled `2/12`, provenance, response
 uniqueness, unrelated/rejected inputs, current authored candidate changes,
@@ -88,7 +106,8 @@ Failure history is preserved:
    confirmed the correction; related 127 tests / 4 files passed independently.
 6. Reviewer identified P2 implicit latest guidance selection. Adapter now keeps
    an explicit selected preparation ID and offers the valid prepared list. New
-   selection regression passes in the developer full suite; final re-review pending.
+   selection regression passed in the developer and independent QA suites;
+   final independent re-review confirmed the correction.
 
 ## Known risks and remaining work
 
@@ -102,12 +121,14 @@ Failure history is preserved:
 - Native test setup must separate actual WebView storage from
   `com.vantage.orpheus` user data and keep fixture content out of the normal
   production entry. Any material test-profile/layout choice requires the human.
-- Independent final review/QA and distinct acceptance evaluation remain mandatory.
+- Independent candidate review/QA and bounded evaluation passed. Final acceptance
+  review/QA and distinct configured evaluation after native evidence remain mandatory.
   No canonical completion, M4 closure, TASK-025 waiver, production campaign,
   ending grant, actual REWRITE, push or release is approved by this candidate.
 
 ## Next recommended step
 
-Finish independent candidate review/QA, then obtain approval for a separate
-native fixture entry and isolated WebView profile. Record actual native evidence
-before final TASK-024 evaluation and the independent TASK-025 audit.
+Obtain approval for a separate native fixture entry and isolated WebView profile
+under the [native fixture gate](../.project-os/planning/TASK-024.native-fixture-gate.yaml).
+Record actual native evidence before final TASK-024 evaluation and the independent
+TASK-025 audit. No native app/profile has been added or launched yet.
