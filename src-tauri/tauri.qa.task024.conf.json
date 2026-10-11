@@ -1,0 +1,23 @@
+{
+  "productName": "Orpheus QA - TASK-024",
+  "identifier": "com.vantage.orpheus.qa.task024",
+  "build": {
+    "beforeBuildCommand": "npx vite build --config vite.qa.config.ts",
+    "frontendDist": "../.qa/task024/web"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "qa024",
+        "title": "Orpheus QA - TASK-024",
+        "url": "qa/task024/index.html",
+        "width": 960,
+        "height": 640,
+        "minWidth": 960,
+        "minHeight": 640,
+        "resizable": true,
+        "dataDirectory": "task024-fixtures-v1"
+      }
+    ]
+  }
+}

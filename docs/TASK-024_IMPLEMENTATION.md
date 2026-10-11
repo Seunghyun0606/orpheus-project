@@ -111,7 +111,9 @@ Failure history is preserved:
 
 ## Known risks and remaining work
 
-- No native fixture entry/profile has been authorized or installed. Computer-use
+- At the original `6b1a8fce` checkpoint, no native fixture entry/profile had been
+  authorized or added. DEC-034 now approves the separate entry and it has been
+  built, unlaunched; the discovered actual path still needs confirmation. Computer-use
   initialization and lightweight app inventory succeeded on 2026-10-12, but no
   Orpheus app was returned. No native app was launched or clicked, and no user
   saves were accessed. This is not a `native pipe unavailable` finding.
@@ -128,7 +130,10 @@ Failure history is preserved:
 
 ## Next recommended step
 
-Obtain approval for a separate native fixture entry and isolated WebView profile
-under the [native fixture gate](../.project-os/planning/TASK-024.native-fixture-gate.yaml).
-Record actual native evidence before final TASK-024 evaluation and the independent
-TASK-025 audit. No native app/profile has been added or launched yet.
+The human approved the separate native fixture entry/profile under DEC-034.
+The [QA entry candidate](TASK-024_NATIVE_QA.md) has since been added and built,
+not launched. Local Tauri source reveals a different relative profile path than
+the original proposal; the [path confirmation gate](../.project-os/planning/TASK-024.native-path-resolution-gate.yaml)
+must be resolved first. Record actual native evidence before final TASK-024
+evaluation and the independent TASK-025 audit. No native profile has been opened
+or created through the application.

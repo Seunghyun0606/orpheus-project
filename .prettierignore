@@ -4,6 +4,7 @@ node_modules/
 specs/
 src-tauri/target/
 src-tauri/gen/
+.qa/
 AGENTS.md
 PROJECT.md
 package-lock.json

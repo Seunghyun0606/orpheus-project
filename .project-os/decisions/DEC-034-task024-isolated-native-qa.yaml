@@ -1,0 +1,21 @@
+id: DEC-034
+title: Isolated TASK-024 native QA application and WebView profile
+status: active
+date: '2026-10-12'
+applies_to: [M4]
+task: TASK-024
+human_approval:
+  selected_option: A
+  instruction: 격리된 QA 앱·프로필 추가 후 네이티브 검증.
+request: .project-os/planning/TASK-024.native-fixture-gate.yaml
+decision: Implement and inspect an explicitly invoked fixture-only QA entry, with identifier com.vantage.orpheus.qa.task024, window qa024 and relative WebView dataDirectory task024-fixtures-v1. Separate frontend and Cargo outputs; preserve the normal application, saved data and security settings.
+consequences:
+  - Actual IndexedDB fixture runs only inside the separate QA profile; preserve database version and physical store layout.
+  - Normal entry, config, build artifacts and existing user storage remain untouched.
+  - Native visibility, committed ACK, eligible response, restart/reload, minimum 960x640 and 150 percent accessibility require direct evidence.
+  - No fixture import into production, user-profile reset/deletion, ending grant, REWRITE, security change, push, release or M4 closure.
+supersedes: null
+implementation_followup:
+  status: native_launch_pending_path_confirmation
+  finding: Installed Tauri resolves the relative dataDirectory under local data/window label, not the application identifier; no native launch performed.
+  gate: .project-os/planning/TASK-024.native-path-resolution-gate.yaml

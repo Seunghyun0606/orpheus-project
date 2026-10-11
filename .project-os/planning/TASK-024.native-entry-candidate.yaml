@@ -1,0 +1,29 @@
+task: TASK-024
+kind: bounded_native_entry_implementation_checkpoint
+role: developer
+actor: codex-task024-developer
+source_agent: /root
+date: '2026-10-12'
+baseline: 47955e8
+candidate: Committed together with this checkpoint; not an immutable final acceptance record.
+status: built_unlaunched_actual_profile_path_gate_pending
+approval: .project-os/decisions/DEC-034-task024-isolated-native-qa.yaml
+report: docs/TASK-024_NATIVE_QA.md
+verification:
+  focused_fixture_test: 1 passed, 4.09s, fake IndexedDB / DOM only.
+  initial_full_tests: 410 tests, 29 files, 47.54s.
+  final_full_tests: 410 tests, 29 files, 34.02s, default two workers and unchanged timeouts.
+  typecheck_lint_format: pass
+  scenarios: 8 files passed
+  initial_separate_native_build: pass, 1m59s; not final UI guard binary
+  final_separate_native_build: pass, 41.38s; binary not launched
+  final_native_binary_sha256: 93C65A16A2269AE8FB8C1B0B0A9B092EE35AD2CE4E68AB9CF2BE4A1FB4E16665
+  final_qa_web_build: pass, 220 modules, 524ms, 553.32kB warning retained
+  main_entry_config_scripts_rust: unchanged
+  native_observation: not_run
+  app_or_profile_launch_creation: not_performed
+  actual_user_stores: not_accessed
+independence_limit: Prior independent candidate records evaluate 6b1a8fce; new QA entry still needs independent final review/QA and distinct evaluation after actual native evidence.
+failure_history: Retained in docs/TASK-024_NATIVE_QA.md, including generated Cargo asset lint failure; only generated artifacts excluded.
+next_gate: .project-os/planning/TASK-024.native-path-resolution-gate.yaml
+state_boundary: No implementation submission, immutable final pass, canonical completion, TASK-025 claim, M4 closure, push or release.

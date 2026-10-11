@@ -4,7 +4,7 @@ role: developer
 actor: codex-task024-developer
 source_agent: /root
 date: '2026-10-12'
-status: awaiting_human_decision
+status: human_approved_option_A
 candidate: 6b1a8fcea868cf0eaac19db361e8c55371031d24
 safe_step_completed:
   - New-only v2 domain, injected transaction adapter and opt-in fixture screen candidate committed.
@@ -22,7 +22,8 @@ local_configuration_evidence:
 gate:
   type: architecture_change
   question: Add a separate native QA application entry and isolated WebView profile for TASK-024, or have the human prepare the isolated environment first?
-  selected_option: null
+  selected_option: A
+  human_instruction: 격리된 QA 앱·프로필 추가 후 네이티브 검증.
   options:
     - key: A
       label: Separate native QA entry/profile, preserve normal app and saves

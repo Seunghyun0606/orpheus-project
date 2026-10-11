@@ -1,0 +1,34 @@
+task: TASK-024
+kind: native_profile_path_resolution_gate
+role: developer
+actor: codex-task024-developer
+source_agent: /root
+date: '2026-10-12'
+status: awaiting_human_decision
+prior_approval: .project-os/decisions/DEC-034-task024-isolated-native-qa.yaml
+finding:
+  initial_basis: The installed JSON schema documents dataDirectory as relative to app data/window label; the prior proposal described the distinct app identifier directory.
+  actual_installed_source: tauri-2.11.6/src/webview/mod.rs lines 392-423 resolves dataDirectory using dirs::data_local_dir().join(config.label).join(dataDirectory).
+  identifier_source: tauri-2.11.6/src/path/desktop.rs app_local_data_dir includes identifier, but WindowConfig::from_config does not call it for dataDirectory.
+  configured_identifier: com.vantage.orpheus.qa.task024
+  configured_window: qa024
+  configured_relative_directory: task024-fixtures-v1
+  actual_resolved_profile: '%LocalAppData%\qa024\task024-fixtures-v1'
+  originally_described_profile: '%LocalAppData%\com.vantage.orpheus.qa.task024\qa024\task024-fixtures-v1'
+safe_progress:
+  - Fixture-only HTML/component, separate Tauri override and frontend/Cargo build outputs added; default entry and app configuration unchanged.
+  - Explicit fresh UUID fixture creation and restoration use actual IndexedDB only after an explicit UI action; test factory injected only in automated tests.
+  - No application launch, profile creation through the app, native input or user save access performed.
+  - TASK-024 and M4 remain active; no final acceptance or TASK-025 claim.
+gate:
+  type: architecture_change
+  question: Approve the actual label-relative isolated WebView path, or require the originally proposed identifier-qualified path before native launch?
+  selected_option: null
+  options:
+    - key: A
+      label: Approve actual label-relative QA path
+      scope: Use %LocalAppData%\qa024\task024-fixtures-v1 with unchanged explicit QA identifier/config; confirm only the distinct QA window and continue native fixture QA. No normal user-store access, overwrite or profile deletion.
+    - key: B
+      label: Require identifier-qualified path first
+      scope: Keep current candidate unlaunched; implement a QA-only explicit builder path under the distinct QA application identifier without changing the normal window/runtime/security configuration, then verify isolation before native QA.
+not_authorized: User-store writes, profile reset/deletion, security/credential changes, production fixture activation, ending grants, REWRITE, push, release or M4 closure.

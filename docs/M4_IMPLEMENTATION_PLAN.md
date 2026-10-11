@@ -286,3 +286,11 @@ Independent candidate review and QA of `6b1a8fce` passed, including QA's direct
 AC1/AC3 and native AC5 remain pending. The proposed
 [isolated native QA entry/profile](../.project-os/planning/TASK-024.native-fixture-gate.yaml)
 requires a human decision before implementation or launch.
+
+The human subsequently approved DEC-034 and the separate
+[native QA entry candidate](TASK-024_NATIVE_QA.md) is built, unlaunched. Its
+automated regression increases the full suite to 410 tests / 29 files. Local
+Tauri source inspection disproved the originally described identifier-relative
+profile resolution; the [actual-path gate](../.project-os/planning/TASK-024.native-path-resolution-gate.yaml)
+must be resolved before any launch or profile creation. No native acceptance,
+TASK-025 claim or M4 closure is implied.
