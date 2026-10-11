@@ -4,7 +4,7 @@ role: developer
 actor: codex-task024-developer
 source_agent: /root
 date: '2026-10-12'
-status: awaiting_human_decision
+status: human_approved_option_A
 prior_approval: .project-os/decisions/DEC-034-task024-isolated-native-qa.yaml
 finding:
   initial_basis: The installed JSON schema documents dataDirectory as relative to app data/window label; the prior proposal described the distinct app identifier directory.
@@ -23,7 +23,8 @@ safe_progress:
 gate:
   type: architecture_change
   question: Approve the actual label-relative isolated WebView path, or require the originally proposed identifier-qualified path before native launch?
-  selected_option: null
+  selected_option: A
+  human_instruction: 실제 qa024 격리 경로 승인 후 네이티브 QA.
   options:
     - key: A
       label: Approve actual label-relative QA path

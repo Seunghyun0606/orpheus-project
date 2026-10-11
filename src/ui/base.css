@@ -54,6 +54,34 @@ body {
   margin: 0.25rem;
 }
 
+.campaign-desk button,
+.qa-native-entry > .panel button {
+  border: 1px solid var(--line-strong);
+  padding: 0.45em 0.7em;
+  background: var(--surface-raised);
+  color: var(--white);
+  cursor: pointer;
+}
+
+.campaign-desk button:disabled,
+.qa-native-entry > .panel button:disabled {
+  color: var(--muted);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+.qa-native-entry > .panel {
+  margin: 1rem;
+  padding: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.qa-native-entry > .panel button {
+  margin: 0.25rem;
+  max-width: 100%;
+  white-space: normal;
+}
+
 .campaign-desk[data-reduced-animation='true'] *,
 .campaign-desk[data-crt-effects='false'] * {
   animation: none !important;

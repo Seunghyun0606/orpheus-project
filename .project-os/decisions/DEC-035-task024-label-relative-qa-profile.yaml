@@ -1,0 +1,16 @@
+id: DEC-035
+title: Approve installed Tauri label-relative QA WebView profile
+status: active
+date: '2026-10-12'
+applies_to: [M4]
+task: TASK-024
+human_approval:
+  selected_option: A
+  instruction: 실제 qa024 격리 경로 승인 후 네이티브 QA.
+request: .project-os/planning/TASK-024.native-path-resolution-gate.yaml
+decision: Use the installed Tauri resolution %LocalAppData%\qa024\task024-fixtures-v1 with the explicit QA identifier com.vantage.orpheus.qa.task024; launch only the separate verified QA binary and perform bounded native fixture inspection.
+consequences:
+  - Keep prior isolated frontend/Cargo outputs and fixture-only authority boundaries.
+  - No main user-store access, overwrite, profile reset/deletion, security change, production activation, ending grant, REWRITE, push, release or M4 closure.
+  - Preserve observed native outcomes and limitations before independent final review/QA/evaluation.
+supersedes: null

@@ -97,7 +97,7 @@ export function NativeQa() {
     }
   }
   return (
-    <>
+    <div className="qa-native-entry">
       <section className="panel">
         <h1>Orpheus QA - TASK-024</h1>
         <p>
@@ -124,6 +124,6 @@ export function NativeQa() {
           />
         </>
       ) : null}
-    </>
+    </div>
   );
 }
