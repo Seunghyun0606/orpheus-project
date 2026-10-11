@@ -1,6 +1,6 @@
 # M4 — Campaign Intelligence Systems
 
-Status: TASK-018, TASK-019, TASK-020 and TASK-021 accepted through independent evidence
+Status: TASK-018, TASK-019, TASK-020, TASK-021 and bounded TASK-022 accepted through independent evidence
 evaluation and Project OS. DEC-028 approves TASK-020's physical layout; its
 bounded adapter acceptance does not certify native integration. TASK-021 completed
 through Project OS on 2026-10-11. DEC-029 records the human-approved new-definition-only
@@ -10,7 +10,7 @@ metrics and explicit unavailability for six opportunity-dependent fields.
 Independent review/QA passed final candidate `895a05b` after correcting the
 milestone source-ID collision found in `5913304`. Independent QA passed 264 tests;
 distinct evaluator `codex-task021-evaluator` accepted all four criteria and Project OS
-recorded PASS. TASK-022 is now eligible. No storage migration or native
+recorded PASS. TASK-022 subsequently completed under DEC-031. No storage migration or native
 integration is performed. Attributed evidence follows the separately approved
 [TASK-021 review/QA gate](../.project-os/planning/TASK-021.review-qa-execution-request.yaml).
 The human approved M3 closure and M4 definition
@@ -27,14 +27,15 @@ adds strict authored rules and pure branch/prediction queries. Developer verific
 passed 310 tests, including 46 new cases and the twelve current MVP replay tests.
 Prediction calculation is not an actual exposure and creates no deviation sample.
 No production content, UI, operation variants or storage migration were added.
-TASK-022 remains active, not accepted. The human separately authorized read-only
+At the original candidate checkpoint TASK-022 remained active, not accepted.
+The human separately authorized read-only
 review/QA and a distinct evaluator. Original independent reports recommended
 [HUMAN_GATE](../.project-os/planning/TASK-022.deviation-sequencing-gate.yaml): positive
 exposure/response/deviation fixtures remain required but unimplemented, without explicit
 reassignment to a later task. Four numbered criteria pass for the pure queries and
-independent QA passed all 310 tests. That is not overall completion. Distinct final
-evaluation waits for the scope decision and final acceptable handoffs; TASK-023 is not
-started. No M4 exit obligation is silently waived.
+independent QA passed all 310 tests. That did not establish overall completion.
+Distinct final evaluation then waited for the scope decision and final acceptable
+handoffs. No M4 exit obligation was silently waived.
 
 The human subsequently approved DEC-031 option A: evaluate TASK-022's pure queries
 after final independent handoffs and distinct evaluation; explicitly allocate actual
@@ -44,8 +45,10 @@ and actual gated integration/native evidence before M4 completion. Task definiti
 now declare these requirements. No runtime, old-record, schema or lifecycle default
 was changed by this sequencing approval; the original HUMAN_GATE reports remain intact.
 Final review and QA independently passed the approved query scope after fresh probes
-and a serial 310-test rerun. Attributed final handoffs are being submitted; distinct
-evaluation and canonical completion remain pending.
+and a serial 310-test rerun. Handoffs committed at `fbb5a8f` passed distinct evaluation
+by `/root/task022_evaluator`; Project OS completed TASK-022 on 2026-10-11. Original
+HUMAN_GATE checkpoints remain unchanged. TASK-023 is now eligible, not started;
+TASK-024/025 positive exposure/deviation obligations remain unimplemented and mandatory.
 
 ## Scope and continuity
 

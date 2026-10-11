@@ -1,7 +1,7 @@
 # TASK-022 — Authored branches and empirical prediction
 
-Status: final independent review/QA passed under DEC-031; distinct evaluation
-and canonical completion remain pending. TASK-022 is active.
+Status: completed through Project OS on 2026-10-11 after final independent
+review, QA and distinct evaluation PASS under DEC-031's calculation scope.
 DEC-030 approves new-definition-only binding; it does not authorize automatic
 model attachment, old-run migration, agent delegation, release or push.
 
@@ -20,8 +20,11 @@ deviation/recovery fixtures; TASK-025 audits them before M4 completion. The orig
 HUMAN_GATE findings remain historical evidence, not rewritten PASS results. New final
 [review](../.project-os/planning/TASK-022.final-review.yaml) and
 [QA](../.project-os/planning/TASK-022.final-qa.yaml) independently passed the explicit
-scope, including fresh memory probes and a serial rerun of all 310 tests. Distinct
-evaluation is still required before Project OS completion.
+scope, including fresh memory probes and a serial rerun of all 310 tests. The
+[distinct evaluator](../.project-os/planning/TASK-022.final-evaluation.yaml) audited
+committed handoffs at `fbb5a8f`, accepted all four criteria and verified source/evidence
+identity. Configured `projectctl evaluate` subsequently recorded PASS and completed
+TASK-022. No M4 closure or missing positive-deviation certification is implied.
 
 ## Completed
 
@@ -95,16 +98,20 @@ DEC-031 resolves positive exposure/deviation verification sequencing explicitly.
 found one low documentation overclaim: current predicate diagnostics precede reveal,
 whereas historical conditions are evaluated only after reveal and available-candidate
 checks. That wording is clarified without changing code or policy. No blocking query
-arithmetic/authority/reveal defect was identified. Preserve both HUMAN_GATE reports;
-do not turn passing suites into overall acceptance. Obtain final handoffs under the
-approved scope and a distinct configured evaluator before Project OS completion.
-TASK-023 is not started and M4 is not closed.
+arithmetic/authority/reveal defect was identified. Both original HUMAN_GATE reports
+remain unchanged; final approval and independently evaluated handoffs establish
+bounded completion without certifying missing work. TASK-024 must implement actual
+exposure/eligible responses and positive deviation/recovery; TASK-025 must independently
+audit them and integration/native evidence before M4 completion. Prefix replay/history
+growth remain unbenchmarked. TASK-023 is not started and M4 is not closed.
 
-Next recommended step: obtain final independent handoffs and distinct evaluation
-under DEC-031; do not certify the missing TASK-024/025 exposure/response/deviation work.
+Next recommended step: TASK-023's data-driven ending framework, now eligible; retain
+mandatory TASK-024/025 exposure/response/deviation work and all applicable Human Gates.
 The [bounded delegation request](../.project-os/planning/TASK-022.review-qa-evaluation-request.yaml)
 pins implementation commit `8ada150`. The human separately approved read-only
 review/QA and a distinct final evaluator. Reviewer `/root/task022_review` and QA
 `/root/task022_qa` finished with HUMAN_GATE recommendations. Final actors
 `/root/task022_final_review` and `/root/task022_final_qa` subsequently passed under
-DEC-031. Distinct evaluation waits for committed final handoffs.
+DEC-031. Distinct evaluator `/root/task022_evaluator` then accepted the committed
+evidence; the primary transcribed that actual verdict and used the configured CLI
+completion transition. No push, release, actual user-storage or native operation occurred.

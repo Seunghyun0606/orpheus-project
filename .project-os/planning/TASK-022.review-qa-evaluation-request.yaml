@@ -62,6 +62,15 @@ finalization_after_scope_approval:
   final_qa: pass_from_task022_final_qa
   final_tests: 310_full_58_focused_13_narrative_data_passed
   canonical_completion: not_performed_pending_distinct_evaluation
+completion:
+  evaluator: codex-task022-evaluator
+  source_agent: /root/task022_evaluator
+  evidence_commit: fbb5a8f38cdd77f05895937230e0cc84597f1f9d
+  verdict: PASS
+  canonical_transition: Completed by configured projectctl evaluation on 2026-10-11.
+  bounded_scope: DEC-031 calculation only; TASK-024/025 positive exposure/response/deviation remains mandatory.
+  original_human_gate_evidence: Preserved unchanged.
+  next_step: TASK-023 eligible, not started; M4 active, no push or release.
 known_risks:
   - Prefix replay and whole-history growth are unbenchmarked.
   - Six opportunity-dependent behavior metrics remain unavailable until supported committed presentation/response provenance exists.
