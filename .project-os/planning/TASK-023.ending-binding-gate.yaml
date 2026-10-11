@@ -3,7 +3,7 @@ kind: implementation_planning_and_human_gate
 role: developer
 actor: codex-task023-developer
 date: '2026-10-11'
-status: awaiting_human_binding_decision
+status: human_approved_new_definition_only_binding
 base_commit: 1568070e15f25ec8791c3b3c71d38ebae5cab553
 summary: >-
   Reloaded repository instructions and canonical Project OS state. TASK-022 is
@@ -28,6 +28,8 @@ approved_constraints:
   - Evaluation is read-only and cannot itself grant an ending flag.
 gate:
   type: architecture_change
+  selected_option: A
+  human_instruction: '새 캠페인 버전에만 고정하고 기존 기록 유지(권장).'
   question: Pin ending definitions in new campaign versions only, or first design explicit existing-run compatibility?
   options:
     - key: A

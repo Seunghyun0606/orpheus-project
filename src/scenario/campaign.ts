@@ -14,6 +14,7 @@ import { scenarioSchema, type Scenario } from './schema.ts';
 import { validateScenarioObject } from './validator.ts';
 import { behaviorDefinitionSchema, validateBehaviorDefinition, metricKeys } from './behavior.ts';
 import { predictionDefinitionSchema, validatePredictionDefinition } from './prediction.ts';
+import { endingDefinitionSchema, validateEndingDefinition } from './ending.ts';
 export { metricKeys } from './behavior.ts';
 
 const id = z.string().min(1);
@@ -40,6 +41,7 @@ export const campaignDefinitionSchema = z
     replayVersion: z.literal(1),
     behavior: behaviorDefinitionSchema.optional(),
     prediction: predictionDefinitionSchema.optional(),
+    endings: endingDefinitionSchema.optional(),
     branches: z
       .array(
         z
@@ -166,6 +168,7 @@ export function validateCampaignDefinition(
     return checked.success ? checked.data : undefined;
   };
   const issues: CampaignDiagnostic[] = [];
+  if (d.endings) issues.push(...validateEndingDefinition(d.endings, d, catalog));
   if (d.prediction)
     issues.push(
       ...validatePredictionDefinition(

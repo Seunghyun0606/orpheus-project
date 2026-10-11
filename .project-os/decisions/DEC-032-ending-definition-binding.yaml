@@ -1,0 +1,23 @@
+id: DEC-032
+title: Pin ending rules in new immutable campaign definitions only
+status: active
+date: '2026-10-11'
+applies_to: [M4]
+task: TASK-023
+decision: >-
+  Add optional strict versioned ending definitions and final-context/reference
+  mappings only in new immutable campaign definition versions. Preserve existing
+  authorities, records and replay shapes without automatic attachment, backfill,
+  migration or latest-version substitution. Implement pure verified-context
+  resolution with non-production fixtures under DEC-019/025/026.
+human_approval:
+  selected_option: A
+  instruction: '새 캠페인 버전에만 고정하고 기존 기록 유지(권장).'
+request: .project-os/planning/TASK-023.ending-binding-gate.yaml
+consequences:
+  - No production ending thresholds, ranks, BLACKOUT content or early MVP reveal.
+  - Evaluation grants no ending flags and introduces no operation variant.
+  - Existing physical ledger, legacy stores, scenario bytes and behavior formulas remain unchanged.
+  - No new agent delegation, push, release or existing-run migration is authorized.
+  - Independent review, QA and distinct evaluation remain required.
+supersedes: null

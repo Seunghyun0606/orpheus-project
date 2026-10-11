@@ -67,6 +67,11 @@ active_decisions:
   - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
   - '.project-os/decisions/DEC-025-strict-predicate-availability.yaml'
   - '.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml'
+  - '.project-os/decisions/DEC-027-explicit-compatible-campaign-content.yaml'
+  - '.project-os/decisions/DEC-029-behavior-model-binding.yaml'
+  - '.project-os/decisions/DEC-030-branch-prediction-binding.yaml'
+  - '.project-os/decisions/DEC-031-prediction-verification-sequencing.yaml'
+  - '.project-os/decisions/DEC-032-ending-definition-binding.yaml'
 
 acceptance:
   - 'All ten named endings have repeatable positive and exclusion/boundary fixtures.'

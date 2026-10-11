@@ -1,5 +1,16 @@
 # Campaign definition interfaces — approved logical contract
 
+## TASK-023 developer implementation checkpoint
+
+DEC-032 pins optional strict `endings` in new campaign definition versions only.
+`src/scenario/ending.ts` validates final incident/content mappings, typed references,
+explicit eligibility, model versions and ending entries/conditions/ranks. The
+pure resolver derives verified final state and newly accepted final-attempt actions
+from whole-record replay. It grants no flag and adds no operation or storage field.
+Old authorities are not rewritten or automatically connected. The
+[ending checkpoint](ending-resolution.md) and [developer report](../../docs/TASK-023_IMPLEMENTATION.md)
+describe the representation and passing development tests, not independent acceptance.
+
 ## TASK-022 implementation checkpoint
 
 DEC-030 pins optional `branches` and `prediction` in new immutable campaign definition

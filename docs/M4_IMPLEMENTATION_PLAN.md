@@ -1,5 +1,16 @@
 # M4 — Campaign Intelligence Systems
 
+TASK-023 was claimed through Project OS on 2026-10-11. The human approved DEC-032:
+ending rules are pinned only in new immutable campaign definitions; existing records
+remain unchanged. Its [developer candidate](TASK-023_IMPLEMENTATION.md) implements
+validated data-driven resolution and all ten non-production ending fixture families.
+Developer verification passed 70 ending tests and 380 full-suite tests with one
+worker and unchanged timeouts; the report retains a default parallel UI timeout.
+Independent
+review, QA and distinct evaluation are pending, so TASK-023 remains active and
+TASK-024/025 remain unclaimed. No actual user storage, native exposure, production
+ending content, M4 closure, push or release is implied.
+
 Status: TASK-018, TASK-019, TASK-020, TASK-021 and bounded TASK-022 accepted through independent evidence
 evaluation and Project OS. DEC-028 approves TASK-020's physical layout; its
 bounded adapter acceptance does not certify native integration. TASK-021 completed
@@ -47,7 +58,8 @@ was changed by this sequencing approval; the original HUMAN_GATE reports remain 
 Final review and QA independently passed the approved query scope after fresh probes
 and a serial 310-test rerun. Handoffs committed at `fbb5a8f` passed distinct evaluation
 by `/root/task022_evaluator`; Project OS completed TASK-022 on 2026-10-11. Original
-HUMAN_GATE checkpoints remain unchanged. TASK-023 is now eligible, not started;
+HUMAN_GATE checkpoints remain unchanged. At that checkpoint TASK-023 was eligible;
+it has since been claimed as described above.
 TASK-024/025 positive exposure/deviation obligations remain unimplemented and mandatory.
 
 ## Scope and continuity

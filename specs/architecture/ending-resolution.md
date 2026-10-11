@@ -1,5 +1,44 @@
 # Ending resolution — TASK-018 review draft
 
+## TASK-023 developer implementation checkpoint
+
+DEC-032 approves optional ending rules in new immutable campaign definitions only.
+The [developer candidate](../../docs/TASK-023_IMPLEMENTATION.md) implements strict
+`endings` data and the pure `resolveCampaignEnding` query. Existing definitions
+without ending rules retain exact authority/record shapes; no old-run attachment,
+storage migration or latest-version substitution is implemented.
+
+`endings` declares schema version 1, ID/version, optional exact behavior/prediction
+model versions, `finals` mappings and `entries`. A final mapping declares an allowed
+incident/content version, typed source/key references and an explicit `eligible`
+tree. Entries have unique IDs, model version, condition and nonnegative safe-integer
+`priorityRank`. Every mapping validates every entry; no file-order winner exists.
+
+The query verifies whole-record replay and an explicitly requested attempt/head,
+with completion reached outside its inherited baseline. Current campaign context
+and that final attempt's state are derived from the record. `action` observations
+use only newly accepted commands in the selected attempt, with operation/input
+provenance, not inherited command prefixes or another attempt's history. Known
+imported discovery membership can satisfy campaign presence conditions under
+DEC-011, but imports cannot manufacture final completion or actions.
+
+Results are resolved, ambiguous, no-match or diagnostic. Invalid/unavailable
+conditions block selection even at a lower priority or beneath a false final gate.
+A false valid final eligibility is diagnostic rather than successful no-match.
+Evaluation is read-only and introduces no ending grant/operation or player UI.
+All ten ending fixtures are test-only; their simulated recovery is not a requirement
+that all future production ending choices restore service health. Actual final
+completion criteria remain authored scenario data.
+
+Developer verification passed 70 ending tests and 380 full-suite tests with one
+worker and unchanged timeouts; the report retains a default parallel UI timeout.
+Independent
+review, acceptance QA and distinct evaluation are still pending; TASK-023 is active.
+The historical draft below describes the approved logical baseline, not a claim
+that the new candidate has independent acceptance or production content.
+
+## Original logical baseline
+
 Status: DEC-019 approves unresolved top ties and no-match without automatic
 endings. This document specifies review, replay and fixture boundaries within
 that decision; no resolver, save field or production ending content is implemented.
