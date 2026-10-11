@@ -35,7 +35,10 @@ gate:
         - Do not spawn new agents or self-certify completion.
         - Await human-provided independent review, QA and evaluation evidence or an execution plan before dependent work.
 state:
-  independent_agents_started: false
+  independent_agents_started: true
+  resumed_review_agent: /root/task023_review_resume
+  resumed_qa_agent: /root/task023_qa_resume
+  distinct_evaluator: pending_committed_final_handoffs
   immutable_results_created: false
   task023: active_pending_independent_acceptance
   task024_task025: unclaimed_dependencies_pending
