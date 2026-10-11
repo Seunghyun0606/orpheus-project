@@ -32,8 +32,9 @@ completion criteria remain authored scenario data.
 
 Developer verification passed 70 ending tests and 380 full-suite tests with one
 worker and unchanged timeouts; the report retains a default parallel UI timeout.
-Independent
-review, acceptance QA and distinct evaluation are still pending; TASK-023 is active.
+Independent review and QA subsequently passed candidate `8f406b4`, after test-only
+Node/two-worker resource corrections and two default 380-test passes. Historical
+timeouts remain recorded. Distinct evaluation is pending; TASK-023 is active.
 The historical draft below describes the approved logical baseline, not a claim
 that the new candidate has independent acceptance or production content.
 

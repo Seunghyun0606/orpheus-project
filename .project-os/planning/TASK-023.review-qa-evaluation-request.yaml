@@ -39,8 +39,8 @@ state:
   resumed_review_agent: /root/task023_review_resume
   resumed_qa_agent: /root/task023_qa_resume
   distinct_evaluator: pending_committed_final_handoffs
-  immutable_results_created: false
-  task023: active_pending_independent_acceptance
+  immutable_results_created: true
+  task023: active_pending_distinct_evaluation
   task024_task025: unclaimed_dependencies_pending
   milestone: M4_active_M5_planned
   actual_user_storage: untouched

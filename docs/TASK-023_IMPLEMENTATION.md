@@ -1,8 +1,25 @@
 # TASK-023 — Ending resolution developer candidate
 
-Status: implemented and developer-verified under DEC-032; independent review,
-acceptance QA and distinct evaluation are pending. TASK-023 remains active.
+Status: independent review and acceptance QA passed final candidate `8f406b4`.
+Distinct evidence evaluation is pending, so TASK-023 remains active.
 TASK-024/025 are not claimed and M4 is not complete.
+
+## Final independent verification checkpoint
+
+After resuming the quota-interrupted sessions, separately attributed read-only
+review and QA verified the existing implementation. Repeated default-worker UI
+timeouts were retained in historical planning checkpoints, not waived. A test-local
+Node environment alone was insufficient; the final harness also bounds workers to
+two, retaining parallel file isolation, all assertions and the 5000 ms timeout.
+No runtime, scenario, UI, legacy store or dependency was changed by these fixes.
+
+Independent QA passed the default full command twice serially: 380 tests in 25
+files at 24.91 s and 24.51 s. The 70 ending tests passed in 4.06 s; typecheck, lint,
+format, eight scenario files, build, doctor and diff checks passed. The existing
+572.59 kB chunk warning remains. Review passed all four acceptance criteria.
+Final attributed handoffs are in `.project-os/planning/TASK-023.final-*.yaml`.
+These checks certify bounded framework behavior, not native presentation, production
+balance or TASK-024/025. The original developer observations below remain history.
 
 ## Completed
 
@@ -91,11 +108,11 @@ parallel timeout is retained as an unresolved reliability risk for independent Q
 - IndexedDB verification uses an injected memory factory, not user databases,
   native storage capability or actual presentation. Old stores and MVP UI are untouched.
 - Complete-history replay cost remains unbenchmarked for a full campaign.
-- Default parallel test execution has an observed UI timeout; independent QA must
-  assess it without concealing failed runs or relaxing the existing timeout.
-- Obtain separately authorized independent review/QA and distinct evaluation before
+- Earlier default parallel execution has recorded UI timeouts. The corrected
+  two-worker harness passed twice, without a guarantee for every machine.
+- Obtain distinct evaluation of the final independent handoffs before
   completion. TASK-024 then owns gated adapter/presentation integration and positive
   deviation fixtures; TASK-025 owns independent integration/native exit evidence.
 
-Next recommended step: independent review and QA of the pinned candidate, followed
-by distinct Project OS evidence evaluation. No push or release is authorized here.
+Next recommended step: distinct Project OS evidence evaluation of the committed
+final handoffs. No push or release is authorized here.

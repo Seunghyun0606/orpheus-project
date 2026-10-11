@@ -1,0 +1,49 @@
+task: TASK-023
+status: pass
+role: developer
+actor: codex-task023-developer
+source_agent: /root
+date: '2026-10-11'
+commit: 8f406b4cd2fb4656aa01f4a2d2bc54d5f40d28a0
+original_runtime_commit: 5495c6d1ce64587a635bb1d8a1da7900754d6667
+summary: >-
+  Implemented DEC-032 new-definition-only strict ending authoring and pure
+  replay-verified final-attempt resolution, all ten isolated fixture families,
+  validation and deterministic priority ambiguity/no-match. Independent review
+  and corrected-harness execution QA pass. This submission is not self-approved
+  canonical completion or native/production acceptance.
+files_changed:
+  - src/scenario/ending.ts
+  - src/scenario/campaign.ts
+  - src/engine/campaign/endings.ts
+  - src/tests/fixtures/endings.ts
+  - src/tests/ending-resolution.test.ts
+  - vitest.config.ts
+  - .project-os/decisions/DEC-032-ending-definition-binding.yaml
+  - .project-os/tasks/ready/TASK-023.yaml
+  - .project-os/planning/TASK-023.implementation-candidate.yaml
+  - .project-os/planning/TASK-023.verification-resume.yaml
+  - .project-os/planning/TASK-023.pre-fix-review.yaml
+  - .project-os/planning/TASK-023.pre-fix-qa.yaml
+  - .project-os/planning/TASK-023.node-only-qa.yaml
+  - specs/architecture/campaign-definition-contract.md
+  - specs/architecture/ending-resolution.md
+  - docs/TASK-023_IMPLEMENTATION.md
+  - docs/M4_IMPLEMENTATION_PLAN.md
+verification:
+  acceptance: pass
+  ac1: pass
+  ac2: pass
+  ac3: pass
+  ac4: pass
+  independent_review: pass
+  independent_qa: pass
+  unit_test: pass_from_independent_qa_380_twice_default_70_focused
+  typecheck_lint_format_build_validation_doctor_diff: pass_from_independent_qa
+  compatibility: No old authority attachment, record migration, source rewrite or model reinterpretation.
+critical_issues: 0
+followups:
+  - Distinct configured evaluator must audit committed final evidence before completion.
+  - Historical failures remain intact; safe test-only Node/two-worker corrections did not relax timeouts or assertions.
+  - Six opportunity metrics, actual presentation/response, positive deviation and native verification remain TASK-024/025 obligations.
+  - No ending grant, production final content, actual REWRITE operation, user storage write, push or release.
