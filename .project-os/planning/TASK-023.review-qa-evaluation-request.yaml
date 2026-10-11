@@ -3,7 +3,7 @@ kind: bounded_independent_review_qa_and_distinct_evaluation_request
 role: developer
 actor: codex-task023-developer
 date: '2026-10-11'
-status: awaiting_human_delegation_approval
+status: human_approved_read_only_delegation
 candidate_commit: 5495c6d1ce64587a635bb1d8a1da7900754d6667
 implementation_checkpoint: .project-os/planning/TASK-023.implementation-candidate.yaml
 summary: >-
@@ -13,6 +13,8 @@ summary: >-
   delegation for TASK-023 and, after each dependency is accepted, TASK-024/025.
 gate:
   type: architecture_change
+  selected_option: A
+  human_instruction: '023~025의 읽기 전용 독립 리뷰·QA·별도 평가 위임 승인(권장).'
   question: Authorize separately attributed read-only review, QA and distinct evaluation for TASK-023 through TASK-025?
   options:
     - key: A
