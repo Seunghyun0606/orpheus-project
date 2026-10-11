@@ -22,6 +22,12 @@ import {
 import type { BehaviorMetricKey } from '../../scenario/behavior.ts';
 import { canonicalJson } from './canonical.ts';
 import {
+  applyOpportunityOperation,
+  associateOpportunityResponses,
+  projectOpportunityMetrics,
+  type OpportunityState,
+} from './opportunities.ts';
+import {
   evaluateCampaignCondition,
   type Observation,
   type CampaignDiagnostic,
@@ -44,13 +50,35 @@ const common = {
   sequence,
   definitionId: id,
   definitionVersion: id,
-  replayVersion: z.literal(1),
+  replayVersion: z.union([z.literal(1), z.literal(2)]),
   canonicalVersion: z.literal(1),
 };
 const legacySourcesSchema = z
   .object({ incident: z.string().nullable(), progress: z.string().nullable() })
   .strict();
 export const campaignOperationSchema = z.discriminatedUnion('kind', [
+  z
+    .object({
+      ...common,
+      replayVersion: z.literal(2),
+      kind: z.literal('prepare_opportunity'),
+      attemptId: id,
+      priorHead: id,
+      preparationId: id,
+      ruleId: id,
+    })
+    .strict(),
+  z
+    .object({
+      ...common,
+      replayVersion: z.literal(2),
+      kind: z.literal('acknowledge_presentation'),
+      attemptId: id,
+      priorHead: id,
+      preparationId: id,
+      surfaceId: id,
+    })
+    .strict(),
   z.object({ ...common, kind: z.literal('create') }).strict(),
   z
     .object({
@@ -132,7 +160,7 @@ export interface EffectReceipt {
   eventSequence: number;
 }
 export interface CampaignRun {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
   runId: string;
   revision: number;
   definitionAuthority: string;
@@ -142,6 +170,7 @@ export interface CampaignRun {
   projection: CampaignProjection;
   effectReceipts: EffectReceipt[];
   behavior?: BehaviorState;
+  opportunities?: OpportunityState;
   checkpointAssociations?: {
     operationId: string;
     attemptId: string;
@@ -442,27 +471,30 @@ function apply(
   catalog: ScenarioCatalog,
   prior: CampaignRun | null,
   op: CampaignOperation,
+  prefixes: ReadonlyMap<number, CampaignRun> = new Map(),
 ): CampaignResult {
+  if (op.replayVersion !== definition.replayVersion) return failure('INCOMPATIBLE_REPLAY_VERSION');
   if (op.definitionId !== definition.id || op.definitionVersion !== definition.version)
     return failure('INCOMPATIBLE_DEFINITION');
   if (prior === null) {
     if (op.kind !== 'create' || op.sequence !== 0) return failure('MISSING_CREATION');
-    return {
-      ok: true,
-      disposition: 'candidate',
-      run: {
-        schemaVersion: 1,
-        runId: op.runId,
-        revision: 0,
-        definitionAuthority: canonicalJson(definition),
-        operations: [op],
-        attempts: [],
-        activeAttemptId: null,
-        projection: JSON.parse(canonicalJson(definition.initial)) as CampaignProjection,
-        effectReceipts: [],
-        ...(definition.behavior ? { behavior: createBehaviorState(definition.behavior) } : {}),
-      },
+    const run: CampaignRun = {
+      schemaVersion: definition.recordVersion ?? 1,
+      runId: op.runId,
+      revision: 0,
+      definitionAuthority: canonicalJson(definition),
+      operations: [op],
+      attempts: [],
+      activeAttemptId: null,
+      projection: JSON.parse(canonicalJson(definition.initial)) as CampaignProjection,
+      effectReceipts: [],
+      ...(definition.behavior ? { behavior: createBehaviorState(definition.behavior) } : {}),
+      ...(definition.recordVersion === 2
+        ? { opportunities: { preparations: [], acknowledgements: [], responses: [] } }
+        : {}),
     };
+    projectOpportunityMetrics(definition, run);
+    return { ok: true, disposition: 'candidate', run };
   }
   if (op.runId !== prior.runId || prior.definitionAuthority !== canonicalJson(definition))
     return failure('INCOMPATIBLE_AUTHORITY');
@@ -475,7 +507,15 @@ function apply(
     return failure('OUT_OF_ORDER_OPERATION');
   const next = JSON.parse(canonicalJson(prior)) as CampaignRun;
   next.revision = op.sequence;
-  if (op.kind === 'start' || op.kind === 'checkpoint') {
+  if (op.kind === 'prepare_opportunity' || op.kind === 'acknowledge_presentation') {
+    const result = applyOpportunityOperation(definition, catalog, prior, next, op, (length) => {
+      const run = prefixes.get(length - 1);
+      return run
+        ? { ok: true, disposition: 'candidate', run }
+        : failure('MISSING_PREDICTION_PREFIX');
+    });
+    if (!result.ok) return result;
+  } else if (op.kind === 'start' || op.kind === 'checkpoint') {
     if (next.attempts.some((item) => item.id === op.attemptId))
       return failure('CONFLICTING_ATTEMPT');
     const snapshot = op.kind === 'checkpoint' ? sourceSnapshot(op.sourceBytes, catalog) : undefined;
@@ -536,6 +576,8 @@ function apply(
       return failure('INVALID_COMMAND_BOUNDARY');
     const result = executeCommand(attempt.incident, scenario, op.command);
     if (!result.ok) return failure('REJECTED_COMMAND', op.command.actionId);
+    const response = associateOpportunityResponses(definition, catalog, prior, next, op);
+    if (!response.ok) return response;
     const source: BehaviorSource | undefined = definition.behavior
       ? {
           runId: op.runId,
@@ -568,6 +610,7 @@ function apply(
     for (const event of result.events) {
       if (definition.behavior && next.behavior && source)
         consumeBehaviorEvent(next.behavior, definition.behavior, source, event, delivered);
+      projectOpportunityMetrics(definition, next);
       const error = projectEvents(definition, next, prior, attempt, op, [event]);
       if (error) return error;
     }
@@ -614,6 +657,7 @@ function apply(
       sourceBytes: op.sourceBytes,
     });
   }
+  projectOpportunityMetrics(definition, next);
   next.operations.push(op);
   return { ok: true, disposition: 'candidate', run: next };
 }
@@ -622,6 +666,7 @@ function replayCampaignUnchecked(
   input: unknown,
   catalog: ScenarioCatalog,
   operations: readonly unknown[],
+  prefixes: Map<number, CampaignRun> = new Map(),
 ): CampaignResult {
   const validated = validateCampaignDefinition(input, catalog);
   if (!validated.ok) return validated;
@@ -634,11 +679,12 @@ function replayCampaignUnchecked(
     }
     const parsed = campaignOperationSchema.safeParse(operation);
     if (!parsed.success) return failure('INVALID_OPERATION');
-    const result = apply(validated.definition, catalog, run, parsed.data);
+    const result = apply(validated.definition, catalog, run, parsed.data, prefixes);
     if (!result.ok) return result;
     // Stored chronology must not contain duplicate delivery as a new operation.
     if (result.disposition === 'duplicate') return failure('DUPLICATE_HISTORY_ENTRY');
     run = result.run;
+    prefixes.set(run.revision, run);
   }
   return run ? { ok: true, disposition: 'candidate', run } : failure('MISSING_CREATION');
 }
@@ -664,16 +710,19 @@ export function prepareCampaignOperation(
 ): CampaignResult {
   try {
     canonicalJson(input);
+    const prefixes = new Map<number, CampaignRun>();
     if (prior !== null) {
-      const verified = replayCampaign(definition, catalog, prior.operations);
+      canonicalJson(prior);
+      const verified = replayCampaignUnchecked(definition, catalog, prior.operations, prefixes);
       if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(prior))
         return failure('INVALID_PRIOR_RECORD');
+      prior = verified.run;
     }
     const validated = validateCampaignDefinition(definition, catalog);
     if (!validated.ok) return validated;
     const parsed = campaignOperationSchema.safeParse(input);
     if (!parsed.success) return failure('INVALID_OPERATION');
-    return apply(validated.definition, catalog, prior, parsed.data);
+    return apply(validated.definition, catalog, prior, parsed.data, prefixes);
   } catch {
     return failure('INVALID_JSON_OR_RECORD');
   }

@@ -108,3 +108,10 @@ Required fixtures cover ordered variants, exact identity vs equal bytes, canonic
 key-order/Unicode/array behavior, revision races/lost acknowledgements, source changes,
 association-after-slot-write failure, stale heads, inherited-prefix isolation and
 strict incompatible-version rejection. Production content/balance remains separate.
+
+## TASK-024 new-only extension
+
+DEC-033 approves the [v2 presentation candidate](campaign-presentation-v2.md) in
+new campaign authorities only. The historical v1 contract above remains supported
+without appended fields or replay reinterpretation. Native/adapter acceptance is
+not implied by the new runtime candidate.

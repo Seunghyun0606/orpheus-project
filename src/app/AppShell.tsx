@@ -16,11 +16,14 @@ import {
   type IncidentSessionState,
 } from '../store/incident-session.ts';
 import { App } from './App.tsx';
+import { CampaignDesk } from './CampaignDesk.tsx';
+import type { CampaignSessionState } from '../store/campaign-session.ts';
 
 export interface AppShellProps {
   readonly catalog?: ReadonlyMap<string, Scenario>;
   readonly incidentStorage?: SaveStorage;
   readonly progressStorage?: SaveStorage;
+  readonly campaign?: { store: StoreApi<CampaignSessionState>; seed: number };
 }
 
 interface DeskSnapshot {
@@ -64,7 +67,9 @@ export function AppShell({
   catalog = scenarioCatalog,
   incidentStorage,
   progressStorage,
+  campaign,
 }: AppShellProps) {
+  const [campaignOpen, setCampaignOpen] = useState(false);
   const incidentStorageRef = useRef(incidentStorage ?? createLocalSaveStorage());
   const progressStorageRef = useRef(
     progressStorage ?? createLocalSaveStorage(CAMPAIGN_PROGRESS_KEY),
@@ -131,6 +136,15 @@ export function AppShell({
     setActiveId(scenario.id);
   };
 
+  if (campaignOpen && campaign)
+    return (
+      <CampaignDesk
+        store={campaign.store}
+        seed={campaign.seed}
+        onBack={() => setCampaignOpen(false)}
+      />
+    );
+
   if (activeId !== null && activeStore !== null) {
     return (
       <App
@@ -155,6 +169,11 @@ export function AppShell({
         </h1>
         <p>Find the root cause. Choose an incident to investigate or revisit a response record.</p>
       </header>
+      {campaign ? (
+        <button type="button" onClick={() => setCampaignOpen(true)}>
+          Open opt-in campaign framework
+        </button>
+      ) : null}
       {interactionError && <p role="alert">{interactionError}</p>}
       {desk.errors.map((error) => (
         <p key={error} role="alert">

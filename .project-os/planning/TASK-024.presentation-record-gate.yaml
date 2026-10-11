@@ -4,7 +4,7 @@ role: developer
 actor: codex-task024-developer
 source_agent: /root
 date: '2026-10-11'
-status: awaiting_human_decision
+status: human_approved_option_A
 baseline_commit: c10ae913fb73f1912d6eab6840fe37798369e9ca
 dependency_evidence:
   TASK-023: Completed by projectctl after independent review, QA and distinct evaluation.
@@ -22,7 +22,8 @@ inspection:
 gate:
   type: architecture_change
   question: Implement actual presentation and response recording through a new-campaign-only v2 ledger contract, or first design a v1-compatible extension?
-  selected_option: null
+  selected_option: A
+  human_instruction: '새 캠페인만 v2 적용, 기존 v1 기록 유지(권장).'
   options:
     - key: A
       label: New campaigns use v2 records; preserve all v1 records and authorities
@@ -48,6 +49,11 @@ preserved_limits:
   - Native capability and presentation are not certified by fake IndexedDB or headless tests.
   - No production content, M4 closure, M5 work, push or release.
 safe_progress:
+  boundary: Historical preflight at 9f57a96; retained as the state before option A approval.
   claim: TASK-024 claimed through projectctl only after TASK-023 acceptance.
   runtime_schema_operations_storage_ui_changes: none
   TASK-025: unclaimed_dependency_pending
+approved_followup:
+  decision: .project-os/decisions/DEC-033-v2-presentation-response-records.yaml
+  candidate: docs/TASK-024_IMPLEMENTATION.md
+  scope: v2 domain, transactional adapter and opt-in fixture screen candidate; not acceptance or native certification.

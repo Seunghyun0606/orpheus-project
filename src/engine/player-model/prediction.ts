@@ -13,6 +13,7 @@ import {
   campaignObservations,
   campaignAttemptHead,
   replayCampaign,
+  type CampaignResult,
   type CampaignRun,
   type CampaignAttempt,
 } from '../campaign/transitions.ts';
@@ -57,10 +58,12 @@ export interface PredictionBoundary {
   formulaVersion: 1;
   contextId: string;
 }
-interface Support {
+export interface PredictionContext {
   boundary: PredictionBoundary;
   observations: Record<string, Observation>;
   availableCandidates: { candidateId: string; actionId: string }[];
+}
+interface Support extends PredictionContext {
   counts: { candidateId: string; count: number }[];
   eligibleTotal: number;
   samples: PredictionSample[];
@@ -165,6 +168,26 @@ export function getCampaignPrediction(
       return fail('INVALID_PRIOR_RECORD');
     // Work only with replay-owned values, never a caller's mutable projection.
     run = verified.run;
+    return calculateVerifiedPrediction(d, catalog, run, parsed.data);
+  } catch {
+    return fail('INVALID_JSON_OR_RECORD');
+  }
+}
+
+// Internal replay primitive. The transition owns the verified run and prefix
+// cache; public callers use getCampaignPrediction, which verifies whole authority.
+export function calculateVerifiedPrediction(
+  d: CampaignDefinition,
+  catalog: Catalog,
+  run: CampaignRun,
+  request: unknown,
+  prefixAt: (length: number) => CampaignResult = (length) =>
+    replayCampaign(d, catalog, run.operations.slice(0, length)),
+  availabilityOnly = false,
+): PredictionResult {
+  try {
+    const parsed = requestSchema.safeParse(request);
+    if (!parsed.success) return fail('INVALID_PREDICTION_REQUEST');
     const model = d.prediction;
     if (!model) return fail('NO_PINNED_PREDICTION_MODEL');
     const context = model.contexts.find((c) => c.id === parsed.data.contextId);
@@ -228,10 +251,13 @@ export function getCampaignPrediction(
     const unknown = (
       reason: 'EMPTY_CANDIDATES' | 'EMPTY_HISTORY' | 'INSUFFICIENT_SUPPORT' | 'TOP_TIE',
     ): PredictionResult => ({ ok: true, result: { ...support(), kind: 'unknown', reason } });
+    // The ACK/response boundary validates current predicates without recalculating
+    // historical frequency or replacing an already exposed prediction.
+    if (availabilityOnly) return unknown('EMPTY_HISTORY');
     if (!availableCandidates.length) return unknown('EMPTY_CANDIDATES');
     for (const op of run.operations) {
       if (op.kind !== 'command') continue;
-      const prefix = replayCampaign(d, catalog, run.operations.slice(0, op.sequence));
+      const prefix = prefixAt(op.sequence);
       if (!prefix.ok) return prefix;
       const historical = prefix.run.attempts.find((a) => a.id === op.attemptId)!;
       const pastMapping = mappingFor(model, historical);
@@ -285,4 +311,19 @@ export function getCampaignPrediction(
   } catch {
     return fail('INVALID_JSON_OR_RECORD');
   }
+}
+
+export function verifiedPredictionContext(
+  d: CampaignDefinition,
+  catalog: Catalog,
+  run: CampaignRun,
+  contextId: string,
+):
+  | { ok: false; diagnostics: CampaignDiagnostic[] }
+  | { ok: true; gated: boolean; context: PredictionContext | null } {
+  const current = calculateVerifiedPrediction(d, catalog, run, { contextId }, undefined, true);
+  if (!current.ok) return current;
+  if (current.result.kind === 'gated') return { ok: true, gated: true, context: null };
+  const { boundary, observations, availableCandidates } = current.result;
+  return { ok: true, gated: false, context: { boundary, observations, availableCandidates } };
 }

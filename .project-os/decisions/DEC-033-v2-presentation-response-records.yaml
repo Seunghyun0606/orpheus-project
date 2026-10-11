@@ -1,0 +1,25 @@
+id: DEC-033
+title: New-campaign-only v2 actual presentation and response recording
+status: active
+date: '2026-10-11'
+applies_to: [M4]
+task: TASK-024
+decision: >-
+  Implement option A of the concrete record gate: new immutable campaign
+  definitions explicitly select record/replay v2 and versioned authored
+  opportunities. Distinguish preparation from actual gated presentation
+  acknowledgement; commit acknowledgement before eligible responses. Derive
+  one metric-specific response from new accepted commands using verified
+  pre-action context, retaining history and transaction identity.
+human_approval:
+  selected_option: A
+  instruction: '새 캠페인만 v2 적용, 기존 v1 기록 유지(권장).'
+request: .project-os/planning/TASK-024.presentation-record-gate.yaml
+consequences:
+  - Preserve exact v1 authorities, shapes and replay; no attachment, backfill, migration or latest-version substitution.
+  - Keep physical IndexedDB version 1, runs store and runId keyPath; old localStorage authorities remain unchanged.
+  - Required lifecycle and response predicates are explicit authored rules, without timeout, replacement or permanent-validity defaults.
+  - Prepared computation is not exposure; abort/conflict/lost-ack recovery and actual gated adapter/native provenance remain mandatory.
+  - Test-only content first; no production balance, initial state, late-act gate, ending grant or actual REWRITE approval.
+  - No actual user save mutation, native overwrite, push, release, M4 closure or M5 scope approval.
+supersedes: null

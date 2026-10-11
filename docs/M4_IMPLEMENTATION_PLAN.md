@@ -267,3 +267,10 @@ budget-truncated context output does not replace reading required source files.
 Do not invent pending authoring rules or approve
 material findings silently. Approved formula/storage decisions are not acceptance
 of the entire contract or authorization to infer missing history.
+
+TASK-024 has a [new-only v2 candidate](TASK-024_IMPLEMENTATION.md) under DEC-033:
+strict authored presentations/responses, six pooled opportunity metrics and an
+opt-in transactional adapter/fixture screen. Developer verification passed 409
+tests plus quality/web/native build checks. Native gated presentation/storage and
+960×640/150% inspection remain unverified. TASK-024 is active; TASK-025 and M4
+completion remain pending, with no production campaign activation or release.

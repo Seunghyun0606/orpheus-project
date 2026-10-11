@@ -15,6 +15,7 @@ import { validateScenarioObject } from './validator.ts';
 import { behaviorDefinitionSchema, validateBehaviorDefinition, metricKeys } from './behavior.ts';
 import { predictionDefinitionSchema, validatePredictionDefinition } from './prediction.ts';
 import { endingDefinitionSchema, validateEndingDefinition } from './ending.ts';
+import { opportunityDefinitionSchema, validateOpportunityDefinition } from './opportunity.ts';
 export { metricKeys } from './behavior.ts';
 
 const id = z.string().min(1);
@@ -38,7 +39,9 @@ export const campaignDefinitionSchema = z
     schemaVersion: z.literal(1),
     id,
     version: id,
-    replayVersion: z.literal(1),
+    replayVersion: z.union([z.literal(1), z.literal(2)]),
+    recordVersion: z.literal(2).optional(),
+    opportunities: opportunityDefinitionSchema.optional(),
     behavior: behaviorDefinitionSchema.optional(),
     prediction: predictionDefinitionSchema.optional(),
     endings: endingDefinitionSchema.optional(),
@@ -168,6 +171,12 @@ export function validateCampaignDefinition(
     return checked.success ? checked.data : undefined;
   };
   const issues: CampaignDiagnostic[] = [];
+  if (d.replayVersion === 2) {
+    if (d.recordVersion !== 2 || !d.opportunities || !d.behavior)
+      issues.push({ code: 'INVALID_V2_CONTRACT', path: '$' });
+  } else if (d.recordVersion !== undefined || d.opportunities !== undefined)
+    issues.push({ code: 'INVALID_V2_CONTRACT', path: '$' });
+  if (d.opportunities) issues.push(...validateOpportunityDefinition(d.opportunities, d, catalog));
   if (d.endings) issues.push(...validateEndingDefinition(d.endings, d, catalog));
   if (d.prediction)
     issues.push(

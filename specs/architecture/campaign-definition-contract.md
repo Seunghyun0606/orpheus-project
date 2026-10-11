@@ -246,3 +246,11 @@ TASK-020/024/025 must exercise committed acknowledgement before response, actual
 gated visibility, abort/lost-ack recovery and legacy/prefix isolation. These are
 future tests, not newly passing APIs. Independent review/QA and final contract
 acceptance remain necessary before dependent implementation.
+
+## TASK-024 new-only presentation binding
+
+DEC-033 now permits explicit record/replay v2 and required versioned opportunities
+in new immutable authorities. Existing v1 definitions retain their exact shape.
+The concrete [v2 candidate](campaign-presentation-v2.md) implements required
+authoring rather than lifecycle defaults; its isolated native evidence and final
+TASK-024/025 acceptance remain outstanding.

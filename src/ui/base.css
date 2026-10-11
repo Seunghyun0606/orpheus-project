@@ -42,6 +42,25 @@ body {
   margin: 0;
 }
 
+.campaign-desk .panel {
+  margin-block: 1rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.campaign-desk button {
+  white-space: normal;
+  max-width: 100%;
+  margin: 0.25rem;
+}
+
+.campaign-desk[data-reduced-animation='true'] *,
+.campaign-desk[data-crt-effects='false'] * {
+  animation: none !important;
+  transition: none !important;
+  text-shadow: none !important;
+}
+
 button,
 input,
 textarea,

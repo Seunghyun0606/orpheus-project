@@ -25,6 +25,7 @@ depends_on:
   - 'TASK-022'
   - 'TASK-023'
 specs:
+  - 'specs/architecture/campaign-presentation-v2.md'
   - 'specs/architecture/campaign-definition-contract.md'
   - 'specs/architecture/campaign-record-contract.md'
   - 'specs/architecture/condition-evaluation.md'
@@ -78,6 +79,7 @@ active_decisions:
   - '.project-os/decisions/DEC-030-branch-prediction-binding.yaml'
   - '.project-os/decisions/DEC-031-prediction-verification-sequencing.yaml'
   - '.project-os/decisions/DEC-032-ending-definition-binding.yaml'
+  - '.project-os/decisions/DEC-033-v2-presentation-response-records.yaml'
 
 acceptance:
   - 'DEC-031 prediction exposure/response/deviation obligations have executable positive and failure/recovery evidence with actual committed presentation provenance; no sample is inferred from calculation, redisplay or inherited/imported history.'
