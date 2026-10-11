@@ -1,0 +1,22 @@
+task: TASK-023
+status: changes_requested
+role: qa
+actor: codex-task023-qa-resume
+source_agent: /root/task023_qa_resume
+recorded_by: codex-task023-developer
+date: '2026-10-11'
+commit: d4902bac70ea28c6e30d1cfe29da2a7546344a2f
+files_changed: []
+summary: The test-local Node environment is valid but insufficient to make the default full test command pass; bounded parallel workers need fresh verification.
+verification:
+  focused_endings: 70_passed_4_23s
+  default_full_first: 379_passed_1_unchanged_vertical_slice_5000ms_timeout_10_09s
+  default_full_repeat: 379_passed_1_unchanged_vertical_slice_5000ms_timeout_11_00s
+  quality_commands: pass
+  bounded_parallel_experiment:
+    command: npm test -- --maxWorkers=2
+    result: 380_tests_25_files_passed_25_76s
+recommendation: Cap default parallel workers at two without changing any timeout, isolation, test body, assertion or runtime behavior; independently repeat the committed default command before acceptance.
+followups:
+  - Neither the experiment nor Node-only change constitutes final QA PASS.
+  - Historical failed checks remain retained; no user storage/native certification.
