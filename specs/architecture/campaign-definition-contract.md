@@ -9,7 +9,9 @@ pure resolver derives verified final state and newly accepted final-attempt acti
 from whole-record replay. It grants no flag and adds no operation or storage field.
 Old authorities are not rewritten or automatically connected. The
 [ending checkpoint](ending-resolution.md) and [developer report](../../docs/TASK-023_IMPLEMENTATION.md)
-describe the representation and passing development tests, not independent acceptance.
+describe the representation and original development tests. Final independent
+review/QA passed candidate `8f406b4`; distinct evidence evaluation accepted
+`f954a8f` and Project OS completed bounded TASK-023 on 2026-10-11.
 
 ## TASK-022 implementation checkpoint
 

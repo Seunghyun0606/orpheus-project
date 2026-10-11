@@ -1,7 +1,8 @@
 # TASK-023 — Ending resolution developer candidate
 
 Status: independent review and acceptance QA passed final candidate `8f406b4`.
-Distinct evidence evaluation is pending, so TASK-023 remains active.
+Distinct evaluation of evidence commit `f954a8f` passed; Project OS completed
+TASK-023 on 2026-10-11 through its configured evaluation transition.
 TASK-024/025 are not claimed and M4 is not complete.
 
 ## Final independent verification checkpoint
@@ -110,9 +111,9 @@ parallel timeout is retained as an unresolved reliability risk for independent Q
 - Complete-history replay cost remains unbenchmarked for a full campaign.
 - Earlier default parallel execution has recorded UI timeouts. The corrected
   two-worker harness passed twice, without a guarantee for every machine.
-- Obtain distinct evaluation of the final independent handoffs before
-  completion. TASK-024 then owns gated adapter/presentation integration and positive
+- TASK-024 owns gated adapter/presentation integration and positive
   deviation fixtures; TASK-025 owns independent integration/native exit evidence.
 
-Next recommended step: distinct Project OS evidence evaluation of the committed
-final handoffs. No push or release is authorized here.
+Next recommended step: claim eligible TASK-024 and resolve its concrete
+opportunity/acknowledgement record contract before implementation. No push or
+release is authorized here.
