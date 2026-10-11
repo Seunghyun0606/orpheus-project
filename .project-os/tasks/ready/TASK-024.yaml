@@ -72,8 +72,12 @@ active_decisions:
   - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
   - '.project-os/decisions/DEC-025-strict-predicate-availability.yaml'
   - '.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml'
+  - '.project-os/decisions/DEC-027-explicit-compatible-campaign-content.yaml'
+  - '.project-os/decisions/DEC-028-campaign-ledger-physical-layout.yaml'
+  - '.project-os/decisions/DEC-029-behavior-model-binding.yaml'
   - '.project-os/decisions/DEC-030-branch-prediction-binding.yaml'
   - '.project-os/decisions/DEC-031-prediction-verification-sequencing.yaml'
+  - '.project-os/decisions/DEC-032-ending-definition-binding.yaml'
 
 acceptance:
   - 'DEC-031 prediction exposure/response/deviation obligations have executable positive and failure/recovery evidence with actual committed presentation provenance; no sample is inferred from calculation, redisplay or inherited/imported history.'

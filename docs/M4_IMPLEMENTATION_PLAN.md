@@ -1,5 +1,14 @@
 # M4 — Campaign Intelligence Systems
 
+TASK-024 was subsequently claimed through Project OS after TASK-023 completion.
+Its preflight found no authored opportunity, prepared-result/presentation operation
+or durable response provenance in the existing v1 runtime. DEC-031 explicitly does
+not approve concrete recording/schema/lifecycle changes. The
+[record-version gate](../.project-os/planning/TASK-024.presentation-record-gate.yaml)
+proposes new-campaign-only v2 records while preserving v1, or a separately reviewed
+v1-compatible extension. No TASK-024 runtime/storage/UI change is implemented pending
+that decision. TASK-025 remains unclaimed and M4 remains active.
+
 TASK-023 was claimed through Project OS on 2026-10-11. The human approved DEC-032:
 ending rules are pinned only in new immutable campaign definitions; existing records
 remain unchanged. Its [developer candidate](TASK-023_IMPLEMENTATION.md) implements

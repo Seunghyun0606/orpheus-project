@@ -223,7 +223,7 @@ tasks:
   role: developer
   milestone: M4
   priority: P0
-  status: ready
+  status: active
   depends_on:
   - TASK-020
   - TASK-022

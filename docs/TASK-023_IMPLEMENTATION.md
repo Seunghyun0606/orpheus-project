@@ -3,7 +3,8 @@
 Status: independent review and acceptance QA passed final candidate `8f406b4`.
 Distinct evaluation of evidence commit `f954a8f` passed; Project OS completed
 TASK-023 on 2026-10-11 through its configured evaluation transition.
-TASK-024/025 are not claimed and M4 is not complete.
+TASK-024 was subsequently claimed for its concrete record-contract preflight;
+TASK-025 remains unclaimed and M4 is not complete.
 
 ## Final independent verification checkpoint
 

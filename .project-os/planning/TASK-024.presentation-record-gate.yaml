@@ -1,0 +1,53 @@
+task: TASK-024
+kind: concrete_opportunity_record_version_gate
+role: developer
+actor: codex-task024-developer
+source_agent: /root
+date: '2026-10-11'
+status: awaiting_human_decision
+baseline_commit: c10ae913fb73f1912d6eab6840fe37798369e9ca
+dependency_evidence:
+  TASK-023: Completed by projectctl after independent review, QA and distinct evaluation.
+  candidate: 8f406b4cd2fb4656aa01f4a2d2bc54d5f40d28a0
+  final_full_tests: 380_passed_twice_default_24_91s_and_24_51s
+  focused: 70_passed_4_06s
+  historical_failures: Preserved; no timeout/assertion waiver.
+inspection:
+  existing_definition: Strict schemaVersion 1 with behavior, prediction and endings but no authored opportunity rules.
+  existing_operations: Strict create, start, checkpoint, command, adopt and associate; no preparation or actual-presentation acknowledgement.
+  existing_record: SchemaVersion 1 and replayVersion 1; exact whole-record replay equality rejects unapproved new fields.
+  existing_behavior: Four supported metrics and six explicitly unavailable opportunity metrics; no actual exposure or response provenance.
+  existing_desktop: Incident/M3 adapters only; queries cannot prove actual presentation or durable response eligibility.
+  approved_boundary: DEC-031 assigns implementation and verification here but explicitly does not approve concrete new operations, schema or lifecycle defaults.
+gate:
+  type: architecture_change
+  question: Implement actual presentation and response recording through a new-campaign-only v2 ledger contract, or first design a v1-compatible extension?
+  selected_option: null
+  options:
+    - key: A
+      label: New campaigns use v2 records; preserve all v1 records and authorities
+      proposed_scope:
+        - New immutable campaign definition versions explicitly select supported record/replay v2 and exact opportunity/model versions; no old-run attachment or automatic migration.
+        - Add strict versioned authored opportunity kinds, typed references, reveal/availability/continuing-validity and eligible/positive response rules. Missing or ambiguous mandatory rules diagnose; no default deadline, permanent validity or latest-display replacement.
+        - New v2 operations distinguish prepared immutable result/context from actual gated presentation acknowledgement. A stable acknowledgement must be committed before a qualifying official response.
+        - Derive at-most-one metric-specific response association from a genuinely new accepted command at its verified pre-action boundary; commit command and samples atomically, without dispatching a second action.
+        - Retain schema/replay v1 support and exact old projections, legacy authorities and frozen content. Unknown versions fail; no v1 record is rewritten, backfilled or silently upgraded.
+        - Keep IndexedDB physical database version 1, runs store and runId keyPath; support both verified envelope versions without a physical upgrade or storage fallback.
+        - Existing approved count semantics remain unchanged. New supported opportunity projections use exact versioned metadata; unavailable old metrics remain unavailable.
+        - Use isolated non-production fixtures first; production initial values, balance, late-act gates, ending grants and actual REWRITE operations are not authorized by this record-contract choice.
+        - Required matching 0/1, differing 1/1, pooled 2/12, one-response, prefix/import exclusion, abort/conflict/lost-ack and gated adapter/native tests remain mandatory.
+    - key: B
+      label: Design and review a v1-compatible optional extension before implementation
+      proposed_scope:
+        - Stop new recording implementation while specifying whether optional v1 fields/variants can preserve exact old replay and client compatibility.
+        - Do not change old authorities, fill absent history or attach opportunity models automatically.
+        - Return any material representation/compatibility decision to the human before implementation; no implicit migration or scope waiver.
+preserved_limits:
+  - Existing Incident slot and discovery store remain unchanged; no actual user storage, native interaction or overwrites are authorized here.
+  - Read-only independent review/QA/distinct evaluation remains approved separately for TASK-024/025 after the dependencies and implementation are ready.
+  - Native capability and presentation are not certified by fake IndexedDB or headless tests.
+  - No production content, M4 closure, M5 work, push or release.
+safe_progress:
+  claim: TASK-024 claimed through projectctl only after TASK-023 acceptance.
+  runtime_schema_operations_storage_ui_changes: none
+  TASK-025: unclaimed_dependency_pending

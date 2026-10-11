@@ -41,7 +41,7 @@ state:
   distinct_evaluator: /root/task023_evaluator
   immutable_results_created: true
   task023: completed_through_projectctl_after_distinct_evaluation
-  task024_task025: unclaimed_dependencies_pending
+  task024_task025: task024_claimed_record_contract_gate_task025_unclaimed
   milestone: M4_active_M5_planned
   actual_user_storage: untouched
   push_release: not_performed
