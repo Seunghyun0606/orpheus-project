@@ -1,0 +1,67 @@
+task: TASK-023
+kind: implementation_planning_and_human_gate
+role: developer
+actor: codex-task023-developer
+date: '2026-10-11'
+status: awaiting_human_binding_decision
+base_commit: 1568070e15f25ec8791c3b3c71d38ebae5cab553
+summary: >-
+  Reloaded repository instructions and canonical Project OS state. TASK-022 is
+  complete and TASK-023 was eligible; claimed TASK-023 through projectctl.
+  Inspected the approved ending/definition/record contracts and strict current
+  runtime. Ending precedence and diagnostic policies are approved, but concrete
+  ending-definition binding to existing versus new campaign authorities is not.
+  DEC-029 and DEC-030 authorize behavior and branch/prediction binding respectively;
+  neither authorizes automatic ending attachment or an existing-run migration.
+observed_state:
+  campaign_definition: Strict version 1 with optional behavior, prediction and branches; no ending definition field.
+  record_authority: Whole immutable campaign definition plus exact scenario authority and accepted operation history.
+  official_operations: create_start_checkpoint_command_adopt_associate_only
+  final_context: No authored final-attempt selection or ending observation mapping implemented.
+  ending_flags: Initial flags exist; generic campaign effects cannot grant them.
+approved_constraints:
+  - DEC-019 resolves only a uniquely preferred eligible ending; top ties and valid no-match have no winner or fallback.
+  - DEC-025 requires every referenced observation before composition, including lower-priority ending conditions.
+  - DEC-026 approves logical typed conditions and priorityRank, not production thresholds or migration.
+  - Final context must belong to a verified official run and attempt, not an arbitrary archive or caller-provided outcome.
+  - All ten ending fixtures are non-production; preserve the bundled UNKNOWN-only MVP and frozen replay authorities.
+  - Evaluation is read-only and cannot itself grant an ending flag.
+gate:
+  type: architecture_change
+  question: Pin ending definitions in new campaign versions only, or first design explicit existing-run compatibility?
+  options:
+    - key: A
+      label: New campaign definition versions only; preserve existing records
+      proposed_scope:
+        - Add optional strict versioned ending rules and final-context/reference mappings to new immutable campaign definition authorities only.
+        - Preserve old authorities and exact replay shapes when ending rules are absent; no automatic attachment, backfill or latest-version fallback.
+        - Implement pure verified-context resolution with test-only conditions and ranks; no player-facing ending content or production tuning.
+        - Keep current storage layout, legacy stores, behavior formulas and scenario source bytes unchanged.
+        - This approval does not authorize new operation variants, ending flag grants, exposure lifecycle rules, agent delegation, push or release.
+      tradeoff: Existing campaigns remain without ending rules; new ending-enabled campaigns require a new definition version.
+    - key: B
+      label: Design explicit existing-run compatibility first
+      proposed_scope:
+        - Keep runtime and records unchanged while specifying source authorities, confirmation and ending/final-context provenance.
+        - Obtain further approval for concrete attachment or migration before implementation; no user-save rewrite is authorized by this option.
+      tradeoff: Compatibility design precedes resolver integration and avoids silently reinterpreting old history.
+verification:
+  task_claim: projectctl claim TASK-023 --role developer
+  project_os_structure:
+    command: projectctl doctor
+    result: pass
+  scenario_validation:
+    command: npm run validate:scenarios
+    result: 8_files_passed
+  current_mvp_replays:
+    command: npm test -- src/tests/inc-001-replay.test.ts src/tests/inc-002-replay.test.ts src/tests/inc-003-replay.test.ts
+    result: 12_tests_in_3_files_passed
+  task023_acceptance: not_implemented_not_claimed
+  independent_review_qa_evaluation: not_performed_not_delegated
+  runtime_schema_content_storage_changes: none
+remaining_work:
+  - Obtain binding approval before changing concrete campaign schema or authority.
+  - Implement all ten ending positive/exclusion/boundary fixtures and order-independent priority diagnostics.
+  - Obtain separately authorized independent review, QA and distinct evaluation before TASK-023 completion.
+  - Proceed to dependent TASK-024 and TASK-025 only after Project OS accepts their prerequisites.
+  - Retain DEC-031 mandatory positive exposure/deviation and failure/recovery obligations in TASK-024/025.
