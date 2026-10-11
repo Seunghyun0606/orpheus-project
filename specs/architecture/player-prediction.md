@@ -7,7 +7,7 @@ branch/prediction binding only in new campaign definition versions. The develope
 candidate implements strict optional `prediction` and `branches` authoring plus
 read-only headless queries; it does not attach them to old runs. Existing model-less
 authorities and replay records retain their exact shape. Independent TASK-022
-review, acceptance QA and evaluation are still pending.
+review/QA passed the DEC-031 bounded scope; distinct evaluation is still pending.
 
 DEC-031 now explicitly assigns verification stages after independent review/QA
 identified the original positive-deviation gap. TASK-022 is evaluated for pure

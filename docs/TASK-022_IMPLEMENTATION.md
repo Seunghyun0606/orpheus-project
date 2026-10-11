@@ -1,23 +1,27 @@
 # TASK-022 — Authored branches and empirical prediction
 
-Status: developer candidate, not independently accepted. TASK-022 remains active.
+Status: final independent review/QA passed under DEC-031; distinct evaluation
+and canonical completion remain pending. TASK-022 is active.
 DEC-030 approves new-definition-only binding; it does not authorize automatic
 model attachment, old-run migration, agent delegation, release or push.
 
 Separately authorized [independent review](../.project-os/planning/TASK-022.independent-review-checkpoint.yaml)
 and [acceptance QA](../.project-os/planning/TASK-022.independent-qa-checkpoint.yaml)
-now both recommend HUMAN_GATE. All four numbered criteria pass for the bounded
+originally both recommended HUMAN_GATE. All four numbered criteria passed for the bounded
 queries and independent QA passed 310 tests, but positive exposure/response/deviation
 verification remains incomplete. DEC-030 does not explicitly move those original
 TASK-021/022 obligations elsewhere. The [sequencing decision](../.project-os/planning/TASK-022.deviation-sequencing-gate.yaml)
-is required before unconditional completion; no final PASS records were submitted.
+was required before unconditional completion; no final PASS records were submitted at that checkpoint.
 
 The human subsequently approved DEC-031 option A. TASK-022 is now evaluated for
 pure query calculation, empirical confidence feedback and no-exposure deviation
 guards. TASK-024 explicitly owns actual acknowledgement/eligible responses and positive
 deviation/recovery fixtures; TASK-025 audits them before M4 completion. The original
-HUMAN_GATE findings remain historical evidence, not rewritten PASS results. Final
-independent confirmation and distinct evaluation are still required for TASK-022.
+HUMAN_GATE findings remain historical evidence, not rewritten PASS results. New final
+[review](../.project-os/planning/TASK-022.final-review.yaml) and
+[QA](../.project-os/planning/TASK-022.final-qa.yaml) independently passed the explicit
+scope, including fresh memory probes and a serial rerun of all 310 tests. Distinct
+evaluation is still required before Project OS completion.
 
 ## Completed
 
@@ -101,5 +105,6 @@ under DEC-031; do not certify the missing TASK-024/025 exposure/response/deviati
 The [bounded delegation request](../.project-os/planning/TASK-022.review-qa-evaluation-request.yaml)
 pins implementation commit `8ada150`. The human separately approved read-only
 review/QA and a distinct final evaluator. Reviewer `/root/task022_review` and QA
-`/root/task022_qa` have finished with HUMAN_GATE recommendations. Final evaluation
-is deferred until the scope decision and final acceptable handoffs exist.
+`/root/task022_qa` finished with HUMAN_GATE recommendations. Final actors
+`/root/task022_final_review` and `/root/task022_final_qa` subsequently passed under
+DEC-031. Distinct evaluation waits for committed final handoffs.

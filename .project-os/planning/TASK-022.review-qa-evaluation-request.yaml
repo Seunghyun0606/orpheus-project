@@ -49,6 +49,19 @@ developer_verification:
   actual_user_storage: not_accessed
   independent_review_qa_evaluation: not_performed
   canonical_completion: not_performed
+finalization_after_scope_approval:
+  decision: .project-os/decisions/DEC-031-prediction-verification-sequencing.yaml
+  allocation_commit: 9407e1d1811806c158c98a2301db0c1fff6b2c72
+  runtime_candidate: 8ada150646227e75d52ec8e1b33be2b040abc476
+  reviewer: /root/task022_final_review
+  qa: /root/task022_final_qa
+  reason: Prior turn sessions are unavailable; replace only within the approved read-only task delegation to finalize evidence under the human-approved scope.
+  state: Independent final confirmation in progress; distinct evaluator waits for committed final handoffs.
+  original_human_gate_reports: Preserved unchanged; no retroactive PASS rewrite.
+  final_review: pass_from_task022_final_review
+  final_qa: pass_from_task022_final_qa
+  final_tests: 310_full_58_focused_13_narrative_data_passed
+  canonical_completion: not_performed_pending_distinct_evaluation
 known_risks:
   - Prefix replay and whole-history growth are unbenchmarked.
   - Six opportunity-dependent behavior metrics remain unavailable until supported committed presentation/response provenance exists.

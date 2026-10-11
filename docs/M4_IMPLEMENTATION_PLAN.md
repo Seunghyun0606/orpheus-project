@@ -28,7 +28,7 @@ passed 310 tests, including 46 new cases and the twelve current MVP replay tests
 Prediction calculation is not an actual exposure and creates no deviation sample.
 No production content, UI, operation variants or storage migration were added.
 TASK-022 remains active, not accepted. The human separately authorized read-only
-review/QA and a distinct evaluator. Both independent reports now recommend
+review/QA and a distinct evaluator. Original independent reports recommended
 [HUMAN_GATE](../.project-os/planning/TASK-022.deviation-sequencing-gate.yaml): positive
 exposure/response/deviation fixtures remain required but unimplemented, without explicit
 reassignment to a later task. Four numbered criteria pass for the pure queries and
@@ -43,6 +43,9 @@ deviation and abort/conflict/lost-ack fixtures to TASK-024. TASK-025 must audit 
 and actual gated integration/native evidence before M4 completion. Task definitions
 now declare these requirements. No runtime, old-record, schema or lifecycle default
 was changed by this sequencing approval; the original HUMAN_GATE reports remain intact.
+Final review and QA independently passed the approved query scope after fresh probes
+and a serial 310-test rerun. Attributed final handoffs are being submitted; distinct
+evaluation and canonical completion remain pending.
 
 ## Scope and continuity
 
