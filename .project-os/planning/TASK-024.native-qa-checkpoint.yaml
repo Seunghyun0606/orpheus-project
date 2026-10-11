@@ -1,0 +1,36 @@
+task: TASK-024
+kind: partial_direct_native_observation
+role: developer
+actor: codex-task024-developer
+source_agent: /root
+date: '2026-10-12'
+status: partial_native_verification_desktop_locked
+approved_scope: DEC-034 and DEC-035 isolated QA binary/window/profile only.
+initial_candidate: 376f166
+initial_binary_sha256: 93C65A16A2269AE8FB8C1B0B0A9B092EE35AD2CE4E68AB9CF2BE4A1FB4E16665
+corrected_candidate: 9719e06
+corrected_binary_sha256: B3D18D065B323E67A29962C6CE4987240AC386FD7666A4B66646DF7CF1CD8E54
+window_title: Orpheus QA - TASK-024
+initial_returned_window_id: 69298
+restarted_returned_window_id: 986876
+fixture_run_id: qa024-43941b8b-04bc-43d7-9df8-0407e2b9a704
+direct_observations:
+  - Unique returned explicit QA process/window selected. Initial page exposes only fresh/restore fixture controls; no automatic run creation or restoration.
+  - Explicit fresh creation completed at revision 5. Actual visible QA diagnostics reported viewport 960 x 640 CSS pixels, ACK 0, response 0, deviation 0/0.
+  - Initial authored reveal gate hid preparation controls. Open Payment API logs (+30s) committed revision 6, elapsed 30, then preparation became available.
+  - Prepare committed revision 7. Visible authored prediction RESTART_API at 100.0 percent, prepared-only status, ACK 0 and response 0. Live action controls disabled until confirmation.
+  - Explicit visible Confirm displayed guidance committed revision 8. ACK 1, response 0, deviation 0/0, no pending operation, Display acknowledgement durably committed. Confirm disabled and live action controls enabled.
+  - Active buttons initially inherited pale text on default pale Windows button background. This failed visual readability; no native accessibility PASS claimed.
+  - Scoped explicit surface/text colors and disabled dashed borders corrected in 9719e06. Typecheck/lint and 7 focused component tests passed; separate native build passed in 30.69s with retained warnings.
+  - Closed only the QA window after revision 8 had no pending operation. A later fresh window inventory confirmed no QA window. Restarted corrected binary; new unique returned window showed legible initial controls.
+  - Restore input was refused with user input was detected in this window; call get_window_state before continuing. Re-observed without retrying the input. Screenshot showed Windows lock screen while accessibility retained old QA tree; did not treat stale text as successful restoration.
+  - Stopped all native input immediately per computer-use skill locked-desktop rule. No lock-screen interaction, security change, profile reset or normal application access.
+remaining:
+  - Unlock desktop, reselect a fresh uniquely returned QA window; explicitly restore existing fixture without creating a duplicate run.
+  - Verify revision 8 ACK survives process restart before eligible response. Explicitly select stored guidance; eligible action must produce matching 0/1 or differing 1/1 as appropriate.
+  - Verify real native WebView reload preserves run identity, contributions and evidence; archive/remount do not duplicate ACK/response.
+  - Native 150 percent text, keyboard, reduced-animation and non-color cues on live and archive screens.
+  - Final independent review/QA/evaluation with original failures and partial observations retained.
+evidence_limit: Native observations are root's direct computer-use outputs, not independent QA execution. No screenshot files were saved or re-decoded. Desktop build and DOM/fake-IDB tests are not proof of pending native outcomes.
+storage_boundary: Only approved isolated native QA profile and its fresh fixture were accessed. Normal user stores untouched; no profiles or runs deleted.
+canonical_state: TASK-024 and M4 active, TASK-025 unclaimed. No completion, acceptance waiver, push or release.

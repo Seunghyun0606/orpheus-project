@@ -1,0 +1,23 @@
+task: TASK-024
+kind: bounded_read_only_partial_native_checkpoint_evaluation
+role: evaluator
+actor: codex-task024-candidate-evaluator
+source_agent: /root/task024_candidate_evaluator
+recorded_by: /root
+date: '2026-10-12'
+commit: 9719e06d6e295b5df046da1fe01a53287af4619c
+status: evidence_consistency_pass_full_acceptance_pending
+audit:
+  - DEC-034/035 match isolated QA entry/config/profile and normal production/user-store/security boundaries.
+  - Root's original candidate native revision 5-8 ACK observations and corrected candidate initial control readability are separately attributed with binary/run/window identities.
+  - Restore input refusal and Windows lock screen with stale accessibility text prove neither successful restore nor durable response; stopping native input is correct.
+  - Independent full 410/29 PASS 30.75s, original focused 29 pass/1 timeout 5245ms, unchanged rerun 30/4 PASS 9.22s and quality results are correctly separated. Not evaluator's own test execution.
+acceptance:
+  AC1: Automated met; native pre-response ACK partial, corrected restore/response/durability pending.
+  AC2: Domain-authoritative projection candidate scope met.
+  AC3: Automated met; actual WebView/process restore/reload/archive pending.
+  AC4: Independent automated MVP/UNKNOWN/save protection met.
+  AC5: Original minimum viewport partial; corrected full screens/150 percent/keyboard/reduced-motion/archive pending.
+next_step: Unlock desktop, restore existing fixture and revision 8 ACK, then verify eligible response, reload and accessibility/archive; do not substitute new creation for restore.
+state_boundary: TASK-024/M4 active; TASK-025 unclaimed. No final configured acceptance/evaluate, completion, waiver or M4 closure.
+mutation_boundary: Read-only audit; no files, commits, canonical state, native input or actual user-store changes by evaluator.

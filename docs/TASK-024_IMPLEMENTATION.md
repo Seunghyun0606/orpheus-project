@@ -136,4 +136,11 @@ not launched. Local Tauri source reveals a different relative profile path than
 the original proposal; the [path confirmation gate](../.project-os/planning/TASK-024.native-path-resolution-gate.yaml)
 must be resolved first. Record actual native evidence before final TASK-024
 evaluation and the independent TASK-025 audit. No native profile has been opened
-or created through the application.
+or created through the application at that pre-approval checkpoint.
+
+DEC-035 subsequently approved the actual QA path. Partial direct native evidence
+now confirms reveal gating and a committed ACK before response. Root fixed poor
+button contrast in `9719e06`; after restarting the corrected binary, Windows
+locked before restoration. See [native resume](TASK-024_NATIVE_QA.md). Actual
+post-restart durability, response/reload and enlarged-text/archive inspection
+remain pending; no final task acceptance is claimed.

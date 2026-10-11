@@ -294,3 +294,13 @@ Tauri source inspection disproved the originally described identifier-relative
 profile resolution; the [actual-path gate](../.project-os/planning/TASK-024.native-path-resolution-gate.yaml)
 must be resolved before any launch or profile creation. No native acceptance,
 TASK-025 claim or M4 closure is implied.
+
+DEC-035 subsequently approved the actual label-relative QA profile. Root native
+inspection verified initial 960×640 reveal gating, preparation without a sample
+and an actual visible ACK committed before response. Native readability required
+a scoped button correction in `9719e06`; the restarted corrected binary showed
+legible initial controls. Windows locked before restoration, so inputs stopped.
+Post-restart durability, reload, 150%/keyboard and archive evidence remain pending.
+Independent candidate review reports no additional blocker; separate automated
+QA passes 410 tests, retaining its initial focused timeout and unchanged rerun.
+These bounded checkpoints are not TASK-024 completion or TASK-025 acceptance.

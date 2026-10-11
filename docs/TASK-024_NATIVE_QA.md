@@ -1,10 +1,10 @@
 # TASK-024 — isolated native QA candidate
 
-Status: separate QA entry built, **not launched or native-certified**. DEC-034
-approved a fixture-only application/profile, but local Tauri source inspection
-found a concrete path discrepancy. Resolve the
-[path gate](../.project-os/planning/TASK-024.native-path-resolution-gate.yaml)
-before launch. Existing TASK-024 implementation/evidence is preserved.
+Status: **partial native verification; desktop locked before restoration**.
+DEC-034 approved a fixture-only application/profile and DEC-035 subsequently
+approved the installed label-relative path. The original unlaunched checkpoint
+and path discrepancy remain below as historical evidence. Full native acceptance
+is still pending; existing TASK-024 implementation/evidence is preserved.
 
 ## Completed / changed files
 
@@ -95,3 +95,59 @@ actual REWRITE is performed.
 
 Choose the actual isolated profile path at the human gate. Do not launch the
 current binary before that decision. No native requirement is waived.
+
+That recommendation described the `376f166` pre-approval checkpoint. The human
+subsequently approved DEC-035 and the bounded native run proceeded as follows.
+
+## Direct native resume and current next step
+
+Root selected only the uniquely returned QA window for the verified binary.
+Fresh run `qa024-43941b8b-04bc-43d7-9df8-0407e2b9a704` at revision 5 showed an
+actual 960×640 viewport and no ACK/response samples. The authored gate initially
+hid guidance; inspecting logs advanced 30 seconds and opened the gate (revision
+6). Preparation displayed RESTART_API / 100.0% without ACK or sample (revision
+7), blocking actions. Actual visible confirmation committed revision 8, ACK 1 /
+response 0, showing durable status and enabling actions. This demonstrates the
+native pre-response path, **not** post-restart durability or a response sample.
+
+Native inspection found poor active-button contrast on Windows defaults. Scoped
+campaign/QA button colors, padding and dashed disabled borders corrected this in
+`9719e06`. No gameplay, normal app initialization, profile contract or security
+setting changed. Typecheck/lint and 7 focused component tests passed (5.38s);
+the corrected QA binary built in 30.69s, web in 154ms / 220 modules. Its SHA256 is
+`B3D18D065B323E67A29962C6CE4987240AC386FD7666A4B66646DF7CF1CD8E54`.
+
+After no pending operation was visible, root closed only the QA window and
+confirmed its absence in a subsequent inventory. The corrected binary restarted
+with readable controls and no automatically loaded run. The restore click was
+refused because user input had been detected; root re-observed before retrying.
+The screenshot then showed the Windows lock screen despite stale QA accessibility
+text. Per computer-use's locked-desktop rule, all native input stopped immediately.
+No restoration success or native accessibility PASS is inferred from stale text.
+
+The [direct observation checkpoint](../.project-os/planning/TASK-024.native-qa-checkpoint.yaml)
+retains candidate/hash/run/window identities, successful steps, readability defect
+and incomplete scope. Root observations are not an independent agent's execution.
+Next: unlock Windows and re-observe the uniquely returned QA window, restore this
+existing run (do not create another), then verify ACK/reload/response preservation,
+150% text, keyboard, reduced-motion and read-only archive. Independent final
+acceptance remains required; TASK-024/025 and M4 are not complete.
+
+Independent recheck of `9719e06`:
+
+- `codex-task024-domain-reviewer` passed the implementation candidate scope,
+  directly checking installed path resolution and isolation; native outcomes
+  are audited root observations, not independent input.
+- `codex-task024-candidate-qa` directly passed the full 410 tests / 29 files
+  (30.75s) and typecheck/lint/format/eight scenarios/normal web build/doctor/diff.
+  Its first focused run had 29 passes and one pooled `2/12` timeout (5245ms
+  against the unchanged 5000ms limit, 12.59s total). The same settings rerun passed
+  all 30 / 4 files (9.22s). Preserve the failure; the cause was not established.
+- These [review](../.project-os/planning/TASK-024.native-resume-review.yaml) and
+  [QA](../.project-os/planning/TASK-024.native-resume-qa.yaml) records explicitly
+  withhold full native acceptance. Actual restoration and accessibility checks
+  cannot be replaced by the passing automated suite.
+- Distinct `codex-task024-candidate-evaluator` audited the candidate and attributed
+  evidence: bounded consistency PASS, full acceptance PENDING. Its
+  [evaluation](../.project-os/planning/TASK-024.native-resume-evaluation.yaml)
+  retains AC1/AC3/AC5 native gaps; it did not run tests or operate the native app.
