@@ -1,0 +1,54 @@
+kind: structured_planning_result_not_task_acceptance
+milestone: M5
+actor: /root
+date: '2026-10-12'
+baseline_commit: b548573
+status: planning_only_complete
+summary: >-
+  Recorded human option A in DEC-036 and prepared an M5 implementation plan,
+  planning manifest and ten bounded TASK-026–035 draft definitions. M4 remains
+  incomplete and its QA obligations remain mandatory. No draft was registered
+  or claimed, and no runtime/content/storage change was made.
+files_changed:
+  - .project-os/decisions/DEC-036-m5-planning-before-m4-acceptance.yaml
+  - docs/M5_IMPLEMENTATION_PLAN.md
+  - docs/M4_IMPLEMENTATION_PLAN.md
+  - README.md
+  - .project-os/planning/M5/manifest.yaml
+  - .project-os/planning/M5/result.yaml
+drafts: .project-os/planning/M5/manifest.yaml
+verification:
+  scope: Documentation consistency only; not application QA or independent acceptance.
+  yaml_references_dependencies:
+    outcome: pass
+    method: Node UTF-8 reads and YAML unique-key parsing; required fields, references, ID collisions, cycle detection and direct/transitive TASK-025 dependency checks.
+    draft_count: 10
+  markdown_links:
+    outcome: pass
+    existing_and_new_local_links_checked: 59
+  canonical_state:
+    outcome: unchanged
+    method: Compare normalized UTF-8 content and Git clean-filter blob hashes against HEAD for current, backlog, roadmap and M4/M5 milestone files.
+    files_checked: 5
+  projectctl_doctor: pass
+  projectctl_next_developer: No eligible task; drafts are outside the ready queue.
+  document_format: pass
+  git_diff_check: pass
+  application_tests: not_run_per_human_QA_deferral
+  native_QA: not_run_per_human_QA_deferral
+  independent_review_QA_evaluation: not_requested_or_claimed
+validation_history:
+  - Initial raw byte comparison against git show failed because Git stores LF while the existing Windows worktree uses CRLF; current.yaml had 0 versus 7 CRLF sequences. No canonical file was rewritten.
+  - A subsequent inline Node diagnostic failed from PowerShell argument quoting before running; no file or state mutation resulted.
+  - The UTF-8 here-string rerun verified unchanged normalized content and matching clean-filter Git blobs for all five canonical files. Other draft/reference/link checks passed.
+known_risks:
+  - TASK-024 corrected native restore/response/durability and full display/accessibility evidence remain pending.
+  - TASK-025 acceptance and M4 closure remain pending; QA deferral is not a completion waiver.
+  - Draft IDs, Incident allocation, production binding/balance, delivery targets and release choices are not final approvals.
+followups:
+  - Keep M5 planned and draft tasks unregistered until M4 acceptance and configured human activation approval.
+  - Resume TASK-024 QA only when requested; preserve the approved isolated profile and existing ACK restoration evidence boundary, then perform TASK-025.
+  - Obtain campaign blueprint and applicable material implementation decisions before production content work.
+canonical_state_updated: false
+commit: null
+push: not_performed

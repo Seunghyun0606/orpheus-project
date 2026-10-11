@@ -1,0 +1,23 @@
+id: DEC-036
+title: Plan M5 without closing M4 or waiving outstanding QA
+status: active
+date: '2026-10-12'
+applies_to: [M4, M5]
+human_approval:
+  selected_option: A
+  instruction: 'M4 미완료 유지, M5 계획·작업 정의 선행.'
+  original_question: 'QA를 후행으로 미루고 M5 작업 정의를 먼저 진행할까요?'
+decision: >-
+  Defer QA execution at the human's request and prepare M5 plans and draft task
+  definitions only. Keep M4 active and incomplete, TASK-024 active, TASK-025
+  unclaimed, and M5 planned. Planning does not satisfy the M5 implementation
+  entry criterion that M4 systems are complete and tested.
+consequences:
+  - Outstanding TASK-024 native evidence and TASK-025 independent acceptance remain mandatory, not waived or marked pass.
+  - Place proposed M5 tasks outside the ready queue, backlog and milestone task registration; they cannot be claimed by projectctl.
+  - Preserve existing immutable implementation, test, review, QA and evaluation handoffs and partial native checkpoints.
+  - Reuse the approved product direction and domain boundaries without changing runtime, content, schemas, storage or security.
+  - Task IDs and decomposition are proposals, not approved production content, thresholds, incident allocation or release targets.
+  - M5 activation, task registration and material follow-on choices require their configured human gates and Project OS rules.
+  - No QA execution, subagent delegation, M4 completion, user-store access, push or release is authorized by this planning approval.
+supersedes: null

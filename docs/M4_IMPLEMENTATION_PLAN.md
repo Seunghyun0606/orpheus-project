@@ -304,3 +304,13 @@ Post-restart durability, reload, 150%/keyboard and archive evidence remain pendi
 Independent candidate review reports no additional blocker; separate automated
 QA passes 410 tests, retaining its initial focused timeout and unchanged rerun.
 These bounded checkpoints are not TASK-024 completion or TASK-025 acceptance.
+
+## Planning-first follow-up (2026-10-12)
+
+The human requested deferring QA and approved DEC-036: keep M4 incomplete while
+preparing M5 plans and draft task definitions. The
+[M5 planning draft](M5_IMPLEMENTATION_PLAN.md) records TASK-026–035 outside the
+canonical ready queue. TASK-024 remains active, TASK-025 unclaimed/ineligible,
+and M5 planned. No missing native or independent acceptance obligation is waived;
+M5 implementation still requires complete/tested M4 and its configured human gate.
+No runtime, storage, content, old handoff or canonical state changes are implied.

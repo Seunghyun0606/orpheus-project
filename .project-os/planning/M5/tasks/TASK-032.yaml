@@ -1,0 +1,52 @@
+id: TASK-032
+title: 'Author production ending conditions and conditional epilogues'
+role: developer
+milestone: M5
+priority: P1
+status: draft
+
+objective: 'Apply separately approved ending balance and narrative data to all ten named endings in accumulated full-campaign runs.'
+why: 'Existing ending fixture families prove resolver behavior, not production threshold balance or reachable campaign endings.'
+
+scope:
+  include:
+    - 'Obtain approval for production thresholds/priorities and pin them in new immutable definitions only.'
+    - 'Author CONTINUITY, LIBERATION, WHISTLEBLOWER, SHUTDOWN, CUSTODIAN, NULL, THE BOARD, THE FIRE, STATUS QUO and REWRITE outcomes.'
+    - 'Show benefits and costs without good/bad/true labels; preserve REWRITE as structural limits/audit rather than a replacement single objective.'
+    - 'Author the title payoff and approved conditional PROMETHEUS epilogue with reveal gates.'
+  exclude:
+    - 'Promote test-only balance into production or label any ending the correct route.'
+    - 'Reinterpret old runs, auto-grant endings on ties/no-match or publish release content without approval.'
+    - 'Planning-only definition; no execution, registration or acceptance under DEC-036.'
+
+depends_on:
+  - TASK-031
+specs:
+  - specs/product/00-initial-plan.md
+  - specs/product/01-game-and-narrative-direction.md
+  - specs/architecture/ending-resolution.md
+  - specs/architecture/condition-evaluation.md
+  - docs/M5_IMPLEMENTATION_PLAN.md
+relevant_files:
+  - src/scenario/
+  - src/engine/campaign/endings.ts
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+  - .project-os/decisions/DEC-004-m3-incident-identity.yaml
+  - .project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml
+  - .project-os/decisions/DEC-033-v2-presentation-response-records.yaml
+  - .project-os/decisions/DEC-036-m5-planning-before-m4-acceptance.yaml
+
+acceptance:
+  - 'Each of the ten approved production endings is reachable from valid accumulated run inputs with deterministic fixtures.'
+  - 'Boundary, overlapping priority, top tie, no-match and unavailable referenced values preserve resolver diagnostics.'
+  - 'Final choice does not substitute for accumulated behavior/evidence requirements.'
+  - 'Epilogue/title payoff conditions validate and ending prose retains ambiguity without a privileged true ending.'
+verification:
+  - 'Test every approved threshold boundary and ending using full-run provenance, not only artificial score assignment.'
+  - 'Independently review production balance, reachability and narrative after separate authorization.'
+
+human_gate: true
+risk: high

@@ -1,0 +1,53 @@
+id: TASK-033
+title: 'Complete campaign accessibility and environmental audio'
+role: developer
+milestone: M5
+priority: P1
+status: draft
+
+objective: 'Make the complete approved campaign usable with display controls and scoped environmental audio on supported desktop targets.'
+why: 'MVP display checks do not establish accessible late-act investigation tools or audio behavior.'
+
+scope:
+  include:
+    - 'Audit all campaign investigation, evidence, archive, prediction, ending and settings views against approved accessibility scope.'
+    - 'Retain CRT-off, reduced animation, text scaling, visible focus, keyboard navigation and non-color alternatives.'
+    - 'Add approved pager, keyboard, hum, notification/relay and critical-alarm cues with explicit mute/volume behavior and licensed assets.'
+    - 'Keep audio/presentation separate from action-driven time, domain state and save authority.'
+  exclude:
+    - 'Choose new target platforms, asset licensing, budgets or settings-storage migration implicitly.'
+    - 'Claim screen-reader/audio coverage from unrelated visual checks or enable unapproved intense flicker.'
+    - 'Planning-only definition; no execution, registration or acceptance under DEC-036.'
+
+depends_on:
+  - TASK-027
+  - TASK-032
+specs:
+  - specs/product/00-initial-plan.md
+  - specs/ux/operations-desktop.md
+  - specs/architecture/system-architecture.md
+  - docs/M5_IMPLEMENTATION_PLAN.md
+relevant_files:
+  - src/app/
+  - src/ui/
+  - src/assets/
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+  - .project-os/decisions/DEC-004-m3-incident-identity.yaml
+  - .project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml
+  - .project-os/decisions/DEC-033-v2-presentation-response-records.yaml
+  - .project-os/decisions/DEC-036-m5-planning-before-m4-acceptance.yaml
+
+acceptance:
+  - 'All affected campaign screens have explicit keyboard/focus, text-scaling and non-color acceptance evidence.'
+  - 'Approved audio cues respect mute/volume and do not change simulation results or action timing.'
+  - 'Asset source/license and required audio/accessibility coverage are recorded.'
+  - 'Native viewport, motion and audio results identify the actual platform/candidate and remaining limitations.'
+verification:
+  - 'Test presentation/settings controls and unchanged deterministic replays.'
+  - 'Perform separately authorized native 960x640/150 percent/keyboard/motion checks and approved audio/screen-reader scope.'
+
+human_gate: true
+risk: medium

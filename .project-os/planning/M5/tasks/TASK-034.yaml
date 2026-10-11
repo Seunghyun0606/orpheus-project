@@ -1,0 +1,55 @@
+id: TASK-034
+title: 'Prepare measured desktop packaging and release authoring guidance'
+role: developer
+milestone: M5
+priority: P1
+status: draft
+
+objective: 'Measure full-campaign performance and prepare approved desktop packages with accurate release and authoring documentation.'
+why: 'A --no-bundle development build is not an installer, distribution policy or release-ready quality claim.'
+
+scope:
+  include:
+    - 'Agree measurable performance budgets, supported targets and packaging/signing scope before implementation.'
+    - 'Measure long-run replay/load, archive rendering and transactional recovery against approved budgets.'
+    - 'Produce only authorized local packages and record commit/binary/configuration provenance.'
+    - 'Document scenario/campaign/ending authoring, validation, version compatibility, error recovery, build prerequisites, licenses and known limitations.'
+  exclude:
+    - 'Upload/distribute packages, push branches, acquire credentials or alter security settings without separate approval.'
+    - 'Change save layout, add automatic destructive recovery or assert unsupported platform compatibility.'
+    - 'Planning-only definition; no execution, registration or acceptance under DEC-036.'
+
+depends_on:
+  - TASK-032
+  - TASK-033
+specs:
+  - specs/architecture/system-architecture.md
+  - specs/architecture/scenario-format.md
+  - specs/architecture/campaign-ledger-persistence.md
+  - specs/product/01-game-and-narrative-direction.md
+  - docs/M5_IMPLEMENTATION_PLAN.md
+relevant_files:
+  - docs/
+  - README.md
+  - src-tauri/
+  - scripts/
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+  - .project-os/decisions/DEC-004-m3-incident-identity.yaml
+  - .project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml
+  - .project-os/decisions/DEC-033-v2-presentation-response-records.yaml
+  - .project-os/decisions/DEC-036-m5-planning-before-m4-acceptance.yaml
+
+acceptance:
+  - 'Measured results satisfy approved budgets or explicitly block readiness without weakened checks.'
+  - 'Approved desktop packages have repeatable build and compatibility provenance; no publication is implied.'
+  - 'Authoring guidance covers all production content validation and immutable/versioned replay boundaries.'
+  - 'Release/support instructions and asset licenses state actual supported scope and unresolved risks.'
+verification:
+  - 'Run approved benchmark, packaging and clean local install/upgrade checks in isolated profiles.'
+  - 'Check documented commands/references and content-authoring examples without modifying actual user saves.'
+
+human_gate: true
+risk: high

@@ -1,0 +1,55 @@
+id: TASK-027
+title: 'Compose the approved production campaign without rewriting old runs'
+role: developer
+milestone: M5
+priority: P0
+status: draft
+
+objective: 'Connect approved full-campaign content and shared desktop projections to the version-pinned transactional campaign authority.'
+why: 'The opt-in M4 fixture UI is not authorization to enable a production full-campaign entry.'
+
+scope:
+  include:
+    - 'Implement only the approved campaign entry/default policy and new immutable definition/version bindings.'
+    - 'Connect shared incident tools, progression, evidence, archive and postmortem projections without moving domain rules into React.'
+    - 'Implement approved investigation-view gaps identified by TASK-026; gate any missing data representation separately.'
+    - 'Preserve actual presentation ACK, eligible response, commit-before-publish, stable operation identity and recoverable storage diagnostics.'
+  exclude:
+    - 'Import QA fixtures or test ending thresholds into production.'
+    - 'Attach new definitions to old campaigns, backfill history, auto-migrate or change physical storage/security layout.'
+    - 'Planning-only definition; no execution, registration or acceptance under DEC-036.'
+
+depends_on:
+  - TASK-025
+  - TASK-026
+specs:
+  - specs/architecture/system-architecture.md
+  - specs/architecture/campaign-presentation-v2.md
+  - specs/architecture/campaign-ledger-persistence.md
+  - specs/feature/campaign-and-player-model.md
+  - docs/M5_IMPLEMENTATION_PLAN.md
+relevant_files:
+  - src/app/
+  - src/store/campaign-session.ts
+  - src/persistence/campaign-ledger.ts
+  - src/scenario/
+  - src/ui/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+  - .project-os/decisions/DEC-004-m3-incident-identity.yaml
+  - .project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml
+  - .project-os/decisions/DEC-033-v2-presentation-response-records.yaml
+  - .project-os/decisions/DEC-036-m5-planning-before-m4-acceptance.yaml
+
+acceptance:
+  - 'The approved entry selects exact authored versions and never substitutes a latest definition for an existing run.'
+  - 'MVP remains UNKNOWN-only and legacy saves/replay authorities remain unchanged.'
+  - 'Actual display/ACK/response provenance is committed atomically before UI authority changes.'
+  - 'Campaign tools, archive and restore use domain projections; unavailable or failed state is not interpreted as zero or success.'
+verification:
+  - 'Exercise approved campaign composition, legacy isolation and injected abort/conflict/lost-ACK recovery.'
+  - 'Verify actual native restore/reload and affected display controls after separately authorized QA.'
+
+human_gate: true
+risk: high

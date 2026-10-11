@@ -1,0 +1,30 @@
+kind: human_gate_request
+milestone: M5
+date: '2026-10-12'
+status: pending
+human_instruction: '커밋하고, M5활성화해서 26~35 진행해줘. 전체 작업을 끝내는게 우선이야'
+approved_safe_step: Commit the existing planning documents and draft task definitions after documentation checks.
+finding: >-
+  M5 currently requires complete/tested M4 before implementation. TASK-026 and
+  TASK-027 explicitly depend on TASK-025; all other draft tasks transitively
+  require it. TASK-024 is active and TASK-025 remains ready but ineligible.
+  The request to activate M5 does not specify whether to change these prerequisites
+  while retaining M4 debt or complete M4 first. Do not invent a completion waiver.
+question: 'M4 미완료 검증을 유지하면서 M5 구현의 선행 조건을 예외 변경해도 될까요?'
+options:
+  A:
+    label: 'M4 미완료 유지, M5 구현 선행 허용'
+    proposal:
+      - Explicitly authorize M5 activation and TASK-026–035 registration while keeping M4 and TASK-024/025 incomplete.
+      - Remove TASK-025 as a pre-implementation prerequisite of TASK-026/027 only; retain all intra-M5 dependencies.
+      - Retain TASK-025 as a mandatory TASK-035 acceptance dependency; M4 QA debt blocks final M5 acceptance and release.
+      - Preserve task acceptance rules and require subsequent material content, schema, balance and release decisions through human gates.
+  B:
+    label: 'M4 검증 완료 후 M5 구현 시작'
+    proposal:
+      - Resume required TASK-024 verification and TASK-025 acceptance before M4 closure and M5 activation.
+      - Preserve the current draft dependencies and M5 implementation entry criterion.
+boundaries:
+  - This is a proposal, not a selected decision or canonical state transition.
+  - Existing incomplete evidence is not accepted, waived, rewritten or marked pass.
+  - No task registration, dependency change, M5 activation, production implementation, user-store access, push or release before the decision.

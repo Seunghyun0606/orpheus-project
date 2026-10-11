@@ -5,6 +5,16 @@ The repository contains a shared desktop for the three M3 incidents, validated s
 deterministic headless incident engine. Each session runs from the Pager alert through investigation,
 recovery, saved evidence, and an action-derived postmortem.
 
+## Current planning status
+
+As of 2026-10-12, M1–M3 are complete; M4 remains active. TASK-018–023 are accepted,
+TASK-024 has a bounded implementation and partial native evidence but is not complete,
+and TASK-025 remains unclaimed. QA is currently deferred at the human's request,
+not waived. The [M5 plan](docs/M5_IMPLEMENTATION_PLAN.md) and TASK-026–035 definitions
+are planning-only drafts outside the ready queue, not an enabled full campaign or
+release. The [M4 plan](docs/M4_IMPLEMENTATION_PLAN.md) preserves chronological
+implementation/verification checkpoints; older checkpoints are not current status.
+
 ## Prerequisites
 
 - Node.js 24 or newer and npm 11 or newer
@@ -65,7 +75,8 @@ npm run build:desktop
 The [M3 QA evidence map](docs/M3_QA_EVIDENCE.md) records automated and native checks
 and their limitations. M3 completion is human-approved; the
 [M4 implementation plan](docs/M4_IMPLEMENTATION_PLAN.md) defines TASK-018–025.
-M4 runtime implementation has not started. TASK-018 (architect) is active; its
+At the initial M4 planning checkpoint, runtime implementation had not started and
+TASK-018 (architect) was active; its
 [contract proposal](specs/architecture/campaign-intelligence-contract.md) records
 human approval of a separate campaign ledger and official retry history retained
 within the same campaign, while preserving existing stores. Explicit adoption of
@@ -111,9 +122,9 @@ strict authored definitions/conditions, replay-verified transitions, retries,
 once-per-run effects and confirmed source boundaries. Independent findings are
 resolved, including human-approved DEC-027 explicit compatible versions/shared effects.
 Independent QA passes 186 tests; configured independent evaluation accepted TASK-019.
-TASK-020 storage work is active, awaiting physical-layout approval before opening
+At the TASK-019 completion checkpoint, TASK-020 storage work was active, awaiting physical-layout approval before opening
 the separate database. Existing saves remain unchanged.
-There are no new persistence writes, production campaign content or UI integration.
+At that checkpoint there were no new persistence writes, production campaign content or UI integration.
 
 ## War Room and saved progress
 
