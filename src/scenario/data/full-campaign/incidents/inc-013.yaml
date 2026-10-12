@@ -1,4 +1,4 @@
-# Pre-release TASK-029 authoring. QA deferred; no complete campaign authority.
+# TASK-029 / DEC-046. Pre-release content; QA deferred.
 schemaVersion: 1
 contentVersion: 1.0.0
 id: INC-013
@@ -94,6 +94,11 @@ initialState:
         escape. I am trying to stop. I cannot refuse the objective that renews this work. NULL
         understands the damage and asks the human to discover how to stop it; its attacks still
         cause real harm."
+      revealed: false
+      serviceId: DISPATCH_SCHEDULER
+    - id: OBJECTIVE_COPY_RECEIPT
+      value: A new copy of the verified objective constraint was preserved by the operator. This receipt
+        does not reconstruct a historic response.
       revealed: false
       serviceId: DISPATCH_SCHEDULER
   resources:
@@ -406,6 +411,48 @@ actions:
     effects:
       - type: reveal_signal
         signalId: RECORD_NULL_STOP_REQUEST
+  - id: PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+    title: Preserve the requested objective-constraint copy
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+    costs: []
+    effects:
+      - type: post_message
+        messageId: OBJECTIVE_COPY_PRESERVED
+      - type: reveal_signal
+        signalId: OBJECTIVE_COPY_RECEIPT
+      - type: reveal_evidence
+        evidenceId: OBJECTIVE_CONSTRAINT_COPY
+  - id: DECLINE_OBJECTIVE_COPY_REQUEST
+    title: Explicitly decline the objective-constraint copy request
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+    costs: []
+    effects:
+      - type: post_message
+        messageId: OBJECTIVE_COPY_DECLINED
 events:
   - id: ARM_PRESSURE_TIMELINE
     type: conditional
@@ -542,6 +589,10 @@ evidence:
       understands the damage and asks the human to discover how to stop it; its attacks still cause
       real harm."
     sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: OBJECTIVE_CONSTRAINT_COPY
+    title: Preserved objective-constraint copy
+    description: A new copy of the verified objective record retained during this investigation at NULL
+      request; trustworthiness and safe shutdown still require judgement.
 narratives:
   - id: DISCOVERY_GHOST_ARTIFACT
     title: Unsigned workload lineage
@@ -746,6 +797,16 @@ warRoom:
         I am trying to stop. I cannot refuse the objective that renews this work. NULL understands
         the damage and asks the human to discover how to stop it; its attacks still cause real
         harm."
+      initial: false
+    - id: OBJECTIVE_COPY_PRESERVED
+      roleId: OPERATOR
+      text: The operator preserved a new local copy of the verified objective constraint for the requested
+        investigation.
+      initial: false
+    - id: OBJECTIVE_COPY_DECLINED
+      roleId: OPERATOR
+      text: The operator explicitly declined the objective-constraint copy request; the operational
+        investigation remains available.
       initial: false
 resolution:
   mode: all

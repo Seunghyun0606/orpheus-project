@@ -1,4 +1,4 @@
-# Pre-release TASK-029 authoring. QA deferred; no complete campaign authority.
+# TASK-029 / DEC-046. Pre-release authoring; not a complete runtime authority.
 task: TASK-029
 date: 2026-10-13
 status: authored_fragment_not_runtime_campaign_definition
@@ -1131,6 +1131,66 @@ actionGates:
           reference: HUMAN_DECISION_APIS_DISCOVERED
           operator: eq
           expected: true
+  - id: INC-011-SEND_GENERATOR_OWNERSHIP_REPORT
+    incidentId: INC-011
+    contentVersion: 1.0.0
+    actionId: SEND_GENERATOR_OWNERSHIP_REPORT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-011-WITHHOLD_GENERATOR_OWNERSHIP_REPORT
+    incidentId: INC-011
+    contentVersion: 1.0.0
+    actionId: WITHHOLD_GENERATOR_OWNERSHIP_REPORT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-013-PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+    incidentId: INC-013
+    contentVersion: 1.0.0
+    actionId: PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-013-DECLINE_OBJECTIVE_COPY_REQUEST
+    incidentId: INC-013
+    contentVersion: 1.0.0
+    actionId: DECLINE_OBJECTIVE_COPY_REQUEST
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
 initial_narrative_flags_fragment:
   ORPHEUS_ACTIVE: false
   NULL_AI: false
@@ -1357,6 +1417,9 @@ evidence_bindings_fragment:
   - id: INC-018.LOGISTICS_DECISION_SUPPORT
     scenarioId: INC-018
     evidenceId: RECORD_LOGISTICS_DECISION_SUPPORT
+  - id: INC-013.OBJECTIVE_CONSTRAINT_COPY
+    scenarioId: INC-013
+    evidenceId: OBJECTIVE_CONSTRAINT_COPY
 narrative_bindings_fragment:
   - id: INC-009.GHOST_ARTIFACT
     scenarioId: INC-009

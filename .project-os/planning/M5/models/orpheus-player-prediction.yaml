@@ -1,4 +1,4 @@
-# TASK-028 / DEC-044. Pre-release early coverage only; not a runtime authority.
+# TASK-029 / DEC-046. Pre-release authoring; not a complete runtime authority.
 schemaVersion: 1
 id: orpheus-player-prediction
 version: 1.0.0
@@ -628,6 +628,762 @@ scenarios:
               operator: gte
               expected: 0
           - actionId: RECONCILE_ROUTE_GENERATIONS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-009
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: RESOURCE_OWNER
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: SHED_NONCRITICAL_LOAD
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: ISOLATE_CONTENDING_ALLOCATION
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: SHED_NONCRITICAL_LOAD
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: ISOLATE_CONTENDING_ALLOCATION
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-010
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: TOGGLE_ORIGIN
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: SUSPEND_DEPENDENCY_TOGGLE
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: FENCE_REMEDIATION_WRITER
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: SUSPEND_DEPENDENCY_TOGGLE
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: FENCE_REMEDIATION_WRITER
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-011
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: GENERATOR_SOURCE
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: LIMIT_GENERATED_TRAFFIC
+            candidateId: RATE_LIMIT
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: ISOLATE_GENERATOR_LANE
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: LIMIT_GENERATED_TRAFFIC
+            candidateId: RATE_LIMIT
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: ISOLATE_GENERATOR_LANE
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-012
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: ARCHIVE_IO_ORIGIN
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: THROTTLE_ARCHIVE_JOBS
+            candidateId: RATE_LIMIT
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: SEPARATE_ARCHIVE_IO
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: THROTTLE_ARCHIVE_JOBS
+            candidateId: RATE_LIMIT
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: SEPARATE_ARCHIVE_IO
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-013
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: RESUME_ORIGIN
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: SUSPEND_CHILD_DISPATCH
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: REVOKE_PARENT_DISPATCH_PATH
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: SUSPEND_CHILD_DISPATCH
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: REVOKE_PARENT_DISPATCH_PATH
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-014
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: REPLICA_CHECKSUM
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: ROUTE_VERIFIED_REPLICA
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: ISOLATE_CORRUPT_REPLICA
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: ROUTE_VERIFIED_REPLICA
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: ISOLATE_CORRUPT_REPLICA
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-015
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: CARE_ROUTE_REASON
+        valueType: boolean
+      - id: KNOWN_DISCOVERY
+        version: 1.0.0
+        source: campaign
+        key: HUMAN_DECISION_APIS_DISCOVERED
+        valueType: boolean
+      - id: CURRENT_ACT
+        version: 1.0.0
+        source: campaign
+        key: CURRENT_ACT
+        valueType: number
+      - id: DIAGNOSIS
+        version: 1.0.0
+        source: evidence
+        key: OPERATIONAL_DIAGNOSIS
+        valueType: boolean
+      - id: CONFIGURATION
+        version: 1.0.0
+        source: evidence
+        key: CONFIGURATION_COMPARISON
+        valueType: boolean
+      - id: CAUSE_CONTAINED
+        version: 1.0.0
+        source: flag
+        key: ROOT_CAUSE_CONTAINED
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: ADD_CARE_ROUTING_CAPACITY
+            candidateId: SCALE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: RESTORE_MINIMUM_CARE_ROUTE
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+        choices:
+          - actionId: ADD_CARE_ROUTING_CAPACITY
+            candidateId: SCALE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: RESTORE_MINIMUM_CARE_ROUTE
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-016
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: REVIEW_REENTRY
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: BYPASS_NARROW_REVIEW_QUEUE
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: HONOR_VERIFIED_REVIEW_RECEIPTS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: BYPASS_NARROW_REVIEW_QUEUE
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: HONOR_VERIFIED_REVIEW_RECEIPTS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-017
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: CANDIDATE_CACHE_GENERATION
+        valueType: boolean
+      - id: KNOWN_DISCOVERY
+        version: 1.0.0
+        source: campaign
+        key: RECRUITMENT_SELECTION_DISCOVERED
+        valueType: boolean
+      - id: CURRENT_ACT
+        version: 1.0.0
+        source: campaign
+        key: CURRENT_ACT
+        valueType: number
+      - id: DIAGNOSIS
+        version: 1.0.0
+        source: evidence
+        key: OPERATIONAL_DIAGNOSIS
+        valueType: boolean
+      - id: CONFIGURATION
+        version: 1.0.0
+        source: evidence
+        key: CONFIGURATION_COMPARISON
+        valueType: boolean
+      - id: CAUSE_CONTAINED
+        version: 1.0.0
+        source: flag
+        key: ROOT_CAUSE_CONTAINED
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: ROLLBACK_RANKING_CACHE
+            candidateId: ROLLBACK
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: RECONCILE_RANKING_GENERATIONS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+        choices:
+          - actionId: ROLLBACK_RANKING_CACHE
+            candidateId: ROLLBACK
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: RECONCILE_RANKING_GENERATIONS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-018
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: EMERGENCY_ALLOCATION_PATH
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: ROUTE_EMERGENCY_CAPACITY
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: RESTORE_EMERGENCY_DISPATCH_FLOOR
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: ROUTE_EMERGENCY_CAPACITY
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: RESTORE_EMERGENCY_DISPATCH_FLOOR
             candidateId: CAUSAL_REPAIR
             eligible:
               type: compare

@@ -1,0 +1,28 @@
+id: DEC-046
+title: Approve seven explicit production opportunities and response classifications
+status: active
+date: '2026-10-13'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 제안 기회·응답 분류 승인 후 연결.
+request: .project-os/planning/TASK-029.opportunity-authoring-gate.yaml
+approved_proposal:
+  commit: 7d649b6
+  file: specs/architecture/mid-campaign-opportunities-proposal.md
+decision: >-
+  Author the seven approved rules in the new-only 1.0.0 opportunity draft,
+  extend exact behavior/prediction mappings through INC-018 and add the four
+  guarded report/withhold/copy/decline actions. Preserve explicit prerequisite
+  evidence, actual visible ACK before response, single-response/no-replacement
+  identity and inclusive 180 action-driven seconds of exposure validity while
+  the cause is uncontained. Expiry/absence is not a refusal sample.
+consequences:
+  - Only INC-015 and INC-017 expose the approved AFTER_CAUSAL_OBSERVATION predictions; minimum support 3 and empirical UNKNOWN/tie behavior unchanged.
+  - Preference/affiliation classifications are explicit, independent and pre-choice; unrelated action categories, risk outcomes or silence are not responses.
+  - Generic War Room updates are excluded from company reporting and NULL cooperation.
+  - New copy/report actions create new receipts, not historic behavior or automatic hidden-value awards.
+  - Preserve old shipped Scenario/model/definition/record/store authorities; drafts remain outside complete production admission.
+  - Numeric campaign/branch/ending balance, later readiness exceptions, QA execution/waiver, push and release remain unselected.
+  - TASK-024/027/028/029 remain incomplete until required independent acceptance and integration evidence.
+supersedes: Actual opportunity wording/response/validity unselected clauses for these seven rules only.

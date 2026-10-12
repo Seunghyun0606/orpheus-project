@@ -1,0 +1,33 @@
+task: TASK-029
+date: '2026-10-13'
+role: developer
+actor: codex-task029-developer
+source_agent: /root
+status: pending
+summary: Connected seven approved opportunity rules, four guarded decision actions and eighteen-Incident behavior/prediction draft mappings; corrected direct investigation result attribution. Runtime package and independent acceptance remain incomplete.
+approval: .project-os/decisions/DEC-046-mid-campaign-opportunities.yaml
+evidence:
+  - docs/TASK-029_OPPORTUNITIES_IMPLEMENTATION.md
+  - .project-os/planning/TASK-029.model-bindings.yaml
+  - .project-os/planning/M5/models/orpheus-player-opportunities.yaml
+  - src/tests/fixtures/authored-mid-campaign.ts
+  - src/tests/mid-campaign-opportunities.test.ts
+verification:
+  acceptance: pending
+  unit_test: nineteen_cases_authored_not_run
+  scenario_validation: not_run
+  typecheck: not_run
+  lint: not_run
+  build: not_run
+  independent_review: deferred
+  independent_QA: deferred
+  native_QA: deferred
+known_risks:
+  - Partial eighteen-Incident authoring and test-only composition are not a complete production authority or actual native/storage evidence.
+  - New data/timing/classification/tests and save/retry/sequence/ACK/source-provenance boundaries remain unverified.
+  - Branch criteria, campaign numerical effects and production ending choices remain unselected.
+preserved:
+  - Original shipped Scenario/model/definition/record/store authorities and user profiles.
+  - TASK-024/027/028/029 incomplete; later dependencies and mandatory M4/M5 acceptance unchanged.
+  - No schema/engine/store relaxation, fixture fallback, partial production run, QA waiver, push or release.
+next_step: Human decision on production branch eligibility cutoffs before authoring those predicates.

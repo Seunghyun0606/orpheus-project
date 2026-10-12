@@ -1,4 +1,4 @@
-# Pre-release TASK-029 authoring. QA deferred; no complete campaign authority.
+# TASK-029 / DEC-046. Pre-release content; QA deferred.
 schemaVersion: 1
 id: INC-013-INVESTIGATION
 version: 1.0.0
@@ -324,4 +324,41 @@ panels:
         id: investigate-null_stop_request-values
         signalIds:
           - RECORD_NULL_STOP_REQUEST
+  - id: objective-copy-decision
+    title: Objective copy request
+    kind: documents
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+      - DECLINE_OBJECTIVE_COPY_REQUEST
+    blocks:
+      - kind: paragraph
+        id: explicit-response-context
+        text: NULL requests a preserved objective-constraint copy to help investigate how to stop it.
+          Sharing does not establish trustworthiness. Reading, silence or containment is not
+          automatically cooperation or refusal.
+      - kind: signals
+        id: copy-receipt
+        signalIds:
+          - OBJECTIVE_COPY_RECEIPT
 evidenceRelations: []

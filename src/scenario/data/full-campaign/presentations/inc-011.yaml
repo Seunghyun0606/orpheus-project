@@ -1,4 +1,4 @@
-# Pre-release TASK-029 authoring. QA deferred; no complete campaign authority.
+# TASK-029 / DEC-046. Pre-release content; QA deferred.
 schemaVersion: 1
 id: INC-011-INVESTIGATION
 version: 1.0.0
@@ -272,4 +272,36 @@ panels:
         id: investigate-null_adversary-values
         signalIds:
           - RECORD_NULL_ADVERSARY
+  - id: generator-report-decision
+    title: Security reporting decision
+    kind: documents
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - SEND_GENERATOR_OWNERSHIP_REPORT
+      - WITHHOLD_GENERATOR_OWNERSHIP_REPORT
+    blocks:
+      - kind: paragraph
+        id: explicit-response-context
+        text: Security requests the verified company-ownership record. Send it or explicitly withhold it
+          while investigating? Reading or a generic War Room update is not a response.
 evidenceRelations: []

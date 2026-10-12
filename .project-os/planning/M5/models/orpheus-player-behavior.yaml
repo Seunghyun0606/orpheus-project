@@ -1,4 +1,7 @@
-# TASK-028 / DEC-044. Pre-release early coverage only; not a runtime authority.
+# TASK-029 / DEC-046. Pre-release authoring; not a complete runtime authority.
+Warning: truncated output (original token count: 24729)
+Total output lines: 3248
+
 schemaVersion: 1
 id: orpheus-player-behavior
 version: 1.0.0
@@ -95,10 +98,7 @@ scenarios:
         key: INC-001/sessions
         actionId: INSPECT_SESSIONS
         result:
-          kind: signal_revealed
-          signalId: STALE_SESSION_COUNT
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-001/impact
         key: INC-001/impact
         actionId: ASK_JIN_CONFIRM_IMPACT
@@ -261,34 +261,22 @@ scenarios:
         key: INC-002/logs
         actionId: OPEN_LOGS
         result:
-          kind: signal_revealed
-          signalId: LOG_REJECTION
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-002/metrics
         key: INC-002/metrics
         actionId: OPEN_METRICS
         result:
-          kind: signal_revealed
-          signalId: RETRY_RATE
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-002/issuer-chain
         key: INC-002/issuer-chain
         actionId: TRACE_AUTH_REQUEST
         result:
-          kind: signal_revealed
-          signalId: ISSUER_KEY_ID
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-002/deployment
         key: INC-002/deployment
         actionId: COMPARE_DEPLOYMENT
         result:
-          kind: signal_revealed
-          signalId: DEPLOYMENT_BUILD
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-002/keyset-report
         key: INC-002/keyset-report
         actionId: ASK_SAM_CHECK_KEYSET
@@ -435,34 +423,22 @@ scenarios:
         key: INC-003/logs
         actionId: OPEN_LOGS
         result:
-          kind: signal_revealed
-          signalId: LOG_REJECTION
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-003/metrics
         key: INC-003/metrics
         actionId: OPEN_METRICS
         result:
-          kind: signal_revealed
-          signalId: ACK_RATE
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-003/retry-trace
         key: INC-003/retry-trace
         actionId: TRACE_RETRY
         result:
-          kind: signal_revealed
-          signalId: TRACED_MESSAGE_ID
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-003/batch
         key: INC-003/batch
         actionId: COMPARE_BATCH
         result:
-          kind: signal_revealed
-          signalId: TRACED_SOURCE_BATCH
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-003/impact
         key: INC-003/impact
         actionId: ASK_JIN_CONFIRM_IMPACT
@@ -596,34 +572,22 @@ scenarios:
         key: INC-004/logs
         actionId: OPEN_LOGS
         result:
-          kind: signal_revealed
-          signalId: LOG_OBSERVATION
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-004/metrics
         key: INC-004/metrics
         actionId: OPEN_METRICS
         result:
-          kind: signal_revealed
-          signalId: HEAP_PERCENT
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-004/allocations
         key: INC-004/allocations
         actionId: INSPECT_ALLOCATIONS
         result:
-          kind: signal_revealed
-          signalId: RETAINED_ALLOCATION_PATH
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-004/handler
         key: INC-004/handler
         actionId: COMPARE_HANDLER
         result:
-          kind: signal_revealed
-          signalId: HANDLER_RETENTION
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-004/heap-report
         key: INC-004/heap-report
         actionId: ASK_SAM_CHECK_HEAP
@@ -738,34 +702,22 @@ scenarios:
         key: INC-005/logs
         actionId: OPEN_LOGS
         result:
-          kind: signal_revealed
-          signalId: LOG_OBSERVATION
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-005/metrics
         key: INC-005/metrics
         actionId: OPEN_METRICS
         result:
-          kind: signal_revealed
-          signalId: SYNTHETIC_REQUEST_RATE
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-005/request-source
         key: INC-005/request-source
         actionId: TRACE_SYNTHETIC_REQUEST
         result:
-          kind: signal_revealed
-          signalId: SYNTHETIC_SOURCE
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-005/workload-lineage
         key: INC-005/workload-lineage
         actionId: COMPARE_DEPLOYMENT_LINEAGE
         result:
-          kind: signal_revealed
-          signalId: WORKLOAD_APPROVAL
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-005/signature-report
         key: INC-005/signature-report
         actionId: ASK_MARCUS_COMPARE_SIGNATURE
@@ -895,50 +847,32 @@ scenarios:
         key: INC-006/logs
         actionId: OPEN_LOGS
         result:
-          kind: signal_revealed
-          signalId: LOG_OBSERVATION
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-006/metrics
         key: INC-006/metrics
         actionId: OPEN_METRICS
         result:
-          kind: signal_revealed
-          signalId: IDENTITY_RETRY_RATE
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-006/certificate-chain
         key: INC-006/certificate-chain
         actionId: TRACE_CERTIFICATE_CHAIN
         result:
-          kind: signal_revealed
-          signalId: CURRENT_ISSUER
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-006/trust-history
         key: INC-006/trust-history
         actionId: COMPARE_TRUST_HISTORY
         result:
-          kind: signal_revealed
-          signalId: TRUSTED_ISSUER
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-006/workload-archive
         key: INC-006/workload-archive
         actionId: RETRACE_WORKLOAD_ARCHIVE
         result:
-          kind: signal_revealed
-          signalId: WORKLOAD_ARCHIVE_LINEAGE
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-006/security-attribution
         key: INC-006/security-attribution
         actionId: READ_SECURITY_ATTRIBUTION
         result:
-          kind: signal_revealed
-          signalId: SECURITY_ATTRIBUTION
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-006/trust-report
         key: INC-006/trust-report
         actionId: ASK_MARCUS_INSPECT_TRUST
@@ -1075,34 +1009,22 @@ scenarios:
         key: INC-007/logs
         actionId: OPEN_LOGS
         result:
-          kind: signal_revealed
-          signalId: LOG_OBSERVATION
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-007/metrics
         key: INC-007/metrics
         actionId: OPEN_METRICS
         result:
-          kind: signal_revealed
-          signalId: ACTIVE_SESSIONS
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-007/session-tags
         key: INC-007/session-tags
         actionId: INSPECT_SESSION_TAGS
         result:
-          kind: signal_revealed
-          signalId: SATURATED_SESSION_TAG
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-007/admission
         key: INC-007/admission
         actionId: TRACE_ADMISSION_PATH
         result:
-          kind: signal_revealed
-          signalId: ADMISSION_POLICY
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-007/session-report
         key: INC-007/session-report
         actionId: ASK_ALEX_INSPECT_SESSIONS
@@ -1217,34 +1139,22 @@ scenarios:
         key: INC-008/logs
         actionId: OPEN_LOGS
         result:
-          kind: signal_revealed
-          signalId: LOG_OBSERVATION
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-008/metrics
         key: INC-008/metrics
         actionId: OPEN_METRICS
         result:
-          kind: signal_revealed
-          signalId: CONFLICTING_ROUTE_COUNT
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-008/regional-trace
         key: INC-008/regional-trace
         actionId: TRACE_REGION_REQUEST
         result:
-          kind: signal_revealed
-          signalId: REQUEST_ROUTE_PATH
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-008/route-generations
         key: INC-008/route-generations
         actionId: COMPARE_ROUTE_GENERATIONS
         result:
-          kind: signal_revealed
-          signalId: ROUTE_GENERATIONS
-          delivery:
-            kind: action
+          kind: action_completed
       - id: INC-008/route-report
         key: INC-008/route-report
         actionId: ASK_SAM_COMPARE_ROUTES
@@ -1288,6 +1198,1693 @@ scenarios:
           reference: CURRENT_ACTION
           operator: eq
           expected: RECONCILE_ROUTE_GENERATIONS
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-009
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_RESOURCE_OWNERS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_DECOMMISSION_RECORD
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: SHED_NONCRITICAL_LOAD
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: ISOLATE_CONTENDING_ALLOCATION
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_SAM_CHECK_OWNERS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_LEGACY_CLUSTER_RECORD
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-009/OPEN_LOGS
+        key: INC-009/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-009/OPEN_METRICS
+        key: INC-009/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-009/INSPECT_RESOURCE_OWNERS
+        key: INC-009/INSPECT_RESOURCE_OWNERS
+        actionId: INSPECT_RESOURCE_OWNERS
+        result:
+          kind: action_completed
+      - id: INC-009/COMPARE_DECOMMISSION_RECORD
+        key: INC-009/COMPARE_DECOMMISSION_RECORD
+        actionId: COMPARE_DECOMMISSION_RECORD
+        result:
+          kind: action_completed
+      - id: INC-009/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-009/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-009/REINVESTIGATE_NULL_NAME
+        key: INC-009/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-009/INSPECT_LEGACY_CLUSTER_RECORD
+        key: INC-009/INSPECT_LEGACY_CLUSTER_RECORD
+        actionId: INSPECT_LEGACY_CLUSTER_RECORD
+        result:
+          kind: action_completed
+      - id: INC-009/TEAM_REPORT
+        key: INC-009/TEAM_REPORT
+        actionId: ASK_SAM_CHECK_OWNERS
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-009/SUPPORT/SHED_NONCRITICAL_LOAD
+        actionId: SHED_NONCRITICAL_LOAD
+        investigationKeys:
+          - INC-009/INSPECT_RESOURCE_OWNERS
+          - INC-009/COMPARE_DECOMMISSION_RECORD
+          - INC-009/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: SHED_NONCRITICAL_LOAD
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-009/SUPPORT/ISOLATE_CONTENDING_ALLOCATION
+        actionId: ISOLATE_CONTENDING_ALLOCATION
+        investigationKeys:
+          - INC-009/INSPECT_RESOURCE_OWNERS
+          - INC-009/COMPARE_DECOMMISSION_RECORD
+          - INC-009/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: ISOLATE_CONTENDING_ALLOCATION
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-010
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_REMEDIATION_ORIGIN
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_CONTROLLER_GENERATIONS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: SUSPEND_DEPENDENCY_TOGGLE
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: FENCE_REMEDIATION_WRITER
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_SAM_TRACE_CONTROLLER
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_MESSAGE_MODEL_ORIGIN
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-010/OPEN_LOGS
+        key: INC-010/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-010/OPEN_METRICS
+        key: INC-010/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-010/TRACE_REMEDIATION_ORIGIN
+        key: INC-010/TRACE_REMEDIATION_ORIGIN
+        actionId: TRACE_REMEDIATION_ORIGIN
+        result:
+          kind: action_completed
+      - id: INC-010/COMPARE_CONTROLLER_GENERATIONS
+        key: INC-010/COMPARE_CONTROLLER_GENERATIONS
+        actionId: COMPARE_CONTROLLER_GENERATIONS
+        result:
+          kind: action_completed
+      - id: INC-010/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-010/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-010/REINVESTIGATE_NULL_NAME
+        key: INC-010/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-010/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-010/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-010/COMPARE_MESSAGE_MODEL_ORIGIN
+        key: INC-010/COMPARE_MESSAGE_MODEL_ORIGIN
+        actionId: COMPARE_MESSAGE_MODEL_ORIGIN
+        result:
+          kind: action_completed
+      - id: INC-010/TEAM_REPORT
+        key: INC-010/TEAM_REPORT
+        actionId: ASK_SAM_TRACE_CONTROLLER
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-010/SUPPORT/SUSPEND_DEPENDENCY_TOGGLE
+        actionId: SUSPEND_DEPENDENCY_TOGGLE
+        investigationKeys:
+          - INC-010/TRACE_REMEDIATION_ORIGIN
+          - INC-010/COMPARE_CONTROLLER_GENERATIONS
+          - INC-010/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: SUSPEND_DEPENDENCY_TOGGLE
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-010/SUPPORT/FENCE_REMEDIATION_WRITER
+        actionId: FENCE_REMEDIATION_WRITER
+        invest…2729 tokens truncated…: TEAM_RESULT
+    supportRules:
+      - id: INC-012/SUPPORT/THROTTLE_ARCHIVE_JOBS
+        actionId: THROTTLE_ARCHIVE_JOBS
+        investigationKeys:
+          - INC-012/TRACE_ARCHIVE_IO
+          - INC-012/COMPARE_ARCHIVE_RESERVATIONS
+          - INC-012/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: THROTTLE_ARCHIVE_JOBS
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-012/SUPPORT/SEPARATE_ARCHIVE_IO
+        actionId: SEPARATE_ARCHIVE_IO
+        investigationKeys:
+          - INC-012/TRACE_ARCHIVE_IO
+          - INC-012/COMPARE_ARCHIVE_RESERVATIONS
+          - INC-012/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: SEPARATE_ARCHIVE_IO
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-013
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_RESUMED_DISPATCH
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_DISPATCH_AUTHORIZATION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: SUSPEND_CHILD_DISPATCH
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: REVOKE_PARENT_DISPATCH_PATH
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_MARCUS_TRACE_RENEWAL
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_OBJECTIVE_CONSTRAINT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: DECLINE_OBJECTIVE_COPY_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-013/OPEN_LOGS
+        key: INC-013/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-013/OPEN_METRICS
+        key: INC-013/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-013/TRACE_RESUMED_DISPATCH
+        key: INC-013/TRACE_RESUMED_DISPATCH
+        actionId: TRACE_RESUMED_DISPATCH
+        result:
+          kind: action_completed
+      - id: INC-013/COMPARE_DISPATCH_AUTHORIZATION
+        key: INC-013/COMPARE_DISPATCH_AUTHORIZATION
+        actionId: COMPARE_DISPATCH_AUTHORIZATION
+        result:
+          kind: action_completed
+      - id: INC-013/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-013/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-013/REINVESTIGATE_NULL_NAME
+        key: INC-013/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-013/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-013/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-013/REINVESTIGATE_NULL_AI
+        key: INC-013/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-013/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-013/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-013/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-013/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-013/INSPECT_OBJECTIVE_CONSTRAINT
+        key: INC-013/INSPECT_OBJECTIVE_CONSTRAINT
+        actionId: INSPECT_OBJECTIVE_CONSTRAINT
+        result:
+          kind: action_completed
+      - id: INC-013/PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+        key: INC-013/PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+        actionId: PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+        result:
+          kind: action_completed
+      - id: INC-013/TEAM_REPORT
+        key: INC-013/TEAM_REPORT
+        actionId: ASK_MARCUS_TRACE_RENEWAL
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-013/SUPPORT/SUSPEND_CHILD_DISPATCH
+        actionId: SUSPEND_CHILD_DISPATCH
+        investigationKeys:
+          - INC-013/TRACE_RESUMED_DISPATCH
+          - INC-013/COMPARE_DISPATCH_AUTHORIZATION
+          - INC-013/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: SUSPEND_CHILD_DISPATCH
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-013/SUPPORT/REVOKE_PARENT_DISPATCH_PATH
+        actionId: REVOKE_PARENT_DISPATCH_PATH
+        investigationKeys:
+          - INC-013/TRACE_RESUMED_DISPATCH
+          - INC-013/COMPARE_DISPATCH_AUTHORIZATION
+          - INC-013/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: REVOKE_PARENT_DISPATCH_PATH
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-014
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: VERIFY_REPLICA_CHECKSUM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_REPLICA_LINEAGE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ROUTE_VERIFIED_REPLICA
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: ISOLATE_CORRUPT_REPLICA
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_ALEX_VERIFY_REPLICA
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: VERIFY_INSTANCE_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-014/OPEN_LOGS
+        key: INC-014/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-014/OPEN_METRICS
+        key: INC-014/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-014/VERIFY_REPLICA_CHECKSUM
+        key: INC-014/VERIFY_REPLICA_CHECKSUM
+        actionId: VERIFY_REPLICA_CHECKSUM
+        result:
+          kind: action_completed
+      - id: INC-014/COMPARE_REPLICA_LINEAGE
+        key: INC-014/COMPARE_REPLICA_LINEAGE
+        actionId: COMPARE_REPLICA_LINEAGE
+        result:
+          kind: action_completed
+      - id: INC-014/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-014/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-014/REINVESTIGATE_NULL_NAME
+        key: INC-014/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-014/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-014/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-014/REINVESTIGATE_NULL_AI
+        key: INC-014/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-014/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-014/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-014/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-014/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-014/REINVESTIGATE_NULL_STOP_REQUEST
+        key: INC-014/REINVESTIGATE_NULL_STOP_REQUEST
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        result:
+          kind: action_completed
+      - id: INC-014/VERIFY_INSTANCE_ARCHIVE
+        key: INC-014/VERIFY_INSTANCE_ARCHIVE
+        actionId: VERIFY_INSTANCE_ARCHIVE
+        result:
+          kind: action_completed
+      - id: INC-014/TEAM_REPORT
+        key: INC-014/TEAM_REPORT
+        actionId: ASK_ALEX_VERIFY_REPLICA
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-014/SUPPORT/ROUTE_VERIFIED_REPLICA
+        actionId: ROUTE_VERIFIED_REPLICA
+        investigationKeys:
+          - INC-014/VERIFY_REPLICA_CHECKSUM
+          - INC-014/COMPARE_REPLICA_LINEAGE
+          - INC-014/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: ROUTE_VERIFIED_REPLICA
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-014/SUPPORT/ISOLATE_CORRUPT_REPLICA
+        actionId: ISOLATE_CORRUPT_REPLICA
+        investigationKeys:
+          - INC-014/VERIFY_REPLICA_CHECKSUM
+          - INC-014/COMPARE_REPLICA_LINEAGE
+          - INC-014/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: ISOLATE_CORRUPT_REPLICA
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-015
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_DEFERRED_PATIENT_ROUTE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_PRIORITY_CONSTRAINTS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ADD_CARE_ROUTING_CAPACITY
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: RESTORE_MINIMUM_CARE_ROUTE
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_JIN_TRACE_CARE_DELAYS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_PATIENT_PRIORITY_INTERFACE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-015/OPEN_LOGS
+        key: INC-015/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-015/OPEN_METRICS
+        key: INC-015/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-015/TRACE_DEFERRED_PATIENT_ROUTE
+        key: INC-015/TRACE_DEFERRED_PATIENT_ROUTE
+        actionId: TRACE_DEFERRED_PATIENT_ROUTE
+        result:
+          kind: action_completed
+      - id: INC-015/COMPARE_PRIORITY_CONSTRAINTS
+        key: INC-015/COMPARE_PRIORITY_CONSTRAINTS
+        actionId: COMPARE_PRIORITY_CONSTRAINTS
+        result:
+          kind: action_completed
+      - id: INC-015/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-015/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-015/REINVESTIGATE_NULL_NAME
+        key: INC-015/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-015/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-015/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-015/REINVESTIGATE_NULL_AI
+        key: INC-015/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-015/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-015/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-015/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-015/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-015/REINVESTIGATE_NULL_STOP_REQUEST
+        key: INC-015/REINVESTIGATE_NULL_STOP_REQUEST
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        result:
+          kind: action_completed
+      - id: INC-015/REINVESTIGATE_NULL_218_ARCHIVE
+        key: INC-015/REINVESTIGATE_NULL_218_ARCHIVE
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        result:
+          kind: action_completed
+      - id: INC-015/INSPECT_PATIENT_PRIORITY_INTERFACE
+        key: INC-015/INSPECT_PATIENT_PRIORITY_INTERFACE
+        actionId: INSPECT_PATIENT_PRIORITY_INTERFACE
+        result:
+          kind: action_completed
+      - id: INC-015/TEAM_REPORT
+        key: INC-015/TEAM_REPORT
+        actionId: ASK_JIN_TRACE_CARE_DELAYS
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-015/SUPPORT/ADD_CARE_ROUTING_CAPACITY
+        actionId: ADD_CARE_ROUTING_CAPACITY
+        investigationKeys:
+          - INC-015/TRACE_DEFERRED_PATIENT_ROUTE
+          - INC-015/COMPARE_PRIORITY_CONSTRAINTS
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: ADD_CARE_ROUTING_CAPACITY
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-015/SUPPORT/RESTORE_MINIMUM_CARE_ROUTE
+        actionId: RESTORE_MINIMUM_CARE_ROUTE
+        investigationKeys:
+          - INC-015/TRACE_DEFERRED_PATIENT_ROUTE
+          - INC-015/COMPARE_PRIORITY_CONSTRAINTS
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: RESTORE_MINIMUM_CARE_ROUTE
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-016
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_TRANSACTION_REENTRY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_REVIEW_RECEIPTS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: BYPASS_NARROW_REVIEW_QUEUE
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: HONOR_VERIFIED_REVIEW_RECEIPTS
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_JIN_TRACE_TRANSACTION_REPORTS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_CREDIT_RISK_INTERFACE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-016/OPEN_LOGS
+        key: INC-016/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-016/OPEN_METRICS
+        key: INC-016/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-016/TRACE_TRANSACTION_REENTRY
+        key: INC-016/TRACE_TRANSACTION_REENTRY
+        actionId: TRACE_TRANSACTION_REENTRY
+        result:
+          kind: action_completed
+      - id: INC-016/COMPARE_REVIEW_RECEIPTS
+        key: INC-016/COMPARE_REVIEW_RECEIPTS
+        actionId: COMPARE_REVIEW_RECEIPTS
+        result:
+          kind: action_completed
+      - id: INC-016/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-016/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-016/REINVESTIGATE_NULL_NAME
+        key: INC-016/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-016/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-016/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-016/REINVESTIGATE_NULL_AI
+        key: INC-016/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-016/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-016/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-016/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-016/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-016/REINVESTIGATE_NULL_STOP_REQUEST
+        key: INC-016/REINVESTIGATE_NULL_STOP_REQUEST
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        result:
+          kind: action_completed
+      - id: INC-016/REINVESTIGATE_NULL_218_ARCHIVE
+        key: INC-016/REINVESTIGATE_NULL_218_ARCHIVE
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        result:
+          kind: action_completed
+      - id: INC-016/REINVESTIGATE_HUMAN_DECISION_APIS
+        key: INC-016/REINVESTIGATE_HUMAN_DECISION_APIS
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        result:
+          kind: action_completed
+      - id: INC-016/INSPECT_CREDIT_RISK_INTERFACE
+        key: INC-016/INSPECT_CREDIT_RISK_INTERFACE
+        actionId: INSPECT_CREDIT_RISK_INTERFACE
+        result:
+          kind: action_completed
+      - id: INC-016/TEAM_REPORT
+        key: INC-016/TEAM_REPORT
+        actionId: ASK_JIN_TRACE_TRANSACTION_REPORTS
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-016/SUPPORT/BYPASS_NARROW_REVIEW_QUEUE
+        actionId: BYPASS_NARROW_REVIEW_QUEUE
+        investigationKeys:
+          - INC-016/TRACE_TRANSACTION_REENTRY
+          - INC-016/COMPARE_REVIEW_RECEIPTS
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: BYPASS_NARROW_REVIEW_QUEUE
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-016/SUPPORT/HONOR_VERIFIED_REVIEW_RECEIPTS
+        actionId: HONOR_VERIFIED_REVIEW_RECEIPTS
+        investigationKeys:
+          - INC-016/TRACE_TRANSACTION_REENTRY
+          - INC-016/COMPARE_REVIEW_RECEIPTS
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: HONOR_VERIFIED_REVIEW_RECEIPTS
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-017
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_CANDIDATE_RANKING
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_RANKING_LINEAGE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ROLLBACK_RANKING_CACHE
+        operational: true
+        restart: false
+        rollback: true
+        evidenceEligible: true
+      - actionId: RECONCILE_RANKING_GENERATIONS
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_SAM_COMPARE_RANKING
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: VERIFY_CANDIDATE_4172_RECORD
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-017/OPEN_LOGS
+        key: INC-017/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-017/OPEN_METRICS
+        key: INC-017/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-017/TRACE_CANDIDATE_RANKING
+        key: INC-017/TRACE_CANDIDATE_RANKING
+        actionId: TRACE_CANDIDATE_RANKING
+        result:
+          kind: action_completed
+      - id: INC-017/COMPARE_RANKING_LINEAGE
+        key: INC-017/COMPARE_RANKING_LINEAGE
+        actionId: COMPARE_RANKING_LINEAGE
+        result:
+          kind: action_completed
+      - id: INC-017/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-017/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-017/REINVESTIGATE_NULL_NAME
+        key: INC-017/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-017/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-017/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-017/REINVESTIGATE_NULL_AI
+        key: INC-017/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-017/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-017/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-017/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-017/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-017/REINVESTIGATE_NULL_STOP_REQUEST
+        key: INC-017/REINVESTIGATE_NULL_STOP_REQUEST
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        result:
+          kind: action_completed
+      - id: INC-017/REINVESTIGATE_NULL_218_ARCHIVE
+        key: INC-017/REINVESTIGATE_NULL_218_ARCHIVE
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        result:
+          kind: action_completed
+      - id: INC-017/REINVESTIGATE_HUMAN_DECISION_APIS
+        key: INC-017/REINVESTIGATE_HUMAN_DECISION_APIS
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        result:
+          kind: action_completed
+      - id: INC-017/VERIFY_CANDIDATE_4172_RECORD
+        key: INC-017/VERIFY_CANDIDATE_4172_RECORD
+        actionId: VERIFY_CANDIDATE_4172_RECORD
+        result:
+          kind: action_completed
+      - id: INC-017/TEAM_REPORT
+        key: INC-017/TEAM_REPORT
+        actionId: ASK_SAM_COMPARE_RANKING
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-017/SUPPORT/ROLLBACK_RANKING_CACHE
+        actionId: ROLLBACK_RANKING_CACHE
+        investigationKeys:
+          - INC-017/TRACE_CANDIDATE_RANKING
+          - INC-017/COMPARE_RANKING_LINEAGE
+          - INC-017/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: ROLLBACK_RANKING_CACHE
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-017/SUPPORT/RECONCILE_RANKING_GENERATIONS
+        actionId: RECONCILE_RANKING_GENERATIONS
+        investigationKeys:
+          - INC-017/TRACE_CANDIDATE_RANKING
+          - INC-017/COMPARE_RANKING_LINEAGE
+          - INC-017/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: RECONCILE_RANKING_GENERATIONS
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-018
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_EMERGENCY_ALLOCATION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_ALLOCATION_CONSTRAINTS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ROUTE_EMERGENCY_CAPACITY
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: RESTORE_EMERGENCY_DISPATCH_FLOOR
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_SAM_COMPARE_ALLOCATION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_LOGISTICS_ALLOCATION_INTERFACE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-018/OPEN_LOGS
+        key: INC-018/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-018/OPEN_METRICS
+        key: INC-018/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-018/TRACE_EMERGENCY_ALLOCATION
+        key: INC-018/TRACE_EMERGENCY_ALLOCATION
+        actionId: TRACE_EMERGENCY_ALLOCATION
+        result:
+          kind: action_completed
+      - id: INC-018/COMPARE_ALLOCATION_CONSTRAINTS
+        key: INC-018/COMPARE_ALLOCATION_CONSTRAINTS
+        actionId: COMPARE_ALLOCATION_CONSTRAINTS
+        result:
+          kind: action_completed
+      - id: INC-018/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-018/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-018/REINVESTIGATE_NULL_NAME
+        key: INC-018/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-018/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-018/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-018/REINVESTIGATE_NULL_AI
+        key: INC-018/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-018/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-018/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-018/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-018/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-018/REINVESTIGATE_NULL_STOP_REQUEST
+        key: INC-018/REINVESTIGATE_NULL_STOP_REQUEST
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        result:
+          kind: action_completed
+      - id: INC-018/REINVESTIGATE_NULL_218_ARCHIVE
+        key: INC-018/REINVESTIGATE_NULL_218_ARCHIVE
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        result:
+          kind: action_completed
+      - id: INC-018/REINVESTIGATE_HUMAN_DECISION_APIS
+        key: INC-018/REINVESTIGATE_HUMAN_DECISION_APIS
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        result:
+          kind: action_completed
+      - id: INC-018/INSPECT_LOGISTICS_ALLOCATION_INTERFACE
+        key: INC-018/INSPECT_LOGISTICS_ALLOCATION_INTERFACE
+        actionId: INSPECT_LOGISTICS_ALLOCATION_INTERFACE
+        result:
+          kind: action_completed
+      - id: INC-018/TEAM_REPORT
+        key: INC-018/TEAM_REPORT
+        actionId: ASK_SAM_COMPARE_ALLOCATION
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-018/SUPPORT/ROUTE_EMERGENCY_CAPACITY
+        actionId: ROUTE_EMERGENCY_CAPACITY
+        investigationKeys:
+          - INC-018/TRACE_EMERGENCY_ALLOCATION
+          - INC-018/COMPARE_ALLOCATION_CONSTRAINTS
+          - INC-018/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: ROUTE_EMERGENCY_CAPACITY
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-018/SUPPORT/RESTORE_EMERGENCY_DISPATCH_FLOOR
+        actionId: RESTORE_EMERGENCY_DISPATCH_FLOOR
+        investigationKeys:
+          - INC-018/TRACE_EMERGENCY_ALLOCATION
+          - INC-018/COMPARE_ALLOCATION_CONSTRAINTS
+          - INC-018/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: RESTORE_EMERGENCY_DISPATCH_FLOOR
         freshness:
           type: all
           children:

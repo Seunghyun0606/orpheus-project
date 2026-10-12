@@ -1,5 +1,11 @@
 # TASK-029 — Acts 4–6 authoring checkpoint
 
+Current addendum: DEC-046 approves the seven concrete opportunity rules. The
+[model/opportunity connection checkpoint](TASK-029_OPPORTUNITIES_IMPLEMENTATION.md)
+records their authored integration and still-deferred verification. The original
+operational checkpoint below is historical; its pending opportunity decision was
+resolved, not an invitation to re-decide the same gate.
+
 ## Completed authoring, not task completion
 
 DEC-045 authorizes TASK-029 implementation before TASK-028 acceptance only.

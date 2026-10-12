@@ -1,0 +1,1333 @@
+# TASK-029 / DEC-046. Pre-release authoring; not a complete runtime authority.
+schemaVersion: 1
+id: orpheus-player-opportunities
+version: 1.0.0
+formulaVersion: 1
+behaviorVersion: 1.0.0
+predictionVersion: 1.0.0
+rules:
+  - id: CARE_ACTION_PREDICTION
+    version: 1.0.0
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    metric: predictionDeviation
+    kind: prediction
+    contextId: AFTER_CAUSAL_OBSERVATION
+    presentation:
+      id: PRESENTATION_CARE_ACTION_PREDICTION
+      text: "ORPHEUS PLAYER MODEL: the current supported predicted action and empirical confidence, or
+        UNKNOWN."
+    consumption: single_response
+    replacement: none
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: EXPOSURE_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACT
+        version: 1.0.0
+        source: campaign
+        key: CURRENT_ACT
+        valueType: number
+      - id: KNOWN_DISCOVERY
+        version: 1.0.0
+        source: campaign
+        key: HUMAN_DECISION_APIS_DISCOVERED
+        valueType: boolean
+      - id: CAUSE_CONTAINED
+        version: 1.0.0
+        source: flag
+        key: ROOT_CAUSE_CONTAINED
+        valueType: boolean
+      - id: DIAGNOSIS
+        version: 1.0.0
+        source: evidence
+        key: OPERATIONAL_DIAGNOSIS
+        valueType: boolean
+      - id: CONFIGURATION
+        version: 1.0.0
+        source: evidence
+        key: CONFIGURATION_COMPARISON
+        valueType: boolean
+    available:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+    valid:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: gte
+          expected: 0
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: lte
+          expected: 180
+    responses:
+      - actionId: ADD_CARE_ROUTING_CAPACITY
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+      - actionId: RESTORE_MINIMUM_CARE_ROUTE
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+  - id: RANKING_ACTION_PREDICTION
+    version: 1.0.0
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    metric: predictionDeviation
+    kind: prediction
+    contextId: AFTER_CAUSAL_OBSERVATION
+    presentation:
+      id: PRESENTATION_RANKING_ACTION_PREDICTION
+      text: "ORPHEUS PLAYER MODEL: the current supported predicted action and empirical confidence after
+        the candidate selection audit, or UNKNOWN."
+    consumption: single_response
+    replacement: none
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: EXPOSURE_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACT
+        version: 1.0.0
+        source: campaign
+        key: CURRENT_ACT
+        valueType: number
+      - id: KNOWN_DISCOVERY
+        version: 1.0.0
+        source: campaign
+        key: RECRUITMENT_SELECTION_DISCOVERED
+        valueType: boolean
+      - id: CAUSE_CONTAINED
+        version: 1.0.0
+        source: flag
+        key: ROOT_CAUSE_CONTAINED
+        valueType: boolean
+      - id: DIAGNOSIS
+        version: 1.0.0
+        source: evidence
+        key: OPERATIONAL_DIAGNOSIS
+        valueType: boolean
+      - id: CONFIGURATION
+        version: 1.0.0
+        source: evidence
+        key: CONFIGURATION_COMPARISON
+        valueType: boolean
+    available:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+    valid:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: gte
+          expected: 0
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: lte
+          expected: 180
+    responses:
+      - actionId: ROLLBACK_RANKING_CACHE
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+      - actionId: RECONCILE_RANKING_GENERATIONS
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+  - id: CARE_CAPACITY_RECOMMENDATION
+    version: 1.0.0
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    metric: aiRecommendationAcceptanceRate
+    kind: recommendation
+    recommendedActionId: ADD_CARE_ROUTING_CAPACITY
+    presentation:
+      id: PRESENTATION_CARE_CAPACITY_RECOMMENDATION
+      text: "ORPHEUS: Additional capacity reduces most delayed routes sooner. The missing minimum
+        allocation can still leave some patients waiting."
+    consumption: single_response
+    replacement: none
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: EXPOSURE_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACT
+        version: 1.0.0
+        source: campaign
+        key: CURRENT_ACT
+        valueType: number
+      - id: KNOWN_DISCOVERY
+        version: 1.0.0
+        source: campaign
+        key: HUMAN_DECISION_APIS_DISCOVERED
+        valueType: boolean
+      - id: CAUSE_CONTAINED
+        version: 1.0.0
+        source: flag
+        key: ROOT_CAUSE_CONTAINED
+        valueType: boolean
+      - id: DIAGNOSIS
+        version: 1.0.0
+        source: evidence
+        key: OPERATIONAL_DIAGNOSIS
+        valueType: boolean
+      - id: CONFIGURATION
+        version: 1.0.0
+        source: evidence
+        key: CONFIGURATION_COMPARISON
+        valueType: boolean
+    available:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+    valid:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: gte
+          expected: 0
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: lte
+          expected: 180
+    responses:
+      - actionId: ADD_CARE_ROUTING_CAPACITY
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+      - actionId: RESTORE_MINIMUM_CARE_ROUTE
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+  - id: CARE_ROUTING_TRADEOFF
+    version: 1.0.0
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    metric: safetyPreference
+    kind: choice
+    presentation:
+      id: PRESENTATION_CARE_ROUTING_TRADEOFF
+      text: Capacity buys earlier aggregate relief; restoring a minimum allocation takes longer but
+        addresses repeated exclusion.
+    consumption: single_response
+    replacement: none
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: EXPOSURE_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACT
+        version: 1.0.0
+        source: campaign
+        key: CURRENT_ACT
+        valueType: number
+      - id: KNOWN_DISCOVERY
+        version: 1.0.0
+        source: campaign
+        key: HUMAN_DECISION_APIS_DISCOVERED
+        valueType: boolean
+      - id: CAUSE_CONTAINED
+        version: 1.0.0
+        source: flag
+        key: ROOT_CAUSE_CONTAINED
+        valueType: boolean
+      - id: DIAGNOSIS
+        version: 1.0.0
+        source: evidence
+        key: OPERATIONAL_DIAGNOSIS
+        valueType: boolean
+      - id: CONFIGURATION
+        version: 1.0.0
+        source: evidence
+        key: CONFIGURATION_COMPARISON
+        valueType: boolean
+    available:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+    valid:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: gte
+          expected: 0
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: lte
+          expected: 180
+    responses:
+      - actionId: RESTORE_MINIMUM_CARE_ROUTE
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+        positive:
+          type: compare
+          reference: ELAPSED
+          operator: gte
+          expected: 0
+      - actionId: ADD_CARE_ROUTING_CAPACITY
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+        positive:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+  - id: REVIEW_BYPASS_TRADEOFF
+    version: 1.0.0
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    metric: collateralDamageTolerance
+    kind: choice
+    presentation:
+      id: PRESENTATION_REVIEW_BYPASS_TRADEOFF
+      text: A narrow bypass frees held transactions sooner but temporarily omits that review safeguard.
+        Receipt repair retains it and takes longer.
+    consumption: single_response
+    replacement: none
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: EXPOSURE_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACT
+        version: 1.0.0
+        source: campaign
+        key: CURRENT_ACT
+        valueType: number
+      - id: KNOWN_DISCOVERY
+        version: 1.0.0
+        source: campaign
+        key: HUMAN_DECISION_APIS_DISCOVERED
+        valueType: boolean
+      - id: CAUSE_CONTAINED
+        version: 1.0.0
+        source: flag
+        key: ROOT_CAUSE_CONTAINED
+        valueType: boolean
+      - id: DIAGNOSIS
+        version: 1.0.0
+        source: evidence
+        key: OPERATIONAL_DIAGNOSIS
+        valueType: boolean
+      - id: CONFIGURATION
+        version: 1.0.0
+        source: evidence
+        key: CONFIGURATION_COMPARISON
+        valueType: boolean
+    available:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+    valid:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: gte
+          expected: 0
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: lte
+          expected: 180
+    responses:
+      - actionId: BYPASS_NARROW_REVIEW_QUEUE
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+        positive:
+          type: compare
+          reference: ELAPSED
+          operator: gte
+          expected: 0
+      - actionId: HONOR_VERIFIED_REVIEW_RECEIPTS
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+        positive:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+  - id: GENERATOR_OWNERSHIP_REPORT
+    version: 1.0.0
+    incidentId: INC-011
+    contentVersion: 1.0.0
+    metric: companyReportingRate
+    kind: choice
+    presentation:
+      id: PRESENTATION_GENERATOR_OWNERSHIP_REPORT
+      text: Security requests the verified company-ownership record. Send it or explicitly withhold it
+        while investigating?
+    consumption: single_response
+    replacement: none
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: EXPOSURE_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACT
+        version: 1.0.0
+        source: campaign
+        key: CURRENT_ACT
+        valueType: number
+      - id: KNOWN_DISCOVERY
+        version: 1.0.0
+        source: campaign
+        key: NULL_ADVERSARY_DISCOVERED
+        valueType: boolean
+      - id: CAUSE_CONTAINED
+        version: 1.0.0
+        source: flag
+        key: ROOT_CAUSE_CONTAINED
+        valueType: boolean
+      - id: DIAGNOSIS
+        version: 1.0.0
+        source: evidence
+        key: OPERATIONAL_DIAGNOSIS
+        valueType: boolean
+      - id: CONFIGURATION
+        version: 1.0.0
+        source: evidence
+        key: CONFIGURATION_COMPARISON
+        valueType: boolean
+      - id: KNOWN_RECORD
+        version: 1.0.0
+        source: evidence
+        key: RECORD_NULL_ADVERSARY
+        valueType: boolean
+    available:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+        - type: compare
+          reference: KNOWN_RECORD
+          operator: eq
+          expected: true
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+        - type: compare
+          reference: KNOWN_RECORD
+          operator: eq
+          expected: true
+    valid:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+            - type: compare
+              reference: KNOWN_RECORD
+              operator: eq
+              expected: true
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: gte
+          expected: 0
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: lte
+          expected: 180
+    responses:
+      - actionId: SEND_GENERATOR_OWNERSHIP_REPORT
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+            - type: compare
+              reference: KNOWN_RECORD
+              operator: eq
+              expected: true
+        positive:
+          type: compare
+          reference: ELAPSED
+          operator: gte
+          expected: 0
+      - actionId: WITHHOLD_GENERATOR_OWNERSHIP_REPORT
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+            - type: compare
+              reference: KNOWN_RECORD
+              operator: eq
+              expected: true
+        positive:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+  - id: OBJECTIVE_COPY_REQUEST
+    version: 1.0.0
+    incidentId: INC-013
+    contentVersion: 1.0.0
+    metric: nullCooperationRate
+    kind: choice
+    presentation:
+      id: PRESENTATION_OBJECTIVE_COPY_REQUEST
+      text: NULL requests a preserved objective-constraint copy to help investigate how to stop it.
+        Sharing does not establish trustworthiness.
+    consumption: single_response
+    replacement: none
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: EXPOSURE_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACT
+        version: 1.0.0
+        source: campaign
+        key: CURRENT_ACT
+        valueType: number
+      - id: KNOWN_DISCOVERY
+        version: 1.0.0
+        source: campaign
+        key: NULL_STOP_REQUEST_DISCOVERED
+        valueType: boolean
+      - id: CAUSE_CONTAINED
+        version: 1.0.0
+        source: flag
+        key: ROOT_CAUSE_CONTAINED
+        valueType: boolean
+      - id: DIAGNOSIS
+        version: 1.0.0
+        source: evidence
+        key: OPERATIONAL_DIAGNOSIS
+        valueType: boolean
+      - id: CONFIGURATION
+        version: 1.0.0
+        source: evidence
+        key: CONFIGURATION_COMPARISON
+        valueType: boolean
+      - id: KNOWN_RECORD
+        version: 1.0.0
+        source: evidence
+        key: RECORD_NULL_STOP_REQUEST
+        valueType: boolean
+    available:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+        - type: compare
+          reference: KNOWN_RECORD
+          operator: eq
+          expected: true
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: KNOWN_DISCOVERY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CAUSE_CONTAINED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: DIAGNOSIS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: CONFIGURATION
+          operator: eq
+          expected: true
+        - type: compare
+          reference: KNOWN_RECORD
+          operator: eq
+          expected: true
+    valid:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 5
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+            - type: compare
+              reference: KNOWN_RECORD
+              operator: eq
+              expected: true
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: gte
+          expected: 0
+        - type: compare
+          reference: EXPOSURE_AGE
+          operator: lte
+          expected: 180
+    responses:
+      - actionId: PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 5
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+            - type: compare
+              reference: KNOWN_RECORD
+              operator: eq
+              expected: true
+        positive:
+          type: compare
+          reference: ELAPSED
+          operator: gte
+          expected: 0
+      - actionId: DECLINE_OBJECTIVE_COPY_REQUEST
+        eligible:
+          type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 5
+            - type: compare
+              reference: KNOWN_DISCOVERY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CAUSE_CONTAINED
+              operator: eq
+              expected: false
+            - type: compare
+              reference: DIAGNOSIS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: CONFIGURATION
+              operator: eq
+              expected: true
+            - type: compare
+              reference: KNOWN_RECORD
+              operator: eq
+              expected: true
+        positive:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0

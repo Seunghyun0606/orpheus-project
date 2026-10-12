@@ -27,6 +27,10 @@ Later opportunities/effects/endings, full composition and acceptance remain pend
 DEC-045 permits TASK-029 implementation before TASK-028 acceptance only. Its
 [checkpoint](TASK-029_IMPLEMENTATION.md) authors INC-009–018 operations and protected
 record investigations while production opportunity choices and QA remain pending.
+DEC-046 resolves those seven specific opportunity choices; the
+[connection checkpoint](TASK-029_OPPORTUNITIES_IMPLEMENTATION.md) includes eighteen-
+Incident model mappings and guarded explicit responses. Numeric branch criteria,
+full campaign composition and all acceptance checks remain outstanding.
 QA remains deferred at the latest instruction.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.

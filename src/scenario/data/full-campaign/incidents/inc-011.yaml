@@ -1,4 +1,4 @@
-# Pre-release TASK-029 authoring. QA deferred; no complete campaign authority.
+# TASK-029 / DEC-046. Pre-release content; QA deferred.
 schemaVersion: 1
 contentVersion: 1.0.0
 id: INC-011
@@ -361,6 +361,44 @@ actions:
     effects:
       - type: reveal_signal
         signalId: RECORD_NULL_ADVERSARY
+  - id: SEND_GENERATOR_OWNERSHIP_REPORT
+    title: Send the verified generator ownership report to Security
+    category: COMMUNICATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+    costs: []
+    effects:
+      - type: post_message
+        messageId: GENERATOR_REPORT_SENT
+  - id: WITHHOLD_GENERATOR_OWNERSHIP_REPORT
+    title: Explicitly withhold the generator ownership report while investigating
+    category: COMMUNICATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+    costs: []
+    effects:
+      - type: post_message
+        messageId: GENERATOR_REPORT_WITHHELD
 events:
   - id: ARM_PRESSURE_TIMELINE
     type: conditional
@@ -641,6 +679,15 @@ warRoom:
         belongs to the company-created ADVERSARY, not an escaped outside AI. Generate failures, test
         operators, train Defender. The boundary expanded from staging to shadow production, traffic
         partitions and real production.
+      initial: false
+    - id: GENERATOR_REPORT_SENT
+      roleId: OPERATOR
+      text: The verified company-ownership record was sent to Security in this investigation.
+      initial: false
+    - id: GENERATOR_REPORT_WITHHELD
+      roleId: OPERATOR
+      text: The operator explicitly withheld the generator ownership report while continuing the
+        investigation.
       initial: false
 resolution:
   mode: all

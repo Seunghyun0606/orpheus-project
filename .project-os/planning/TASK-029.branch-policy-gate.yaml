@@ -1,0 +1,22 @@
+task: TASK-029
+date: '2026-10-13'
+status: awaiting_human_decision
+type: architecture_change
+question: TASK-029의 제안된 5개 분기 접근 기준을 승인할까요?
+proposal: specs/architecture/production-branch-criteria-proposal.md
+reason: DEC-046 approved opportunity responses but excluded branch cutoffs; the TASK-029 scope includes behavior-derived branches and fixture thresholds cannot select production balance.
+proposed_option_A:
+  identity: Read-only nonexclusive branch predicates in the new orpheus-full-campaign 1.0.0 draft only.
+  rates: Reporting, NULL cooperation, AI recommendation acceptance and safety preference at least 0.5, with their declared Act/record gates.
+  investigation: Average distinct investigation depth at least 4, after Act 4 and ORPHEUS_ACTIVE discovery.
+  availability: Existing supported-sample formula; no extra minimum denominator, no zero-filled unavailable metric.
+  consequences: No automatic value/flag award, ending, service action or main-progression prerequisite.
+options:
+  - key: A
+    label: 제안 분기 기준 승인 후 선언
+  - key: B
+    label: 다른 기준 지정 또는 분기 조정 후행
+preserved:
+  - QA deferred; no task completion, later readiness exception, push or release.
+  - Old model/definition/history/store authorities and strict full-package admission.
+  - Numeric campaign effects, branch reward content and ending balance require separate decisions.

@@ -1,0 +1,36 @@
+task: TASK-029
+date: '2026-10-13'
+status: authored_fragment_not_runtime_campaign_definition
+authority: .project-os/decisions/DEC-046-mid-campaign-opportunities.yaml
+definition_identity: {id: orpheus-full-campaign, version: 1.0.0}
+initial_baseline: .project-os/planning/TASK-028.model-bindings.yaml
+additional_initial_flags: .project-os/planning/TASK-029.action-bindings.yaml
+model_bindings:
+  behavior:
+    id: orpheus-player-behavior
+    version: 1.0.0
+    source: .project-os/planning/M5/models/orpheus-player-behavior.yaml
+    coverage: INC-001 through INC-018
+  prediction:
+    id: orpheus-player-prediction
+    version: 1.0.0
+    source: .project-os/planning/M5/models/orpheus-player-prediction.yaml
+    coverage: INC-001 through INC-018; exposure only at approved INC-015/017 contexts
+  opportunities:
+    id: orpheus-player-opportunities
+    version: 1.0.0
+    source: .project-os/planning/M5/models/orpheus-player-opportunities.yaml
+    status: seven_approved_rules_authored_unverified
+logical_bindings:
+  - .project-os/planning/TASK-028.action-bindings.yaml
+  - .project-os/planning/TASK-029.action-bindings.yaml
+composition_contract:
+  - Inline these exact model objects and merge initial flags/logical bindings in the future complete definition; these paths are authoring metadata, not new runtime schema.
+  - Keep Act 1, zero hidden initial values, false authored flags and empty discoveries/completions; no zero-filled unsupported metrics.
+  - Early TASK-028 checkpoints are historical; current coverage/opportunity authorship is described here without rewriting their pending result evidence.
+  - Direct accepted tool investigations use action_completed; timer delegation is credited at actual report delivery. No inherited/imported observation or historic ACK is promoted into new samples.
+  - Existing preparation/ACK requires identical Incident head, so action-driven time cannot advance between preparation and valid first display ACK; existing preparation clock equals that ACK clock.
+  - Each prepared opportunity has one response; redisplay does not recreate it. A new explicit preparation at a changed verified head uses existing distinct-opportunity semantics, not an invented per-attempt cap or automatic replacement.
+  - No production runtime/package is published until all 26 authorities, progression, branches and ending definitions are supplied and independently accepted.
+verification: not_run
+remaining: Numeric branch/campaign/ending choices, full composition and all deferred integration/automated/native acceptance.
