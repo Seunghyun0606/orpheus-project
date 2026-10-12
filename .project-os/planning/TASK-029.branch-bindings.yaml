@@ -1,0 +1,195 @@
+task: TASK-029
+date: 2026-10-13
+status: authored_fragment_not_runtime_campaign_definition
+authority: .project-os/decisions/DEC-047-production-branch-criteria.yaml
+definition_identity:
+  id: orpheus-full-campaign
+  version: 1.0.0
+references:
+  - id: METRIC_COMPANY_REPORTING
+    version: 1.0.0
+    valueType: number
+    source: metric
+    key: companyReportingRate
+    contexts:
+      - branch
+  - id: METRIC_NULL_COOPERATION
+    version: 1.0.0
+    valueType: number
+    source: metric
+    key: nullCooperationRate
+    contexts:
+      - branch
+  - id: METRIC_INVESTIGATION_DEPTH
+    version: 1.0.0
+    valueType: number
+    source: metric
+    key: averageInvestigationDepth
+    contexts:
+      - branch
+  - id: METRIC_RECOMMENDATION_ACCEPTANCE
+    version: 1.0.0
+    valueType: number
+    source: metric
+    key: aiRecommendationAcceptanceRate
+    contexts:
+      - branch
+  - id: METRIC_SAFETY_PREFERENCE
+    version: 1.0.0
+    valueType: number
+    source: metric
+    key: safetyPreference
+    contexts:
+      - branch
+branches:
+  - id: COMPANY_REPORTING_ACCESS
+    version: 1.0.0
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: METRIC_COMPANY_REPORTING
+          operator: gte
+          expected: 0.5
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: NULL_COOPERATION_ACCESS
+    version: 1.0.0
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: METRIC_NULL_COOPERATION
+          operator: gte
+          expected: 0.5
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INVESTIGATION_ACCESS
+    version: 1.0.0
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: METRIC_INVESTIGATION_DEPTH
+          operator: gte
+          expected: 4
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: AI_DEPENDENT_ACCESS
+    version: 1.0.0
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: METRIC_RECOMMENDATION_ACCEPTANCE
+          operator: gte
+          expected: 0.5
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+  - id: SAFETY_FIRST_ACCESS
+    version: 1.0.0
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: METRIC_SAFETY_PREFERENCE
+          operator: gte
+          expected: 0.5
+    reveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+composition_contract:
+  - Merge these references/branches with the approved TASK-028/029 logical/model fragments in the
+    complete new definition; paths are planning metadata, not new runtime fields.
+  - Each referenced unavailable value diagnoses even beneath a decisive sibling; supported zero is
+    not unavailable.
+  - Nonexclusive read-only indicators; no priority, reward/flag, service change or ending grant.
+  - No ordinary recovery, main progression or required discovery uses these predicates. Later
+    consumers require explicit authored content and gates.
+  - Preserve old authorities and strict complete-package admission; do not create a partial official
+    run.
+verification: not_run

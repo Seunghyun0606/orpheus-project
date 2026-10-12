@@ -27,8 +27,9 @@ DEC-045 permits TASK-029 implementation before TASK-028 acceptance. Its
 [Acts 4–6 authoring checkpoint](docs/TASK-029_IMPLEMENTATION.md) adds INC-009–018
 and protected record/re-investigation fragments. DEC-046 now approves the
 [seven-rule opportunity connection](docs/TASK-029_OPPORTUNITIES_IMPLEMENTATION.md),
-with model draft coverage through INC-018. Branch choices, full composition and QA
-remain pending; TASK-028/029 are not complete.
+with model draft coverage through INC-018. DEC-047 adds the
+[five read-only branch declarations](docs/TASK-029_BRANCH_IMPLEMENTATION.md).
+Full composition, reward/ending choices and QA remain pending; TASK-028/029 are not complete.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,

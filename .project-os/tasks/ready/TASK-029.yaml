@@ -33,6 +33,7 @@ relevant_files:
   - src/scenario/
   - src/tests/
 active_decisions:
+  - .project-os/decisions/DEC-047-production-branch-criteria.yaml
   - .project-os/decisions/DEC-046-mid-campaign-opportunities.yaml
   - .project-os/decisions/DEC-045-task029-implementation-before-task028-acceptance.yaml
   - .project-os/decisions/DEC-044-production-model-initial-baseline.yaml

@@ -1,5 +1,10 @@
 # TASK-029 — Approved opportunity/model connection checkpoint
 
+Latest addendum: DEC-047 separately approves and declares the five branch criteria.
+See the [branch checkpoint](TASK-029_BRANCH_IMPLEMENTATION.md). The original
+opportunity checkpoint below is historical, not an unresolved request to approve
+the same branch criteria again. Full integration/acceptance remains pending.
+
 ## Completed
 
 DEC-046 records option A approval of the proposal at `7d649b6`. Authored the seven

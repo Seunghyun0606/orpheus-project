@@ -1,5 +1,9 @@
 # TASK-029 — Acts 4–6 authoring checkpoint
 
+Latest addendum: DEC-047 approves the five read-only branch criteria. The
+[branch declaration checkpoint](TASK-029_BRANCH_IMPLEMENTATION.md) records their
+authoring and deferred verification; TASK-029 is still incomplete.
+
 Current addendum: DEC-046 approves the seven concrete opportunity rules. The
 [model/opportunity connection checkpoint](TASK-029_OPPORTUNITIES_IMPLEMENTATION.md)
 records their authored integration and still-deferred verification. The original

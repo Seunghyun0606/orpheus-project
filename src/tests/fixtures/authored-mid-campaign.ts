@@ -28,6 +28,7 @@ export function authoredMidFixture() {
   const earlier = read('.project-os/planning/TASK-028.action-bindings.yaml');
   const mid = read('.project-os/planning/TASK-029.action-bindings.yaml');
   const baseline = read('.project-os/planning/TASK-028.model-bindings.yaml');
+  const route = read('.project-os/planning/TASK-029.branch-bindings.yaml');
   const modelRoot = '.project-os/planning/M5/models/';
   const definition: CampaignDefinition = {
     schemaVersion: 1,
@@ -45,7 +46,8 @@ export function authoredMidFixture() {
         ...mid.initial_narrative_flags_fragment,
       },
     },
-    references: [...earlier.references, ...mid.references],
+    references: [...earlier.references, ...mid.references, ...route.references],
+    branches: route.branches,
     acts: [1, 2, 3, 4, 5, 6].map((id) => ({
       id,
       eligibility: {

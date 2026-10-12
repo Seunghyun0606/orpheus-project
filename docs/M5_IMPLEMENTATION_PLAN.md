@@ -31,6 +31,9 @@ DEC-046 resolves those seven specific opportunity choices; the
 [connection checkpoint](TASK-029_OPPORTUNITIES_IMPLEMENTATION.md) includes eighteen-
 Incident model mappings and guarded explicit responses. Numeric branch criteria,
 full campaign composition and all acceptance checks remain outstanding.
+DEC-047 now resolves the five specific branch criteria through
+[read-only declarations](TASK-029_BRANCH_IMPLEMENTATION.md); full integration,
+reward/campaign/ending balance and all deferred acceptance remain pending.
 QA remains deferred at the latest instruction.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.

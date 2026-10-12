@@ -1,0 +1,26 @@
+id: DEC-047
+title: Approve five nonexclusive production route eligibility criteria
+status: active
+date: '2026-10-13'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 제안 분기 기준 승인 후 선언.
+request: .project-os/planning/TASK-029.branch-policy-gate.yaml
+approved_proposal:
+  commit: 660d673
+  file: specs/architecture/production-branch-criteria-proposal.md
+decision: >-
+  Declare the five read-only, nonexclusive route indicators in the new unreleased
+  orpheus-full-campaign 1.0.0 definition only. Reporting, NULL cooperation,
+  recommendation acceptance and safety preference require supported rates at
+  least 0.5; investigation requires average distinct depth at least 4.
+  Retain each approved Act/known-record gate and strict unavailable-leaf diagnostics.
+consequences:
+  - Branch eligibility does not grant awards, flags, service actions, authority or endings; indicators may overlap without priority.
+  - Supported zero remains distinct from unavailable; no extra minimum denominator or confidence weighting. Prediction minimum support remains 3.
+  - Ordinary recovery, main Act progression and required discoveries do not depend on these optional indicators.
+  - Old definitions/models/records/stores stay unchanged; partial authoring is not production admission.
+  - Numeric campaign awards, branch reward content, other thresholds and production endings remain unselected.
+  - QA remains deferred; no task completion, later readiness exception, push or release.
+supersedes: Branch criteria unselected clauses for these five indicators only.

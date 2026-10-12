@@ -24,6 +24,10 @@ model_bindings:
 logical_bindings:
   - .project-os/planning/TASK-028.action-bindings.yaml
   - .project-os/planning/TASK-029.action-bindings.yaml
+branch_bindings:
+  source: .project-os/planning/TASK-029.branch-bindings.yaml
+  authority: .project-os/decisions/DEC-047-production-branch-criteria.yaml
+  status: five_approved_read_only_indicators_authored_unverified
 composition_contract:
   - Inline these exact model objects and merge initial flags/logical bindings in the future complete definition; these paths are authoring metadata, not new runtime schema.
   - Keep Act 1, zero hidden initial values, false authored flags and empty discoveries/completions; no zero-filled unsupported metrics.
@@ -33,4 +37,4 @@ composition_contract:
   - Each prepared opportunity has one response; redisplay does not recreate it. A new explicit preparation at a changed verified head uses existing distinct-opportunity semantics, not an invented per-attempt cap or automatic replacement.
   - No production runtime/package is published until all 26 authorities, progression, branches and ending definitions are supplied and independently accepted.
 verification: not_run
-remaining: Numeric branch/campaign/ending choices, full composition and all deferred integration/automated/native acceptance.
+remaining: Numeric campaign/ending choices, branch reward content, full composition and all deferred integration/automated/native acceptance.
