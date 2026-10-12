@@ -1,0 +1,23 @@
+task: TASK-027
+date: '2026-10-12'
+status: awaiting_human_decision
+candidate_commit: 2e6bea0030a30b4e953ba8e4f964a76c04ef4e9a
+evidence_commit: e02ae8e5db27f2bd3ff4c6a2b65b726928812e8a
+evaluation: .project-os/planning/TASK-027.distinct-evaluation.yaml
+question: TASK-027 네이티브 QA를 먼저 진행할까요, 미완료를 유지한 채 TASK-028 콘텐츠 구현을 선행할까요?
+details: >-
+  Implementation and independent automated foundation review/QA passed, including
+  426 tests. Distinct evaluator returns HUMAN_GATE because actual native restore,
+  reload and display verification is unexecuted. Project OS next reports no eligible
+  developer task; TASK-028 depends on unfinished TASK-027. Native work requires
+  separate scoped authorization; dependency/scheduling exception also requires
+  explicit human approval. Neither path implies task completion, production balance,
+  destructive user storage operations, release or M4 verification waiver.
+options:
+  - key: A
+    label: TASK-027 전용 격리 네이티브 QA를 먼저 승인
+  - key: B
+    label: TASK-027 미완료·필수 QA 유지, 의존성 예외로 TASK-028 선행 승인
+unmodified_canonical_state:
+  current_tasks: [TASK-024, TASK-027]
+  TASK-028_dependency_on_TASK-027: retained
