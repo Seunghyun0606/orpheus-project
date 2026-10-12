@@ -30,6 +30,12 @@ and protected record/re-investigation fragments. DEC-046 now approves the
 with model draft coverage through INC-018. DEC-047 adds the
 [five read-only branch declarations](docs/TASK-029_BRANCH_IMPLEMENTATION.md).
 Full composition, reward/ending choices and QA remain pending; TASK-028/029 are not complete.
+DEC-048 permits TASK-030 implementation before TASK-029 acceptance. Its
+[Board authoring checkpoint](docs/TASK-030_IMPLEMENTATION.md) adds INC-019–022
+and protected investigations without the later framing reveal. The partial tree
+now contains 22 Scenario/sidecar pairs; models still cover 18 Incidents.
+Optional Board branch consumers require the pending explicit decision.
+TASK-030 remains incomplete, with all QA and final verification obligations retained.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,

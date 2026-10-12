@@ -1,0 +1,25 @@
+id: DEC-048
+title: Permit TASK-030 implementation before deferred TASK-029 acceptance
+status: active
+date: '2026-10-13'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: TASK-030 구현 선행 승인, 기존 검증 의무 유지.
+request: .project-os/planning/TASK-030.readiness-exception-gate.yaml
+approved_proposal:
+  commit: 2b1e553
+  file: .project-os/planning/TASK-030.readiness-exception-gate.yaml
+decision: >-
+  Remove TASK-029 from TASK-030 implementation readiness prerequisites only.
+  Retain accepted TASK-026 and claim through projectctl. Preserve TASK-029
+  incomplete and author the approved four-Incident Board investigation without
+  executing deferred QA or revealing SOFT CONTROL before INC-023.
+consequences:
+  - No TASK-029 completion, acceptance waiver or removal of later dependencies.
+  - All M4/M5 review, QA, independent evaluation and final release gates remain mandatory.
+  - Preserve exact existing authorities, default MVP, user stores and profiles.
+  - Strict complete-package admission remains; no partial official run or fixture fallback.
+  - New opportunity/branch rewards, numeric effects and ending choices require explicit approval.
+  - No QA execution/delegation, push or release is authorized by this exception.
+supersedes: TASK-030 implementation readiness dependency on TASK-029 only.

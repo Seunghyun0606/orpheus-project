@@ -282,9 +282,9 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: ready
+  status: active
   depends_on:
-  - TASK-029
+  - TASK-026
   human_gate: false
 - id: TASK-031
   title: Author OBSERVER and BLACKOUT with verified final context
