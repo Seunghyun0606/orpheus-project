@@ -1,0 +1,84 @@
+task: TASK-026
+date: '2026-10-12'
+commit: 66a019f8c6f9fd9b7362759f4bbb2bd55fce1620
+files_changed: []
+critical_issues: 0
+blocking_issues: 0
+recorded_by: codex-task026-architect
+status: pass
+role: qa
+actor: codex-task026-qa
+source_agent: /root/task026_qa
+summary: Independent direct document/structural automated QA PASS for all four TASK-026
+  criteria. Retains initial future-directory probe failure and explicitly bounded
+  corrected check.
+verification:
+  acceptance: pass
+  ac1: 26 unique consecutive IDs across nine Acts with expected distribution; per-Incident
+    causal/response/investigation/boundary data; MVP source blobs/versions unchanged,
+    approved cbdeba0 blueprint unchanged and INC-004 explicitly approved.
+  ac2: 19 valid acyclic reveal nodes and 17 critical chain edges; declared prerequisites/surfaces/negative-case
+    requirements. No backwards Incident prerequisites. GHOST_ARTIFACT and BLACKOUT_FINAL
+    empty graph prerequisites are explicit.
+  ac3: Four Board Incidents before framing; responsibility retained; five branch profiles,
+    ten ending families, distributed-project title payoff and conditional PROMETHEUS/ORPHEUS-DERIVED/1842
+    requirements traceable; structural REWRITE and no privileged true ending.
+  ac4: Direct sources match documented eager catalog, standalone default entry, injected/framework-only
+    campaign UI, six heuristic-routed tools, scalar engine/War Room, transactional
+    pinning/archive/query, unselected rich views/production/balance and --no-bundle
+    packaging. M4/TASK-025 debt retained.
+  document_validation: pass
+  format: pass
+  doctor_diff: pass
+  counts:
+    incidents: 26
+    new_incidents: 23
+    acts: 9
+    acyclic_reveal_nodes: 19
+    critical_chain_edges: 17
+    negative_case_requirements: 19
+    board_interval: 4
+    ending_families: 10
+    branch_profiles: 5
+    local_markdown_links: 67
+    M5_task_contracts: 10
+    required_spec_decision_references: 137
+    unique_key_yaml_parses: 18
+    preserved_canonical_M4_blobs_vs_cbdeba0: 6
+    preserved_historical_results_vs_2684200: 117
+    preserved_MVP_source_blobs: 3
+    runtime_source_changes: 0
+commands:
+- command: 'Inline Node ESM checker: UTF-8 fs, unique-key YAML, assert, read-only
+    Git blob queries'
+  initial_result: FAIL
+  retained_failure: Incorrectly required every future relevant_files directory to
+    exist; stopped at TASK-033 src/assets/.
+  classification: Future TASK-033 inventory, not a present source or required TASK-026
+    specification reference.
+  corrected_result: PASS
+  correction: Specs/decisions/doc links remain strict; absent future inventory reported
+    separately, not created or hidden.
+- command: projectctl doctor
+  result: PASS
+- command: git diff --check
+  result: PASS, exit 0
+- command: npx prettier --check on 23 explicit scoped files
+  result: PASS
+- command: rg inventory and UTF-8 source reads
+  result: Direct inventory verified; runtime incident directory contains exactly inc-001/002/003.yaml.
+- command: git status --short --branch and git rev-parse HEAD before/after checks
+  result: Clean main ahead 87; candidate unchanged.
+future_inventory:
+- TASK-033 relevant_files src/assets/ does not exist yet.
+direct:
+- Actual structural/reference/graph/format/doctor/source/Git-preservation checks.
+audited:
+- M4 native incompleteness/provenance are repository records, not newly observed.
+limitations:
+- Negative cases checked as requirements, not runtime narrative/gameplay execution.
+- No application/unit/replay suite/native app/actual browser/profile/user store accessed.
+- No future ending reachability/full campaign playable claim.
+- No writes/edits/commits/CLI handoffs/state transitions/delegation/final evaluation.
+- M4/TASK-024/025 remain mandatory before final M5 acceptance/release.
+kind: qa
