@@ -1,0 +1,23 @@
+id: DEC-039
+title: Authorize independent read-only review automated QA and distinct evaluation for M5 tasks
+status: active
+date: '2026-10-12'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 'TASK-026~035 독립 리뷰·자동화 QA·별도 평가 위임 승인.'
+request: .project-os/planning/TASK-026-035.independent-verification-request.yaml
+decision: >-
+  Delegate independent read-only reviewer, document/automated QA verifier and
+  distinct evaluator work for each eligible TASK-026–035 candidate. Begin with
+  TASK-026's approved content blueprint and architecture inventory. Preserve
+  separate actors, exact candidate provenance and direct versus audited evidence.
+consequences:
+  - Agents may inspect and execute safe scoped document/automated verification, but may not edit source/specs/tests/canonical state, commit, push or submit state transitions.
+  - Root records attributed handoffs and invokes configured Project OS claim/evaluate only when supported by independent evidence.
+  - Automated verification on future implementation candidates is authorized; native QA remains separately scoped/deferred.
+  - No actual user database/profile access, destructive overwrite/reset, credentials/security changes, production defaults or release approval.
+  - Required independent findings are repaired or separately gated; no actor certifies its own implementation, review or QA as the distinct final evaluation.
+  - M4/TASK-024/025 verification remains mandatory before final M5 acceptance/release under DEC-037.
+  - Later material architecture/schema/balance/content decisions retain their own human gates.
+supersedes: null

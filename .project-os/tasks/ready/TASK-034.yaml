@@ -36,6 +36,7 @@ relevant_files:
   - scripts/
   - src/tests/
 active_decisions:
+  - .project-os/decisions/DEC-039-m5-independent-verification-delegation.yaml
   - .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml
   - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
   - .project-os/decisions/DEC-003-deterministic-local-first.yaml
