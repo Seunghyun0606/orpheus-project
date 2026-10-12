@@ -1,5 +1,10 @@
 # TASK-028 — Early content implementation checkpoint
 
+Latest checkpoint: DEC-044 approves the production model/initial-state baseline.
+The [model authoring candidate](TASK-028_MODEL_BASELINE_IMPLEMENTATION.md) records
+eight-Incident mappings and still-pending runtime integration/verification. The
+original operational checkpoint below is historical, not a current missing-decision list.
+
 Later checkpoint: DEC-043 approves cross-Incident action guards. The
 [action guard candidate](TASK-028_ACTION_GATES_IMPLEMENTATION.md) now includes
 condition-driven Security-name data and explicit archive investigation. The

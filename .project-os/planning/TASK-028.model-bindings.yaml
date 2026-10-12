@@ -1,0 +1,53 @@
+task: TASK-028
+date: '2026-10-13'
+status: authored_fragment_not_runtime_campaign_definition
+authority: .project-os/decisions/DEC-044-production-model-initial-baseline.yaml
+definition_identity: {id: orpheus-full-campaign, version: 1.0.0}
+definition_header_fragment:
+  schemaVersion: 1
+  id: orpheus-full-campaign
+  version: 1.0.0
+  replayVersion: 2
+  recordVersion: 2
+initial_fragment:
+  act: 1
+  alignment: {corporate: 0, null: 0}
+  values:
+    publicInterest: 0
+    operationalSafety: 0
+    curiosity: 0
+    evidence: 0
+    teamTrust: 0
+    aiDependency: 0
+    collateralDamage: 0
+  evidence: []
+  narratives: []
+  completed: []
+  narrativeFlags: {GHOST_ARTIFACT: false, NULL_NAME: false}
+  endingFlags: {}
+model_bindings:
+  behavior:
+    id: orpheus-player-behavior
+    version: 1.0.0
+    source: .project-os/planning/M5/models/orpheus-player-behavior.yaml
+    coverage: INC-001 through INC-008 only; extend draft before publishing
+  prediction:
+    id: orpheus-player-prediction
+    version: 1.0.0
+    source: .project-os/planning/M5/models/orpheus-player-prediction.yaml
+    coverage: INC-001 through INC-008 only; early reveal predicates always false
+  opportunities:
+    id: orpheus-player-opportunities
+    version: 1.0.0
+    schemaVersion: 1
+    formulaVersion: 1
+    behaviorVersion: 1.0.0
+    predictionVersion: 1.0.0
+    status: identity_approved_rules_not_authored
+logical_bindings: .project-os/planning/TASK-028.action-bindings.yaml
+composition_contract:
+  - Inline the exact behavior/prediction objects into the complete new definition; these file bindings are planning metadata, not new runtime schema fields.
+  - Add every subsequently authored narrative/ending flag as false before first run; no initialized behavior metric values.
+  - Complete all 26 content/model mappings, actual later opportunity rules, ending authority and sidecars before production admission.
+  - Do not publish this fragment as a definitions asset, fill missing rules from fixtures, or relax opportunity/package completeness validation.
+verification: not_run

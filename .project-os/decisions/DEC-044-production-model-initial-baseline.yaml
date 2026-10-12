@@ -1,0 +1,29 @@
+id: DEC-044
+title: Pin fresh production player models and explicit initial state
+status: active
+date: '2026-10-13'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 제안 모델·초기값 기준 승인 후 연결.
+request: .project-os/planning/TASK-028.production-model-baseline-gate.yaml
+approved_proposal:
+  commit: 97b6163
+  file: specs/architecture/production-player-model-baseline-proposal.md
+decision: >-
+  Pin production-only behavior, prediction and opportunity model identities at
+  1.0.0 in the new orpheus-full-campaign definition only. Use schema/formula 1,
+  behavior/prediction classification 1.0.0, Act 1, zero alignment/hidden values,
+  empty discoveries/completions and false authored narrative/ending flags.
+  Keep no-sample behavior metrics unavailable, never initialize them to zero.
+consequences:
+  - Explicit service-changing action classifications; restart/rollback identities are authored, not inferred.
+  - Relevant newly delivered same-attempt observations only; inclusive freshness 0 through 180 action-driven seconds.
+  - Distinct declared investigation keys per attempt; Security/archive investigation is not passive navigation.
+  - Prediction minimum support 3, unique empirical top; ties/insufficient/no candidates remain UNKNOWN.
+  - No ORPHEUS guidance exposure in Acts 1–3; later opportunities need actual visible ACK and authored valid response mappings.
+  - Old definitions, records, models and physical stores remain untouched; no migration or fixture fallback.
+  - Partial early model data is authoring material, not a complete/startable 26-Incident package.
+  - Numerical effect awards, production ending balance and later opportunity wording remain unselected.
+  - QA remains deferred; no task completion, dependency exception, push or release authorization.
+supersedes: null

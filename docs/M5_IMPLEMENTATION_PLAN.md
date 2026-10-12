@@ -20,6 +20,10 @@ has [partial operational authoring](TASK-028_IMPLEMENTATION.md), not verified
 campaign/reveal acceptance. DEC-043 now approves the
 [protected action contract](../specs/architecture/campaign-action-gates.md); its
 implementation, model decisions and full integration are still unverified/incomplete.
+DEC-044 now approves the fresh production model identities and initial state;
+the [model checkpoint](TASK-028_MODEL_BASELINE_IMPLEMENTATION.md) authors explicit
+eight-Incident mappings and definition fragments without a partial official run.
+Later opportunities/effects/endings, full composition and acceptance remain pending.
 QA remains deferred at the latest instruction.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.

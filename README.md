@@ -21,6 +21,8 @@ and the TASK-033 dependency on TASK-027 are retained.
 TASK-028 has authored eight early Incident authorities and eight investigation
 sidecars under DEC-042, with [unexecuted replay fixtures](docs/TASK-028_IMPLEMENTATION.md).
 DEC-043 now approves its [cross-Incident guard candidate](docs/TASK-028_ACTION_GATES_IMPLEMENTATION.md).
+DEC-044 approves the [fresh player-model/initial-state baseline](docs/TASK-028_MODEL_BASELINE_IMPLEMENTATION.md);
+eight-Incident model tables are authored outside runtime composition, with QA deferred.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
