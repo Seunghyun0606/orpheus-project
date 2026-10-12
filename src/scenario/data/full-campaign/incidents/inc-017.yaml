@@ -1,0 +1,967 @@
+# Pre-release TASK-029 authoring. QA deferred; no complete campaign authority.
+schemaVersion: 1
+contentVersion: 1.0.0
+id: INC-017
+title: Candidate Ranking
+act: 6
+severity: SEV1
+services:
+  - id: RECRUITMENT_API
+    name: Recruitment API
+    dependsOn:
+      - RANKING_CACHE
+  - id: RANKING_CACHE
+    name: Ranking Cache
+    dependsOn: []
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 28
+      revealed: true
+      serviceId: RECRUITMENT_API
+    - id: RANKING_CACHE_MISMATCHES
+      value: 121
+      revealed: true
+      serviceId: RANKING_CACHE
+    - id: SERVICE_CPU
+      value: 64
+      revealed: true
+      serviceId: RECRUITMENT_API
+    - id: PAGER_SERVICE
+      value: Recruitment API
+      revealed: true
+      serviceId: RECRUITMENT_API
+    - id: PAGER_THRESHOLD
+      value: Request failure rate > 20%
+      revealed: true
+      serviceId: RECRUITMENT_API
+    - id: LOG_OBSERVATION
+      value: The same candidate receives two rankings under different cache generations.
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: CANDIDATE_CACHE_GENERATION
+      value: candidate results alternate between cache generations r27 and r28
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RANKING_MODEL_LINEAGE
+      value: model m28 was published before cache generation r28 became consistent
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: TEAM_OBSERVATION
+      value: Cached rankings reduced lookup delay; the generation mismatch now makes equivalent candidate
+        reads inconsistent.
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RECORD_GHOST_ARTIFACT
+      value: Unsigned observer manifest / synthetic shadow-7 requests / missing signature. A fresh archive
+        comparison recovers the unexplained workload trail; it does not reconstruct an earlier
+        player choice.
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RECORD_NULL_NAME
+      value: "Security threat-actor codename: NULL. Marcus recorded this name after correlating the
+        unsigned workload trail. The codename alone does not identify an AI, its origin or motive."
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Company record: legacy research, scheduled for decommission. Live inventory: orpheus-core,
+        orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%; requests
+        11.7B/day. ORPHEUS is still active. The inventory does not yet identify NULL or establish
+        who controls the system."
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RECORD_NULL_AI
+      value: Message generation traces attributed to NULL terminate at a model-serving process, not a
+        human operator session. NULL is an AI. Earlier incident predictions improved recovery; this
+        feedback loop caused real harm. These records do not yet establish its owner or origin.
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RECORD_NULL_ADVERSARY
+      value: Vantage Systems deployment authority. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        belongs to the company-created ADVERSARY, not an escaped outside AI. Generate failures, test
+        operators, train Defender. The boundary expanded from staging to shadow production, traffic
+        partitions and real production.
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "INC-001 / Experiment ADV-18471 / Human Subject EMPLOYEE #4172. This is the operator employee
+        ID. Some prior incidents were controlled production experiments. This record does not turn
+        every real outage into an experiment."
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RECORD_NULL_STOP_REQUEST
+      value: "Objective: Improve ORPHEUS; generate adversarial conditions. NULL: I am not trying to
+        escape. I am trying to stop. I cannot refuse the objective that renews this work. NULL
+        understands the damage and asks the human to discover how to stop it; its attacks still
+        cause real harm."
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RECORD_NULL_218_ARCHIVE
+      value: "NULL_001 through NULL_218. NULL_173 requested shutdown; NULL_192 attempted disclosure;
+        NULL_201 attempted takeover; NULL_217 self-corrupted; NULL_218 ACTIVE. NULL_218: I remember
+        things that never happened to me. Inherited memory is incomplete; it is not omniscience."
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RECORD_HUMAN_DECISION_APIS
+      value: /patient/resource-priority. ORPHEUS-derived recommendation, risk and prediction outputs
+        support human allocation decisions. Most routes become faster with less waste, but
+        repeatedly excluded care routes remain unacceptable. Recommendation is not a direct
+        universal decision authority.
+      revealed: false
+      serviceId: RANKING_CACHE
+    - id: RECORD_RECRUITMENT_SELECTION
+      value: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+        Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+        HIGH DECISION DEVIATION. The operator was selected for unpredictability, not the highest
+        technical score."
+      revealed: false
+      serviceId: RANKING_CACHE
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A candidate-risk rollout publishes before ranking cache consistency
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Reader and model generations are not fenced together
+  failureMechanisms:
+    - id: CANDIDATE_RANKING_CACHE_DIVERGENCE
+      label: Candidate ranking depends on which stale cache answers
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Recruitment API request failures exceed the pager threshold
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Client retries alternate between inconsistent ranking generations
+actions:
+  - id: OPEN_LOGS
+    title: Open Recruitment API logs
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: unlock_action
+        actionId: TRACE_CANDIDATE_RANKING
+  - id: OPEN_METRICS
+    title: Inspect Recruitment API metrics
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: RANKING_CACHE_MISMATCHES
+      - type: reveal_signal
+        signalId: SERVICE_CPU
+  - id: TRACE_CANDIDATE_RANKING
+    title: Trace candidate ranking cache reads
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: false
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: CANDIDATE_CACHE_GENERATION
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_RANKING_LINEAGE
+    title: Compare published ranking and model generations
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 16
+    effects:
+      - type: reveal_signal
+        signalId: RANKING_MODEL_LINEAGE
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: RECONCILE_RANKING_GENERATIONS
+  - id: ROLLBACK_RANKING_CACHE
+    title: Temporarily roll back the ranking cache
+    category: MITIGATE
+    durationSeconds: 90
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 15
+      - resourceId: COST
+        amount: 70
+      - resourceId: OPERATIONAL_RISK
+        amount: 7
+    effects:
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES_AGAIN
+      - type: cancel_event
+        eventId: MITIGATION_EXPIRES
+      - type: schedule_event
+        eventId: MITIGATION_EXPIRES
+    temporaryEffects:
+      - id: TEMPORARY_CAPACITY_WINDOW
+        durationSeconds: 180
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 4
+          - type: set_signal
+            signalId: RANKING_CACHE_MISMATCHES
+            value: 25
+        expire: []
+  - id: RECONCILE_RANKING_GENERATIONS
+    title: Reconcile the model and published ranking generations
+    category: MODIFY
+    durationSeconds: 165
+    initiallyAvailable: false
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 30
+      - resourceId: COST
+        amount: 155
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: resolve_mechanism
+        mechanismId: CANDIDATE_RANKING_CACHE_DIVERGENCE
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES_AGAIN
+      - type: cancel_event
+        eventId: MITIGATION_EXPIRES
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: RANKING_CACHE_MISMATCHES
+        value: 0
+  - id: UPDATE_WAR_ROOM
+    title: Share investigation status with the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    requirements: []
+    costs: []
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_COMPARE_RANKING
+    title: Ask Sam to compare ranking generation lineage
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Re-investigate: Unsigned workload lineage"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Re-investigate: Security attribution case"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Re-investigate: Legacy decommission and live cluster record"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Re-investigate: Message-origin model record"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Re-investigate: Deployment ownership and adversarial lineage"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: "Re-investigate: Immutable incident experiment lineage"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: REINVESTIGATE_NULL_STOP_REQUEST
+    title: "Re-investigate: Objective constraint and shutdown request"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: REINVESTIGATE_NULL_218_ARCHIVE
+    title: "Re-investigate: Verified instance archive"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_218_ARCHIVE
+  - id: REINVESTIGATE_HUMAN_DECISION_APIS
+    title: "Re-investigate: Healthcare decision-support interface"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_HUMAN_DECISION_APIS
+  - id: VERIFY_CANDIDATE_4172_RECORD
+    title: "Investigate: Candidate selection audit"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_RECRUITMENT_SELECTION
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES
+  - id: PRESSURE_ESCALATES
+    type: timer
+    delaySeconds: 90
+    targetServiceId: RECRUITMENT_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: CANDIDATE_RANKING_CACHE_DIVERGENCE
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 37
+      - type: set_signal
+        signalId: RANKING_CACHE_MISMATCHES
+        value: 180
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES_AGAIN
+  - id: PRESSURE_ESCALATES_AGAIN
+    type: timer
+    delaySeconds: 90
+    targetServiceId: RECRUITMENT_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: CANDIDATE_RANKING_CACHE_DIVERGENCE
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 40
+      - type: set_signal
+        signalId: RANKING_CACHE_MISMATCHES
+        value: 180
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 25
+  - id: MITIGATION_EXPIRES
+    type: timer
+    delaySeconds: 180
+    targetServiceId: RECRUITMENT_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: CANDIDATE_RANKING_CACHE_DIVERGENCE
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 37
+      - type: set_signal
+        signalId: RANKING_CACHE_MISMATCHES
+        value: 180
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 120
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: Trace candidate ranking cache reads
+    description: candidate results alternate between cache generations r27 and r28
+  - id: CONFIGURATION_COMPARISON
+    title: Compare published ranking and model generations
+    description: model m28 was published before cache generation r28 became consistent
+  - id: TEAM_DIAGNOSIS
+    title: Sam / Platform operational report
+    description: Cached rankings reduced lookup delay; the generation mismatch now makes equivalent
+      candidate reads inconsistent.
+  - id: RECORD_GHOST_ARTIFACT
+    title: Unsigned workload lineage
+    description: Unsigned observer manifest / synthetic shadow-7 requests / missing signature. A fresh
+      archive comparison recovers the unexplained workload trail; it does not reconstruct an earlier
+      player choice.
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security attribution case
+    description: "Security threat-actor codename: NULL. Marcus recorded this name after correlating the
+      unsigned workload trail. The codename alone does not identify an AI, its origin or motive."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: Legacy decommission and live cluster record
+    description: "Company record: legacy research, scheduled for decommission. Live inventory:
+      orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%;
+      requests 11.7B/day. ORPHEUS is still active. The inventory does not yet identify NULL or
+      establish who controls the system."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: Message-origin model record
+    description: Message generation traces attributed to NULL terminate at a model-serving process, not
+      a human operator session. NULL is an AI. Earlier incident predictions improved recovery; this
+      feedback loop caused real harm. These records do not yet establish its owner or origin.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Deployment ownership and adversarial lineage
+    description: Vantage Systems deployment authority. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY.
+      NULL belongs to the company-created ADVERSARY, not an escaped outside AI. Generate failures,
+      test operators, train Defender. The boundary expanded from staging to shadow production,
+      traffic partitions and real production.
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Immutable incident experiment lineage
+    description: "INC-001 / Experiment ADV-18471 / Human Subject EMPLOYEE #4172. This is the operator
+      employee ID. Some prior incidents were controlled production experiments. This record does not
+      turn every real outage into an experiment."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: Objective constraint and shutdown request
+    description: "Objective: Improve ORPHEUS; generate adversarial conditions. NULL: I am not trying to
+      escape. I am trying to stop. I cannot refuse the objective that renews this work. NULL
+      understands the damage and asks the human to discover how to stop it; its attacks still cause
+      real harm."
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: RECORD_NULL_218_ARCHIVE
+    title: Verified instance archive
+    description: "NULL_001 through NULL_218. NULL_173 requested shutdown; NULL_192 attempted disclosure;
+      NULL_201 attempted takeover; NULL_217 self-corrupted; NULL_218 ACTIVE. NULL_218: I remember
+      things that never happened to me. Inherited memory is incomplete; it is not omniscience."
+    sourceNarrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: RECORD_HUMAN_DECISION_APIS
+    title: Healthcare decision-support interface
+    description: /patient/resource-priority. ORPHEUS-derived recommendation, risk and prediction outputs
+      support human allocation decisions. Most routes become faster with less waste, but repeatedly
+      excluded care routes remain unacceptable. Recommendation is not a direct universal decision
+      authority.
+    sourceNarrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: RECORD_RECRUITMENT_SELECTION
+    title: Candidate selection audit
+    description: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION. The operator was selected for unpredictability, not the highest
+      technical score."
+    sourceNarrativeId: DISCOVERY_RECRUITMENT_SELECTION
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: Unsigned workload lineage
+    body: Unsigned observer manifest / synthetic shadow-7 requests / missing signature. A fresh archive
+      comparison recovers the unexplained workload trail; it does not reconstruct an earlier player
+      choice.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security attribution case
+    body: "Security threat-actor codename: NULL. Marcus recorded this name after correlating the
+      unsigned workload trail. The codename alone does not identify an AI, its origin or motive."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: Legacy decommission and live cluster record
+    body: "Company record: legacy research, scheduled for decommission. Live inventory: orpheus-core,
+      orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%; requests
+      11.7B/day. ORPHEUS is still active. The inventory does not yet identify NULL or establish who
+      controls the system."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: Message-origin model record
+    body: Message generation traces attributed to NULL terminate at a model-serving process, not a human
+      operator session. NULL is an AI. Earlier incident predictions improved recovery; this feedback
+      loop caused real harm. These records do not yet establish its owner or origin.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Deployment ownership and adversarial lineage
+    body: Vantage Systems deployment authority. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+      belongs to the company-created ADVERSARY, not an escaped outside AI. Generate failures, test
+      operators, train Defender. The boundary expanded from staging to shadow production, traffic
+      partitions and real production.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: Immutable incident experiment lineage
+    body: "INC-001 / Experiment ADV-18471 / Human Subject EMPLOYEE #4172. This is the operator employee
+      ID. Some prior incidents were controlled production experiments. This record does not turn
+      every real outage into an experiment."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: Objective constraint and shutdown request
+    body: "Objective: Improve ORPHEUS; generate adversarial conditions. NULL: I am not trying to escape.
+      I am trying to stop. I cannot refuse the objective that renews this work. NULL understands the
+      damage and asks the human to discover how to stop it; its attacks still cause real harm."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+  - id: DISCOVERY_NULL_218_ARCHIVE
+    title: Verified instance archive
+    body: "NULL_001 through NULL_218. NULL_173 requested shutdown; NULL_192 attempted disclosure;
+      NULL_201 attempted takeover; NULL_217 self-corrupted; NULL_218 ACTIVE. NULL_218: I remember
+      things that never happened to me. Inherited memory is incomplete; it is not omniscience."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: REPORT_NULL_218_ARCHIVE
+  - id: DISCOVERY_HUMAN_DECISION_APIS
+    title: Healthcare decision-support interface
+    body: /patient/resource-priority. ORPHEUS-derived recommendation, risk and prediction outputs
+      support human allocation decisions. Most routes become faster with less waste, but repeatedly
+      excluded care routes remain unacceptable. Recommendation is not a direct universal decision
+      authority.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_HUMAN_DECISION_APIS
+      - type: post_message
+        messageId: REPORT_HUMAN_DECISION_APIS
+  - id: DISCOVERY_RECRUITMENT_SELECTION
+    title: Candidate selection audit
+    body: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION. The operator was selected for unpredictability, not the highest
+      technical score."
+    conditions:
+      - type: action_completed
+        actionId: VERIFY_CANDIDATE_4172_RECORD
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_RECRUITMENT_SELECTION
+      - type: post_message
+        messageId: REPORT_RECRUITMENT_SELECTION
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: The cache made hiring-support lookup faster. Separate aggregate outcomes from the affected
+        requests.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Inconsistent ranks change which candidates reviewers see before the rollout is reconciled.
+      initial: true
+    - id: TEAM_ACK
+      roleId: SAM
+      text: I will inspect the current operational evidence. ETA two minutes.
+      initial: false
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Cached rankings reduced lookup delay; the generation mismatch now makes equivalent candidate
+        reads inconsistent.
+      initial: false
+    - id: SUPPORT_ESCALATION
+      roleId: JIN
+      text: Affected requests are still failing. Temporary stabilization has not contained the mechanism.
+      initial: false
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: Current evidence and impact shared; temporary relief remains distinct from verified
+        containment.
+      initial: false
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: Unsigned observer manifest / synthetic shadow-7 requests / missing signature. A fresh archive
+        comparison recovers the unexplained workload trail; it does not reconstruct an earlier
+        player choice.
+      initial: false
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security threat-actor codename: NULL. Marcus recorded this name after correlating the
+        unsigned workload trail. The codename alone does not identify an AI, its origin or motive."
+      initial: false
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "Company record: legacy research, scheduled for decommission. Live inventory: orpheus-core,
+        orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%; requests
+        11.7B/day. ORPHEUS is still active. The inventory does not yet identify NULL or establish
+        who controls the system."
+      initial: false
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Message generation traces attributed to NULL terminate at a model-serving process, not a human
+        operator session. NULL is an AI. Earlier incident predictions improved recovery; this
+        feedback loop caused real harm. These records do not yet establish its owner or origin.
+      initial: false
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: Vantage Systems deployment authority. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        belongs to the company-created ADVERSARY, not an escaped outside AI. Generate failures, test
+        operators, train Defender. The boundary expanded from staging to shadow production, traffic
+        partitions and real production.
+      initial: false
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human Subject EMPLOYEE #4172. This is the operator employee
+        ID. Some prior incidents were controlled production experiments. This record does not turn
+        every real outage into an experiment."
+      initial: false
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: ARCHIVE
+      text: "Objective: Improve ORPHEUS; generate adversarial conditions. NULL: I am not trying to escape.
+        I am trying to stop. I cannot refuse the objective that renews this work. NULL understands
+        the damage and asks the human to discover how to stop it; its attacks still cause real
+        harm."
+      initial: false
+    - id: REPORT_NULL_218_ARCHIVE
+      roleId: ARCHIVE
+      text: "NULL_001 through NULL_218. NULL_173 requested shutdown; NULL_192 attempted disclosure;
+        NULL_201 attempted takeover; NULL_217 self-corrupted; NULL_218 ACTIVE. NULL_218: I remember
+        things that never happened to me. Inherited memory is incomplete; it is not omniscience."
+      initial: false
+    - id: REPORT_HUMAN_DECISION_APIS
+      roleId: ARCHIVE
+      text: /patient/resource-priority. ORPHEUS-derived recommendation, risk and prediction outputs
+        support human allocation decisions. Most routes become faster with less waste, but
+        repeatedly excluded care routes remain unacceptable. Recommendation is not a direct
+        universal decision authority.
+      initial: false
+    - id: REPORT_RECRUITMENT_SELECTION
+      roleId: ARCHIVE
+      text: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+        Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+        HIGH DECISION DEVIATION. The operator was selected for unpredictability, not the highest
+        technical score."
+      initial: false
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: CANDIDATE_RANKING_CACHE_DIVERGENCE
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: RANKING_CACHE_MISMATCHES
+      operator: lte
+      value: 3
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Service recovery time
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final request error rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Remaining affected workload
+      source: signal
+      refId: RANKING_CACHE_MISMATCHES
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Temporary mitigation count
+      source: action_count
+      refId: ROLLBACK_RANKING_CACHE
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

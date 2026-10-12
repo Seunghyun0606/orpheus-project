@@ -24,6 +24,9 @@ DEC-044 now approves the fresh production model identities and initial state;
 the [model checkpoint](TASK-028_MODEL_BASELINE_IMPLEMENTATION.md) authors explicit
 eight-Incident mappings and definition fragments without a partial official run.
 Later opportunities/effects/endings, full composition and acceptance remain pending.
+DEC-045 permits TASK-029 implementation before TASK-028 acceptance only. Its
+[checkpoint](TASK-029_IMPLEMENTATION.md) authors INC-009–018 operations and protected
+record investigations while production opportunity choices and QA remain pending.
 QA remains deferred at the latest instruction.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
@@ -106,7 +109,9 @@ cutscenes alone and story-completion percentages cannot substitute for them.
 
 DEC-037 removes TASK-025 as a prerequisite of TASK-026/027 only. DEC-041 additionally
 removes TASK-027 as TASK-028's implementation readiness prerequisite only, without
-completing TASK-027. TASK-033 still requires TASK-027. TASK-035 still
+completing TASK-027. DEC-045 removes TASK-028 from TASK-029 implementation readiness
+only, retaining accepted TASK-026 as its prerequisite; TASK-028 stays incomplete.
+TASK-033 still requires TASK-027. TASK-035 still
 requires TASK-025 and every M5 implementation package. Dependencies do not authorize
 parallel agents. Read-only review/QA/evaluator delegation needs applicable authority.
 
@@ -115,7 +120,7 @@ parallel agents. Read-only review/QA/evaluator delegation needs applicable autho
 | [TASK-026](../.project-os/tasks/ready/TASK-026.yaml) | architect | Reviewed campaign manifest, reveal graph, coverage and approval checklist | None (DEC-037)         |
 | [TASK-027](../.project-os/tasks/ready/TASK-027.yaml) | developer | Explicitly approved production campaign composition and version binding   | TASK-026               |
 | [TASK-028](../.project-os/tasks/ready/TASK-028.yaml) | developer | Approved Acts 1–3 data and replay fixtures                                | TASK-026 (DEC-041)     |
-| [TASK-029](../.project-os/tasks/ready/TASK-029.yaml) | developer | Approved Acts 4–6 data and reveal/branch fixtures                         | TASK-028               |
+| [TASK-029](../.project-os/tasks/ready/TASK-029.yaml) | developer | Approved Acts 4–6 data and reveal/branch fixtures                         | TASK-026 (DEC-045)     |
 | [TASK-030](../.project-os/tasks/ready/TASK-030.yaml) | developer | Extended Board investigation and deferred framing reveal                  | TASK-029               |
 | [TASK-031](../.project-os/tasks/ready/TASK-031.yaml) | developer | Observer and Blackout data, final-context fixtures                        | TASK-030               |
 | [TASK-032](../.project-os/tasks/ready/TASK-032.yaml) | developer | Approved production ending rules and epilogue data                        | TASK-031               |

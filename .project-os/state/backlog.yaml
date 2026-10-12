@@ -273,9 +273,9 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: ready
+  status: active
   depends_on:
-  - TASK-028
+  - TASK-026
   human_gate: false
 - id: TASK-030
   title: Sustain the Board investigation before the SOFT CONTROL reveal

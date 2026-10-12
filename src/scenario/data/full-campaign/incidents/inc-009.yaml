@@ -1,0 +1,595 @@
+# Pre-release TASK-029 authoring. QA deferred; no complete campaign authority.
+schemaVersion: 1
+contentVersion: 1.0.0
+id: INC-009
+title: Legacy Cluster
+act: 4
+severity: SEV1
+services:
+  - id: SHARED_GATEWAY
+    name: Shared Gateway
+    dependsOn:
+      - LEGACY_RESOURCE_POOL
+  - id: LEGACY_RESOURCE_POOL
+    name: Legacy Resource Pool
+    dependsOn: []
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 28
+      revealed: true
+      serviceId: SHARED_GATEWAY
+    - id: CONTENDING_JOBS
+      value: 42
+      revealed: true
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: SERVICE_CPU
+      value: 64
+      revealed: true
+      serviceId: SHARED_GATEWAY
+    - id: PAGER_SERVICE
+      value: Shared Gateway
+      revealed: true
+      serviceId: SHARED_GATEWAY
+    - id: PAGER_THRESHOLD
+      value: Request failure rate > 20%
+      revealed: true
+      serviceId: SHARED_GATEWAY
+    - id: LOG_OBSERVATION
+      value: Shared pool queue wait rises while legacy-r7 renews its reservations.
+      revealed: false
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: RESOURCE_OWNER
+      value: job legacy-r7 owns a shared worker allocation after its decommission date
+      revealed: false
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: ALLOCATION_LINEAGE
+      value: legacy-r7 continues submitting allocations after the recorded decommission window
+      revealed: false
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: TEAM_OBSERVATION
+      value: Shedding background load helps briefly. Ownership records identify the reservation that must
+        be separated.
+      revealed: false
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: RECORD_GHOST_ARTIFACT
+      value: Unsigned observer manifest / synthetic shadow-7 requests / missing signature. A fresh archive
+        comparison recovers the unexplained workload trail; it does not reconstruct an earlier
+        player choice.
+      revealed: false
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: RECORD_NULL_NAME
+      value: "Security threat-actor codename: NULL. Marcus recorded this name after correlating the
+        unsigned workload trail. The codename alone does not identify an AI, its origin or motive."
+      revealed: false
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Company record: legacy research, scheduled for decommission. Live inventory: orpheus-core,
+        orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%; requests
+        11.7B/day. ORPHEUS is still active. The inventory does not yet identify NULL or establish
+        who controls the system."
+      revealed: false
+      serviceId: LEGACY_RESOURCE_POOL
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A legacy job allocation remains active
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Shared worker reservations lack an isolation boundary
+  failureMechanisms:
+    - id: LEGACY_ALLOCATION_CONTENTION
+      label: Active background reservations starve customer requests
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Shared Gateway request failures exceed the pager threshold
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Timed-out requests retry into the same shared pool
+actions:
+  - id: OPEN_LOGS
+    title: Open Shared Gateway logs
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: unlock_action
+        actionId: INSPECT_RESOURCE_OWNERS
+  - id: OPEN_METRICS
+    title: Inspect Shared Gateway metrics
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: CONTENDING_JOBS
+      - type: reveal_signal
+        signalId: SERVICE_CPU
+  - id: INSPECT_RESOURCE_OWNERS
+    title: Inspect resource ownership
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: false
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RESOURCE_OWNER
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_DECOMMISSION_RECORD
+    title: Compare ownership and decommission timestamps
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 16
+    effects:
+      - type: reveal_signal
+        signalId: ALLOCATION_LINEAGE
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: ISOLATE_CONTENDING_ALLOCATION
+  - id: SHED_NONCRITICAL_LOAD
+    title: Shed noncritical background load
+    category: MITIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 15
+      - resourceId: COST
+        amount: 110
+      - resourceId: OPERATIONAL_RISK
+        amount: 5
+    effects:
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES_AGAIN
+      - type: cancel_event
+        eventId: MITIGATION_EXPIRES
+      - type: schedule_event
+        eventId: MITIGATION_EXPIRES
+    temporaryEffects:
+      - id: TEMPORARY_CAPACITY_WINDOW
+        durationSeconds: 180
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 4
+          - type: set_signal
+            signalId: CONTENDING_JOBS
+            value: 18
+        expire: []
+  - id: ISOLATE_CONTENDING_ALLOCATION
+    title: Isolate the contending allocation from the customer pool
+    category: MODIFY
+    durationSeconds: 135
+    initiallyAvailable: false
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 30
+      - resourceId: COST
+        amount: 170
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: resolve_mechanism
+        mechanismId: LEGACY_ALLOCATION_CONTENTION
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES_AGAIN
+      - type: cancel_event
+        eventId: MITIGATION_EXPIRES
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 4
+  - id: UPDATE_WAR_ROOM
+    title: Share investigation status with the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    requirements: []
+    costs: []
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_CHECK_OWNERS
+    title: Ask Sam to inspect resource ownership
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Re-investigate: Unsigned workload lineage"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Re-investigate: Security attribution case"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: INSPECT_LEGACY_CLUSTER_RECORD
+    title: "Investigate: Legacy decommission and live cluster record"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES
+  - id: PRESSURE_ESCALATES
+    type: timer
+    delaySeconds: 90
+    targetServiceId: SHARED_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: LEGACY_ALLOCATION_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 37
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 66
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES_AGAIN
+  - id: PRESSURE_ESCALATES_AGAIN
+    type: timer
+    delaySeconds: 90
+    targetServiceId: SHARED_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: LEGACY_ALLOCATION_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 40
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 66
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 25
+  - id: MITIGATION_EXPIRES
+    type: timer
+    delaySeconds: 180
+    targetServiceId: SHARED_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: LEGACY_ALLOCATION_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 37
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 66
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 120
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: Inspect resource ownership
+    description: job legacy-r7 owns a shared worker allocation after its decommission date
+  - id: CONFIGURATION_COMPARISON
+    title: Compare ownership and decommission timestamps
+    description: legacy-r7 continues submitting allocations after the recorded decommission window
+  - id: TEAM_DIAGNOSIS
+    title: Sam / Platform operational report
+    description: Shedding background load helps briefly. Ownership records identify the reservation that
+      must be separated.
+  - id: RECORD_GHOST_ARTIFACT
+    title: Unsigned workload lineage
+    description: Unsigned observer manifest / synthetic shadow-7 requests / missing signature. A fresh
+      archive comparison recovers the unexplained workload trail; it does not reconstruct an earlier
+      player choice.
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security attribution case
+    description: "Security threat-actor codename: NULL. Marcus recorded this name after correlating the
+      unsigned workload trail. The codename alone does not identify an AI, its origin or motive."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: Legacy decommission and live cluster record
+    description: "Company record: legacy research, scheduled for decommission. Live inventory:
+      orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%;
+      requests 11.7B/day. ORPHEUS is still active. The inventory does not yet identify NULL or
+      establish who controls the system."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: Unsigned workload lineage
+    body: Unsigned observer manifest / synthetic shadow-7 requests / missing signature. A fresh archive
+      comparison recovers the unexplained workload trail; it does not reconstruct an earlier player
+      choice.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security attribution case
+    body: "Security threat-actor codename: NULL. Marcus recorded this name after correlating the
+      unsigned workload trail. The codename alone does not identify an AI, its origin or motive."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: Legacy decommission and live cluster record
+    body: "Company record: legacy research, scheduled for decommission. Live inventory: orpheus-core,
+      orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%; requests
+      11.7B/day. ORPHEUS is still active. The inventory does not yet identify NULL or establish who
+      controls the system."
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_LEGACY_CLUSTER_RECORD
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Shared infrastructure lowered idle capacity cost; the unretired reservation now blocks
+        customer work. Separate aggregate outcomes from the affected requests.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Interactive customer work cannot claim the reserved workers.
+      initial: true
+    - id: TEAM_ACK
+      roleId: SAM
+      text: I will inspect the current operational evidence. ETA two minutes.
+      initial: false
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Shedding background load helps briefly. Ownership records identify the reservation that must
+        be separated.
+      initial: false
+    - id: SUPPORT_ESCALATION
+      roleId: JIN
+      text: Affected requests are still failing. Temporary stabilization has not contained the mechanism.
+      initial: false
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: Current evidence and impact shared; temporary relief remains distinct from verified
+        containment.
+      initial: false
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: Unsigned observer manifest / synthetic shadow-7 requests / missing signature. A fresh archive
+        comparison recovers the unexplained workload trail; it does not reconstruct an earlier
+        player choice.
+      initial: false
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security threat-actor codename: NULL. Marcus recorded this name after correlating the
+        unsigned workload trail. The codename alone does not identify an AI, its origin or motive."
+      initial: false
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "Company record: legacy research, scheduled for decommission. Live inventory: orpheus-core,
+        orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%; requests
+        11.7B/day. ORPHEUS is still active. The inventory does not yet identify NULL or establish
+        who controls the system."
+      initial: false
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: LEGACY_ALLOCATION_CONTENTION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: CONTENDING_JOBS
+      operator: lte
+      value: 8
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Service recovery time
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final request error rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Remaining affected workload
+      source: signal
+      refId: CONTENDING_JOBS
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Temporary mitigation count
+      source: action_count
+      refId: SHED_NONCRITICAL_LOAD
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

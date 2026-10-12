@@ -4,6 +4,7 @@ current_tasks:
 - TASK-024
 - TASK-027
 - TASK-028
+- TASK-029
 blocked_tasks: []
 human_gate: false
 updated_at: '2026-10-12'

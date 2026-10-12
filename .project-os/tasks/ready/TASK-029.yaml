@@ -20,7 +20,7 @@ scope:
     - 'Reveal Board framing/observer conclusions before approved prerequisites.'
 
 depends_on:
-  - TASK-028
+  - TASK-026
 specs:
   - specs/product/02-full-campaign-blueprint.md
   - specs/product/01-game-and-narrative-direction.md
@@ -33,6 +33,10 @@ relevant_files:
   - src/scenario/
   - src/tests/
 active_decisions:
+  - .project-os/decisions/DEC-045-task029-implementation-before-task028-acceptance.yaml
+  - .project-os/decisions/DEC-044-production-model-initial-baseline.yaml
+  - .project-os/decisions/DEC-043-campaign-action-prerequisites.yaml
+  - .project-os/decisions/DEC-042-full-campaign-content-version-baseline.yaml
   - .project-os/decisions/DEC-039-m5-independent-verification-delegation.yaml
   - .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml
   - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml

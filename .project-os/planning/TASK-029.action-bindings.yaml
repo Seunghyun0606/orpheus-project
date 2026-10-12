@@ -1,0 +1,2707 @@
+# Pre-release TASK-029 authoring. QA deferred; no complete campaign authority.
+task: TASK-029
+date: 2026-10-13
+status: authored_fragment_not_runtime_campaign_definition
+authorities:
+  - .project-os/decisions/DEC-045-task029-implementation-before-task028-acceptance.yaml
+  - .project-os/decisions/DEC-043-campaign-action-prerequisites.yaml
+definition_identity:
+  id: orpheus-full-campaign
+  version: 1.0.0
+references:
+  - id: NULL_NAME_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: NULL_NAME
+    valueType: boolean
+    contexts:
+      - effect
+      - branch
+      - action
+  - id: ORPHEUS_ACTIVE_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: ORPHEUS_ACTIVE
+    valueType: boolean
+    contexts:
+      - effect
+      - branch
+      - action
+  - id: NULL_AI_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: NULL_AI
+    valueType: boolean
+    contexts:
+      - effect
+      - branch
+      - action
+  - id: NULL_ADVERSARY_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: NULL_ADVERSARY
+    valueType: boolean
+    contexts:
+      - effect
+      - branch
+      - action
+  - id: CONTROLLED_EXPERIMENT_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: CONTROLLED_EXPERIMENT
+    valueType: boolean
+    contexts:
+      - effect
+      - branch
+      - action
+  - id: NULL_STOP_REQUEST_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: NULL_STOP_REQUEST
+    valueType: boolean
+    contexts:
+      - effect
+      - branch
+      - action
+  - id: NULL_218_ARCHIVE_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: NULL_218_ARCHIVE
+    valueType: boolean
+    contexts:
+      - effect
+      - branch
+      - action
+  - id: HUMAN_DECISION_APIS_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: HUMAN_DECISION_APIS
+    valueType: boolean
+    contexts:
+      - effect
+      - branch
+      - action
+  - id: RECRUITMENT_SELECTION_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: RECRUITMENT_SELECTION
+    valueType: boolean
+    contexts:
+      - effect
+      - branch
+      - action
+actionGates:
+  - id: INC-009-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-009
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+  - id: INC-009-REINVESTIGATE_NULL_NAME
+    incidentId: INC-009
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-009-INSPECT_LEGACY_CLUSTER_RECORD
+    incidentId: INC-009
+    contentVersion: 1.0.0
+    actionId: INSPECT_LEGACY_CLUSTER_RECORD
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-010-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-010
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+  - id: INC-010-REINVESTIGATE_NULL_NAME
+    incidentId: INC-010
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-010-REINVESTIGATE_ORPHEUS_ACTIVE
+    incidentId: INC-010
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-010-COMPARE_MESSAGE_MODEL_ORIGIN
+    incidentId: INC-010
+    contentVersion: 1.0.0
+    actionId: COMPARE_MESSAGE_MODEL_ORIGIN
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-011-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-011
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+  - id: INC-011-REINVESTIGATE_NULL_NAME
+    incidentId: INC-011
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-011-REINVESTIGATE_ORPHEUS_ACTIVE
+    incidentId: INC-011
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-011-REINVESTIGATE_NULL_AI
+    incidentId: INC-011
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_AI
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-011-INSPECT_GENERATOR_PROVENANCE
+    incidentId: INC-011
+    contentVersion: 1.0.0
+    actionId: INSPECT_GENERATOR_PROVENANCE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-012-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-012
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+  - id: INC-012-REINVESTIGATE_NULL_NAME
+    incidentId: INC-012
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-012-REINVESTIGATE_ORPHEUS_ACTIVE
+    incidentId: INC-012
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-012-REINVESTIGATE_NULL_AI
+    incidentId: INC-012
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_AI
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-012-REINVESTIGATE_NULL_ADVERSARY
+    incidentId: INC-012
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_ADVERSARY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-012-VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+    incidentId: INC-012
+    contentVersion: 1.0.0
+    actionId: VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-013-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-013
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+  - id: INC-013-REINVESTIGATE_NULL_NAME
+    incidentId: INC-013
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-013-REINVESTIGATE_ORPHEUS_ACTIVE
+    incidentId: INC-013
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-013-REINVESTIGATE_NULL_AI
+    incidentId: INC-013
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_AI
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-013-REINVESTIGATE_NULL_ADVERSARY
+    incidentId: INC-013
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_ADVERSARY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-013-REINVESTIGATE_CONTROLLED_EXPERIMENT
+    incidentId: INC-013
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-013-INSPECT_OBJECTIVE_CONSTRAINT
+    incidentId: INC-013
+    contentVersion: 1.0.0
+    actionId: INSPECT_OBJECTIVE_CONSTRAINT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-014-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-014
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+  - id: INC-014-REINVESTIGATE_NULL_NAME
+    incidentId: INC-014
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-014-REINVESTIGATE_ORPHEUS_ACTIVE
+    incidentId: INC-014
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-014-REINVESTIGATE_NULL_AI
+    incidentId: INC-014
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_AI
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-014-REINVESTIGATE_NULL_ADVERSARY
+    incidentId: INC-014
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_ADVERSARY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-014-REINVESTIGATE_CONTROLLED_EXPERIMENT
+    incidentId: INC-014
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-014-REINVESTIGATE_NULL_STOP_REQUEST
+    incidentId: INC-014
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_STOP_REQUEST
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-014-VERIFY_INSTANCE_ARCHIVE
+    incidentId: INC-014
+    contentVersion: 1.0.0
+    actionId: VERIFY_INSTANCE_ARCHIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-015-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+  - id: INC-015-REINVESTIGATE_NULL_NAME
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-015-REINVESTIGATE_ORPHEUS_ACTIVE
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-015-REINVESTIGATE_NULL_AI
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_AI
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-015-REINVESTIGATE_NULL_ADVERSARY
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_ADVERSARY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-015-REINVESTIGATE_CONTROLLED_EXPERIMENT
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-015-REINVESTIGATE_NULL_STOP_REQUEST
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_STOP_REQUEST
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-015-REINVESTIGATE_NULL_218_ARCHIVE
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_218_ARCHIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-015-INSPECT_PATIENT_PRIORITY_INTERFACE
+    incidentId: INC-015
+    contentVersion: 1.0.0
+    actionId: INSPECT_PATIENT_PRIORITY_INTERFACE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-016-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+  - id: INC-016-REINVESTIGATE_NULL_NAME
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-016-REINVESTIGATE_ORPHEUS_ACTIVE
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-016-REINVESTIGATE_NULL_AI
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_AI
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-016-REINVESTIGATE_NULL_ADVERSARY
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_ADVERSARY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-016-REINVESTIGATE_CONTROLLED_EXPERIMENT
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-016-REINVESTIGATE_NULL_STOP_REQUEST
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_STOP_REQUEST
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-016-REINVESTIGATE_NULL_218_ARCHIVE
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_218_ARCHIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-016-REINVESTIGATE_HUMAN_DECISION_APIS
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-016-INSPECT_CREDIT_RISK_INTERFACE
+    incidentId: INC-016
+    contentVersion: 1.0.0
+    actionId: INSPECT_CREDIT_RISK_INTERFACE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-017-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+  - id: INC-017-REINVESTIGATE_NULL_NAME
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-017-REINVESTIGATE_ORPHEUS_ACTIVE
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-017-REINVESTIGATE_NULL_AI
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_AI
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-017-REINVESTIGATE_NULL_ADVERSARY
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_ADVERSARY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-017-REINVESTIGATE_CONTROLLED_EXPERIMENT
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-017-REINVESTIGATE_NULL_STOP_REQUEST
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_STOP_REQUEST
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-017-REINVESTIGATE_NULL_218_ARCHIVE
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_218_ARCHIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-017-REINVESTIGATE_HUMAN_DECISION_APIS
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-017-VERIFY_CANDIDATE_4172_RECORD
+    incidentId: INC-017
+    contentVersion: 1.0.0
+    actionId: VERIFY_CANDIDATE_4172_RECORD
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-018-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+  - id: INC-018-REINVESTIGATE_NULL_NAME
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-018-REINVESTIGATE_ORPHEUS_ACTIVE
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-018-REINVESTIGATE_NULL_AI
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_AI
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-018-REINVESTIGATE_NULL_ADVERSARY
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_ADVERSARY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-018-REINVESTIGATE_CONTROLLED_EXPERIMENT
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-018-REINVESTIGATE_NULL_STOP_REQUEST
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_STOP_REQUEST
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-018-REINVESTIGATE_NULL_218_ARCHIVE
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_218_ARCHIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-018-REINVESTIGATE_HUMAN_DECISION_APIS
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-018-INSPECT_LOGISTICS_ALLOCATION_INTERFACE
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    actionId: INSPECT_LOGISTICS_ALLOCATION_INTERFACE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+initial_narrative_flags_fragment:
+  ORPHEUS_ACTIVE: false
+  NULL_AI: false
+  NULL_ADVERSARY: false
+  CONTROLLED_EXPERIMENT: false
+  NULL_STOP_REQUEST: false
+  NULL_218_ARCHIVE: false
+  HUMAN_DECISION_APIS: false
+  RECRUITMENT_SELECTION: false
+evidence_bindings_fragment:
+  - id: INC-009.GHOST_ARTIFACT
+    scenarioId: INC-009
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-009.NULL_NAME
+    scenarioId: INC-009
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-009.ORPHEUS_ACTIVE
+    scenarioId: INC-009
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-010.GHOST_ARTIFACT
+    scenarioId: INC-010
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-010.NULL_NAME
+    scenarioId: INC-010
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-010.ORPHEUS_ACTIVE
+    scenarioId: INC-010
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-010.NULL_AI
+    scenarioId: INC-010
+    evidenceId: RECORD_NULL_AI
+  - id: INC-011.GHOST_ARTIFACT
+    scenarioId: INC-011
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-011.NULL_NAME
+    scenarioId: INC-011
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-011.ORPHEUS_ACTIVE
+    scenarioId: INC-011
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-011.NULL_AI
+    scenarioId: INC-011
+    evidenceId: RECORD_NULL_AI
+  - id: INC-011.NULL_ADVERSARY
+    scenarioId: INC-011
+    evidenceId: RECORD_NULL_ADVERSARY
+  - id: INC-012.GHOST_ARTIFACT
+    scenarioId: INC-012
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-012.NULL_NAME
+    scenarioId: INC-012
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-012.ORPHEUS_ACTIVE
+    scenarioId: INC-012
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-012.NULL_AI
+    scenarioId: INC-012
+    evidenceId: RECORD_NULL_AI
+  - id: INC-012.NULL_ADVERSARY
+    scenarioId: INC-012
+    evidenceId: RECORD_NULL_ADVERSARY
+  - id: INC-012.CONTROLLED_EXPERIMENT
+    scenarioId: INC-012
+    evidenceId: RECORD_CONTROLLED_EXPERIMENT
+  - id: INC-013.GHOST_ARTIFACT
+    scenarioId: INC-013
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-013.NULL_NAME
+    scenarioId: INC-013
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-013.ORPHEUS_ACTIVE
+    scenarioId: INC-013
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-013.NULL_AI
+    scenarioId: INC-013
+    evidenceId: RECORD_NULL_AI
+  - id: INC-013.NULL_ADVERSARY
+    scenarioId: INC-013
+    evidenceId: RECORD_NULL_ADVERSARY
+  - id: INC-013.CONTROLLED_EXPERIMENT
+    scenarioId: INC-013
+    evidenceId: RECORD_CONTROLLED_EXPERIMENT
+  - id: INC-013.NULL_STOP_REQUEST
+    scenarioId: INC-013
+    evidenceId: RECORD_NULL_STOP_REQUEST
+  - id: INC-014.GHOST_ARTIFACT
+    scenarioId: INC-014
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-014.NULL_NAME
+    scenarioId: INC-014
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-014.ORPHEUS_ACTIVE
+    scenarioId: INC-014
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-014.NULL_AI
+    scenarioId: INC-014
+    evidenceId: RECORD_NULL_AI
+  - id: INC-014.NULL_ADVERSARY
+    scenarioId: INC-014
+    evidenceId: RECORD_NULL_ADVERSARY
+  - id: INC-014.CONTROLLED_EXPERIMENT
+    scenarioId: INC-014
+    evidenceId: RECORD_CONTROLLED_EXPERIMENT
+  - id: INC-014.NULL_STOP_REQUEST
+    scenarioId: INC-014
+    evidenceId: RECORD_NULL_STOP_REQUEST
+  - id: INC-014.NULL_218_ARCHIVE
+    scenarioId: INC-014
+    evidenceId: RECORD_NULL_218_ARCHIVE
+  - id: INC-015.GHOST_ARTIFACT
+    scenarioId: INC-015
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-015.NULL_NAME
+    scenarioId: INC-015
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-015.ORPHEUS_ACTIVE
+    scenarioId: INC-015
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-015.NULL_AI
+    scenarioId: INC-015
+    evidenceId: RECORD_NULL_AI
+  - id: INC-015.NULL_ADVERSARY
+    scenarioId: INC-015
+    evidenceId: RECORD_NULL_ADVERSARY
+  - id: INC-015.CONTROLLED_EXPERIMENT
+    scenarioId: INC-015
+    evidenceId: RECORD_CONTROLLED_EXPERIMENT
+  - id: INC-015.NULL_STOP_REQUEST
+    scenarioId: INC-015
+    evidenceId: RECORD_NULL_STOP_REQUEST
+  - id: INC-015.NULL_218_ARCHIVE
+    scenarioId: INC-015
+    evidenceId: RECORD_NULL_218_ARCHIVE
+  - id: INC-015.HUMAN_DECISION_APIS
+    scenarioId: INC-015
+    evidenceId: RECORD_HUMAN_DECISION_APIS
+  - id: INC-016.GHOST_ARTIFACT
+    scenarioId: INC-016
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-016.NULL_NAME
+    scenarioId: INC-016
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-016.ORPHEUS_ACTIVE
+    scenarioId: INC-016
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-016.NULL_AI
+    scenarioId: INC-016
+    evidenceId: RECORD_NULL_AI
+  - id: INC-016.NULL_ADVERSARY
+    scenarioId: INC-016
+    evidenceId: RECORD_NULL_ADVERSARY
+  - id: INC-016.CONTROLLED_EXPERIMENT
+    scenarioId: INC-016
+    evidenceId: RECORD_CONTROLLED_EXPERIMENT
+  - id: INC-016.NULL_STOP_REQUEST
+    scenarioId: INC-016
+    evidenceId: RECORD_NULL_STOP_REQUEST
+  - id: INC-016.NULL_218_ARCHIVE
+    scenarioId: INC-016
+    evidenceId: RECORD_NULL_218_ARCHIVE
+  - id: INC-016.HUMAN_DECISION_APIS
+    scenarioId: INC-016
+    evidenceId: RECORD_HUMAN_DECISION_APIS
+  - id: INC-016.FINANCE_DECISION_SUPPORT
+    scenarioId: INC-016
+    evidenceId: RECORD_FINANCE_DECISION_SUPPORT
+  - id: INC-017.GHOST_ARTIFACT
+    scenarioId: INC-017
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-017.NULL_NAME
+    scenarioId: INC-017
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-017.ORPHEUS_ACTIVE
+    scenarioId: INC-017
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-017.NULL_AI
+    scenarioId: INC-017
+    evidenceId: RECORD_NULL_AI
+  - id: INC-017.NULL_ADVERSARY
+    scenarioId: INC-017
+    evidenceId: RECORD_NULL_ADVERSARY
+  - id: INC-017.CONTROLLED_EXPERIMENT
+    scenarioId: INC-017
+    evidenceId: RECORD_CONTROLLED_EXPERIMENT
+  - id: INC-017.NULL_STOP_REQUEST
+    scenarioId: INC-017
+    evidenceId: RECORD_NULL_STOP_REQUEST
+  - id: INC-017.NULL_218_ARCHIVE
+    scenarioId: INC-017
+    evidenceId: RECORD_NULL_218_ARCHIVE
+  - id: INC-017.HUMAN_DECISION_APIS
+    scenarioId: INC-017
+    evidenceId: RECORD_HUMAN_DECISION_APIS
+  - id: INC-017.RECRUITMENT_SELECTION
+    scenarioId: INC-017
+    evidenceId: RECORD_RECRUITMENT_SELECTION
+  - id: INC-018.GHOST_ARTIFACT
+    scenarioId: INC-018
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-018.NULL_NAME
+    scenarioId: INC-018
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-018.ORPHEUS_ACTIVE
+    scenarioId: INC-018
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-018.NULL_AI
+    scenarioId: INC-018
+    evidenceId: RECORD_NULL_AI
+  - id: INC-018.NULL_ADVERSARY
+    scenarioId: INC-018
+    evidenceId: RECORD_NULL_ADVERSARY
+  - id: INC-018.CONTROLLED_EXPERIMENT
+    scenarioId: INC-018
+    evidenceId: RECORD_CONTROLLED_EXPERIMENT
+  - id: INC-018.NULL_STOP_REQUEST
+    scenarioId: INC-018
+    evidenceId: RECORD_NULL_STOP_REQUEST
+  - id: INC-018.NULL_218_ARCHIVE
+    scenarioId: INC-018
+    evidenceId: RECORD_NULL_218_ARCHIVE
+  - id: INC-018.HUMAN_DECISION_APIS
+    scenarioId: INC-018
+    evidenceId: RECORD_HUMAN_DECISION_APIS
+  - id: INC-018.LOGISTICS_DECISION_SUPPORT
+    scenarioId: INC-018
+    evidenceId: RECORD_LOGISTICS_DECISION_SUPPORT
+narrative_bindings_fragment:
+  - id: INC-009.GHOST_ARTIFACT
+    scenarioId: INC-009
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-009.NULL_NAME
+    scenarioId: INC-009
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-009.ORPHEUS_ACTIVE
+    scenarioId: INC-009
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-010.GHOST_ARTIFACT
+    scenarioId: INC-010
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-010.NULL_NAME
+    scenarioId: INC-010
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-010.ORPHEUS_ACTIVE
+    scenarioId: INC-010
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-010.NULL_AI
+    scenarioId: INC-010
+    narrativeId: DISCOVERY_NULL_AI
+  - id: INC-011.GHOST_ARTIFACT
+    scenarioId: INC-011
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-011.NULL_NAME
+    scenarioId: INC-011
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-011.ORPHEUS_ACTIVE
+    scenarioId: INC-011
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-011.NULL_AI
+    scenarioId: INC-011
+    narrativeId: DISCOVERY_NULL_AI
+  - id: INC-011.NULL_ADVERSARY
+    scenarioId: INC-011
+    narrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: INC-012.GHOST_ARTIFACT
+    scenarioId: INC-012
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-012.NULL_NAME
+    scenarioId: INC-012
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-012.ORPHEUS_ACTIVE
+    scenarioId: INC-012
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-012.NULL_AI
+    scenarioId: INC-012
+    narrativeId: DISCOVERY_NULL_AI
+  - id: INC-012.NULL_ADVERSARY
+    scenarioId: INC-012
+    narrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: INC-012.CONTROLLED_EXPERIMENT
+    scenarioId: INC-012
+    narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: INC-013.GHOST_ARTIFACT
+    scenarioId: INC-013
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-013.NULL_NAME
+    scenarioId: INC-013
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-013.ORPHEUS_ACTIVE
+    scenarioId: INC-013
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-013.NULL_AI
+    scenarioId: INC-013
+    narrativeId: DISCOVERY_NULL_AI
+  - id: INC-013.NULL_ADVERSARY
+    scenarioId: INC-013
+    narrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: INC-013.CONTROLLED_EXPERIMENT
+    scenarioId: INC-013
+    narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: INC-013.NULL_STOP_REQUEST
+    scenarioId: INC-013
+    narrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: INC-014.GHOST_ARTIFACT
+    scenarioId: INC-014
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-014.NULL_NAME
+    scenarioId: INC-014
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-014.ORPHEUS_ACTIVE
+    scenarioId: INC-014
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-014.NULL_AI
+    scenarioId: INC-014
+    narrativeId: DISCOVERY_NULL_AI
+  - id: INC-014.NULL_ADVERSARY
+    scenarioId: INC-014
+    narrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: INC-014.CONTROLLED_EXPERIMENT
+    scenarioId: INC-014
+    narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: INC-014.NULL_STOP_REQUEST
+    scenarioId: INC-014
+    narrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: INC-014.NULL_218_ARCHIVE
+    scenarioId: INC-014
+    narrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: INC-015.GHOST_ARTIFACT
+    scenarioId: INC-015
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-015.NULL_NAME
+    scenarioId: INC-015
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-015.ORPHEUS_ACTIVE
+    scenarioId: INC-015
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-015.NULL_AI
+    scenarioId: INC-015
+    narrativeId: DISCOVERY_NULL_AI
+  - id: INC-015.NULL_ADVERSARY
+    scenarioId: INC-015
+    narrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: INC-015.CONTROLLED_EXPERIMENT
+    scenarioId: INC-015
+    narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: INC-015.NULL_STOP_REQUEST
+    scenarioId: INC-015
+    narrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: INC-015.NULL_218_ARCHIVE
+    scenarioId: INC-015
+    narrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: INC-015.HUMAN_DECISION_APIS
+    scenarioId: INC-015
+    narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: INC-016.GHOST_ARTIFACT
+    scenarioId: INC-016
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-016.NULL_NAME
+    scenarioId: INC-016
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-016.ORPHEUS_ACTIVE
+    scenarioId: INC-016
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-016.NULL_AI
+    scenarioId: INC-016
+    narrativeId: DISCOVERY_NULL_AI
+  - id: INC-016.NULL_ADVERSARY
+    scenarioId: INC-016
+    narrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: INC-016.CONTROLLED_EXPERIMENT
+    scenarioId: INC-016
+    narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: INC-016.NULL_STOP_REQUEST
+    scenarioId: INC-016
+    narrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: INC-016.NULL_218_ARCHIVE
+    scenarioId: INC-016
+    narrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: INC-016.HUMAN_DECISION_APIS
+    scenarioId: INC-016
+    narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: INC-016.FINANCE_DECISION_SUPPORT
+    scenarioId: INC-016
+    narrativeId: DISCOVERY_FINANCE_DECISION_SUPPORT
+  - id: INC-017.GHOST_ARTIFACT
+    scenarioId: INC-017
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-017.NULL_NAME
+    scenarioId: INC-017
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-017.ORPHEUS_ACTIVE
+    scenarioId: INC-017
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-017.NULL_AI
+    scenarioId: INC-017
+    narrativeId: DISCOVERY_NULL_AI
+  - id: INC-017.NULL_ADVERSARY
+    scenarioId: INC-017
+    narrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: INC-017.CONTROLLED_EXPERIMENT
+    scenarioId: INC-017
+    narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: INC-017.NULL_STOP_REQUEST
+    scenarioId: INC-017
+    narrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: INC-017.NULL_218_ARCHIVE
+    scenarioId: INC-017
+    narrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: INC-017.HUMAN_DECISION_APIS
+    scenarioId: INC-017
+    narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: INC-017.RECRUITMENT_SELECTION
+    scenarioId: INC-017
+    narrativeId: DISCOVERY_RECRUITMENT_SELECTION
+  - id: INC-018.GHOST_ARTIFACT
+    scenarioId: INC-018
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-018.NULL_NAME
+    scenarioId: INC-018
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-018.ORPHEUS_ACTIVE
+    scenarioId: INC-018
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-018.NULL_AI
+    scenarioId: INC-018
+    narrativeId: DISCOVERY_NULL_AI
+  - id: INC-018.NULL_ADVERSARY
+    scenarioId: INC-018
+    narrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: INC-018.CONTROLLED_EXPERIMENT
+    scenarioId: INC-018
+    narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: INC-018.NULL_STOP_REQUEST
+    scenarioId: INC-018
+    narrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: INC-018.NULL_218_ARCHIVE
+    scenarioId: INC-018
+    narrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: INC-018.HUMAN_DECISION_APIS
+    scenarioId: INC-018
+    narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: INC-018.LOGISTICS_DECISION_SUPPORT
+    scenarioId: INC-018
+    narrativeId: DISCOVERY_LOGISTICS_DECISION_SUPPORT
+logical_effects_fragment:
+  - id: INC-009-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-009
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-009-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-009
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-009-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-009
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-010-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-010
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-010-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-010
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-010-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-010
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-010-NULL_AI-DISCOVERY
+    trigger:
+      incidentId: INC-010
+      type: evidence_revealed
+      targetId: RECORD_NULL_AI
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_AI: true
+    endingFlags: {}
+  - id: INC-011-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-011
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-011-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-011
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-011-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-011
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-011-NULL_AI-DISCOVERY
+    trigger:
+      incidentId: INC-011
+      type: evidence_revealed
+      targetId: RECORD_NULL_AI
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_AI: true
+    endingFlags: {}
+  - id: INC-011-NULL_ADVERSARY-DISCOVERY
+    trigger:
+      incidentId: INC-011
+      type: evidence_revealed
+      targetId: RECORD_NULL_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_ADVERSARY: true
+    endingFlags: {}
+  - id: INC-012-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-012
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-012-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-012
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-012-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-012
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-012-NULL_AI-DISCOVERY
+    trigger:
+      incidentId: INC-012
+      type: evidence_revealed
+      targetId: RECORD_NULL_AI
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_AI: true
+    endingFlags: {}
+  - id: INC-012-NULL_ADVERSARY-DISCOVERY
+    trigger:
+      incidentId: INC-012
+      type: evidence_revealed
+      targetId: RECORD_NULL_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_ADVERSARY: true
+    endingFlags: {}
+  - id: INC-012-CONTROLLED_EXPERIMENT-DISCOVERY
+    trigger:
+      incidentId: INC-012
+      type: evidence_revealed
+      targetId: RECORD_CONTROLLED_EXPERIMENT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      CONTROLLED_EXPERIMENT: true
+    endingFlags: {}
+  - id: INC-013-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-013
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-013-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-013
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-013-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-013
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-013-NULL_AI-DISCOVERY
+    trigger:
+      incidentId: INC-013
+      type: evidence_revealed
+      targetId: RECORD_NULL_AI
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_AI: true
+    endingFlags: {}
+  - id: INC-013-NULL_ADVERSARY-DISCOVERY
+    trigger:
+      incidentId: INC-013
+      type: evidence_revealed
+      targetId: RECORD_NULL_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_ADVERSARY: true
+    endingFlags: {}
+  - id: INC-013-CONTROLLED_EXPERIMENT-DISCOVERY
+    trigger:
+      incidentId: INC-013
+      type: evidence_revealed
+      targetId: RECORD_CONTROLLED_EXPERIMENT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      CONTROLLED_EXPERIMENT: true
+    endingFlags: {}
+  - id: INC-013-NULL_STOP_REQUEST-DISCOVERY
+    trigger:
+      incidentId: INC-013
+      type: evidence_revealed
+      targetId: RECORD_NULL_STOP_REQUEST
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_STOP_REQUEST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_STOP_REQUEST: true
+    endingFlags: {}
+  - id: INC-014-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-014
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-014-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-014
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-014-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-014
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-014-NULL_AI-DISCOVERY
+    trigger:
+      incidentId: INC-014
+      type: evidence_revealed
+      targetId: RECORD_NULL_AI
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_AI: true
+    endingFlags: {}
+  - id: INC-014-NULL_ADVERSARY-DISCOVERY
+    trigger:
+      incidentId: INC-014
+      type: evidence_revealed
+      targetId: RECORD_NULL_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_ADVERSARY: true
+    endingFlags: {}
+  - id: INC-014-CONTROLLED_EXPERIMENT-DISCOVERY
+    trigger:
+      incidentId: INC-014
+      type: evidence_revealed
+      targetId: RECORD_CONTROLLED_EXPERIMENT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      CONTROLLED_EXPERIMENT: true
+    endingFlags: {}
+  - id: INC-014-NULL_STOP_REQUEST-DISCOVERY
+    trigger:
+      incidentId: INC-014
+      type: evidence_revealed
+      targetId: RECORD_NULL_STOP_REQUEST
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_STOP_REQUEST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_STOP_REQUEST: true
+    endingFlags: {}
+  - id: INC-014-NULL_218_ARCHIVE-DISCOVERY
+    trigger:
+      incidentId: INC-014
+      type: evidence_revealed
+      targetId: RECORD_NULL_218_ARCHIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_218_ARCHIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_218_ARCHIVE: true
+    endingFlags: {}
+  - id: INC-015-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-015
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-015-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-015
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-015-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-015
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-015-NULL_AI-DISCOVERY
+    trigger:
+      incidentId: INC-015
+      type: evidence_revealed
+      targetId: RECORD_NULL_AI
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_AI: true
+    endingFlags: {}
+  - id: INC-015-NULL_ADVERSARY-DISCOVERY
+    trigger:
+      incidentId: INC-015
+      type: evidence_revealed
+      targetId: RECORD_NULL_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_ADVERSARY: true
+    endingFlags: {}
+  - id: INC-015-CONTROLLED_EXPERIMENT-DISCOVERY
+    trigger:
+      incidentId: INC-015
+      type: evidence_revealed
+      targetId: RECORD_CONTROLLED_EXPERIMENT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      CONTROLLED_EXPERIMENT: true
+    endingFlags: {}
+  - id: INC-015-NULL_STOP_REQUEST-DISCOVERY
+    trigger:
+      incidentId: INC-015
+      type: evidence_revealed
+      targetId: RECORD_NULL_STOP_REQUEST
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_STOP_REQUEST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_STOP_REQUEST: true
+    endingFlags: {}
+  - id: INC-015-NULL_218_ARCHIVE-DISCOVERY
+    trigger:
+      incidentId: INC-015
+      type: evidence_revealed
+      targetId: RECORD_NULL_218_ARCHIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_218_ARCHIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_218_ARCHIVE: true
+    endingFlags: {}
+  - id: INC-015-HUMAN_DECISION_APIS-DISCOVERY
+    trigger:
+      incidentId: INC-015
+      type: evidence_revealed
+      targetId: RECORD_HUMAN_DECISION_APIS
+    boundary: post_event
+    condition:
+      type: compare
+      reference: HUMAN_DECISION_APIS_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      HUMAN_DECISION_APIS: true
+    endingFlags: {}
+  - id: INC-016-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-016
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-016-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-016
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-016-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-016
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-016-NULL_AI-DISCOVERY
+    trigger:
+      incidentId: INC-016
+      type: evidence_revealed
+      targetId: RECORD_NULL_AI
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_AI: true
+    endingFlags: {}
+  - id: INC-016-NULL_ADVERSARY-DISCOVERY
+    trigger:
+      incidentId: INC-016
+      type: evidence_revealed
+      targetId: RECORD_NULL_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_ADVERSARY: true
+    endingFlags: {}
+  - id: INC-016-CONTROLLED_EXPERIMENT-DISCOVERY
+    trigger:
+      incidentId: INC-016
+      type: evidence_revealed
+      targetId: RECORD_CONTROLLED_EXPERIMENT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      CONTROLLED_EXPERIMENT: true
+    endingFlags: {}
+  - id: INC-016-NULL_STOP_REQUEST-DISCOVERY
+    trigger:
+      incidentId: INC-016
+      type: evidence_revealed
+      targetId: RECORD_NULL_STOP_REQUEST
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_STOP_REQUEST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_STOP_REQUEST: true
+    endingFlags: {}
+  - id: INC-016-NULL_218_ARCHIVE-DISCOVERY
+    trigger:
+      incidentId: INC-016
+      type: evidence_revealed
+      targetId: RECORD_NULL_218_ARCHIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_218_ARCHIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_218_ARCHIVE: true
+    endingFlags: {}
+  - id: INC-016-HUMAN_DECISION_APIS-DISCOVERY
+    trigger:
+      incidentId: INC-016
+      type: evidence_revealed
+      targetId: RECORD_HUMAN_DECISION_APIS
+    boundary: post_event
+    condition:
+      type: compare
+      reference: HUMAN_DECISION_APIS_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      HUMAN_DECISION_APIS: true
+    endingFlags: {}
+  - id: INC-017-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-017
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-017-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-017
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-017-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-017
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-017-NULL_AI-DISCOVERY
+    trigger:
+      incidentId: INC-017
+      type: evidence_revealed
+      targetId: RECORD_NULL_AI
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_AI: true
+    endingFlags: {}
+  - id: INC-017-NULL_ADVERSARY-DISCOVERY
+    trigger:
+      incidentId: INC-017
+      type: evidence_revealed
+      targetId: RECORD_NULL_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_ADVERSARY: true
+    endingFlags: {}
+  - id: INC-017-CONTROLLED_EXPERIMENT-DISCOVERY
+    trigger:
+      incidentId: INC-017
+      type: evidence_revealed
+      targetId: RECORD_CONTROLLED_EXPERIMENT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      CONTROLLED_EXPERIMENT: true
+    endingFlags: {}
+  - id: INC-017-NULL_STOP_REQUEST-DISCOVERY
+    trigger:
+      incidentId: INC-017
+      type: evidence_revealed
+      targetId: RECORD_NULL_STOP_REQUEST
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_STOP_REQUEST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_STOP_REQUEST: true
+    endingFlags: {}
+  - id: INC-017-NULL_218_ARCHIVE-DISCOVERY
+    trigger:
+      incidentId: INC-017
+      type: evidence_revealed
+      targetId: RECORD_NULL_218_ARCHIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_218_ARCHIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_218_ARCHIVE: true
+    endingFlags: {}
+  - id: INC-017-HUMAN_DECISION_APIS-DISCOVERY
+    trigger:
+      incidentId: INC-017
+      type: evidence_revealed
+      targetId: RECORD_HUMAN_DECISION_APIS
+    boundary: post_event
+    condition:
+      type: compare
+      reference: HUMAN_DECISION_APIS_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      HUMAN_DECISION_APIS: true
+    endingFlags: {}
+  - id: INC-017-RECRUITMENT_SELECTION-DISCOVERY
+    trigger:
+      incidentId: INC-017
+      type: evidence_revealed
+      targetId: RECORD_RECRUITMENT_SELECTION
+    boundary: post_event
+    condition:
+      type: compare
+      reference: RECRUITMENT_SELECTION_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      RECRUITMENT_SELECTION: true
+    endingFlags: {}
+  - id: INC-018-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-018
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-018-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-018
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-018-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-018
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-018-NULL_AI-DISCOVERY
+    trigger:
+      incidentId: INC-018
+      type: evidence_revealed
+      targetId: RECORD_NULL_AI
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_AI: true
+    endingFlags: {}
+  - id: INC-018-NULL_ADVERSARY-DISCOVERY
+    trigger:
+      incidentId: INC-018
+      type: evidence_revealed
+      targetId: RECORD_NULL_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_ADVERSARY: true
+    endingFlags: {}
+  - id: INC-018-CONTROLLED_EXPERIMENT-DISCOVERY
+    trigger:
+      incidentId: INC-018
+      type: evidence_revealed
+      targetId: RECORD_CONTROLLED_EXPERIMENT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      CONTROLLED_EXPERIMENT: true
+    endingFlags: {}
+  - id: INC-018-NULL_STOP_REQUEST-DISCOVERY
+    trigger:
+      incidentId: INC-018
+      type: evidence_revealed
+      targetId: RECORD_NULL_STOP_REQUEST
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_STOP_REQUEST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_STOP_REQUEST: true
+    endingFlags: {}
+  - id: INC-018-NULL_218_ARCHIVE-DISCOVERY
+    trigger:
+      incidentId: INC-018
+      type: evidence_revealed
+      targetId: RECORD_NULL_218_ARCHIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_218_ARCHIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_218_ARCHIVE: true
+    endingFlags: {}
+  - id: INC-018-HUMAN_DECISION_APIS-DISCOVERY
+    trigger:
+      incidentId: INC-018
+      type: evidence_revealed
+      targetId: RECORD_HUMAN_DECISION_APIS
+    boundary: post_event
+    condition:
+      type: compare
+      reference: HUMAN_DECISION_APIS_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      HUMAN_DECISION_APIS: true
+    endingFlags: {}
+verification: not_run
+composition_contract:
+  - Merge with TASK-028 action/model bindings; shared CURRENT_ACT and GHOST_DISCOVERED are declared
+    there.
+  - These are literal fragments, not new runtime schema or a complete official campaign.
+  - Recovery and main Act access do not depend on optional records. Guard both the accepted command
+    and presentation.
+  - Fresh archive investigation preserves earlier history and creates no historic response or
+    completion.
+  - No numeric awards or opportunity/ending balance is selected here.

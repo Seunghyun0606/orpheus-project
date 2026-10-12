@@ -1,0 +1,25 @@
+id: DEC-045
+title: Permit TASK-029 implementation before deferred TASK-028 acceptance
+status: active
+date: '2026-10-13'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: TASK-029 구현 선행 승인, 기존 검증 의무 유지.
+request: .project-os/planning/TASK-029.readiness-exception-gate.yaml
+approved_proposal:
+  commit: f1c3111
+  file: .project-os/planning/TASK-029.readiness-exception-gate.yaml
+decision: >-
+  Remove TASK-028 from TASK-029 implementation readiness prerequisites only.
+  Retain the approved TASK-026 blueprint as a prerequisite, claim through
+  projectctl and preserve TASK-028 incomplete pending integration/acceptance.
+  TASK-029 may author approved Acts 4–6 without executing deferred QA.
+consequences:
+  - No TASK-028 completion, acceptance waiver or removal of later dependencies.
+  - Final M4/M5 review, QA, independent evaluation and release gates remain mandatory.
+  - Preserve existing MVP, exact model/definition authorities, all user stores and profiles.
+  - Complete-package validation stays strict; no fixture fallback or partial official run.
+  - Material schema, opportunity/ending balance and release decisions still require explicit approval.
+  - No QA delegation/execution, push or release is authorized by this readiness exception.
+supersedes: TASK-029 implementation readiness dependency on TASK-028 only.

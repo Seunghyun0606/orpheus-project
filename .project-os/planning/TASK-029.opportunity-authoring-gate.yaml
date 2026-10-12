@@ -1,0 +1,22 @@
+task: TASK-029
+date: '2026-10-13'
+status: awaiting_human_decision
+type: architecture_change
+question: TASK-029의 실제 예측·추천·선택 기회 문구와 응답 분류를 제안대로 승인할까요?
+proposal: specs/architecture/mid-campaign-opportunities-proposal.md
+reason: DEC-044 approves identities/baselines only; actual opportunity wording, response classification and validity remain unselected. Readiness approval does not select them.
+proposed_option_A:
+  model_binding: Extend fresh 1.0.0 behavior/prediction drafts through INC-018; preserve old authorities and early exposure restrictions.
+  opportunities: Seven rules; two empirical predictions, one recommendation, separate care-safety/review-tolerance choices and explicit company-report/NULL-copy responses.
+  validity: At most 180 action-driven seconds after actual exposure, local cause uncontained and authored prerequisites known; expiry is not rejection.
+  new_actions: Guarded report/withhold responses at INC-011 and copy/decline responses at INC-013; actual visible ACK before any metric response.
+  numeric_effects: None selected or automatically inferred from a response, risk or metric.
+options:
+  - key: A
+    label: 제안 기회·응답 분류 승인 후 연결
+  - key: B
+    label: 다른 문구·분류·유효기간 지정 후 연결
+preserved:
+  - QA deferred; TASK-024/027/028/029 incomplete, final independent acceptance mandatory.
+  - No partial official campaign, schema/store relaxation, old-history reinterpretation or fixture fallback.
+  - Ending/branch balance, later dependencies, push and release require separate authority.

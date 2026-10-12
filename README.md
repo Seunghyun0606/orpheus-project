@@ -23,6 +23,10 @@ sidecars under DEC-042, with [unexecuted replay fixtures](docs/TASK-028_IMPLEMEN
 DEC-043 now approves its [cross-Incident guard candidate](docs/TASK-028_ACTION_GATES_IMPLEMENTATION.md).
 DEC-044 approves the [fresh player-model/initial-state baseline](docs/TASK-028_MODEL_BASELINE_IMPLEMENTATION.md);
 eight-Incident model tables are authored outside runtime composition, with QA deferred.
+DEC-045 permits TASK-029 implementation before TASK-028 acceptance. Its
+[Acts 4–6 authoring checkpoint](docs/TASK-029_IMPLEMENTATION.md) adds INC-009–018
+and protected record/re-investigation fragments. QA and actual opportunity selection
+remain pending; TASK-028/029 are not complete.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
