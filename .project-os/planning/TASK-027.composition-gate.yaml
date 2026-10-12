@@ -1,0 +1,24 @@
+kind: human_gate_request
+task: TASK-027
+status: pending
+proposal: specs/architecture/full-campaign-composition-proposal.md
+content_authority: .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml
+question: 'MVP 기본 진입을 유지하고 별도 버전 고정 캠페인 패키지·조사 화면 데이터로 TASK-027을 구현할까요?'
+options:
+  A:
+    label: '별도 캠페인 패키지·표시 데이터 계층 승인'
+    scope:
+      - Keep MVP as default; explicit opt-in full-campaign route and separate catalog outside the eager MVP Incident directory.
+      - Strict version-1 CampaignPackage and presentation sidecar authoring; exact immutable definition/scenario/presentation binding without changing old engine/save shapes.
+      - Typed gated investigation panels/blocks and evidence relations; all commands/provenance remain campaign-domain/transaction-owned.
+      - Read-only run discovery and explicit creation/restore over unchanged IndexedDB layout; no new pointer authority or automatic import/migration.
+      - Incomplete 26-Incident data remains unavailable, never a placeholder/QA/partial official campaign; isolated fixtures verify the composition foundation.
+  B:
+    label: '구조·진입 방식을 조정한 뒤 구현'
+    scope:
+      - Retain current runtime/store authorities and TASK-027 active until a revised representation/entry decision is supplied.
+boundaries:
+  - No runtime/schema/persistence implementation or actual user-store access before this decision.
+  - Production model values/classifications/content versions/ending balance remain separate authored approvals.
+  - Native verification is not authorized, moved or waived by this gate; TASK-027 and M4 final verification obligations remain.
+  - No ending grant, actual hacking/cloud access, migration, old-run reinterpretation, security change, push or release.

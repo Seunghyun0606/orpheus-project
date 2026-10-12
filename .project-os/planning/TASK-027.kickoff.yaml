@@ -1,0 +1,34 @@
+task: TASK-027
+kind: safe_kickoff_checkpoint_pending_material_choice
+actor: codex-task027-developer
+source_agent: /root
+date: '2026-10-12'
+status: active_preflight_gate_pending
+task_claim: projectctl claim TASK-027 --role developer
+prerequisite: TASK-026 independently reviewed, document-QA verified and distinctly evaluated PASS through Project OS.
+finding: >-
+  The existing eager MVP catalog/default desk and framework-only injected
+  campaign view cannot be treated as an approved production campaign composition.
+  Definition and Scenario schemas are strict, rich authored investigation
+  presentation is absent, and current ledger ports expose read/commit but no
+  user-facing run discovery. Concrete separate authoring/entry/read boundaries
+  require the configured human architecture/production behavior gate.
+safe_work:
+  - Read canonical task and relevant architecture/persistence/presentation/product specs and actual store/catalog/UI sources.
+  - Prepare a concrete separate-package/presentation and opt-in-entry proposal without implementing it.
+proposal: specs/architecture/full-campaign-composition-proposal.md
+gate: .project-os/planning/TASK-027.composition-gate.yaml
+verification:
+  scope: Direct document/metadata checks only, not TASK-027 runtime or native acceptance.
+  attributed_TASK026_handoff_pairs_matching: 5
+  distinct_TASK026_implementation_review_QA_evaluation_actors: 4
+  canonical_transition: TASK-026 done and TASK-027 active through configured projectctl evaluate/claim.
+  local_links_checked: 31
+  protected_MVP_blueprint_and_M4_blobs: unchanged
+  runtime_and_dependency_changes: none
+  formatting_projectctl_doctor_diff: pass
+  material_composition_decision: pending
+boundaries:
+  - No source, runtime catalog, authoring schema, save/DB layout or actual storage changed.
+  - No TASK-027 implementation acceptance or native verification claimed.
+  - M4/TASK-024/025 remains mandatory before final M5 acceptance/release.

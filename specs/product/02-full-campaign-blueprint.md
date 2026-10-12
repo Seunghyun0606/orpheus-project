@@ -51,5 +51,7 @@ BLACKOUT context is verified independently of optional full-disclosure routes.
 - Production opportunity/rate classification, initial values and ending balance.
 - Conditional epilogue implementation, supported targets, budgets, licensed audio,
   packaging/signing/distribution and final release decision.
-- Independently verified TASK-026 acceptance before TASK-027 claim. M4/TASK-024/025
+- TASK-026 independent review, document QA and distinct Project OS evaluation now
+  PASS source candidate `66a019f`, with committed evidence `10ccb59`. TASK-027 has
+  been claimed but requires its own concrete composition approval. M4/TASK-024/025
   verification remains mandatory before final M5 acceptance/release under DEC-037.

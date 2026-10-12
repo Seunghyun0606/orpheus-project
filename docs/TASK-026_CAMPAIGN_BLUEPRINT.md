@@ -1,8 +1,10 @@
 # TASK-026 — Full-campaign blueprint proposal
 
-Status: content blueprint approved under DEC-038; **independent acceptance pending**.
-M5 activation follows DEC-037. TASK-026 remains active; TASK-027 cannot be claimed
-until TASK-026 has the required decision, handoffs and Project OS evaluation.
+Status: **accepted through independent review, document QA and distinct Project OS evaluation**.
+DEC-039 authorized separate read-only actors. Review/QA and distinct evaluation
+passed source candidate `66a019f` with evidence commit `10ccb59`; Project OS completed
+TASK-026 on 2026-10-12 and then claimed TASK-027. This accepts the content blueprint
+and inventory, not implemented full campaign, runtime reveal enforcement or native QA.
 
 The [machine-readable proposal](../.project-os/planning/TASK-026.campaign-blueprint.yaml)
 is planning data, not an implemented Scenario/CampaignDefinition schema. It is
@@ -117,8 +119,9 @@ The 26-Incident allocation, new IDs (including Memory Leak), Board interval and
 reveal graph are now approved under DEC-038. This establishes the content blueprint,
 not TASK-026 completion or all later architecture/balance choices.
 
-After approval, obtain the required independent acceptance and distinct evaluation.
-TASK-027 then needs concrete production entry/catalog/view binding decisions;
+Required independent acceptance and distinct evaluation have now passed. Original
+candidate checkpoints and initial probe failures remain intact. TASK-027 needs
+concrete production entry/catalog/view binding decisions;
 TASK-032 needs numeric ending balance/priorities and epilogue rules. Platform,
 performance budgets, assets/licenses, packaging/security and release remain later
 gates. M4/TASK-024/025 remain mandatory before TASK-035 acceptance and release.

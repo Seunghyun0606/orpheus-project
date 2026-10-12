@@ -9,8 +9,9 @@ Canonical ready contracts now live in `.project-os/tasks/ready/`; the ten origin
 `.project-os/planning/M5/tasks/` files are historical drafts, not executable contracts.
 
 M5 is active; M4 remains active/incomplete. TASK-024 remains active and TASK-025
-ready/ineligible. TASK-026 has been claimed as architect through Project OS;
-TASK-027–035 remain dependent ready tasks, not completed implementations.
+ready/ineligible. TASK-026 completed through independent review, document QA and
+distinct Project OS evaluation; TASK-027 is now active for its material composition
+decision. TASK-028–035 remain dependent ready tasks, not completed implementations.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 
@@ -18,7 +19,7 @@ DEC-037 allows M5 implementation before M4 verification but retains **complete/t
 M4 before final M5 acceptance or release**. QA is deferred, not waived. No new
 automated/native QA or independent acceptance is claimed by this activation.
 Earlier PASS evidence retains its original scope. DEC-038 now approves the TASK-026
-content blueprint, but independent task acceptance remains pending.
+content blueprint; TASK-026 independent document-scope acceptance has now passed.
 
 ## M4 debt that must remain visible
 
@@ -69,8 +70,8 @@ the [content baseline](../specs/product/02-full-campaign-blueprint.md).
 ## Content work packages
 
 These are drafting boundaries, not approved Incident lists or numeric balance.
-TASK-026's per-Incident manifest and reveal order are approved by DEC-038; required
-independent acceptance remains pending. Any new domain representation needs a separate architecture
+TASK-026's per-Incident manifest and reveal order are approved by DEC-038 and accepted
+through independent evaluation. Any new domain representation needs a separate architecture
 gate; a content task is not permission to extend schemas by guesswork.
 
 | Package                                       | Required investigation and reveal boundary                                                                                                                                                                                                                 | Task owner |
@@ -118,8 +119,8 @@ material extensions require separate decisions. New engine folders are not a goa
    implementation. Finish mandatory M4 evidence and Project OS evaluation before
    final M5 acceptance or release; this exception does not waive QA or mark M4 done.
 2. **Campaign blueprint approved:** DEC-038 fixes 26 Incident IDs, allocation and
-   reveal order/Board pacing. Independent acceptance and concrete UI/domain gap
-   representation decisions still precede dependent implementation.
+   reveal order/Board pacing. TASK-026 independent acceptance is complete; concrete
+   UI/domain gap representation decisions still precede dependent implementation.
 3. **Production binding and balance:** approve full-campaign entry/default behavior,
    new immutable definition versions, opportunity rules, ending thresholds and
    priorities. Test fixture thresholds do not become production balance.
@@ -153,8 +154,10 @@ playable full-campaign acceptance.
 
 ## Safe next step
 
-TASK-026 is active with its content blueprint approved by DEC-038 and repository
-gap inventory recorded. Obtain required independent acceptance before TASK-027.
+TASK-026 is complete after independent review, document QA and distinct evaluation.
+TASK-027 is active; its
+[composition proposal](../specs/architecture/full-campaign-composition-proposal.md)
+requires a separate package/catalog/entry/presentation decision before runtime work.
 Keep the original draft/result records unchanged. M4 native verification resumes
 when requested, then TASK-025; both remain final M5 acceptance/release blockers.
 Activation and blueprint drafting change project metadata/docs only, not runtime,
