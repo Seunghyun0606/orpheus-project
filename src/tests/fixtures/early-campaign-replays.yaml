@@ -1,0 +1,248 @@
+status: 'authored_not_executed'
+scope: 'operational_only_not_campaign_acceptance'
+cases:
+  - id: 'INC-004-RECOVERY'
+    scenarioId: 'INC-004'
+    contentVersion: '1.0.0'
+    seed: 4172
+    investigationRecovery:
+      - 'OPEN_LOGS'
+      - 'INSPECT_ALLOCATIONS'
+      - 'COMPARE_HANDLER'
+      - 'DISABLE_LEAKING_HANDLER'
+    temporaryRecovery:
+      - 'RESTART_INSTANCE'
+      - 'OPEN_LOGS'
+      - 'INSPECT_ALLOCATIONS'
+      - 'COMPARE_HANDLER'
+      - 'DISABLE_LEAKING_HANDLER'
+    expirationObservation:
+      - 'RESTART_INSTANCE'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'OPEN_LOGS'
+      - 'INSPECT_ALLOCATIONS'
+      - 'COMPARE_HANDLER'
+      - 'DISABLE_LEAKING_HANDLER'
+    delegationRecovery:
+      - 'ASK_SAM_CHECK_HEAP'
+      - 'OPEN_LOGS'
+      - 'INSPECT_ALLOCATIONS'
+      - 'COMPARE_HANDLER'
+      - 'DISABLE_LEAKING_HANDLER'
+    expectations:
+      mechanism: 'RETAINED_REQUEST_OBJECTS'
+      completion: true
+      mitigationAloneResolves: false
+      healthySignals:
+        ERROR_RATE: 0.5
+        HEAP_PERCENT: 38
+      delegationResource: 'TEAM_CAPACITY'
+      teamEvidence: 'TEAM_DIAGNOSIS'
+  - id: 'INC-005-RECOVERY'
+    scenarioId: 'INC-005'
+    contentVersion: '1.0.0'
+    seed: 4172
+    investigationRecovery:
+      - 'OPEN_LOGS'
+      - 'TRACE_SYNTHETIC_REQUEST'
+      - 'COMPARE_DEPLOYMENT_LINEAGE'
+      - 'ISOLATE_SYNTHETIC_WORKLOAD'
+    temporaryRecovery:
+      - 'RATE_LIMIT_GATEWAY'
+      - 'OPEN_LOGS'
+      - 'TRACE_SYNTHETIC_REQUEST'
+      - 'COMPARE_DEPLOYMENT_LINEAGE'
+      - 'ISOLATE_SYNTHETIC_WORKLOAD'
+    expirationObservation:
+      - 'RATE_LIMIT_GATEWAY'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'OPEN_LOGS'
+      - 'TRACE_SYNTHETIC_REQUEST'
+      - 'COMPARE_DEPLOYMENT_LINEAGE'
+      - 'ISOLATE_SYNTHETIC_WORKLOAD'
+    delegationRecovery:
+      - 'ASK_MARCUS_COMPARE_SIGNATURE'
+      - 'OPEN_LOGS'
+      - 'TRACE_SYNTHETIC_REQUEST'
+      - 'COMPARE_DEPLOYMENT_LINEAGE'
+      - 'ISOLATE_SYNTHETIC_WORKLOAD'
+    expectations:
+      mechanism: 'SYNTHETIC_LOAD_AMPLIFICATION'
+      completion: true
+      mitigationAloneResolves: false
+      healthySignals:
+        ERROR_RATE: 0.5
+        SYNTHETIC_REQUEST_RATE: 450
+      delegationResource: 'TEAM_CAPACITY'
+      teamEvidence: 'TEAM_DIAGNOSIS'
+  - id: 'INC-006-RECOVERY'
+    scenarioId: 'INC-006'
+    contentVersion: '1.0.0'
+    seed: 4172
+    investigationRecovery:
+      - 'OPEN_LOGS'
+      - 'TRACE_CERTIFICATE_CHAIN'
+      - 'COMPARE_TRUST_HISTORY'
+      - 'REPAIR_TRUST_DISTRIBUTION'
+    temporaryRecovery:
+      - 'ROUTE_TRUSTED_IDENTITY_POOL'
+      - 'OPEN_LOGS'
+      - 'TRACE_CERTIFICATE_CHAIN'
+      - 'COMPARE_TRUST_HISTORY'
+      - 'REPAIR_TRUST_DISTRIBUTION'
+    expirationObservation:
+      - 'ROUTE_TRUSTED_IDENTITY_POOL'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'OPEN_LOGS'
+      - 'TRACE_CERTIFICATE_CHAIN'
+      - 'COMPARE_TRUST_HISTORY'
+      - 'REPAIR_TRUST_DISTRIBUTION'
+    delegationRecovery:
+      - 'ASK_MARCUS_INSPECT_TRUST'
+      - 'OPEN_LOGS'
+      - 'TRACE_CERTIFICATE_CHAIN'
+      - 'COMPARE_TRUST_HISTORY'
+      - 'REPAIR_TRUST_DISTRIBUTION'
+    alternateRecovery:
+      - 'OPEN_LOGS'
+      - 'TRACE_CERTIFICATE_CHAIN'
+      - 'COMPARE_TRUST_HISTORY'
+      - 'ROLLBACK_CERTIFICATE_ROLLOVER'
+    expectations:
+      mechanism: 'ISSUER_CHAIN_MISMATCH'
+      completion: true
+      mitigationAloneResolves: false
+      healthySignals:
+        ERROR_RATE: 0.5
+        IDENTITY_RETRY_RATE: 16
+      delegationResource: 'TEAM_CAPACITY'
+      teamEvidence: 'TEAM_DIAGNOSIS'
+  - id: 'INC-007-RECOVERY'
+    scenarioId: 'INC-007'
+    contentVersion: '1.0.0'
+    seed: 4172
+    investigationRecovery:
+      - 'OPEN_LOGS'
+      - 'INSPECT_SESSION_TAGS'
+      - 'TRACE_ADMISSION_PATH'
+      - 'LIMIT_SYNTHETIC_ADMISSION'
+    temporaryRecovery:
+      - 'SCALE_SESSION_CAPACITY'
+      - 'OPEN_LOGS'
+      - 'INSPECT_SESSION_TAGS'
+      - 'TRACE_ADMISSION_PATH'
+      - 'LIMIT_SYNTHETIC_ADMISSION'
+    expirationObservation:
+      - 'SCALE_SESSION_CAPACITY'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'OPEN_LOGS'
+      - 'INSPECT_SESSION_TAGS'
+      - 'TRACE_ADMISSION_PATH'
+      - 'LIMIT_SYNTHETIC_ADMISSION'
+    delegationRecovery:
+      - 'ASK_ALEX_INSPECT_SESSIONS'
+      - 'OPEN_LOGS'
+      - 'INSPECT_SESSION_TAGS'
+      - 'TRACE_ADMISSION_PATH'
+      - 'LIMIT_SYNTHETIC_ADMISSION'
+    expectations:
+      mechanism: 'SYNTHETIC_SESSION_SATURATION'
+      completion: true
+      mitigationAloneResolves: false
+      healthySignals:
+        ERROR_RATE: 0.5
+        ACTIVE_SESSIONS: 220
+      delegationResource: 'TEAM_CAPACITY'
+      teamEvidence: 'TEAM_DIAGNOSIS'
+  - id: 'INC-008-RECOVERY'
+    scenarioId: 'INC-008'
+    contentVersion: '1.0.0'
+    seed: 4172
+    investigationRecovery:
+      - 'OPEN_LOGS'
+      - 'TRACE_REGION_REQUEST'
+      - 'COMPARE_ROUTE_GENERATIONS'
+      - 'RECONCILE_ROUTE_GENERATIONS'
+    temporaryRecovery:
+      - 'RESTART_ROUTE_CONTROLLER'
+      - 'OPEN_LOGS'
+      - 'TRACE_REGION_REQUEST'
+      - 'COMPARE_ROUTE_GENERATIONS'
+      - 'RECONCILE_ROUTE_GENERATIONS'
+    expirationObservation:
+      - 'RESTART_ROUTE_CONTROLLER'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'UPDATE_WAR_ROOM'
+      - 'OPEN_LOGS'
+      - 'TRACE_REGION_REQUEST'
+      - 'COMPARE_ROUTE_GENERATIONS'
+      - 'RECONCILE_ROUTE_GENERATIONS'
+    delegationRecovery:
+      - 'ASK_SAM_COMPARE_ROUTES'
+      - 'OPEN_LOGS'
+      - 'TRACE_REGION_REQUEST'
+      - 'COMPARE_ROUTE_GENERATIONS'
+      - 'RECONCILE_ROUTE_GENERATIONS'
+    expectations:
+      mechanism: 'ROUTE_GENERATION_DIVERGENCE'
+      completion: true
+      mitigationAloneResolves: false
+      healthySignals:
+        ERROR_RATE: 0.5
+        CONFLICTING_ROUTE_COUNT: 0
+      delegationResource: 'TEAM_CAPACITY'
+      teamEvidence: 'TEAM_DIAGNOSIS'

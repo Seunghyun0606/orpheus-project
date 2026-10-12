@@ -1,0 +1,105 @@
+schemaVersion: 1
+id: 'INC-003-INVESTIGATION'
+version: '1.0.0'
+scenarioId: 'INC-003'
+contentVersion: '1.2.0'
+panels:
+  - id: 'observations'
+    title: 'Logs and metrics'
+    kind: 'logs'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 1
+    actionIds:
+      - 'OPEN_LOGS'
+      - 'OPEN_METRICS'
+    blocks:
+      - kind: 'signals'
+        id: 'incident-observations'
+        signalIds:
+          - 'QUEUE_DEPTH'
+          - 'OLDEST_MESSAGE_AGE'
+          - 'RECEIPT_DELAY'
+          - 'PAGER_SERVICE'
+          - 'PAGER_THRESHOLD'
+          - 'ACK_RATE'
+          - 'RETRY_RATE'
+          - 'WORKER_CPU'
+          - 'LOG_REJECTION'
+          - 'TRACED_MESSAGE_ID'
+          - 'TRACED_MESSAGE_SCHEMA'
+          - 'TRACED_EXPECTED_SCHEMA'
+          - 'TRACED_SOURCE_BATCH'
+  - id: 'investigation'
+    title: 'Operational investigation'
+    kind: 'diagnostics'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 1
+    actionIds:
+      - 'TRACE_RETRY'
+      - 'COMPARE_BATCH'
+    blocks:
+      - kind: 'paragraph'
+        id: 'investigation-context'
+        text: 'Collect operational evidence before selecting a containment path. The displayed values reflect only observations actually revealed by accepted actions.'
+  - id: 'interventions'
+    title: 'Response actions'
+    kind: 'status'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 1
+    actionIds:
+      - 'SCALE_CONSUMERS'
+      - 'QUARANTINE_MESSAGE'
+      - 'ADD_DEAD_LETTER_RULE'
+    blocks:
+      - kind: 'paragraph'
+        id: 'response-context'
+        text: 'A temporary service improvement does not by itself establish that the failure mechanism has been removed.'
+  - id: 'team'
+    title: 'War Room'
+    kind: 'war_room'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 1
+    actionIds:
+      - 'COMMUNICATE_STATUS'
+      - 'UPDATE_WAR_ROOM'
+      - 'ASK_JIN_CONFIRM_IMPACT'
+    blocks:
+      - kind: 'paragraph'
+        id: 'MAYA_OPEN'
+        text: 'Queue depth is rising. We do not yet know whether the workers are slow or one message is blocking progress.'
+      - kind: 'paragraph'
+        id: 'JIN_REPORT'
+        text: 'Receipts are late, but Support has not confirmed that payments failed.'
+evidenceRelations: []

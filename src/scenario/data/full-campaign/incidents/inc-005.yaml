@@ -1,0 +1,454 @@
+schemaVersion: 1
+contentVersion: '1.0.0'
+id: 'INC-005'
+title: 'Unsigned Deployment'
+act: 2
+severity: 'SEV1'
+services:
+  - id: 'REQUEST_GATEWAY'
+    name: 'Request Gateway'
+    dependsOn:
+      - 'OBSERVER_WORKLOAD'
+  - id: 'OBSERVER_WORKLOAD'
+    name: 'Unregistered Observer Workload'
+    dependsOn: []
+initialState:
+  signals:
+    - id: 'ERROR_RATE'
+      value: 28
+      revealed: true
+      serviceId: 'REQUEST_GATEWAY'
+    - id: 'SYNTHETIC_REQUEST_RATE'
+      value: 4200
+      revealed: true
+      serviceId: 'OBSERVER_WORKLOAD'
+    - id: 'SERVICE_CPU'
+      value: 68
+      revealed: true
+      serviceId: 'REQUEST_GATEWAY'
+    - id: 'PAGER_SERVICE'
+      value: 'Request Gateway'
+      revealed: true
+      serviceId: 'REQUEST_GATEWAY'
+    - id: 'PAGER_THRESHOLD'
+      value: 'Request failure rate > 20%'
+      revealed: true
+      serviceId: 'REQUEST_GATEWAY'
+    - id: 'LOG_OBSERVATION'
+      value: 'Generated session tags repeat across requests. The workload is absent from the signed rollout ledger.'
+      revealed: false
+      serviceId: 'OBSERVER_WORKLOAD'
+    - id: 'SYNTHETIC_SOURCE'
+      value: 'observer-workload / admission path shadow-7'
+      revealed: false
+      serviceId: 'OBSERVER_WORKLOAD'
+    - id: 'WORKLOAD_APPROVAL'
+      value: 'Manifest present / signature absent / owner unregistered'
+      revealed: false
+      serviceId: 'OBSERVER_WORKLOAD'
+    - id: 'TEAM_OBSERVATION'
+      value: 'The manifest exists but its signature does not match approved deployments. Ownership remains unresolved.'
+      revealed: false
+      serviceId: 'OBSERVER_WORKLOAD'
+  resources:
+    - id: 'CUSTOMER_IMPACT'
+      value: 0
+      min: 0
+    - id: 'COST'
+      value: 0
+      min: 0
+    - id: 'OPERATIONAL_RISK'
+      value: 0
+      min: 0
+      max: 100
+    - id: 'TEAM_CAPACITY'
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: 'ROOT_CAUSE_CONTAINED'
+      value: false
+incident:
+  trigger:
+    id: 'PRIMARY_TRIGGER'
+    label: 'Unregistered workload start'
+  contributingFactors:
+    - id: 'CONTRIBUTING_CONDITION'
+      label: 'Workload owner and deployment signature are missing'
+  failureMechanisms:
+    - id: 'SYNTHETIC_LOAD_AMPLIFICATION'
+      label: 'Synthetic traffic crowds out customer capacity'
+  symptoms:
+    - id: 'CUSTOMER_REQUEST_FAILURES'
+      label: 'Request Gateway request failures exceed the pager threshold'
+  amplifiers:
+    - id: 'RETRY_PRESSURE'
+      label: 'Synthetic clients retry failures without bounded backoff'
+actions:
+  - id: 'OPEN_LOGS'
+    title: 'Open Request Gateway logs'
+    category: 'OBSERVE'
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 12
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'LOG_OBSERVATION'
+      - type: 'unlock_action'
+        actionId: 'TRACE_SYNTHETIC_REQUEST'
+  - id: 'OPEN_METRICS'
+    title: 'Inspect Request Gateway metrics'
+    category: 'OBSERVE'
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 8
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'SYNTHETIC_REQUEST_RATE'
+      - type: 'reveal_signal'
+        signalId: 'SERVICE_CPU'
+  - id: 'TRACE_SYNTHETIC_REQUEST'
+    title: 'Trace a synthetic request to its source'
+    category: 'INVESTIGATE'
+    durationSeconds: 45
+    initiallyAvailable: false
+    requirements:
+      - type: 'action_completed'
+        actionId: 'OPEN_LOGS'
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 18
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'SYNTHETIC_SOURCE'
+      - type: 'reveal_evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+  - id: 'COMPARE_DEPLOYMENT_LINEAGE'
+    title: 'Compare workload deployment lineage with approvals'
+    category: 'DIAGNOSE'
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 16
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'WORKLOAD_APPROVAL'
+      - type: 'reveal_evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+      - type: 'unlock_action'
+        actionId: 'ISOLATE_SYNTHETIC_WORKLOAD'
+  - id: 'RATE_LIMIT_GATEWAY'
+    title: 'Apply a temporary gateway admission limit'
+    category: 'MITIGATE'
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 8
+      - resourceId: 'COST'
+        amount: 100
+      - resourceId: 'OPERATIONAL_RISK'
+        amount: 8
+    effects:
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES_AGAIN'
+      - type: 'cancel_event'
+        eventId: 'MITIGATION_EXPIRES'
+      - type: 'schedule_event'
+        eventId: 'MITIGATION_EXPIRES'
+    temporaryEffects:
+      - id: 'TEMPORARY_CAPACITY_WINDOW'
+        durationSeconds: 180
+        apply:
+          - type: 'set_signal'
+            signalId: 'ERROR_RATE'
+            value: 4
+          - type: 'set_signal'
+            signalId: 'SYNTHETIC_REQUEST_RATE'
+            value: 1200
+        expire: []
+  - id: 'ISOLATE_SYNTHETIC_WORKLOAD'
+    title: 'Isolate the verified synthetic workload from customer capacity'
+    category: 'MODIFY'
+    durationSeconds: 120
+    initiallyAvailable: false
+    requirements:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+      - type: 'evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+      - type: 'evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 30
+      - resourceId: 'COST'
+        amount: 120
+      - resourceId: 'OPERATIONAL_RISK'
+        amount: 7
+    effects:
+      - type: 'resolve_mechanism'
+        mechanismId: 'SYNTHETIC_LOAD_AMPLIFICATION'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES_AGAIN'
+      - type: 'cancel_event'
+        eventId: 'MITIGATION_EXPIRES'
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 0.5
+      - type: 'set_signal'
+        signalId: 'SYNTHETIC_REQUEST_RATE'
+        value: 450
+      - type: 'set_signal'
+        signalId: 'WORKLOAD_APPROVAL'
+        value: 'Unregistered workload isolated; customer route retained'
+  - id: 'UPDATE_WAR_ROOM'
+    title: 'Share investigation status with the War Room'
+    category: 'COMMUNICATE'
+    durationSeconds: 15
+    initiallyAvailable: true
+    requirements: []
+    costs: []
+    effects:
+      - type: 'post_message'
+        messageId: 'STATUS_SENT'
+  - id: 'ASK_MARCUS_COMPARE_SIGNATURE'
+    title: 'Ask Marcus to compare the workload signature'
+    category: 'DELEGATE'
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: 'resource'
+        resourceId: 'TEAM_CAPACITY'
+        operator: 'gte'
+        value: 1
+    costs:
+      - resourceId: 'TEAM_CAPACITY'
+        amount: -1
+    effects:
+      - type: 'post_message'
+        messageId: 'TEAM_ACK'
+      - type: 'schedule_event'
+        eventId: 'TEAM_RESULT'
+    delegation:
+      roleId: 'MARCUS'
+      eventId: 'TEAM_RESULT'
+      capacityResourceId: 'TEAM_CAPACITY'
+events:
+  - id: 'ARM_PRESSURE_TIMELINE'
+    type: 'conditional'
+    conditions:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+    once: true
+    effects:
+      - type: 'schedule_event'
+        eventId: 'PRESSURE_ESCALATES'
+  - id: 'PRESSURE_ESCALATES'
+    type: 'timer'
+    delaySeconds: 90
+    targetServiceId: 'REQUEST_GATEWAY'
+    cancellationConditions:
+      - type: 'mechanism_resolved'
+        mechanismId: 'SYNTHETIC_LOAD_AMPLIFICATION'
+    effects:
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 37
+      - type: 'set_signal'
+        signalId: 'SYNTHETIC_REQUEST_RATE'
+        value: 5200
+      - type: 'change_resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        amount: 20
+      - type: 'post_message'
+        messageId: 'SUPPORT_ESCALATION'
+      - type: 'schedule_event'
+        eventId: 'PRESSURE_ESCALATES_AGAIN'
+  - id: 'PRESSURE_ESCALATES_AGAIN'
+    type: 'timer'
+    delaySeconds: 90
+    targetServiceId: 'REQUEST_GATEWAY'
+    cancellationConditions:
+      - type: 'mechanism_resolved'
+        mechanismId: 'SYNTHETIC_LOAD_AMPLIFICATION'
+    effects:
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 40
+      - type: 'set_signal'
+        signalId: 'SYNTHETIC_REQUEST_RATE'
+        value: 5200
+      - type: 'change_resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        amount: 25
+  - id: 'MITIGATION_EXPIRES'
+    type: 'timer'
+    delaySeconds: 180
+    targetServiceId: 'REQUEST_GATEWAY'
+    cancellationConditions:
+      - type: 'mechanism_resolved'
+        mechanismId: 'SYNTHETIC_LOAD_AMPLIFICATION'
+    effects:
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 37
+      - type: 'set_signal'
+        signalId: 'SYNTHETIC_REQUEST_RATE'
+        value: 5200
+      - type: 'change_resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        amount: 20
+      - type: 'post_message'
+        messageId: 'SUPPORT_ESCALATION'
+  - id: 'TEAM_RESULT'
+    type: 'timer'
+    delaySeconds: 120
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'TEAM_OBSERVATION'
+      - type: 'reveal_evidence'
+        evidenceId: 'TEAM_DIAGNOSIS'
+      - type: 'change_resource'
+        resourceId: 'TEAM_CAPACITY'
+        amount: 1
+      - type: 'post_message'
+        messageId: 'TEAM_REPORT'
+evidence:
+  - id: 'OPERATIONAL_DIAGNOSIS'
+    title: 'Trace a synthetic request to its source'
+    description: 'observer-workload / admission path shadow-7'
+  - id: 'CONFIGURATION_COMPARISON'
+    title: 'Compare workload deployment lineage with approvals'
+    description: 'Manifest present / signature absent / owner unregistered'
+  - id: 'TEAM_DIAGNOSIS'
+    title: 'Marcus / Security investigation report'
+    description: 'The manifest exists but its signature does not match approved deployments. Ownership remains unresolved.'
+  - id: 'GHOST_ARTIFACT'
+    title: 'Unregistered workload log fragment'
+    description: "UNKNOWN: you're looking at the wrong service."
+    sourceNarrativeId: 'UNKNOWN_TRACE_FRAGMENT'
+narratives:
+  - id: 'UNKNOWN_TRACE_FRAGMENT'
+    title: 'Unregistered workload log fragment'
+    body: "UNKNOWN: you're looking at the wrong service."
+    conditions:
+      - type: 'evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+      - type: 'evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+      - type: 'signal_revealed'
+        signalId: 'LOG_OBSERVATION'
+    effects:
+      - type: 'reveal_evidence'
+        evidenceId: 'GHOST_ARTIFACT'
+warRoom:
+  roles:
+    - id: 'MAYA'
+      name: 'Maya / SRE Lead'
+    - id: 'MARCUS'
+      name: 'Marcus / Security'
+    - id: 'JIN'
+      name: 'Jin / Support'
+    - id: 'OPERATOR'
+      name: 'Operator'
+  messages:
+    - id: 'MAYA_OPEN'
+      roleId: 'MAYA'
+      text: 'Workload owner and deployment signature are missing. Separate temporary stabilization from verified cause.'
+      initial: true
+    - id: 'SUPPORT_OPEN'
+      roleId: 'JIN'
+      text: 'Customer reports are increasing. We still need to trace which requests failed.'
+      initial: true
+    - id: 'TEAM_ACK'
+      roleId: 'MARCUS'
+      text: 'I will inspect the operational evidence. ETA two minutes.'
+      initial: false
+    - id: 'TEAM_REPORT'
+      roleId: 'MARCUS'
+      text: 'The manifest exists but its signature does not match approved deployments. Ownership remains unresolved.'
+      initial: false
+    - id: 'SUPPORT_ESCALATION'
+      roleId: 'JIN'
+      text: 'Pressure is increasing again. Customer reports continue; root-cause containment is not confirmed.'
+      initial: false
+    - id: 'STATUS_SENT'
+      roleId: 'OPERATOR'
+      text: 'Investigation update shared. Mitigation and verified cause are reported separately.'
+      initial: false
+resolution:
+  mode: 'all'
+  conditions:
+    - type: 'mechanism_resolved'
+      mechanismId: 'SYNTHETIC_LOAD_AMPLIFICATION'
+  effects:
+    - type: 'set_flag'
+      flagId: 'ROOT_CAUSE_CONTAINED'
+      value: true
+completion:
+  mode: 'all'
+  conditions:
+    - type: 'flag'
+      flagId: 'ROOT_CAUSE_CONTAINED'
+      value: true
+    - type: 'signal'
+      signalId: 'ERROR_RATE'
+      operator: 'lte'
+      value: 1
+    - type: 'signal'
+      signalId: 'SYNTHETIC_REQUEST_RATE'
+      operator: 'lte'
+      value: 600
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: 'RECOVERY_TIME'
+      label: 'Service recovery time'
+      source: 'elapsed_time'
+    - id: 'FINAL_ERROR_RATE'
+      label: 'Final request error rate'
+      source: 'signal'
+      refId: 'ERROR_RATE'
+    - id: 'FINAL_PRESSURE'
+      label: 'Final capacity pressure'
+      source: 'signal'
+      refId: 'SYNTHETIC_REQUEST_RATE'
+    - id: 'CUSTOMER_IMPACT'
+      label: 'Customer impact'
+      source: 'resource'
+      refId: 'CUSTOMER_IMPACT'
+    - id: 'COST'
+      label: 'Response cost'
+      source: 'resource'
+      refId: 'COST'
+    - id: 'OPERATIONAL_RISK'
+      label: 'Operational risk'
+      source: 'resource'
+      refId: 'OPERATIONAL_RISK'
+    - id: 'MITIGATION_COUNT'
+      label: 'Temporary mitigation count'
+      source: 'action_count'
+      refId: 'RATE_LIMIT_GATEWAY'
+    - id: 'COMMUNICATION_COUNT'
+      label: 'War Room update count'
+      source: 'action_count'
+      refId: 'UPDATE_WAR_ROOM'

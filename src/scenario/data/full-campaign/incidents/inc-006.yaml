@@ -1,0 +1,477 @@
+schemaVersion: 1
+contentVersion: '1.0.0'
+id: 'INC-006'
+title: 'Certificate Storm'
+act: 3
+severity: 'SEV1'
+services:
+  - id: 'IDENTITY_GATEWAY'
+    name: 'Identity Gateway'
+    dependsOn:
+      - 'TRUST_VERIFIER'
+  - id: 'TRUST_VERIFIER'
+    name: 'Trust Verifier'
+    dependsOn: []
+initialState:
+  signals:
+    - id: 'ERROR_RATE'
+      value: 28
+      revealed: true
+      serviceId: 'IDENTITY_GATEWAY'
+    - id: 'IDENTITY_RETRY_RATE'
+      value: 420
+      revealed: true
+      serviceId: 'TRUST_VERIFIER'
+    - id: 'SERVICE_CPU'
+      value: 68
+      revealed: true
+      serviceId: 'IDENTITY_GATEWAY'
+    - id: 'PAGER_SERVICE'
+      value: 'Identity Gateway'
+      revealed: true
+      serviceId: 'IDENTITY_GATEWAY'
+    - id: 'PAGER_THRESHOLD'
+      value: 'Request failure rate > 20%'
+      revealed: true
+      serviceId: 'IDENTITY_GATEWAY'
+    - id: 'LOG_OBSERVATION'
+      value: 'Handshake rejected: issuer ca-18 is absent from the verifier trust bundle.'
+      revealed: false
+      serviceId: 'TRUST_VERIFIER'
+    - id: 'CURRENT_ISSUER'
+      value: 'ca-18'
+      revealed: false
+      serviceId: 'TRUST_VERIFIER'
+    - id: 'TRUSTED_ISSUER'
+      value: 'ca-17'
+      revealed: false
+      serviceId: 'TRUST_VERIFIER'
+    - id: 'TEAM_OBSERVATION'
+      value: 'Issuer ca-18 reached production before its trust bundle. Operational evidence alone does not establish attribution.'
+      revealed: false
+      serviceId: 'TRUST_VERIFIER'
+  resources:
+    - id: 'CUSTOMER_IMPACT'
+      value: 0
+      min: 0
+    - id: 'COST'
+      value: 0
+      min: 0
+    - id: 'OPERATIONAL_RISK'
+      value: 0
+      min: 0
+      max: 100
+    - id: 'TEAM_CAPACITY'
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: 'ROOT_CAUSE_CONTAINED'
+      value: false
+incident:
+  trigger:
+    id: 'PRIMARY_TRIGGER'
+    label: 'Issuer certificate rollover'
+  contributingFactors:
+    - id: 'CONTRIBUTING_CONDITION'
+      label: 'Issuer changes before verifier trust propagates'
+  failureMechanisms:
+    - id: 'ISSUER_CHAIN_MISMATCH'
+      label: 'New identity sessions fail the verifier trust check'
+  symptoms:
+    - id: 'CUSTOMER_REQUEST_FAILURES'
+      label: 'Identity Gateway request failures exceed the pager threshold'
+  amplifiers:
+    - id: 'RETRY_PRESSURE'
+      label: 'Rejected identity sessions retry and consume handshake capacity'
+actions:
+  - id: 'OPEN_LOGS'
+    title: 'Open Identity Gateway logs'
+    category: 'OBSERVE'
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 12
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'LOG_OBSERVATION'
+      - type: 'unlock_action'
+        actionId: 'TRACE_CERTIFICATE_CHAIN'
+  - id: 'OPEN_METRICS'
+    title: 'Inspect Identity Gateway metrics'
+    category: 'OBSERVE'
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 8
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'IDENTITY_RETRY_RATE'
+      - type: 'reveal_signal'
+        signalId: 'SERVICE_CPU'
+  - id: 'TRACE_CERTIFICATE_CHAIN'
+    title: 'Trace the rejected certificate chain'
+    category: 'INVESTIGATE'
+    durationSeconds: 45
+    initiallyAvailable: false
+    requirements:
+      - type: 'action_completed'
+        actionId: 'OPEN_LOGS'
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 18
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'CURRENT_ISSUER'
+      - type: 'reveal_evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+  - id: 'COMPARE_TRUST_HISTORY'
+    title: 'Compare issuer rollout and verifier trust history'
+    category: 'DIAGNOSE'
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 16
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'TRUSTED_ISSUER'
+      - type: 'reveal_evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+      - type: 'unlock_action'
+        actionId: 'REPAIR_TRUST_DISTRIBUTION'
+      - type: 'unlock_action'
+        actionId: 'ROLLBACK_CERTIFICATE_ROLLOVER'
+  - id: 'ROUTE_TRUSTED_IDENTITY_POOL'
+    title: 'Route new identity sessions through the trusted pool'
+    category: 'MITIGATE'
+    durationSeconds: 60
+    initiallyAvailable: true
+    requirements:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 10
+      - resourceId: 'COST'
+        amount: 140
+      - resourceId: 'OPERATIONAL_RISK'
+        amount: 8
+    effects:
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES_AGAIN'
+      - type: 'cancel_event'
+        eventId: 'MITIGATION_EXPIRES'
+      - type: 'schedule_event'
+        eventId: 'MITIGATION_EXPIRES'
+    temporaryEffects:
+      - id: 'TEMPORARY_CAPACITY_WINDOW'
+        durationSeconds: 180
+        apply:
+          - type: 'set_signal'
+            signalId: 'ERROR_RATE'
+            value: 4
+          - type: 'set_signal'
+            signalId: 'IDENTITY_RETRY_RATE'
+            value: 70
+        expire: []
+  - id: 'REPAIR_TRUST_DISTRIBUTION'
+    title: 'Coordinate distribution of the verified issuer chain'
+    category: 'MODIFY'
+    durationSeconds: 150
+    initiallyAvailable: false
+    requirements:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+      - type: 'evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+      - type: 'evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 38
+      - resourceId: 'COST'
+        amount: 110
+      - resourceId: 'OPERATIONAL_RISK'
+        amount: 4
+    effects:
+      - type: 'resolve_mechanism'
+        mechanismId: 'ISSUER_CHAIN_MISMATCH'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES_AGAIN'
+      - type: 'cancel_event'
+        eventId: 'MITIGATION_EXPIRES'
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 0.5
+      - type: 'set_signal'
+        signalId: 'IDENTITY_RETRY_RATE'
+        value: 16
+      - type: 'set_signal'
+        signalId: 'TRUSTED_ISSUER'
+        value: 'ca-18'
+  - id: 'ROLLBACK_CERTIFICATE_ROLLOVER'
+    title: 'Roll back the issuer to the verified previous chain'
+    category: 'MODIFY'
+    durationSeconds: 90
+    initiallyAvailable: false
+    requirements:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+      - type: 'evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+      - type: 'evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 23
+      - resourceId: 'COST'
+        amount: 40
+      - resourceId: 'OPERATIONAL_RISK'
+        amount: 12
+    effects:
+      - type: 'resolve_mechanism'
+        mechanismId: 'ISSUER_CHAIN_MISMATCH'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES_AGAIN'
+      - type: 'cancel_event'
+        eventId: 'MITIGATION_EXPIRES'
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 0.5
+      - type: 'set_signal'
+        signalId: 'IDENTITY_RETRY_RATE'
+        value: 16
+      - type: 'set_signal'
+        signalId: 'CURRENT_ISSUER'
+        value: 'ca-17'
+  - id: 'UPDATE_WAR_ROOM'
+    title: 'Share investigation status with the War Room'
+    category: 'COMMUNICATE'
+    durationSeconds: 15
+    initiallyAvailable: true
+    requirements: []
+    costs: []
+    effects:
+      - type: 'post_message'
+        messageId: 'STATUS_SENT'
+  - id: 'ASK_MARCUS_INSPECT_TRUST'
+    title: 'Ask Marcus to inspect trust distribution'
+    category: 'DELEGATE'
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: 'resource'
+        resourceId: 'TEAM_CAPACITY'
+        operator: 'gte'
+        value: 1
+    costs:
+      - resourceId: 'TEAM_CAPACITY'
+        amount: -1
+    effects:
+      - type: 'post_message'
+        messageId: 'TEAM_ACK'
+      - type: 'schedule_event'
+        eventId: 'TEAM_RESULT'
+    delegation:
+      roleId: 'MARCUS'
+      eventId: 'TEAM_RESULT'
+      capacityResourceId: 'TEAM_CAPACITY'
+events:
+  - id: 'ARM_PRESSURE_TIMELINE'
+    type: 'conditional'
+    conditions:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+    once: true
+    effects:
+      - type: 'schedule_event'
+        eventId: 'PRESSURE_ESCALATES'
+  - id: 'PRESSURE_ESCALATES'
+    type: 'timer'
+    delaySeconds: 90
+    targetServiceId: 'IDENTITY_GATEWAY'
+    cancellationConditions:
+      - type: 'mechanism_resolved'
+        mechanismId: 'ISSUER_CHAIN_MISMATCH'
+    effects:
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 37
+      - type: 'set_signal'
+        signalId: 'IDENTITY_RETRY_RATE'
+        value: 700
+      - type: 'change_resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        amount: 20
+      - type: 'post_message'
+        messageId: 'SUPPORT_ESCALATION'
+      - type: 'schedule_event'
+        eventId: 'PRESSURE_ESCALATES_AGAIN'
+  - id: 'PRESSURE_ESCALATES_AGAIN'
+    type: 'timer'
+    delaySeconds: 90
+    targetServiceId: 'IDENTITY_GATEWAY'
+    cancellationConditions:
+      - type: 'mechanism_resolved'
+        mechanismId: 'ISSUER_CHAIN_MISMATCH'
+    effects:
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 40
+      - type: 'set_signal'
+        signalId: 'IDENTITY_RETRY_RATE'
+        value: 700
+      - type: 'change_resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        amount: 25
+  - id: 'MITIGATION_EXPIRES'
+    type: 'timer'
+    delaySeconds: 180
+    targetServiceId: 'IDENTITY_GATEWAY'
+    cancellationConditions:
+      - type: 'mechanism_resolved'
+        mechanismId: 'ISSUER_CHAIN_MISMATCH'
+    effects:
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 37
+      - type: 'set_signal'
+        signalId: 'IDENTITY_RETRY_RATE'
+        value: 700
+      - type: 'change_resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        amount: 20
+      - type: 'post_message'
+        messageId: 'SUPPORT_ESCALATION'
+  - id: 'TEAM_RESULT'
+    type: 'timer'
+    delaySeconds: 120
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'TEAM_OBSERVATION'
+      - type: 'reveal_evidence'
+        evidenceId: 'TEAM_DIAGNOSIS'
+      - type: 'change_resource'
+        resourceId: 'TEAM_CAPACITY'
+        amount: 1
+      - type: 'post_message'
+        messageId: 'TEAM_REPORT'
+evidence:
+  - id: 'OPERATIONAL_DIAGNOSIS'
+    title: 'Trace the rejected certificate chain'
+    description: 'ca-18'
+  - id: 'CONFIGURATION_COMPARISON'
+    title: 'Compare issuer rollout and verifier trust history'
+    description: 'ca-17'
+  - id: 'TEAM_DIAGNOSIS'
+    title: 'Marcus / Security investigation report'
+    description: 'Issuer ca-18 reached production before its trust bundle. Operational evidence alone does not establish attribution.'
+narratives: []
+warRoom:
+  roles:
+    - id: 'MAYA'
+      name: 'Maya / SRE Lead'
+    - id: 'MARCUS'
+      name: 'Marcus / Security'
+    - id: 'JIN'
+      name: 'Jin / Support'
+    - id: 'OPERATOR'
+      name: 'Operator'
+  messages:
+    - id: 'MAYA_OPEN'
+      roleId: 'MAYA'
+      text: 'Issuer changes before verifier trust propagates. Separate temporary stabilization from verified cause.'
+      initial: true
+    - id: 'SUPPORT_OPEN'
+      roleId: 'JIN'
+      text: 'Customer reports are increasing. We still need to trace which requests failed.'
+      initial: true
+    - id: 'TEAM_ACK'
+      roleId: 'MARCUS'
+      text: 'I will inspect the operational evidence. ETA two minutes.'
+      initial: false
+    - id: 'TEAM_REPORT'
+      roleId: 'MARCUS'
+      text: 'Issuer ca-18 reached production before its trust bundle. Operational evidence alone does not establish attribution.'
+      initial: false
+    - id: 'SUPPORT_ESCALATION'
+      roleId: 'JIN'
+      text: 'Pressure is increasing again. Customer reports continue; root-cause containment is not confirmed.'
+      initial: false
+    - id: 'STATUS_SENT'
+      roleId: 'OPERATOR'
+      text: 'Investigation update shared. Mitigation and verified cause are reported separately.'
+      initial: false
+resolution:
+  mode: 'all'
+  conditions:
+    - type: 'mechanism_resolved'
+      mechanismId: 'ISSUER_CHAIN_MISMATCH'
+  effects:
+    - type: 'set_flag'
+      flagId: 'ROOT_CAUSE_CONTAINED'
+      value: true
+completion:
+  mode: 'all'
+  conditions:
+    - type: 'flag'
+      flagId: 'ROOT_CAUSE_CONTAINED'
+      value: true
+    - type: 'signal'
+      signalId: 'ERROR_RATE'
+      operator: 'lte'
+      value: 1
+    - type: 'signal'
+      signalId: 'IDENTITY_RETRY_RATE'
+      operator: 'lte'
+      value: 25
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: 'RECOVERY_TIME'
+      label: 'Service recovery time'
+      source: 'elapsed_time'
+    - id: 'FINAL_ERROR_RATE'
+      label: 'Final request error rate'
+      source: 'signal'
+      refId: 'ERROR_RATE'
+    - id: 'FINAL_PRESSURE'
+      label: 'Final capacity pressure'
+      source: 'signal'
+      refId: 'IDENTITY_RETRY_RATE'
+    - id: 'CUSTOMER_IMPACT'
+      label: 'Customer impact'
+      source: 'resource'
+      refId: 'CUSTOMER_IMPACT'
+    - id: 'COST'
+      label: 'Response cost'
+      source: 'resource'
+      refId: 'COST'
+    - id: 'OPERATIONAL_RISK'
+      label: 'Operational risk'
+      source: 'resource'
+      refId: 'OPERATIONAL_RISK'
+    - id: 'MITIGATION_COUNT'
+      label: 'Temporary mitigation count'
+      source: 'action_count'
+      refId: 'ROUTE_TRUSTED_IDENTITY_POOL'
+    - id: 'COMMUNICATION_COUNT'
+      label: 'War Room update count'
+      source: 'action_count'
+      refId: 'UPDATE_WAR_ROOM'

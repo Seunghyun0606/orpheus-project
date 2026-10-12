@@ -15,6 +15,10 @@ implementation under independent review/automated QA. Native TASK-027 verificati
 pending. DEC-041 now permits TASK-028 implementation before TASK-027 native acceptance
 at the human's latest instruction. Other dependencies and final verification stay intact.
 TASK-028–035 are not completed implementations.
+DEC-042 approves initial content/sidecar/package version identities. TASK-028 now
+has [partial operational authoring](TASK-028_IMPLEMENTATION.md), not verified
+campaign/reveal acceptance; its protected cross-Incident action representation is
+pending a separate human gate. QA remains deferred at the latest instruction.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 

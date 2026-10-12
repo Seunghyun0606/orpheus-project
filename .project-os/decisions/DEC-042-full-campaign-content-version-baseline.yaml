@@ -1,0 +1,24 @@
+id: DEC-042
+title: Approve initial immutable full-campaign content identities and versions
+status: active
+date: '2026-10-13'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 제안 버전·불변 호환 규칙 승인 후 구현.
+request: .project-os/planning/TASK-028.content-version-gate.yaml
+approved_proposal:
+  commit: 7b32eef
+  file: .project-os/planning/TASK-028.content-version-gate.yaml
+decision: >-
+  Retain existing INC-001 1.1.0 and INC-002/003 1.2.0 authorities unchanged.
+  New INC-004 through INC-026 start at contentVersion 1.0.0. Investigation sidecars
+  use <Incident-ID>-INVESTIGATION version 1.0.0, schema 1. New definition/package
+  use ID orpheus-full-campaign version 1.0.0, existing schema 1 and record/replay 2.
+consequences:
+  - Preserve shipped exact bindings and old records; no automatic migration, latest substitution or old authority overwrite.
+  - Subsequent presentation/content changes require new pinned package/definition authorities; pre-release authored drafts are not yet certified/shipped bindings.
+  - Production behavior/prediction/opportunity/ending model versions, initial values, classifications and numeric campaign/ending balance remain unselected.
+  - Cross-Incident reveal representation, schema changes, final actions, destructive storage changes and release retain material-choice gates.
+  - QA remains deferred at the latest explicit instruction; no missing verification becomes PASS or canonical task completion.
+supersedes: Version-number-unselected clauses only; not compatibility, native verification or final acceptance obligations.

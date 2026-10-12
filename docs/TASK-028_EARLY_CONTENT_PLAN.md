@@ -56,6 +56,11 @@ values, opportunity classifications and ending thresholds remain separate decisi
 
 ## Pending version proposal
 
+Historical proposal below: option A is now approved by DEC-042 on 2026-10-13.
+The operational authoring checkpoint is documented in
+[TASK-028_IMPLEMENTATION.md](TASK-028_IMPLEMENTATION.md). Protected cross-Incident
+Security-name disclosure is still pending a separate domain decision.
+
 Propose initial `contentVersion: 1.0.0` for newly introduced INC-004–026 only;
 INC-001/002/003 stay 1.1.0/1.2.0/1.2.0. Reuse retained source authorities rather than
 revise them. New investigation sidecars use `<Incident-ID>-INVESTIGATION`, version

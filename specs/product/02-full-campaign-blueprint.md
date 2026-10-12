@@ -46,6 +46,12 @@ BLACKOUT context is verified independently of optional full-disclosure routes.
 
 ## Boundaries still awaiting decisions and verification
 
+Current addendum: DEC-040 approves separate exact-version package/view composition;
+DEC-042 approves initial Scenario/presentation/package identities and versions.
+The original pending list below is retained as the blueprint checkpoint, not a
+request to re-decide those approvals. Cross-Incident action guards, actual model/
+initial values, numeric effects, ending balance and verification remain outstanding.
+
 - New immutable content/model/definition versions and production entry/catalog policy.
 - Authored investigation view representation and any material schema extension.
 - Production opportunity/rate classification, initial values and ending balance.

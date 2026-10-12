@@ -1,0 +1,102 @@
+schemaVersion: 1
+id: 'INC-002-INVESTIGATION'
+version: '1.0.0'
+scenarioId: 'INC-002'
+contentVersion: '1.2.0'
+panels:
+  - id: 'observations'
+    title: 'Logs and metrics'
+    kind: 'logs'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 1
+    actionIds:
+      - 'OPEN_LOGS'
+      - 'OPEN_METRICS'
+    blocks:
+      - kind: 'signals'
+        id: 'incident-observations'
+        signalIds:
+          - 'AUTH_ERROR_RATE'
+          - 'PAGER_THRESHOLD'
+          - 'PAGER_SERVICE'
+          - 'IDENTITY_CPU'
+          - 'RETRY_RATE'
+          - 'LOG_REJECTION'
+          - 'ISSUER_KEY_ID'
+          - 'VERIFIER_KEY_ID'
+          - 'DEPLOYMENT_BUILD'
+          - 'PREVIOUS_BUILD'
+  - id: 'investigation'
+    title: 'Operational investigation'
+    kind: 'diagnostics'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 1
+    actionIds:
+      - 'TRACE_AUTH_REQUEST'
+      - 'COMPARE_DEPLOYMENT'
+    blocks:
+      - kind: 'paragraph'
+        id: 'investigation-context'
+        text: 'Collect operational evidence before selecting a containment path. The displayed values reflect only observations actually revealed by accepted actions.'
+  - id: 'interventions'
+    title: 'Response actions'
+    kind: 'status'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 1
+    actionIds:
+      - 'ROUTE_STABLE_REGION'
+      - 'ROLLBACK_BUILD_1847'
+      - 'UPDATE_VERIFIER_KEYSET'
+    blocks:
+      - kind: 'paragraph'
+        id: 'response-context'
+        text: 'A temporary service improvement does not by itself establish that the failure mechanism has been removed.'
+  - id: 'team'
+    title: 'War Room'
+    kind: 'war_room'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 1
+    actionIds:
+      - 'COMMUNICATE_STATUS'
+      - 'UPDATE_WAR_ROOM'
+      - 'ASK_SAM_CHECK_KEYSET'
+    blocks:
+      - kind: 'paragraph'
+        id: 'MAYA_OPEN'
+        text: 'The checkout alert is real. We still need to separate issuer failures from gateway load.'
+      - kind: 'paragraph'
+        id: 'JIN_REPORT'
+        text: 'Customers report failed payments; Support cannot yet tell whether retries also succeeded.'
+evidenceRelations: []

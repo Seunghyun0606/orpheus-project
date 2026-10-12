@@ -1,0 +1,164 @@
+schemaVersion: 1
+id: 'INC-007-INVESTIGATION'
+version: '1.0.0'
+scenarioId: 'INC-007'
+contentVersion: '1.0.0'
+panels:
+  - id: 'metrics'
+    title: 'Service pressure and customer-facing errors'
+    kind: 'metrics'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 3
+    actionIds:
+      - 'OPEN_METRICS'
+    blocks:
+      - kind: 'signals'
+        id: 'health'
+        signalIds:
+          - 'ERROR_RATE'
+          - 'ACTIVE_SESSIONS'
+          - 'SERVICE_CPU'
+  - id: 'logs'
+    title: 'Service log review'
+    kind: 'logs'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 3
+    actionIds:
+      - 'OPEN_LOGS'
+    blocks:
+      - kind: 'signals'
+        id: 'log-values'
+        signalIds:
+          - 'LOG_OBSERVATION'
+  - id: 'trace'
+    title: 'Inspect tagged sessions in the capacity pool'
+    kind: 'diagnostics'
+    reveal:
+      - type: 'action_completed'
+        actionId: 'OPEN_LOGS'
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 3
+    actionIds:
+      - 'INSPECT_SESSION_TAGS'
+    blocks:
+      - kind: 'signals'
+        id: 'trace-values'
+        signalIds:
+          - 'SATURATED_SESSION_TAG'
+  - id: 'deployment'
+    title: 'Trace the synthetic admission path'
+    kind: 'deployment'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 3
+    actionIds:
+      - 'TRACE_ADMISSION_PATH'
+    blocks:
+      - kind: 'signals'
+        id: 'configuration-values'
+        signalIds:
+          - 'ADMISSION_POLICY'
+  - id: 'mitigation'
+    title: 'Temporary mitigation'
+    kind: 'status'
+    reveal:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 3
+    actionIds:
+      - 'SCALE_SESSION_CAPACITY'
+    blocks:
+      - kind: 'paragraph'
+        id: 'temporary-warning'
+        text: 'This response provides a capacity window. The underlying mechanism can continue unless separately contained.'
+  - id: 'containment'
+    title: 'Verified containment options'
+    kind: 'diagnostics'
+    reveal:
+      - type: 'evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+      - type: 'evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 3
+    actionIds:
+      - 'LIMIT_SYNTHETIC_ADMISSION'
+    blocks:
+      - kind: 'paragraph'
+        id: 'containment-context'
+        text: 'Compare the collected diagnosis with the configuration record. Response duration, cost and operational exposure remain distinct consequences.'
+  - id: 'team'
+    title: 'War Room'
+    kind: 'war_room'
+    reveal:
+      - type: 'resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        operator: 'gte'
+        value: 0
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 3
+    actionIds:
+      - 'UPDATE_WAR_ROOM'
+      - 'ASK_ALEX_INSPECT_SESSIONS'
+    blocks:
+      - kind: 'paragraph'
+        id: 'team-context'
+        text: 'Alex / DBA can investigate with a two-minute ETA. Delegated work consumes capacity until the report arrives.'
+      - kind: 'signals'
+        id: 'team-observation'
+        signalIds:
+          - 'TEAM_OBSERVATION'
+  - id: 'artifact'
+    title: 'Repeated session marker'
+    kind: 'documents'
+    reveal:
+      - type: 'evidence'
+        evidenceId: 'REPEATED_SESSION_MARKER'
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: 'paragraph'
+        id: 'preserved-fragment'
+        text: 'UNKNOWN: follow the tag. I left it where you could see it.'
+evidenceRelations: []

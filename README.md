@@ -18,6 +18,10 @@ for the independently accepted blueprint; TASK-027 is active with the DEC-040-ap
 The latest instruction defers native QA again; DEC-041 permits TASK-028 early
 implementation while TASK-027 remains active/incomplete. Required final verification
 and the TASK-033 dependency on TASK-027 are retained.
+TASK-028 has authored eight early Incident authorities and eight investigation
+sidecars under DEC-042, with [unexecuted replay fixtures](docs/TASK-028_IMPLEMENTATION.md).
+Its cross-Incident Security-name guard and complete production definition remain
+pending. No QA result or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
 document QA and distinct evaluation PASS. M4 verification remains mandatory before final M5 acceptance/release. Original
 planning drafts remain historical checkpoints. The [M4 plan](docs/M4_IMPLEMENTATION_PLAN.md) preserves chronological
@@ -190,7 +194,8 @@ produces a non-zero exit code.
 The default desk still contains only the three UNKNOWN-only MVP Incidents.
 **Full campaign** opens an explicit opt-in catalog. **Inspect campaign packages and saved runs**
 loads and validates separate exact-version authorities before any ledger access.
-There is currently no complete 26-Incident production package, so this route reports
+There is currently no complete 26-Incident production package (only partial early
+content), so this route reports
 unavailable and creates no run. No QA fixture substitutes for real content.
 
 Authored package schema 1 binds exact campaign definition, Scenario and investigation

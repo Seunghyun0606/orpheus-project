@@ -1,0 +1,26 @@
+task: TASK-028
+date: '2026-10-13'
+status: awaiting_human_decision
+type: architecture_change
+question: 이전 Incident 단서를 요구하는 조사 행동을 캠페인 엔진에서 검증하도록 확장할까요?
+details: >-
+  GHOST_ARTIFACT must precede NULL_NAME, while optional clues cannot block ordinary
+  recovery/Act access. Scenario conditions are local; current campaign command
+  dispatch has no action-level campaign predicate, and projectEvents collects
+  membership before numeric effect conditions. UI hiding alone does not enforce
+  command/replay/import provenance. Security-name runtime content remains withheld.
+proposal: specs/architecture/campaign-action-gates-proposal.md
+safe_progress:
+  - DEC-042 recorded; eight operational Incident authorities and eight sidecars authored without changing MVP/legacy originals.
+  - Five new operational replay-input cases and deferred harness authored, not executed.
+  - No guessed production campaign/model initial values, hidden numerical effects or ending balance.
+  - No engine/schema/record/store changes made for this unapproved guard representation.
+options:
+  - key: A
+    label: 새 캠페인 정의에 행동별 조건·명령 검증 추가
+  - key: B
+    label: 현재 엔진 유지, 다른 도메인 표현을 먼저 설계
+not_authorized:
+  - UI-only reveal fallback or optional clues required for ordinary service recovery.
+  - Old definition reinterpretation, automatic import/migration, destructive source replacement or QA PASS.
+  - QA execution, task/milestone completion, push or release.

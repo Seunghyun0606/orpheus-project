@@ -1,0 +1,454 @@
+schemaVersion: 1
+contentVersion: '1.0.0'
+id: 'INC-004'
+title: 'Memory Leak'
+act: 2
+severity: 'SEV1'
+services:
+  - id: 'CHECKOUT_API'
+    name: 'Checkout API'
+    dependsOn:
+      - 'REQUEST_HANDLER'
+  - id: 'REQUEST_HANDLER'
+    name: 'Request Handler'
+    dependsOn: []
+initialState:
+  signals:
+    - id: 'ERROR_RATE'
+      value: 28
+      revealed: true
+      serviceId: 'CHECKOUT_API'
+    - id: 'HEAP_PERCENT'
+      value: 91
+      revealed: true
+      serviceId: 'REQUEST_HANDLER'
+    - id: 'SERVICE_CPU'
+      value: 68
+      revealed: true
+      serviceId: 'CHECKOUT_API'
+    - id: 'PAGER_SERVICE'
+      value: 'Checkout API'
+      revealed: true
+      serviceId: 'CHECKOUT_API'
+    - id: 'PAGER_THRESHOLD'
+      value: 'Request failure rate > 20%'
+      revealed: true
+      serviceId: 'CHECKOUT_API'
+    - id: 'LOG_OBSERVATION'
+      value: 'Completed checkout requests remain reachable from completionCallbacks after response delivery.'
+      revealed: false
+      serviceId: 'REQUEST_HANDLER'
+    - id: 'RETAINED_ALLOCATION_PATH'
+      value: 'checkout-handler / completionCallbacks / completed-request'
+      revealed: false
+      serviceId: 'REQUEST_HANDLER'
+    - id: 'HANDLER_RETENTION'
+      value: 'Completion callbacks retain completed requests'
+      revealed: false
+      serviceId: 'REQUEST_HANDLER'
+    - id: 'TEAM_OBSERVATION'
+      value: 'Restart clears the heap, but the same callback still retains completed requests.'
+      revealed: false
+      serviceId: 'REQUEST_HANDLER'
+  resources:
+    - id: 'CUSTOMER_IMPACT'
+      value: 0
+      min: 0
+    - id: 'COST'
+      value: 0
+      min: 0
+    - id: 'OPERATIONAL_RISK'
+      value: 0
+      min: 0
+      max: 100
+    - id: 'TEAM_CAPACITY'
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: 'ROOT_CAUSE_CONTAINED'
+      value: false
+incident:
+  trigger:
+    id: 'PRIMARY_TRIGGER'
+    label: 'Retaining handler rollout'
+  contributingFactors:
+    - id: 'CONTRIBUTING_CONDITION'
+      label: 'Completed requests remain referenced by callbacks'
+  failureMechanisms:
+    - id: 'RETAINED_REQUEST_OBJECTS'
+      label: 'Retained requests exhaust the instance heap'
+  symptoms:
+    - id: 'CUSTOMER_REQUEST_FAILURES'
+      label: 'Checkout API request failures exceed the pager threshold'
+  amplifiers:
+    - id: 'RETRY_PRESSURE'
+      label: 'Retries allocate additional retained objects'
+actions:
+  - id: 'OPEN_LOGS'
+    title: 'Open Checkout API logs'
+    category: 'OBSERVE'
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 12
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'LOG_OBSERVATION'
+      - type: 'unlock_action'
+        actionId: 'INSPECT_ALLOCATIONS'
+  - id: 'OPEN_METRICS'
+    title: 'Inspect Checkout API metrics'
+    category: 'OBSERVE'
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 8
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'HEAP_PERCENT'
+      - type: 'reveal_signal'
+        signalId: 'SERVICE_CPU'
+  - id: 'INSPECT_ALLOCATIONS'
+    title: 'Inspect retained request allocations'
+    category: 'INVESTIGATE'
+    durationSeconds: 45
+    initiallyAvailable: false
+    requirements:
+      - type: 'action_completed'
+        actionId: 'OPEN_LOGS'
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 18
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'RETAINED_ALLOCATION_PATH'
+      - type: 'reveal_evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+  - id: 'COMPARE_HANDLER'
+    title: 'Compare current and previous handler ownership'
+    category: 'DIAGNOSE'
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 16
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'HANDLER_RETENTION'
+      - type: 'reveal_evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+      - type: 'unlock_action'
+        actionId: 'DISABLE_LEAKING_HANDLER'
+  - id: 'RESTART_INSTANCE'
+    title: 'Restart the affected checkout instance'
+    category: 'MITIGATE'
+    durationSeconds: 90
+    initiallyAvailable: true
+    requirements:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 15
+      - resourceId: 'COST'
+        amount: 60
+      - resourceId: 'OPERATIONAL_RISK'
+        amount: 8
+    effects:
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES_AGAIN'
+      - type: 'cancel_event'
+        eventId: 'MITIGATION_EXPIRES'
+      - type: 'schedule_event'
+        eventId: 'MITIGATION_EXPIRES'
+    temporaryEffects:
+      - id: 'TEMPORARY_CAPACITY_WINDOW'
+        durationSeconds: 180
+        apply:
+          - type: 'set_signal'
+            signalId: 'ERROR_RATE'
+            value: 4
+          - type: 'set_signal'
+            signalId: 'HEAP_PERCENT'
+            value: 44
+        expire: []
+  - id: 'DISABLE_LEAKING_HANDLER'
+    title: 'Disable the retaining handler and use the stable path'
+    category: 'MODIFY'
+    durationSeconds: 120
+    initiallyAvailable: false
+    requirements:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+      - type: 'evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+      - type: 'evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 30
+      - resourceId: 'COST'
+        amount: 80
+      - resourceId: 'OPERATIONAL_RISK'
+        amount: 6
+    effects:
+      - type: 'resolve_mechanism'
+        mechanismId: 'RETAINED_REQUEST_OBJECTS'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES'
+      - type: 'cancel_event'
+        eventId: 'PRESSURE_ESCALATES_AGAIN'
+      - type: 'cancel_event'
+        eventId: 'MITIGATION_EXPIRES'
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 0.5
+      - type: 'set_signal'
+        signalId: 'HEAP_PERCENT'
+        value: 38
+      - type: 'set_signal'
+        signalId: 'HANDLER_RETENTION'
+        value: 'Stable handler releases completed request references'
+  - id: 'UPDATE_WAR_ROOM'
+    title: 'Share investigation status with the War Room'
+    category: 'COMMUNICATE'
+    durationSeconds: 15
+    initiallyAvailable: true
+    requirements: []
+    costs: []
+    effects:
+      - type: 'post_message'
+        messageId: 'STATUS_SENT'
+  - id: 'ASK_SAM_CHECK_HEAP'
+    title: 'Ask Sam to inspect the heap growth'
+    category: 'DELEGATE'
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: 'resource'
+        resourceId: 'TEAM_CAPACITY'
+        operator: 'gte'
+        value: 1
+    costs:
+      - resourceId: 'TEAM_CAPACITY'
+        amount: -1
+    effects:
+      - type: 'post_message'
+        messageId: 'TEAM_ACK'
+      - type: 'schedule_event'
+        eventId: 'TEAM_RESULT'
+    delegation:
+      roleId: 'SAM'
+      eventId: 'TEAM_RESULT'
+      capacityResourceId: 'TEAM_CAPACITY'
+events:
+  - id: 'ARM_PRESSURE_TIMELINE'
+    type: 'conditional'
+    conditions:
+      - type: 'flag'
+        flagId: 'ROOT_CAUSE_CONTAINED'
+        value: false
+    once: true
+    effects:
+      - type: 'schedule_event'
+        eventId: 'PRESSURE_ESCALATES'
+  - id: 'PRESSURE_ESCALATES'
+    type: 'timer'
+    delaySeconds: 90
+    targetServiceId: 'CHECKOUT_API'
+    cancellationConditions:
+      - type: 'mechanism_resolved'
+        mechanismId: 'RETAINED_REQUEST_OBJECTS'
+    effects:
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 37
+      - type: 'set_signal'
+        signalId: 'HEAP_PERCENT'
+        value: 98
+      - type: 'change_resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        amount: 20
+      - type: 'post_message'
+        messageId: 'SUPPORT_ESCALATION'
+      - type: 'schedule_event'
+        eventId: 'PRESSURE_ESCALATES_AGAIN'
+  - id: 'PRESSURE_ESCALATES_AGAIN'
+    type: 'timer'
+    delaySeconds: 90
+    targetServiceId: 'CHECKOUT_API'
+    cancellationConditions:
+      - type: 'mechanism_resolved'
+        mechanismId: 'RETAINED_REQUEST_OBJECTS'
+    effects:
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 40
+      - type: 'set_signal'
+        signalId: 'HEAP_PERCENT'
+        value: 98
+      - type: 'change_resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        amount: 25
+  - id: 'MITIGATION_EXPIRES'
+    type: 'timer'
+    delaySeconds: 180
+    targetServiceId: 'CHECKOUT_API'
+    cancellationConditions:
+      - type: 'mechanism_resolved'
+        mechanismId: 'RETAINED_REQUEST_OBJECTS'
+    effects:
+      - type: 'set_signal'
+        signalId: 'ERROR_RATE'
+        value: 37
+      - type: 'set_signal'
+        signalId: 'HEAP_PERCENT'
+        value: 98
+      - type: 'change_resource'
+        resourceId: 'CUSTOMER_IMPACT'
+        amount: 20
+      - type: 'post_message'
+        messageId: 'SUPPORT_ESCALATION'
+  - id: 'TEAM_RESULT'
+    type: 'timer'
+    delaySeconds: 120
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'TEAM_OBSERVATION'
+      - type: 'reveal_evidence'
+        evidenceId: 'TEAM_DIAGNOSIS'
+      - type: 'change_resource'
+        resourceId: 'TEAM_CAPACITY'
+        amount: 1
+      - type: 'post_message'
+        messageId: 'TEAM_REPORT'
+evidence:
+  - id: 'OPERATIONAL_DIAGNOSIS'
+    title: 'Inspect retained request allocations'
+    description: 'checkout-handler / completionCallbacks / completed-request'
+  - id: 'CONFIGURATION_COMPARISON'
+    title: 'Compare current and previous handler ownership'
+    description: 'Completion callbacks retain completed requests'
+  - id: 'TEAM_DIAGNOSIS'
+    title: 'Sam / Platform investigation report'
+    description: 'Restart clears the heap, but the same callback still retains completed requests.'
+  - id: 'DELETED_ALLOCATION_FRAGMENT'
+    title: 'Deleted allocation log fragment'
+    description: 'UNKNOWN: the objects are gone. the references are not.'
+    sourceNarrativeId: 'UNKNOWN_TRACE_FRAGMENT'
+narratives:
+  - id: 'UNKNOWN_TRACE_FRAGMENT'
+    title: 'Deleted allocation log fragment'
+    body: 'UNKNOWN: the objects are gone. the references are not.'
+    conditions:
+      - type: 'evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+      - type: 'evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+      - type: 'signal_revealed'
+        signalId: 'LOG_OBSERVATION'
+    effects:
+      - type: 'reveal_evidence'
+        evidenceId: 'DELETED_ALLOCATION_FRAGMENT'
+warRoom:
+  roles:
+    - id: 'MAYA'
+      name: 'Maya / SRE Lead'
+    - id: 'SAM'
+      name: 'Sam / Platform'
+    - id: 'JIN'
+      name: 'Jin / Support'
+    - id: 'OPERATOR'
+      name: 'Operator'
+  messages:
+    - id: 'MAYA_OPEN'
+      roleId: 'MAYA'
+      text: 'Completed requests remain referenced by callbacks. Separate temporary stabilization from verified cause.'
+      initial: true
+    - id: 'SUPPORT_OPEN'
+      roleId: 'JIN'
+      text: 'Customer reports are increasing. We still need to trace which requests failed.'
+      initial: true
+    - id: 'TEAM_ACK'
+      roleId: 'SAM'
+      text: 'I will inspect the operational evidence. ETA two minutes.'
+      initial: false
+    - id: 'TEAM_REPORT'
+      roleId: 'SAM'
+      text: 'Restart clears the heap, but the same callback still retains completed requests.'
+      initial: false
+    - id: 'SUPPORT_ESCALATION'
+      roleId: 'JIN'
+      text: 'Pressure is increasing again. Customer reports continue; root-cause containment is not confirmed.'
+      initial: false
+    - id: 'STATUS_SENT'
+      roleId: 'OPERATOR'
+      text: 'Investigation update shared. Mitigation and verified cause are reported separately.'
+      initial: false
+resolution:
+  mode: 'all'
+  conditions:
+    - type: 'mechanism_resolved'
+      mechanismId: 'RETAINED_REQUEST_OBJECTS'
+  effects:
+    - type: 'set_flag'
+      flagId: 'ROOT_CAUSE_CONTAINED'
+      value: true
+completion:
+  mode: 'all'
+  conditions:
+    - type: 'flag'
+      flagId: 'ROOT_CAUSE_CONTAINED'
+      value: true
+    - type: 'signal'
+      signalId: 'ERROR_RATE'
+      operator: 'lte'
+      value: 1
+    - type: 'signal'
+      signalId: 'HEAP_PERCENT'
+      operator: 'lte'
+      value: 50
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: 'RECOVERY_TIME'
+      label: 'Service recovery time'
+      source: 'elapsed_time'
+    - id: 'FINAL_ERROR_RATE'
+      label: 'Final request error rate'
+      source: 'signal'
+      refId: 'ERROR_RATE'
+    - id: 'FINAL_PRESSURE'
+      label: 'Final capacity pressure'
+      source: 'signal'
+      refId: 'HEAP_PERCENT'
+    - id: 'CUSTOMER_IMPACT'
+      label: 'Customer impact'
+      source: 'resource'
+      refId: 'CUSTOMER_IMPACT'
+    - id: 'COST'
+      label: 'Response cost'
+      source: 'resource'
+      refId: 'COST'
+    - id: 'OPERATIONAL_RISK'
+      label: 'Operational risk'
+      source: 'resource'
+      refId: 'OPERATIONAL_RISK'
+    - id: 'MITIGATION_COUNT'
+      label: 'Temporary mitigation count'
+      source: 'action_count'
+      refId: 'RESTART_INSTANCE'
+    - id: 'COMMUNICATION_COUNT'
+      label: 'War Room update count'
+      source: 'action_count'
+      refId: 'UPDATE_WAR_ROOM'
