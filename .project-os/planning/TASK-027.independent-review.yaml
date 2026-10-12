@@ -1,0 +1,34 @@
+task: TASK-027
+date: '2026-10-12'
+commit: 2e6bea0030a30b4e953ba8e4f964a76c04ef4e9a
+status: pass
+scope: automated_implementation_foundation_only
+role: reviewer
+actor: codex-task027-reviewer
+source_agent: /root/task027_review
+recorded_by: codex-task027-developer
+provenance: Read-only source review of pre-commit working candidate subsequently committed unchanged in runtime at the identified commit; root transcribed agent verdict.
+critical_issues: 0
+blocking_issues: 0
+summary: >-
+  Independent re-review PASS for exact binding, lazy loading, replay-verified gated
+  projection, escaped content/archive isolation and pending atomic store publication.
+  No remaining concrete blocking defect found. Overall task/native acceptance not certified.
+retained_initial_verdict:
+  status: fail
+  issues:
+    - 'P2: duplicate signalIds accepted and rendered duplicate React keys.'
+    - 'P2: new creation could attach a run appearing between two reads.'
+repair_verification:
+  - Duplicate signal references rejected by presentation validator; regression added.
+  - Creation requires not_found after store load and reports/preserves collision; interleave regression added.
+  - Shared pure production inspector preserves lazy Vite loading and separate CLI data categories.
+direct_checks:
+  command: npx vitest run src/tests/campaign-composition.test.tsx
+  result: 16_tests_passed
+  duration_seconds: 5.46
+  observed_at: '2026-10-12 15:46:39 KST'
+limitations:
+  - Required actual native restore/reload/display checks remain unexecuted.
+  - Complete 26-Incident production authority remains absent and explicitly unavailable.
+  - No edits, commits, push, canonical transitions, user DB access or native launch by reviewer.
