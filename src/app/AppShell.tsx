@@ -18,12 +18,14 @@ import {
 import { App } from './App.tsx';
 import { CampaignDesk } from './CampaignDesk.tsx';
 import type { CampaignSessionState } from '../store/campaign-session.ts';
+import { FullCampaignEntry, type CampaignPackageLoader } from './FullCampaignEntry.tsx';
 
 export interface AppShellProps {
   readonly catalog?: ReadonlyMap<string, Scenario>;
   readonly incidentStorage?: SaveStorage;
   readonly progressStorage?: SaveStorage;
   readonly campaign?: { store: StoreApi<CampaignSessionState>; seed: number };
+  readonly fullCampaignLoader?: CampaignPackageLoader;
 }
 
 interface DeskSnapshot {
@@ -68,7 +70,9 @@ export function AppShell({
   incidentStorage,
   progressStorage,
   campaign,
+  fullCampaignLoader,
 }: AppShellProps) {
+  const [fullCampaignOpen, setFullCampaignOpen] = useState(false);
   const [campaignOpen, setCampaignOpen] = useState(false);
   const incidentStorageRef = useRef(incidentStorage ?? createLocalSaveStorage());
   const progressStorageRef = useRef(
@@ -136,6 +140,10 @@ export function AppShell({
     setActiveId(scenario.id);
   };
 
+  if (fullCampaignOpen)
+    return (
+      <FullCampaignEntry loader={fullCampaignLoader} onBack={() => setFullCampaignOpen(false)} />
+    );
   if (campaignOpen && campaign)
     return (
       <CampaignDesk
@@ -169,6 +177,9 @@ export function AppShell({
         </h1>
         <p>Find the root cause. Choose an incident to investigate or revisit a response record.</p>
       </header>
+      <button type="button" onClick={() => setFullCampaignOpen(true)}>
+        Full campaign
+      </button>
       {campaign ? (
         <button type="button" onClick={() => setCampaignOpen(true)}>
           Open opt-in campaign framework

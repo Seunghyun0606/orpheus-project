@@ -4,6 +4,12 @@ import type { StoreApi } from 'zustand/vanilla';
 import type { CampaignSessionState } from '../store/campaign-session.ts';
 import { PresentationSettings } from './PresentationSettings.tsx';
 import { defaultPresentationPreferences } from './presentation-settings.ts';
+import {
+  readPresentationPreferences,
+  savePresentationPreferences,
+} from './presentation-settings.ts';
+import { CampaignTools } from './CampaignTools.tsx';
+import type { ResolvedCampaignPackage } from '../scenario/campaign-package.ts';
 
 // The caller must supply an approved authority/isolated fixture adapter. Nothing
 // in this component selects a campaign, fabricates history or enables MVP reveals.
@@ -11,15 +17,19 @@ export function CampaignDesk({
   store,
   seed,
   onBack,
+  composition,
 }: {
   store: StoreApi<CampaignSessionState>;
   seed: number;
   onBack: () => void;
+  composition?: ResolvedCampaignPackage;
 }) {
   const state = useStore(store);
   const [reviewId, setReviewId] = useState<string | null>(null);
   const [ending, setEnding] = useState<ReturnType<CampaignSessionState['ending']>>(null);
-  const [preferences, setPreferences] = useState(defaultPresentationPreferences);
+  const [preferences, setPreferences] = useState(() =>
+    composition ? readPresentationPreferences() : defaultPresentationPreferences,
+  );
   const presentationRef = useRef<HTMLElement>(null);
   const run = state.run;
   const attempt = run?.attempts.find((a) => a.id === (reviewId ?? run.activeAttemptId));
@@ -43,13 +53,27 @@ export function CampaignDesk({
       data-crt-effects={preferences.crtEffects}
     >
       <header>
-        <p className="eyebrow">CAMPAIGN FRAMEWORK // EXPLICIT AUTHORITY</p>
+        <p className="eyebrow">
+          {composition
+            ? 'VANTAGE SYSTEMS // CAMPAIGN OPERATIONS'
+            : 'CAMPAIGN FRAMEWORK // EXPLICIT AUTHORITY'}
+        </p>
         <h1>Campaign desk</h1>
-        <p>This opt-in framework does not change the three-incident MVP.</p>
-        <button type="button" onClick={onBack}>
+        <p>
+          {composition
+            ? 'Version-pinned campaign. All actions commit through the campaign ledger.'
+            : 'This opt-in framework does not change the three-incident MVP.'}
+        </p>
+        <button type="button" disabled={blocked} onClick={onBack}>
           Back to incident desk
         </button>
-        <PresentationSettings preferences={preferences} onChange={setPreferences} />
+        <PresentationSettings
+          preferences={preferences}
+          onChange={(p) => {
+            setPreferences(p);
+            if (composition) savePresentationPreferences(p);
+          }}
+        />
       </header>
       {state.error ? <p role="alert">Campaign operation not confirmed: {state.error}</p> : null}
       <p role="status">
@@ -145,6 +169,20 @@ export function CampaignDesk({
           </p>
         ) : null}
       </section>
+      {composition && run && attempt ? (
+        <CampaignTools
+          composition={composition}
+          run={run}
+          attemptId={attempt.id}
+          actions={state.view?.availableActions ?? []}
+          disabled={blocked || !!(prep && !acknowledged)}
+          readOnly={reviewing}
+          onAction={(id) => {
+            setEnding(null);
+            void state.performAction(id);
+          }}
+        />
+      ) : null}
       {!reviewing ? (
         <>
           <section className="panel" aria-labelledby="campaign-guidance-title">
@@ -208,22 +246,24 @@ export function CampaignDesk({
               <p>No approved guidance is displayed.</p>
             )}
           </section>
-          <section className="panel" aria-labelledby="campaign-action-title">
-            <h2 id="campaign-action-title">Accepted actions</h2>
-            {state.view?.availableActions.map((a) => (
-              <button
-                key={a.id}
-                type="button"
-                disabled={blocked || !!(prep && !acknowledged)}
-                onClick={() => {
-                  setEnding(null);
-                  void state.performAction(a.id);
-                }}
-              >
-                {a.title} (+{a.durationSeconds}s)
-              </button>
-            ))}
-          </section>
+          {!composition ? (
+            <section className="panel" aria-labelledby="campaign-action-title">
+              <h2 id="campaign-action-title">Accepted actions</h2>
+              {state.view?.availableActions.map((a) => (
+                <button
+                  key={a.id}
+                  type="button"
+                  disabled={blocked || !!(prep && !acknowledged)}
+                  onClick={() => {
+                    setEnding(null);
+                    void state.performAction(a.id);
+                  }}
+                >
+                  {a.title} (+{a.durationSeconds}s)
+                </button>
+              ))}
+            </section>
+          ) : null}
         </>
       ) : null}
       <section className="panel" aria-labelledby="campaign-evidence-title">

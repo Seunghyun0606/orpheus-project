@@ -138,6 +138,37 @@ export function createCampaignLedger(
     }
   }
   return {
+    // Only explicit opt-in callers discover keys. Selection still requires read()
+    // and complete replay validation; enumeration does not create or repair runs.
+    async listRunIds(): Promise<LedgerFailure | { ok: true; runIds: string[] }> {
+      const opened = await open();
+      if (!opened.ok) return opened;
+      return new Promise((resolve) => {
+        const db = opened.db;
+        try {
+          const tx = db.transaction(CAMPAIGN_RUN_STORE, 'readonly');
+          let outcome: LedgerFailure | { ok: true; runIds: string[] } = fail('STORAGE_ERROR');
+          tx.oncomplete = () => {
+            db.close();
+            resolve(outcome);
+          };
+          tx.onabort = () => {
+            db.close();
+            resolve(fail('TRANSACTION_ABORTED'));
+          };
+          const request = tx.objectStore(CAMPAIGN_RUN_STORE).getAllKeys();
+          request.onsuccess = () => {
+            const keys = request.result;
+            outcome = keys.every((k) => typeof k === 'string' && k.length > 0)
+              ? { ok: true, runIds: (keys as string[]).sort() }
+              : fail('INVALID_RUN_ID');
+          };
+        } catch {
+          db.close();
+          resolve(fail('STORAGE_ERROR'));
+        }
+      });
+    },
     async read(runId: string): Promise<LedgerRead> {
       if (typeof runId !== 'string' || !runId.length) return fail('INVALID_RUN_ID');
       const opened = await open();

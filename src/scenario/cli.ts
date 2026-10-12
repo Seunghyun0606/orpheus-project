@@ -7,6 +7,11 @@ import {
   type ScenarioSource,
 } from './catalog.ts';
 import type { ScenarioDiagnostic } from './validator.ts';
+import { parsePackageYaml } from './campaign-package.ts';
+import {
+  fullCampaignManifestSchema,
+  inspectProductionCampaignSources,
+} from './production-catalog.ts';
 
 const yamlExtensions = new Set(['.yaml', '.yml']);
 
@@ -58,10 +63,50 @@ export async function runScenarioValidationCli(args: readonly string[]): Promise
     }
 
     fileCount += files.length;
+    let scenarioSources = sources;
+    if (args.length === 0 && groupIndex === 0) {
+      const normalized = sources.map((s) => ({ ...s, file: s.file.replaceAll('\\', '/') }));
+      const manifest = normalized.find(
+        (s) => s.file === 'src/scenario/data/full-campaign-manifest.yaml',
+      );
+      const production = normalized.filter((s) =>
+        s.file.startsWith('src/scenario/data/full-campaign/'),
+      );
+      scenarioSources = normalized.filter((s) => s.file.startsWith('src/scenario/data/incidents/'));
+      const recognized = scenarioSources.length + production.length + (manifest ? 1 : 0);
+      if (recognized !== sources.length || !manifest) {
+        console.error(
+          'Campaign authoring validation failed: unknown data category or missing manifest.',
+        );
+        failed = true;
+      } else {
+        try {
+          const parsed = fullCampaignManifestSchema.parse(parsePackageYaml(manifest.source));
+          if (production.length) {
+            const checked = inspectProductionCampaignSources(
+              Object.fromEntries(production.map((s) => [s.file, s.source])),
+              parsed,
+            );
+            if (!checked.ok) {
+              console.error(
+                `Campaign authoring validation failed: ${checked.diagnostics.join(', ')}`,
+              );
+              failed = true;
+            }
+          } else
+            console.log(
+              'Full campaign: no production package authored yet (unavailable, not certified).',
+            );
+        } catch {
+          console.error('Campaign authoring validation failed: invalid full-campaign manifest.');
+          failed = true;
+        }
+      }
+    }
     const result =
       args.length === 0 && groupIndex === 1
-        ? validateVersionedScenarioCatalog(sources)
-        : validateScenarioCatalog(sources);
+        ? validateVersionedScenarioCatalog(scenarioSources)
+        : validateScenarioCatalog(scenarioSources);
     if (!result.success) {
       result.diagnostics.forEach(printDiagnostic);
       failed = true;

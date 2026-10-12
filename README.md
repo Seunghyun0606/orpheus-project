@@ -9,11 +9,12 @@ recovery, saved evidence, and an action-derived postmortem.
 
 As of 2026-10-12, M1–M3 are complete; M4 remains active. TASK-018–023 are accepted,
 TASK-024 has a bounded implementation and partial native evidence but is not complete,
-and TASK-025 remains unclaimed. QA is currently deferred at the human's request,
-not waived. DEC-037 now activates the [M5 plan](docs/M5_IMPLEMENTATION_PLAN.md)
+and TASK-025 remains unclaimed. Native QA is currently deferred at the human's request,
+not waived; DEC-039 authorizes M5 independent automated review/QA/evaluation.
+DEC-037 now activates the [M5 plan](docs/M5_IMPLEMENTATION_PLAN.md)
 and registers TASK-026–035 with early implementation permitted. TASK-026 is complete
-for the independently accepted blueprint; TASK-027 is active, pending its concrete
-campaign composition decision. The full campaign is not implemented or released.
+for the independently accepted blueprint; TASK-027 is active with the DEC-040-approved
+[composition candidate](docs/TASK-027_IMPLEMENTATION.md). The full campaign is not implemented or released.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
 document QA and distinct evaluation PASS. M4 verification remains mandatory before final M5 acceptance/release. Original
 planning drafts remain historical checkpoints. The [M4 plan](docs/M4_IMPLEMENTATION_PLAN.md) preserves chronological
@@ -168,8 +169,10 @@ Run the full quality command set above and the desktop build for the final M2 ch
 structured TASK-010 result in `.project-os/tasks/results` records actual command outcomes and
 independent review/QA decisions.
 
-The scenario validation command checks current content and frozen legacy content (eight files) by
-default. Pass one or
+The scenario validation command checks current Incident content, frozen legacy content and
+the approved campaign manifest (nine files currently). Full-campaign package/definition/
+presentation/Incident data are validated together when authored; their present absence is
+reported as unavailable, not a complete campaign. Pass one or
 more YAML files or directories to validate authored content elsewhere:
 
 ```sh
@@ -178,6 +181,22 @@ npm run validate:scenarios -- path/to/scenario.yaml path/to/scenario-directory
 
 Diagnostics include the source file, data path, stable error code, and message. Invalid content
 produces a non-zero exit code.
+
+## Full-campaign composition candidate
+
+The default desk still contains only the three UNKNOWN-only MVP Incidents.
+**Full campaign** opens an explicit opt-in catalog. **Inspect campaign packages and saved runs**
+loads and validates separate exact-version authorities before any ledger access.
+There is currently no complete 26-Incident production package, so this route reports
+unavailable and creates no run. No QA fixture substitutes for real content.
+
+Authored package schema 1 binds exact campaign definition, Scenario and investigation
+sidecar versions; sidecar text/tables/revealed signals are projected by a pure engine.
+Existing campaigns are never attached to a newer definition. See
+[authoring and verification boundaries](docs/TASK-027_IMPLEMENTATION.md).
+The unchanged IndexedDB ledger uses explicit create/restore and transaction-complete
+publication. Actual native restore/display checks remain pending, independently of
+the injected automated fixtures.
 
 ## Source boundaries
 

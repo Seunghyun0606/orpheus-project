@@ -10,8 +10,9 @@ Canonical ready contracts now live in `.project-os/tasks/ready/`; the ten origin
 
 M5 is active; M4 remains active/incomplete. TASK-024 remains active and TASK-025
 ready/ineligible. TASK-026 completed through independent review, document QA and
-distinct Project OS evaluation; TASK-027 is now active for its material composition
-decision. TASK-028–035 remain dependent ready tasks, not completed implementations.
+distinct Project OS evaluation; TASK-027 is now active with DEC-040-approved composition
+implementation under independent review/automated QA. Native TASK-027 verification remains
+pending. TASK-028–035 remain dependent ready tasks, not completed implementations.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 
@@ -157,8 +158,12 @@ playable full-campaign acceptance.
 TASK-026 is complete after independent review, document QA and distinct evaluation.
 TASK-027 is active; its
 [composition proposal](../specs/architecture/full-campaign-composition-proposal.md)
-requires a separate package/catalog/entry/presentation decision before runtime work.
+was approved through DEC-040. The
+[candidate](TASK-027_IMPLEMENTATION.md) implements package/catalog/entry/presentation
+boundaries without complete production content or native certification.
 Keep the original draft/result records unchanged. M4 native verification resumes
 when requested, then TASK-025; both remain final M5 acceptance/release blockers.
-Activation and blueprint drafting change project metadata/docs only, not runtime,
-production content, old campaign authorities or actual user storage.
+The original activation and blueprint steps changed metadata/docs only. TASK-027 now
+adds bounded runtime composition; old campaign authorities and actual user storage
+remain untouched. Do not complete TASK-027 or claim TASK-028 by bypassing pending
+native verification or a configured human decision on its scheduling/dependencies.

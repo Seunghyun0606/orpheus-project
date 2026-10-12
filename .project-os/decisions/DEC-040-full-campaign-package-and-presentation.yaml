@@ -1,0 +1,27 @@
+id: DEC-040
+title: Approve separate opt-in campaign packages and authored investigation presentation
+status: active
+date: '2026-10-12'
+applies_to: [M5]
+task: TASK-027
+human_approval:
+  selected_option: A
+  instruction: '제안한 별도 패키지·화면 데이터 계층 승인.'
+request: .project-os/planning/TASK-027.composition-gate.yaml
+approved_proposal:
+  commit: 4760bfc
+  file: specs/architecture/full-campaign-composition-proposal.md
+decision: >-
+  Implement the proposed strict version-1 campaign package and presentation
+  sidecar boundaries, separate opt-in full-campaign entry/catalog, exact immutable
+  definition/scenario/presentation binding, typed gated investigation projections,
+  and read-only run discovery with explicit create/restore over the unchanged ledger.
+consequences:
+  - Keep default MVP and existing Scenario/CampaignDefinition/save/replay shapes and physical IndexedDB layout unchanged.
+  - A complete validated production authority is required for official creation; incomplete content is unavailable, never a placeholder or QA fallback.
+  - Presentation changes require a new package and campaign definition version; unsupported old bindings diagnose without substitution or mutation.
+  - Navigation and archive projection grant no actions, effects, samples or guidance ACK; accepted commands use the existing atomic campaign path.
+  - Preserve old stores/settings and explicit creation/restoration; no automatic import, migration, newest-run selection or new pointer authority.
+  - This approves composition/authoring boundaries, not production initial values, model classifications, content version numbers, ending balance or release.
+  - Independent automated review/QA/evaluation is authorized by DEC-039; TASK-027/native and incomplete M4 verification obligations remain unchanged.
+supersedes: null

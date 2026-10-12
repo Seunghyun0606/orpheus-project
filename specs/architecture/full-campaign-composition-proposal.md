@@ -1,6 +1,12 @@
 # TASK-027 — Production campaign composition proposal
 
-Status: **proposed, awaiting a material architecture/production-entry decision**.
+Status: **Option A approved through DEC-040; implementation candidate under review**.
+The proposal at `4760bfc` is the immutable approval checkpoint. The following
+opening describes its pre-approval state, not a current prohibition on the approved
+implementation. Native verification and production balance/content decisions remain
+outstanding. See [implementation](../../docs/TASK-027_IMPLEMENTATION.md).
+
+Historical proposal context:
 TASK-026 passed distinct independent evaluation and is complete through Project OS.
 TASK-027 is active, but no runtime, authoring schema or user-store change has been
 made by this proposal. DEC-038 approves content identities/reveal order, not the

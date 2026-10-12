@@ -18,6 +18,24 @@
   --white: #f4fbf8;
 }
 
+.campaign-table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.campaign-desk table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.campaign-desk th,
+.campaign-desk td {
+  padding: 0.5rem;
+  border: 1px solid currentColor;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
 :root[data-text-scale='large'] {
   font-size: 125%;
 }

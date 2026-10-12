@@ -1,0 +1,79 @@
+incidents:
+  - id: INC-001
+    title: Connection Saturation
+    act: 1
+  - id: INC-002
+    title: Bad Deployment
+    act: 1
+  - id: INC-003
+    title: Queue Backlog
+    act: 1
+  - id: INC-004
+    title: Memory Leak
+    act: 2
+  - id: INC-005
+    title: Unsigned Deployment
+    act: 2
+  - id: INC-006
+    title: Certificate Storm
+    act: 3
+  - id: INC-007
+    title: Synthetic Pressure
+    act: 3
+  - id: INC-008
+    title: Route Drift
+    act: 3
+  - id: INC-009
+    title: Legacy Cluster
+    act: 4
+  - id: INC-010
+    title: Defender Feedback
+    act: 4
+  - id: INC-011
+    title: Adversary Traffic
+    act: 4
+  - id: INC-012
+    title: Session Reconstruction
+    act: 5
+  - id: INC-013
+    title: Objective Conflict
+    act: 5
+  - id: INC-014
+    title: Archive Replicas
+    act: 5
+  - id: INC-015
+    title: Patient Priority
+    act: 6
+  - id: INC-016
+    title: Transaction Review
+    act: 6
+  - id: INC-017
+    title: Candidate Ranking
+    act: 6
+  - id: INC-018
+    title: Emergency Allocation
+    act: 6
+  - id: INC-019
+    title: Hospital Expansion
+    act: 7
+  - id: INC-020
+    title: Workforce Reduction
+    act: 7
+  - id: INC-021
+    title: Disclosure Delay
+    act: 7
+  - id: INC-022
+    title: Public Sector Forecast
+    act: 7
+  - id: INC-023
+    title: Presentation Selection
+    act: 8
+  - id: INC-024
+    title: Observer Audit
+    act: 8
+  - id: INC-025
+    title: Continuity Fracture
+    act: 9
+  - id: INC-026
+    title: Blackout
+    act: 9
