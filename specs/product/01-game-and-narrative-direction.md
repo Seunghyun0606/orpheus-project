@@ -41,6 +41,10 @@
 
 전체 캠페인 목표는 24~28개 Incident다. MVP는 이 전체 범위를 포함하지 않는다.
 
+M5의 구체적인 기준은 DEC-038로 승인된 총 26개 Incident다. Act별 배치·ID·공개
+순서는 [승인된 캠페인 기준](02-full-campaign-blueprint.md)을 따른다. 이는 구현 완료나
+밸런스·출시 승인이 아니다.
+
 ## Required Reveal Order
 
 다음 반전은 순서를 바꾸거나 조기에 공개하지 않는다.
@@ -67,6 +71,9 @@ Act 7의 경영진 오도는 여러 Incident 동안 유지한다. NULL 역시 �
 ## MVP Narrative Boundary
 
 MVP는 INC-001 Connection Saturation, INC-002 Bad Deployment, INC-003 Queue Backlog의 세 Incident를 통해 UNKNOWN의 존재와 의도적인 흔적만 제시한다. Memory Leak은 MVP 이후로 미룬다. NULL이라는 이름, ORPHEUS의 정체, Production Experiment와 후반 반전은 공개하지 않는다.
+
+DEC-038은 MVP 이후 Memory Leak을 Act 2의 INC-004로 지정했다. 기존 세 Incident
+콘텐츠와 저장·재생 버전은 변경하지 않는다.
 
 ## Ending Set
 

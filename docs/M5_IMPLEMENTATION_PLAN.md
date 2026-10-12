@@ -17,8 +17,8 @@ task claim and completion continue through the configured Project OS commands.
 DEC-037 allows M5 implementation before M4 verification but retains **complete/tested
 M4 before final M5 acceptance or release**. QA is deferred, not waived. No new
 automated/native QA or independent acceptance is claimed by this activation.
-Earlier PASS evidence retains its original scope. The TASK-026 blueprint is a
-proposal requiring its separate content decision before dependent implementation.
+Earlier PASS evidence retains its original scope. DEC-038 now approves the TASK-026
+content blueprint, but independent task acceptance remains pending.
 
 ## M4 debt that must remain visible
 
@@ -45,10 +45,11 @@ restoration evidence, touch the main user profile or relax acceptance checks.
 The [product direction](../specs/product/01-game-and-narrative-direction.md) and
 [full design](../specs/product/00-initial-plan.md) remain the content authorities.
 M5 targets nine Acts and **24–28 total incidents**, not 24–28 additional incidents.
-The exact count, allocation, new Incident IDs and pacing are not chosen here.
+DEC-038 now approves 26 total Incidents, their IDs/allocation and reveal pacing in
+the [content baseline](../specs/product/02-full-campaign-blueprint.md).
 
 - Preserve INC-001 Connection Saturation, INC-002 Bad Deployment and INC-003 Queue
-  Backlog. Memory Leak stays a future candidate with no assigned ID. The existing
+  Backlog. DEC-038 assigns Memory Leak to Act 2's INC-004. The existing
   MVP route remains UNKNOWN-only; full-campaign reveals need separately gated data.
 - Incident, narrative, evidence, opportunity, branch and ending rules remain data
   executed by pure deterministic TypeScript engines. React projects results;
@@ -68,8 +69,8 @@ The exact count, allocation, new Incident IDs and pacing are not chosen here.
 ## Content work packages
 
 These are drafting boundaries, not approved Incident lists or numeric balance.
-TASK-026 must propose an explicit per-Incident manifest and obtain approval before
-content is implemented. Any new domain representation needs a separate architecture
+TASK-026's per-Incident manifest and reveal order are approved by DEC-038; required
+independent acceptance remains pending. Any new domain representation needs a separate architecture
 gate; a content task is not permission to extend schemas by guesswork.
 
 | Package                                       | Required investigation and reveal boundary                                                                                                                                                                                                                 | Task owner |
@@ -80,7 +81,7 @@ gate; a content task is not permission to extend schemas by guesswork.
 | Acts 8–9: OBSERVER / BLACKOUT                 | Information framing and NULL admitting error after sufficient Board investigation; experiment #99172 and employee #4172; expected investigation but unknown final action; multi-service final conflict.                                                    | TASK-031   |
 | Endings and epilogues                         | All ten named endings, accumulated behavior and distinct costs; title payoff and conditional PROMETHEUS lineage discovery. No good/bad/true labels or privileged correct route.                                                                            | TASK-032   |
 
-The finer placement of reveals within Acts is a TASK-026 proposal, not a new canon.
+The frozen TASK-026 reveal graph is now the approved content baseline under DEC-038.
 The sequence must keep NULL non-omniscient, ORPHEUS useful as well as harmful, and
 the Board responsible without falsely making it fully in control. Do not absolve
 executives when information framing is discovered. Investigations through logs,
@@ -116,9 +117,9 @@ material extensions require separate decisions. New engine folders are not a goa
 1. **M5 activation approved / M4 verification deferred:** DEC-037 allows early
    implementation. Finish mandatory M4 evidence and Project OS evaluation before
    final M5 acceptance or release; this exception does not waive QA or mark M4 done.
-2. **Campaign blueprint:** approve Incident count/IDs, reveal gates, branch access,
-   gameplay variety, Board pacing and needed UI/domain gaps. Do not freeze a
-   26-Incident layout or new Memory Leak ID in this planning pass.
+2. **Campaign blueprint approved:** DEC-038 fixes 26 Incident IDs, allocation and
+   reveal order/Board pacing. Independent acceptance and concrete UI/domain gap
+   representation decisions still precede dependent implementation.
 3. **Production binding and balance:** approve full-campaign entry/default behavior,
    new immutable definition versions, opportunity rules, ending thresholds and
    priorities. Test fixture thresholds do not become production balance.
@@ -152,8 +153,8 @@ playable full-campaign acceptance.
 
 ## Safe next step
 
-TASK-026 is active for the proposed campaign blueprint and repository gap inventory.
-Obtain its content decision and required independent acceptance before TASK-027.
+TASK-026 is active with its content blueprint approved by DEC-038 and repository
+gap inventory recorded. Obtain required independent acceptance before TASK-027.
 Keep the original draft/result records unchanged. M4 native verification resumes
 when requested, then TASK-025; both remain final M5 acceptance/release blockers.
 Activation and blueprint drafting change project metadata/docs only, not runtime,

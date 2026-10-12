@@ -1,0 +1,31 @@
+kind: developer_executed_documentation_verification_not_independent_QA
+task: TASK-026
+actor: codex-task026-architect
+source_agent: /root
+date: '2026-10-12'
+baseline_commit: cbdeba0
+status: pass_documentation_scope_only
+human_content_decision: .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml
+checks:
+  unique_total_incidents: 26
+  act_distribution: [3, 2, 3, 3, 3, 4, 4, 2, 2]
+  acyclic_reveal_nodes: 19
+  board_incidents_before_framing: 4
+  named_ending_families: 10
+  tasks_with_approved_context: 10
+  local_links_checked: 67
+  canonical_and_historical_files_unchanged: 19
+  current_MVP_source_files_unchanged: 3
+  approved_snapshot: Identical Git blob to cbdeba0; original proposed/pending strings retained as historical status.
+  identities: Existing INC-001–003 IDs/titles/versions unchanged; Memory Leak now explicitly approved as Act 2 INC-004.
+  projectctl_doctor: pass
+  git_diff_check: pass
+method: Direct UTF-8 Node/YAML unique-key parsing, manifest/reference/graph checks, local link existence and Git clean-filter blob comparisons.
+limitations:
+  - These are structural specification checks, not runtime narrative conditions or negative gameplay-path tests.
+  - No application suite, native QA, actual storage, engine migration, independent review/QA or final evaluation was performed.
+  - Independent verification request remains pending; TASK-026 stays active and TASK-027 remains ineligible.
+  - M4/TASK-024/025 verification remains mandatory before final M5 acceptance/release.
+tooling_history:
+  - A previous-turn orchestration cache was unavailable during the first attempt to reuse its check command; no check result or acceptance was inferred.
+  - A fresh direct filesystem checker passed all listed checks; no persisted file was rewritten to work around shell encoding or cache issues.

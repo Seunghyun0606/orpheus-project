@@ -1,0 +1,39 @@
+kind: human_gate_request
+tasks:
+  [
+    TASK-026,
+    TASK-027,
+    TASK-028,
+    TASK-029,
+    TASK-030,
+    TASK-031,
+    TASK-032,
+    TASK-033,
+    TASK-034,
+    TASK-035,
+  ]
+status: pending
+reason: >-
+  The content blueprint is approved by DEC-038, but TASK-026 requires separately
+  authorized independent content/architecture review and a distinct evaluator.
+  Existing independent delegation approvals cover earlier tasks, not M5. The
+  implementer cannot certify its own independent review or final evaluation.
+  TASK-027 remains ineligible until TASK-026 is accepted through Project OS.
+question: 'TASK-026~035의 필수 독립 리뷰·자동화 QA·별도 평가를 읽기 전용 에이전트에 위임할까요?'
+options:
+  A:
+    label: 'M5 독립 리뷰·자동화 QA·평가 위임 승인'
+    scope:
+      - Separate read-only reviewer, automated QA/document verifier and distinct evaluator for each eligible TASK-026–035 candidate.
+      - Begin with TASK-026 document/content/architecture checks; future implementation candidates may run existing safe automated quality commands.
+      - Agents may inspect and execute scoped verification but not edit source/specs/canonical state, commit, push, submit final state transitions, or access real user storage.
+      - Reports must name actor, candidate and direct observations/limitations; root records attributed handoffs and applies only supported Project OS transitions.
+  B:
+    label: '위임 보류, 독립 검증 대기'
+    scope:
+      - Keep TASK-026 active/unaccepted and TASK-027 ineligible until independently supplied evidence or a separately approved verification path exists.
+boundaries:
+  - This request is not an approval and no agent has been spawned for M5.
+  - Native QA remains separately scoped/deferred; actual user storage, credentials, security settings, profile overwrite/reset, production activation choices and release are excluded.
+  - M4 native evidence and TASK-025 remain mandatory before final M5 acceptance/release; no waiver or retrospective PASS.
+  - Later architecture/schema/balance/content changes still obey their own human gates.

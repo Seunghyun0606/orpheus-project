@@ -30,6 +30,7 @@ depends_on:
   - TASK-033
   - TASK-034
 specs:
+  - specs/product/02-full-campaign-blueprint.md
   - specs/product/01-game-and-narrative-direction.md
   - specs/feature/campaign-and-player-model.md
   - docs/M4_IMPLEMENTATION_PLAN.md
@@ -40,6 +41,7 @@ relevant_files:
   - README.md
   - .project-os/tasks/results/
 active_decisions:
+  - .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml
   - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
   - .project-os/decisions/DEC-003-deterministic-local-first.yaml
   - .project-os/decisions/DEC-004-m3-incident-identity.yaml

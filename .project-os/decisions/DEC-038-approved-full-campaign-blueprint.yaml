@@ -1,0 +1,29 @@
+id: DEC-038
+title: Approve the 26-Incident campaign identities and reveal blueprint
+status: active
+date: '2026-10-12'
+applies_to: [M5]
+task: TASK-026
+human_approval:
+  selected_option: A
+  instruction: '제안한 26개 구성·번호·공개 순서 승인.'
+request: .project-os/planning/TASK-026.content-blueprint-gate.yaml
+approved_snapshot:
+  commit: cbdeba0
+  file: .project-os/planning/TASK-026.campaign-blueprint.yaml
+decision: >-
+  Approve the candidate's 26 total Incident identities, titles, Act allocation
+  3/2/3/3/3/4/4/2/2 and reveal prerequisites. Preserve existing INC-001–003
+  identities and versions; assign Memory Leak to INC-004 in Act 2. Preserve
+  the four-Incident Board investigation INC-019–022 before INC-023 framing
+  resolution, faction ambiguity, optional investigation routes and verified
+  final-context requirements.
+consequences:
+  - The frozen proposal is now the approved content blueprint through this decision; its old proposed/pending strings describe candidate-time status only.
+  - Complete content-authoring/runtime validation and independent task acceptance are not implied by content approval.
+  - TASK-026 remains active until required independent handoffs and distinct Project OS evaluation; do not self-approve or claim TASK-027 prematurely.
+  - New production content versions, catalog/default entry, investigation representation, model/opportunity initial values and ending thresholds/priorities remain unselected.
+  - No save migration, old-run attachment, native/user-store access, delegation, push or release is approved here.
+  - DEC-037 keeps incomplete M4 verification and TASK-025 mandatory before final M5 acceptance/release.
+supersedes: null
+clarifies: .project-os/decisions/DEC-004-m3-incident-identity.yaml

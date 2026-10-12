@@ -22,6 +22,7 @@ scope:
 depends_on:
   - TASK-026
 specs:
+  - specs/product/02-full-campaign-blueprint.md
   - specs/architecture/system-architecture.md
   - specs/architecture/campaign-presentation-v2.md
   - specs/architecture/campaign-ledger-persistence.md
@@ -34,6 +35,7 @@ relevant_files:
   - src/scenario/
   - src/ui/
 active_decisions:
+  - .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml
   - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
   - .project-os/decisions/DEC-003-deterministic-local-first.yaml
   - .project-os/decisions/DEC-004-m3-incident-identity.yaml

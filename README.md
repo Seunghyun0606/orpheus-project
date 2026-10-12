@@ -13,7 +13,8 @@ and TASK-025 remains unclaimed. QA is currently deferred at the human's request,
 not waived. DEC-037 now activates the [M5 plan](docs/M5_IMPLEMENTATION_PLAN.md)
 and registers TASK-026–035 with early implementation permitted. TASK-026 is active
 for the proposed blueprint; the full campaign is not implemented or released.
-M4 verification remains mandatory before final M5 acceptance/release. Original
+DEC-038 approves the 26-Incident identities and reveal blueprint; TASK-026 independent
+acceptance remains pending. M4 verification remains mandatory before final M5 acceptance/release. Original
 planning drafts remain historical checkpoints. The [M4 plan](docs/M4_IMPLEMENTATION_PLAN.md) preserves chronological
 implementation/verification checkpoints; older checkpoints are not current status.
 

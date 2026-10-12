@@ -23,6 +23,7 @@ depends_on:
   - TASK-027
   - TASK-032
 specs:
+  - specs/product/02-full-campaign-blueprint.md
   - specs/product/00-initial-plan.md
   - specs/ux/operations-desktop.md
   - specs/architecture/system-architecture.md
@@ -33,6 +34,7 @@ relevant_files:
   - src/assets/
   - src/tests/
 active_decisions:
+  - .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml
   - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
   - .project-os/decisions/DEC-003-deterministic-local-first.yaml
   - .project-os/decisions/DEC-004-m3-incident-identity.yaml

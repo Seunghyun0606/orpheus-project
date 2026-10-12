@@ -533,10 +533,10 @@ Incident 예:
 INC-001 Connection Saturation
 INC-002 Bad Deployment
 INC-003 Queue Backlog
-Memory Leak (MVP 이후, Incident ID 미정)
+Memory Leak (M5 ACT 2의 INC-004, DEC-038 승인)
 ```
 
-M3의 세 Incident MVP에는 위의 INC-001~003만 포함한다. Memory Leak은 이후 콘텐츠로 미루며, ID는 해당 작업을 정의할 때 정한다.
+M3의 세 Incident MVP에는 위의 INC-001~003만 포함한다. Memory Leak은 M5 ACT 2의 INC-004로 지정됐으며, 전체 26개 구성과 공개 순서는 DEC-038 및 `02-full-campaign-blueprint.md`를 따른다. 기존 MVP의 버전과 공개 범위는 변경하지 않는다.
 
 초기에는 대부분 실제 장애다.
 

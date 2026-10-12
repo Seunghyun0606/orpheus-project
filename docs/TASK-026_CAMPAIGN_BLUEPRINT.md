@@ -1,19 +1,25 @@
 # TASK-026 — Full-campaign blueprint proposal
 
-Status: architect candidate, **not content-approved or independently accepted**.
+Status: content blueprint approved under DEC-038; **independent acceptance pending**.
 M5 activation follows DEC-037. TASK-026 remains active; TASK-027 cannot be claimed
 until TASK-026 has the required decision, handoffs and Project OS evaluation.
 
 The [machine-readable proposal](../.project-os/planning/TASK-026.campaign-blueprint.yaml)
 is planning data, not an implemented Scenario/CampaignDefinition schema. It is
 outside the runtime catalog and must never be loaded as production content.
+Its exact `cbdeba0` content is approved through
+[DEC-038](../.project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml);
+the original candidate-time status strings and checkpoints remain unchanged.
+The [current content specification](../specs/product/02-full-campaign-blueprint.md)
+records this subsequent approval and its limits.
 
 ## Proposed bounded campaign
 
-Propose **26 total Incidents**: the three existing MVP Incidents plus 23 new ones.
+Approved **26 total Incidents**: the three existing MVP Incidents plus 23 new ones.
 The allocation stays within the specified 24–28 range and reserves four Incidents
-for the Board investigation before the framing resolution. New IDs/titles remain
-proposed until human approval; especially `INC-004 Memory Leak` is not yet canon.
+for the Board investigation before the framing resolution. DEC-038 approves the
+new IDs/titles, including `INC-004 Memory Leak` in Act 2. Runtime versions and
+production balance remain unselected.
 
 | Act            | Proposed Incident IDs | Count | Required pacing function                                                        |
 | -------------- | --------------------- | ----- | ------------------------------------------------------------------------------- |
@@ -107,9 +113,9 @@ immutable reports and the original planning drafts remain unchanged.
 
 ## Decisions before dependent implementation
 
-The immediate human decision is the 26-Incident allocation, new IDs (including
-Memory Leak), Board interval and reveal graph. Approval would establish a content
-blueprint, not complete TASK-026 or authorize all later architecture/balance choices.
+The 26-Incident allocation, new IDs (including Memory Leak), Board interval and
+reveal graph are now approved under DEC-038. This establishes the content blueprint,
+not TASK-026 completion or all later architecture/balance choices.
 
 After approval, obtain the required independent acceptance and distinct evaluation.
 TASK-027 then needs concrete production entry/catalog/view binding decisions;
