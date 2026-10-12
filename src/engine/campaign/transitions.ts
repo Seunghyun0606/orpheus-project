@@ -10,6 +10,8 @@ import { scenarioVersionKey } from '../../scenario/catalog.ts';
 import type { Scenario } from '../../scenario/schema.ts';
 import { validateScenarioObject } from '../../scenario/validator.ts';
 import { createIncidentState, executeCommand, replayCommands } from '../simulation.ts';
+import { evaluateActionGate, selectCampaignActionIds } from './action-gates.ts';
+import { protectedActionOutputs } from '../../scenario/action-gates.ts';
 import type { IncidentState, EngineEvent } from '../types.ts';
 import {
   createBehaviorState,
@@ -32,6 +34,7 @@ import {
   type Observation,
   type CampaignDiagnostic,
   type Condition,
+  type ConditionContext,
 } from './conditions.ts';
 
 const id = z.string().min(1);
@@ -182,7 +185,7 @@ export type CampaignResult =
   | { ok: true; disposition: 'candidate' | 'duplicate'; run: CampaignRun }
   | { ok: false; diagnostics: CampaignDiagnostic[] };
 type ScenarioCatalog = ReadonlyMap<string, Scenario>;
-const failure = (code: string, path = '$'): CampaignResult => ({
+const failure = (code: string, path = '$'): Extract<CampaignResult, { ok: false }> => ({
   ok: false,
   diagnostics: [{ code, path }],
 });
@@ -258,6 +261,51 @@ function condition(
     boundary: run.revision,
     observations: campaignObservations(definition, run),
   });
+}
+export function campaignActionContext(
+  definition: CampaignDefinition,
+  run: CampaignRun,
+): ConditionContext {
+  return {
+    definitionVersion: definition.version,
+    kind: 'action',
+    runId: run.runId,
+    boundary: run.revision,
+    observations: campaignObservations(definition, run),
+  };
+}
+function sourceNeedsCampaignProof(
+  definition: CampaignDefinition,
+  source: NonNullable<ReturnType<typeof sourceSnapshot>>,
+) {
+  if (!definition.actionGates) return false;
+  const protectedOutputs = protectedActionOutputs(definition, source.scenario);
+  return (
+    source.state.replayLog.some((e) => protectedOutputs.actionIds.has(e.command.actionId)) ||
+    source.state.revealedEvidenceIds.some((id) => protectedOutputs.evidence.has(id)) ||
+    source.state.triggeredNarrativeIds.some((id) => protectedOutputs.narratives.has(id)) ||
+    [...protectedOutputs.signals].some((id) => source.state.signals[id]?.revealed) ||
+    source.state.eventLog.some(
+      (e) =>
+        e.type === 'war_room_message' && e.targetId && protectedOutputs.messages.has(e.targetId),
+    )
+  );
+}
+function hasOriginalSourceProof(prior: CampaignRun, bytes: string) {
+  // Associations were accepted at a verified exact live head. Equality of only
+  // seed/actions/state is not provenance; a caller cannot forge this receipt.
+  return (prior.checkpointAssociations ?? []).some(
+    (a) =>
+      a.sourceBytes === bytes &&
+      prior.operations.some(
+        (op) =>
+          op.kind === 'associate' &&
+          op.operationId === a.operationId &&
+          op.attemptId === a.attemptId &&
+          op.sourceBytes === bytes &&
+          op.priorHead === a.head,
+      ),
+  );
 }
 function incidentScenario(
   definition: CampaignDefinition,
@@ -345,6 +393,30 @@ export function verifyCampaignSource(bytes: string, catalog: ScenarioCatalog) {
     return sourceSnapshot(bytes, catalog);
   } catch {
     return undefined;
+  }
+}
+export function checkCampaignSourceAdmission(
+  definition: unknown,
+  catalog: ScenarioCatalog,
+  run: CampaignRun,
+  bytes: string,
+) {
+  try {
+    const checked = validateCampaignDefinition(definition, catalog);
+    if (!checked.ok) return checked;
+    const replay = replayCampaign(checked.definition, catalog, run.operations);
+    if (!replay.ok || canonicalJson(replay.run) !== canonicalJson(run))
+      return failure('INVALID_PRIOR_RECORD');
+    const source = sourceSnapshot(bytes, catalog);
+    if (!source) return failure('INVALID_ADOPTION_SOURCE');
+    if (
+      sourceNeedsCampaignProof(checked.definition, source) &&
+      !hasOriginalSourceProof(replay.run, bytes)
+    )
+      return failure('UNPROVEN_PROTECTED_SOURCE');
+    return { ok: true as const };
+  } catch {
+    return failure('INVALID_JSON_OR_RECORD');
   }
 }
 // Preserve old wrapper bytes as provenance, without treating its order as chronology.
@@ -521,6 +593,12 @@ function apply(
     const snapshot = op.kind === 'checkpoint' ? sourceSnapshot(op.sourceBytes, catalog) : undefined;
     if (op.kind === 'checkpoint' && (!snapshot || snapshot.state.completionReached))
       return failure('INVALID_CHECKPOINT');
+    if (
+      snapshot &&
+      sourceNeedsCampaignProof(definition, snapshot) &&
+      !hasOriginalSourceProof(prior, op.kind === 'checkpoint' ? op.sourceBytes : '')
+    )
+      return failure('UNPROVEN_PROTECTED_SOURCE');
     const scenario = incidentScenario(
       definition,
       catalog,
@@ -574,6 +652,15 @@ function apply(
       op.priorHead !== campaignAttemptHead(attempt)
     )
       return failure('INVALID_COMMAND_BOUNDARY');
+    const guard = evaluateActionGate(
+      definition,
+      attempt.incidentId,
+      attempt.incident.contentVersion,
+      op.command.actionId,
+      campaignActionContext(definition, prior),
+    );
+    if (!guard.ok) return { ok: false, diagnostics: guard.diagnostics };
+    if (!guard.value) return failure('INELIGIBLE_CAMPAIGN_ACTION', op.command.actionId);
     const result = executeCommand(attempt.incident, scenario, op.command);
     if (!result.ok) return failure('REJECTED_COMMAND', op.command.actionId);
     const response = associateOpportunityResponses(definition, catalog, prior, next, op);
@@ -622,6 +709,14 @@ function apply(
     }
     const sources = op.sourceBytes.map((bytes) => sourceSnapshot(bytes, catalog));
     if (sources.some((source) => !source)) return failure('INVALID_ADOPTION_SOURCE');
+    // Validate the entire batch before granting any membership. Current discovery
+    // or another source in this batch does not prove original command eligibility.
+    for (const [index, source] of sources.entries())
+      if (
+        sourceNeedsCampaignProof(definition, source!) &&
+        !hasOriginalSourceProof(prior, op.sourceBytes[index]!)
+      )
+        return failure('UNPROVEN_PROTECTED_SOURCE');
     for (const source of sources) {
       for (const item of definition.evidence)
         if (
@@ -755,6 +850,46 @@ export function getCampaignProgression(
 ) {
   try {
     return getCampaignProgressionUnchecked(definition, catalog, run);
+  } catch {
+    return failure('INVALID_JSON_OR_RECORD');
+  }
+}
+
+// Public read-only projection verifies the complete record before guard queries.
+export function getCampaignActionAvailability(
+  definition: unknown,
+  catalog: ScenarioCatalog,
+  run: CampaignRun,
+) {
+  try {
+    const checked = validateCampaignDefinition(definition, catalog);
+    if (!checked.ok) return checked;
+    const replay = replayCampaign(checked.definition, catalog, run.operations);
+    if (!replay.ok || canonicalJson(replay.run) !== canonicalJson(run))
+      return failure('INVALID_PRIOR_RECORD');
+    const attempt = replay.run.attempts.find((a) => a.id === replay.run.activeAttemptId);
+    if (!attempt)
+      return {
+        ok: true as const,
+        actionIds: [] as string[],
+        diagnostics: [] as CampaignDiagnostic[],
+      };
+    const scenario = incidentScenario(
+      checked.definition,
+      catalog,
+      attempt.incidentId,
+      attempt.incident.contentVersion,
+    )!;
+    return {
+      ok: true as const,
+      ...selectCampaignActionIds(
+        checked.definition,
+        scenario,
+        attempt.incidentId,
+        attempt.incident,
+        campaignActionContext(checked.definition, replay.run),
+      ),
+    };
   } catch {
     return failure('INVALID_JSON_OR_RECORD');
   }

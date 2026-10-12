@@ -20,8 +20,9 @@ implementation while TASK-027 remains active/incomplete. Required final verifica
 and the TASK-033 dependency on TASK-027 are retained.
 TASK-028 has authored eight early Incident authorities and eight investigation
 sidecars under DEC-042, with [unexecuted replay fixtures](docs/TASK-028_IMPLEMENTATION.md).
-Its cross-Incident Security-name guard and complete production definition remain
-pending. No QA result or playable full-campaign acceptance is claimed.
+DEC-043 now approves its [cross-Incident guard candidate](docs/TASK-028_ACTION_GATES_IMPLEMENTATION.md).
+The complete production definition and verification remain pending. No QA result
+or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
 document QA and distinct evaluation PASS. M4 verification remains mandatory before final M5 acceptance/release. Original
 planning drafts remain historical checkpoints. The [M4 plan](docs/M4_IMPLEMENTATION_PLAN.md) preserves chronological

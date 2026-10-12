@@ -1,0 +1,26 @@
+id: DEC-043
+title: Enforce cross-Incident action prerequisites in new campaign definitions
+status: active
+date: '2026-10-13'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 새 캠페인에 행동별 조건·명령 검증 추가.
+request: .project-os/planning/TASK-028.cross-incident-reveal-gate.yaml
+approved_proposal:
+  commit: 1383be0
+  file: specs/architecture/campaign-action-gates-proposal.md
+decision: >-
+  Add explicit actionGates and an action condition context to new exact campaign
+  definitions. Enforce the verified pre-command predicate before simulation,
+  publishing effects/history/samples or advertising protected response options.
+  Validate protected reveal paths; imported protected history requires original
+  campaign provenance, not only local replay. Existing definitions remain unchanged.
+consequences:
+  - Existing operation/record envelopes and physical storage layout remain unchanged; no old authority migration or reinterpretation.
+  - False prerequisites diagnose ineligible actions, unavailable observations diagnose explicitly; neither is an accepted input.
+  - GHOST_ARTIFACT precedes the Security attribution investigation; ordinary certificate recovery and Act access remain independent of optional clues.
+  - UI hiding is additional presentation protection, never the sole domain authority.
+  - Use existing validated same-run checkpoint association bytes/history as provenance; unassociated protected sources are incompatible and remain preserved without partial import.
+  - QA remains deferred; no verification PASS, production model/initial values, ending balance, task completion, push or release is authorized.
+supersedes: null

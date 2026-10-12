@@ -16,6 +16,7 @@ import { behaviorDefinitionSchema, validateBehaviorDefinition, metricKeys } from
 import { predictionDefinitionSchema, validatePredictionDefinition } from './prediction.ts';
 import { endingDefinitionSchema, validateEndingDefinition } from './ending.ts';
 import { opportunityDefinitionSchema, validateOpportunityDefinition } from './opportunity.ts';
+import { actionGateSchema, validateActionGates } from './action-gates.ts';
 export { metricKeys } from './behavior.ts';
 
 const id = z.string().min(1);
@@ -45,6 +46,7 @@ export const campaignDefinitionSchema = z
     behavior: behaviorDefinitionSchema.optional(),
     prediction: predictionDefinitionSchema.optional(),
     endings: endingDefinitionSchema.optional(),
+    actionGates: z.array(actionGateSchema).min(1).optional(),
     branches: z
       .array(
         z
@@ -171,6 +173,7 @@ export function validateCampaignDefinition(
     return checked.success ? checked.data : undefined;
   };
   const issues: CampaignDiagnostic[] = [];
+  issues.push(...validateActionGates(d, catalog));
   if (d.replayVersion === 2) {
     if (d.recordVersion !== 2 || !d.opportunities || !d.behavior)
       issues.push({ code: 'INVALID_V2_CONTRACT', path: '$' });

@@ -1,5 +1,11 @@
 # TASK-028 — Early content implementation checkpoint
 
+Later checkpoint: DEC-043 approves cross-Incident action guards. The
+[action guard candidate](TASK-028_ACTION_GATES_IMPLEMENTATION.md) now includes
+condition-driven Security-name data and explicit archive investigation. The
+original operational checkpoint below is retained as history. Complete production
+definition, model decisions and all deferred verification remain outstanding.
+
 ## Completed authoring, not verified task completion
 
 DEC-042 records human-approved version bindings. Under DEC-041 and the latest

@@ -31,6 +31,7 @@ relevant_files:
   - src/scenario/
   - src/tests/
 active_decisions:
+  - .project-os/decisions/DEC-043-campaign-action-prerequisites.yaml
   - .project-os/decisions/DEC-042-full-campaign-content-version-baseline.yaml
   - .project-os/decisions/DEC-041-task028-implementation-before-task027-native-qa.yaml
   - .project-os/decisions/DEC-040-full-campaign-package-and-presentation.yaml

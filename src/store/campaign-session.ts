@@ -5,11 +5,11 @@ import {
   prepareCampaignOperation,
   getCampaignProgression,
   getCampaignBranches,
+  getCampaignActionAvailability,
   type CampaignOperation,
   type CampaignRun,
 } from '../engine/campaign/transitions.ts';
 import { resolveCampaignEnding, type EndingResult } from '../engine/campaign/endings.ts';
-import { getAvailableActionIds } from '../engine/simulation.ts';
 import { getCampaignPresentation } from '../engine/campaign/opportunities.ts';
 import { scenarioVersionKey } from '../scenario/catalog.ts';
 import type { CampaignDefinition } from '../scenario/campaign.ts';
@@ -42,6 +42,7 @@ export interface CampaignView {
   progress: ReturnType<typeof getCampaignProgression>;
   branches: ReturnType<typeof getCampaignBranches> | null;
   availableActions: { id: string; title: string; durationSeconds: number }[];
+  actionDiagnostics: string[];
   availableOpportunityRuleIds: string[];
   evidence: { id: string; title: string; description: string }[];
 }
@@ -120,9 +121,10 @@ export function createCampaignSessionStore(options: {
     const a = run.attempts.find((t) => t.id === run.activeAttemptId);
     const scenario =
       a && catalog.get(scenarioVersionKey(a.incident.scenarioId, a.incident.contentVersion));
+    const actionAvailability = getCampaignActionAvailability(d, catalog, run);
     const availableActions =
       a && scenario && !a.incident.completionReached
-        ? getAvailableActionIds(a.incident, scenario).map((id) => {
+        ? (actionAvailability.ok ? actionAvailability.actionIds : []).map((id) => {
             const action = scenario.actions.find((t) => t.id === id)!;
             return { id, title: action.title, durationSeconds: action.durationSeconds };
           })
@@ -181,6 +183,7 @@ export function createCampaignSessionStore(options: {
       progress: getCampaignProgression(d, catalog, run),
       branches: d.branches ? getCampaignBranches(d, catalog, run) : null,
       availableActions,
+      actionDiagnostics: actionAvailability.diagnostics.map((d) => d.code),
       availableOpportunityRuleIds,
       evidence,
     });

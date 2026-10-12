@@ -7,7 +7,7 @@ import {
 } from '../../scenario/opportunity.ts';
 import type { Scenario } from '../../scenario/schema.ts';
 import { scenarioVersionKey } from '../../scenario/catalog.ts';
-import { getAvailableActionIds } from '../simulation.ts';
+import { selectCampaignActionIds, evaluateActionGate } from './action-gates.ts';
 import {
   calculateVerifiedPrediction,
   verifiedPredictionContext,
@@ -19,9 +19,12 @@ import {
   type Condition,
   type Observation,
   type CampaignDiagnostic,
+  type ConditionResult,
+  orderedDiagnostics,
 } from './conditions.ts';
 import {
   campaignObservations,
+  campaignActionContext,
   campaignAttemptHead,
   replayCampaign,
   type CampaignRun,
@@ -84,12 +87,33 @@ export function getCampaignPresentation(
     const diagnostics = checks.flatMap((c) => (c.ok ? [] : c.diagnostics));
     if (diagnostics.length) return { ok: false, diagnostics };
     if (checks.some((c) => c.ok && !c.value)) return { ok: true, presentation: null };
+    const choiceGuard = choiceActionGuard(
+      d,
+      verified.run,
+      a.incidentId,
+      a.incident.contentVersion,
+      rule,
+    );
+    if (!choiceGuard.ok) return choiceGuard;
+    if (!choiceGuard.value) return { ok: true, presentation: null };
     const scenario = catalog.get(
       scenarioVersionKey(a.incident.scenarioId, a.incident.contentVersion),
     )!;
+    const availability = selectCampaignActionIds(
+      d,
+      scenario,
+      a.incidentId,
+      a.incident,
+      campaignActionContext(d, verified.run),
+      rule.kind === 'recommendation'
+        ? [rule.recommendedActionId!]
+        : rule.responses.map((r) => r.actionId),
+    );
+    if (availability.diagnostics.length)
+      return { ok: false, diagnostics: availability.diagnostics };
     if (
       rule.kind === 'recommendation' &&
-      !getAvailableActionIds(a.incident, scenario).includes(rule.recommendedActionId!)
+      !availability.actionIds.includes(rule.recommendedActionId!)
     )
       return { ok: true, presentation: null };
     if (rule.kind === 'prediction') {
@@ -143,6 +167,22 @@ export interface OpportunityState {
 }
 type Result = { ok: true } | { ok: false; diagnostics: CampaignDiagnostic[] };
 const fail = (code: string, path = '$'): Result => ({ ok: false, diagnostics: [{ code, path }] });
+function choiceActionGuard(
+  d: CampaignDefinition,
+  run: CampaignRun,
+  incidentId: string,
+  contentVersion: string,
+  rule: OpportunityRule,
+): ConditionResult {
+  if (rule.kind !== 'choice') return { ok: true, value: true };
+  const checks = [...new Set(rule.responses.map((r) => r.actionId))].map((id) =>
+    evaluateActionGate(d, incidentId, contentVersion, id, campaignActionContext(d, run)),
+  );
+  const diagnostics = orderedDiagnostics(checks.flatMap((c) => (c.ok ? [] : c.diagnostics)));
+  return diagnostics.length
+    ? { ok: false, diagnostics }
+    : { ok: true, value: checks.every((c) => c.ok && c.value) };
+}
 function context(
   d: CampaignDefinition,
   run: CampaignRun,
@@ -237,10 +277,30 @@ export function applyOpportunityOperation(
   const diagnostics = checked.flatMap((r) => (r.ok ? [] : r.diagnostics));
   if (diagnostics.length) return { ok: false, diagnostics };
   if (checked.some((r) => r.ok && !r.value)) return fail('UNAVAILABLE_PRESENTATION');
+  const choiceGuard = choiceActionGuard(
+    d,
+    before,
+    attempt.incidentId,
+    attempt.incident.contentVersion,
+    rule,
+  );
+  if (!choiceGuard.ok) return choiceGuard;
+  if (!choiceGuard.value) return fail('UNAVAILABLE_PRESENTATION');
   const scenario = catalog.get(
     scenarioVersionKey(attempt.incident.scenarioId, rule.contentVersion),
   )!;
-  const available = getAvailableActionIds(attempt.incident, scenario);
+  const guarded = selectCampaignActionIds(
+    d,
+    scenario,
+    attempt.incidentId,
+    attempt.incident,
+    campaignActionContext(d, before),
+    rule.kind === 'recommendation'
+      ? [rule.recommendedActionId!]
+      : rule.responses.map((r) => r.actionId),
+  );
+  if (guarded.diagnostics.length) return { ok: false, diagnostics: guarded.diagnostics };
+  const available = guarded.actionIds;
   if (rule.kind === 'recommendation' && !available.includes(rule.recommendedActionId!))
     return fail('UNAVAILABLE_RECOMMENDATION');
   if (op.kind === 'prepare_opportunity') {
@@ -321,16 +381,28 @@ export function associateOpportunityResponses(
   if (!next.opportunities || !d.opportunities) return { ok: true };
   const state = next.opportunities;
   const attempt = before.attempts.find((a) => a.id === op.attemptId)!;
-  const available = getAvailableActionIds(
-    attempt.incident,
+  const available = selectCampaignActionIds(
+    d,
     catalog.get(scenarioVersionKey(attempt.incident.scenarioId, attempt.incident.contentVersion))!,
-  );
+    attempt.incidentId,
+    attempt.incident,
+    campaignActionContext(d, before),
+  ).actionIds;
   const candidates: OpportunityResponse[] = [];
   for (const ack of state.acknowledgements) {
     const prep = state.preparations.find((p) => p.id === ack.preparationId)!;
     if (prep.attemptId !== attempt.id || state.responses.some((r) => r.preparationId === prep.id))
       continue;
     const rule = d.opportunities.rules.find((r) => r.id === prep.ruleId)!;
+    const choiceGuard = choiceActionGuard(
+      d,
+      before,
+      attempt.incidentId,
+      attempt.incident.contentVersion,
+      rule,
+    );
+    if (!choiceGuard.ok) return choiceGuard;
+    if (!choiceGuard.value) continue;
     const response = rule.responses.find((r) => r.actionId === op.command.actionId);
     const observations = context(d, before, rule, prep.atSeconds);
     // Continuing validity always validates, even if this command is unrelated.
@@ -371,6 +443,14 @@ export function associateOpportunityResponses(
         continue;
       positive = response.actionId !== prediction.result.actionId;
     } else if (rule.kind === 'recommendation') {
+      const guard = evaluateActionGate(
+        d,
+        attempt.incidentId,
+        attempt.incident.contentVersion,
+        rule.recommendedActionId!,
+        campaignActionContext(d, before),
+      );
+      if (!guard.ok) return guard;
       if (!available.includes(rule.recommendedActionId!)) continue;
       positive = response.actionId === rule.recommendedActionId;
     }

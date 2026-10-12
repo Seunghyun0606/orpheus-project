@@ -1,0 +1,25 @@
+task: TASK-028
+date: '2026-10-13'
+status: awaiting_human_decision
+type: architecture_change
+question: 새 캠페인의 모델 버전·초기 상태·공통 행동 분류 기준을 제안대로 확정할까요?
+proposal: specs/architecture/production-player-model-baseline-proposal.md
+reason: Approved content versions/action guards do not select production model versions, initial hidden values or classification tuning. A complete v2 definition needs explicit authorities; fixtures cannot supply defaults.
+proposed_baseline:
+  model_versions: Fresh production behavior/prediction/opportunity IDs, each 1.0.0; schema/formula 1 and classification versions 1.0.0.
+  initial_state: Act 1; corporate/NULL alignment and seven hidden values 0, discoveries/completions empty and flags false; unsupported rates remain unavailable, not zero.
+  denominator: Explicit authored operational interventions only.
+  evidence: Relevant fresh newly obtained same-attempt investigation/attributed delegation; proposed freshness 180 action-driven seconds; no imported/inherited support.
+  depth: Distinct declared investigation items per attempt.
+  prediction: Explicit comparable-context mappings; minimum 3 eligible historical samples; ties/insufficient support UNKNOWN, confidence empirical.
+  exposure: No ORPHEUS guidance exposure in Acts 1–3; later declared opportunities require real ACK and valid responses.
+unchanged:
+  - Established pooled formulas and strict unavailable-leaf policy, guard/retry/receipt and immutable old authority contracts.
+  - QA deferred; current TASK-024/027/028 incomplete and final M4/M5 verification mandatory.
+  - Complete26 production content/ending authority still absent; no incomplete official run or fixture fallback.
+not_selected: Numerical campaign effects, production ending versions/balance, final actions, epilogues, dependency exceptions, push or release.
+options:
+  - key: A
+    label: 제안한 공통 모델·초기값 기준 승인 후 정의 연결
+  - key: B
+    label: 다른 초기값·분류 기준 지정 후 정의 연결

@@ -4,6 +4,46 @@ version: '1.0.0'
 scenarioId: 'INC-006'
 contentVersion: '1.0.0'
 panels:
+  - id: 'archive-investigation'
+    title: 'Unsigned workload archive investigation'
+    kind: 'documents'
+    reveal:
+      - type: 'action_completed'
+        actionId: 'COMPARE_TRUST_HISTORY'
+    campaignReveal:
+      type: 'compare'
+      reference: 'CURRENT_ACT'
+      operator: 'gte'
+      expected: 3
+    actionIds: ['RETRACE_WORKLOAD_ARCHIVE']
+    blocks:
+      - kind: 'signals'
+        id: 'archive-lineage'
+        signalIds: ['WORKLOAD_ARCHIVE_LINEAGE']
+  - id: 'security-attribution'
+    title: 'Security attribution investigation'
+    kind: 'war_room'
+    reveal:
+      - type: 'evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+      - type: 'evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+    campaignReveal:
+      type: 'all'
+      children:
+        - type: 'compare'
+          reference: 'CURRENT_ACT'
+          operator: 'gte'
+          expected: 3
+        - type: 'compare'
+          reference: 'GHOST_DISCOVERED'
+          operator: 'eq'
+          expected: true
+    actionIds: ['READ_SECURITY_ATTRIBUTION']
+    blocks:
+      - kind: 'signals'
+        id: 'security-notice'
+        signalIds: ['SECURITY_ATTRIBUTION']
   - id: 'metrics'
     title: 'Service pressure and customer-facing errors'
     kind: 'metrics'

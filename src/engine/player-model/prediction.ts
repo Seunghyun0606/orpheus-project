@@ -7,10 +7,11 @@ import {
   type PredictionDefinition,
   type PredictionScenario,
 } from '../../scenario/prediction.ts';
-import { getAvailableActionIds } from '../simulation.ts';
+import { selectCampaignActionIds } from '../campaign/action-gates.ts';
 import { canonicalJson } from '../campaign/canonical.ts';
 import {
   campaignObservations,
+  campaignActionContext,
   campaignAttemptHead,
   replayCampaign,
   type CampaignResult,
@@ -232,9 +233,16 @@ export function calculateVerifiedPrediction(
     if (applicable.ok && !applicable.value)
       return fail('INAPPLICABLE_PREDICTION_CONTEXT', context.id);
     const scenario = catalog.get(scenarioVersionKey(mapping.scenarioId, mapping.contentVersion))!;
-    const engineAvailable = attempt.incident.completionReached
-      ? []
-      : getAvailableActionIds(attempt.incident, scenario);
+    const guarded = selectCampaignActionIds(
+      d,
+      scenario,
+      attempt.incidentId,
+      attempt.incident,
+      campaignActionContext(d, run),
+      choices.map((c) => c.choice.actionId),
+    );
+    if (guarded.diagnostics.length) return { ok: false, diagnostics: guarded.diagnostics };
+    const engineAvailable = guarded.actionIds;
     const availableCandidates = choices
       .filter((c) => c.result.ok && c.result.value && engineAvailable.includes(c.choice.actionId))
       .map((c) => ({ candidateId: c.choice.candidateId, actionId: c.choice.actionId }));

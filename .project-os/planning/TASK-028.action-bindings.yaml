@@ -1,0 +1,63 @@
+task: TASK-028
+date: '2026-10-13'
+status: authored_fragment_not_runtime_campaign_definition
+authority: .project-os/decisions/DEC-043-campaign-action-prerequisites.yaml
+definition_identity: {id: orpheus-full-campaign, version: 1.0.0}
+description: Exact logical bindings to compose into the new complete definition after model/initial-value decisions; not loaded by the production package loader.
+references:
+  - id: CURRENT_ACT
+    version: 1.0.0
+    source: act
+    key: current
+    valueType: number
+    contexts: [progression, effect, branch, action]
+  - id: GHOST_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: GHOST_ARTIFACT
+    valueType: boolean
+    contexts: [effect, branch, action]
+actionGates:
+  - id: INC-006-SECURITY-PREREQUISITE
+    incidentId: INC-006
+    contentVersion: 1.0.0
+    actionId: READ_SECURITY_ATTRIBUTION
+    eligibility:
+      type: all
+      children:
+        - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 3}
+        - {type: compare, reference: GHOST_DISCOVERED, operator: eq, expected: true}
+initial_narrative_flags_fragment:
+  GHOST_ARTIFACT: false
+  NULL_NAME: false
+evidence_bindings_fragment:
+  - {id: GHOST_NATIVE, scenarioId: INC-005, evidenceId: GHOST_ARTIFACT}
+  - {id: GHOST_REINVESTIGATED, scenarioId: INC-006, evidenceId: GHOST_ARCHIVE_FRAGMENT}
+  - {id: NULL_NAME, scenarioId: INC-006, evidenceId: NULL_NAME}
+logical_effects_fragment:
+  - id: GHOST_NATIVE_DISCOVERY
+    trigger: {incidentId: INC-005, type: evidence_revealed, targetId: GHOST_ARTIFACT}
+    boundary: post_event
+    condition: {type: compare, reference: GHOST_DISCOVERED, operator: eq, expected: false}
+    alignment: {}
+    values: {}
+    narrativeFlags: {GHOST_ARTIFACT: true}
+    endingFlags: {}
+  - id: GHOST_ARCHIVE_DISCOVERY
+    trigger: {incidentId: INC-006, type: evidence_revealed, targetId: GHOST_ARCHIVE_FRAGMENT}
+    boundary: post_event
+    condition: {type: compare, reference: GHOST_DISCOVERED, operator: eq, expected: false}
+    alignment: {}
+    values: {}
+    narrativeFlags: {GHOST_ARTIFACT: true}
+    endingFlags: {}
+  - id: SECURITY_NAME_DISCOVERY
+    trigger: {incidentId: INC-006, type: evidence_revealed, targetId: NULL_NAME}
+    boundary: post_event
+    condition: {type: compare, reference: GHOST_DISCOVERED, operator: eq, expected: true}
+    alignment: {}
+    values: {}
+    narrativeFlags: {NULL_NAME: true}
+    endingFlags: {}
+verification: not_run
+remaining: Complete definition, production models/initial values, campaign-sequence/retry/negative/source-provenance QA and later reinvestigation routes.

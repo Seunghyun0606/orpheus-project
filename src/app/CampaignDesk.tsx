@@ -76,6 +76,9 @@ export function CampaignDesk({
         />
       </header>
       {state.error ? <p role="alert">Campaign operation not confirmed: {state.error}</p> : null}
+      {state.view?.actionDiagnostics.length ? (
+        <p role="alert">Some response options require valid campaign observations.</p>
+      ) : null}
       <p role="status">
         {state.busy
           ? 'Waiting for durable transaction completion'

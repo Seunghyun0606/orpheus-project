@@ -50,6 +50,14 @@ initialState:
       value: 'Issuer ca-18 reached production before its trust bundle. Operational evidence alone does not establish attribution.'
       revealed: false
       serviceId: 'TRUST_VERIFIER'
+    - id: 'WORKLOAD_ARCHIVE_LINEAGE'
+      value: 'Unsigned observer manifest / shadow-7 request source / missing signature; the deleted log sequence correlates with this workload.'
+      revealed: false
+      serviceId: 'TRUST_VERIFIER'
+    - id: 'SECURITY_ATTRIBUTION'
+      value: 'Threat actor codename: NULL. This classification does not establish identity or motive.'
+      revealed: false
+      serviceId: 'IDENTITY_GATEWAY'
   resources:
     - id: 'CUSTOMER_IMPACT'
       value: 0
@@ -85,6 +93,38 @@ incident:
     - id: 'RETRY_PRESSURE'
       label: 'Rejected identity sessions retry and consume handshake capacity'
 actions:
+  - id: 'RETRACE_WORKLOAD_ARCHIVE'
+    title: 'Investigate the unsigned workload archive'
+    category: 'INVESTIGATE'
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: 'action_completed'
+        actionId: 'COMPARE_TRUST_HISTORY'
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 18
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'WORKLOAD_ARCHIVE_LINEAGE'
+    temporaryEffects: []
+  - id: 'READ_SECURITY_ATTRIBUTION'
+    title: 'Read the Security attribution notice'
+    category: 'INVESTIGATE'
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: 'evidence'
+        evidenceId: 'OPERATIONAL_DIAGNOSIS'
+      - type: 'evidence'
+        evidenceId: 'CONFIGURATION_COMPARISON'
+    costs:
+      - resourceId: 'CUSTOMER_IMPACT'
+        amount: 12
+    effects:
+      - type: 'reveal_signal'
+        signalId: 'SECURITY_ATTRIBUTION'
+    temporaryEffects: []
   - id: 'OPEN_LOGS'
     title: 'Open Identity Gateway logs'
     category: 'OBSERVE'
@@ -382,7 +422,35 @@ evidence:
   - id: 'TEAM_DIAGNOSIS'
     title: 'Marcus / Security investigation report'
     description: 'Issuer ca-18 reached production before its trust bundle. Operational evidence alone does not establish attribution.'
-narratives: []
+  - id: 'GHOST_ARCHIVE_FRAGMENT'
+    title: 'Unsigned workload archive fragment'
+    description: 'A fresh archive investigation correlates shadow-7 synthetic requests, an unsigned workload and the missing log sequence. It does not import an earlier player action.'
+    sourceNarrativeId: 'GHOST_ARCHIVE_RECONSTRUCTION'
+  - id: 'NULL_NAME'
+    title: 'Security attribution notice'
+    description: 'Marcus reports that Security is using NULL as an operational codename. The available evidence does not establish the actor identity or intent.'
+    sourceNarrativeId: 'SECURITY_THREAT_NAME'
+narratives:
+  - id: 'GHOST_ARCHIVE_RECONSTRUCTION'
+    title: 'Correlated workload archive'
+    body: 'The unsigned workload, synthetic source and deleted log sequence match. This investigation recovers a previously unexplained artifact, not an attribution.'
+    conditions:
+      - type: 'action_completed'
+        actionId: 'RETRACE_WORKLOAD_ARCHIVE'
+    effects:
+      - type: 'reveal_evidence'
+        evidenceId: 'GHOST_ARCHIVE_FRAGMENT'
+  - id: 'SECURITY_THREAT_NAME'
+    title: 'Security threat classification'
+    body: 'MARCUS: Security is tracking this activity under the name NULL. That is a classification, not an explanation of who or what is behind it.'
+    conditions:
+      - type: 'action_completed'
+        actionId: 'READ_SECURITY_ATTRIBUTION'
+    effects:
+      - type: 'reveal_evidence'
+        evidenceId: 'NULL_NAME'
+      - type: 'post_message'
+        messageId: 'SECURITY_NAME_REPORT'
 warRoom:
   roles:
     - id: 'MAYA'
@@ -394,6 +462,10 @@ warRoom:
     - id: 'OPERATOR'
       name: 'Operator'
   messages:
+    - id: 'SECURITY_NAME_REPORT'
+      roleId: 'MARCUS'
+      text: 'Security codename: NULL. The designation does not establish identity, motive or control of this incident.'
+      initial: false
     - id: 'MAYA_OPEN'
       roleId: 'MAYA'
       text: 'Issuer changes before verifier trust propagates. Separate temporary stabilization from verified cause.'

@@ -1,6 +1,11 @@
 # TASK-028 — Cross-Incident action gate proposal
 
-Status: proposed only; requires a material schema/replay behavior decision.
+Status: Option A approved through DEC-043; implementation candidate is unverified.
+The proposal at `1383be0` is the approval checkpoint. See the
+[concrete contract](campaign-action-gates.md) and
+[implementation](../../docs/TASK-028_ACTION_GATES_IMPLEMENTATION.md).
+
+Historical pre-approval context:
 No guard schema, condition context, command transition or import policy is changed
 by this document. DEC-042 approves versions, not cross-Incident narrative semantics.
 

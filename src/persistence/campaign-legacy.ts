@@ -4,6 +4,7 @@ import {
   prepareCampaignOperation,
   resumeCampaignAssociation,
   verifyCampaignSource,
+  checkCampaignSourceAdmission,
   type CampaignOperation,
   type CampaignRun,
 } from '../engine/campaign/transitions.ts';
@@ -16,6 +17,14 @@ export interface LegacyReaders {
   progress: Reader;
 }
 type LegacySources = { incident: string | null; progress: string | null };
+type CampaignPreviewAuthority = { definition: unknown; run: CampaignRun };
+const guardedAuthority = (
+  definition: unknown,
+  run: CampaignRun,
+): CampaignPreviewAuthority | undefined =>
+  definition !== null && typeof definition === 'object' && 'actionGates' in definition
+    ? { definition, run }
+    : undefined;
 type Failure = { ok: false; code: string };
 const fail = (code: string): Failure => ({ ok: false, code });
 function readSources(readers: LegacyReaders): LegacySources | undefined {
@@ -30,11 +39,24 @@ function readSources(readers: LegacyReaders): LegacySources | undefined {
     return undefined;
   }
 }
-function inspect(sources: LegacySources, catalog: ReadonlyMap<string, Scenario>) {
+function inspect(
+  sources: LegacySources,
+  catalog: ReadonlyMap<string, Scenario>,
+  authority?: CampaignPreviewAuthority,
+) {
   const bytes = legacySnapshotBytes(sources);
   if (!bytes?.length) return fail('NO_OR_INVALID_LEGACY_SOURCE');
   const discoveries = [];
   for (const sourceBytes of bytes) {
+    if (authority) {
+      const admitted = checkCampaignSourceAdmission(
+        authority.definition,
+        catalog,
+        authority.run,
+        sourceBytes,
+      );
+      if (!admitted.ok) return fail(admitted.diagnostics[0]?.code ?? 'INVALID_LEGACY_SOURCE');
+    }
     const source = verifyCampaignSource(sourceBytes, catalog);
     if (!source) return fail('INVALID_LEGACY_SOURCE');
     discoveries.push({
@@ -49,9 +71,10 @@ function inspect(sources: LegacySources, catalog: ReadonlyMap<string, Scenario>)
 export function previewLegacyDiscoveries(
   readers: LegacyReaders,
   catalog: ReadonlyMap<string, Scenario>,
+  authority?: CampaignPreviewAuthority,
 ) {
   const sources = readSources(readers);
-  return sources ? inspect(sources, catalog) : fail('LEGACY_STORAGE_ERROR');
+  return sources ? inspect(sources, catalog, authority) : fail('LEGACY_STORAGE_ERROR');
 }
 type Preview = Extract<ReturnType<typeof previewLegacyDiscoveries>, { ok: true }>;
 type AdoptionIdentity = Omit<
@@ -67,7 +90,7 @@ export function prepareLegacyAdoption(
   identity: AdoptionIdentity,
 ) {
   try {
-    const current = previewLegacyDiscoveries(readers, catalog);
+    const current = previewLegacyDiscoveries(readers, catalog, guardedAuthority(definition, run));
     if (!current.ok) return current;
     if (canonicalJson(current) !== canonicalJson(preview)) return fail('LEGACY_SOURCE_CHANGED');
     return prepareCampaignOperation(definition, catalog, run, {
@@ -79,10 +102,23 @@ export function prepareLegacyAdoption(
     return fail('INVALID_LEGACY_PREVIEW');
   }
 }
-export function previewLegacyCheckpoint(reader: Reader, catalog: ReadonlyMap<string, Scenario>) {
+export function previewLegacyCheckpoint(
+  reader: Reader,
+  catalog: ReadonlyMap<string, Scenario>,
+  authority?: CampaignPreviewAuthority,
+) {
   try {
     const sourceBytes = reader.read();
     if (sourceBytes === null) return fail('CHECKPOINT_NOT_FOUND');
+    if (authority) {
+      const admitted = checkCampaignSourceAdmission(
+        authority.definition,
+        catalog,
+        authority.run,
+        sourceBytes,
+      );
+      if (!admitted.ok) return fail(admitted.diagnostics[0]?.code ?? 'INVALID_CHECKPOINT');
+    }
     const source = verifyCampaignSource(sourceBytes, catalog);
     if (!source) return fail('INVALID_CHECKPOINT');
     return {
@@ -107,7 +143,7 @@ export function prepareLegacyCheckpoint(
   identity: CheckpointIdentity,
 ) {
   try {
-    const current = previewLegacyCheckpoint(reader, catalog);
+    const current = previewLegacyCheckpoint(reader, catalog, guardedAuthority(definition, run));
     if (!current.ok) return current;
     if (canonicalJson(current) !== canonicalJson(preview)) return fail('LEGACY_SOURCE_CHANGED');
     return prepareCampaignOperation(definition, catalog, run, {

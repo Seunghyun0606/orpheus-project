@@ -46,7 +46,7 @@ export const referenceSchema = z
       'metric',
     ]),
     key: z.string().min(1),
-    contexts: z.array(z.enum(['progression', 'effect', 'branch', 'ending'])).min(1),
+    contexts: z.array(z.enum(['progression', 'effect', 'branch', 'ending', 'action'])).min(1),
   })
   .strict();
 export type Reference = z.infer<typeof referenceSchema>;
@@ -60,7 +60,7 @@ const observationSchema = z.discriminatedUnion('status', [
 const contextSchema = z
   .object({
     definitionVersion: z.string().min(1),
-    kind: z.enum(['progression', 'effect', 'branch', 'ending']),
+    kind: z.enum(['progression', 'effect', 'branch', 'ending', 'action']),
     runId: z.string().min(1),
     boundary: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER),
     observations: z.record(z.string(), observationSchema),
