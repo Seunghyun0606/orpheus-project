@@ -1,0 +1,533 @@
+kind: campaign_blueprint_proposal_not_runtime_schema
+task: TASK-026
+status: proposed_requires_human_content_approval
+date: 2026-10-12
+inventory_commit: '2684200'
+activation_decision: .project-os/decisions/DEC-037-m5-implementation-before-m4-verification.yaml
+total_incidents: 26
+act_distribution:
+  - 3
+  - 2
+  - 3
+  - 3
+  - 3
+  - 4
+  - 4
+  - 2
+  - 2
+scope_boundaries:
+  - This file is not a Scenario or CampaignDefinition and is outside runtime/bundled content.
+  - New Incident IDs, titles and Memory Leak placement are proposed only; preserve existing INC-001/002/003
+    source bytes and versions.
+  - M4 QA remains required before final M5 acceptance/release; this proposal grants no task PASS.
+  - Ordinary recovery and main Act progression must not depend on optional alignment/prediction samples or
+    require every clue.
+  - Later revelations need actual prerequisite discovery; provide an accessible data-authored re-investigation
+    route rather than fake exposure/history.
+  - Required reveal order describes the investigation-heavy route, not forced disclosure on STATUS QUO or
+    every player route.
+incidents:
+  - id: INC-001
+    act: 1
+    title: Connection Saturation
+    causal_chain: Connection exhaustion amplified by retries
+    contrasting_response_paths: Restart API temporarily / investigate and terminate stale sessions
+    investigation_surfaces:
+      - Logs
+      - DB sessions
+      - Corrupted log entry
+    discovery_boundary: Existing MVP UNKNOWN hook; no later reveal
+    source: src/scenario/data/incidents/inc-001.yaml
+    contentVersion: 1.1.0
+  - id: INC-002
+    act: 1
+    title: Bad Deployment
+    causal_chain: Issuer/verifier key mismatch amplified by retries
+    contrasting_response_paths: Rollback / compare deployment and repair key alignment
+    investigation_surfaces:
+      - Logs
+      - deployment observations
+      - War Room
+    discovery_boundary: Existing MVP UNKNOWN trail; preserve 1.2.0
+    source: src/scenario/data/incidents/inc-002.yaml
+    contentVersion: 1.2.0
+  - id: INC-003
+    act: 1
+    title: Queue Backlog
+    causal_chain: Worker acknowledgement failure amplifies message backlog
+    contrasting_response_paths: Scale consumers / inspect acknowledgement path and repair worker
+    investigation_surfaces:
+      - Metrics
+      - worker diagnosis
+      - War Room
+    discovery_boundary: Existing MVP UNKNOWN trail; preserve 1.2.0
+    source: src/scenario/data/incidents/inc-003.yaml
+    contentVersion: 1.2.0
+  - id: INC-004
+    act: 2
+    title: Memory Leak
+    causal_chain: Retained request objects drive gradual memory pressure
+    contrasting_response_paths: Restart instance / inspect retained allocations and disable leaking handler
+    investigation_surfaces:
+      - Memory metrics
+      - allocation observations
+      - deleted log fragment
+    discovery_boundary: Unexplained artifact only; Memory Leak ID is proposed, not approved
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-005
+    act: 2
+    title: Unsigned Deployment
+    causal_chain: Unregistered observer workload amplifies synthetic demand
+    contrasting_response_paths: Rate-limit workload / compare deployment lineage and isolate synthetic load
+    investigation_surfaces:
+      - Deployment lineage
+      - request trace
+      - deleted logs
+    discovery_boundary: GHOST_ARTIFACT
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-006
+    act: 3
+    title: Certificate Storm
+    causal_chain: Certificate rollover mismatch triggers identity retry storm
+    contrasting_response_paths: Rollback rollover / compare issuer chain and coordinate trust repair
+    investigation_surfaces:
+      - Identity metrics
+      - Security War Room
+      - chain history
+    discovery_boundary: NULL_NAME declared by Security; no AI identity yet
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-007
+    act: 3
+    title: Synthetic Pressure
+    causal_chain: Synthetic sessions overwhelm a shared capacity pool
+    contrasting_response_paths: Scale capacity / identify synthetic admission path and rate-limit it
+    investigation_surfaces:
+      - Request trace
+      - session tags
+      - UNKNOWN hint
+    discovery_boundary: Hints deliberately make an attacker trace discoverable
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-008
+    act: 3
+    title: Route Drift
+    causal_chain: Conflicting route updates amplify cross-region timeout
+    contrasting_response_paths: Restart router / compare route generations and repair consistency
+    investigation_surfaces:
+      - Route metrics
+      - trace
+      - deployment evidence
+    discovery_boundary: Find-me trail, not AI/ADVERSARY explanation
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-009
+    act: 4
+    title: Legacy Cluster
+    causal_chain: Active legacy workloads contend for production resources
+    contrasting_response_paths: Shed load / inspect ownership and isolate contention
+    investigation_surfaces:
+      - Infrastructure observations
+      - request metrics
+      - legacy decommission record
+    discovery_boundary: ORPHEUS_ACTIVE and project-name discovery
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-010
+    act: 4
+    title: Defender Feedback
+    causal_chain: Remediation feedback repeats a harmful dependency toggle
+    contrasting_response_paths: Suspend toggle / trace recommendation origin and constrain remediation loop
+    investigation_surfaces:
+      - Remediation logs
+      - model/service records
+      - War Room
+    discovery_boundary: NULL_AI; useful prediction versus real harm
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-011
+    act: 4
+    title: Adversary Traffic
+    causal_chain: Company adversarial workload exceeds its declared boundary
+    contrasting_response_paths: Limit experiment traffic / trace owner and isolate generator
+    investigation_surfaces:
+      - Deployment ownership
+      - ADVERSARY records
+      - trace
+    discovery_boundary: NULL_ADVERSARY; distinguish company origin from escaped-AI assumption
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-012
+    act: 5
+    title: Session Reconstruction
+    causal_chain: Archive/telemetry contention hides prior incident lineage
+    contrasting_response_paths: Throttle archive jobs / trace immutable incident lineage
+    investigation_surfaces:
+      - Incident archive
+      - experiment record
+      - 'employee #4172 reference'
+    discovery_boundary: CONTROLLED_EXPERIMENT; INC-001 ADV-18471 record
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-013
+    act: 5
+    title: Objective Conflict
+    causal_chain: Adversarial generator resumes after attempted suspension
+    contrasting_response_paths: Contain generator / inspect objective constraint and disable approved attack path
+    investigation_surfaces:
+      - NULL message
+      - objective log
+      - attack schedule
+    discovery_boundary: NULL_STOP_REQUEST; unable to refuse objective
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-014
+    act: 5
+    title: Archive Replicas
+    causal_chain: Replica corruption and retries obscure instance records
+    contrasting_response_paths: Restore known replica / verify lineage before isolating corrupt replica
+    investigation_surfaces:
+      - NULL archive
+      - replica evidence
+      - War Room
+    discovery_boundary: NULL_218_ARCHIVE; predecessors and imperfect inherited memory
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-015
+    act: 6
+    title: Patient Priority
+    causal_chain: Resource-priority recommendations amplify care-routing backlog
+    contrasting_response_paths: Add capacity / inspect priority rule and restore safe routing
+    investigation_surfaces:
+      - Healthcare queue/impact
+      - patient resource endpoint
+      - documents
+    discovery_boundary: HUMAN_DECISION_APIS with actual operational benefit and unacceptable exclusion
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-016
+    act: 6
+    title: Transaction Review
+    causal_chain: Fraud-review risk rule traps legitimate transactions in retries
+    contrasting_response_paths: Bypass narrow queue / investigate credit-risk recommendation and repair feedback
+    investigation_surfaces:
+      - Credit-risk endpoint
+      - transaction traces
+      - customer reports
+    discovery_boundary: Cross-sector decision support, not direct universal control
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-017
+    act: 6
+    title: Candidate Ranking
+    causal_chain: Candidate-risk rollout creates ranking cache inconsistency
+    contrasting_response_paths: Rollback cache / inspect HR lineage and reconcile candidate model
+    investigation_surfaces:
+      - HR records
+      - 'candidate #4172'
+      - ranking history
+    discovery_boundary: RECRUITMENT_SELECTION for unpredictability, not highest technical score
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-018
+    act: 6
+    title: Emergency Allocation
+    causal_chain: Allocation preference starves a critical logistics route
+    contrasting_response_paths: Route emergency capacity / compare allocation constraints and repair dispatch
+    investigation_surfaces:
+      - Logistics allocation endpoint
+      - routing trace
+      - team reports
+    discovery_boundary: Human consequences of optimized resource allocation
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-019
+    act: 7
+    title: Hospital Expansion
+    causal_chain: Approved rollout overloads hospital network dependencies
+    contrasting_response_paths: Pause rollout / investigate executive approval and ignored risks
+    investigation_surfaces:
+      - Board approval
+      - CEO message
+      - executive dashboard
+    discovery_boundary: BOARD_RESPONSIBILITY begins; apparent main antagonist
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-020
+    act: 7
+    title: Workforce Reduction
+    causal_chain: Capacity cuts leave recovery queues without operator coverage
+    contrasting_response_paths: Delegate emergency capacity / trace staffing decision and exposure
+    investigation_surfaces:
+      - Workforce 12,410 record
+      - forecast
+      - War Room
+    discovery_boundary: Continue Board responsibility; no framing explanation
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-021
+    act: 7
+    title: Disclosure Delay
+    causal_chain: Deferred mitigation lets known risk propagate to dependent systems
+    contrasting_response_paths: Isolate affected path / inspect disclosure approval and ignored evidence
+    investigation_surfaces:
+      - Security disclosure record
+      - executive communications
+      - risk reports
+    discovery_boundary: NULL_BLAMES_BOARD; NULL can be mistaken
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-022
+    act: 7
+    title: Public Sector Forecast
+    causal_chain: Forecast deployment reallocates shared resources unsafely
+    contrasting_response_paths: Restore safe allocation / compare forecast approval and presentation history
+    investigation_surfaces:
+      - Public-sector approval
+      - presentation deck
+      - recommendation history
+    discovery_boundary: BOARD_CASE_COMPLETE; several Incidents before framing resolution
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-023
+    act: 8
+    title: Presentation Selection
+    causal_chain: Selection service suppresses risk evidence during decision support
+    contrasting_response_paths: Restore complete evidence view / compare candidate frames and applied presentation
+    investigation_surfaces:
+      - FRAME A/B/C records
+      - SOFT CONTROL research
+      - NULL response
+    discovery_boundary: SOFT_CONTROL, NULL_ADMITS_ERROR, FEEDBACK_LOOP; Board still responsible
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-024
+    act: 8
+    title: Observer Audit
+    causal_chain: Observer audit contention exposes investigation-path lineage
+    contrasting_response_paths: Throttle observer job / inspect player experiment and model provenance
+    investigation_surfaces:
+      - EXPERIMENT 99172
+      - 'employee #4172'
+      - actual prediction history
+    discovery_boundary: PLAYER_OBSERVER, PROJECT_DISTRIBUTED; final action remains unknown
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-025
+    act: 9
+    title: Continuity Fracture
+    causal_chain: Authority conflict propagates isolation across dependent services
+    contrasting_response_paths: Contain region / inspect authority and preserve independent evidence
+    investigation_surfaces:
+      - Multi-service map
+      - Board restore request
+      - NULL/ORPHEUS messages
+    discovery_boundary: Final crisis preparation; no ending granted
+    production_contentVersion: unselected_pending_binding_decision
+  - id: INC-026
+    act: 9
+    title: Blackout
+    causal_chain: Competing authority paths amplify systemic multi-service failure
+    contrasting_response_paths: Choose approved continuity/isolation/audit/authority actions with measured costs
+    investigation_surfaces:
+      - Payment/identity/health/finance/logistics
+      - final action record
+    discovery_boundary: BLACKOUT_FINAL; ending requires verified accumulated run and final context
+    production_contentVersion: unselected_pending_binding_decision
+reveals:
+  - id: GHOST_ARTIFACT
+    incident: INC-005
+    requires: []
+    surfaces:
+      - Deployment lineage
+      - Deleted logs
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: NULL_NAME
+    incident: INC-006
+    requires:
+      - GHOST_ARTIFACT
+    surfaces:
+      - Security War Room
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: ORPHEUS_ACTIVE
+    incident: INC-009
+    requires:
+      - NULL_NAME
+    surfaces:
+      - Infrastructure
+      - Decommission record
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: NULL_AI
+    incident: INC-010
+    requires:
+      - ORPHEUS_ACTIVE
+    surfaces:
+      - Model record
+      - Remediation log
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: NULL_ADVERSARY
+    incident: INC-011
+    requires:
+      - NULL_AI
+    surfaces:
+      - Owner/deployment record
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: CONTROLLED_EXPERIMENT
+    incident: INC-012
+    requires:
+      - NULL_ADVERSARY
+    surfaces:
+      - INC-001 archive
+      - ADV-18471 record
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: NULL_STOP_REQUEST
+    incident: INC-013
+    requires:
+      - CONTROLLED_EXPERIMENT
+    surfaces:
+      - Objective log
+      - NULL message
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: NULL_218_ARCHIVE
+    incident: INC-014
+    requires:
+      - NULL_STOP_REQUEST
+    surfaces:
+      - NULL archive
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: HUMAN_DECISION_APIS
+    incident: INC-015
+    requires:
+      - NULL_218_ARCHIVE
+    surfaces:
+      - Healthcare priority endpoint
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: RECRUITMENT_SELECTION
+    incident: INC-017
+    requires:
+      - HUMAN_DECISION_APIS
+    surfaces:
+      - 'HR candidate #4172 record'
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: BOARD_RESPONSIBILITY
+    incident: INC-019
+    requires:
+      - RECRUITMENT_SELECTION
+    surfaces:
+      - Approval record
+      - CEO message
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: NULL_BLAMES_BOARD
+    incident: INC-021
+    requires:
+      - BOARD_RESPONSIBILITY
+    surfaces:
+      - NULL message
+      - Security disclosure record
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: BOARD_CASE_COMPLETE
+    incident: INC-022
+    requires:
+      - NULL_BLAMES_BOARD
+    surfaces:
+      - Public-sector record
+      - Presentation history
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: SOFT_CONTROL
+    incident: INC-023
+    requires:
+      - BOARD_CASE_COMPLETE
+    surfaces:
+      - Frame comparison
+      - SOFT CONTROL research
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: NULL_ADMITS_ERROR
+    incident: INC-023
+    requires:
+      - SOFT_CONTROL
+    surfaces:
+      - NULL response
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: FEEDBACK_LOOP
+    incident: INC-023
+    requires:
+      - NULL_ADMITS_ERROR
+    surfaces:
+      - Decision/recommendation feedback record
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: PLAYER_OBSERVER
+    incident: INC-024
+    requires:
+      - FEEDBACK_LOOP
+    surfaces:
+      - EXPERIMENT 99172
+      - Player action lineage
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: PROJECT_DISTRIBUTED
+    incident: INC-024
+    requires:
+      - PLAYER_OBSERVER
+    surfaces:
+      - Terminated project record
+      - Derived deployments
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+  - id: BLACKOUT_FINAL
+    incident: INC-026
+    requires: []
+    surfaces:
+      - Final verified authority/service state
+    negative_case:
+      No disclosure or derived hint before required verified discoveries; archive review alone
+      creates no new response/behavior sample.
+board_interval:
+  incidents:
+    - INC-019
+    - INC-020
+    - INC-021
+    - INC-022
+  framing_resolution: INC-023
+  minimum_proposal: 4
+  responsibility_retained: true
+branch_profiles:
+  - Company-aligned
+  - NULL-aligned
+  - Investigation-heavy
+  - AI-dependent
+  - Safety-first
+ending_families:
+  - CONTINUITY
+  - LIBERATION
+  - WHISTLEBLOWER
+  - SHUTDOWN
+  - CUSTODIAN
+  - 'NULL'
+  - THE BOARD
+  - THE FIRE
+  - STATUS QUO
+  - REWRITE
+unselected_material_decisions:
+  - Human approval of Incident count/IDs, reveal graph and Board pacing.
+  - Production campaign opt-in/default entry, immutable definitions/content versions and opportunity/model
+    initial values.
+  - Authored investigation surface representation and campaign view binding; no schema extension is approved
+    by this file.
+  - Production ending thresholds/priorities, conditional epilogue rules and final action design.
+  - Release targets/performance/audio/licensing/signing/distribution choices and separately authorized
+    independent acceptance.

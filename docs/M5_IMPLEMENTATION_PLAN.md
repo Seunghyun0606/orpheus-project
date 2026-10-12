@@ -2,20 +2,23 @@
 
 ## Status and authorization
 
-Planning-only draft, 2026-10-12, based on repository candidate `b548573`.
-The human approved [DEC-036](../.project-os/decisions/DEC-036-m5-planning-before-m4-acceptance.yaml):
-retain incomplete M4 and prepare M5 plans/task definitions before resuming QA.
-This does not approve M5 implementation, registration, activation or release.
+M5 activation approved on 2026-10-12 under
+[DEC-037](../.project-os/decisions/DEC-037-m5-implementation-before-m4-verification.yaml).
+The earlier DEC-036 planning-only checkpoint and original draft files are retained.
+Canonical ready contracts now live in `.project-os/tasks/ready/`; the ten original
+`.project-os/planning/M5/tasks/` files are historical drafts, not executable contracts.
 
-Canonical state remains M4 active, TASK-024 active, TASK-025 ready but ineligible,
-and M5 planned with no registered tasks. TASK-018–023 are done. The draft tasks
-below live in `.project-os/planning/M5/tasks/`, not the executable ready queue.
-Their IDs must be checked for collisions again before future registration.
-Do not edit backlog/current/milestone completion by hand or claim these drafts.
+M5 is active; M4 remains active/incomplete. TASK-024 remains active and TASK-025
+ready/ineligible. TASK-026 has been claimed as architect through Project OS;
+TASK-027–035 remain dependent ready tasks, not completed implementations.
+Milestone registration follows the explicit human-approved metadata transition;
+task claim and completion continue through the configured Project OS commands.
 
-The existing M5 implementation entry criterion remains **M4 complete and tested**.
-QA is deferred, not waived. No new automated/native QA or independent acceptance
-is claimed by this document. Earlier PASS evidence retains its original scope.
+DEC-037 allows M5 implementation before M4 verification but retains **complete/tested
+M4 before final M5 acceptance or release**. QA is deferred, not waived. No new
+automated/native QA or independent acceptance is claimed by this activation.
+Earlier PASS evidence retains its original scope. The TASK-026 blueprint is a
+proposal requiring its separate content decision before dependent implementation.
 
 ## M4 debt that must remain visible
 
@@ -69,13 +72,13 @@ TASK-026 must propose an explicit per-Incident manifest and obtain approval befo
 content is implemented. Any new domain representation needs a separate architecture
 gate; a content task is not permission to extend schemas by guesswork.
 
-| Package                                       | Required investigation and reveal boundary                                                                                                                                                                                                                 | Draft owner |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| Acts 1–3: NORMAL / GHOST / NULL               | Existing operations lessons and UNKNOWN; unexplained artifacts before Security names NULL. Distinguish discovering the name from discovering AI identity.                                                                                                  | TASK-028    |
-| Acts 4–6: ORPHEUS / EXPERIMENT / HUMAN SYSTEM | Active legacy cluster; NULL as AI and company-created ADVERSARY; controlled production experiments; request to stop despite its objective; NULL archive and NULL_218; decision APIs and unpredictable recruitment. Preserve authored reveal prerequisites. | TASK-029    |
-| Act 7: THE BOARD                              | Investigate CEO/Board approvals, dashboards, forecasts and recommendation history across multiple Incidents. Preserve responsibility and the apparent-main-villain interval before resolving SOFT CONTROL.                                                 | TASK-030    |
-| Acts 8–9: OBSERVER / BLACKOUT                 | Information framing and NULL admitting error after sufficient Board investigation; experiment #99172 and employee #4172; expected investigation but unknown final action; multi-service final conflict.                                                    | TASK-031    |
-| Endings and epilogues                         | All ten named endings, accumulated behavior and distinct costs; title payoff and conditional PROMETHEUS lineage discovery. No good/bad/true labels or privileged correct route.                                                                            | TASK-032    |
+| Package                                       | Required investigation and reveal boundary                                                                                                                                                                                                                 | Task owner |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| Acts 1–3: NORMAL / GHOST / NULL               | Existing operations lessons and UNKNOWN; unexplained artifacts before Security names NULL. Distinguish discovering the name from discovering AI identity.                                                                                                  | TASK-028   |
+| Acts 4–6: ORPHEUS / EXPERIMENT / HUMAN SYSTEM | Active legacy cluster; NULL as AI and company-created ADVERSARY; controlled production experiments; request to stop despite its objective; NULL archive and NULL_218; decision APIs and unpredictable recruitment. Preserve authored reveal prerequisites. | TASK-029   |
+| Act 7: THE BOARD                              | Investigate CEO/Board approvals, dashboards, forecasts and recommendation history across multiple Incidents. Preserve responsibility and the apparent-main-villain interval before resolving SOFT CONTROL.                                                 | TASK-030   |
+| Acts 8–9: OBSERVER / BLACKOUT                 | Information framing and NULL admitting error after sufficient Board investigation; experiment #99172 and employee #4172; expected investigation but unknown final action; multi-service final conflict.                                                    | TASK-031   |
+| Endings and epilogues                         | All ten named endings, accumulated behavior and distinct costs; title payoff and conditional PROMETHEUS lineage discovery. No good/bad/true labels or privileged correct route.                                                                            | TASK-032   |
 
 The finer placement of reveals within Acts is a TASK-026 proposal, not a new canon.
 The sequence must keep NULL non-omniscient, ORPHEUS useful as well as harmful, and
@@ -86,22 +89,22 @@ cutscenes alone and story-completion percentages cannot substitute for them.
 
 ## Proposed tasks and dependencies
 
-Every draft has TASK-025 as a direct or transitive dependency **and** requires
-human-approved M4 closure/M5 activation before claim. Dependencies do not authorize
+DEC-037 removes TASK-025 as a prerequisite of TASK-026/027 only. TASK-035 still
+requires TASK-025 and every M5 implementation package. Dependencies do not authorize
 parallel agents. Read-only review/QA/evaluator delegation needs applicable authority.
 
-| Draft                                                      | Role      | Deliverable                                                               | Dependencies           |
-| ---------------------------------------------------------- | --------- | ------------------------------------------------------------------------- | ---------------------- |
-| [TASK-026](../.project-os/planning/M5/tasks/TASK-026.yaml) | architect | Reviewed campaign manifest, reveal graph, coverage and approval checklist | TASK-025               |
-| [TASK-027](../.project-os/planning/M5/tasks/TASK-027.yaml) | developer | Explicitly approved production campaign composition and version binding   | TASK-025, TASK-026     |
-| [TASK-028](../.project-os/planning/M5/tasks/TASK-028.yaml) | developer | Approved Acts 1–3 data and replay fixtures                                | TASK-026, TASK-027     |
-| [TASK-029](../.project-os/planning/M5/tasks/TASK-029.yaml) | developer | Approved Acts 4–6 data and reveal/branch fixtures                         | TASK-028               |
-| [TASK-030](../.project-os/planning/M5/tasks/TASK-030.yaml) | developer | Extended Board investigation and deferred framing reveal                  | TASK-029               |
-| [TASK-031](../.project-os/planning/M5/tasks/TASK-031.yaml) | developer | Observer and Blackout data, final-context fixtures                        | TASK-030               |
-| [TASK-032](../.project-os/planning/M5/tasks/TASK-032.yaml) | developer | Approved production ending rules and epilogue data                        | TASK-031               |
-| [TASK-033](../.project-os/planning/M5/tasks/TASK-033.yaml) | developer | Campaign-wide accessibility and scoped audio presentation                 | TASK-027, TASK-032     |
-| [TASK-034](../.project-os/planning/M5/tasks/TASK-034.yaml) | developer | Measured performance, approved packaging and release/authoring docs       | TASK-032, TASK-033     |
-| [TASK-035](../.project-os/planning/M5/tasks/TASK-035.yaml) | developer | Full M5 evidence audit and separate release decision                      | TASK-025, TASK-028–034 |
+| Task                                                 | Role      | Deliverable                                                               | Dependencies           |
+| ---------------------------------------------------- | --------- | ------------------------------------------------------------------------- | ---------------------- |
+| [TASK-026](../.project-os/tasks/ready/TASK-026.yaml) | architect | Reviewed campaign manifest, reveal graph, coverage and approval checklist | None (DEC-037)         |
+| [TASK-027](../.project-os/tasks/ready/TASK-027.yaml) | developer | Explicitly approved production campaign composition and version binding   | TASK-026               |
+| [TASK-028](../.project-os/tasks/ready/TASK-028.yaml) | developer | Approved Acts 1–3 data and replay fixtures                                | TASK-026, TASK-027     |
+| [TASK-029](../.project-os/tasks/ready/TASK-029.yaml) | developer | Approved Acts 4–6 data and reveal/branch fixtures                         | TASK-028               |
+| [TASK-030](../.project-os/tasks/ready/TASK-030.yaml) | developer | Extended Board investigation and deferred framing reveal                  | TASK-029               |
+| [TASK-031](../.project-os/tasks/ready/TASK-031.yaml) | developer | Observer and Blackout data, final-context fixtures                        | TASK-030               |
+| [TASK-032](../.project-os/tasks/ready/TASK-032.yaml) | developer | Approved production ending rules and epilogue data                        | TASK-031               |
+| [TASK-033](../.project-os/tasks/ready/TASK-033.yaml) | developer | Campaign-wide accessibility and scoped audio presentation                 | TASK-027, TASK-032     |
+| [TASK-034](../.project-os/tasks/ready/TASK-034.yaml) | developer | Measured performance, approved packaging and release/authoring docs       | TASK-032, TASK-033     |
+| [TASK-035](../.project-os/tasks/ready/TASK-035.yaml) | developer | Full M5 evidence audit and separate release decision                      | TASK-025, TASK-028–034 |
 
 Prior work is reused, not recreated. Missing document/trace/decision views or
 simulation mechanisms must first be listed against real authoring needs in
@@ -110,8 +113,9 @@ material extensions require separate decisions. New engine folders are not a goa
 
 ## Approval checkpoints before future execution
 
-1. **M4 exit / M5 activation:** finish mandatory deferred evidence and Project OS
-   evaluation; human approves closure and registration. Keep M5 planned until then.
+1. **M5 activation approved / M4 verification deferred:** DEC-037 allows early
+   implementation. Finish mandatory M4 evidence and Project OS evaluation before
+   final M5 acceptance or release; this exception does not waive QA or mark M4 done.
 2. **Campaign blueprint:** approve Incident count/IDs, reveal gates, branch access,
    gameplay variety, Board pacing and needed UI/domain gaps. Do not freeze a
    26-Incident layout or new Memory Leak ID in this planning pass.
@@ -148,7 +152,9 @@ playable full-campaign acceptance.
 
 ## Safe next step
 
-With QA still deferred, retain these drafts and resolve blueprint proposals only
-within planning scope. The next executable canonical work remains TASK-024 native
-verification when the human requests its resumption, then TASK-025. No M5 runtime,
-content, user storage or canonical state was changed by this planning pass.
+TASK-026 is active for the proposed campaign blueprint and repository gap inventory.
+Obtain its content decision and required independent acceptance before TASK-027.
+Keep the original draft/result records unchanged. M4 native verification resumes
+when requested, then TASK-025; both remain final M5 acceptance/release blockers.
+Activation and blueprint drafting change project metadata/docs only, not runtime,
+production content, old campaign authorities or actual user storage.

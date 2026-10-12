@@ -1,0 +1,52 @@
+id: TASK-029
+title: 'Author ORPHEUS EXPERIMENT and HUMAN SYSTEM investigations'
+role: developer
+milestone: M5
+priority: P1
+status: ready
+
+objective: 'Implement approved Acts 4–6 discoveries through operational investigation rather than cutscene-only exposition.'
+why: 'The AI, company experiments, repeated NULL instances and recruitment reveals must remain distinct causal discoveries.'
+
+scope:
+  include:
+    - 'Author approved active-cluster, production experiment and cross-sector decision-system Incidents.'
+    - 'Gate NULL AI identity, company ADVERSARY provenance, inability to stop and NULL_218 archive discoveries in approved order.'
+    - 'Connect healthcare/finance/recruitment/logistics evidence and employee #4172 recruitment discovery through authored investigation surfaces.'
+    - 'Author operational benefits and actual harm for ORPHEUS/NULL alongside valid behavior opportunities and branches.'
+  exclude:
+    - 'Bypass future material-choice gates, independent acceptance, or mandatory M4 verification before final M5 acceptance/release.'
+    - 'Treat NULL as omniscient or righteous, or ORPHEUS as a universally malicious controller.'
+    - 'Reveal Board framing/observer conclusions before approved prerequisites.'
+
+depends_on:
+  - TASK-028
+specs:
+  - specs/product/01-game-and-narrative-direction.md
+  - specs/feature/campaign-and-player-model.md
+  - specs/architecture/recommendation-responses.md
+  - specs/architecture/preference-rates.md
+  - specs/architecture/affiliation-rates.md
+  - docs/M5_IMPLEMENTATION_PLAN.md
+relevant_files:
+  - src/scenario/
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+  - .project-os/decisions/DEC-004-m3-incident-identity.yaml
+  - .project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml
+  - .project-os/decisions/DEC-033-v2-presentation-response-records.yaml
+  - .project-os/decisions/DEC-037-m5-implementation-before-m4-verification.yaml
+
+acceptance:
+  - 'All approved Acts 4–6 manifest entries validate and replay deterministically.'
+  - 'Every required discovery has tested positive and early/absent-prerequisite negative routes.'
+  - 'Behavior opportunities use explicit eligible responses, not unrelated actions or absence treated as rejection.'
+  - 'Cross-sector consequences and faction ambiguity remain visible without directly exposing hidden score numbers.'
+verification:
+  - 'Replay alternate investigation/operational paths, retries and reload boundaries.'
+  - 'Review required reveal order and both benefits and harms against the approved blueprint.'
+
+human_gate: false
+risk: high

@@ -1,0 +1,61 @@
+id: TASK-035
+title: 'Audit full campaign readiness and request a separate release decision'
+role: developer
+milestone: M5
+priority: P0
+status: ready
+
+objective: 'Produce independent evidence for every M5 exit criterion without equating implementation or packaging with release approval.'
+why: 'Full campaign readiness requires tested content, real persistence, accessible desktop flows and independent acceptance.'
+
+scope:
+  include:
+    - 'Map nine Acts, 24–28 total Incidents, required reveals and all ten endings to actual tested production content.'
+    - 'Run the complete quality/regression command set, long-run persistence/replay and supported desktop inspections.'
+    - 'Audit unchanged legacy authority, actual ACK/response samples, retry effects and unavailable/ambiguous diagnostics.'
+    - 'Obtain separately authorized independent review/QA and distinct evaluation; reconcile candidate provenance and limitations.'
+    - 'Request M5 closure and production release through separate configured human gates.'
+  exclude:
+    - 'Bypass future material-choice gates, independent acceptance, or mandatory M4 verification before final M5 acceptance/release.'
+    - 'Waive missing M4/TASK-025 evidence or alter immutable historical reports.'
+    - 'Publish, push, sign with new credentials or mark milestone complete outside configured transitions.'
+
+depends_on:
+  - TASK-025
+  - TASK-028
+  - TASK-029
+  - TASK-030
+  - TASK-031
+  - TASK-032
+  - TASK-033
+  - TASK-034
+specs:
+  - specs/product/01-game-and-narrative-direction.md
+  - specs/feature/campaign-and-player-model.md
+  - docs/M4_IMPLEMENTATION_PLAN.md
+  - docs/M5_IMPLEMENTATION_PLAN.md
+relevant_files:
+  - src/tests/
+  - docs/
+  - README.md
+  - .project-os/tasks/results/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+  - .project-os/decisions/DEC-004-m3-incident-identity.yaml
+  - .project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml
+  - .project-os/decisions/DEC-033-v2-presentation-response-records.yaml
+  - .project-os/decisions/DEC-037-m5-implementation-before-m4-verification.yaml
+
+acceptance:
+  - 'Every M5 exit criterion has attributed automated/native evidence for the exact reviewed candidate.'
+  - 'All required reveal order/pacing and moral ambiguity checks pass independent review with no critical finding.'
+  - 'Each named ending resolves deterministically from supported accumulated behavior and approved final context.'
+  - 'Target performance/persistence/accessibility/audio/packaging requirements pass or explicitly block acceptance.'
+  - 'Completion uses Project OS evaluation and configured human approval; release is separately authorized.'
+verification:
+  - 'Run build, lint, format:check, typecheck, full tests, replays, all production scenario validation, desktop build, diff check and projectctl doctor.'
+  - 'Audit full supported native campaign routes and publish distinct implementation, test, review, QA and evaluation handoffs.'
+
+human_gate: false
+risk: high

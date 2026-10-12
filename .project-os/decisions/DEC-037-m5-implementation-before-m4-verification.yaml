@@ -1,0 +1,22 @@
+id: DEC-037
+title: Activate M5 implementation with mandatory deferred M4 final verification
+status: active
+date: '2026-10-12'
+applies_to: [M4, M5]
+human_approval:
+  selected_option: A
+  instruction: 'M5 활성화·구현 선행 허용, M4 검증은 최종 완료·출시 전 필수 유지.'
+request: .project-os/planning/M5/activation-gate.yaml
+decision: >-
+  Activate M5 and register TASK-026–035. Remove TASK-025 as an implementation
+  prerequisite of TASK-026/027 only, retain all intra-M5 dependencies, and keep
+  TASK-025 mandatory for TASK-035 acceptance. Keep M4 active/incomplete and
+  TASK-024 active; no missing QA or acceptance evidence becomes PASS.
+consequences:
+  - Human-approved milestone/task registration changes readiness only; task claim and completion still use projectctl claim and independent configured evaluation.
+  - Current milestone becomes M5 while the active TASK-024 and all M4 statuses/evidence remain intact.
+  - M5 implementation entry is the explicit exception; M4 completion/testing remains a final M5 acceptance and release requirement.
+  - Preserve the original planning drafts and DEC-036 checkpoint; canonical tasks/ready contracts supersede draft-only execution restrictions under this approval.
+  - TASK-026 must propose the campaign blueprint; material content/architecture/balance decisions still require their own gates before dependent implementation.
+  - No production entry policy, content allocation, ending thresholds, schemas, migration, delegation, user-store overwrite, push or release is decided here.
+supersedes: .project-os/decisions/DEC-036-m5-planning-before-m4-acceptance.yaml

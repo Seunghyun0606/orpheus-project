@@ -1,0 +1,50 @@
+id: TASK-030
+title: 'Sustain the Board investigation before the SOFT CONTROL reveal'
+role: developer
+milestone: M5
+priority: P1
+status: ready
+
+objective: 'Implement the approved extended Act 7 investigation with Board responsibility and apparent control preserved.'
+why: 'An immediate framing twist would defeat the required multi-Incident Board misdirection.'
+
+scope:
+  include:
+    - 'Author multiple approved Board-focused Incidents and investigable approvals, CEO communications, dashboards, forecasts and recommendation records.'
+    - "Preserve documented experiment/expansion/risk responsibilities and NULL's mistaken Board root-cause conclusion."
+    - 'Gate framing evidence and its resolution behind the approved duration and investigation prerequisites.'
+    - 'Retain consequential mitigation, evidence, communication and branch choices throughout the investigation.'
+  exclude:
+    - 'Bypass future material-choice gates, independent acceptance, or mandatory M4 verification before final M5 acceptance/release.'
+    - 'Absolve executives as mere victims or make SOFT CONTROL immediately available.'
+    - 'Set a new minimum Incident count or pacing balance without blueprint approval.'
+
+depends_on:
+  - TASK-029
+specs:
+  - specs/product/00-initial-plan.md
+  - specs/product/01-game-and-narrative-direction.md
+  - specs/architecture/condition-evaluation.md
+  - docs/M5_IMPLEMENTATION_PLAN.md
+relevant_files:
+  - src/scenario/
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+  - .project-os/decisions/DEC-004-m3-incident-identity.yaml
+  - .project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml
+  - .project-os/decisions/DEC-033-v2-presentation-response-records.yaml
+  - .project-os/decisions/DEC-037-m5-implementation-before-m4-verification.yaml
+
+acceptance:
+  - 'Act 7 spans the approved multiple-Incident investigation interval rather than a single reveal scene.'
+  - 'Board approvals and ignored risks remain attributable after the framing twist.'
+  - 'SOFT CONTROL conclusions are unavailable before the approved evidence/pacing gates.'
+  - "NULL's limited knowledge and mistaken conclusion are data-authored and tested."
+verification:
+  - 'Replay evidence-heavy, company-aligned and missed-evidence routes and attempt premature reveal access.'
+  - 'Obtain independently authorized pacing/faction writing review, not self-assessed narrative acceptance.'
+
+human_gate: false
+risk: high

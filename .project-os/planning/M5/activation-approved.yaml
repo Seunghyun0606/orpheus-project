@@ -1,0 +1,13 @@
+kind: human_approved_registration_transition
+date: '2026-10-12'
+decision: .project-os/decisions/DEC-037-m5-implementation-before-m4-verification.yaml
+source_request: .project-os/planning/M5/activation-gate.yaml
+selected_option: A
+baseline_commit: 2684200
+transition_rules:
+  - Confirm M5 planned, no registered TASK-026–035 IDs and unchanged TASK-024/025 statuses before initial registration.
+  - Register ten ready task contracts with TASK-025 removed only from TASK-026/027 dependencies; preserve all other dependencies and TASK-035's TASK-025 requirement.
+  - Activate M5 roadmap/milestone and current milestone; preserve M4 active and TASK-024 current-task membership.
+  - No task is marked active/done by registration; claim TASK-026 as architect through projectctl after doctor and next checks.
+  - Retain all immutable handoffs and planning checkpoints, and preserve M4 verification as a final M5 acceptance/release gate.
+limitations: Milestone activation/registration has no installed projectctl CLI command; this explicit human-approved metadata transition does not bypass CLI task claim/evaluate rules.

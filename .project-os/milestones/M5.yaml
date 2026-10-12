@@ -1,14 +1,27 @@
 id: M5
 name: Full Campaign and Release Readiness
-status: planned
+status: active
 objective: Expand the proven systems into the complete nine-act campaign and prepare a stable desktop release.
 entry_criteria:
-  - M4 campaign systems are complete and tested.
+  - DEC-037 explicitly approves implementation before M4 verification; TASK-024/025 remain mandatory before final M5 acceptance and release.
 exit_criteria:
+  - Deferred M4 verification, TASK-024/025 acceptance and M4 completion are established before final M5 acceptance or release.
   - The nine-act campaign contains the intended 24 to 28 incidents and preserves all required reveal beats.
   - Supported endings resolve from accumulated behavior and campaign state without a labeled true ending.
   - Performance, persistence, accessibility, audio, packaging, and regression quality gates pass on target desktop platforms.
   - Release documentation and scenario-authoring guidance are complete.
-tasks: []
+tasks:
+  - TASK-026
+  - TASK-027
+  - TASK-028
+  - TASK-029
+  - TASK-030
+  - TASK-031
+  - TASK-032
+  - TASK-033
+  - TASK-034
+  - TASK-035
+planning_document: docs/M5_IMPLEMENTATION_PLAN.md
+activation_decision: .project-os/decisions/DEC-037-m5-implementation-before-m4-verification.yaml
 human_gate:
   required_on_completion: true

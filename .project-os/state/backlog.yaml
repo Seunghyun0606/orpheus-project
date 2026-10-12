@@ -242,3 +242,102 @@ tasks:
   - TASK-023
   - TASK-024
   human_gate: false
+- id: TASK-026
+  title: Define the reviewed full-campaign content blueprint
+  role: architect
+  milestone: M5
+  priority: P0
+  status: active
+  depends_on: []
+  human_gate: false
+- id: TASK-027
+  title: Compose the approved production campaign without rewriting old runs
+  role: developer
+  milestone: M5
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-026
+  human_gate: false
+- id: TASK-028
+  title: Author the approved NORMAL GHOST and NULL campaign data
+  role: developer
+  milestone: M5
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-026
+  - TASK-027
+  human_gate: false
+- id: TASK-029
+  title: Author ORPHEUS EXPERIMENT and HUMAN SYSTEM investigations
+  role: developer
+  milestone: M5
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-028
+  human_gate: false
+- id: TASK-030
+  title: Sustain the Board investigation before the SOFT CONTROL reveal
+  role: developer
+  milestone: M5
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-029
+  human_gate: false
+- id: TASK-031
+  title: Author OBSERVER and BLACKOUT with verified final context
+  role: developer
+  milestone: M5
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-030
+  human_gate: false
+- id: TASK-032
+  title: Author production ending conditions and conditional epilogues
+  role: developer
+  milestone: M5
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-031
+  human_gate: false
+- id: TASK-033
+  title: Complete campaign accessibility and environmental audio
+  role: developer
+  milestone: M5
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-027
+  - TASK-032
+  human_gate: false
+- id: TASK-034
+  title: Prepare measured desktop packaging and release authoring guidance
+  role: developer
+  milestone: M5
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-032
+  - TASK-033
+  human_gate: false
+- id: TASK-035
+  title: Audit full campaign readiness and request a separate release decision
+  role: developer
+  milestone: M5
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-025
+  - TASK-028
+  - TASK-029
+  - TASK-030
+  - TASK-031
+  - TASK-032
+  - TASK-033
+  - TASK-034
+  human_gate: false

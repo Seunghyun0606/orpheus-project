@@ -314,3 +314,10 @@ canonical ready queue. TASK-024 remains active, TASK-025 unclaimed/ineligible,
 and M5 planned. No missing native or independent acceptance obligation is waived;
 M5 implementation still requires complete/tested M4 and its configured human gate.
 No runtime, storage, content, old handoff or canonical state changes are implied.
+
+DEC-037 subsequently approves M5 activation and early implementation while retaining
+M4 incomplete. TASK-026–035 are now registered; TASK-026/027 no longer require
+TASK-025 before implementation, but TASK-035 still requires TASK-025. TASK-024
+remains active and TASK-025 unclaimed/ineligible. No outstanding M4 verification
+is waived or retrospectively marked PASS, and final M5 acceptance/release remains
+blocked by missing M4 acceptance. The earlier planning-only checkpoint is historical.

@@ -1,0 +1,52 @@
+id: TASK-026
+title: 'Define the reviewed full-campaign content blueprint'
+role: architect
+milestone: M5
+priority: P0
+status: ready
+
+objective: 'Propose an implementable nine-Act campaign manifest and reveal graph before authoring production content.'
+why: 'The approved 24–28 Incident target and reveal spine are not a final Incident allocation or production balance.'
+
+scope:
+  include:
+    - 'Inventory existing engines, validated data and investigation views; list only gaps required by the proposed campaign.'
+    - 'Propose 24–28 total Incidents including the existing three identities, with stable IDs, causal mechanisms, action paths, discovery surfaces and Act ownership.'
+    - 'Map AI identity, ADVERSARY provenance, controlled experiments, shutdown request, NULL_218, recruitment, Board responsibility, SOFT CONTROL and observer/final reveals to prerequisites.'
+    - 'Specify multiple Board investigation Incidents before the framing reveal, branch accessibility and gameplay/pacing coverage.'
+    - 'Produce human approval requests for content allocation, required representation changes and production balance; distinguish approved requirements from proposals.'
+  exclude:
+    - 'Bypass future material-choice gates, independent acceptance, or mandatory M4 verification before final M5 acceptance/release.'
+    - 'Assign new production IDs, ending thresholds or schema versions without approval.'
+
+depends_on: []
+specs:
+  - specs/product/00-initial-plan.md
+  - specs/product/01-game-and-narrative-direction.md
+  - specs/architecture/scenario-format.md
+  - specs/architecture/campaign-intelligence-contract.md
+  - docs/M5_IMPLEMENTATION_PLAN.md
+relevant_files:
+  - specs/product/
+  - specs/architecture/
+  - src/scenario/
+  - src/engine/
+active_decisions:
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+  - .project-os/decisions/DEC-004-m3-incident-identity.yaml
+  - .project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml
+  - .project-os/decisions/DEC-033-v2-presentation-response-records.yaml
+  - .project-os/decisions/DEC-037-m5-implementation-before-m4-verification.yaml
+
+acceptance:
+  - 'A proposed manifest covers all nine Acts and 24–28 total Incidents without changing INC-001–003 or silently assigning Memory Leak an ID.'
+  - 'Every required reveal has an investigation surface, prerequisite and early-disclosure negative case.'
+  - 'Board pacing, moral ambiguity, title payoff and conditional epilogue requirements are explicitly traceable.'
+  - 'Unsupported domain/UI needs and material decisions are listed; implementation waits for applicable human approvals.'
+verification:
+  - 'Check manifest counts, ID collisions, reveal order and source references.'
+  - 'Obtain separately authorized independent content/architecture review and distinct evaluation; retain unresolved decisions.'
+
+human_gate: false
+risk: high

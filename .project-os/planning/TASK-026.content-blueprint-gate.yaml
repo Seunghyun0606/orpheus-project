@@ -1,0 +1,18 @@
+kind: human_gate_request
+task: TASK-026
+status: pending
+question: '26개 Incident 구성·번호·공개 순서와 Act 7의 4개 Incident 조사 구간을 캠페인 기준으로 승인할까요?'
+proposal: .project-os/planning/TASK-026.campaign-blueprint.yaml
+explanation: docs/TASK-026_CAMPAIGN_BLUEPRINT.md
+approved_activation: .project-os/decisions/DEC-037-m5-implementation-before-m4-verification.yaml
+options:
+  A:
+    label: '제안한 26개 구성과 공개 순서 승인'
+    scope: Content blueprint only; includes proposed INC-004 Memory Leak and preserves existing INC-001–003 identities/versions.
+  B:
+    label: '구성·번호·공개 순서 조정 후 진행'
+    scope: Retain M5 active and TASK-026 unaccepted; obtain human changes before finalizing blueprint.
+boundaries:
+  - No architecture/schema changes, production entry/version defaults, ending thresholds, release target or publication approval is implied.
+  - Required independent review/acceptance and distinct evaluation are still pending; no self-approval or TASK-027 claim.
+  - M4 verification and TASK-025 remain mandatory before final M5 acceptance/release.

@@ -17,5 +17,5 @@ milestones:
     milestone_file: .project-os/milestones/M4.yaml
   - id: M5
     name: Full Campaign and Release Readiness
-    status: planned
+    status: active
     milestone_file: .project-os/milestones/M5.yaml
