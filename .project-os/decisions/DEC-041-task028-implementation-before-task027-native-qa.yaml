@@ -1,0 +1,22 @@
+id: DEC-041
+title: Permit TASK-028 implementation before deferred TASK-027 native acceptance
+status: active
+date: '2026-10-12'
+applies_to: [M5]
+human_approval:
+  instruction: qa하지말고 다음 작업 계속 진행해줘
+  interpretation: Supersedes the immediately preceding native-QA-first request; implements the scheduling exception described as option B of the recorded gate, not a QA waiver or task PASS.
+request: .project-os/planning/TASK-027.native-scheduling-gate.yaml
+decision: >-
+  Stop native QA and allow TASK-028 implementation to consume the reviewed TASK-027
+  foundation at 2e6bea0 without waiting for overall TASK-027 acceptance. Remove
+  TASK-027 from TASK-028 readiness prerequisites only. Preserve TASK-026 dependency,
+  every other dependency, TASK-027 active/incomplete and all mandatory final checks.
+consequences:
+  - Human-approved readiness metadata changes only; activation uses projectctl claim and completion still requires configured independent evaluation.
+  - No source, build or actual QA profile created/changed/launched during the interrupted native attempt; computer-use initialization/listing was read-only and successful.
+  - Existing TASK-024 QA app/profile and ordinary user saves remain untouched.
+  - Native verification, independent review/QA and final evaluation are deferred, not waived, and missing evidence must never be PASS.
+  - TASK-033 retains TASK-027 dependency, so TASK-034/035 cannot bypass required native acceptance; M4/TASK-024/025 obligations remain unchanged.
+  - No approval of unselected production content versions, model/initial values, ending balance, schema expansion, destructive action, push or release.
+supersedes: TASK-027 native-first scheduling request only; not DEC-040 composition or DEC-037 final verification obligations.

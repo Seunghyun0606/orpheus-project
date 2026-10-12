@@ -1,0 +1,43 @@
+task: TASK-028
+date: '2026-10-12'
+status: awaiting_human_decision
+type: architecture_change
+question: 새 캠페인 콘텐츠의 최초 버전과 불변 저장 호환 규칙을 제안대로 확정할까요?
+reason: >-
+  DEC-038/040 and TASK-028 preserve old authorities but explicitly leave production
+  version numbers unselected. Scenario validation requires contentVersion and packages
+  bind exact definition/Scenario/presentation versions. Authoring production data must
+  not silently decide these immutable replay authorities or rewrite existing saves.
+proposal:
+  existing_mvp:
+    INC-001: 1.1.0
+    INC-002: 1.2.0
+    INC-003: 1.2.0
+    policy: Retain source bytes and legacy replay authorities unchanged.
+  new_incidents:
+    ids: INC-004 through INC-026
+    initial_contentVersion: 1.0.0
+  new_investigation_presentations:
+    id_pattern: <Incident-ID>-INVESTIGATION
+    initial_version: 1.0.0
+    schemaVersion: 1
+  new_definition:
+    id: orpheus-full-campaign
+    version: 1.0.0
+    schemaVersion: 1
+    recordVersion: 2
+    replayVersion: 2
+  new_package:
+    id: orpheus-full-campaign
+    version: 1.0.0
+    schemaVersion: 1
+  compatibility: Preserve shipped exact bindings; subsequent changes require new pinned package/definition authorities, not latest substitution, automatic migration or overwriting old records.
+not_selected:
+  - Behavior/prediction/opportunity/ending production model versions, classifications or initial values.
+  - Alignment/value effects, ending thresholds/priorities, final actions or production release.
+  - Native QA execution, final task acceptance or destructive user storage operations.
+options:
+  - key: A
+    label: 제안 버전·불변 호환 규칙 승인 후 콘텐츠 구현
+  - key: B
+    label: 기존 저장 유지, 다른 버전 체계 지정 후 구현

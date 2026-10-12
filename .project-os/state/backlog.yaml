@@ -264,10 +264,9 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: ready
+  status: active
   depends_on:
   - TASK-026
-  - TASK-027
   human_gate: false
 - id: TASK-029
   title: Author ORPHEUS EXPERIMENT and HUMAN SYSTEM investigations

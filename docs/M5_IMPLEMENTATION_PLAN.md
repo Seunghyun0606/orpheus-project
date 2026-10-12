@@ -12,7 +12,9 @@ M5 is active; M4 remains active/incomplete. TASK-024 remains active and TASK-025
 ready/ineligible. TASK-026 completed through independent review, document QA and
 distinct Project OS evaluation; TASK-027 is now active with DEC-040-approved composition
 implementation under independent review/automated QA. Native TASK-027 verification remains
-pending. TASK-028–035 remain dependent ready tasks, not completed implementations.
+pending. DEC-041 now permits TASK-028 implementation before TASK-027 native acceptance
+at the human's latest instruction. Other dependencies and final verification stay intact.
+TASK-028–035 are not completed implementations.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 
@@ -92,7 +94,9 @@ cutscenes alone and story-completion percentages cannot substitute for them.
 
 ## Proposed tasks and dependencies
 
-DEC-037 removes TASK-025 as a prerequisite of TASK-026/027 only. TASK-035 still
+DEC-037 removes TASK-025 as a prerequisite of TASK-026/027 only. DEC-041 additionally
+removes TASK-027 as TASK-028's implementation readiness prerequisite only, without
+completing TASK-027. TASK-033 still requires TASK-027. TASK-035 still
 requires TASK-025 and every M5 implementation package. Dependencies do not authorize
 parallel agents. Read-only review/QA/evaluator delegation needs applicable authority.
 
@@ -100,7 +104,7 @@ parallel agents. Read-only review/QA/evaluator delegation needs applicable autho
 | ---------------------------------------------------- | --------- | ------------------------------------------------------------------------- | ---------------------- |
 | [TASK-026](../.project-os/tasks/ready/TASK-026.yaml) | architect | Reviewed campaign manifest, reveal graph, coverage and approval checklist | None (DEC-037)         |
 | [TASK-027](../.project-os/tasks/ready/TASK-027.yaml) | developer | Explicitly approved production campaign composition and version binding   | TASK-026               |
-| [TASK-028](../.project-os/tasks/ready/TASK-028.yaml) | developer | Approved Acts 1–3 data and replay fixtures                                | TASK-026, TASK-027     |
+| [TASK-028](../.project-os/tasks/ready/TASK-028.yaml) | developer | Approved Acts 1–3 data and replay fixtures                                | TASK-026 (DEC-041)     |
 | [TASK-029](../.project-os/tasks/ready/TASK-029.yaml) | developer | Approved Acts 4–6 data and reveal/branch fixtures                         | TASK-028               |
 | [TASK-030](../.project-os/tasks/ready/TASK-030.yaml) | developer | Extended Board investigation and deferred framing reveal                  | TASK-029               |
 | [TASK-031](../.project-os/tasks/ready/TASK-031.yaml) | developer | Observer and Blackout data, final-context fixtures                        | TASK-030               |
@@ -165,5 +169,5 @@ Keep the original draft/result records unchanged. M4 native verification resumes
 when requested, then TASK-025; both remain final M5 acceptance/release blockers.
 The original activation and blueprint steps changed metadata/docs only. TASK-027 now
 adds bounded runtime composition; old campaign authorities and actual user storage
-remain untouched. Do not complete TASK-027 or claim TASK-028 by bypassing pending
-native verification or a configured human decision on its scheduling/dependencies.
+remain untouched. DEC-041 authorizes TASK-028 claim/implementation before native QA;
+it does not complete TASK-027 or waive native/independent final verification.
