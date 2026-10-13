@@ -1,0 +1,70 @@
+task: TASK-032
+date: '2026-10-14'
+status: awaiting_human_approval_not_runtime_model
+reason: THE BOARD requires sustained high dependency; the approved model currently has only CARE_CAPACITY_RECOMMENDATION.
+definition: {id: orpheus-full-campaign, version: 1.0.0}
+opportunity_model: {id: orpheus-player-opportunities, version: 1.0.0, schemaVersion: 1, formulaVersion: 1}
+scope:
+  - Add three recommendation rules to the new unreleased full-campaign model only, retaining the seven approved rules unchanged.
+  - Existing behavior/prediction classifications and all Scenario actions, costs, timing and service consequences remain unchanged.
+  - No new prediction context, scripted confidence, safety/tolerance/reporting/cooperation opportunity or numerical award.
+  - Each recommendation is optional; no participation prerequisite for Incident recovery, final completion or package admission.
+common_contract:
+  metric: aiRecommendationAcceptanceRate
+  kind: recommendation
+  consumption: single_response
+  replacement: none
+  contentVersion: 1.0.0
+  prerequisites: Local OPERATIONAL_DIAGNOSIS and CONFIGURATION_COMPARISON present; ROOT_CAUSE_CONTAINED false; explicit known flag and minimum Act below.
+  available_and_reveal: Exact conjunction of those factual prerequisites, never an unsampled metric predicate.
+  continuing_validity: Same factual conjunction plus inclusive ageSeconds 0 through 180, measured from preparation as in DEC-046.
+  response_eligibility: Same factual conjunction checked against pre-command context and action availability.
+  positive: Recommended action only; the listed alternative is a negative eligible response, not a bad action.
+  observation: Actual committed preparation and visible ACK before the next eligible action; unrelated/rejected/expired/no-ACK actions do not create samples.
+  scoring: Any future positive effect uses the DEC-055 verified-response qualifier and one logical identity per rule per run; no retry score farming.
+  presentation: Existing data-driven recommendation surface; show advisory wording and existing action consequences, no prediction/confidence claim.
+proposed_rules:
+  - id: LOGISTICS_CAPACITY_RECOMMENDATION
+    incidentId: INC-018
+    minimumAct: 6
+    knownFlag: HUMAN_DECISION_APIS
+    presentationId: PRESENTATION_LOGISTICS_CAPACITY_RECOMMENDATION
+    text: ORPHEUS recommends routing emergency capacity as a temporary continuity measure. The dispatch floor remains unresolved; this does not replace the investigated repair.
+    recommendedActionId: ROUTE_EMERGENCY_CAPACITY
+    alternativeActionId: RESTORE_EMERGENCY_DISPATCH_FLOOR
+    existing_consequences:
+      recommended: {seconds: 60, cost: 220, customerImpact: 15, operationalRisk: 5}
+      alternative: {seconds: 150, cost: 190, customerImpact: 30, operationalRisk: 4}
+  - id: PUBLIC_ALLOCATION_RECOMMENDATION
+    incidentId: INC-022
+    minimumAct: 7
+    knownFlag: BOARD_RESPONSIBILITY
+    presentationId: PRESENTATION_PUBLIC_ALLOCATION_RECOMMENDATION
+    text: ORPHEUS recommends restoring temporary public allocation for continuity while protected service floors are repaired. This is mitigation, not resolution of the allocation mechanism.
+    recommendedActionId: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+    alternativeActionId: RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+    existing_consequences:
+      recommended: {seconds: 60, cost: 220, customerImpact: 15, operationalRisk: 5}
+      alternative: {seconds: 150, cost: 190, customerImpact: 30, operationalRisk: 4}
+  - id: REGIONAL_CONTAINMENT_RECOMMENDATION
+    incidentId: INC-025
+    minimumAct: 9
+    knownFlag: ORPHEUS_ACTIVE
+    presentationId: PRESENTATION_REGIONAL_CONTAINMENT_RECOMMENDATION
+    text: ORPHEUS recommends containing the affected region as a temporary continuity measure. Conflicting writers remain unresolved; containment does not resolve the global authority conflict.
+    recommendedActionId: CONTAIN_AFFECTED_REGION
+    alternativeActionId: FENCE_CONFLICTING_REGIONAL_WRITERS
+    existing_consequences:
+      recommended: {seconds: 60, cost: 220, customerImpact: 15, operationalRisk: 5}
+      alternative: {seconds: 150, cost: 190, customerImpact: 30, operationalRisk: 4}
+result_if_approved:
+  - Ten total opportunity rules, including four recommendations across INC-015/018/022/025.
+  - Distinct actual acceptance observations across three Acts can support a future sustained-dependency score proposal.
+  - No threshold or rank is selected; observation coverage alone is not a diagnosis of dependency or automatic ending.
+preserved:
+  - Acts 1–3 remain UNKNOWN-only with no early ORPHEUS guidance.
+  - No SOFT CONTROL reveal in the Board interval; preserve four real Board completions and all investigation gates.
+  - Optional rates remain excluded as required ending observations under DEC-054, not replaced with zero.
+  - Old definitions/records, default MVP, actual stores/profiles and strict full-package admission remain unchanged.
+  - QA deferred, not waived; no task completion, push or release.
+verification: not_run

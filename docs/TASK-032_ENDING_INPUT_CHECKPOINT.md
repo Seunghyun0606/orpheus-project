@@ -11,8 +11,11 @@ historical proposal approved at `568cc22`, not an unresolved input-scope request
 The next pending choice is the bounded
 [actual choice-effect source extension](../specs/architecture/campaign-choice-effect-source-proposal.md).
 Existing discovery/complete effects alone cannot faithfully award scores from
-explicit reporting and acknowledged recommendation responses. No extension or
-numeric balance has been implemented; QA remains deferred.
+explicit reporting and acknowledged recommendation responses. DEC-055 subsequently
+approves the bounded extension; the
+[implementation candidate](TASK-032_CHOICE_EFFECT_IMPLEMENTATION.md) supplies it
+with unexecuted regression tests. Numeric balance and recommendation-coverage
+expansion remain unapproved; QA stays deferred.
 
 ## Completed safe steps
 

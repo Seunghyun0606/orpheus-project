@@ -1,0 +1,27 @@
+id: DEC-055
+title: Add genuine completed-action and verified-response effect sources for new campaigns
+status: active
+date: '2026-10-14'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 새 캠페인에 실제 행동·검증된 응답 조건 추가(권장).
+request: .project-os/planning/TASK-032.choice-effect-source-gate.yaml
+approved_proposal:
+  commit: a9f42f7
+  file: specs/architecture/campaign-choice-effect-source-proposal.md
+decision: >-
+  Extend campaign effects with genuine action_completed targets and an optional
+  exact ruleId/positive qualifier for a newly associated verified response.
+  Match the accepted operation and real simulation event, preserving existing
+  once-per-run receipt provenance and atomic commit. Adopt only in the new
+  unreleased full-campaign definition; keep old authorities and records unchanged.
+consequences:
+  - No matching-action heuristic, fabricated ACK, unsampled rate default or baseline action award.
+  - Absent/expired/consumed response is a non-match, not refusal or rejection of a valid command.
+  - Malformed authority/provenance diagnoses; duplicate delivery and retry do not repay the same effect.
+  - No save format migration, new guidance opportunity or ending grant.
+  - Numeric awards, exact ending conditions/ranks and epilogue gates still require approval.
+  - One recommendation response cannot by itself establish sustained very-high dependency.
+  - QA deferred, not waived; no completion, push or release authorization.
+supersedes: Existing effect-source enum only for explicitly authored new contracts.

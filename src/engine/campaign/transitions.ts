@@ -455,6 +455,79 @@ const add = (items: string[], value: string): void => {
   if (!items.includes(value)) items.push(value);
 };
 
+// DEC-055: match real new command events, never accumulated action membership.
+function completedActionSource(
+  definition: CampaignDefinition,
+  next: CampaignRun,
+  before: CampaignRun,
+  attempt: CampaignAttempt,
+  operation: CampaignOperation,
+  event: EngineEvent,
+  trigger: ReturnType<typeof campaignEffectTriggers>[number],
+): { ok: true; matches: boolean } | Extract<CampaignResult, { ok: false }> {
+  if (
+    operation.kind !== 'command' ||
+    operation.attemptId !== attempt.id ||
+    event.type !== 'action_completed' ||
+    event.sourceId !== operation.command.actionId ||
+    event.sourceId !== trigger.targetId ||
+    event.sequence < attempt.baselineEventCount
+  )
+    return failure('INVALID_COMPLETED_ACTION_SOURCE');
+  const qualifier = trigger.response;
+  if (!qualifier) return { ok: true, matches: true };
+  const model = definition.opportunities;
+  const state = next.opportunities;
+  if (!model || !state || !before.opportunities)
+    return failure('INVALID_EFFECT_RESPONSE_SOURCE', qualifier.ruleId);
+  const responses = state.responses.filter(
+    (r) =>
+      r.ruleId === qualifier.ruleId &&
+      !before.opportunities!.responses.some((old) => old.preparationId === r.preparationId),
+  );
+  if (!responses.length) return { ok: true, matches: false };
+  if (responses.length !== 1) return failure('AMBIGUOUS_EFFECT_RESPONSE_SOURCE', qualifier.ruleId);
+  const response = responses[0]!;
+  const preparation = state.preparations.find((p) => p.id === response.preparationId);
+  const acknowledgement = state.acknowledgements.find(
+    (a) => a.operationId === response.acknowledgementId,
+  );
+  const rule = model.rules.find((r) => r.id === qualifier.ruleId);
+  if (
+    !rule ||
+    rule.incidentId !== attempt.incidentId ||
+    rule.contentVersion !== attempt.incident.contentVersion ||
+    rule.version !== model.version ||
+    response.modelId !== model.id ||
+    response.modelVersion !== model.version ||
+    response.formulaVersion !== model.formulaVersion ||
+    response.metric !== rule.metric ||
+    response.attemptId !== attempt.id ||
+    response.operationId !== operation.operationId ||
+    response.inputId !== operation.inputId ||
+    response.operationSequence !== operation.sequence ||
+    response.commandSequence !== operation.commandSequence ||
+    response.priorHead !== operation.priorHead ||
+    response.actionId !== operation.command.actionId ||
+    !preparation ||
+    preparation.ruleId !== rule.id ||
+    preparation.modelId !== model.id ||
+    preparation.modelVersion !== model.version ||
+    preparation.formulaVersion !== model.formulaVersion ||
+    preparation.attemptId !== attempt.id ||
+    preparation.scenarioId !== attempt.incident.scenarioId ||
+    preparation.contentVersion !== attempt.incident.contentVersion ||
+    !acknowledgement ||
+    acknowledgement.preparationId !== preparation.id ||
+    acknowledgement.priorHead !== preparation.priorHead ||
+    acknowledgement.surfaceId !== preparation.presentation.id ||
+    acknowledgement.historyBoundary >= operation.sequence
+  )
+    return failure('INVALID_EFFECT_RESPONSE_SOURCE', qualifier.ruleId);
+  // Association already verified exposure, continuing eligibility and polarity.
+  return { ok: true, matches: response.positive === qualifier.positive };
+}
+
 function projectEvents(
   definition: CampaignDefinition,
   next: CampaignRun,
@@ -478,18 +551,35 @@ function projectEvents(
     } else if (event.type === 'completion_reached')
       add(next.projection.completed, attempt.incidentId);
     for (const effect of definition.effects) {
-      const eventTarget = event.type === 'narrative_triggered' ? event.sourceId : event.targetId;
+      const eventTarget =
+        event.type === 'narrative_triggered' || event.type === 'action_completed'
+          ? event.sourceId
+          : event.targetId;
       const incident = definition.incidents.find((item) => item.id === attempt.incidentId)!;
-      if (
-        effect.trigger.incidentId !== attempt.incidentId ||
-        !campaignEffectTriggers(effect, incident).some(
-          (trigger) =>
-            trigger.contentVersion === attempt.incident.contentVersion &&
-            trigger.type === event.type &&
-            trigger.targetId === eventTarget,
+      if (effect.trigger.incidentId !== attempt.incidentId) continue;
+      let matched = false;
+      for (const trigger of campaignEffectTriggers(effect, incident)) {
+        if (
+          trigger.contentVersion !== attempt.incident.contentVersion ||
+          trigger.type !== event.type ||
+          trigger.targetId !== eventTarget
         )
-      )
-        continue;
+          continue;
+        if (trigger.type === 'action_completed') {
+          const source = completedActionSource(
+            definition,
+            next,
+            before,
+            attempt,
+            operation,
+            event,
+            trigger,
+          );
+          if (!source.ok) return source;
+          matched ||= source.matches;
+        } else matched = true;
+      }
+      if (!matched) continue;
       const semantics = canonicalJson(effect);
       const receipt = next.effectReceipts.find((item) => item.effectId === effect.id);
       if (receipt) {

@@ -21,6 +21,24 @@ export { metricKeys } from './behavior.ts';
 
 const id = z.string().min(1);
 const integer = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
+const effectTriggerFields = {
+  type: z.enum([
+    'evidence_revealed',
+    'narrative_triggered',
+    'completion_reached',
+    'action_completed',
+  ]),
+  targetId: id.optional(),
+  response: z.object({ ruleId: id, positive: z.boolean() }).strict().optional(),
+};
+const validEffectSource = (trigger: {
+  type: string;
+  targetId?: string;
+  response?: unknown;
+}): boolean =>
+  trigger.type === 'action_completed'
+    ? trigger.targetId !== undefined
+    : trigger.response === undefined;
 export const alignmentSchema = z
   .object({ corporate: z.number().finite(), null: z.number().finite() })
   .strict();
@@ -90,21 +108,15 @@ export const campaignDefinitionSchema = z
         .object({
           id,
           trigger: z
-            .object({
-              incidentId: id,
-              type: z.enum(['evidence_revealed', 'narrative_triggered', 'completion_reached']),
-              targetId: id.optional(),
-            })
-            .strict(),
+            .object({ incidentId: id, ...effectTriggerFields })
+            .strict()
+            .refine(validEffectSource, { message: 'Invalid completed-action effect source' }),
           additionalTriggers: z
             .array(
               z
-                .object({
-                  contentVersion: id,
-                  type: z.enum(['evidence_revealed', 'narrative_triggered', 'completion_reached']),
-                  targetId: id.optional(),
-                })
-                .strict(),
+                .object({ contentVersion: id, ...effectTriggerFields })
+                .strict()
+                .refine(validEffectSource, { message: 'Invalid completed-action effect source' }),
             )
             .min(1)
             .optional(),
@@ -136,6 +148,7 @@ export function campaignEffectTriggers(
       contentVersion: incident.contentVersion,
       type: effect.trigger.type,
       ...(effect.trigger.targetId === undefined ? {} : { targetId: effect.trigger.targetId }),
+      ...(effect.trigger.response === undefined ? {} : { response: effect.trigger.response }),
     },
     ...(effect.additionalTriggers ?? []),
   ];
@@ -320,6 +333,27 @@ export function validateCampaignDefinition(
         } else if (trigger.type === 'narrative_triggered') {
           if (!scenario.narratives.some((item) => item.id === trigger.targetId))
             issue(effect.id + '.trigger.targetId');
+        } else if (trigger.type === 'action_completed') {
+          if (!scenario.actions.some((item) => item.id === trigger.targetId))
+            issue(effect.id + '.trigger.targetId');
+          if (trigger.response) {
+            const model = d.opportunities;
+            const rule = model?.rules.find((item) => item.id === trigger.response!.ruleId);
+            if (
+              d.replayVersion !== 2 ||
+              d.recordVersion !== 2 ||
+              !model ||
+              !rule ||
+              rule.version !== model.version ||
+              rule.incidentId !== incident.id ||
+              rule.contentVersion !== trigger.contentVersion ||
+              !rule.responses.some((item) => item.actionId === trigger.targetId) ||
+              (rule.kind === 'recommendation' &&
+                trigger.response.positive &&
+                rule.recommendedActionId !== trigger.targetId)
+            )
+              issue(effect.id + '.trigger.response');
+          }
         } else if (trigger.targetId !== undefined) issue(effect.id + '.trigger.targetId');
       }
     }

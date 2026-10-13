@@ -61,8 +61,12 @@ DEC-054 now selects accumulated values/discoveries and supported operational
 behavior, excluding optional-opportunity rates as required ending inputs. The
 [choice-effect source proposal](../specs/architecture/campaign-choice-effect-source-proposal.md)
 identifies how actual accepted actions/acknowledged responses could support
-numeric effects without inferring missing observations. Its schema extension,
-numeric balance and conditional epilogues remain unapproved and unimplemented.
+numeric effects without inferring missing observations. DEC-055 now approves that
+bounded extension; the [source candidate](TASK-032_CHOICE_EFFECT_IMPLEMENTATION.md)
+implements action-completed/verified-response matching and authors synthetic
+tests without running QA or registering production awards. Three additional
+recommendations are proposed separately to address sustained-dependency coverage;
+new guidance, numeric balance and conditional epilogues remain unapproved.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 
