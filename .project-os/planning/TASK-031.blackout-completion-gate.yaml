@@ -1,0 +1,19 @@
+task: TASK-031
+date: '2026-10-13'
+status: awaiting_human_decision
+type: architecture_change
+question: BLACKOUT을 서비스 정상화가 아니라 명시적 최종 판단의 커밋으로 종료하도록 정의할까요?
+reason: The existing ending resolver requires new final completion; reusing healthy-service completion would constrain shutdown/destructive outcomes. Final gameplay completion is not selected by DEC-050 readiness approval.
+proposal: specs/architecture/blackout-completion-proposal.md
+safe_checkpoint: docs/TASK-031_OBSERVER_IMPLEMENTATION.md
+options:
+  - key: A
+    label: 최종 판단 기반 종료 승인
+    scope: Existing Scenario flag FINAL_DECISION_COMMITTED and mutually terminal approved final-plan actions; retain measured service failures and no automatic ending grant. Concrete actions/effects/ending balance remain separate choices.
+  - key: B
+    label: 종료 기준 보류, 다른 계약 설계
+    scope: Preserve Observer authoring and defer INC-025/026 rather than copying healthy-service completion or weakening replay provenance.
+preserved:
+  - Board pacing, optional-clue independence, exact authorities, old records and stores.
+  - New accepted-input provenance, strict unavailable/tie/no-match semantics and no fictional ACK/model history.
+  - No QA waiver, task completion, migration, push or release.

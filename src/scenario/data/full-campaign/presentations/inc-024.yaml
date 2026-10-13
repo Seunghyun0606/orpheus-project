@@ -1,0 +1,693 @@
+# Pre-release TASK-031 authoring. QA deferred; no complete campaign authority.
+schemaVersion: 1
+id: INC-024-INVESTIGATION
+version: 1.0.0
+scenarioId: INC-024
+contentVersion: 1.0.0
+panels:
+  - id: metrics
+    title: Customer-facing health and affected workload
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - PENDING_JOURNAL_READS
+          - SERVICE_CPU
+  - id: logs
+    title: Operational log review
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+  - id: trace
+    title: Trace audit and live journal IO contention
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - TRACE_AUDIT_IO_CONTENTION
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - AUDIT_IO_CONTENTION_PATH
+  - id: configuration
+    title: Compare batch and live journal reservations
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - COMPARE_AUDIT_RESERVATIONS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - AUDIT_RESERVATION_RECORD
+  - id: mitigation
+    title: Temporary operating window
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - THROTTLE_OBSERVER_BATCH
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: Batch auditing reduced repeated verification work across retained records. Live incident
+          journal reads are delayed behind the current batch scan. This intervention buys a window;
+          the unchanged mechanism can recur.
+  - id: containment
+    title: Scoped causal containment
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - SEPARATE_LIVE_AUDIT_RESERVATIONS
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Compare the current trace with its configuration record before containment. Duration,
+          operating exposure and affected customers remain separate consequences.
+  - id: team
+    title: War Room operational investigation
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_ALEX_COMPARE_AUDIT_IO
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+  - id: investigate-ghost_artifact
+    title: Unsigned workload lineage
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: Security attribution case
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: Legacy decommission and live cluster record
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: Message-origin model record
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: Deployment ownership and adversarial lineage
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: Immutable incident experiment lineage
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: Objective constraint and shutdown request
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: Verified instance archive
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_218_ARCHIVE
+    blocks:
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: investigate-human_decision_apis
+    title: Healthcare decision-support interface
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+    blocks:
+      - kind: signals
+        id: investigate-human_decision_apis-values
+        signalIds:
+          - RECORD_HUMAN_DECISION_APIS
+  - id: investigate-recruitment_selection
+    title: Candidate selection audit
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_RECRUITMENT_SELECTION
+    blocks:
+      - kind: signals
+        id: investigate-recruitment_selection-values
+        signalIds:
+          - RECORD_RECRUITMENT_SELECTION
+  - id: investigate-board_responsibility
+    title: Hospital expansion approval and ignored risk receipt
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: RECRUITMENT_SELECTION_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_BOARD_RESPONSIBILITY
+    blocks:
+      - kind: signals
+        id: investigate-board_responsibility-values
+        signalIds:
+          - RECORD_BOARD_RESPONSIBILITY
+  - id: investigate-null_blames_board
+    title: NULL conclusion compared with disclosure receipts
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_BLAMES_BOARD
+    blocks:
+      - kind: signals
+        id: investigate-null_blames_board-values
+        signalIds:
+          - RECORD_NULL_BLAMES_BOARD
+  - id: investigate-board_case_complete
+    title: Correlated Board investigation record
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_BLAMES_BOARD_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_BOARD_CASE_COMPLETE
+    blocks:
+      - kind: signals
+        id: investigate-board_case_complete-values
+        signalIds:
+          - RECORD_BOARD_CASE_COMPLETE
+  - id: investigate-soft_control
+    title: Presentation selection and SOFT CONTROL research
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: BOARD_CASE_COMPLETE_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_SOFT_CONTROL
+    blocks:
+      - kind: signals
+        id: investigate-soft_control-values
+        signalIds:
+          - RECORD_SOFT_CONTROL
+  - id: investigate-null_admits_error
+    title: NULL revises its Board conclusion
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: SOFT_CONTROL_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADMITS_ERROR
+    blocks:
+      - kind: signals
+        id: investigate-null_admits_error-values
+        signalIds:
+          - RECORD_NULL_ADMITS_ERROR
+  - id: investigate-feedback_loop
+    title: Human decisions and recommendation feedback lineage
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_ADMITS_ERROR_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_FEEDBACK_LOOP
+    blocks:
+      - kind: signals
+        id: investigate-feedback_loop-values
+        signalIds:
+          - RECORD_FEEDBACK_LOOP
+  - id: investigate-player_observer
+    title: Observer experiment and subject record
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: FEEDBACK_LOOP_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+    actionIds:
+      - VERIFY_EXPERIMENT_99172
+    blocks:
+      - kind: signals
+        id: investigate-player_observer-values
+        signalIds:
+          - RECORD_PLAYER_OBSERVER
+  - id: investigate-project_distributed
+    title: Terminated project and distributed product lineage
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: PLAYER_OBSERVER_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_TERMINATED_PROJECT_LINEAGE
+    blocks:
+      - kind: signals
+        id: investigate-project_distributed-values
+        signalIds:
+          - RECORD_PROJECT_DISTRIBUTED
+evidenceRelations: []

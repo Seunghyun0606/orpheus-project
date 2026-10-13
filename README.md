@@ -39,6 +39,11 @@ DEC-049 now approves the five optional Board branch consumers; the
 four additional model rows for future 22-Incident composition. It also repairs
 output-truncation artifacts in the unreleased INC-010/011/012 behavior draft.
 TASK-030 remains incomplete, with all QA and final verification obligations retained.
+DEC-050 permits TASK-031 implementation before TASK-030 acceptance. The
+[Observer checkpoint](docs/TASK-031_OBSERVER_IMPLEMENTATION.md) adds INC-023/024,
+verified Board-completion guards and model rows for future 24-Incident composition.
+BLACKOUT completion/final actions and full composition remain unselected or absent;
+TASK-031 is incomplete and QA remains deferred.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,

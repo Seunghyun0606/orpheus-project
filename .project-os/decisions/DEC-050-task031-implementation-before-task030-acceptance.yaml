@@ -1,0 +1,25 @@
+id: DEC-050
+title: Permit TASK-031 implementation before deferred TASK-030 acceptance
+status: active
+date: '2026-10-13'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: TASK-031 구현 선행 승인, 검증 의무 유지.
+request: .project-os/planning/TASK-031.readiness-exception-gate.yaml
+approved_proposal:
+  commit: ff70ccd
+  file: .project-os/planning/TASK-031.readiness-exception-gate.yaml
+decision: >-
+  Remove TASK-030 from TASK-031 implementation readiness prerequisites only.
+  Retain accepted TASK-026 and claim through projectctl. Keep TASK-030 incomplete
+  and all later dependencies intact. Author only approved Acts 8–9 content without
+  silently selecting final actions, ending balance or new guidance opportunities.
+consequences:
+  - QA remains deferred, not waived; mandatory M4/M5 review and acceptance remain.
+  - Preserve four-Incident Board pacing and responsibility after framing discovery.
+  - Preserve old exact authorities, default MVP, actual stores/profiles and strict package admission.
+  - No partial official campaign, inferred player predictions/ACKs or fallback ending.
+  - Material final-action/ending/schema/security decisions still require human approval.
+  - No task completion, push or release authorization.
+supersedes: TASK-031 implementation readiness dependency on TASK-030 only.
