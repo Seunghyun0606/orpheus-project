@@ -1,5 +1,19 @@
 # TASK-032 — Ending authoring and input-policy checkpoint
 
+## Subsequent input-scope approval
+
+DEC-054 records option A on 2026-10-14: accumulated campaign values/discoveries
+and supported operational behavior are the required ending inputs. The six
+optional-opportunity rates are not required ending observations. Their formulas,
+availability and existing uses remain unchanged. The alternatives below are the
+historical proposal approved at `568cc22`, not an unresolved input-scope request.
+
+The next pending choice is the bounded
+[actual choice-effect source extension](../specs/architecture/campaign-choice-effect-source-proposal.md).
+Existing discovery/complete effects alone cannot faithfully award scores from
+explicit reporting and acknowledged recommendation responses. No extension or
+numeric balance has been implemented; QA remains deferred.
+
 ## Completed safe steps
 
 On 2026-10-14, DEC-053 records the human's TASK-032 readiness exception.

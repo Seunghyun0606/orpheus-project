@@ -1,0 +1,33 @@
+id: DEC-054
+title: Use accumulated campaign values, discoveries and supported operational behavior for endings
+status: active
+date: '2026-10-14'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 누적 캠페인값·증거·운영 행동 중심, 선택적 비율은 엔딩 필수 입력에서 제외(권장).
+request: .project-os/planning/TASK-032.ending-input-policy-gate.yaml
+approved_proposal:
+  commit: 568cc22
+  file: docs/TASK-032_ENDING_INPUT_CHECKPOINT.md
+decision: >-
+  Prepare explicit once-per-run numeric effect and ending proposals using
+  accumulated campaign values/discoveries, supported operational behavior and
+  genuine new final context. Do not require optional-opportunity rates in the
+  new production ending authority. Preserve their existing models and uses.
+excluded_required_ending_metrics:
+  - aiRecommendationAcceptanceRate
+  - predictionDeviation
+  - safetyPreference
+  - collateralDamageTolerance
+  - companyReportingRate
+  - nullCooperationRate
+consequences:
+  - No-sample metrics remain unavailable; neither zero nor a fabricated refusal.
+  - Preserve strict all-candidate diagnostics for every observation actually referenced.
+  - A final plan alone is insufficient; accumulated requirements remain mandatory.
+  - Actual choice/response records may inform proposed numeric effects, but their source contract and amounts are not approved here.
+  - Exact numeric awards, thresholds, priority ranks and conditional epilogue/presentation contracts need separate approval.
+  - Only the new unreleased full-campaign authority may adopt this policy; old definitions and records are unchanged.
+  - QA remains deferred, not waived; no completion, push or release authorization.
+supersedes: Pending TASK-032 required ending input scope only.

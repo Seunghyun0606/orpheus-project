@@ -57,6 +57,12 @@ acceptance only, retaining accepted TASK-026. The
 [ending input checkpoint](TASK-032_ENDING_INPUT_CHECKPOINT.md) records ten narrative
 drafts and the required-input decision without selecting production balance or
 conditional epilogue gates. TASK-031 remains incomplete; QA stays deferred.
+DEC-054 now selects accumulated values/discoveries and supported operational
+behavior, excluding optional-opportunity rates as required ending inputs. The
+[choice-effect source proposal](../specs/architecture/campaign-choice-effect-source-proposal.md)
+identifies how actual accepted actions/acknowledged responses could support
+numeric effects without inferring missing observations. Its schema extension,
+numeric balance and conditional epilogues remain unapproved and unimplemented.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 
