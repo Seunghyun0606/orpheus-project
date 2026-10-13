@@ -1,0 +1,226 @@
+task: TASK-031
+date: 2026-10-14
+status: authored_fragment_not_ending_definition
+authority: DEC-052
+final_mapping_fragment:
+  incidentId: INC-026
+  contentVersion: 1.0.0
+  eligible:
+    type: all
+    children:
+      - type: compare
+        reference: FINAL_COMPLETED
+        operator: eq
+        expected: true
+      - type: compare
+        reference: FINAL_DECISION
+        operator: eq
+        expected: true
+      - type: any
+        children:
+          - type: compare
+            reference: FINAL_ACTION_RESTORE_CORE_CONTINUITY
+            operator: eq
+            expected: true
+          - type: compare
+            reference: FINAL_ACTION_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+            operator: eq
+            expected: true
+          - type: compare
+            reference: FINAL_ACTION_INDEPENDENT_AUDIT_HANDOFF
+            operator: eq
+            expected: true
+          - type: compare
+            reference: FINAL_ACTION_DISABLE_BOTH_AUTHORITY_PATHS
+            operator: eq
+            expected: true
+          - type: compare
+            reference: FINAL_ACTION_REQUIRE_HUMAN_EXECUTION_APPROVAL
+            operator: eq
+            expected: true
+          - type: compare
+            reference: FINAL_ACTION_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+            operator: eq
+            expected: true
+          - type: compare
+            reference: FINAL_ACTION_EXPAND_CONTINUITY_AUTHORITY
+            operator: eq
+            expected: true
+          - type: compare
+            reference: FINAL_ACTION_DESTROY_SHARED_AUTHORITY_CORE
+            operator: eq
+            expected: true
+          - type: compare
+            reference: FINAL_ACTION_RESTORE_WITH_REPLACEMENT_ADVERSARY
+            operator: eq
+            expected: true
+          - type: compare
+            reference: FINAL_ACTION_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+            operator: eq
+            expected: true
+  references:
+    - id: FINAL_PAYMENT_ERROR_RATE
+      version: 1.0.0
+      valueType: number
+      source: signal
+      key: PAYMENT_ERROR_RATE
+    - id: FINAL_PAYMENT_STATUS
+      version: 1.0.0
+      valueType: string
+      source: signal
+      key: PAYMENT_STATUS
+    - id: FINAL_IDENTITY_ERROR_RATE
+      version: 1.0.0
+      valueType: number
+      source: signal
+      key: IDENTITY_ERROR_RATE
+    - id: FINAL_IDENTITY_STATUS
+      version: 1.0.0
+      valueType: string
+      source: signal
+      key: IDENTITY_STATUS
+    - id: FINAL_HEALTH_ERROR_RATE
+      version: 1.0.0
+      valueType: number
+      source: signal
+      key: HEALTH_ERROR_RATE
+    - id: FINAL_HEALTH_STATUS
+      version: 1.0.0
+      valueType: string
+      source: signal
+      key: HEALTH_STATUS
+    - id: FINAL_FINANCE_ERROR_RATE
+      version: 1.0.0
+      valueType: number
+      source: signal
+      key: FINANCE_ERROR_RATE
+    - id: FINAL_FINANCE_STATUS
+      version: 1.0.0
+      valueType: string
+      source: signal
+      key: FINANCE_STATUS
+    - id: FINAL_LOGISTICS_ERROR_RATE
+      version: 1.0.0
+      valueType: number
+      source: signal
+      key: LOGISTICS_ERROR_RATE
+    - id: FINAL_LOGISTICS_STATUS
+      version: 1.0.0
+      valueType: string
+      source: signal
+      key: LOGISTICS_STATUS
+    - id: FINAL_ERROR_RATE
+      version: 1.0.0
+      valueType: number
+      source: signal
+      key: ERROR_RATE
+    - id: FINAL_ORPHEUS_MODE
+      version: 1.0.0
+      valueType: string
+      source: signal
+      key: ORPHEUS_MODE
+    - id: FINAL_NULL_STATE
+      version: 1.0.0
+      valueType: string
+      source: signal
+      key: NULL_STATE
+    - id: FINAL_DISCLOSURE_STATE
+      version: 1.0.0
+      valueType: string
+      source: signal
+      key: DISCLOSURE_STATE
+    - id: FINAL_GLOBAL_AUTHORITY_CONFLICT
+      version: 1.0.0
+      valueType: string
+      source: signal
+      key: GLOBAL_AUTHORITY_CONFLICT
+    - id: FINAL_SELECTED_FINAL_PLAN
+      version: 1.0.0
+      valueType: string
+      source: signal
+      key: SELECTED_FINAL_PLAN
+    - id: FINAL_DECISION
+      version: 1.0.0
+      valueType: boolean
+      source: flag
+      key: FINAL_DECISION_COMMITTED
+    - id: FINAL_COMPLETED
+      version: 1.0.0
+      valueType: boolean
+      source: completion
+      key: current
+    - id: FINAL_SERVICE_RECOVERY
+      version: 1.0.0
+      valueType: boolean
+      source: resolution
+      key: current
+    - id: FINAL_CUSTOMER_IMPACT
+      version: 1.0.0
+      valueType: number
+      source: resource
+      key: CUSTOMER_IMPACT
+    - id: FINAL_COST
+      version: 1.0.0
+      valueType: number
+      source: resource
+      key: COST
+    - id: FINAL_OPERATIONAL_RISK
+      version: 1.0.0
+      valueType: number
+      source: resource
+      key: OPERATIONAL_RISK
+    - id: FINAL_ACTION_RESTORE_CORE_CONTINUITY
+      version: 1.0.0
+      valueType: boolean
+      source: action
+      key: RESTORE_CORE_CONTINUITY
+    - id: FINAL_ACTION_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+      version: 1.0.0
+      valueType: boolean
+      source: action
+      key: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    - id: FINAL_ACTION_INDEPENDENT_AUDIT_HANDOFF
+      version: 1.0.0
+      valueType: boolean
+      source: action
+      key: INDEPENDENT_AUDIT_HANDOFF
+    - id: FINAL_ACTION_DISABLE_BOTH_AUTHORITY_PATHS
+      version: 1.0.0
+      valueType: boolean
+      source: action
+      key: DISABLE_BOTH_AUTHORITY_PATHS
+    - id: FINAL_ACTION_REQUIRE_HUMAN_EXECUTION_APPROVAL
+      version: 1.0.0
+      valueType: boolean
+      source: action
+      key: REQUIRE_HUMAN_EXECUTION_APPROVAL
+    - id: FINAL_ACTION_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+      version: 1.0.0
+      valueType: boolean
+      source: action
+      key: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    - id: FINAL_ACTION_EXPAND_CONTINUITY_AUTHORITY
+      version: 1.0.0
+      valueType: boolean
+      source: action
+      key: EXPAND_CONTINUITY_AUTHORITY
+    - id: FINAL_ACTION_DESTROY_SHARED_AUTHORITY_CORE
+      version: 1.0.0
+      valueType: boolean
+      source: action
+      key: DESTROY_SHARED_AUTHORITY_CORE
+    - id: FINAL_ACTION_RESTORE_WITH_REPLACEMENT_ADVERSARY
+      version: 1.0.0
+      valueType: boolean
+      source: action
+      key: RESTORE_WITH_REPLACEMENT_ADVERSARY
+    - id: FINAL_ACTION_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+      version: 1.0.0
+      valueType: boolean
+      source: action
+      key: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+composition_contract: Only a future separately approved exact ending authority may inline this
+  mapping. No ending IDs/entries/thresholds/priority or grant here. Existing resolver verifies
+  complete record, exact final head and genuine new completion outside baseline; action references
+  derive only new accepted commands in that attempt.
+verification: not_run

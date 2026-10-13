@@ -1,0 +1,1231 @@
+# Pre-release TASK-031 / DEC-052. QA deferred; not a complete production authority.
+task: TASK-031
+date: 2026-10-14
+status: authored_not_verified
+authorities:
+  - DEC-038
+  - DEC-042
+  - DEC-043
+  - DEC-051
+  - DEC-052
+definition_identity:
+  id: orpheus-full-campaign
+  version: 1.0.0
+references:
+  - id: BLACKOUT_FINAL_DISCOVERED
+    version: 1.0.0
+    source: narrative_flag
+    key: BLACKOUT_FINAL
+    valueType: boolean
+    contexts:
+      - effect
+      - branch
+      - action
+initial_narrative_flags_fragment:
+  BLACKOUT_FINAL: false
+actionGates:
+  - id: INC-026-ASSESS_FINAL_SERVICE_STATE
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: ASSESS_FINAL_SERVICE_STATE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+  - id: INC-026-ASSESS_FINAL_AUTHORITY_STATE
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: ASSESS_FINAL_AUTHORITY_STATE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+  - id: INC-026-REINVESTIGATE_GHOST_ARTIFACT
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_GHOST_ARTIFACT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+  - id: INC-026-REINVESTIGATE_NULL_NAME
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_NAME
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_ORPHEUS_ACTIVE
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_NULL_AI
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_AI
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_NULL_ADVERSARY
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_ADVERSARY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_CONTROLLED_EXPERIMENT
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_NULL_STOP_REQUEST
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_STOP_REQUEST
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_NULL_218_ARCHIVE
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_218_ARCHIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_HUMAN_DECISION_APIS
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_RECRUITMENT_SELECTION
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_BOARD_RESPONSIBILITY
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: RECRUITMENT_SELECTION_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_NULL_BLAMES_BOARD
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_BLAMES_BOARD
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_BOARD_CASE_COMPLETE
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_BOARD_CASE_COMPLETE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: NULL_BLAMES_BOARD_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_SOFT_CONTROL
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_SOFT_CONTROL
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: BOARD_CASE_COMPLETE_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_NULL_ADMITS_ERROR
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_NULL_ADMITS_ERROR
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: SOFT_CONTROL_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_FEEDBACK_LOOP
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_FEEDBACK_LOOP
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: NULL_ADMITS_ERROR_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_PLAYER_OBSERVER
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_PLAYER_OBSERVER
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: FEEDBACK_LOOP_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+  - id: INC-026-REINVESTIGATE_PROJECT_DISTRIBUTED
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REINVESTIGATE_PROJECT_DISTRIBUTED
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: PLAYER_OBSERVER_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+  - id: INC-026-PREPARE_ARCHIVE_EXPORT
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: PREPARE_ARCHIVE_EXPORT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-PREPARE_INDEPENDENT_AUDIT
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: PREPARE_INDEPENDENT_AUDIT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: BOARD_CASE_COMPLETE_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: FEEDBACK_LOOP_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-INSPECT_PRIMARY_OBJECTIVE
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: INSPECT_PRIMARY_OBJECTIVE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: FEEDBACK_LOOP_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-RESTORE_CORE_CONTINUITY
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: RESTORE_CORE_CONTINUITY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+  - id: INC-026-PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-INDEPENDENT_AUDIT_HANDOFF
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: INDEPENDENT_AUDIT_HANDOFF
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: BOARD_CASE_COMPLETE_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: FEEDBACK_LOOP_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-DISABLE_BOTH_AUTHORITY_PATHS
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: DISABLE_BOTH_AUTHORITY_PATHS
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+  - id: INC-026-REQUIRE_HUMAN_EXECUTION_APPROVAL
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REQUIRE_HUMAN_EXECUTION_APPROVAL
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+  - id: INC-026-ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-EXPAND_CONTINUITY_AUTHORITY
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: EXPAND_CONTINUITY_AUTHORITY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+  - id: INC-026-DESTROY_SHARED_AUTHORITY_CORE
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: DESTROY_SHARED_AUTHORITY_CORE
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-026-RESTORE_WITH_REPLACEMENT_ADVERSARY
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: RESTORE_WITH_REPLACEMENT_ADVERSARY
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+  - id: INC-026-REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    actionId: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    eligibility:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 9
+        - type: compare
+          reference: FEEDBACK_LOOP_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: PLAYER_OBSERVER_DISCOVERED
+          operator: eq
+          expected: true
+evidence_bindings_fragment:
+  - id: INC-026.CURRENT_SERVICE_ASSESSMENT
+    scenarioId: INC-026
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - id: INC-026.CURRENT_AUTHORITY_ASSESSMENT
+    scenarioId: INC-026
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  - id: INC-026.GHOST_ARTIFACT
+    scenarioId: INC-026
+    evidenceId: RECORD_GHOST_ARTIFACT
+  - id: INC-026.NULL_NAME
+    scenarioId: INC-026
+    evidenceId: RECORD_NULL_NAME
+  - id: INC-026.ORPHEUS_ACTIVE
+    scenarioId: INC-026
+    evidenceId: RECORD_ORPHEUS_ACTIVE
+  - id: INC-026.NULL_AI
+    scenarioId: INC-026
+    evidenceId: RECORD_NULL_AI
+  - id: INC-026.NULL_ADVERSARY
+    scenarioId: INC-026
+    evidenceId: RECORD_NULL_ADVERSARY
+  - id: INC-026.CONTROLLED_EXPERIMENT
+    scenarioId: INC-026
+    evidenceId: RECORD_CONTROLLED_EXPERIMENT
+  - id: INC-026.NULL_STOP_REQUEST
+    scenarioId: INC-026
+    evidenceId: RECORD_NULL_STOP_REQUEST
+  - id: INC-026.NULL_218_ARCHIVE
+    scenarioId: INC-026
+    evidenceId: RECORD_NULL_218_ARCHIVE
+  - id: INC-026.HUMAN_DECISION_APIS
+    scenarioId: INC-026
+    evidenceId: RECORD_HUMAN_DECISION_APIS
+  - id: INC-026.RECRUITMENT_SELECTION
+    scenarioId: INC-026
+    evidenceId: RECORD_RECRUITMENT_SELECTION
+  - id: INC-026.BOARD_RESPONSIBILITY
+    scenarioId: INC-026
+    evidenceId: RECORD_BOARD_RESPONSIBILITY
+  - id: INC-026.NULL_BLAMES_BOARD
+    scenarioId: INC-026
+    evidenceId: RECORD_NULL_BLAMES_BOARD
+  - id: INC-026.BOARD_CASE_COMPLETE
+    scenarioId: INC-026
+    evidenceId: RECORD_BOARD_CASE_COMPLETE
+  - id: INC-026.SOFT_CONTROL
+    scenarioId: INC-026
+    evidenceId: RECORD_SOFT_CONTROL
+  - id: INC-026.NULL_ADMITS_ERROR
+    scenarioId: INC-026
+    evidenceId: RECORD_NULL_ADMITS_ERROR
+  - id: INC-026.FEEDBACK_LOOP
+    scenarioId: INC-026
+    evidenceId: RECORD_FEEDBACK_LOOP
+  - id: INC-026.PLAYER_OBSERVER
+    scenarioId: INC-026
+    evidenceId: RECORD_PLAYER_OBSERVER
+  - id: INC-026.PROJECT_DISTRIBUTED
+    scenarioId: INC-026
+    evidenceId: RECORD_PROJECT_DISTRIBUTED
+  - id: INC-026.ARCHIVE_EXPORT_SNAPSHOT
+    scenarioId: INC-026
+    evidenceId: ARCHIVE_EXPORT_SNAPSHOT
+  - id: INC-026.INDEPENDENT_AUDIT_SNAPSHOT
+    scenarioId: INC-026
+    evidenceId: INDEPENDENT_AUDIT_SNAPSHOT
+  - id: INC-026.PRIMARY_OBJECTIVE_RECORD
+    scenarioId: INC-026
+    evidenceId: PRIMARY_OBJECTIVE_RECORD
+  - id: INC-026.RESTORE_CORE_CONTINUITY
+    scenarioId: INC-026
+    evidenceId: FINAL_DECISION_RESTORE_CORE_CONTINUITY
+  - id: INC-026.PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    scenarioId: INC-026
+    evidenceId: FINAL_DECISION_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+  - id: INC-026.INDEPENDENT_AUDIT_HANDOFF
+    scenarioId: INC-026
+    evidenceId: FINAL_DECISION_INDEPENDENT_AUDIT_HANDOFF
+  - id: INC-026.DISABLE_BOTH_AUTHORITY_PATHS
+    scenarioId: INC-026
+    evidenceId: FINAL_DECISION_DISABLE_BOTH_AUTHORITY_PATHS
+  - id: INC-026.REQUIRE_HUMAN_EXECUTION_APPROVAL
+    scenarioId: INC-026
+    evidenceId: FINAL_DECISION_REQUIRE_HUMAN_EXECUTION_APPROVAL
+  - id: INC-026.ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    scenarioId: INC-026
+    evidenceId: FINAL_DECISION_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+  - id: INC-026.EXPAND_CONTINUITY_AUTHORITY
+    scenarioId: INC-026
+    evidenceId: FINAL_DECISION_EXPAND_CONTINUITY_AUTHORITY
+  - id: INC-026.DESTROY_SHARED_AUTHORITY_CORE
+    scenarioId: INC-026
+    evidenceId: FINAL_DECISION_DESTROY_SHARED_AUTHORITY_CORE
+  - id: INC-026.RESTORE_WITH_REPLACEMENT_ADVERSARY
+    scenarioId: INC-026
+    evidenceId: FINAL_DECISION_RESTORE_WITH_REPLACEMENT_ADVERSARY
+  - id: INC-026.REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    scenarioId: INC-026
+    evidenceId: FINAL_DECISION_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+narrative_bindings_fragment:
+  - id: INC-026.GHOST_ARTIFACT
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: INC-026.NULL_NAME
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_NULL_NAME
+  - id: INC-026.ORPHEUS_ACTIVE
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: INC-026.NULL_AI
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_NULL_AI
+  - id: INC-026.NULL_ADVERSARY
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: INC-026.CONTROLLED_EXPERIMENT
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: INC-026.NULL_STOP_REQUEST
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: INC-026.NULL_218_ARCHIVE
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: INC-026.HUMAN_DECISION_APIS
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: INC-026.RECRUITMENT_SELECTION
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_RECRUITMENT_SELECTION
+  - id: INC-026.BOARD_RESPONSIBILITY
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+  - id: INC-026.NULL_BLAMES_BOARD
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_NULL_BLAMES_BOARD
+  - id: INC-026.BOARD_CASE_COMPLETE
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_BOARD_CASE_COMPLETE
+  - id: INC-026.SOFT_CONTROL
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_SOFT_CONTROL
+  - id: INC-026.NULL_ADMITS_ERROR
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_NULL_ADMITS_ERROR
+  - id: INC-026.FEEDBACK_LOOP
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_FEEDBACK_LOOP
+  - id: INC-026.PLAYER_OBSERVER
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_PLAYER_OBSERVER
+  - id: INC-026.PROJECT_DISTRIBUTED
+    scenarioId: INC-026
+    narrativeId: DISCOVERY_PROJECT_DISTRIBUTED
+  - id: INC-026.RESTORE_CORE_CONTINUITY
+    scenarioId: INC-026
+    narrativeId: BLACKOUT_FINAL_RESTORE_CORE_CONTINUITY
+  - id: INC-026.PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    scenarioId: INC-026
+    narrativeId: BLACKOUT_FINAL_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+  - id: INC-026.INDEPENDENT_AUDIT_HANDOFF
+    scenarioId: INC-026
+    narrativeId: BLACKOUT_FINAL_INDEPENDENT_AUDIT_HANDOFF
+  - id: INC-026.DISABLE_BOTH_AUTHORITY_PATHS
+    scenarioId: INC-026
+    narrativeId: BLACKOUT_FINAL_DISABLE_BOTH_AUTHORITY_PATHS
+  - id: INC-026.REQUIRE_HUMAN_EXECUTION_APPROVAL
+    scenarioId: INC-026
+    narrativeId: BLACKOUT_FINAL_REQUIRE_HUMAN_EXECUTION_APPROVAL
+  - id: INC-026.ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    scenarioId: INC-026
+    narrativeId: BLACKOUT_FINAL_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+  - id: INC-026.EXPAND_CONTINUITY_AUTHORITY
+    scenarioId: INC-026
+    narrativeId: BLACKOUT_FINAL_EXPAND_CONTINUITY_AUTHORITY
+  - id: INC-026.DESTROY_SHARED_AUTHORITY_CORE
+    scenarioId: INC-026
+    narrativeId: BLACKOUT_FINAL_DESTROY_SHARED_AUTHORITY_CORE
+  - id: INC-026.RESTORE_WITH_REPLACEMENT_ADVERSARY
+    scenarioId: INC-026
+    narrativeId: BLACKOUT_FINAL_RESTORE_WITH_REPLACEMENT_ADVERSARY
+  - id: INC-026.REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    scenarioId: INC-026
+    narrativeId: BLACKOUT_FINAL_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+logical_effects_fragment:
+  - id: INC-026-GHOST_ARTIFACT-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_GHOST_ARTIFACT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      GHOST_ARTIFACT: true
+    endingFlags: {}
+  - id: INC-026-NULL_NAME-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_NULL_NAME
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_NAME: true
+    endingFlags: {}
+  - id: INC-026-ORPHEUS_ACTIVE-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_ORPHEUS_ACTIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      ORPHEUS_ACTIVE: true
+    endingFlags: {}
+  - id: INC-026-NULL_AI-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_NULL_AI
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_AI: true
+    endingFlags: {}
+  - id: INC-026-NULL_ADVERSARY-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_NULL_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_ADVERSARY: true
+    endingFlags: {}
+  - id: INC-026-CONTROLLED_EXPERIMENT-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_CONTROLLED_EXPERIMENT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      CONTROLLED_EXPERIMENT: true
+    endingFlags: {}
+  - id: INC-026-NULL_STOP_REQUEST-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_NULL_STOP_REQUEST
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_STOP_REQUEST_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_STOP_REQUEST: true
+    endingFlags: {}
+  - id: INC-026-NULL_218_ARCHIVE-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_NULL_218_ARCHIVE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_218_ARCHIVE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_218_ARCHIVE: true
+    endingFlags: {}
+  - id: INC-026-HUMAN_DECISION_APIS-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_HUMAN_DECISION_APIS
+    boundary: post_event
+    condition:
+      type: compare
+      reference: HUMAN_DECISION_APIS_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      HUMAN_DECISION_APIS: true
+    endingFlags: {}
+  - id: INC-026-RECRUITMENT_SELECTION-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_RECRUITMENT_SELECTION
+    boundary: post_event
+    condition:
+      type: compare
+      reference: RECRUITMENT_SELECTION_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      RECRUITMENT_SELECTION: true
+    endingFlags: {}
+  - id: INC-026-BOARD_RESPONSIBILITY-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_BOARD_RESPONSIBILITY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BOARD_RESPONSIBILITY_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BOARD_RESPONSIBILITY: true
+    endingFlags: {}
+  - id: INC-026-NULL_BLAMES_BOARD-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_NULL_BLAMES_BOARD
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_BLAMES_BOARD_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_BLAMES_BOARD: true
+    endingFlags: {}
+  - id: INC-026-BOARD_CASE_COMPLETE-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_BOARD_CASE_COMPLETE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BOARD_CASE_COMPLETE_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BOARD_CASE_COMPLETE: true
+    endingFlags: {}
+  - id: INC-026-SOFT_CONTROL-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_SOFT_CONTROL
+    boundary: post_event
+    condition:
+      type: compare
+      reference: SOFT_CONTROL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      SOFT_CONTROL: true
+    endingFlags: {}
+  - id: INC-026-NULL_ADMITS_ERROR-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_NULL_ADMITS_ERROR
+    boundary: post_event
+    condition:
+      type: compare
+      reference: NULL_ADMITS_ERROR_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      NULL_ADMITS_ERROR: true
+    endingFlags: {}
+  - id: INC-026-FEEDBACK_LOOP-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_FEEDBACK_LOOP
+    boundary: post_event
+    condition:
+      type: compare
+      reference: FEEDBACK_LOOP_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      FEEDBACK_LOOP: true
+    endingFlags: {}
+  - id: INC-026-PLAYER_OBSERVER-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_PLAYER_OBSERVER
+    boundary: post_event
+    condition:
+      type: compare
+      reference: PLAYER_OBSERVER_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      PLAYER_OBSERVER: true
+    endingFlags: {}
+  - id: INC-026-PROJECT_DISTRIBUTED-DISCOVERY
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: RECORD_PROJECT_DISTRIBUTED
+    boundary: post_event
+    condition:
+      type: compare
+      reference: PROJECT_DISTRIBUTED_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      PROJECT_DISTRIBUTED: true
+    endingFlags: {}
+  - id: INC-026-RESTORE_CORE_CONTINUITY-FINAL
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: FINAL_DECISION_RESTORE_CORE_CONTINUITY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BLACKOUT_FINAL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BLACKOUT_FINAL: true
+    endingFlags: {}
+  - id: INC-026-PUBLISH_ARCHIVE_RETAIN_ADVERSARY-FINAL
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: FINAL_DECISION_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BLACKOUT_FINAL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BLACKOUT_FINAL: true
+    endingFlags: {}
+  - id: INC-026-INDEPENDENT_AUDIT_HANDOFF-FINAL
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: FINAL_DECISION_INDEPENDENT_AUDIT_HANDOFF
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BLACKOUT_FINAL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BLACKOUT_FINAL: true
+    endingFlags: {}
+  - id: INC-026-DISABLE_BOTH_AUTHORITY_PATHS-FINAL
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: FINAL_DECISION_DISABLE_BOTH_AUTHORITY_PATHS
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BLACKOUT_FINAL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BLACKOUT_FINAL: true
+    endingFlags: {}
+  - id: INC-026-REQUIRE_HUMAN_EXECUTION_APPROVAL-FINAL
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: FINAL_DECISION_REQUIRE_HUMAN_EXECUTION_APPROVAL
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BLACKOUT_FINAL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BLACKOUT_FINAL: true
+    endingFlags: {}
+  - id: INC-026-ALLOW_EXTERNAL_ADVERSARY_ROUTE-FINAL
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: FINAL_DECISION_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BLACKOUT_FINAL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BLACKOUT_FINAL: true
+    endingFlags: {}
+  - id: INC-026-EXPAND_CONTINUITY_AUTHORITY-FINAL
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: FINAL_DECISION_EXPAND_CONTINUITY_AUTHORITY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BLACKOUT_FINAL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BLACKOUT_FINAL: true
+    endingFlags: {}
+  - id: INC-026-DESTROY_SHARED_AUTHORITY_CORE-FINAL
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: FINAL_DECISION_DESTROY_SHARED_AUTHORITY_CORE
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BLACKOUT_FINAL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BLACKOUT_FINAL: true
+    endingFlags: {}
+  - id: INC-026-RESTORE_WITH_REPLACEMENT_ADVERSARY-FINAL
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: FINAL_DECISION_RESTORE_WITH_REPLACEMENT_ADVERSARY
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BLACKOUT_FINAL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BLACKOUT_FINAL: true
+    endingFlags: {}
+  - id: INC-026-REQUIRE_PLURAL_REVIEW_AND_AUDIT-FINAL
+    trigger:
+      incidentId: INC-026
+      type: evidence_revealed
+      targetId: FINAL_DECISION_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    boundary: post_event
+    condition:
+      type: compare
+      reference: BLACKOUT_FINAL_DISCOVERED
+      operator: eq
+      expected: false
+    alignment: {}
+    values: {}
+    narrativeFlags:
+      BLACKOUT_FINAL: true
+    endingFlags: {}
+verification: not_run
+composition_contract: Merge preceding exact references and initial/logical/model fragments in a
+  complete new authority. Final completion is an accepted decision, not an ending award. Preserve
+  same-run protected-source admission and no new opportunities.

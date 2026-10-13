@@ -41,10 +41,20 @@ function fixture() {
       initiallyAvailable: true,
       requirements: contract.final_action_requirements_fragment,
       costs: [],
-      effects: contract.final_action_terminal_effect_fragment,
+      effects: [],
       temporaryEffects: [],
     })),
   ];
+  s.narratives = ['TEST_PLAN_A', 'TEST_PLAN_B'].map((actionId) => ({
+    id: 'TEST_COMPLETE_' + actionId,
+    title: 'Test-only completed decision',
+    body: 'Test-only outcome applied after normal action time and due events.',
+    conditions: [
+      { type: 'action_completed' as const, actionId },
+      { type: 'flag' as const, flagId: 'FINAL_DECISION_COMMITTED', value: false },
+    ],
+    effects: contract.final_action_terminal_effect_fragment,
+  }));
   s.events = [
     {
       id: 'TEST_ARM_PRESSURE',
@@ -113,6 +123,11 @@ describe('DEC-051 final completion contract — deferred QA', () => {
     expect(contract.completion_fragment.effects).toEqual([]);
     // Official ending provenance still requires a new completion outside inherited
     // baseline; standalone replay above is not a campaign or resolver acceptance.
-    expect(s.narratives).toEqual([]);
+    expect(s.events.every((e) => e.effects.every((effect) => effect.type !== 'set_flag'))).toBe(
+      true,
+    );
+    expect(s.narratives.every((n) => n.conditions.some((c) => c.type === 'action_completed'))).toBe(
+      true,
+    );
   });
 });

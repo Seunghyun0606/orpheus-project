@@ -1,0 +1,26 @@
+id: DEC-052
+title: Approve concrete BLACKOUT terminal plans and operational consequences
+status: active
+date: '2026-10-14'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 최종 행동·영향 초안 승인 후 구현.
+request: .project-os/planning/TASK-031.final-plans-gate.yaml
+approved_proposal:
+  commit: 0eb6037
+  file: specs/architecture/blackout-final-plans-proposal.md
+decision: >-
+  Author the exact ten terminal plans, initial five-service context, normal delayed
+  pressure, current assessment/snapshot/objective investigations, explicit local
+  and known-record guards, time/cost/impact/risk and final service/authority states
+  proposed at 0eb6037. Apply only to new unreleased INC-026 1.0.0 under DEC-051.
+consequences:
+  - Preserve normal due-event ordering, already incurred impact and mutually terminal decisions.
+  - Ordinary crisis access does not require every optional clue or an unavailable metric.
+  - Advanced re-investigation preserves the reveal graph and actual Board-completion pacing.
+  - Explicit operational classifications and distinct current causal assessments retain DEC-044 semantics.
+  - No ending thresholds/priorities, numeric campaign awards, epilogues or new guidance opportunities are selected.
+  - All consequences are fictional game data; no actual export/destruction/security mutation.
+  - Preserve old authorities/records/stores and strict complete-package admission; no QA waiver, completion, push or release.
+supersedes: Final-plan/context-operational-balance-unselected clauses for this exact proposal only.

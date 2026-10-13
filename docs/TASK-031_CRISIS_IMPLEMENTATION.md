@@ -1,5 +1,10 @@
 # TASK-031 — Crisis preparation and final-completion checkpoint
 
+Latest addendum: DEC-052 approves the final-plan proposal. The
+[BLACKOUT checkpoint](TASK-031_BLACKOUT_IMPLEMENTATION.md) authors INC-026 and
+completion-bound outcomes. The pending concrete-plan choice below is historical
+and resolved; ending balance/full integration and TASK-031 acceptance remain pending.
+
 ## Completed authoring, not task completion
 
 DEC-051 records human approval of final-decision-based completion at the

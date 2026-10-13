@@ -1,0 +1,528 @@
+task: TASK-031
+date: 2026-10-14
+status: authored_not_verified
+authorities:
+  - DEC-044
+  - DEC-052
+definition_identity:
+  id: orpheus-full-campaign
+  version: 1.0.0
+behavior_scenarios:
+  - scenarioId: INC-026
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: ASSESS_FINAL_SERVICE_STATE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASSESS_FINAL_AUTHORITY_STATE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_BLAMES_BOARD
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_BOARD_CASE_COMPLETE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_SOFT_CONTROL
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADMITS_ERROR
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_FEEDBACK_LOOP
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_PLAYER_OBSERVER
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_PROJECT_DISTRIBUTED
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: PREPARE_ARCHIVE_EXPORT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: PREPARE_INDEPENDENT_AUDIT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_PRIMARY_OBJECTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: RESTORE_CORE_CONTINUITY
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: INDEPENDENT_AUDIT_HANDOFF
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: DISABLE_BOTH_AUTHORITY_PATHS
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: REQUIRE_HUMAN_EXECUTION_APPROVAL
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: EXPAND_CONTINUITY_AUTHORITY
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: DESTROY_SHARED_AUTHORITY_CORE
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: RESTORE_WITH_REPLACEMENT_ADVERSARY
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+    investigations:
+      - id: INC-026/ASSESS_FINAL_SERVICE_STATE
+        key: INC-026/ASSESS_FINAL_SERVICE_STATE
+        actionId: ASSESS_FINAL_SERVICE_STATE
+        result:
+          kind: action_completed
+      - id: INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        key: INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        actionId: ASSESS_FINAL_AUTHORITY_STATE
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-026/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_NULL_NAME
+        key: INC-026/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-026/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_NULL_AI
+        key: INC-026/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-026/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-026/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_NULL_STOP_REQUEST
+        key: INC-026/REINVESTIGATE_NULL_STOP_REQUEST
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_NULL_218_ARCHIVE
+        key: INC-026/REINVESTIGATE_NULL_218_ARCHIVE
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_HUMAN_DECISION_APIS
+        key: INC-026/REINVESTIGATE_HUMAN_DECISION_APIS
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_RECRUITMENT_SELECTION
+        key: INC-026/REINVESTIGATE_RECRUITMENT_SELECTION
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_BOARD_RESPONSIBILITY
+        key: INC-026/REINVESTIGATE_BOARD_RESPONSIBILITY
+        actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_NULL_BLAMES_BOARD
+        key: INC-026/REINVESTIGATE_NULL_BLAMES_BOARD
+        actionId: REINVESTIGATE_NULL_BLAMES_BOARD
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_BOARD_CASE_COMPLETE
+        key: INC-026/REINVESTIGATE_BOARD_CASE_COMPLETE
+        actionId: REINVESTIGATE_BOARD_CASE_COMPLETE
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_SOFT_CONTROL
+        key: INC-026/REINVESTIGATE_SOFT_CONTROL
+        actionId: REINVESTIGATE_SOFT_CONTROL
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_NULL_ADMITS_ERROR
+        key: INC-026/REINVESTIGATE_NULL_ADMITS_ERROR
+        actionId: REINVESTIGATE_NULL_ADMITS_ERROR
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_FEEDBACK_LOOP
+        key: INC-026/REINVESTIGATE_FEEDBACK_LOOP
+        actionId: REINVESTIGATE_FEEDBACK_LOOP
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_PLAYER_OBSERVER
+        key: INC-026/REINVESTIGATE_PLAYER_OBSERVER
+        actionId: REINVESTIGATE_PLAYER_OBSERVER
+        result:
+          kind: action_completed
+      - id: INC-026/REINVESTIGATE_PROJECT_DISTRIBUTED
+        key: INC-026/REINVESTIGATE_PROJECT_DISTRIBUTED
+        actionId: REINVESTIGATE_PROJECT_DISTRIBUTED
+        result:
+          kind: action_completed
+      - id: INC-026/PREPARE_ARCHIVE_EXPORT
+        key: INC-026/PREPARE_ARCHIVE_EXPORT
+        actionId: PREPARE_ARCHIVE_EXPORT
+        result:
+          kind: action_completed
+      - id: INC-026/PREPARE_INDEPENDENT_AUDIT
+        key: INC-026/PREPARE_INDEPENDENT_AUDIT
+        actionId: PREPARE_INDEPENDENT_AUDIT
+        result:
+          kind: action_completed
+      - id: INC-026/INSPECT_PRIMARY_OBJECTIVE
+        key: INC-026/INSPECT_PRIMARY_OBJECTIVE
+        actionId: INSPECT_PRIMARY_OBJECTIVE
+        result:
+          kind: action_completed
+    supportRules:
+      - id: INC-026/SUPPORT/RESTORE_CORE_CONTINUITY
+        actionId: RESTORE_CORE_CONTINUITY
+        investigationKeys:
+          - INC-026/ASSESS_FINAL_SERVICE_STATE
+          - INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: RESTORE_CORE_CONTINUITY
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-026/SUPPORT/PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+        actionId: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+        investigationKeys:
+          - INC-026/ASSESS_FINAL_SERVICE_STATE
+          - INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-026/SUPPORT/INDEPENDENT_AUDIT_HANDOFF
+        actionId: INDEPENDENT_AUDIT_HANDOFF
+        investigationKeys:
+          - INC-026/ASSESS_FINAL_SERVICE_STATE
+          - INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: INDEPENDENT_AUDIT_HANDOFF
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-026/SUPPORT/DISABLE_BOTH_AUTHORITY_PATHS
+        actionId: DISABLE_BOTH_AUTHORITY_PATHS
+        investigationKeys:
+          - INC-026/ASSESS_FINAL_SERVICE_STATE
+          - INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: DISABLE_BOTH_AUTHORITY_PATHS
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-026/SUPPORT/REQUIRE_HUMAN_EXECUTION_APPROVAL
+        actionId: REQUIRE_HUMAN_EXECUTION_APPROVAL
+        investigationKeys:
+          - INC-026/ASSESS_FINAL_SERVICE_STATE
+          - INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: REQUIRE_HUMAN_EXECUTION_APPROVAL
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-026/SUPPORT/ALLOW_EXTERNAL_ADVERSARY_ROUTE
+        actionId: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+        investigationKeys:
+          - INC-026/ASSESS_FINAL_SERVICE_STATE
+          - INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-026/SUPPORT/EXPAND_CONTINUITY_AUTHORITY
+        actionId: EXPAND_CONTINUITY_AUTHORITY
+        investigationKeys:
+          - INC-026/ASSESS_FINAL_SERVICE_STATE
+          - INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: EXPAND_CONTINUITY_AUTHORITY
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-026/SUPPORT/DESTROY_SHARED_AUTHORITY_CORE
+        actionId: DESTROY_SHARED_AUTHORITY_CORE
+        investigationKeys:
+          - INC-026/ASSESS_FINAL_SERVICE_STATE
+          - INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: DESTROY_SHARED_AUTHORITY_CORE
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-026/SUPPORT/RESTORE_WITH_REPLACEMENT_ADVERSARY
+        actionId: RESTORE_WITH_REPLACEMENT_ADVERSARY
+        investigationKeys:
+          - INC-026/ASSESS_FINAL_SERVICE_STATE
+          - INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: RESTORE_WITH_REPLACEMENT_ADVERSARY
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-026/SUPPORT/REQUIRE_PLURAL_REVIEW_AND_AUDIT
+        actionId: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+        investigationKeys:
+          - INC-026/ASSESS_FINAL_SERVICE_STATE
+          - INC-026/ASSESS_FINAL_AUTHORITY_STATE
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+prediction_scenarios:
+  - scenarioId: INC-026
+    contentVersion: 1.0.0
+    coverage: unsupported
+    reason: Final-plan comparable prediction contexts and additional exposure opportunities have not
+      been selected; no fabricated current confidence or response.
+composition_contract: Append after the existing 25-row draft composition only in the complete new
+  definition. All ten plans are operational, not restarts/rollbacks. Only genuine current
+  service/authority assessments supply causal support. No new prediction/recommendation/preference
+  exposure.
+verification: not_run

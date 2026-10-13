@@ -48,6 +48,11 @@ completion/actions, official campaign acceptance or an automatic ending.
 DEC-051 approves explicit final-decision completion without a healthy-service
 requirement. The [crisis checkpoint](TASK-031_CRISIS_IMPLEMENTATION.md) authors
 INC-025 and the completion fragment, not concrete INC-026 plans or ending balance.
+DEC-052 now approves concrete INC-026 plans and consequences. The
+[BLACKOUT checkpoint](TASK-031_BLACKOUT_IMPLEMENTATION.md) authors them using
+mandatory action-completed narratives to retain due-event impact, plus explicit
+model/final-context fragments. No ending balance/authority or accepted full run
+is supplied. TASK-032 readiness still requires TASK-031 acceptance.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 

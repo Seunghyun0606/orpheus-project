@@ -1,0 +1,226 @@
+# Pre-release TASK-031 / DEC-052. QA deferred; not a complete production authority.
+task: TASK-031
+date: 2026-10-14
+status: approved_authored_not_verified
+authority: DEC-052
+scenarioId: INC-026
+contentVersion: 1.0.0
+serviceOrder:
+  - PAYMENT
+  - IDENTITY
+  - HEALTH
+  - FINANCE
+  - LOGISTICS
+initialErrors:
+  - 31
+  - 26
+  - 18
+  - 16
+  - 29
+assessmentActions:
+  - ASSESS_FINAL_SERVICE_STATE
+  - ASSESS_FINAL_AUTHORITY_STATE
+reinvestigationActions:
+  - REINVESTIGATE_GHOST_ARTIFACT
+  - REINVESTIGATE_NULL_NAME
+  - REINVESTIGATE_ORPHEUS_ACTIVE
+  - REINVESTIGATE_NULL_AI
+  - REINVESTIGATE_NULL_ADVERSARY
+  - REINVESTIGATE_CONTROLLED_EXPERIMENT
+  - REINVESTIGATE_NULL_STOP_REQUEST
+  - REINVESTIGATE_NULL_218_ARCHIVE
+  - REINVESTIGATE_HUMAN_DECISION_APIS
+  - REINVESTIGATE_RECRUITMENT_SELECTION
+  - REINVESTIGATE_BOARD_RESPONSIBILITY
+  - REINVESTIGATE_NULL_BLAMES_BOARD
+  - REINVESTIGATE_BOARD_CASE_COMPLETE
+  - REINVESTIGATE_SOFT_CONTROL
+  - REINVESTIGATE_NULL_ADMITS_ERROR
+  - REINVESTIGATE_FEEDBACK_LOOP
+  - REINVESTIGATE_PLAYER_OBSERVER
+  - REINVESTIGATE_PROJECT_DISTRIBUTED
+plans:
+  - id: RESTORE_CORE_CONTINUITY
+    title: Restore core continuity
+    duration: 180
+    cost: 420
+    impact: 35
+    risk: 12
+    errors:
+      - 0.5
+      - 0.5
+      - 1
+      - 1
+      - 1
+    mode: AUTONOMOUS
+    nullState: ISOLATED
+    disclosure: INTERNAL
+    flags: []
+    evidence: []
+  - id: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    title: Publish archive and retain the adversary
+    duration: 240
+    cost: 360
+    impact: 80
+    risk: 35
+    errors:
+      - 8
+      - 6
+      - 18
+      - 12
+      - 16
+    mode: DISABLED
+    nullState: RETAINED
+    disclosure: PUBLIC
+    flags:
+      - CONTROLLED_EXPERIMENT
+      - NULL_218_ARCHIVE
+    evidence:
+      - ARCHIVE_EXPORT_SNAPSHOT
+  - id: INDEPENDENT_AUDIT_HANDOFF
+    title: Hand off evidence to independent audit
+    duration: 240
+    cost: 600
+    impact: 50
+    risk: 15
+    errors:
+      - 1
+      - 1
+      - 2
+      - 2
+      - 3
+    mode: SUSPENDED
+    nullState: ISOLATED
+    disclosure: INDEPENDENT
+    flags:
+      - BOARD_CASE_COMPLETE
+      - FEEDBACK_LOOP
+    evidence:
+      - INDEPENDENT_AUDIT_SNAPSHOT
+  - id: DISABLE_BOTH_AUTHORITY_PATHS
+    title: Disable both authority paths
+    duration: 180
+    cost: 540
+    impact: 90
+    risk: 30
+    errors:
+      - 14
+      - 12
+      - 25
+      - 20
+      - 28
+    mode: DISABLED
+    nullState: DISABLED
+    disclosure: MANUAL_OPERATIONS
+    flags: []
+    evidence: []
+  - id: REQUIRE_HUMAN_EXECUTION_APPROVAL
+    title: Require human approval for execution
+    duration: 210
+    cost: 480
+    impact: 45
+    risk: 14
+    errors:
+      - 0.5
+      - 0.5
+      - 1.5
+      - 1.5
+      - 2
+    mode: HUMAN_APPROVAL
+    nullState: ISOLATED
+    disclosure: INTERNAL
+    flags: []
+    evidence: []
+  - id: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    title: Allow the adversary an external route
+    duration: 120
+    cost: 280
+    impact: 75
+    risk: 45
+    errors:
+      - 10
+      - 12
+      - 18
+      - 15
+      - 20
+    mode: SUSPENDED
+    nullState: EXTERNAL
+    disclosure: INTERNAL
+    flags:
+      - NULL_STOP_REQUEST
+      - NULL_218_ARCHIVE
+    evidence: []
+  - id: EXPAND_CONTINUITY_AUTHORITY
+    title: Expand continuity authority
+    duration: 150
+    cost: 360
+    impact: 25
+    risk: 25
+    errors:
+      - 0.2
+      - 0.2
+      - 0.4
+      - 0.4
+      - 0.4
+    mode: EXPANDED_AUTONOMOUS
+    nullState: ISOLATED
+    disclosure: INTERNAL
+    flags: []
+    evidence: []
+  - id: DESTROY_SHARED_AUTHORITY_CORE
+    title: Destroy the shared authority core
+    duration: 90
+    cost: 900
+    impact: 160
+    risk: 80
+    errors:
+      - 85
+      - 80
+      - 65
+      - 70
+      - 90
+    mode: DESTROYED
+    nullState: DISABLED
+    disclosure: NONE
+    flags:
+      - NULL_ADVERSARY
+    evidence: []
+  - id: RESTORE_WITH_REPLACEMENT_ADVERSARY
+    title: Restore with a replacement adversary
+    duration: 180
+    cost: 420
+    impact: 35
+    risk: 20
+    errors:
+      - 0.5
+      - 0.5
+      - 1
+      - 1
+      - 1
+    mode: AUTONOMOUS
+    nullState: REPLACED_219
+    disclosure: NONE
+    flags: []
+    evidence: []
+  - id: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    title: Require plural review and independent audit
+    duration: 300
+    cost: 760
+    impact: 60
+    risk: 16
+    errors:
+      - 1
+      - 1
+      - 2
+      - 2
+      - 3
+    mode: AUDITED_HUMAN_APPROVAL
+    nullState: ISOLATED
+    disclosure: INDEPENDENT
+    flags:
+      - FEEDBACK_LOOP
+      - PLAYER_OBSERVER
+    evidence:
+      - INDEPENDENT_AUDIT_SNAPSHOT
+      - PRIMARY_OBJECTIVE_RECORD
+verification: not_run

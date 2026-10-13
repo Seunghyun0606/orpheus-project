@@ -47,7 +47,13 @@ TASK-031 is incomplete and QA remains deferred.
 DEC-051 approves final-decision-based BLACKOUT completion, not final-plan balance.
 The [crisis checkpoint](docs/TASK-031_CRISIS_IMPLEMENTATION.md) adds INC-025 regional
 preparation and completion-contract fragments. Authoring now covers 25 Incidents;
-INC-026 plans/impacts require the pending explicit decision. No full campaign or QA PASS.
+At that checkpoint INC-026 plans/impacts awaited a decision; DEC-052 below resolves it.
+No full campaign or QA PASS was claimed.
+DEC-052 now approves those ten concrete plans. The
+[BLACKOUT checkpoint](docs/TASK-031_BLACKOUT_IMPLEMENTATION.md) authors INC-026,
+completion-bound outcomes and exact final-context/model fragments. All 26
+Scenario/sidecar pairs exist, but production definition/package, ending balance,
+actual full-campaign integration and QA remain pending; TASK-031 is incomplete.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
