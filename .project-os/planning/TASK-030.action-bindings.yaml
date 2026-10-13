@@ -1,4 +1,4 @@
-# Pre-release TASK-030 authoring. QA deferred; no complete campaign authority.
+# Pre-release authoring. QA deferred; not a complete runtime authority.
 task: TASK-030
 date: 2026-10-13
 status: authored_not_verified
@@ -7,6 +7,7 @@ authorities:
   - DEC-042
   - DEC-043
   - DEC-048
+  - DEC-049
 definition_identity:
   id: orpheus-full-campaign
   version: 1.0.0
@@ -836,6 +837,201 @@ actionGates:
           reference: NULL_BLAMES_BOARD_DISCOVERED
           operator: eq
           expected: true
+  - id: INC-019-READ_EXECUTIVE_ROLLOUT_BRIEF
+    incidentId: INC-019
+    contentVersion: 1.0.0
+    actionId: READ_EXECUTIVE_ROLLOUT_BRIEF
+    eligibility:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: NULL_ADVERSARY_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_COMPANY_REPORTING
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: NULL_ADVERSARY_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-021-READ_NULL_DISCLOSURE_ANNOTATION
+    incidentId: INC-021
+    contentVersion: 1.0.0
+    actionId: READ_NULL_DISCLOSURE_ANNOTATION
+    eligibility:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 5
+            - type: compare
+              reference: NULL_STOP_REQUEST_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_NULL_COOPERATION
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 5
+            - type: compare
+              reference: NULL_STOP_REQUEST_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-020-COMPARE_STAFFING_WARNING_TIMELINE
+    incidentId: INC-020
+    contentVersion: 1.0.0
+    actionId: COMPARE_STAFFING_WARNING_TIMELINE
+    eligibility:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: ORPHEUS_ACTIVE_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_INVESTIGATION_DEPTH
+              operator: gte
+              expected: 4
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: ORPHEUS_ACTIVE_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-022-READ_ALLOCATION_RECOMMENDATION_RECEIPT
+    incidentId: INC-022
+    contentVersion: 1.0.0
+    actionId: READ_ALLOCATION_RECOMMENDATION_RECEIPT
+    eligibility:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_RECOMMENDATION_ACCEPTANCE
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+  - id: INC-019-READ_CARE_CONTINUITY_EXCEPTION
+    incidentId: INC-019
+    contentVersion: 1.0.0
+    actionId: READ_CARE_CONTINUITY_EXCEPTION
+    eligibility:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_SAFETY_PREFERENCE
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
 initial_narrative_flags_fragment:
   BOARD_RESPONSIBILITY: false
   NULL_BLAMES_BOARD: false
@@ -1003,6 +1199,21 @@ evidence_bindings_fragment:
   - id: INC-022.BOARD_CASE_COMPLETE
     scenarioId: INC-022
     evidenceId: RECORD_BOARD_CASE_COMPLETE
+  - id: INC-019.EXECUTIVE_ROLLOUT_BRIEF
+    scenarioId: INC-019
+    evidenceId: RECORD_EXECUTIVE_ROLLOUT_BRIEF
+  - id: INC-021.NULL_DISCLOSURE_ANNOTATION
+    scenarioId: INC-021
+    evidenceId: RECORD_NULL_DISCLOSURE_ANNOTATION
+  - id: INC-020.STAFFING_WARNING_TIMELINE
+    scenarioId: INC-020
+    evidenceId: RECORD_STAFFING_WARNING_TIMELINE
+  - id: INC-022.ALLOCATION_RECOMMENDATION_RECEIPT
+    scenarioId: INC-022
+    evidenceId: RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
+  - id: INC-019.CARE_CONTINUITY_EXCEPTION
+    scenarioId: INC-019
+    evidenceId: RECORD_CARE_CONTINUITY_EXCEPTION
 narrative_bindings_fragment:
   - id: INC-019.GHOST_ARTIFACT
     scenarioId: INC-019
@@ -1166,6 +1377,21 @@ narrative_bindings_fragment:
   - id: INC-022.BOARD_CASE_COMPLETE
     scenarioId: INC-022
     narrativeId: DISCOVERY_BOARD_CASE_COMPLETE
+  - id: INC-019.EXECUTIVE_ROLLOUT_BRIEF
+    scenarioId: INC-019
+    narrativeId: DISCOVERY_EXECUTIVE_ROLLOUT_BRIEF
+  - id: INC-021.NULL_DISCLOSURE_ANNOTATION
+    scenarioId: INC-021
+    narrativeId: DISCOVERY_NULL_DISCLOSURE_ANNOTATION
+  - id: INC-020.STAFFING_WARNING_TIMELINE
+    scenarioId: INC-020
+    narrativeId: DISCOVERY_STAFFING_WARNING_TIMELINE
+  - id: INC-022.ALLOCATION_RECOMMENDATION_RECEIPT
+    scenarioId: INC-022
+    narrativeId: DISCOVERY_ALLOCATION_RECOMMENDATION_RECEIPT
+  - id: INC-019.CARE_CONTINUITY_EXCEPTION
+    scenarioId: INC-019
+    narrativeId: DISCOVERY_CARE_CONTINUITY_EXCEPTION
 logical_effects_fragment:
   - id: INC-019-GHOST_ARTIFACT-DISCOVERY
     trigger:
@@ -1922,3 +2148,5 @@ logical_effects_fragment:
 verification: Not run. QA deferred; fragments are not an admitted production authority.
 composition_contract: Compose with TASK-028/029 fragments without duplicate refs, preserve
   exact-source provenance, complete all 26 assets and Act progression. No partial official run.
+  Merge TASK-029 branch metric references with explicit branch/action contexts; no duplicate refs.
+  Optional consumers have no campaign awards.

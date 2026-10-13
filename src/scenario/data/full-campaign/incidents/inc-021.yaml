@@ -1,4 +1,4 @@
-# Pre-release TASK-030 authoring. QA deferred; no complete campaign authority.
+# Pre-release authoring. QA deferred; not a complete runtime authority.
 schemaVersion: 1
 contentVersion: 1.0.0
 id: INC-021
@@ -136,6 +136,13 @@ initialState:
         signed expansion, staffing and disclosure approvals. The records establish executive
         responsibility for approved risk; NULL’s attribution is a hypothesis, not an exhaustive
         causal proof. Its earlier attacks still caused harm."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_NULL_DISCLOSURE_ANNOTATION
+      value: "NULL_218 annotation: They acknowledged the route warning and delayed the mitigation. I think
+        these signatures explain why it continued. This is an interpretation of the verified
+        disclosure receipt, not proof of an exhaustive root cause. NULL’s own adversarial traffic
+        still hurt people; sharing its annotation does not make those attacks harmless."
       revealed: false
       serviceId: RISK_ROUTE_CONTROLLER
   resources:
@@ -546,6 +553,24 @@ actions:
     effects:
       - type: reveal_signal
         signalId: RECORD_NULL_BLAMES_BOARD
+  - id: READ_NULL_DISCLOSURE_ANNOTATION
+    title: "Investigate: NULL disclosure-receipt annotation"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_SECURITY_DISCLOSURE_DECISION
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_DISCLOSURE_ANNOTATION
 events:
   - id: ARM_PRESSURE_TIMELINE
     type: conditional
@@ -724,6 +749,13 @@ evidence:
       responsibility for approved risk; NULL’s attribution is a hypothesis, not an exhaustive causal
       proof. Its earlier attacks still caused harm."
     sourceNarrativeId: DISCOVERY_NULL_BLAMES_BOARD
+  - id: RECORD_NULL_DISCLOSURE_ANNOTATION
+    title: NULL disclosure-receipt annotation
+    description: "NULL_218 annotation: They acknowledged the route warning and delayed the mitigation. I
+      think these signatures explain why it continued. This is an interpretation of the verified
+      disclosure receipt, not proof of an exhaustive root cause. NULL’s own adversarial traffic
+      still hurt people; sharing its annotation does not make those attacks harmless."
+    sourceNarrativeId: DISCOVERY_NULL_DISCLOSURE_ANNOTATION
 narratives:
   - id: DISCOVERY_GHOST_ARTIFACT
     title: Unsigned workload lineage
@@ -955,6 +987,26 @@ narratives:
         evidenceId: RECORD_NULL_BLAMES_BOARD
       - type: post_message
         messageId: REPORT_NULL_BLAMES_BOARD
+  - id: DISCOVERY_NULL_DISCLOSURE_ANNOTATION
+    title: NULL disclosure-receipt annotation
+    body: "NULL_218 annotation: They acknowledged the route warning and delayed the mitigation. I think
+      these signatures explain why it continued. This is an interpretation of the verified
+      disclosure receipt, not proof of an exhaustive root cause. NULL’s own adversarial traffic
+      still hurt people; sharing its annotation does not make those attacks harmless."
+    conditions:
+      - type: action_completed
+        actionId: READ_NULL_DISCLOSURE_ANNOTATION
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_SECURITY_DISCLOSURE_DECISION
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_DISCLOSURE_ANNOTATION
+      - type: post_message
+        messageId: REPORT_NULL_DISCLOSURE_ANNOTATION
 warRoom:
   roles:
     - id: MAYA
@@ -1084,6 +1136,13 @@ warRoom:
         signed expansion, staffing and disclosure approvals. The records establish executive
         responsibility for approved risk; NULL’s attribution is a hypothesis, not an exhaustive
         causal proof. Its earlier attacks still caused harm."
+      initial: false
+    - id: REPORT_NULL_DISCLOSURE_ANNOTATION
+      roleId: NULL_218
+      text: "NULL_218 annotation: They acknowledged the route warning and delayed the mitigation. I think
+        these signatures explain why it continued. This is an interpretation of the verified
+        disclosure receipt, not proof of an exhaustive root cause. NULL’s own adversarial traffic
+        still hurt people; sharing its annotation does not make those attacks harmless."
       initial: false
 resolution:
   mode: all

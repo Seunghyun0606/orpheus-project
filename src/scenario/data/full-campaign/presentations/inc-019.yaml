@@ -1,4 +1,4 @@
-# Pre-release TASK-030 authoring. QA deferred; no complete campaign authority.
+# Pre-release authoring. QA deferred; not a complete runtime authority.
 schemaVersion: 1
 id: INC-019-INVESTIGATION
 version: 1.0.0
@@ -480,4 +480,108 @@ panels:
         id: investigate-hospital_dashboard-values
         signalIds:
           - RECORD_HOSPITAL_DASHBOARD
+  - id: branch-executive_rollout_brief
+    title: Executive hospital rollout brief
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+    campaignReveal:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: NULL_ADVERSARY_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_COMPANY_REPORTING
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: NULL_ADVERSARY_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_EXECUTIVE_ROLLOUT_BRIEF
+    blocks:
+      - kind: signals
+        id: executive_rollout_brief-values
+        signalIds:
+          - RECORD_EXECUTIVE_ROLLOUT_BRIEF
+  - id: branch-care_continuity_exception
+    title: Care continuity exception attachment
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_HOSPITAL_DASHBOARD
+    campaignReveal:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_SAFETY_PREFERENCE
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_CARE_CONTINUITY_EXCEPTION
+    blocks:
+      - kind: signals
+        id: care_continuity_exception-values
+        signalIds:
+          - RECORD_CARE_CONTINUITY_EXCEPTION
 evidenceRelations: []

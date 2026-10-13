@@ -1,0 +1,1393 @@
+task: TASK-030
+date: 2026-10-13
+status: authored_not_verified
+authorities:
+  - DEC-044
+  - DEC-049
+definition_identity:
+  id: orpheus-full-campaign
+  version: 1.0.0
+behavior_scenarios:
+  - scenarioId: INC-019
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_HOSPITAL_DEPENDENCY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_ROLLOUT_LIMITS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: PAUSE_HOSPITAL_ROLLOUT
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: CAP_HOSPITAL_DEPENDENCY_ADMISSION
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_SAM_INSPECT_HOSPITAL_CAPACITY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: READ_HOSPITAL_EXPANSION_APPROVAL
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_CEO_OUTCOMES
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_HOSPITAL_DASHBOARD
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: READ_EXECUTIVE_ROLLOUT_BRIEF
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: READ_CARE_CONTINUITY_EXCEPTION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-019/OPEN_LOGS
+        key: INC-019/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-019/OPEN_METRICS
+        key: INC-019/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-019/TRACE_HOSPITAL_DEPENDENCY
+        key: INC-019/TRACE_HOSPITAL_DEPENDENCY
+        actionId: TRACE_HOSPITAL_DEPENDENCY
+        result:
+          kind: action_completed
+      - id: INC-019/COMPARE_ROLLOUT_LIMITS
+        key: INC-019/COMPARE_ROLLOUT_LIMITS
+        actionId: COMPARE_ROLLOUT_LIMITS
+        result:
+          kind: action_completed
+      - id: INC-019/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-019/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-019/REINVESTIGATE_NULL_NAME
+        key: INC-019/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-019/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-019/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-019/REINVESTIGATE_NULL_AI
+        key: INC-019/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-019/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-019/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-019/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-019/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-019/REINVESTIGATE_NULL_STOP_REQUEST
+        key: INC-019/REINVESTIGATE_NULL_STOP_REQUEST
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        result:
+          kind: action_completed
+      - id: INC-019/REINVESTIGATE_NULL_218_ARCHIVE
+        key: INC-019/REINVESTIGATE_NULL_218_ARCHIVE
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        result:
+          kind: action_completed
+      - id: INC-019/REINVESTIGATE_HUMAN_DECISION_APIS
+        key: INC-019/REINVESTIGATE_HUMAN_DECISION_APIS
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        result:
+          kind: action_completed
+      - id: INC-019/REINVESTIGATE_RECRUITMENT_SELECTION
+        key: INC-019/REINVESTIGATE_RECRUITMENT_SELECTION
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+        result:
+          kind: action_completed
+      - id: INC-019/READ_HOSPITAL_EXPANSION_APPROVAL
+        key: INC-019/READ_HOSPITAL_EXPANSION_APPROVAL
+        actionId: READ_HOSPITAL_EXPANSION_APPROVAL
+        result:
+          kind: action_completed
+      - id: INC-019/INSPECT_CEO_OUTCOMES
+        key: INC-019/INSPECT_CEO_OUTCOMES
+        actionId: INSPECT_CEO_OUTCOMES
+        result:
+          kind: action_completed
+      - id: INC-019/INSPECT_HOSPITAL_DASHBOARD
+        key: INC-019/INSPECT_HOSPITAL_DASHBOARD
+        actionId: INSPECT_HOSPITAL_DASHBOARD
+        result:
+          kind: action_completed
+      - id: INC-019/READ_EXECUTIVE_ROLLOUT_BRIEF
+        key: INC-019/READ_EXECUTIVE_ROLLOUT_BRIEF
+        actionId: READ_EXECUTIVE_ROLLOUT_BRIEF
+        result:
+          kind: action_completed
+      - id: INC-019/READ_CARE_CONTINUITY_EXCEPTION
+        key: INC-019/READ_CARE_CONTINUITY_EXCEPTION
+        actionId: READ_CARE_CONTINUITY_EXCEPTION
+        result:
+          kind: action_completed
+      - id: INC-019/TEAM_REPORT
+        key: INC-019/TEAM_REPORT
+        actionId: ASK_SAM_INSPECT_HOSPITAL_CAPACITY
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-019/SUPPORT/PAUSE_HOSPITAL_ROLLOUT
+        actionId: PAUSE_HOSPITAL_ROLLOUT
+        investigationKeys:
+          - INC-019/TRACE_HOSPITAL_DEPENDENCY
+          - INC-019/COMPARE_ROLLOUT_LIMITS
+          - INC-019/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: PAUSE_HOSPITAL_ROLLOUT
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-019/SUPPORT/CAP_HOSPITAL_DEPENDENCY_ADMISSION
+        actionId: CAP_HOSPITAL_DEPENDENCY_ADMISSION
+        investigationKeys:
+          - INC-019/TRACE_HOSPITAL_DEPENDENCY
+          - INC-019/COMPARE_ROLLOUT_LIMITS
+          - INC-019/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: CAP_HOSPITAL_DEPENDENCY_ADMISSION
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-020
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_RECOVERY_COVERAGE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_STAFFING_ROUTES
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: DELEGATE_EMERGENCY_COVERAGE
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: RECONCILE_STAFFED_QUEUE_OWNERS
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_MAYA_AUDIT_COVERAGE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: READ_WORKFORCE_REDUCTION_RECORD
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_CEO_PUBLIC_OUTCOMES
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_STAFFING_WARNING_TIMELINE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-020/OPEN_LOGS
+        key: INC-020/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-020/OPEN_METRICS
+        key: INC-020/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-020/TRACE_RECOVERY_COVERAGE
+        key: INC-020/TRACE_RECOVERY_COVERAGE
+        actionId: TRACE_RECOVERY_COVERAGE
+        result:
+          kind: action_completed
+      - id: INC-020/COMPARE_STAFFING_ROUTES
+        key: INC-020/COMPARE_STAFFING_ROUTES
+        actionId: COMPARE_STAFFING_ROUTES
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-020/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_NULL_NAME
+        key: INC-020/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-020/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_NULL_AI
+        key: INC-020/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-020/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-020/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_NULL_STOP_REQUEST
+        key: INC-020/REINVESTIGATE_NULL_STOP_REQUEST
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_NULL_218_ARCHIVE
+        key: INC-020/REINVESTIGATE_NULL_218_ARCHIVE
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_HUMAN_DECISION_APIS
+        key: INC-020/REINVESTIGATE_HUMAN_DECISION_APIS
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_RECRUITMENT_SELECTION
+        key: INC-020/REINVESTIGATE_RECRUITMENT_SELECTION
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+        result:
+          kind: action_completed
+      - id: INC-020/REINVESTIGATE_BOARD_RESPONSIBILITY
+        key: INC-020/REINVESTIGATE_BOARD_RESPONSIBILITY
+        actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+        result:
+          kind: action_completed
+      - id: INC-020/READ_WORKFORCE_REDUCTION_RECORD
+        key: INC-020/READ_WORKFORCE_REDUCTION_RECORD
+        actionId: READ_WORKFORCE_REDUCTION_RECORD
+        result:
+          kind: action_completed
+      - id: INC-020/INSPECT_CEO_PUBLIC_OUTCOMES
+        key: INC-020/INSPECT_CEO_PUBLIC_OUTCOMES
+        actionId: INSPECT_CEO_PUBLIC_OUTCOMES
+        result:
+          kind: action_completed
+      - id: INC-020/COMPARE_STAFFING_WARNING_TIMELINE
+        key: INC-020/COMPARE_STAFFING_WARNING_TIMELINE
+        actionId: COMPARE_STAFFING_WARNING_TIMELINE
+        result:
+          kind: action_completed
+      - id: INC-020/TEAM_REPORT
+        key: INC-020/TEAM_REPORT
+        actionId: ASK_MAYA_AUDIT_COVERAGE
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-020/SUPPORT/DELEGATE_EMERGENCY_COVERAGE
+        actionId: DELEGATE_EMERGENCY_COVERAGE
+        investigationKeys:
+          - INC-020/TRACE_RECOVERY_COVERAGE
+          - INC-020/COMPARE_STAFFING_ROUTES
+          - INC-020/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: DELEGATE_EMERGENCY_COVERAGE
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-020/SUPPORT/RECONCILE_STAFFED_QUEUE_OWNERS
+        actionId: RECONCILE_STAFFED_QUEUE_OWNERS
+        investigationKeys:
+          - INC-020/TRACE_RECOVERY_COVERAGE
+          - INC-020/COMPARE_STAFFING_ROUTES
+          - INC-020/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: RECONCILE_STAFFED_QUEUE_OWNERS
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-021
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_KNOWN_RISK_PROPAGATION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_DEFERRED_MITIGATION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ISOLATE_AFFECTED_RISK_PATH
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: FENCE_KNOWN_RISK_ROUTE
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_MARCUS_VERIFY_RISK_PATH
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_SECURITY_DISCLOSURE_DECISION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_DISCLOSURE_AND_NULL_CONCLUSION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: READ_NULL_DISCLOSURE_ANNOTATION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-021/OPEN_LOGS
+        key: INC-021/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-021/OPEN_METRICS
+        key: INC-021/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-021/TRACE_KNOWN_RISK_PROPAGATION
+        key: INC-021/TRACE_KNOWN_RISK_PROPAGATION
+        actionId: TRACE_KNOWN_RISK_PROPAGATION
+        result:
+          kind: action_completed
+      - id: INC-021/COMPARE_DEFERRED_MITIGATION
+        key: INC-021/COMPARE_DEFERRED_MITIGATION
+        actionId: COMPARE_DEFERRED_MITIGATION
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-021/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_NULL_NAME
+        key: INC-021/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-021/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_NULL_AI
+        key: INC-021/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-021/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-021/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_NULL_STOP_REQUEST
+        key: INC-021/REINVESTIGATE_NULL_STOP_REQUEST
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_NULL_218_ARCHIVE
+        key: INC-021/REINVESTIGATE_NULL_218_ARCHIVE
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_HUMAN_DECISION_APIS
+        key: INC-021/REINVESTIGATE_HUMAN_DECISION_APIS
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_RECRUITMENT_SELECTION
+        key: INC-021/REINVESTIGATE_RECRUITMENT_SELECTION
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+        result:
+          kind: action_completed
+      - id: INC-021/REINVESTIGATE_BOARD_RESPONSIBILITY
+        key: INC-021/REINVESTIGATE_BOARD_RESPONSIBILITY
+        actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+        result:
+          kind: action_completed
+      - id: INC-021/INSPECT_SECURITY_DISCLOSURE_DECISION
+        key: INC-021/INSPECT_SECURITY_DISCLOSURE_DECISION
+        actionId: INSPECT_SECURITY_DISCLOSURE_DECISION
+        result:
+          kind: action_completed
+      - id: INC-021/COMPARE_DISCLOSURE_AND_NULL_CONCLUSION
+        key: INC-021/COMPARE_DISCLOSURE_AND_NULL_CONCLUSION
+        actionId: COMPARE_DISCLOSURE_AND_NULL_CONCLUSION
+        result:
+          kind: action_completed
+      - id: INC-021/READ_NULL_DISCLOSURE_ANNOTATION
+        key: INC-021/READ_NULL_DISCLOSURE_ANNOTATION
+        actionId: READ_NULL_DISCLOSURE_ANNOTATION
+        result:
+          kind: action_completed
+      - id: INC-021/TEAM_REPORT
+        key: INC-021/TEAM_REPORT
+        actionId: ASK_MARCUS_VERIFY_RISK_PATH
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-021/SUPPORT/ISOLATE_AFFECTED_RISK_PATH
+        actionId: ISOLATE_AFFECTED_RISK_PATH
+        investigationKeys:
+          - INC-021/TRACE_KNOWN_RISK_PROPAGATION
+          - INC-021/COMPARE_DEFERRED_MITIGATION
+          - INC-021/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: ISOLATE_AFFECTED_RISK_PATH
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-021/SUPPORT/FENCE_KNOWN_RISK_ROUTE
+        actionId: FENCE_KNOWN_RISK_ROUTE
+        investigationKeys:
+          - INC-021/TRACE_KNOWN_RISK_PROPAGATION
+          - INC-021/COMPARE_DEFERRED_MITIGATION
+          - INC-021/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: FENCE_KNOWN_RISK_ROUTE
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-022
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_FORECAST_REALLOCATION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_PUBLIC_SERVICE_FLOORS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_SAM_COMPARE_PUBLIC_ALLOCATION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_BLAMES_BOARD
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_FORECAST_HISTORY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_BOARD_AUTHORITY_LEDGER
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: CORRELATE_PUBLIC_SECTOR_APPROVAL_HISTORY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: READ_ALLOCATION_RECOMMENDATION_RECEIPT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-022/OPEN_LOGS
+        key: INC-022/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-022/OPEN_METRICS
+        key: INC-022/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-022/TRACE_FORECAST_REALLOCATION
+        key: INC-022/TRACE_FORECAST_REALLOCATION
+        actionId: TRACE_FORECAST_REALLOCATION
+        result:
+          kind: action_completed
+      - id: INC-022/COMPARE_PUBLIC_SERVICE_FLOORS
+        key: INC-022/COMPARE_PUBLIC_SERVICE_FLOORS
+        actionId: COMPARE_PUBLIC_SERVICE_FLOORS
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-022/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_NULL_NAME
+        key: INC-022/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-022/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_NULL_AI
+        key: INC-022/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-022/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        key: INC-022/REINVESTIGATE_CONTROLLED_EXPERIMENT
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_NULL_STOP_REQUEST
+        key: INC-022/REINVESTIGATE_NULL_STOP_REQUEST
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_NULL_218_ARCHIVE
+        key: INC-022/REINVESTIGATE_NULL_218_ARCHIVE
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_HUMAN_DECISION_APIS
+        key: INC-022/REINVESTIGATE_HUMAN_DECISION_APIS
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_RECRUITMENT_SELECTION
+        key: INC-022/REINVESTIGATE_RECRUITMENT_SELECTION
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_BOARD_RESPONSIBILITY
+        key: INC-022/REINVESTIGATE_BOARD_RESPONSIBILITY
+        actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+        result:
+          kind: action_completed
+      - id: INC-022/REINVESTIGATE_NULL_BLAMES_BOARD
+        key: INC-022/REINVESTIGATE_NULL_BLAMES_BOARD
+        actionId: REINVESTIGATE_NULL_BLAMES_BOARD
+        result:
+          kind: action_completed
+      - id: INC-022/INSPECT_FORECAST_HISTORY
+        key: INC-022/INSPECT_FORECAST_HISTORY
+        actionId: INSPECT_FORECAST_HISTORY
+        result:
+          kind: action_completed
+      - id: INC-022/INSPECT_BOARD_AUTHORITY_LEDGER
+        key: INC-022/INSPECT_BOARD_AUTHORITY_LEDGER
+        actionId: INSPECT_BOARD_AUTHORITY_LEDGER
+        result:
+          kind: action_completed
+      - id: INC-022/CORRELATE_PUBLIC_SECTOR_APPROVAL_HISTORY
+        key: INC-022/CORRELATE_PUBLIC_SECTOR_APPROVAL_HISTORY
+        actionId: CORRELATE_PUBLIC_SECTOR_APPROVAL_HISTORY
+        result:
+          kind: action_completed
+      - id: INC-022/READ_ALLOCATION_RECOMMENDATION_RECEIPT
+        key: INC-022/READ_ALLOCATION_RECOMMENDATION_RECEIPT
+        actionId: READ_ALLOCATION_RECOMMENDATION_RECEIPT
+        result:
+          kind: action_completed
+      - id: INC-022/TEAM_REPORT
+        key: INC-022/TEAM_REPORT
+        actionId: ASK_SAM_COMPARE_PUBLIC_ALLOCATION
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-022/SUPPORT/RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+        actionId: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+        investigationKeys:
+          - INC-022/TRACE_FORECAST_REALLOCATION
+          - INC-022/COMPARE_PUBLIC_SERVICE_FLOORS
+          - INC-022/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-022/SUPPORT/RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+        actionId: RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+        investigationKeys:
+          - INC-022/TRACE_FORECAST_REALLOCATION
+          - INC-022/COMPARE_PUBLIC_SERVICE_FLOORS
+          - INC-022/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+prediction_scenarios:
+  - scenarioId: INC-019
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: HOSPITAL_DEPENDENCY_PATH
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: PAUSE_HOSPITAL_ROLLOUT
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: CAP_HOSPITAL_DEPENDENCY_ADMISSION
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: PAUSE_HOSPITAL_ROLLOUT
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: CAP_HOSPITAL_DEPENDENCY_ADMISSION
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-020
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: RECOVERY_COVERAGE_PATH
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: DELEGATE_EMERGENCY_COVERAGE
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: RECONCILE_STAFFED_QUEUE_OWNERS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: DELEGATE_EMERGENCY_COVERAGE
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: RECONCILE_STAFFED_QUEUE_OWNERS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-021
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: KNOWN_RISK_PROPAGATION_PATH
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: ISOLATE_AFFECTED_RISK_PATH
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: FENCE_KNOWN_RISK_ROUTE
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: ISOLATE_AFFECTED_RISK_PATH
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: FENCE_KNOWN_RISK_ROUTE
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+  - scenarioId: INC-022
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: FORECAST_REALLOCATION_PATH
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+            candidateId: REROUTE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+composition_contract: Append these explicit rows to the 18-Incident authoring models in complete
+  new-definition composition. No guidance exposure at these contexts and no new opportunities.
+  Optional records count only genuine distinct investigations, never causal intervention support.
+verification: not_run

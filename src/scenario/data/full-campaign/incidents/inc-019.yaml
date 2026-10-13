@@ -1,4 +1,4 @@
-# Pre-release TASK-030 authoring. QA deferred; no complete campaign authority.
+# Pre-release authoring. QA deferred; not a complete runtime authority.
 schemaVersion: 1
 contentVersion: 1.0.0
 id: INC-019
@@ -135,6 +135,22 @@ initialState:
       value: "Rollout dashboard: network access expanded; shared infrastructure cost per route decreased.
         Attached operational exception: established care routes share the same dependency ceiling.
         The exception remained open when the executive rollout authorization was signed."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_EXECUTIVE_ROLLOUT_BRIEF
+      value: "Executive rollout brief: wider hospital access and lower shared infrastructure cost
+        supported expansion. The attached dependency-capacity warning requested a rollout admission
+        fence. The signed authorization retained the expansion schedule with that constraint
+        unresolved. Reporting the case does not cancel the Board’s responsibility for the resulting
+        care-route exposure."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_CARE_CONTINUITY_EXCEPTION
+      value: "Care-continuity exception attached to the hospital dashboard: existing care routes and new
+        hospitals share a dependency ceiling. Requested constraint: fence rollout admissions to
+        verified capacity while preserving current care. The exception remained open at approval.
+        The operational scope and executive acknowledgment are evidence, not a moral score or a
+        separate automatic remedy."
       revealed: false
       serviceId: ROLLOUT_COORDINATOR
   resources:
@@ -543,6 +559,42 @@ actions:
     effects:
       - type: reveal_signal
         signalId: RECORD_HOSPITAL_DASHBOARD
+  - id: READ_EXECUTIVE_ROLLOUT_BRIEF
+    title: "Investigate: Executive hospital rollout brief"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_EXECUTIVE_ROLLOUT_BRIEF
+  - id: READ_CARE_CONTINUITY_EXCEPTION
+    title: "Investigate: Care continuity exception attachment"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_HOSPITAL_DASHBOARD
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CARE_CONTINUITY_EXCEPTION
 events:
   - id: ARM_PRESSURE_TIMELINE
     type: conditional
@@ -720,6 +772,22 @@ evidence:
       decreased. Attached operational exception: established care routes share the same dependency
       ceiling. The exception remained open when the executive rollout authorization was signed."
     sourceNarrativeId: DISCOVERY_HOSPITAL_DASHBOARD
+  - id: RECORD_EXECUTIVE_ROLLOUT_BRIEF
+    title: Executive hospital rollout brief
+    description: "Executive rollout brief: wider hospital access and lower shared infrastructure cost
+      supported expansion. The attached dependency-capacity warning requested a rollout admission
+      fence. The signed authorization retained the expansion schedule with that constraint
+      unresolved. Reporting the case does not cancel the Board’s responsibility for the resulting
+      care-route exposure."
+    sourceNarrativeId: DISCOVERY_EXECUTIVE_ROLLOUT_BRIEF
+  - id: RECORD_CARE_CONTINUITY_EXCEPTION
+    title: Care continuity exception attachment
+    description: "Care-continuity exception attached to the hospital dashboard: existing care routes and
+      new hospitals share a dependency ceiling. Requested constraint: fence rollout admissions to
+      verified capacity while preserving current care. The exception remained open at approval. The
+      operational scope and executive acknowledgment are evidence, not a moral score or a separate
+      automatic remedy."
+    sourceNarrativeId: DISCOVERY_CARE_CONTINUITY_EXCEPTION
 narratives:
   - id: DISCOVERY_GHOST_ARTIFACT
     title: Unsigned workload lineage
@@ -948,6 +1016,48 @@ narratives:
         evidenceId: RECORD_HOSPITAL_DASHBOARD
       - type: post_message
         messageId: REPORT_HOSPITAL_DASHBOARD
+  - id: DISCOVERY_EXECUTIVE_ROLLOUT_BRIEF
+    title: Executive hospital rollout brief
+    body: "Executive rollout brief: wider hospital access and lower shared infrastructure cost supported
+      expansion. The attached dependency-capacity warning requested a rollout admission fence. The
+      signed authorization retained the expansion schedule with that constraint unresolved.
+      Reporting the case does not cancel the Board’s responsibility for the resulting care-route
+      exposure."
+    conditions:
+      - type: action_completed
+        actionId: READ_EXECUTIVE_ROLLOUT_BRIEF
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_EXECUTIVE_ROLLOUT_BRIEF
+      - type: post_message
+        messageId: REPORT_EXECUTIVE_ROLLOUT_BRIEF
+  - id: DISCOVERY_CARE_CONTINUITY_EXCEPTION
+    title: Care continuity exception attachment
+    body: "Care-continuity exception attached to the hospital dashboard: existing care routes and new
+      hospitals share a dependency ceiling. Requested constraint: fence rollout admissions to
+      verified capacity while preserving current care. The exception remained open at approval. The
+      operational scope and executive acknowledgment are evidence, not a moral score or a separate
+      automatic remedy."
+    conditions:
+      - type: action_completed
+        actionId: READ_CARE_CONTINUITY_EXCEPTION
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_HOSPITAL_DASHBOARD
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CARE_CONTINUITY_EXCEPTION
+      - type: post_message
+        messageId: REPORT_CARE_CONTINUITY_EXCEPTION
 warRoom:
   roles:
     - id: MAYA
@@ -1076,6 +1186,22 @@ warRoom:
       text: "Rollout dashboard: network access expanded; shared infrastructure cost per route decreased.
         Attached operational exception: established care routes share the same dependency ceiling.
         The exception remained open when the executive rollout authorization was signed."
+      initial: false
+    - id: REPORT_EXECUTIVE_ROLLOUT_BRIEF
+      roleId: ARCHIVE
+      text: "Executive rollout brief: wider hospital access and lower shared infrastructure cost supported
+        expansion. The attached dependency-capacity warning requested a rollout admission fence. The
+        signed authorization retained the expansion schedule with that constraint unresolved.
+        Reporting the case does not cancel the Board’s responsibility for the resulting care-route
+        exposure."
+      initial: false
+    - id: REPORT_CARE_CONTINUITY_EXCEPTION
+      roleId: ARCHIVE
+      text: "Care-continuity exception attached to the hospital dashboard: existing care routes and new
+        hospitals share a dependency ceiling. Requested constraint: fence rollout admissions to
+        verified capacity while preserving current care. The exception remained open at approval.
+        The operational scope and executive acknowledgment are evidence, not a moral score or a
+        separate automatic remedy."
       initial: false
 resolution:
   mode: all

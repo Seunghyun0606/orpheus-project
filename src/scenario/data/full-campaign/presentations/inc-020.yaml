@@ -1,4 +1,4 @@
-# Pre-release TASK-030 authoring. QA deferred; no complete campaign authority.
+# Pre-release authoring. QA deferred; not a complete runtime authority.
 schemaVersion: 1
 id: INC-020-INVESTIGATION
 version: 1.0.0
@@ -480,4 +480,56 @@ panels:
         id: investigate-ceo_public_outcomes-values
         signalIds:
           - RECORD_CEO_PUBLIC_OUTCOMES
+  - id: branch-staffing_warning_timeline
+    title: Staffing warning and authorization chronology
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_WORKFORCE_DECISION
+    campaignReveal:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: ORPHEUS_ACTIVE_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_INVESTIGATION_DEPTH
+              operator: gte
+              expected: 4
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: ORPHEUS_ACTIVE_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - COMPARE_STAFFING_WARNING_TIMELINE
+    blocks:
+      - kind: signals
+        id: staffing_warning_timeline-values
+        signalIds:
+          - RECORD_STAFFING_WARNING_TIMELINE
 evidenceRelations: []

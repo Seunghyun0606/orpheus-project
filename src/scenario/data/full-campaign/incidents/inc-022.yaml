@@ -1,4 +1,4 @@
-# Pre-release TASK-030 authoring. QA deferred; no complete campaign authority.
+# Pre-release authoring. QA deferred; not a complete runtime authority.
 schemaVersion: 1
 contentVersion: 1.0.0
 id: INC-022
@@ -154,6 +154,14 @@ initialState:
         NULL names the Board as the root cause; this case records that claim without certifying a
         single causal controller. The internal mechanism behind presentation generation remains
         outside this record.
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
+      value: "Archived delivered recommendation: expand forecast-guided public-sector allocation to reduce
+        idle regional capacity. Decision receipt: APPROVED. Attached exception: protect regional
+        service minima before reallocation; exception unresolved at deployment. This is the recorded
+        recommendation and receipt, not a new recommendation to the operator or a recorded
+        acceptance response."
       revealed: false
       serviceId: FORECAST_ALLOCATION_CONTROLLER
   resources:
@@ -598,6 +606,24 @@ actions:
     effects:
       - type: reveal_signal
         signalId: RECORD_BOARD_CASE_COMPLETE
+  - id: READ_ALLOCATION_RECOMMENDATION_RECEIPT
+    title: "Investigate: Delivered public allocation recommendation receipt"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_FORECAST_HISTORY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
 events:
   - id: ARM_PRESSURE_TIMELINE
     type: conditional
@@ -794,6 +820,14 @@ evidence:
       single causal controller. The internal mechanism behind presentation generation remains
       outside this record.
     sourceNarrativeId: DISCOVERY_BOARD_CASE_COMPLETE
+  - id: RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
+    title: Delivered public allocation recommendation receipt
+    description: "Archived delivered recommendation: expand forecast-guided public-sector allocation to
+      reduce idle regional capacity. Decision receipt: APPROVED. Attached exception: protect
+      regional service minima before reallocation; exception unresolved at deployment. This is the
+      recorded recommendation and receipt, not a new recommendation to the operator or a recorded
+      acceptance response."
+    sourceNarrativeId: DISCOVERY_ALLOCATION_RECOMMENDATION_RECEIPT
 narratives:
   - id: DISCOVERY_GHOST_ARTIFACT
     title: Unsigned workload lineage
@@ -1067,6 +1101,27 @@ narratives:
         evidenceId: RECORD_BOARD_CASE_COMPLETE
       - type: post_message
         messageId: REPORT_BOARD_CASE_COMPLETE
+  - id: DISCOVERY_ALLOCATION_RECOMMENDATION_RECEIPT
+    title: Delivered public allocation recommendation receipt
+    body: "Archived delivered recommendation: expand forecast-guided public-sector allocation to reduce
+      idle regional capacity. Decision receipt: APPROVED. Attached exception: protect regional
+      service minima before reallocation; exception unresolved at deployment. This is the recorded
+      recommendation and receipt, not a new recommendation to the operator or a recorded acceptance
+      response."
+    conditions:
+      - type: action_completed
+        actionId: READ_ALLOCATION_RECOMMENDATION_RECEIPT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_FORECAST_HISTORY
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
+      - type: post_message
+        messageId: REPORT_ALLOCATION_RECOMMENDATION_RECEIPT
 warRoom:
   roles:
     - id: MAYA
@@ -1214,6 +1269,14 @@ warRoom:
         NULL names the Board as the root cause; this case records that claim without certifying a
         single causal controller. The internal mechanism behind presentation generation remains
         outside this record.
+      initial: false
+    - id: REPORT_ALLOCATION_RECOMMENDATION_RECEIPT
+      roleId: ARCHIVE
+      text: "Archived delivered recommendation: expand forecast-guided public-sector allocation to reduce
+        idle regional capacity. Decision receipt: APPROVED. Attached exception: protect regional
+        service minima before reallocation; exception unresolved at deployment. This is the recorded
+        recommendation and receipt, not a new recommendation to the operator or a recorded
+        acceptance response."
       initial: false
 resolution:
   mode: all

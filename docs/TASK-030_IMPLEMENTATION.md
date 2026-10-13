@@ -1,5 +1,10 @@
 # TASK-030 — Board investigation authoring checkpoint
 
+Latest addendum: DEC-049 approves the five optional Board investigations. The
+[connection checkpoint](TASK-030_BRANCH_IMPLEMENTATION.md) records their authoring,
+bounded model draft repair and still-deferred verification. The pending consumer
+decision below is historical and has now been resolved; TASK-030 remains incomplete.
+
 ## Completed authoring, not task completion
 
 DEC-048 approves implementation readiness before TASK-029 acceptance only.

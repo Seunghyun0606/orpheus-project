@@ -31,6 +31,7 @@ relevant_files:
   - src/scenario/
   - src/tests/
 active_decisions:
+  - .project-os/decisions/DEC-049-board-branch-investigation-consumers.yaml
   - .project-os/decisions/DEC-048-task030-implementation-before-task029-acceptance.yaml
   - .project-os/decisions/DEC-042-full-campaign-content-version-baseline.yaml
   - .project-os/decisions/DEC-043-campaign-action-prerequisites.yaml

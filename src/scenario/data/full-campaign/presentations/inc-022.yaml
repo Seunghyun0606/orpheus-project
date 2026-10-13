@@ -1,4 +1,4 @@
-# Pre-release TASK-030 authoring. QA deferred; no complete campaign authority.
+# Pre-release authoring. QA deferred; not a complete runtime authority.
 schemaVersion: 1
 id: INC-022-INVESTIGATION
 version: 1.0.0
@@ -536,4 +536,56 @@ panels:
         id: investigate-board_case_complete-values
         signalIds:
           - RECORD_BOARD_CASE_COMPLETE
+  - id: branch-allocation_recommendation_receipt
+    title: Delivered public allocation recommendation receipt
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_FORECAST_HISTORY
+    campaignReveal:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_RECOMMENDATION_ACCEPTANCE
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_ALLOCATION_RECOMMENDATION_RECEIPT
+    blocks:
+      - kind: signals
+        id: allocation_recommendation_receipt-values
+        signalIds:
+          - RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
 evidenceRelations: []

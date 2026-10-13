@@ -1,4 +1,4 @@
-# Pre-release TASK-030 authoring. QA deferred; no complete campaign authority.
+# Pre-release authoring. QA deferred; not a complete runtime authority.
 schemaVersion: 1
 id: INC-021-INVESTIGATION
 version: 1.0.0
@@ -482,4 +482,56 @@ panels:
         id: investigate-null_blames_board-values
         signalIds:
           - RECORD_NULL_BLAMES_BOARD
+  - id: branch-null_disclosure_annotation
+    title: NULL disclosure-receipt annotation
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_SECURITY_DISCLOSURE_DECISION
+    campaignReveal:
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 5
+            - type: compare
+              reference: NULL_STOP_REQUEST_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_NULL_COOPERATION
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 5
+            - type: compare
+              reference: NULL_STOP_REQUEST_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_NULL_DISCLOSURE_ANNOTATION
+    blocks:
+      - kind: signals
+        id: null_disclosure_annotation-values
+        signalIds:
+          - RECORD_NULL_DISCLOSURE_ANNOTATION
 evidenceRelations: []

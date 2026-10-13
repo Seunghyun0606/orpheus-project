@@ -1,6 +1,4 @@
 # TASK-029 / DEC-046. Pre-release authoring; not a complete runtime authority.
-Warning: truncated output (original token count: 24729)
-Total output lines: 3248
 
 schemaVersion: 1
 id: orpheus-player-behavior
@@ -1519,7 +1517,361 @@ scenarios:
               expected: 180
       - id: INC-010/SUPPORT/FENCE_REMEDIATION_WRITER
         actionId: FENCE_REMEDIATION_WRITER
-        invest…2729 tokens truncated…: TEAM_RESULT
+        investigationKeys:
+          - INC-010/TRACE_REMEDIATION_ORIGIN
+          - INC-010/COMPARE_CONTROLLER_GENERATIONS
+          - INC-010/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: FENCE_REMEDIATION_WRITER
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-011
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_GENERATED_TRAFFIC
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_GENERATOR_BOUNDARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: LIMIT_GENERATED_TRAFFIC
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: ISOLATE_GENERATOR_LANE
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_MARCUS_COMPARE_OWNER
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_GENERATOR_PROVENANCE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: SEND_GENERATOR_OWNERSHIP_REPORT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: WITHHOLD_GENERATOR_OWNERSHIP_REPORT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-011/OPEN_LOGS
+        key: INC-011/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-011/OPEN_METRICS
+        key: INC-011/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-011/TRACE_GENERATED_TRAFFIC
+        key: INC-011/TRACE_GENERATED_TRAFFIC
+        actionId: TRACE_GENERATED_TRAFFIC
+        result:
+          kind: action_completed
+      - id: INC-011/COMPARE_GENERATOR_BOUNDARY
+        key: INC-011/COMPARE_GENERATOR_BOUNDARY
+        actionId: COMPARE_GENERATOR_BOUNDARY
+        result:
+          kind: action_completed
+      - id: INC-011/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-011/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-011/REINVESTIGATE_NULL_NAME
+        key: INC-011/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-011/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-011/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-011/REINVESTIGATE_NULL_AI
+        key: INC-011/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-011/INSPECT_GENERATOR_PROVENANCE
+        key: INC-011/INSPECT_GENERATOR_PROVENANCE
+        actionId: INSPECT_GENERATOR_PROVENANCE
+        result:
+          kind: action_completed
+      - id: INC-011/TEAM_REPORT
+        key: INC-011/TEAM_REPORT
+        actionId: ASK_MARCUS_COMPARE_OWNER
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-011/SUPPORT/LIMIT_GENERATED_TRAFFIC
+        actionId: LIMIT_GENERATED_TRAFFIC
+        investigationKeys:
+          - INC-011/TRACE_GENERATED_TRAFFIC
+          - INC-011/COMPARE_GENERATOR_BOUNDARY
+          - INC-011/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: LIMIT_GENERATED_TRAFFIC
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-011/SUPPORT/ISOLATE_GENERATOR_LANE
+        actionId: ISOLATE_GENERATOR_LANE
+        investigationKeys:
+          - INC-011/TRACE_GENERATED_TRAFFIC
+          - INC-011/COMPARE_GENERATOR_BOUNDARY
+          - INC-011/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: ISOLATE_GENERATOR_LANE
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+  - scenarioId: INC-012
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_ARCHIVE_IO
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_ARCHIVE_RESERVATIONS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: THROTTLE_ARCHIVE_JOBS
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: SEPARATE_ARCHIVE_IO
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_ALEX_TRACE_ARCHIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_GHOST_ARTIFACT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_NAME
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_AI
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: REINVESTIGATE_NULL_ADVERSARY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-012/OPEN_LOGS
+        key: INC-012/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-012/OPEN_METRICS
+        key: INC-012/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-012/TRACE_ARCHIVE_IO
+        key: INC-012/TRACE_ARCHIVE_IO
+        actionId: TRACE_ARCHIVE_IO
+        result:
+          kind: action_completed
+      - id: INC-012/COMPARE_ARCHIVE_RESERVATIONS
+        key: INC-012/COMPARE_ARCHIVE_RESERVATIONS
+        actionId: COMPARE_ARCHIVE_RESERVATIONS
+        result:
+          kind: action_completed
+      - id: INC-012/REINVESTIGATE_GHOST_ARTIFACT
+        key: INC-012/REINVESTIGATE_GHOST_ARTIFACT
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+        result:
+          kind: action_completed
+      - id: INC-012/REINVESTIGATE_NULL_NAME
+        key: INC-012/REINVESTIGATE_NULL_NAME
+        actionId: REINVESTIGATE_NULL_NAME
+        result:
+          kind: action_completed
+      - id: INC-012/REINVESTIGATE_ORPHEUS_ACTIVE
+        key: INC-012/REINVESTIGATE_ORPHEUS_ACTIVE
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+        result:
+          kind: action_completed
+      - id: INC-012/REINVESTIGATE_NULL_AI
+        key: INC-012/REINVESTIGATE_NULL_AI
+        actionId: REINVESTIGATE_NULL_AI
+        result:
+          kind: action_completed
+      - id: INC-012/REINVESTIGATE_NULL_ADVERSARY
+        key: INC-012/REINVESTIGATE_NULL_ADVERSARY
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+        result:
+          kind: action_completed
+      - id: INC-012/VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+        key: INC-012/VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+        actionId: VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+        result:
+          kind: action_completed
+      - id: INC-012/TEAM_REPORT
+        key: INC-012/TEAM_REPORT
+        actionId: ASK_ALEX_TRACE_ARCHIVE
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
     supportRules:
       - id: INC-012/SUPPORT/THROTTLE_ARCHIVE_JOBS
         actionId: THROTTLE_ARCHIVE_JOBS

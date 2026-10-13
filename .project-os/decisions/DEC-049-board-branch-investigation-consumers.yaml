@@ -1,0 +1,27 @@
+id: DEC-049
+title: Approve five optional Board branch investigation consumers
+status: active
+date: '2026-10-13'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 제안된 선택적 조사 기록 5개 승인.
+request: .project-os/planning/TASK-030.branch-consumer-gate.yaml
+approved_proposal:
+  commit: 1a65b7b
+  file: specs/architecture/board-branch-consumers-proposal.md
+decision: >-
+  Author the five specified optional Board records/actions using the unchanged
+  DEC-047 eligibility and reveal predicates plus Act >= 7, known Board responsibility
+  and current local diagnosis/configuration/case evidence. Each investigation takes
+  45 seconds and CUSTOMER_IMPACT +18. Explicitly authorize metric references in the
+  existing action context in the unreleased new campaign definition only.
+consequences:
+  - Nonexclusive access, no priority, extra sample minimum or new numeric threshold.
+  - No service change, numeric campaign award, ending flag, authority or new opportunity.
+  - Unavailable observations diagnose; no protected labels/content or inferred response.
+  - Core recovery, required records and Act progression never depend on optional metrics.
+  - No early framing disclosure, executive absolution or reinterpretation of NULL's conclusion.
+  - Existing authorities/records/stores, strict package admission and mandatory QA remain intact.
+  - No completion, later readiness exception, push or release authorization.
+supersedes: Branch-consumer-unselected clauses for these five optional records only.

@@ -34,7 +34,10 @@ DEC-048 permits TASK-030 implementation before TASK-029 acceptance. Its
 [Board authoring checkpoint](docs/TASK-030_IMPLEMENTATION.md) adds INC-019–022
 and protected investigations without the later framing reveal. The partial tree
 now contains 22 Scenario/sidecar pairs; models still cover 18 Incidents.
-Optional Board branch consumers require the pending explicit decision.
+DEC-049 now approves the five optional Board branch consumers; the
+[connection checkpoint](docs/TASK-030_BRANCH_IMPLEMENTATION.md) authors them and
+four additional model rows for future 22-Incident composition. It also repairs
+output-truncation artifacts in the unreleased INC-010/011/012 behavior draft.
 TASK-030 remains incomplete, with all QA and final verification obligations retained.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.

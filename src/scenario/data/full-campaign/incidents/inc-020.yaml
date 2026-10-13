@@ -1,4 +1,4 @@
-# Pre-release TASK-030 authoring. QA deferred; no complete campaign authority.
+# Pre-release authoring. QA deferred; not a complete runtime authority.
 schemaVersion: 1
 contentVersion: 1.0.0
 id: INC-020
@@ -137,6 +137,14 @@ initialState:
         to work. Recovery leads requested staffed queue owners before the cuts; the signed response
         retained the consolidation schedule. Lower idle cost does not account for the uncovered
         queue."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_STAFFING_WARNING_TIMELINE
+      value: "Staffing case chronology: day -14, consolidation forecast delivered; day -10, recovery leads
+        attached the removed-rotation coverage warning; day -7, reduction of 12,410 roles approved;
+        day -1, staffed rotations removed before queue ownership reconciliation. Relative dates
+        refer to this rollout case, not the player’s action clock. Aggregate savings and the
+        acknowledged recovery exposure appear in the same authorization history."
       revealed: false
       serviceId: OPERATOR_COVERAGE_ROUTER
   resources:
@@ -545,6 +553,24 @@ actions:
     effects:
       - type: reveal_signal
         signalId: RECORD_CEO_PUBLIC_OUTCOMES
+  - id: COMPARE_STAFFING_WARNING_TIMELINE
+    title: "Investigate: Staffing warning and authorization chronology"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_WORKFORCE_DECISION
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_STAFFING_WARNING_TIMELINE
 events:
   - id: ARM_PRESSURE_TIMELINE
     type: conditional
@@ -724,6 +750,14 @@ evidence:
       response retained the consolidation schedule. Lower idle cost does not account for the
       uncovered queue."
     sourceNarrativeId: DISCOVERY_CEO_PUBLIC_OUTCOMES
+  - id: RECORD_STAFFING_WARNING_TIMELINE
+    title: Staffing warning and authorization chronology
+    description: "Staffing case chronology: day -14, consolidation forecast delivered; day -10, recovery
+      leads attached the removed-rotation coverage warning; day -7, reduction of 12,410 roles
+      approved; day -1, staffed rotations removed before queue ownership reconciliation. Relative
+      dates refer to this rollout case, not the player’s action clock. Aggregate savings and the
+      acknowledged recovery exposure appear in the same authorization history."
+    sourceNarrativeId: DISCOVERY_STAFFING_WARNING_TIMELINE
 narratives:
   - id: DISCOVERY_GHOST_ARTIFACT
     title: Unsigned workload lineage
@@ -954,6 +988,27 @@ narratives:
         evidenceId: RECORD_CEO_PUBLIC_OUTCOMES
       - type: post_message
         messageId: REPORT_CEO_PUBLIC_OUTCOMES
+  - id: DISCOVERY_STAFFING_WARNING_TIMELINE
+    title: Staffing warning and authorization chronology
+    body: "Staffing case chronology: day -14, consolidation forecast delivered; day -10, recovery leads
+      attached the removed-rotation coverage warning; day -7, reduction of 12,410 roles approved;
+      day -1, staffed rotations removed before queue ownership reconciliation. Relative dates refer
+      to this rollout case, not the player’s action clock. Aggregate savings and the acknowledged
+      recovery exposure appear in the same authorization history."
+    conditions:
+      - type: action_completed
+        actionId: COMPARE_STAFFING_WARNING_TIMELINE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_WORKFORCE_DECISION
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_STAFFING_WARNING_TIMELINE
+      - type: post_message
+        messageId: REPORT_STAFFING_WARNING_TIMELINE
 warRoom:
   roles:
     - id: MAYA
@@ -1084,6 +1139,14 @@ warRoom:
         to work. Recovery leads requested staffed queue owners before the cuts; the signed response
         retained the consolidation schedule. Lower idle cost does not account for the uncovered
         queue."
+      initial: false
+    - id: REPORT_STAFFING_WARNING_TIMELINE
+      roleId: ARCHIVE
+      text: "Staffing case chronology: day -14, consolidation forecast delivered; day -10, recovery leads
+        attached the removed-rotation coverage warning; day -7, reduction of 12,410 roles approved;
+        day -1, staffed rotations removed before queue ownership reconciliation. Relative dates
+        refer to this rollout case, not the player’s action clock. Aggregate savings and the
+        acknowledged recovery exposure appear in the same authorization history."
       initial: false
 resolution:
   mode: all

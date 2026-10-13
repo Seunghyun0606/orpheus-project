@@ -43,6 +43,10 @@ const plans = parse(readFileSync('src/tests/fixtures/board-campaign-replays.yaml
 };
 const bindings = parse(readFileSync('.project-os/planning/TASK-030.action-bindings.yaml', 'utf8'));
 const middle = parse(readFileSync('.project-os/planning/TASK-029.action-bindings.yaml', 'utf8'));
+const route = parse(readFileSync('.project-os/planning/TASK-029.branch-bindings.yaml', 'utf8'));
+const consumers = parse(
+  readFileSync('.project-os/planning/TASK-030.branch-consumer-bindings.yaml', 'utf8'),
+);
 const earlier = parse(readFileSync('.project-os/planning/TASK-028.action-bindings.yaml', 'utf8'));
 const baseline = parse(readFileSync('.project-os/planning/TASK-028.model-bindings.yaml', 'utf8'));
 const blueprint = parse(
@@ -71,7 +75,12 @@ function guardAuthority(): CampaignDefinition {
         ...bindings.initial_narrative_flags_fragment,
       },
     },
-    references: [...earlier.references, ...middle.references, ...bindings.references],
+    references: [
+      ...earlier.references,
+      ...middle.references,
+      ...bindings.references,
+      ...route.references,
+    ],
     acts: [7].map((id) => ({
       id,
       eligibility: {
@@ -108,7 +117,19 @@ function context(d: CampaignDefinition, act: number, known: boolean): ConditionC
     observations: Object.fromEntries(
       d.references.map((r) => [
         r.id,
-        { status: 'available', value: r.source === 'act' ? act : known },
+        {
+          status: 'available',
+          value:
+            r.source === 'act'
+              ? act
+              : r.source === 'metric'
+                ? known
+                  ? r.key === 'averageInvestigationDepth'
+                    ? 4
+                    : 1
+                  : 0
+                : known,
+        },
       ]),
     ),
   };
@@ -264,6 +285,148 @@ describe('TASK-030 authored operational/reveal assets — deferred QA', () => {
         expect(discovered.state.revealedEvidenceIds).toContain(p.discoveryEvidence);
         expect(discovered.state.completionReached).toBe(true);
         expect(discovered.state.replayLog).toHaveLength(p.discoveryRecovery.length);
+      },
+    );
+  }
+});
+
+describe('DEC-049 optional Board investigations — deferred QA', () => {
+  it('retains all five exact consumer and branch bindings', () => {
+    expect(consumers.consumers).toHaveLength(5);
+    expect(bindings.actionGates).toHaveLength(59);
+    for (const ref of route.references) expect(ref.contexts).toEqual(['branch', 'action']);
+    for (const c of consumers.consumers) {
+      const branch = route.branches.find((b: { id: string }) => b.id === c.branchId);
+      const gate = bindings.actionGates.find(
+        (g: { incidentId: string; actionId: string }) =>
+          g.incidentId === c.incidentId && g.actionId === c.actionId,
+      );
+      expect(gate.eligibility).toEqual({
+        type: 'all',
+        children: [
+          branch.eligibility,
+          branch.reveal,
+          { type: 'compare', reference: 'CURRENT_ACT', operator: 'gte', expected: 7 },
+          {
+            type: 'compare',
+            reference: 'BOARD_RESPONSIBILITY_DISCOVERED',
+            operator: 'eq',
+            expected: true,
+          },
+        ],
+      });
+      expect(
+        bindings.logical_effects_fragment.some(
+          (e: { trigger: { incidentId: string; targetId: string } }) =>
+            e.trigger.incidentId === c.incidentId && e.trigger.targetId === c.evidenceId,
+        ),
+      ).toBe(false);
+    }
+  });
+  for (const c of consumers.consumers as {
+    incidentId: string;
+    actionId: string;
+    branchId: string;
+    evidenceId: string;
+    narrativeId: string;
+    localEvidenceId: string;
+  }[]) {
+    it(c.actionId + ' respects supported thresholds and strict unavailable diagnostics', () => {
+      const d = guardAuthority(),
+        s = catalog().get(c.incidentId + '@1.0.0')!;
+      const branch = route.branches.find((b: { id: string }) => b.id === c.branchId);
+      const metric = branch.eligibility.children.find((p: { reference: string }) =>
+        p.reference.startsWith('METRIC_'),
+      );
+      const ctx = context(d, 7, true);
+      const withMetric = (value: number): ConditionContext => ({
+        ...ctx,
+        observations: { ...ctx.observations, [metric.reference]: { status: 'available', value } },
+      });
+      expect(
+        evaluateActionGate(d, c.incidentId, '1.0.0', c.actionId, withMetric(metric.expected)),
+      ).toMatchObject({ ok: true, value: true });
+      for (const value of [0, metric.expected - 0.01])
+        expect(
+          evaluateActionGate(d, c.incidentId, '1.0.0', c.actionId, withMetric(value)),
+        ).toMatchObject({ ok: true, value: false });
+      expect(
+        evaluateActionGate(d, c.incidentId, '1.0.0', c.actionId, context(d, 6, true)),
+      ).toMatchObject({ ok: true, value: false });
+      // A decisive false sibling cannot hide a required unavailable observation.
+      const unavailable: ConditionContext = {
+        ...context(d, 6, false),
+        observations: {
+          ...context(d, 6, false).observations,
+          [metric.reference]: { status: 'unavailable', reason: 'NO_ELIGIBLE_SAMPLES' },
+        },
+      };
+      const before = createIncidentState(s, { seed: 4172 }),
+        snapshot = structuredClone(before);
+      expect(evaluateActionGate(d, c.incidentId, '1.0.0', c.actionId, unavailable).ok).toBe(false);
+      expect(
+        selectCampaignActionIds(d, s, c.incidentId, before, unavailable).actionIds,
+      ).not.toContain(c.actionId);
+      expect(before).toEqual(snapshot);
+      expect(before.revealedEvidenceIds).not.toContain(c.evidenceId);
+    });
+    it(
+      c.actionId + ' requires new local investigation and applies only authored time/impact',
+      () => {
+        const d = guardAuthority(),
+          s = catalog().get(c.incidentId + '@1.0.0')!;
+        const p = plans.cases.find((p) => p.id === c.incidentId)!;
+        const action = s.actions.find((a) => a.id === c.actionId)!;
+        expect(action).toMatchObject({
+          category: 'INVESTIGATE',
+          durationSeconds: 45,
+          costs: [{ resourceId: 'CUSTOMER_IMPACT', amount: 18 }],
+          effects: [{ type: 'reveal_signal', signalId: c.evidenceId }],
+        });
+        expect(action.requirements).toContainEqual({
+          type: 'evidence',
+          evidenceId: c.localEvidenceId,
+        });
+        const withoutLocal = replayCommands(
+          s,
+          { seed: p.seed },
+          p.recovery.slice(0, 3).map((actionId) => ({ type: 'perform_action' as const, actionId })),
+        );
+        if (!withoutLocal.ok) throw new Error('Rejected operational diagnosis');
+        expect(
+          selectCampaignActionIds(d, s, c.incidentId, withoutLocal.state, context(d, 7, true))
+            .actionIds,
+        ).not.toContain(c.actionId);
+        const observed = replayCommands(
+          s,
+          { seed: p.seed },
+          p.discoveryRecovery
+            .slice(0, -1)
+            .map((actionId) => ({ type: 'perform_action' as const, actionId })),
+        );
+        if (!observed.ok) throw new Error('Rejected local record path');
+        expect(observed.state.revealedEvidenceIds).not.toContain(c.evidenceId);
+        expect(
+          selectCampaignActionIds(d, s, c.incidentId, observed.state, context(d, 7, true))
+            .actionIds,
+        ).toContain(c.actionId);
+        // Standalone delivery only; this is not official campaign/provenance acceptance.
+        const delivered = executeCommand(observed.state, s, {
+          type: 'perform_action',
+          actionId: c.actionId,
+        });
+        if (!delivered.ok) throw new Error('Rejected local optional investigation');
+        expect(delivered.state.elapsedSeconds - observed.state.elapsedSeconds).toBe(45);
+        expect(
+          delivered.state.resources.CUSTOMER_IMPACT!.value -
+            observed.state.resources.CUSTOMER_IMPACT!.value,
+        ).toBe(18);
+        expect(delivered.state.resources.COST).toEqual(observed.state.resources.COST);
+        expect(delivered.state.resources.OPERATIONAL_RISK).toEqual(
+          observed.state.resources.OPERATIONAL_RISK,
+        );
+        expect(delivered.state.revealedEvidenceIds).toContain(c.evidenceId);
+        expect(delivered.state.triggeredNarrativeIds).toContain(c.narrativeId);
       },
     );
   }

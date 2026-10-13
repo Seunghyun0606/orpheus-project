@@ -1,0 +1,53 @@
+task: TASK-030
+date: 2026-10-13
+status: authored_not_verified
+authority: DEC-049
+proposal_commit: 1a65b7b
+definition_identity:
+  id: orpheus-full-campaign
+  version: 1.0.0
+metric_reference_source: .project-os/planning/TASK-029.branch-bindings.yaml
+consumers:
+  - incidentId: INC-019
+    contentVersion: 1.0.0
+    branchId: COMPANY_REPORTING_ACCESS
+    branchVersion: 1.0.0
+    actionId: READ_EXECUTIVE_ROLLOUT_BRIEF
+    evidenceId: RECORD_EXECUTIVE_ROLLOUT_BRIEF
+    narrativeId: DISCOVERY_EXECUTIVE_ROLLOUT_BRIEF
+    localEvidenceId: RECORD_BOARD_RESPONSIBILITY
+  - incidentId: INC-021
+    contentVersion: 1.0.0
+    branchId: NULL_COOPERATION_ACCESS
+    branchVersion: 1.0.0
+    actionId: READ_NULL_DISCLOSURE_ANNOTATION
+    evidenceId: RECORD_NULL_DISCLOSURE_ANNOTATION
+    narrativeId: DISCOVERY_NULL_DISCLOSURE_ANNOTATION
+    localEvidenceId: RECORD_SECURITY_DISCLOSURE_DECISION
+  - incidentId: INC-020
+    contentVersion: 1.0.0
+    branchId: INVESTIGATION_ACCESS
+    branchVersion: 1.0.0
+    actionId: COMPARE_STAFFING_WARNING_TIMELINE
+    evidenceId: RECORD_STAFFING_WARNING_TIMELINE
+    narrativeId: DISCOVERY_STAFFING_WARNING_TIMELINE
+    localEvidenceId: RECORD_WORKFORCE_DECISION
+  - incidentId: INC-022
+    contentVersion: 1.0.0
+    branchId: AI_DEPENDENT_ACCESS
+    branchVersion: 1.0.0
+    actionId: READ_ALLOCATION_RECOMMENDATION_RECEIPT
+    evidenceId: RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
+    narrativeId: DISCOVERY_ALLOCATION_RECOMMENDATION_RECEIPT
+    localEvidenceId: RECORD_FORECAST_HISTORY
+  - incidentId: INC-019
+    contentVersion: 1.0.0
+    branchId: SAFETY_FIRST_ACCESS
+    branchVersion: 1.0.0
+    actionId: READ_CARE_CONTINUITY_EXCEPTION
+    evidenceId: RECORD_CARE_CONTINUITY_EXCEPTION
+    narrativeId: DISCOVERY_CARE_CONTINUITY_EXCEPTION
+    localEvidenceId: RECORD_HOSPITAL_DASHBOARD
+verification: not_run
+preserved: No numeric award, authority, opportunity response or early framing reveal; main
+  recovery/progression remains independent.

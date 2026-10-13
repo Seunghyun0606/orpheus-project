@@ -38,7 +38,10 @@ QA remains deferred at the latest instruction.
 DEC-048 permits TASK-030 implementation before TASK-029 acceptance only. The
 [Board checkpoint](TASK-030_IMPLEMENTATION.md) adds four operational authorities,
 sidecars and protected investigation fragments, not an official campaign or PASS.
-The proposed optional Board branch consumers remain a separate human choice.
+DEC-049 now approves five optional Board branch investigations. The
+[connection checkpoint](TASK-030_BRANCH_IMPLEMENTATION.md) records their authoring,
+four-row model extension and bounded behavior draft repair. No QA or task completion
+is claimed. TASK-031 readiness remains dependent on TASK-030 acceptance.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 
