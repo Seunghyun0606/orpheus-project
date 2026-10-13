@@ -300,9 +300,9 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: ready
+  status: active
   depends_on:
-  - TASK-031
+  - TASK-026
   human_gate: false
 - id: TASK-033
   title: Complete campaign accessibility and environmental audio

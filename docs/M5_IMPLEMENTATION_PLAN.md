@@ -52,7 +52,11 @@ DEC-052 now approves concrete INC-026 plans and consequences. The
 [BLACKOUT checkpoint](TASK-031_BLACKOUT_IMPLEMENTATION.md) authors them using
 mandatory action-completed narratives to retain due-event impact, plus explicit
 model/final-context fragments. No ending balance/authority or accepted full run
-is supplied. TASK-032 readiness still requires TASK-031 acceptance.
+is supplied. DEC-053 now permits TASK-032 implementation readiness before TASK-031
+acceptance only, retaining accepted TASK-026. The
+[ending input checkpoint](TASK-032_ENDING_INPUT_CHECKPOINT.md) records ten narrative
+drafts and the required-input decision without selecting production balance or
+conditional epilogue gates. TASK-031 remains incomplete; QA stays deferred.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 
@@ -140,6 +144,8 @@ DEC-048 similarly removes TASK-029 from TASK-030 implementation readiness only,
 retaining accepted TASK-026; TASK-029 remains incomplete and later dependencies remain.
 DEC-050 similarly removes TASK-030 from TASK-031 implementation readiness only,
 retaining accepted TASK-026; TASK-030 remains incomplete and later dependencies remain.
+DEC-053 similarly removes TASK-031 from TASK-032 implementation readiness only,
+retaining accepted TASK-026; TASK-031 stays incomplete and later dependencies remain.
 TASK-033 still requires TASK-027. TASK-035 still
 requires TASK-025 and every M5 implementation package. Dependencies do not authorize
 parallel agents. Read-only review/QA/evaluator delegation needs applicable authority.
@@ -152,7 +158,7 @@ parallel agents. Read-only review/QA/evaluator delegation needs applicable autho
 | [TASK-029](../.project-os/tasks/ready/TASK-029.yaml) | developer | Approved Acts 4–6 data and reveal/branch fixtures                         | TASK-026 (DEC-045)     |
 | [TASK-030](../.project-os/tasks/ready/TASK-030.yaml) | developer | Extended Board investigation and deferred framing reveal                  | TASK-026 (DEC-048)     |
 | [TASK-031](../.project-os/tasks/ready/TASK-031.yaml) | developer | Observer and Blackout data, final-context fixtures                        | TASK-026 (DEC-050)     |
-| [TASK-032](../.project-os/tasks/ready/TASK-032.yaml) | developer | Approved production ending rules and epilogue data                        | TASK-031               |
+| [TASK-032](../.project-os/tasks/ready/TASK-032.yaml) | developer | Approved production ending rules and epilogue data                        | TASK-026 (DEC-053)     |
 | [TASK-033](../.project-os/tasks/ready/TASK-033.yaml) | developer | Campaign-wide accessibility and scoped audio presentation                 | TASK-027, TASK-032     |
 | [TASK-034](../.project-os/tasks/ready/TASK-034.yaml) | developer | Measured performance, approved packaging and release/authoring docs       | TASK-032, TASK-033     |
 | [TASK-035](../.project-os/tasks/ready/TASK-035.yaml) | developer | Full M5 evidence audit and separate release decision                      | TASK-025, TASK-028–034 |

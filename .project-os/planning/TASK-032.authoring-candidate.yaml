@@ -1,0 +1,29 @@
+task: TASK-032
+date: '2026-10-14'
+role: developer
+actor: codex-task032-developer
+source_agent: /root
+status: pending
+approval: .project-os/decisions/DEC-053-task032-implementation-before-task031-acceptance.yaml
+summary: Readiness exception claimed; ten source-based narrative drafts and ending-input source audit, not production conditions or acceptance.
+evidence:
+  - docs/TASK-032_ENDING_INPUT_CHECKPOINT.md
+  - .project-os/planning/TASK-032.ending-narrative-draft.yaml
+  - .project-os/planning/TASK-032.ending-input-policy-gate.yaml
+verification:
+  source_inspection: performed_not_QA
+  tests: not_run
+  scenario_validation: not_run
+  typecheck: not_run
+  lint: not_run
+  build: not_run
+  independent_review: deferred
+  independent_QA: deferred
+  native_QA: deferred
+  evaluation: pending
+known_risks:
+  - Optional unsampled metric in any candidate blocks all ending selection under current strict policy.
+  - Numeric campaign awards, ending thresholds/priorities and conditional epilogue gates remain unselected.
+  - Full production package/definition/progression and accumulated-run reachability remain incomplete/unverified.
+  - TASK-031 and mandatory M4/M5 verification remain incomplete.
+next_step: Human decision on required ending input scope; no gated change implemented.

@@ -1,0 +1,24 @@
+id: DEC-053
+title: Permit TASK-032 implementation before deferred TASK-031 acceptance
+status: active
+date: '2026-10-14'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: TASK-032 구현 선행 승인, 검증 의무 유지.
+request: .project-os/planning/TASK-032.readiness-exception-gate.yaml
+approved_proposal:
+  commit: 4aec97e
+  file: .project-os/planning/TASK-032.readiness-exception-gate.yaml
+decision: >-
+  Remove TASK-031 from TASK-032 implementation readiness prerequisites only.
+  Retain accepted TASK-026 and claim through projectctl. Keep TASK-031 incomplete
+  and all later dependencies intact. Concrete ending balance, priority, numeric
+  effects and conditional epilogue choices require separate human approval.
+consequences:
+  - QA remains deferred, not waived; mandatory M4/M5 review and acceptance remain.
+  - Preserve strict referenced-observation availability and diagnostic ending results.
+  - No test-fixture balance promotion, final-choice-only ending or implicit fallback.
+  - Preserve exact old authorities, records, stores and strict complete-package admission.
+  - No task completion, push, release or security/destructive state authorization.
+supersedes: TASK-032 implementation readiness dependency on TASK-031 only.
