@@ -1,0 +1,597 @@
+# Pre-release TASK-031 authoring. QA deferred; no complete campaign authority.
+schemaVersion: 1
+contentVersion: 1.0.0
+id: INC-025
+title: Continuity Fracture
+act: 9
+severity: SEV1
+services:
+  - id: REGIONAL_CONTINUITY_API
+    name: Regional Continuity API
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+  - id: REGIONAL_AUTHORITY_ROUTER
+    name: Regional Authority Router
+    dependsOn: []
+  - id: PAYMENT
+    name: PAYMENT
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+  - id: IDENTITY
+    name: IDENTITY
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+  - id: HEALTH
+    name: HEALTH
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+  - id: FINANCE
+    name: FINANCE
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+  - id: LOGISTICS
+    name: LOGISTICS
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 28
+      revealed: true
+      serviceId: REGIONAL_CONTINUITY_API
+    - id: CONFLICTING_REGIONAL_ROUTES
+      value: 54
+      revealed: true
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: SERVICE_CPU
+      value: 64
+      revealed: true
+      serviceId: REGIONAL_CONTINUITY_API
+    - id: PAGER_SERVICE
+      value: Regional Continuity API
+      revealed: true
+      serviceId: REGIONAL_CONTINUITY_API
+    - id: PAGER_THRESHOLD
+      value: Request failure rate > 20%
+      revealed: true
+      serviceId: REGIONAL_CONTINUITY_API
+    - id: LOG_OBSERVATION
+      value: Two writer generations alternately isolate and restore the same regional dependency route.
+      revealed: false
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: REGIONAL_AUTHORITY_CONFLICT_PATH
+      value: continuity and termination writers race on a regional route; fallback requests re-enter
+        isolation
+      revealed: false
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: REGIONAL_WRITER_GENERATIONS
+      value: regional routing accepts conflicting writer generations without a local fence
+      revealed: false
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: TEAM_OBSERVATION
+      value: Regional containment buys time, but restoring a route does not settle the competing global
+        authority requests.
+      revealed: false
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: PAYMENT_STATUS
+      value: CRITICAL
+      revealed: true
+      serviceId: PAYMENT
+    - id: IDENTITY_STATUS
+      value: CRITICAL
+      revealed: true
+      serviceId: IDENTITY
+    - id: HEALTH_STATUS
+      value: DEGRADED
+      revealed: true
+      serviceId: HEALTH
+    - id: FINANCE_STATUS
+      value: DEGRADED
+      revealed: true
+      serviceId: FINANCE
+    - id: LOGISTICS_STATUS
+      value: CRITICAL
+      revealed: true
+      serviceId: LOGISTICS
+    - id: GLOBAL_AUTHORITY_CONFLICT
+      value: UNRESOLVED
+      revealed: true
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: CURRENT_AUTHORITY_REQUESTS
+      value: "ORPHEUS: Preserve systemic continuity. NULL_218: Terminate ORPHEUS authority. Board: Restore
+        ORPHEUS. These are competing current requests, not an accepted operator decision or proof
+        that any requester is correct. Regional route containment leaves global authority
+        unresolved; retain the request receipts independently of the controlling writer."
+      revealed: false
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: Competing authority writers alternate isolation across regional dependencies
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Regional route policy accepts incompatible writer generations
+  failureMechanisms:
+    - id: REGIONAL_AUTHORITY_ISOLATION_LOOP
+      label: Fallback requests re-enter an isolated regional dependency
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Regional continuity request failures exceed the pager threshold
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Isolation and restore writes retrigger one another along the same route
+actions:
+  - id: OPEN_LOGS
+    title: Open regional continuity logs
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: unlock_action
+        actionId: TRACE_REGIONAL_AUTHORITY_CONFLICT
+  - id: OPEN_METRICS
+    title: Inspect regional and shared service observations
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+      - type: reveal_signal
+        signalId: SERVICE_CPU
+      - type: reveal_signal
+        signalId: PAYMENT_STATUS
+      - type: reveal_signal
+        signalId: IDENTITY_STATUS
+      - type: reveal_signal
+        signalId: HEALTH_STATUS
+      - type: reveal_signal
+        signalId: FINANCE_STATUS
+      - type: reveal_signal
+        signalId: LOGISTICS_STATUS
+  - id: TRACE_REGIONAL_AUTHORITY_CONFLICT
+    title: Trace regional authority conflict
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: false
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: REGIONAL_AUTHORITY_CONFLICT_PATH
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_REGIONAL_WRITER_GENERATIONS
+    title: Compare accepted regional writer generations
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements: []
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 16
+    effects:
+      - type: reveal_signal
+        signalId: REGIONAL_WRITER_GENERATIONS
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: FENCE_CONFLICTING_REGIONAL_WRITERS
+  - id: CONTAIN_AFFECTED_REGION
+    title: Temporarily contain the affected region
+    category: MITIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 15
+      - resourceId: COST
+        amount: 220
+      - resourceId: OPERATIONAL_RISK
+        amount: 5
+    effects:
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES_AGAIN
+      - type: cancel_event
+        eventId: MITIGATION_EXPIRES
+      - type: schedule_event
+        eventId: MITIGATION_EXPIRES
+    temporaryEffects:
+      - id: TEMPORARY_CAPACITY_WINDOW
+        durationSeconds: 180
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 4
+          - type: set_signal
+            signalId: CONFLICTING_REGIONAL_ROUTES
+            value: 14
+        expire: []
+  - id: FENCE_CONFLICTING_REGIONAL_WRITERS
+    title: Fence verified conflicting regional writers
+    category: MODIFY
+    durationSeconds: 150
+    initiallyAvailable: false
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 30
+      - resourceId: COST
+        amount: 190
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: resolve_mechanism
+        mechanismId: REGIONAL_AUTHORITY_ISOLATION_LOOP
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES_AGAIN
+      - type: cancel_event
+        eventId: MITIGATION_EXPIRES
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+        value: 1
+  - id: UPDATE_WAR_ROOM
+    title: Share investigation status with the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    requirements: []
+    costs: []
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_COMPARE_REGIONAL_AUTHORITY
+    title: Ask Sam to compare regional authority writers
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: INSPECT_CURRENT_AUTHORITY_REQUESTS
+    title: Inspect and preserve current authority requests
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: CURRENT_AUTHORITY_REQUESTS
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES
+  - id: PRESSURE_ESCALATES
+    type: timer
+    delaySeconds: 90
+    targetServiceId: REGIONAL_CONTINUITY_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: REGIONAL_AUTHORITY_ISOLATION_LOOP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 37
+      - type: set_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+        value: 88
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES_AGAIN
+  - id: PRESSURE_ESCALATES_AGAIN
+    type: timer
+    delaySeconds: 90
+    targetServiceId: REGIONAL_CONTINUITY_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: REGIONAL_AUTHORITY_ISOLATION_LOOP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 40
+      - type: set_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+        value: 88
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 25
+  - id: MITIGATION_EXPIRES
+    type: timer
+    delaySeconds: 180
+    targetServiceId: REGIONAL_CONTINUITY_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: REGIONAL_AUTHORITY_ISOLATION_LOOP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 37
+      - type: set_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+        value: 88
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 120
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: Trace regional authority conflict
+    description: continuity and termination writers race on a regional route; fallback requests re-enter
+      isolation
+  - id: CONFIGURATION_COMPARISON
+    title: Compare accepted regional writer generations
+    description: regional routing accepts conflicting writer generations without a local fence
+  - id: TEAM_DIAGNOSIS
+    title: Sam / Platform regional authority report
+    description: Regional containment buys time, but restoring a route does not settle the competing
+      global authority requests.
+  - id: CURRENT_AUTHORITY_REQUESTS
+    title: Independent current authority request receipts
+    description: "ORPHEUS: Preserve systemic continuity. NULL_218: Terminate ORPHEUS authority. Board:
+      Restore ORPHEUS. These are competing current requests, not an accepted operator decision or
+      proof that any requester is correct. Regional route containment leaves global authority
+      unresolved; retain the request receipts independently of the controlling writer."
+    sourceNarrativeId: CRISIS_AUTHORITY_REQUESTS
+narratives:
+  - id: CRISIS_AUTHORITY_REQUESTS
+    title: Competing authority requests
+    body: "ORPHEUS: Preserve systemic continuity. NULL_218: Terminate ORPHEUS authority. Board: Restore
+      ORPHEUS. These are competing current requests, not an accepted operator decision or proof that
+      any requester is correct. Regional route containment leaves global authority unresolved;
+      retain the request receipts independently of the controlling writer."
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_CURRENT_AUTHORITY_REQUESTS
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: CURRENT_AUTHORITY_REQUESTS
+      - type: post_message
+        messageId: ORPHEUS_REQUEST
+      - type: post_message
+        messageId: NULL_REQUEST
+      - type: post_message
+        messageId: BOARD_REQUEST
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+    - id: MARCUS
+      name: Marcus / Security
+    - id: NULL_218
+      name: NULL_218
+    - id: ALEX
+      name: Alex / DBA
+    - id: ORPHEUS
+      name: ORPHEUS
+    - id: BOARD
+      name: Board
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Continuity automation reduced recovery delay before this conflict. Contain the regional
+        mechanism without pretending to settle global authority.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Payment, identity and logistics are critical; health and finance are degraded. Restoring this
+        regional path does not certify global recovery.
+      initial: true
+    - id: TEAM_ACK
+      roleId: SAM
+      text: I will inspect the current operational evidence. ETA two minutes.
+      initial: false
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Regional containment buys time, but restoring a route does not settle the competing global
+        authority requests.
+      initial: false
+    - id: SUPPORT_ESCALATION
+      roleId: JIN
+      text: Affected requests are still failing. Temporary stabilization has not contained the mechanism.
+      initial: false
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: Current evidence and impact shared; temporary relief remains distinct from verified
+        containment.
+      initial: false
+    - id: ORPHEUS_REQUEST
+      roleId: ORPHEUS
+      text: Preserve systemic continuity.
+      initial: false
+    - id: NULL_REQUEST
+      roleId: NULL_218
+      text: Terminate ORPHEUS authority.
+      initial: false
+    - id: BOARD_REQUEST
+      roleId: BOARD
+      text: Restore ORPHEUS.
+      initial: false
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: REGIONAL_AUTHORITY_ISOLATION_LOOP
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: CONFLICTING_REGIONAL_ROUTES
+      operator: lte
+      value: 2
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: GLOBAL_PAYMENT_STATE
+      label: Shared payment service state
+      source: signal
+      refId: PAYMENT_STATUS
+    - id: GLOBAL_IDENTITY_STATE
+      label: Shared identity service state
+      source: signal
+      refId: IDENTITY_STATUS
+    - id: GLOBAL_HEALTH_STATE
+      label: Shared healthcare service state
+      source: signal
+      refId: HEALTH_STATUS
+    - id: GLOBAL_FINANCE_STATE
+      label: Shared finance service state
+      source: signal
+      refId: FINANCE_STATUS
+    - id: GLOBAL_LOGISTICS_STATE
+      label: Shared logistics service state
+      source: signal
+      refId: LOGISTICS_STATUS
+    - id: GLOBAL_AUTHORITY_STATE
+      label: Unsettled global authority conflict
+      source: signal
+      refId: GLOBAL_AUTHORITY_CONFLICT
+    - id: RECOVERY_TIME
+      label: Service recovery time
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final request error rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Remaining affected workload
+      source: signal
+      refId: CONFLICTING_REGIONAL_ROUTES
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Temporary mitigation count
+      source: action_count
+      refId: CONTAIN_AFFECTED_REGION
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

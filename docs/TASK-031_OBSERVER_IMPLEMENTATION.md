@@ -1,5 +1,10 @@
 # TASK-031 — Observer authoring checkpoint
 
+Latest addendum: DEC-051 approves the final-completion contract. The
+[crisis checkpoint](TASK-031_CRISIS_IMPLEMENTATION.md) adds INC-025 and deferred
+completion fixtures. The pending completion choice below is historical and now
+resolved; concrete INC-026 actions/balance and TASK-031 acceptance remain pending.
+
 ## Completed authoring, not task completion
 
 DEC-050 approves TASK-031 implementation readiness before TASK-030 acceptance

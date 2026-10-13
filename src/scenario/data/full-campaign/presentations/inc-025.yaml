@@ -1,0 +1,174 @@
+# Pre-release TASK-031 authoring. QA deferred; no complete campaign authority.
+schemaVersion: 1
+id: INC-025-INVESTIGATION
+version: 1.0.0
+scenarioId: INC-025
+contentVersion: 1.0.0
+panels:
+  - id: metrics
+    title: Customer-facing health and affected workload
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - CONFLICTING_REGIONAL_ROUTES
+          - SERVICE_CPU
+          - PAYMENT_STATUS
+          - IDENTITY_STATUS
+          - HEALTH_STATUS
+          - FINANCE_STATUS
+          - LOGISTICS_STATUS
+          - GLOBAL_AUTHORITY_CONFLICT
+  - id: logs
+    title: Operational log review
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+  - id: trace
+    title: Trace regional authority conflict
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - TRACE_REGIONAL_AUTHORITY_CONFLICT
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - REGIONAL_AUTHORITY_CONFLICT_PATH
+  - id: configuration
+    title: Compare accepted regional writer generations
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - COMPARE_REGIONAL_WRITER_GENERATIONS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - REGIONAL_WRITER_GENERATIONS
+  - id: mitigation
+    title: Temporary operating window
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - CONTAIN_AFFECTED_REGION
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: Regional containment buys a temporary operating window. It does not choose a global authority
+          or restore the five shared services.
+  - id: containment
+    title: Scoped causal containment
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - FENCE_CONFLICTING_REGIONAL_WRITERS
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Compare the current trace with its configuration record before containment. Duration,
+          operating exposure and affected customers remain separate consequences.
+  - id: team
+    title: War Room operational investigation
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_COMPARE_REGIONAL_AUTHORITY
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+  - id: authority-receipts
+    title: Current authority request receipts
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - INSPECT_CURRENT_AUTHORITY_REQUESTS
+    blocks:
+      - kind: signals
+        id: current-request-values
+        signalIds:
+          - CURRENT_AUTHORITY_REQUESTS
+evidenceRelations: []

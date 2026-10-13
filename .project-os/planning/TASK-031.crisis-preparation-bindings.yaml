@@ -1,0 +1,36 @@
+# Pre-release TASK-031 authoring. QA deferred; no complete campaign authority.
+task: TASK-031
+date: 2026-10-13
+status: authored_not_verified
+authorities:
+  - DEC-038
+  - DEC-042
+  - DEC-043
+  - DEC-051
+definition_identity:
+  id: orpheus-full-campaign
+  version: 1.0.0
+references: []
+actionGates:
+  - id: INC-025-INSPECT_CURRENT_AUTHORITY_REQUESTS
+    incidentId: INC-025
+    contentVersion: 1.0.0
+    actionId: INSPECT_CURRENT_AUTHORITY_REQUESTS
+    eligibility:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+evidence_bindings_fragment:
+  - id: INC-025.CURRENT_AUTHORITY_REQUESTS
+    scenarioId: INC-025
+    evidenceId: CURRENT_AUTHORITY_REQUESTS
+narrative_bindings_fragment:
+  - id: INC-025.CRISIS_AUTHORITY_REQUESTS
+    scenarioId: INC-025
+    narrativeId: CRISIS_AUTHORITY_REQUESTS
+logical_effects_fragment: []
+composition_contract: Compose with CURRENT_ACT from the approved earlier fragments. This is regional
+  preparation, not BLACKOUT final completion or an ending context; no required optional lore,
+  numeric award or authority selection.
+verification: not_run

@@ -32,6 +32,7 @@ relevant_files:
   - src/scenario/
   - src/tests/
 active_decisions:
+  - .project-os/decisions/DEC-051-blackout-final-decision-completion.yaml
   - .project-os/decisions/DEC-050-task031-implementation-before-task030-acceptance.yaml
   - .project-os/decisions/DEC-042-full-campaign-content-version-baseline.yaml
   - .project-os/decisions/DEC-043-campaign-action-prerequisites.yaml

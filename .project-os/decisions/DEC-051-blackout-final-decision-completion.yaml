@@ -1,0 +1,27 @@
+id: DEC-051
+title: Complete BLACKOUT on an explicit accepted final decision, not healthy services
+status: active
+date: '2026-10-13'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 최종 판단 기반 종료 승인.
+request: .project-os/planning/TASK-031.blackout-completion-gate.yaml
+approved_proposal:
+  commit: 59a5db9
+  file: specs/architecture/blackout-completion-proposal.md
+decision: >-
+  Use existing schema-1 Scenario data. INC-026 starts with
+  FINAL_DECISION_COMMITTED false; only an explicitly approved, available final-plan
+  action may set it true after normal time and consequences. All final-plan actions
+  require it false. Completion requires the decision flag rather than healthy
+  services. Measured critical/degraded outcomes remain recorded; completion does
+  not grant an ending or relax replay/provenance requirements.
+consequences:
+  - Require explicit current local service/authority investigation for final choices.
+  - Do not require every optional clue for ordinary crisis access.
+  - Timers, delegates, navigation, ACKs, imports and inherited prefixes cannot create a new decision/completion.
+  - Preserve accepted input identity, due events, deterministic ordering and commit-before-publish.
+  - Final-plan IDs/list, costs/service effects, numeric campaign awards, endings and new opportunities remain unselected.
+  - No resolver/record/schema extension, user store migration, QA waiver, completion, push or release.
+supersedes: BLACKOUT completion-policy-unselected clauses only.

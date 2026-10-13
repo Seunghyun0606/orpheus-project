@@ -1,0 +1,34 @@
+task: TASK-031
+date: '2026-10-13'
+status: authored_fragment_not_runtime_scenario
+authority: .project-os/decisions/DEC-051-blackout-final-decision-completion.yaml
+scenario_identity: {id: INC-026, contentVersion: 1.0.0, schemaVersion: 1}
+initial_flags_fragment:
+  - id: FINAL_DECISION_COMMITTED
+    value: false
+final_action_requirements_fragment:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+final_action_terminal_effect_fragment:
+  - type: set_flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: true
+completion_fragment:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: FINAL_DECISION_COMMITTED
+      value: true
+  effects: []
+composition_contract:
+  - Final action IDs/eligibility/time/costs/service consequences require a separate concrete approval; no production final action is authored here.
+  - Local assessment evidence IDs are explicit new-only authoring bindings, not imported historical proof; real actions must produce them in the current final attempt.
+  - Only approved final-plan actions may write this flag; no initial true state, timer/delegate/narrative/resolution grant or inherited/imported substitute.
+  - Compose terminal flag after normal due events/time and chosen plan consequences; never discard events to manufacture recovery.
+  - Completing INC-026 is not an ending award; preserve the existing exact-attempt/new-completion provenance check and unresolved diagnostics.
+verification: not_run

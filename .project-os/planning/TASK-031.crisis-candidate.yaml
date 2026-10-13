@@ -1,0 +1,33 @@
+task: TASK-031
+date: '2026-10-14'
+role: developer
+actor: codex-task031-developer
+source_agent: /root
+status: pending
+summary: Approved final-decision completion fragment, INC-025 regional crisis preparation and eight deferred cases; INC-026 final plans remain proposed.
+approval: .project-os/decisions/DEC-051-blackout-final-decision-completion.yaml
+evidence:
+  - docs/TASK-031_CRISIS_IMPLEMENTATION.md
+  - .project-os/planning/TASK-031.final-completion-bindings.yaml
+  - .project-os/planning/TASK-031.crisis-preparation-bindings.yaml
+  - .project-os/planning/TASK-031.crisis-model-bindings.yaml
+  - src/tests/fixtures/crisis-preparation-replays.yaml
+  - src/tests/crisis-preparation.test.ts
+  - src/tests/blackout-completion-contract.test.ts
+verification:
+  tests: authored_not_run
+  scenario_validation: not_run
+  typecheck: not_run
+  lint: not_run
+  build: not_run
+  independent_review: deferred
+  independent_QA: deferred
+  native_QA: deferred
+  evaluation: pending
+known_risks:
+  - Unverified 25-Incident draft tree and incomplete final/runtime/model/progression composition.
+  - INC-026 actions/costs/service effects, endings and actual final-context/provenance QA pending.
+preserved:
+  - Exact old authorities/stores, default MVP, genuine new completion and strict unresolved ending behavior.
+  - No partial campaign admission, fabricated ACK/history, QA waiver, completion, push or release.
+next_step: Human decision on the concrete final-plan proposal before INC-026 authoring.

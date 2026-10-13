@@ -1,0 +1,224 @@
+task: TASK-031
+date: 2026-10-14
+status: authored_not_verified
+authorities:
+  - DEC-044
+  - DEC-050
+  - DEC-051
+definition_identity:
+  id: orpheus-full-campaign
+  version: 1.0.0
+behavior_scenarios:
+  - scenarioId: INC-025
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: OBSERVATION_AGE
+        version: 1.0.0
+        source: ageSeconds
+        key: current
+        valueType: number
+      - id: CURRENT_ACTION
+        version: 1.0.0
+        source: actionId
+        key: current
+        valueType: string
+    actions:
+      - actionId: OPEN_LOGS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: OPEN_METRICS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: TRACE_REGIONAL_AUTHORITY_CONFLICT
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: COMPARE_REGIONAL_WRITER_GENERATIONS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: CONTAIN_AFFECTED_REGION
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: FENCE_CONFLICTING_REGIONAL_WRITERS
+        operational: true
+        restart: false
+        rollback: false
+        evidenceEligible: true
+      - actionId: UPDATE_WAR_ROOM
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: ASK_SAM_COMPARE_REGIONAL_AUTHORITY
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+      - actionId: INSPECT_CURRENT_AUTHORITY_REQUESTS
+        operational: false
+        restart: false
+        rollback: false
+        evidenceEligible: false
+    investigations:
+      - id: INC-025/OPEN_LOGS
+        key: INC-025/OPEN_LOGS
+        actionId: OPEN_LOGS
+        result:
+          kind: action_completed
+      - id: INC-025/OPEN_METRICS
+        key: INC-025/OPEN_METRICS
+        actionId: OPEN_METRICS
+        result:
+          kind: action_completed
+      - id: INC-025/TRACE_REGIONAL_AUTHORITY_CONFLICT
+        key: INC-025/TRACE_REGIONAL_AUTHORITY_CONFLICT
+        actionId: TRACE_REGIONAL_AUTHORITY_CONFLICT
+        result:
+          kind: action_completed
+      - id: INC-025/COMPARE_REGIONAL_WRITER_GENERATIONS
+        key: INC-025/COMPARE_REGIONAL_WRITER_GENERATIONS
+        actionId: COMPARE_REGIONAL_WRITER_GENERATIONS
+        result:
+          kind: action_completed
+      - id: INC-025/INSPECT_CURRENT_AUTHORITY_REQUESTS
+        key: INC-025/INSPECT_CURRENT_AUTHORITY_REQUESTS
+        actionId: INSPECT_CURRENT_AUTHORITY_REQUESTS
+        result:
+          kind: action_completed
+      - id: INC-025/TEAM_REPORT
+        key: INC-025/TEAM_REPORT
+        actionId: ASK_SAM_COMPARE_REGIONAL_AUTHORITY
+        result:
+          kind: war_room_message
+          messageId: TEAM_REPORT
+          delivery:
+            kind: timer
+            eventId: TEAM_RESULT
+    supportRules:
+      - id: INC-025/SUPPORT/CONTAIN_AFFECTED_REGION
+        actionId: CONTAIN_AFFECTED_REGION
+        investigationKeys:
+          - INC-025/TRACE_REGIONAL_AUTHORITY_CONFLICT
+          - INC-025/COMPARE_REGIONAL_WRITER_GENERATIONS
+          - INC-025/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: CONTAIN_AFFECTED_REGION
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+      - id: INC-025/SUPPORT/FENCE_CONFLICTING_REGIONAL_WRITERS
+        actionId: FENCE_CONFLICTING_REGIONAL_WRITERS
+        investigationKeys:
+          - INC-025/TRACE_REGIONAL_AUTHORITY_CONFLICT
+          - INC-025/COMPARE_REGIONAL_WRITER_GENERATIONS
+          - INC-025/TEAM_REPORT
+        relevance:
+          type: compare
+          reference: CURRENT_ACTION
+          operator: eq
+          expected: FENCE_CONFLICTING_REGIONAL_WRITERS
+        freshness:
+          type: all
+          children:
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: gte
+              expected: 0
+            - type: compare
+              reference: OBSERVATION_AGE
+              operator: lte
+              expected: 180
+prediction_scenarios:
+  - scenarioId: INC-025
+    contentVersion: 1.0.0
+    coverage: supported
+    references:
+      - id: ELAPSED
+        version: 1.0.0
+        source: elapsedSeconds
+        key: current
+        valueType: number
+      - id: CAUSAL_OBSERVATION
+        version: 1.0.0
+        source: signal_revealed
+        key: REGIONAL_AUTHORITY_CONFLICT_PATH
+        valueType: boolean
+    contexts:
+      - contextId: BEFORE_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: false
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: CONTAIN_AFFECTED_REGION
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: FENCE_CONFLICTING_REGIONAL_WRITERS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+      - contextId: AFTER_CAUSAL_OBSERVATION
+        when:
+          type: compare
+          reference: CAUSAL_OBSERVATION
+          operator: eq
+          expected: true
+        reveal:
+          type: compare
+          reference: ELAPSED
+          operator: lt
+          expected: 0
+        choices:
+          - actionId: CONTAIN_AFFECTED_REGION
+            candidateId: ISOLATE
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+          - actionId: FENCE_CONFLICTING_REGIONAL_WRITERS
+            candidateId: CAUSAL_REPAIR
+            eligible:
+              type: compare
+              reference: ELAPSED
+              operator: gte
+              expected: 0
+composition_contract: Append this row after the existing 24-row draft composition, not to old
+  authorities. Region-only operational classifications and distinct current investigation keys;
+  authority receipt is not causal intervention support or an opportunity response. No new guidance
+  exposure.
+verification: not_run

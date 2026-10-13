@@ -45,6 +45,9 @@ is claimed. DEC-050 now permits TASK-031 implementation readiness before TASK-03
 acceptance only. The [Observer checkpoint](TASK-031_OBSERVER_IMPLEMENTATION.md)
 authors INC-023/024 with verified Board-completion guards, not final BLACKOUT
 completion/actions, official campaign acceptance or an automatic ending.
+DEC-051 approves explicit final-decision completion without a healthy-service
+requirement. The [crisis checkpoint](TASK-031_CRISIS_IMPLEMENTATION.md) authors
+INC-025 and the completion fragment, not concrete INC-026 plans or ending balance.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 

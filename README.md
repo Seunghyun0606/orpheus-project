@@ -44,6 +44,10 @@ DEC-050 permits TASK-031 implementation before TASK-030 acceptance. The
 verified Board-completion guards and model rows for future 24-Incident composition.
 BLACKOUT completion/final actions and full composition remain unselected or absent;
 TASK-031 is incomplete and QA remains deferred.
+DEC-051 approves final-decision-based BLACKOUT completion, not final-plan balance.
+The [crisis checkpoint](docs/TASK-031_CRISIS_IMPLEMENTATION.md) adds INC-025 regional
+preparation and completion-contract fragments. Authoring now covers 25 Incidents;
+INC-026 plans/impacts require the pending explicit decision. No full campaign or QA PASS.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,

@@ -1,0 +1,19 @@
+task: TASK-031
+date: '2026-10-14'
+status: awaiting_human_decision
+type: architecture_change
+question: INC-026의 제안된 최종 행동 10개와 전제 조건·시간·비용·서비스 영향을 승인할까요?
+reason: DEC-051 approved terminal decision completion only; final action IDs/list and operational consequences remain unselected and affect product behavior and future ending context.
+proposal: specs/architecture/blackout-final-plans-proposal.md
+safe_checkpoint: docs/TASK-031_CRISIS_IMPLEMENTATION.md
+options:
+  - key: A
+    label: 최종 행동·영향 초안 승인 후 구현
+    scope: Approve the exact proposed ten plans, current assessment/snapshot/objective investigations, guards, initial five-service context and normal delayed pressure for new INC-026 only. No ending thresholds/priorities, numeric campaign awards or new guidance.
+  - key: B
+    label: 최종 행동 설계 수정 후 구현
+    scope: Preserve the authored preparation/completion contract and defer INC-026 until revised concrete actions and consequences are approved.
+preserved:
+  - Mutually terminal explicit decisions, measured service failures, no automatic ending and strict unavailable/provenance rules.
+  - Optional-clue independence for ordinary crisis access, Board pacing and existing exact authorities/stores.
+  - Fictional game effects only; no external export, destruction/security mutation, QA waiver, completion, push or release.
