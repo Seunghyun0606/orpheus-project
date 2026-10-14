@@ -21,7 +21,7 @@ Full QA still fails seven unchanged 5-second timeouts and formatting still fails
 37 protected old files. Complete V1–V12/native/task acceptance is not established.
 
 Automated verification resumed under DEC-066 on 2026-10-14. The
-[current checkpoint](docs/TASK-035_AUTOMATED_VERIFICATION_CHECKPOINT.md) retains
+[earlier checkpoint](docs/TASK-035_AUTOMATED_VERIFICATION_CHECKPOINT.md) retains
 the initial 33 test failures and narrow corrections. Independent rerun of
 `a6e509b` passes 690/694 tests but **still fails four unchanged 5-second timeouts**;
 lint/typecheck pass, format fails 37 data files. Independent review also finds

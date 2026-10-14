@@ -1,0 +1,29 @@
+task: TASK-035
+kind: distinct_read_only_checkpoint_consistency_audit_not_final_acceptance
+date: '2026-10-15'
+role: evaluator
+actor: /root/task035_runtime_evaluator
+recorded_by: /root
+audited_evidence_commit: 2b6ff14
+source_candidate: c64d7ba9b6b27685db5250e1c5601f7df6bc007a
+decision: checkpoint_consistency_pass_whole_acceptance_hold
+direct_checks:
+  - All sixty protected source byte counts and SHA-256 match baseline.
+  - Evidence commit contains documentation only; source unchanged from c64d7ba and worktree clean at audit.
+  - No canonical state, timeout, worker, lockfile or budget changes.
+  - All twenty-eight indexed report hashes and actor/command/commit/worktree/outcome fields match complete raw local evidence.
+  - Current desktop binary hash matches attributed QA; no execution inferred.
+audited_not_executed:
+  - Independently executed focused 28/28 PASS, full 715/722 with seven unchanged 5000 ms timeouts, format 37 FAIL, validation 93 PASS.
+  - Separate reviewer findings and repair re-review, plus listed compile/replay/harness/authoring/doctor checks.
+  - Honest partial V1–V12 map and unchanged mandatory broader acceptance obligations.
+finding: No substantive checkpoint contradiction or unjustified task acceptance claim.
+nonblocking_clarification:
+  finding: README still called historical a6e509b report current checkpoint below the newer record.
+  disposition: Root changed label to earlier checkpoint after the audited evidence commit; runtime unaffected.
+remaining:
+  - Genuine new-production completed INC-026 history/archive and all full reveal/ending routes.
+  - Seven timeout and thirty-seven format failures; measured long-run/native budgets and rights.
+  - Mandatory M4/TASK-025 and native/install/accessibility verification before final task/milestone/release acceptance.
+next_gate_boundary: Bounded performance-contract design/review may be proposed; no cache, skipped proof or threshold relaxation approved.
+mutation_boundary: Evaluator executed no tests, app/install/migration, edits, commits, profile operations or canonical transition.

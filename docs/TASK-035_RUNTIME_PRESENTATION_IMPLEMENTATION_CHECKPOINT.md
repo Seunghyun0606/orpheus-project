@@ -67,6 +67,13 @@ and layout-phase replacement regressions were added. Read-only re-review found b
 repairs resolved and no new blocking repair finding. It does not accept TASK-035.
 See [review attribution](../.project-os/planning/TASK-035.runtime-presentation-review.yaml).
 
+Distinct evaluator `/root/task035_runtime_evaluator` audited evidence commit
+`2b6ff14`, protected bytes, all 28 raw-report hashes/actors/candidates/outcomes,
+unchanged canonical state/budgets and binary identity. Its
+[verdict](../.project-os/planning/TASK-035.runtime-presentation-evaluation.yaml) is
+**checkpoint consistency PASS; whole-task acceptance HOLD**. It did not rerun QA
+or execute native applications. A nonblocking historical README label was clarified.
+
 ## Known risks and remaining work
 
 Genuine production INC-001 is exercised, including Good pre/post-trigger and Jin's
@@ -83,7 +90,6 @@ acceptance remain pending. Existing protected data was not reformatted to hide F
 
 ## Next recommended step
 
-Distinct checkpoint consistency audit, then a human decision on a bounded
-performance-contract design/review step. Current approval does not authorize
+A human decision on a bounded performance-contract design/review step. Current approval does not authorize
 validation/replay caches or skipped proofs. Preserve correctness checks, budgets,
 failed logs, old authorities and separately gated native/final/release decisions.

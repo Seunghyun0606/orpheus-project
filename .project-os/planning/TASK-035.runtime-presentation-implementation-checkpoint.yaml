@@ -22,6 +22,7 @@ tests:
   independent_qa: .project-os/planning/TASK-035.runtime-presentation-qa.yaml
   independent_review: .project-os/planning/TASK-035.runtime-presentation-review.yaml
   command_index: .project-os/planning/TASK-035.runtime-presentation-checks.json
+  distinct_evaluation: .project-os/planning/TASK-035.runtime-presentation-evaluation.yaml
   current_focused: pass_28
   current_full: fail_7_timeouts_of_722
   current_format: fail_37_existing_protected_files
@@ -50,7 +51,7 @@ known_risks:
 remaining:
   - Genuine new-version final-completion/load/archive and all reveal/ending routes plus remaining adversarial cases.
   - Performance/long-run/rights/native/install and mandatory M4/TASK-025 acceptance.
-  - Distinct checkpoint consistency evaluation; configured final task/milestone/release decisions remain separate.
+  - Configured final task/milestone/release decisions remain separate; distinct checkpoint consistency PASS is not whole-task acceptance.
 next_recommended_step: Seek a separate bounded performance-contract design/review decision without relaxing verification or budgets; preserve all other blockers.
 canonical_state: M4/M5 and existing tasks remain active; no evaluate/claim/complete transition.
 skill_influence: React best-practices review guided subscription/timer cleanup, synchronous binding snapshots and nonmodal readable notification/history; no new UI library or data ownership change.
