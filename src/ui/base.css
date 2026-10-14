@@ -1678,3 +1678,88 @@ input:focus-visible,
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+
+/* Scoped presentation only: no animation or layout affects simulation time. */
+.campaign-desk {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.campaign-desk h1 {
+  font-size: 2em;
+}
+.campaign-desk h2 {
+  font-size: 1.25em;
+}
+.campaign-desk h3 {
+  font-size: 1.1em;
+}
+.campaign-desk .presentation-settings {
+  font-size: 1em;
+}
+.campaign-desk section,
+.campaign-desk header,
+.campaign-desk figure {
+  min-width: 0;
+}
+.campaign-desk button,
+.campaign-desk input,
+.campaign-desk select {
+  font: inherit;
+  max-width: 100%;
+}
+.campaign-desk button {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  margin: 0.25em;
+}
+.campaign-desk :focus-visible,
+.campaign-desk section:focus {
+  outline: 3px solid var(--text-primary, #effff8);
+  outline-offset: 3px;
+}
+.campaign-jump-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em;
+  margin-bottom: 1em;
+}
+.campaign-jump-links a {
+  color: inherit;
+  text-decoration: underline;
+}
+.campaign-document-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.campaign-table-scroll {
+  max-width: 100%;
+  overflow: auto;
+}
+.campaign-table-scroll caption {
+  text-align: left;
+  padding-bottom: 0.5em;
+}
+.campaign-audio label {
+  display: block;
+  margin-top: 0.75em;
+}
+.campaign-audio input[type='range'] {
+  width: min(100%, 20em);
+}
+.campaign-desk[data-crt-effects='false']::before,
+.campaign-desk[data-crt-effects='false']::after {
+  display: none;
+}
+.campaign-desk[data-crt-effects='false'],
+.campaign-desk[data-crt-effects='false'] * {
+  text-shadow: none;
+  box-shadow: none;
+}
+.campaign-desk[data-reduced-animation='true'],
+.campaign-desk[data-reduced-animation='true'] *,
+.campaign-desk[data-reduced-animation='true'] *::before,
+.campaign-desk[data-reduced-animation='true'] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}

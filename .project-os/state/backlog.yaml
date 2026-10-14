@@ -309,10 +309,9 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: ready
+  status: active
   depends_on:
-  - TASK-027
-  - TASK-032
+  - TASK-026
   human_gate: false
 - id: TASK-034
   title: Prepare measured desktop packaging and release authoring guidance

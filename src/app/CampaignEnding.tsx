@@ -62,7 +62,12 @@ export function CampaignEnding({
             : 'Recovery criteria not reached'}
           .
         </p>
-        <div className="campaign-table-scroll">
+        <div
+          className="campaign-table-scroll"
+          tabIndex={0}
+          role="region"
+          aria-label="Recorded service signals, scroll to read"
+        >
           <table>
             <caption>Recorded service signals at this final attempt</caption>
             <thead>

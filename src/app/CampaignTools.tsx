@@ -36,10 +36,21 @@ export function CampaignTools({
           <h2>{panel.title}</h2>
           {panel.blocks.map((block) =>
             block.kind === 'paragraph' ? (
-              <p key={block.id}>{block.text}</p>
+              <p className="campaign-document-text" key={block.id}>
+                {block.text}
+              </p>
             ) : block.kind === 'table' ? (
-              <div className="campaign-table-scroll" key={block.id}>
+              <div
+                className="campaign-table-scroll"
+                key={block.id}
+                tabIndex={0}
+                role="region"
+                aria-label={`${panel.title}: ${block.id} table, scroll to read`}
+              >
                 <table>
+                  <caption>
+                    {panel.title} — {block.id}
+                  </caption>
                   <thead>
                     <tr>
                       {block.columns.map((c, i) => (

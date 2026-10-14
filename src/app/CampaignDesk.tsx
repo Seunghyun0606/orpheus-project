@@ -11,6 +11,7 @@ import {
 import { CampaignTools } from './CampaignTools.tsx';
 import type { ResolvedCampaignPackage } from '../scenario/campaign-package.ts';
 import { CampaignEnding } from './CampaignEnding.tsx';
+import { CampaignAudio } from './CampaignAudio.tsx';
 import { campaignAttemptHead, type CampaignRun } from '../engine/campaign/transitions.ts';
 
 // The caller must supply an approved authority/isolated fixture adapter. Nothing
@@ -38,6 +39,7 @@ export function CampaignDesk({
     composition ? readPresentationPreferences() : defaultPresentationPreferences,
   );
   const presentationRef = useRef<HTMLElement>(null);
+  const keyboardAudio = useRef<(() => void) | null>(null);
   const run = state.run;
   const attempt = run?.attempts.find((a) => a.id === (reviewId ?? run.activeAttemptId));
   const reviewing = reviewId !== null;
@@ -70,7 +72,32 @@ export function CampaignDesk({
       style={{ fontSize: scale }}
       data-reduced-animation={preferences.reducedAnimation}
       data-crt-effects={preferences.crtEffects}
+      aria-label="Campaign operations desktop"
+      onKeyDownCapture={(event) => {
+        if (
+          !composition ||
+          reviewing ||
+          blocked ||
+          event.repeat ||
+          event.nativeEvent.isComposing ||
+          event.ctrlKey ||
+          event.altKey ||
+          event.metaKey ||
+          (event.target instanceof Element && event.target.closest('[data-audio-controls]'))
+        )
+          return;
+        if (event.key.length === 1 || event.key === 'Enter' || event.key === 'Backspace')
+          keyboardAudio.current?.();
+      }}
     >
+      <nav className="campaign-jump-links" aria-label="Campaign section shortcuts">
+        <a href="#campaign-progress">Progress</a>
+        <a href="#campaign-history">Archive</a>
+        <a href="#campaign-tools">Investigation</a>
+        {!reviewing ? <a href="#campaign-guidance">Guidance</a> : null}
+        <a href="#campaign-evidence">Evidence</a>
+        <a href="#campaign-settings">Settings</a>
+      </nav>
       <header>
         <p className="eyebrow">
           {composition
@@ -86,14 +113,24 @@ export function CampaignDesk({
         <button type="button" disabled={blocked} onClick={onBack}>
           Back to incident desk
         </button>
-        <PresentationSettings
-          preferences={preferences}
-          onChange={(p) => {
-            setPreferences(p);
-            if (composition) savePresentationPreferences(p);
-          }}
-        />
+        <section id="campaign-settings" tabIndex={-1} aria-label="Display settings">
+          <PresentationSettings
+            preferences={preferences}
+            onChange={(p) => {
+              setPreferences(p);
+              if (composition) savePresentationPreferences(p);
+            }}
+          />
+        </section>
       </header>
+      {composition ? (
+        <CampaignAudio
+          store={store}
+          live={!reviewing}
+          ambience={!!attempt && !attempt.incident.completionReached}
+          keyboard={keyboardAudio}
+        />
+      ) : null}
       {state.error ? <p role="alert">Campaign operation not confirmed: {state.error}</p> : null}
       {state.view?.actionDiagnostics.length ? (
         <p role="alert">Some response options require valid campaign observations.</p>
@@ -110,7 +147,13 @@ export function CampaignDesk({
           Retry pending operation
         </button>
       ) : null}
-      <section className="panel" aria-labelledby="campaign-progress-title">
+      <section
+        id="campaign-progress"
+        tabIndex={-1}
+        className="panel"
+        aria-labelledby="campaign-progress-title"
+        aria-busy={state.busy}
+      >
         <h2 id="campaign-progress-title">Progress and persistence</h2>
         <button
           type="button"
@@ -156,12 +199,18 @@ export function CampaignDesk({
           <p role="alert">Progression requires valid campaign observations.</p>
         ) : null}
       </section>
-      <section className="panel" aria-labelledby="campaign-history-title">
+      <section
+        id="campaign-history"
+        tabIndex={-1}
+        className="panel"
+        aria-labelledby="campaign-history-title"
+      >
         <h2 id="campaign-history-title">Attempt history</h2>
         {run?.attempts.map((a) => (
           <button
             key={a.id}
             type="button"
+            disabled={blocked}
             onClick={() => {
               setReviewId(a.id);
               setEnding(null);
@@ -175,6 +224,7 @@ export function CampaignDesk({
             <p>Read-only archive. Viewing does not create exposures or responses.</p>
             <button
               type="button"
+              disabled={blocked}
               onClick={() => {
                 setReviewId(null);
                 setEnding(null);
@@ -191,23 +241,30 @@ export function CampaignDesk({
           </p>
         ) : null}
       </section>
-      {composition && run && attempt ? (
-        <CampaignTools
-          composition={composition}
-          run={run}
-          attemptId={attempt.id}
-          actions={state.view?.availableActions ?? []}
-          disabled={blocked || !!(prep && !acknowledged)}
-          readOnly={reviewing}
-          onAction={(id) => {
-            setEnding(null);
-            void state.performAction(id);
-          }}
-        />
-      ) : null}
+      <section id="campaign-tools" tabIndex={-1} aria-label="Investigation workspace">
+        {composition && run && attempt ? (
+          <CampaignTools
+            composition={composition}
+            run={run}
+            attemptId={attempt.id}
+            actions={state.view?.availableActions ?? []}
+            disabled={blocked || !!(prep && !acknowledged)}
+            readOnly={reviewing}
+            onAction={(id) => {
+              setEnding(null);
+              void state.performAction(id);
+            }}
+          />
+        ) : null}
+      </section>
       {!reviewing ? (
         <>
-          <section className="panel" aria-labelledby="campaign-guidance-title">
+          <section
+            id="campaign-guidance"
+            tabIndex={-1}
+            className="panel"
+            aria-labelledby="campaign-guidance-title"
+          >
             <h2 id="campaign-guidance-title">Gated guidance</h2>
             {state.view?.presentationDiagnostics.length ? (
               <p role="alert">Guidance needs valid authored observations.</p>
@@ -234,7 +291,7 @@ export function CampaignDesk({
             ))}
             {prep ? (
               <section ref={presentationRef} aria-label="Authored presentation">
-                <p>{prep.presentation.text}</p>
+                <p className="campaign-document-text">{prep.presentation.text}</p>
                 {prep.kind === 'recommendation' ? (
                   <p>Recommended action: {prep.recommendedActionId}</p>
                 ) : null}
@@ -288,7 +345,12 @@ export function CampaignDesk({
           ) : null}
         </>
       ) : null}
-      <section className="panel" aria-labelledby="campaign-evidence-title">
+      <section
+        id="campaign-evidence"
+        tabIndex={-1}
+        className="panel"
+        aria-labelledby="campaign-evidence-title"
+      >
         <h2 id="campaign-evidence-title">Preserved evidence</h2>
         {state.view?.evidence.map((e) => (
           <article key={e.id}>

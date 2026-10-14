@@ -14,6 +14,7 @@ import { getCampaignPresentation } from '../engine/campaign/opportunities.ts';
 import { scenarioVersionKey } from '../scenario/catalog.ts';
 import type { CampaignDefinition } from '../scenario/campaign.ts';
 import type { Scenario } from '../scenario/schema.ts';
+import type { EngineEvent, RuntimeSignal } from '../engine/types.ts';
 import {
   verifyCampaignRecord,
   campaignDefinitionKey,
@@ -47,6 +48,7 @@ export interface CampaignView {
   evidence: { id: string; title: string; description: string }[];
 }
 export interface CampaignSessionState {
+  readonly subscribeCommitted: (listener: (update: CampaignCommittedUpdate) => void) => () => void;
   readonly run: CampaignRun | null;
   readonly view: CampaignView | null;
   readonly readState: 'unread' | 'not_found' | 'found';
@@ -72,6 +74,12 @@ export interface CampaignSessionState {
   ) => Promise<boolean>;
   readonly retryPending: () => Promise<boolean>;
   readonly ending: (attemptId: string) => EndingResult | null;
+}
+// Ephemeral presentation port. Never serialized or emitted by reads/replay.
+export interface CampaignCommittedUpdate {
+  readonly operation: CampaignOperation;
+  readonly events: readonly EngineEvent[];
+  readonly signals: Readonly<Record<string, RuntimeSignal>>;
 }
 function freeze<T>(value: T): T {
   if (value && typeof value === 'object') {
@@ -101,6 +109,7 @@ export function createCampaignSessionStore(options: {
   const identity = options.identity ?? (() => crypto.randomUUID());
   let pending: LedgerCommitRequest | null = null;
   let knownConflict = false;
+  const listeners = new Set<(update: CampaignCommittedUpdate) => void>();
   function operation(
     run: CampaignRun | null,
     payload: Payload,
@@ -209,6 +218,7 @@ export function createCampaignSessionStore(options: {
         return false;
       }
       const submitted = pending.operation as CampaignOperation;
+      const before = store.getState().run;
       const recorded = result.run.operations.find((o) => o.operationId === submitted.operationId);
       if (!recorded || canonicalJson(recorded) !== canonicalJson(submitted))
         throw new Error('COMMIT_IDENTITY_MISMATCH');
@@ -218,6 +228,34 @@ export function createCampaignSessionStore(options: {
       pending = null;
       knownConflict = false;
       store.setState({ pendingOperationId: null });
+      try {
+        if (!before?.operations.some((o) => o.operationId === submitted.operationId)) {
+          const attemptId = 'attemptId' in submitted ? submitted.attemptId : null;
+          const attempt = result.run.attempts.find((a) => a.id === attemptId);
+          const previous = before?.attempts.find((a) => a.id === attemptId);
+          const update: CampaignCommittedUpdate = freeze({
+            operation: structuredClone(submitted),
+            events: structuredClone(
+              submitted.kind === 'command' && attempt
+                ? attempt.incident.eventLog.slice(
+                    previous?.incident.eventLog.length ?? attempt.baselineEventCount,
+                  )
+                : [],
+            ),
+            signals: structuredClone(attempt?.incident.signals ?? {}),
+          });
+          for (const listener of listeners) {
+            // A presentation failure must never turn a durable commit into a retry.
+            try {
+              listener(update);
+            } catch {
+              /* silent presentation failure */
+            }
+          }
+        }
+      } catch {
+        /* Presentation projection cannot invalidate committed domain state. */
+      }
       return true;
     } catch {
       store.setState({ error: 'COMMIT_ACK_UNKNOWN' });
@@ -268,6 +306,12 @@ export function createCampaignSessionStore(options: {
     }
   }
   const store: StoreApi<CampaignSessionState> = createStore<CampaignSessionState>(() => ({
+    subscribeCommitted(listener) {
+      listeners.add(listener);
+      return () => {
+        listeners.delete(listener);
+      };
+    },
     run: null,
     view: null,
     readState: 'unread',

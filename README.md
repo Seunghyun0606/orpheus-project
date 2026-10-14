@@ -17,7 +17,7 @@ for the independently accepted blueprint; TASK-027 is active with the DEC-040-ap
 [composition candidate](docs/TASK-027_IMPLEMENTATION.md). The full campaign is not implemented or released.
 The latest instruction defers native QA again; DEC-041 permits TASK-028 early
 implementation while TASK-027 remains active/incomplete. Required final verification
-and the TASK-033 dependency on TASK-027 are retained.
+remain mandatory; DEC-061 below explicitly changes TASK-033 implementation readiness only.
 TASK-028 has authored eight early Incident authorities and eight investigation
 sidecars under DEC-042, with [unexecuted replay fixtures](docs/TASK-028_IMPLEMENTATION.md).
 DEC-043 now approves its [cross-Incident guard candidate](docs/TASK-028_ACTION_GATES_IMPLEMENTATION.md).
@@ -74,8 +74,15 @@ new-only policy and connects complete definition/package sources. The opt-in rou
 still requires all runtime validators to succeed; startup, full-run reachability and
 QA are unverified. Earlier unavailable/candidate notes are historical checkpoints,
 not a claim that this new connection has independent acceptance.
-The complete production definition and verification remain pending. No QA result
-or playable full-campaign acceptance is claimed.
+The complete production definition is now registered but awaits verification. No QA
+result or playable full-campaign acceptance is claimed.
+DEC-061 permits early TASK-033 implementation under approved Windows accessibility
+and local synthesized-audio scope. The [candidate](docs/TASK-033_IMPLEMENTATION.md)
+adds default-muted, explicitly activated sound, separate audio preferences,
+confirmed-live-event notifications and campaign keyboard/text/table controls.
+Tests are authored, not executed. TASK-033 is active, not accepted; native Narrator,
+WebView2 audio, viewport and independent verification remain outstanding.
+TASK-034/035 dependencies and mandatory M4/M5 final verification are unchanged.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
 document QA and distinct evaluation PASS. M4 verification remains mandatory before final M5 acceptance/release. Original
 planning drafts remain historical checkpoints. The [M4 plan](docs/M4_IMPLEMENTATION_PLAN.md) preserves chronological

@@ -1,0 +1,24 @@
+id: DEC-061
+title: Early Windows campaign accessibility and local synthesized audio
+status: active
+date: '2026-10-14'
+applies_to: [M5, TASK-033]
+human_approval:
+  selected_option: A
+  instruction: 선행 구현·Windows 접근성·합성 오디오 승인.
+approved_proposal:
+  commit: 6929c90
+  file: .project-os/planning/TASK-033.scope-and-readiness-proposal.yaml
+decision: >-
+  Apply the approved Windows x64 WebView2 accessibility and local Web Audio
+  synthesis scope. Replace TASK-027/032 implementation-readiness prerequisites
+  with accepted TASK-026 only; do not change their acceptance requirements.
+consequences:
+  - Preserve CRT-off, reduced animation and 100/125/150 percent text controls.
+  - Default muted; explicit gesture creates/resumes audio, including restored preferences.
+  - Newly committed live events only; no historical, archive or candidate notifications.
+  - Separate strict orpheus.audio.v1 preferences; preserve all existing stores.
+  - Audio failures leave silent visual gameplay usable without domain changes.
+  - Local authored synthesis only; no third-party recording or blanket license grant.
+  - QA remains deferred, not waived; no completion, push or release authorization.
+  - Preserve TASK-034/035 dependencies and mandatory M4/M5 final verification.

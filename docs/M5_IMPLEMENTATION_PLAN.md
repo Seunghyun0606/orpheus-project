@@ -162,7 +162,8 @@ DEC-050 similarly removes TASK-030 from TASK-031 implementation readiness only,
 retaining accepted TASK-026; TASK-030 remains incomplete and later dependencies remain.
 DEC-053 similarly removes TASK-031 from TASK-032 implementation readiness only,
 retaining accepted TASK-026; TASK-031 stays incomplete and later dependencies remain.
-TASK-033 still requires TASK-027. TASK-035 still
+DEC-061 now permits TASK-033 implementation readiness before TASK-027/032 acceptance,
+retaining accepted TASK-026 and the approved Windows/synthesis scope. TASK-035 still
 requires TASK-025 and every M5 implementation package. Dependencies do not authorize
 parallel agents. Read-only review/QA/evaluator delegation needs applicable authority.
 
@@ -175,7 +176,7 @@ parallel agents. Read-only review/QA/evaluator delegation needs applicable autho
 | [TASK-030](../.project-os/tasks/ready/TASK-030.yaml) | developer | Extended Board investigation and deferred framing reveal                  | TASK-026 (DEC-048)     |
 | [TASK-031](../.project-os/tasks/ready/TASK-031.yaml) | developer | Observer and Blackout data, final-context fixtures                        | TASK-026 (DEC-050)     |
 | [TASK-032](../.project-os/tasks/ready/TASK-032.yaml) | developer | Approved production ending rules and epilogue data                        | TASK-026 (DEC-053)     |
-| [TASK-033](../.project-os/tasks/ready/TASK-033.yaml) | developer | Campaign-wide accessibility and scoped audio presentation                 | TASK-027, TASK-032     |
+| [TASK-033](../.project-os/tasks/ready/TASK-033.yaml) | developer | Campaign-wide accessibility and scoped audio presentation                 | TASK-026 (DEC-061)     |
 | [TASK-034](../.project-os/tasks/ready/TASK-034.yaml) | developer | Measured performance, approved packaging and release/authoring docs       | TASK-032, TASK-033     |
 | [TASK-035](../.project-os/tasks/ready/TASK-035.yaml) | developer | Full M5 evidence audit and separate release decision                      | TASK-025, TASK-028–034 |
 
@@ -268,3 +269,11 @@ legacy equality and strict admission. QA remains entirely deferred; registration
 does not certify startup or reachable endings. TASK-033 readiness, Windows/audio
 scope and preferences require the next explicit decision; preceding tasks remain
 incomplete and no dependency is bypassed merely because implementation exists.
+
+DEC-061 approves the TASK-033 early Windows accessibility/local synthesis scope.
+The [implementation checkpoint](TASK-033_IMPLEMENTATION.md) adds separate strict
+audio preferences, lazy explicit activation, confirmed-live-event cues and scoped
+keyboard/text/table presentation. Tests are authored but **not run**; no native
+WebView2/Narrator/audio/layout coverage or completion is claimed. TASK-034/035
+dependencies and all M4/M5 final verification remain unchanged. A distinct delivery
+readiness/budget/packaging decision is required before TASK-034 implementation.

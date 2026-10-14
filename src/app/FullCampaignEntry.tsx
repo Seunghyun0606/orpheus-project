@@ -141,7 +141,7 @@ export function FullCampaignEntry({
       />
     );
   return (
-    <main className="incident-hub">
+    <main className="incident-hub" aria-label="Full campaign entry" aria-busy={busy}>
       <h1>Full campaign</h1>
       <button type="button" disabled={busy} onClick={onBack}>
         Back to incident desk
