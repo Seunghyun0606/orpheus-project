@@ -68,6 +68,12 @@ The [composition checkpoint](docs/TASK-027_FULL_COMPOSITION_CHECKPOINT.md) assem
 all approved data as an unregistered planning candidate. Existing engine current-Act
 equality blocks approved prior-Act retries; an explicit access-policy gate must be
 resolved before runtime registration. No engine/old authority change or QA PASS is claimed.
+DEC-060 now resolves that access-contract gate. The
+[replay-access checkpoint](docs/TASK-027_REPLAY_ACCESS_IMPLEMENTATION.md) adds an explicit
+new-only policy and connects complete definition/package sources. The opt-in route
+still requires all runtime validators to succeed; startup, full-run reachability and
+QA are unverified. Earlier unavailable/candidate notes are historical checkpoints,
+not a claim that this new connection has independent acceptance.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,

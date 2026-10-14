@@ -60,6 +60,8 @@ export const campaignDefinitionSchema = z
     version: id,
     replayVersion: z.union([z.literal(1), z.literal(2)]),
     recordVersion: z.literal(2).optional(),
+    // Opt-in new-definition policy only; do not default this on old authorities.
+    replayAccess: z.literal('completed_prior_acts').optional(),
     opportunities: opportunityDefinitionSchema.optional(),
     behavior: behaviorDefinitionSchema.optional(),
     prediction: predictionDefinitionSchema.optional(),
@@ -186,6 +188,8 @@ export function validateCampaignDefinition(
     return checked.success ? checked.data : undefined;
   };
   const issues: CampaignDiagnostic[] = [];
+  if (d.replayAccess !== undefined && (d.replayVersion !== 2 || d.recordVersion !== 2))
+    issues.push({ code: 'INVALID_REPLAY_ACCESS_VERSION', path: 'replayAccess' });
   issues.push(...validateActionGates(d, catalog));
   if (d.replayVersion === 2) {
     if (d.recordVersion !== 2 || !d.opportunities || !d.behavior)

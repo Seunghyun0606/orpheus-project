@@ -333,9 +333,22 @@ function eligible(definition: CampaignDefinition, run: CampaignRun, incidentId: 
     'progression',
   );
   // Evaluate every authored leaf before applying the shared executable Act gate.
-  return result.ok
-    ? { ...result, value: result.value && incident.act === run.projection.act }
-    : result;
+  // Existing authorities without the optional policy retain exact Act equality.
+  if (!result.ok) return result;
+  const currentAct = incident.act === run.projection.act;
+  const completedPriorAct =
+    definition.replayAccess === 'completed_prior_acts' &&
+    incident.act < run.projection.act &&
+    run.projection.completed.includes(incident.id) &&
+    run.attempts.some(
+      (attempt) =>
+        attempt.incidentId === incident.id &&
+        attempt.incident.completionReached &&
+        attempt.incident.eventLog
+          .slice(attempt.baselineEventCount)
+          .some((event) => event.type === 'completion_reached'),
+    );
+  return { ...result, value: result.value && (currentAct || completedPriorAct) };
 }
 function sourceSnapshot(bytes: string, catalog: ScenarioCatalog) {
   const envelope = z

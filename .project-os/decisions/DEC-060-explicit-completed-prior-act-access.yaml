@@ -1,0 +1,27 @@
+id: DEC-060
+title: Explicit new-definition completed prior-Act replay access
+status: active
+date: '2026-10-14'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 새 정의 전용 replayAccess 정책 추가 후 연결.
+request: .project-os/planning/TASK-027.replay-access-gate.yaml
+approved_proposal:
+  commit: 7330922
+  file: .project-os/planning/TASK-027.replay-access-proposal.yaml
+decision: >-
+  Add optional replayAccess=completed_prior_acts to the new unreleased definition.
+  Preserve strict authored conditions and current-Act access. Only the pinned
+  policy additionally permits a genuinely completed Incident in an earlier Act;
+  absent policy preserves exact legacy current-Act equality. Then connect the
+  complete new package subject to existing runtime validators.
+consequences:
+  - Pin the field only in orpheus-full-campaign 1.0.0, under existing record/replay v2.
+  - No future or incomplete prior-Act access, Act rewind, score reset or extra award.
+  - Retain all earlier attempts, source/ACK provenance and once-per-run receipts.
+  - No product-name branch, global relaxation, old-record reattachment or latest fallback.
+  - Saved-run/operation/physical storage shapes and old authority bytes are unchanged.
+  - Keep default MVP and explicit full-campaign creation/restoration.
+  - Invalid/incomplete package validation still diagnoses without a playable fallback.
+  - QA deferred, not waived; no task acceptance, push or release authorization.

@@ -155,6 +155,7 @@ export function authorFullCampaign(readPlanning, readContent, manifest) {
   );
   const definition = {
     ...initialBindings.definition_header_fragment,
+    replayAccess: 'completed_prior_acts', // DEC-060, never injected into old definitions.
     references: unique([
       ...logical.flatMap((s) => s.references ?? []),
       ...branch.references,

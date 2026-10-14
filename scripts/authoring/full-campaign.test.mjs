@@ -1,6 +1,5 @@
 // @vitest-environment node
-// Deferred authoring checks only. This candidate is deliberately not admitted
-// as runtime production content before its replay-access contract is approved.
+// Deferred authoring checks only. Runtime registration is not a validation PASS.
 import { readFileSync } from 'node:fs';
 import { parse } from 'yaml';
 import { describe, expect, it } from 'vitest';
@@ -13,13 +12,17 @@ const authored = () =>
     (file) => read('src/scenario/data/full-campaign/' + file),
     read('src/scenario/data/full-campaign-manifest.yaml'),
   );
-describe('DEC-059 unregistered full composition candidate (deferred)', () => {
+describe('DEC-059/060 complete composition source data (deferred)', () => {
   it('reconstructs exact candidate objects from approved source fragments', () => {
     const data = authored();
+    const priorCandidate = read('.project-os/planning/M5/composition/campaign-definition.yaml');
+    expect(priorCandidate).not.toHaveProperty('replayAccess');
+    expect(data.definition).toEqual({ ...priorCandidate, replayAccess: 'completed_prior_acts' });
     expect(data.definition).toEqual(
-      read('.project-os/planning/M5/composition/campaign-definition.yaml'),
+      read('src/scenario/data/full-campaign/definitions/campaign.yaml'),
     );
     expect(data.package).toEqual(read('.project-os/planning/M5/composition/campaign-package.yaml'));
+    expect(data.package).toEqual(read('src/scenario/data/full-campaign/packages/campaign.yaml'));
     expect(authored()).toEqual(data);
   });
   it('retains exact complete inventories without publishing fixtures or initialized metric values', () => {
@@ -48,14 +51,12 @@ describe('DEC-059 unregistered full composition candidate (deferred)', () => {
     for (const [index, incident] of d.incidents.entries()) {
       expect(incident.eligibility.children).toEqual([
         { type: 'compare', reference: 'CURRENT_ACT', operator: 'gte', expected: incident.act },
-        ...d.incidents
-          .slice(0, index)
-          .map((earlier) => ({
-            type: 'compare',
-            reference: 'PROGRESSION_COMPLETED_' + earlier.id,
-            operator: 'eq',
-            expected: true,
-          })),
+        ...d.incidents.slice(0, index).map((earlier) => ({
+          type: 'compare',
+          reference: 'PROGRESSION_COMPLETED_' + earlier.id,
+          operator: 'eq',
+          expected: true,
+        })),
       ]);
     }
     const transitions = d.effects.filter((e) => e.id.startsWith('PROGRESSION_ACT_'));

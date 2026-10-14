@@ -1,0 +1,36 @@
+task: TASK-027
+date: '2026-10-14'
+role: developer
+actor: codex-task027-developer
+source_agent: /root
+status: pending
+approval: .project-os/decisions/DEC-060-explicit-completed-prior-act-access.yaml
+summary: Explicit opt-in prior-Act replay access and complete exact production source connection, subject to unchanged runtime validators; QA/acceptance remain pending.
+evidence:
+  - src/scenario/campaign.ts
+  - src/engine/campaign/transitions.ts
+  - src/scenario/data/full-campaign/definitions/campaign.yaml
+  - src/scenario/data/full-campaign/packages/campaign.yaml
+  - scripts/authoring/full-campaign.mjs
+  - scripts/authoring/full-campaign.test.mjs
+  - src/tests/campaign-replay-access.test.ts
+  - src/tests/full-campaign-runtime.test.ts
+  - docs/TASK-027_REPLAY_ACCESS_IMPLEMENTATION.md
+verification:
+  source_inspection: performed_not_QA
+  authoring_copy: performed_not_validation
+  tests: authored_not_run
+  scenario_validation: not_run
+  typecheck: not_run
+  lint: not_run
+  build: not_run
+  independent_review: deferred
+  independent_QA: deferred
+  native_QA: deferred
+  evaluation: pending
+known_risks:
+  - Runtime source registration is not proof of package validity, startup or 26-Incident reachability.
+  - New/old retry provenance, restoration, long-run costs and ten endings remain unverified.
+  - No old authority/store/record rewrite, default entry change, acceptance, push or release.
+  - TASK-027/032, mandatory M4/M5 verification and downstream readiness are unchanged.
+next_step: Human decision on TASK-033 early implementation and target/audio/settings scope.

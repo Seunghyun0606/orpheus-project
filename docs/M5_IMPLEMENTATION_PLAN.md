@@ -260,3 +260,11 @@ complete generated data outside runtime while the existing current-Act-only engi
 gate awaits an explicit new-definition prior-Act retry contract. No implicit global
 relaxation, old-authority rewrite or partial official run is introduced. QA and all
 readiness/acceptance dependencies remain unchanged.
+
+DEC-060 subsequently approves the explicit prior-Act replay-access contract. The
+[connection checkpoint](TASK-027_REPLAY_ACCESS_IMPLEMENTATION.md) adds the optional
+new-only policy and complete runtime definition/package sources while preserving
+legacy equality and strict admission. QA remains entirely deferred; registration
+does not certify startup or reachable endings. TASK-033 readiness, Windows/audio
+scope and preferences require the next explicit decision; preceding tasks remain
+incomplete and no dependency is bypassed merely because implementation exists.
