@@ -18,7 +18,7 @@ bindings:
     - src/scenario/data/full-campaign/presentations/inc-NNN-1.1.0.yaml
     - src/scenario/data/full-campaign/ending-presentations/endings-1.1.0.yaml
   duplicate_scenario_files: forbidden
-  new_definition_differences: [envelope_version, definition_owned_reference_versions]
+  new_definition_differences: [envelope_version, definition_owned_reference_versions, definition_owned_branch_versions]
   new_ending_prose_differences: [envelope_version, definitionVersion, own_reference_versions]
   create_restore: explicit_exact_version_no_latest_auto_pick_or_migration
 schema2:
@@ -40,6 +40,20 @@ schema2:
     missing_capacity: invalid_block_not_zero
   unknown_fields_defaults_wildcards: forbidden
   visibility: existing_strict_scenario_and_campaign_panel_gates_no_hidden_body_ids
+  placement:
+    narratives_INC_001_003: observations
+    narratives_INC_004_025: logs
+    warroom_INC_001_025: team
+    preserve_INC_006_security_attribution: true
+    new_team_remove_static: exact_ID_and_text_match_to_initial_messages_only
+    INC_026_additive:
+      narrative: {id: runtime-narratives, title: Recorded runtime narratives, kind: logs}
+      warroom: {id: runtime-war-room, title: War Room event history, kind: war_room}
+      actionIds: []
+      reveal: [{type: resource, resourceId: CUSTOMER_IMPACT, operator: gte, value: 0}]
+      campaignReveal: {type: compare, reference: CURRENT_ACT, operator: gte, expected: 9}
+      before_and_after_final_completion: visible_if_gates_hold_recorded_event_membership_still_required
+      old_action_panel_gates: unchanged
 initial_delivery:
   transient: [{scenarioId: INC-001, narrativeId: UNKNOWN_GOOD, durationMs: 800}]
   remaining_narratives: each_explicitly_until_dismissed
@@ -53,10 +67,16 @@ authority:
   delegation_source: genuine_scheduledWork_and_declared_resource_values
   eta: simulation_due_minus_selected_elapsed_clamped_zero_no_wall_countdown
   new_live_source: verified_durable_command_commit_new_event_beyond_baseline
-  dedup: ephemeral_run_attempt_event_narrative_tuple_and_exact_operation_check
+  event_ownership: exact_selected_attempt_event_delta_between_verified_prefixes_before_after_signalled_operation
+  foreign_payload: reject_even_if_event_exists_in_current_history
+  fresh_head: operation_is_current_verified_head_and_newer_than_ephemeral_read_mount_revision_floor
+  stale_lost_ACK_plus_later_writer: history_only_no_fresh_alert
+  dedup: ephemeral_definition_run_attempt_event_narrative_tuple_and_exact_operation_check
   failed_write_archive_reload_query_adoption_baseline: no_fresh_delivery
   read_reset_observer: proposed_transient_subscribeReadBoundary_after_successful_explicit_verified_load_not_commit
   resets: [verified_load, run_attempt_package_switch, archive_entry, document_hidden, exit, unmount]
+  reset_identity: retired_keys_retained_until_unmount_and_floor_advanced_to_all_current_verified_history
+  remount: floor_from_current_verified_revision_no_persisted_delivery_cursor
   timing: UI_only_injected_clock_epoch_cancel_no_saved_cursor
   feedback: no_command_ACK_effect_sample_or_extra_audio_cue
 verification_ids: [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12]
