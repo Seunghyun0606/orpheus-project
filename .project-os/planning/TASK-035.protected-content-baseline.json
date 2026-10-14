@@ -1,0 +1,308 @@
+{
+  "task": "TASK-035",
+  "kind": "protected_existing_content_inventory",
+  "baselineCommit": "65acf67d199a5a5a69001b4fe8a75268aa19c579",
+  "scope": "All existing tracked Scenario/catalog/manifests/full-campaign authoring files; not current executable verification",
+  "files": [
+    {
+      "path": "src/scenario/data/.gitkeep",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "src/scenario/data/full-campaign-manifest.yaml",
+      "bytes": 1613,
+      "sha256": "a722031962b6812f7ad2348e2d28969c19bfc97d064c18a8a17f5310655afda7"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/definitions/campaign.yaml",
+      "bytes": 1058364,
+      "sha256": "8fc1af717865da689f0ee71bbacff783617c11ce1bb63f27300556b9219eed89"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/ending-presentations/endings.yaml",
+      "bytes": 9946,
+      "sha256": "f2de06bd1344e0550056c125eccb6e616a9e28ca1e07a77b8a1f0372674a5d82"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-001.yaml",
+      "bytes": 10910,
+      "sha256": "d5645f15e0d53dac476de74bc3f8dce113ba3681b588b801855a3beb0c24265a"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-002.yaml",
+      "bytes": 11897,
+      "sha256": "4d29ecd7f3a8f7618ef7cbfa90cefa9aa615678afa6e0358d98855d928e1e698"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-003.yaml",
+      "bytes": 13584,
+      "sha256": "7197854f086f62489e85ffe6459bb432c6351a82fa2bafeaa020eb3e81e3e4f0"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-004.yaml",
+      "bytes": 13219,
+      "sha256": "e91a8c11e565b923229be0f91300c990d2cf7bb6ce2e3b6821d067706692cc39"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-005.yaml",
+      "bytes": 13554,
+      "sha256": "1f04891edecb2135fbe142c06e40c8ec8ca895c42911b8490eb3513f51558c84"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-006.yaml",
+      "bytes": 16870,
+      "sha256": "37bba637183379e5fd03b4616d7fb7fe8af9acccc8c0d2e28d04f9da6fe697f6"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-007.yaml",
+      "bytes": 13398,
+      "sha256": "c2cda9a02b76db258c675c0abb6f529cd9625c2b8b910dca41f2a25e04f2a49b"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-008.yaml",
+      "bytes": 13498,
+      "sha256": "69085b5af10db44258e809c0021ea883fd217b088c3182a967f6a6f26d375dbb"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-009.yaml",
+      "bytes": 18987,
+      "sha256": "75825c9c75bdc47d69395897ed5aa00e1b6748bf27548ea598ad89d5057e4023"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-010.yaml",
+      "bytes": 21516,
+      "sha256": "724727c6081f403016abbf64fe1451c78bb52bd41eafdead1fd6250270975028"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-011.yaml",
+      "bytes": 25451,
+      "sha256": "5fbb8ba5c3db8ae0be535691fe0a77c09e52e3b314ed521d6ef01d165af4a0dd"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-012.yaml",
+      "bytes": 26123,
+      "sha256": "f21d674aa8309a99acb6a4a669ea8785e9b26fba37987de0024112b3c2b0f71e"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-013.yaml",
+      "bytes": 30982,
+      "sha256": "5200e8b222c860153a7448a2e9eaa48cfac4496e9564bf26e331d26c4b5b3ccb"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-014.yaml",
+      "bytes": 31069,
+      "sha256": "5a2b2611065264f78e83c68dc1629f36015f5411216dcb5a8a7d1200d400b011"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-015.yaml",
+      "bytes": 33896,
+      "sha256": "bbdee465f92b7c609ae589335b04112430bed518494810539658a2aa7adf9bac"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-016.yaml",
+      "bytes": 36431,
+      "sha256": "bf33e98bdc3b444c68181d04fb58af6d6ce7c11a30db3f2bc3ec55d05d188201"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-017.yaml",
+      "bytes": 36359,
+      "sha256": "b1a84a74ac3cdc2dbbb5ab9fed7f97a62ef3283abf98074caa148425546809f1"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-018.yaml",
+      "bytes": 36729,
+      "sha256": "be2b773b18f2ee0936fc4d0d6d1c5d36ba6106e8ea2d3099ea962542108f8113"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-019.yaml",
+      "bytes": 51011,
+      "sha256": "a26543f3bedc3916b8b3f888552094b6c4b4440c6530f826c03b5c9d3f4800f0"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-020.yaml",
+      "bytes": 48641,
+      "sha256": "1520887074c8da8297861b05297ff82f3a698f827945eb12f1721662af0c7f79"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-021.yaml",
+      "bytes": 48554,
+      "sha256": "b72007f62eec8b345ea7e360c43ac5517c0feb2c56daaffbbdaa5dc1922846be"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-022.yaml",
+      "bytes": 55780,
+      "sha256": "e8049e5d72d42ee2ed8cc7eeec030948f4432b649526d9e519a26b89aa75e34a"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-023.yaml",
+      "bytes": 57092,
+      "sha256": "33ccafe3c2aba5aae2c360b4a419fe5b0655b32f77fed92421d79fd969d61272"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-024.yaml",
+      "bytes": 64189,
+      "sha256": "80142231aa7e3603cc9a9e573244272aba4ad9495f71fe9f96644e718a58757f"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-025.yaml",
+      "bytes": 18079,
+      "sha256": "5f166bb4b18da056a4f923fad51ce5777a742f5b6a15b8cc3ef28fdd7b149cf8"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/incidents/inc-026.yaml",
+      "bytes": 107898,
+      "sha256": "3972e20801ef02245feedd069e7185917db0c7f5bb077369381777372e73be0e"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/packages/campaign.yaml",
+      "bytes": 6009,
+      "sha256": "56a825aa02dfe8b6fdeaf40308443fc7da99f85195bc0847ba9916a7448fe1e7"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-001.yaml",
+      "bytes": 2829,
+      "sha256": "72bbb69d183ad49b14ca6735a3a065bc84dec5c081b238694b103ba95021530f"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-002.yaml",
+      "bytes": 2816,
+      "sha256": "66db74d57611635139c6ce78f15e60e1b554c7984581990a0e5c2aa9fcbc4a45"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-003.yaml",
+      "bytes": 2898,
+      "sha256": "ce7d8daa16c1be3d53d2234abb27faf4a1736facb86263b48120259ceeb0e321"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-004.yaml",
+      "bytes": 4284,
+      "sha256": "987be707e639d036d3d229b888f7474de46db7204d135bb3b61186eae4d7851e"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-005.yaml",
+      "bytes": 4301,
+      "sha256": "1c70052718b0a28fd91f05d8da87dac94f9631cbabcfd58f1f35e27c268cbec4"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-006.yaml",
+      "bytes": 5053,
+      "sha256": "a1952e43a6924ed198af8cf5174cb954c61e49b519ec033151329ce5e7cfce79"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-007.yaml",
+      "bytes": 4288,
+      "sha256": "c25ccf42b6616b787156a538177fe560d5994f3928f5dd8e46602ea7c6df7ba3"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-008.yaml",
+      "bytes": 4299,
+      "sha256": "2ebea62f71b642b68b9392b6e58e6407310912cb91eecaa5c55c84dc7ff9de05"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-009.yaml",
+      "bytes": 5705,
+      "sha256": "34abdf9a98e74c860d8f48fa5ee9882a21032b3973275c20e5cd3ec7dd2f1a91"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-010.yaml",
+      "bytes": 6400,
+      "sha256": "d446faa85d5533590867ada9dc5fb6a5e396e77f5b685df863298809b550d54b"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-011.yaml",
+      "bytes": 8075,
+      "sha256": "8102cf486778918ca10f3c345c5f2a9b742780ce4d1062f572310176a201bd77"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-012.yaml",
+      "bytes": 7793,
+      "sha256": "678fc630ab5426b816d2436dacab7d1de0f06dd7adb8ce469fe60218470436a4"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-013.yaml",
+      "bytes": 9729,
+      "sha256": "ad30821e5f1dd4f92c617b415b9e0dc991cb39427c014f9fa3d31cadad4c82e0"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-014.yaml",
+      "bytes": 9231,
+      "sha256": "0aef280249492aea30f30c7335598c697d3d6a59f44103b9114893d2e714ea8f"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-015.yaml",
+      "bytes": 10016,
+      "sha256": "4d3bfe56984509555875104bc12e246547edad59a1ee22192e3355936b16d90a"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-016.yaml",
+      "bytes": 10786,
+      "sha256": "4e33bd4386faebcf739b21f9bf4436c29c80e733dc76df5b10385b3a0643b814"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-017.yaml",
+      "bytes": 10716,
+      "sha256": "587640e5511a52d3720247f7cc4268b6f042742d0601252e1c4daba01de5907c"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-018.yaml",
+      "bytes": 10789,
+      "sha256": "3f30ee0d1fc4274161cecc91cc9c6626c99301495568d2e749223eb394dfcae8"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-019.yaml",
+      "bytes": 15989,
+      "sha256": "32a05af49251ee4f4250c48a36ef14d9b85b39ef746a00170e2197e826970b4d"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-020.yaml",
+      "bytes": 14506,
+      "sha256": "5eaa0948ba57ab9fa82073863119bc42f5189cf73b253259d4aec420865019b6"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-021.yaml",
+      "bytes": 14664,
+      "sha256": "344c6d3949a50d30156c1112abf45ace94c8425bd7bd77a0f9ca77e72658f64d"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-022.yaml",
+      "bytes": 16264,
+      "sha256": "8c4ee0c81d673ea80667b5e5e105c612ac85c792a7de10a23bd0e63b5a11a2e3"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-023.yaml",
+      "bytes": 16552,
+      "sha256": "6de0a8fcc34b3d6d56ee4344edb631d033dd6d018403ea0dc99c658b9510600d"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-024.yaml",
+      "bytes": 18908,
+      "sha256": "a612e70739857dd92b5bff0873022f4cfbf4e6ff30b3227e2aa9df742b838ba3"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-025.yaml",
+      "bytes": 4430,
+      "sha256": "4708749b301652b5e01c58fbf87a6508b00d101028a37c5a02cf5284f18cf514"
+    },
+    {
+      "path": "src/scenario/data/full-campaign/presentations/inc-026.yaml",
+      "bytes": 31708,
+      "sha256": "ebbe1e96f007dcbf3d3aa85e76bbd7f1c0ed601a317c80649dd119c833a76d29"
+    },
+    {
+      "path": "src/scenario/data/incidents/inc-001.yaml",
+      "bytes": 10910,
+      "sha256": "d5645f15e0d53dac476de74bc3f8dce113ba3681b588b801855a3beb0c24265a"
+    },
+    {
+      "path": "src/scenario/data/incidents/inc-002.yaml",
+      "bytes": 11897,
+      "sha256": "4d29ecd7f3a8f7618ef7cbfa90cefa9aa615678afa6e0358d98855d928e1e698"
+    },
+    {
+      "path": "src/scenario/data/incidents/inc-003.yaml",
+      "bytes": 13584,
+      "sha256": "7197854f086f62489e85ffe6459bb432c6351a82fa2bafeaa020eb3e81e3e4f0"
+    }
+  ]
+}

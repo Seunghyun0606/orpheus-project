@@ -1,0 +1,23 @@
+id: DEC-067
+title: Design and review a new-only runtime presentation contract
+status: active
+date: '2026-10-14'
+applies_to: [M5, TASK-027, TASK-033, TASK-035]
+human_approval:
+  selected_option: A
+  instruction: 기존 버전 보존, 새 버전 전용 표시 계약 설계·검토.
+approved_request:
+  commit: 65acf67
+  file: .project-os/planning/TASK-035.runtime-presentation-contract-gate.yaml
+decision: >-
+  Prepare concrete new package/definition/view version bindings, data-authored
+  runtime narrative/War Room representation and explicit live/transient/archive
+  rules. Obtain read-only independent document review and QA before requesting
+  approval of the exact contract. Preserve all current authorities and records.
+consequences:
+  - Design/review only; concrete versions, schemas, lifecycle and runtime changes are proposals until separately approved.
+  - No silent renderer correction for old pinned views, automatic migration or schema defaults.
+  - No Scenario/model/effect/ending rebalance, storage changes or profile access.
+  - DEC-066 automated authorization remains; this design is not implementation or acceptance evidence.
+  - Four timeouts, 37 formatting failures and all M4/M5 verification obligations remain unresolved.
+  - Native/app/install execution, milestone completion, push and release remain separately authorized.

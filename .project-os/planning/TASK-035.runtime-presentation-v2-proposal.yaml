@@ -1,0 +1,67 @@
+task: TASK-035
+kind: design_proposal_not_runtime_schema
+date: '2026-10-14'
+status: proposed_exact_contract_approval_pending
+design_authority: .project-os/decisions/DEC-067-design-new-version-runtime-presentation.yaml
+source_baseline: 65acf67
+spec: specs/architecture/runtime-investigation-presentation-v2-proposal.md
+bindings:
+  package: {id: orpheus-full-campaign, version: 1.1.0, schemaVersion: 1}
+  definition: {id: orpheus-full-campaign, version: 1.1.0, schemaVersion: 1, recordVersion: 2, replayVersion: 2}
+  views: {id_pattern: '<INC-ID>-INVESTIGATION', count: 26, version: 1.1.0, schemaVersion: 2}
+  ending_prose: {version: 1.1.0, schemaVersion: 1, definitionVersion: 1.1.0, preserve_exact_existing_id: true}
+  scenarios_models_effects_ending_rules: unchanged_exact_authorities
+  old_versions: preserve_bytes_shape_and_projection_no_reattachment
+  new_files:
+    - src/scenario/data/full-campaign/definitions/campaign-1.1.0.yaml
+    - src/scenario/data/full-campaign/packages/campaign-1.1.0.yaml
+    - src/scenario/data/full-campaign/presentations/inc-NNN-1.1.0.yaml
+    - src/scenario/data/full-campaign/ending-presentations/endings-1.1.0.yaml
+  duplicate_scenario_files: forbidden
+  new_definition_differences: [envelope_version, definition_owned_reference_versions]
+  new_ending_prose_differences: [envelope_version, definitionVersion, own_reference_versions]
+  create_restore: explicit_exact_version_no_latest_auto_pick_or_migration
+schema2:
+  retain_schema1_output_and_behavior: true
+  narrative_stream:
+    required: [kind, id, entries]
+    each_entry: [narrativeId, delivery]
+    delivery_always_required: [mode, reducedMotionMode, historyMode]
+    transient: {required_durationMs: true, integer_min: 1, integer_max: 60000}
+    until_dismissed: {durationMs: forbidden}
+    reducedMotionMode: until_dismissed
+    historyMode: recorded
+    coverage: every_exact_scenario_narrative_once_across_streams
+    panel_kind: logs
+  war_room_stream:
+    required: [kind, id, messageIds, delegationActionIds, capacityResourceIds]
+    coverage: exact_scenario_messages_delegation_actions_unique_delegation_resources
+    panel_kind: war_room
+    missing_capacity: invalid_block_not_zero
+  unknown_fields_defaults_wildcards: forbidden
+  visibility: existing_strict_scenario_and_campaign_panel_gates_no_hidden_body_ids
+initial_delivery:
+  transient: [{scenarioId: INC-001, narrativeId: UNKNOWN_GOOD, durationMs: 800}]
+  remaining_narratives: each_explicitly_until_dismissed
+  persistent_history: all_genuinely_triggered_bodies_only_new_schema2
+  queue: FIFO_one_visible_notice_duration_from_first_visible_render
+  reduced_motion_change: enabling_holds_current_until_dismissed_disabling_affects_later_notices_only
+authority:
+  data: exact_verified_selected_attempt_and_scenario
+  narrative_source: recorded_narrative_triggered_sourceId
+  warroom_source: authored_initial_plus_recorded_war_room_message_sequence
+  delegation_source: genuine_scheduledWork_and_declared_resource_values
+  eta: simulation_due_minus_selected_elapsed_clamped_zero_no_wall_countdown
+  new_live_source: verified_durable_command_commit_new_event_beyond_baseline
+  dedup: ephemeral_run_attempt_event_narrative_tuple_and_exact_operation_check
+  failed_write_archive_reload_query_adoption_baseline: no_fresh_delivery
+  read_reset_observer: proposed_transient_subscribeReadBoundary_after_successful_explicit_verified_load_not_commit
+  resets: [verified_load, run_attempt_package_switch, archive_entry, document_hidden, exit, unmount]
+  timing: UI_only_injected_clock_epoch_cancel_no_saved_cursor
+  feedback: no_command_ACK_effect_sample_or_extra_audio_cue
+verification_ids: [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12]
+excluded:
+  - Runtime/schema/content implementation before exact contract approval.
+  - Old source rewrite, model/ending rebalance, persistence changes or automatic upgrades.
+  - Timeout/budget relaxation, failed-evidence erasure or skipped validation.
+  - Native/app/install/profile execution, task/milestone completion, signing, push or release.

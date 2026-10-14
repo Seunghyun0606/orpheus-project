@@ -35,6 +35,7 @@ relevant_files:
   - README.md
   - .project-os/tasks/results/
 active_decisions:
+  - .project-os/decisions/DEC-067-design-new-version-runtime-presentation.yaml
   - .project-os/decisions/DEC-066-resume-automated-independent-verification.yaml
   - .project-os/decisions/DEC-065-preparatory-readiness-audit.yaml
   - .project-os/decisions/DEC-039-m5-independent-verification-delegation.yaml
