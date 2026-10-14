@@ -1,0 +1,30 @@
+task: TASK-034
+date: '2026-10-14'
+status: awaiting_human_decision
+type: architecture_change
+question: 제안된 성능 예산·Windows 로컬 검토 패키지 범위를 승인할까요?
+proposal: .project-os/planning/TASK-034.delivery-proposal.yaml
+explanation: docs/TASK-034_DELIVERY_PROPOSAL.md
+reason: >-
+  DEC-062 approves documentation/proposals only, not target/budget selection,
+  benchmark execution or package implementation/generation. No timing, installer
+  or native support evidence has been produced. Apply no material choice until
+  the exact proposed boundaries are approved.
+options:
+  - key: A
+    label: 제안 예산·격리 Windows NSIS 승인, 해당 범위 구현·실측·생성
+    scope: >-
+      Approve the exact proposal and TASK-034-only measurement/build exception.
+      Implement the harness and separate review overlay/scripts; perform permitted
+      scoped checks/measurements and generate unsigned local artifacts. Native
+      launch, installer execution/install/upgrade/uninstall and general M4/M5 QA
+      remain deferred pending separate authorization. Failures block, never fallback.
+  - key: B
+    label: 예산·대상·패키징 기준 수정, 실행 보류
+    scope: >-
+      Keep documents/candidate committed without harness/config implementation,
+      measurement or package generation; revise the proposed choices from human feedback.
+preserved:
+  - Earlier incomplete tasks, M4/M5 verification and TASK-035 dependencies.
+  - Exact authority/history/store bytes and production app/security configuration.
+  - No tool acquisition, credentials, security bypass, installer execution, push or release.

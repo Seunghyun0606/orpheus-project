@@ -167,18 +167,22 @@ retaining accepted TASK-026 and the approved Windows/synthesis scope. TASK-035 s
 requires TASK-025 and every M5 implementation package. Dependencies do not authorize
 parallel agents. Read-only review/QA/evaluator delegation needs applicable authority.
 
-| Task                                                 | Role      | Deliverable                                                               | Dependencies           |
-| ---------------------------------------------------- | --------- | ------------------------------------------------------------------------- | ---------------------- |
-| [TASK-026](../.project-os/tasks/ready/TASK-026.yaml) | architect | Reviewed campaign manifest, reveal graph, coverage and approval checklist | None (DEC-037)         |
-| [TASK-027](../.project-os/tasks/ready/TASK-027.yaml) | developer | Explicitly approved production campaign composition and version binding   | TASK-026               |
-| [TASK-028](../.project-os/tasks/ready/TASK-028.yaml) | developer | Approved Acts 1–3 data and replay fixtures                                | TASK-026 (DEC-041)     |
-| [TASK-029](../.project-os/tasks/ready/TASK-029.yaml) | developer | Approved Acts 4–6 data and reveal/branch fixtures                         | TASK-026 (DEC-045)     |
-| [TASK-030](../.project-os/tasks/ready/TASK-030.yaml) | developer | Extended Board investigation and deferred framing reveal                  | TASK-026 (DEC-048)     |
-| [TASK-031](../.project-os/tasks/ready/TASK-031.yaml) | developer | Observer and Blackout data, final-context fixtures                        | TASK-026 (DEC-050)     |
-| [TASK-032](../.project-os/tasks/ready/TASK-032.yaml) | developer | Approved production ending rules and epilogue data                        | TASK-026 (DEC-053)     |
-| [TASK-033](../.project-os/tasks/ready/TASK-033.yaml) | developer | Campaign-wide accessibility and scoped audio presentation                 | TASK-026 (DEC-061)     |
-| [TASK-034](../.project-os/tasks/ready/TASK-034.yaml) | developer | Measured performance, approved packaging and release/authoring docs       | TASK-032, TASK-033     |
-| [TASK-035](../.project-os/tasks/ready/TASK-035.yaml) | developer | Full M5 evidence audit and separate release decision                      | TASK-025, TASK-028–034 |
+DEC-062 permits TASK-034 documentation and concrete budget/packaging proposals
+before TASK-032/033 acceptance, with accepted TASK-026 as readiness prerequisite.
+It does not approve budgets, measurement execution or package implementation/builds.
+
+| Task                                                 | Role      | Deliverable                                                               | Dependencies                                     |
+| ---------------------------------------------------- | --------- | ------------------------------------------------------------------------- | ------------------------------------------------ |
+| [TASK-026](../.project-os/tasks/ready/TASK-026.yaml) | architect | Reviewed campaign manifest, reveal graph, coverage and approval checklist | None (DEC-037)                                   |
+| [TASK-027](../.project-os/tasks/ready/TASK-027.yaml) | developer | Explicitly approved production campaign composition and version binding   | TASK-026                                         |
+| [TASK-028](../.project-os/tasks/ready/TASK-028.yaml) | developer | Approved Acts 1–3 data and replay fixtures                                | TASK-026 (DEC-041)                               |
+| [TASK-029](../.project-os/tasks/ready/TASK-029.yaml) | developer | Approved Acts 4–6 data and reveal/branch fixtures                         | TASK-026 (DEC-045)                               |
+| [TASK-030](../.project-os/tasks/ready/TASK-030.yaml) | developer | Extended Board investigation and deferred framing reveal                  | TASK-026 (DEC-048)                               |
+| [TASK-031](../.project-os/tasks/ready/TASK-031.yaml) | developer | Observer and Blackout data, final-context fixtures                        | TASK-026 (DEC-050)                               |
+| [TASK-032](../.project-os/tasks/ready/TASK-032.yaml) | developer | Approved production ending rules and epilogue data                        | TASK-026 (DEC-053)                               |
+| [TASK-033](../.project-os/tasks/ready/TASK-033.yaml) | developer | Campaign-wide accessibility and scoped audio presentation                 | TASK-026 (DEC-061)                               |
+| [TASK-034](../.project-os/tasks/ready/TASK-034.yaml) | developer | Measured performance, approved packaging and release/authoring docs       | TASK-026 (DEC-062; documentation/proposals only) |
+| [TASK-035](../.project-os/tasks/ready/TASK-035.yaml) | developer | Full M5 evidence audit and separate release decision                      | TASK-025, TASK-028–034                           |
 
 Prior work is reused, not recreated. Missing document/trace/decision views or
 simulation mechanisms must first be listed against real authoring needs in
@@ -277,3 +281,11 @@ keyboard/text/table presentation. Tests are authored but **not run**; no native
 WebView2/Narrator/audio/layout coverage or completion is claimed. TASK-034/035
 dependencies and all M4/M5 final verification remain unchanged. A distinct delivery
 readiness/budget/packaging decision is required before TASK-034 implementation.
+
+DEC-062 resolves the early documentation-readiness decision. The
+[TASK-034 checkpoint](TASK-034_DOCUMENTATION_CHECKPOINT.md) supplies authoring,
+storage/support and preliminary asset-rights guidance plus an unapproved exact
+performance/local-packaging proposal. No benchmark, config, binary or installer
+was produced, and no QA or acceptance was claimed. Concrete budget/Windows review
+package approval precedes implementation and bounded execution; native/install
+QA, TASK-035, M4/M5 closure and release remain separately gated.

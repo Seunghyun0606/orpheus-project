@@ -318,10 +318,9 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: ready
+  status: active
   depends_on:
-  - TASK-032
-  - TASK-033
+  - TASK-026
   human_gate: false
 - id: TASK-035
   title: Audit full campaign readiness and request a separate release decision

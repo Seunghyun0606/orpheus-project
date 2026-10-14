@@ -1,0 +1,21 @@
+id: DEC-062
+title: Early delivery documentation and budget/packaging proposals only
+status: active
+date: '2026-10-14'
+applies_to: [M5, TASK-034]
+human_approval:
+  selected_option: A
+  instruction: 문서·예산·패키징 제안 선행 승인; 실측·패키징은 별도 승인.
+approved_request:
+  commit: 8d07d78
+  file: .project-os/planning/TASK-034.readiness-gate.yaml
+decision: >-
+  Replace TASK-032/033 implementation-readiness prerequisites with accepted
+  TASK-026 only. Claim TASK-034 through projectctl for authoring/support documents
+  and concrete performance-budget and Windows local-packaging proposals.
+consequences:
+  - No approved budget, benchmark execution, installer implementation or package generation yet.
+  - Keep TASK-032/033 and M4 incomplete with mandatory final verification/evaluation.
+  - Preserve TASK-035 dependencies, existing authority bytes and all user storage.
+  - Separate human approval precedes measurement and concrete packaging implementation.
+  - QA remains deferred, not waived; no credentials/security changes, push or release.

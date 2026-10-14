@@ -83,6 +83,15 @@ confirmed-live-event notifications and campaign keyboard/text/table controls.
 Tests are authored, not executed. TASK-033 is active, not accepted; native Narrator,
 WebView2 audio, viewport and independent verification remain outstanding.
 TASK-034/035 dependencies and mandatory M4/M5 final verification are unchanged.
+DEC-062 subsequently permits TASK-034 documentation/proposal work before preceding
+acceptance. Its [checkpoint](docs/TASK-034_DOCUMENTATION_CHECKPOINT.md) adds
+[authoring guidance](docs/CAMPAIGN_AUTHORING.md),
+[storage/support](docs/LOCAL_STORAGE_AND_SUPPORT.md),
+[preliminary license inventory](docs/ASSET_AND_LICENSE_INVENTORY.md) and an
+[unapproved performance/local-package proposal](docs/TASK-034_DELIVERY_PROPOSAL.md).
+No benchmark or installer was produced. Actual budgets, package implementation,
+measurements and local generation require the next concrete human approval;
+installer execution, native QA, TASK-035 and release remain separately gated.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
 document QA and distinct evaluation PASS. M4 verification remains mandatory before final M5 acceptance/release. Original
 planning drafts remain historical checkpoints. The [M4 plan](docs/M4_IMPLEMENTATION_PLAN.md) preserves chronological

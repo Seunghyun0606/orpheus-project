@@ -1,0 +1,21 @@
+task: TASK-034
+role: developer
+status: documentation_candidate_and_unapproved_delivery_proposal
+decision: .project-os/decisions/DEC-062-early-delivery-documentation-proposals.yaml
+report: docs/TASK-034_DOCUMENTATION_CHECKPOINT.md
+completed_scope:
+  - Source-based authoring and local storage/support guidance.
+  - Preliminary asset provenance and unresolved license inventory.
+  - Concrete proposed benchmark boundaries/budgets and isolated Windows review packaging.
+verification:
+  executed: []
+  status: not_run_QA_deferred_measurement_and_packaging_unapproved
+acceptance: pending_budgets_packages_and_required_independent_native_evidence
+remaining:
+  - Concrete human approval before harness/config implementation, measurements or local generation.
+  - Valid qualifying production-history datasets and actual retained benchmark results.
+  - Isolated artifacts/configuration/lockfile hashes and separately authorized install/native QA.
+  - Rights clearance, independent review/QA and distinct evaluation.
+preserved:
+  - M4 and prior tasks remain incomplete; TASK-035 dependencies unchanged.
+  - No runtime/config/store changes, fabricated PASS, push, distribution or release.

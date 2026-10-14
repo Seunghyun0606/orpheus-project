@@ -1,0 +1,81 @@
+task: TASK-034
+date: '2026-10-14'
+status: proposed_not_approved_or_applied
+baseline_commit: 8d07d78
+explanation: docs/TASK-034_DELIVERY_PROPOSAL.md
+scope:
+  - Performance harness and isolated local Windows review-package configuration.
+  - Bounded TASK-034 measurement/build verification only after explicit approval.
+  - No public distribution, production installation or completion of earlier tasks.
+qualification_target:
+  os: Windows 11 x64
+  cpu: At least four logical cores; record exact CPU/model and power mode.
+  memory: At least 8 GiB physical RAM; record available RAM and background load.
+  storage: Local SSD with at least 5 GiB free for isolated build/profile artifacts.
+  webview: Preinstalled Evergreen WebView2; record actual runtime version.
+  native_ui: 960x640 and 1280x800, text 100/125/150 percent, CRT off/reduced animation included.
+  exclusions: No Windows 10, ARM, macOS/Linux, NVDA or installer support certification by inference.
+measurement:
+  units: Real monotonic elapsed milliseconds, not simulation seconds.
+  warm_samples: 20 measured after 2 separate untimed warmups; retain every sample.
+  cold_samples: 5 independent app/process starts; report maximum and each sample.
+  command_trials: Each warmup/trial must be a new valid operation on an in-progress attempt; retain its resulting committed history and report starting/ending counts. Never roll back or overwrite the baseline to repeat a trial.
+  percentile: Nearest-rank p95 = sorted sample at ceil(0.95*n), 1-based.
+  datasets:
+    ordinary:
+      - Genuine approved operations completing all 26 Incidents in sequence.
+      - Actual investigation/ACK/response histories; no edited scores, baseline completion grants or synthetic ACKs.
+    long:
+      - At least 104 genuine attempts and 1000 accepted perform_action commands, including completed prior-Act retries.
+      - Preserve receipts and pooled observations; no padding with rejected commands or deleting costly history.
+      - If a valid qualifying history cannot be authored and replayed, report blocked instead of a smaller substitute.
+  budgets:
+    - {id: package_admission_cold, statistic: maximum, limit_ms: 5000, workload: Full-route click through complete exact-source admission and selectable-package paint; no storage creation.}
+    - {id: replay_ordinary, statistic: p95, limit_ms: 5000, workload: Pure full 26-Incident campaign replay from recorded operations.}
+    - {id: replay_long, statistic: p95, limit_ms: 15000, workload: Pure replay of the qualifying long record.}
+    - {id: load_long, statistic: p95, limit_ms: 20000, workload: Ledger read plus replay verification and published view, before native paint separately.}
+    - {id: commit_ordinary, statistic: p95, limit_ms: 500, workload: Valid action submission through transaction completion and verified session publication near ordinary final history.}
+    - {id: commit_long, statistic: p95, limit_ms: 2500, workload: Same commit boundary on a qualifying long history; lost ACK/duplicate/conflict must not award twice.}
+    - {id: archive_native, statistic: p95, limit_ms: 500, workload: Keyboard/click selection through next visible archive paint on long record at 150 percent text.}
+    - {id: application_cold, statistic: maximum, limit_ms: 5000, workload: Process launch to usable default incident desk with no full-route admission.}
+  memory:
+    steady_limit_mib: 512
+    steady_statistic: Nearest-rank p95 of samples after the first 60 seconds of the five-minute cycle.
+    peak_limit_mib: 1024
+    peak_statistic: Maximum aggregate sample over the entire five-minute cycle, including the first minute.
+    method: Sample main process and WebView descendant private working sets at 1 Hz over a five-minute long-record archive/live cycle; retain PIDs and raw samples. Shared/unattributed runtime is explicitly excluded, not hidden.
+  integrity:
+    - Abort/conflict leaves prior committed run authoritative; same-identity retry does not reapply effects.
+    - No dropped observations, unverified cached projections, gameplay clock changes or weakened assertions to meet budgets.
+    - Failed/unavailable/invalid measurement blocks readiness; retain results, do not silently increase limits or timeouts.
+    - Node/fake-indexeddb timing is development-only, never native Windows storage/render certification.
+packaging:
+  kind: Unsigned local review NSIS installer, current-user only.
+  target: x86_64-pc-windows-msvc
+  identity: com.vantage.orpheus.qa.task034
+  product_name: Orpheus Review - TASK-034
+  window_label: qa034
+  window_data_directory: task034-release-v1
+  expected_profile: '%LOCALAPPDATA%\qa034\task034-release-v1'
+  profile_rule: Verify installed Tauri resolves exactly this isolated path before any launch; mismatch requires a new gate. Never delete/reset this profile or access qa024/main profiles.
+  frontend: Existing production entry and exact full campaign sources; default MVP remains default, no QA-fixture replacement.
+  frontend_output: .qa/task034/web
+  cargo_output: .qa/task034/target
+  main_config: Preserve src-tauri/tauri.conf.json including identifier, bundle.active=false and current capabilities/security.
+  overlay: Proposed separate src-tauri/tauri.review.task034.conf.json; not created by this proposal.
+  webview_install_mode: skip
+  webview_policy: Require an already installed runtime; no bootstrapper download, runtime installation or update.
+  signing: None; no certificate, secret, publisher identity or timestamp service acquisition.
+  updater: None; no telemetry, external service, upload, store publication or branch push.
+  artifact_limit_mib: 100
+  artifact_policy: Existing generated icons only subject to provenance/rights review; preserve lockfiles and record exact binary/installer/config/lock hashes.
+  tooling: Existing lockfile-pinned Tauri/build toolchain; any missing tool download or security prompt requires separate authority, not silent acquisition.
+  execution: Generate and hash local artifacts only after approval; do not execute the installer, install/upgrade/uninstall or launch the review app until a distinct isolated native/install QA instruction.
+approval_effect_if_selected:
+  - Permit implementing the stated measurement harness and review config/scripts, then bounded TASK-034 typecheck/validation/harness checks, measurements and local package builds.
+  - This is the explicit TASK-034-only exception to QA deferral; do not resume general M4/M5/native/install QA by implication.
+  - Missing valid workload, failed compiler/admission, unresolved tooling or path conflict stops the affected step without fallback.
+  - Keep M4, TASK-027 through TASK-033 and TASK-034 acceptance incomplete; all independent and final native checks remain required.
+excluded:
+  - Performance optimization requiring architecture, storage, schema or replay changes without its own approval.
+  - Installer execution or actual user-store writes, credential/security changes, distribution or milestone/release approval.
