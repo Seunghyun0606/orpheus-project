@@ -15,7 +15,10 @@ issue ACKs or change simulation/model/ending rules. Only INC-001's new live noti
 expires after 800ms; recorded text stays readable, and reduced motion holds the notice.
 The earlier [contract checkpoint](docs/TASK-035_RUNTIME_PRESENTATION_CONTRACT_CHECKPOINT.md)
 is historical design evidence, not current implementation/acceptance status.
-Focused automated checks do not establish complete V1–V12 or native acceptance.
+The [implementation checkpoint](docs/TASK-035_RUNTIME_PRESENTATION_IMPLEMENTATION_CHECKPOINT.md)
+records independently reviewed repairs and 28 focused tests passing on `c64d7ba`.
+Full QA still fails seven unchanged 5-second timeouts and formatting still fails
+37 protected old files. Complete V1–V12/native/task acceptance is not established.
 
 Automated verification resumed under DEC-066 on 2026-10-14. The
 [current checkpoint](docs/TASK-035_AUTOMATED_VERIFICATION_CHECKPOINT.md) retains

@@ -1,0 +1,32 @@
+task: TASK-035
+kind: attributed_read_only_implementation_review_not_final_acceptance
+date: '2026-10-15'
+actor: /root/task035_runtime_review
+recorded_by: /root
+initial_candidate: 100c79ab96cdd3086d4d3de36eed465a0d271fb9
+repair_candidate: c64d7ba9b6b27685db5250e1c5601f7df6bc007a
+initial_decision: changes_required
+repair_decision: no_new_blocking_finding_in_reviewed_repair
+findings:
+  - id: ORDER-01
+    severity: P2
+    initial: Fresh messages followed authored panel/block order instead of event sequence across valid split streams.
+    evidence: Reviewer read-only Node probe produced LATER sequence 11 before EARLIER sequence 10.
+    repair: Sort verified owned narratives by eventSequence; legal two-stream command regression reverses authored placement.
+    status: resolved_by_source_and_regression_inspection
+  - id: CONTEXT-02
+    severity: P2
+    initial: A replacement store/composition render could show an old queue body before passive cleanup.
+    evidence: Lifecycle/source inspection, not a native reproduction.
+    repair: Ephemeral binding-scope snapshot suppression before paint; retain timer cleanup and retired keys. Layout-phase regression checks replacement before passive cleanup.
+    status: resolved_by_source_and_regression_inspection
+positive_checks:
+  - All sixty protected files retain exact byte counts and hashes; narrow additive authoring/version rules preserved.
+  - Fresh delivery verifies current canonical operation, exact before/after replay delta, current head and read floor.
+  - No new saved cursor, canonical read operation, guidance ACK, score/sample or extra audio cue.
+  - Scenario data remains the source of narrative and War Room bodies; reduced motion and epoch cancellation preserved.
+  - Singleton-package assertion repair checks independent new admission and absence of old resolve; no removed timeout or blanket assertion suppression.
+limits:
+  - Read-only source/probe review; reviewer did not execute heavy suites or native apps, edit or transition state.
+  - Genuine new-package INC-026 completed history/archive, full routes, budgets and further adversarial notification cases remain incomplete.
+  - Native accessibility/install and M4/TASK-025 obligations remain mandatory; whole TASK-035 unaccepted.
