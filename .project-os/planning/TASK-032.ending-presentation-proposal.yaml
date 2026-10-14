@@ -1,0 +1,48 @@
+task: TASK-032
+date: '2026-10-14'
+status: proposed_not_approved_or_applied
+source_checkpoint: DEC-057 numeric implementation, not full-campaign acceptance
+definition_identity: {id: orpheus-full-campaign, version: 1.0.0}
+ending_identity: {id: orpheus-full-campaign-endings, version: 1.0.0}
+presentation_identity: {id: orpheus-full-campaign-ending-presentations, version: 1.0.0, schemaVersion: 1}
+proposal:
+  contract:
+    - Add a separate strict YAML EndingPresentation authority, bound to exact campaign/ending identities and all ten declared ending IDs.
+    - Use typed authored paragraph/dialogue/policy-report blocks; no HTML, executable text, callbacks or story logic in React.
+    - Validate exact identities, duplicate/missing endings, block types and declared reveal references before admitting the complete package.
+    - Keep the binding separate from existing Scenario/save/ledger shapes; preserve old package bindings and reject missing new required presentation authority.
+    - Render only after a verified read-only resolver result selects one ending for the exact requested attempt/head.
+    - No grant operation or ending flag is introduced; restoring a record replays and re-evaluates its exact pinned authorities.
+    - Ambiguous/no-match/unavailable results show diagnostics without selecting fallback prose.
+  prose:
+    source: .project-os/planning/TASK-032.ending-narrative-draft.yaml
+    ending_ids: [CONTINUITY, LIBERATION, WHISTLEBLOWER, SHUTDOWN, CUSTODIAN, NULL, THE BOARD, THE FIRE, STATUS QUO, REWRITE]
+    rules:
+      - Preserve the source-based benefits, costs and ambiguity of all ten drafts; no good/bad/true ending labels.
+      - Show the actual final attempt's service/customer-impact record alongside prose rather than claiming every service recovered.
+      - Mark retrospective 98.4%, 1,841,299 and 3 as authored future institutional reports, not measured player metrics/confidence.
+      - REWRITE retains plural human judgment, independent audit and execution limits, not a replacement primary objective.
+  title_payoff:
+    narrative_flag_required: PROJECT_DISTRIBUTED
+    behavior: Only include the already authored Project-terminated/distributed recap if this flag is genuinely known; no discovery is granted by viewing the ending.
+    final_question: If the system makes the recommendation, and the human makes the decision, who is responsible for the outcome?
+    final_question_policy: Shared thematic closing for all ten resolved endings, not an unrevealed evidence record.
+  prometheus:
+    eligible_endings: [LIBERATION, WHISTLEBLOWER, SHUTDOWN, CUSTODIAN, NULL, REWRITE]
+    narrative_flag_required: PROJECT_DISTRIBUTED
+    rule: Exact listed ending AND genuine known flag, read-only; no fallback reveal or change to ending eligibility.
+    source_section: 61
+    text: |-
+      PROMETHEUS
+
+      MODEL LINEAGE:
+      ORPHEUS-DERIVED
+
+      Known deployments:
+      1,842
+    interpretation: A local removal or limitation of authority does not retract a distributed idea; not a metric or a privileged true-ending reward.
+excluded:
+  - Old-run migration, save reset, ending grant, numerical rebalance or revised reveal graph.
+  - Partial official campaign admission, invented completion/provenance, latest-version fallback.
+  - Acceptance, QA waiver, push or release.
+verification: not_run_QA_deferred

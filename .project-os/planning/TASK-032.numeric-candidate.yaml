@@ -1,0 +1,35 @@
+task: TASK-032
+date: '2026-10-14'
+role: developer
+actor: codex-task032-developer
+source_agent: /root
+status: pending
+approval: .project-os/decisions/DEC-057-initial-full-campaign-ending-balance.yaml
+summary: Approved initial numeric effect and ten equal-rank ending data authored for new-only complete composition, with deferred tests; not runtime registration or acceptance.
+evidence:
+  - .project-os/planning/TASK-032.numeric-bindings.yaml
+  - .project-os/planning/M5/models/orpheus-full-campaign-endings.yaml
+  - scripts/authoring/task032-balance.mjs
+  - scripts/authoring/task032-balance.test.mjs
+  - src/tests/full-campaign-balance.test.ts
+  - docs/TASK-032_NUMERIC_BALANCE_IMPLEMENTATION.md
+verification:
+  source_inspection: performed_not_QA
+  authoring_generation: performed_not_validation
+  tests: authored_not_run
+  scenario_validation: not_run
+  typecheck: not_run
+  lint: not_run
+  build: not_run
+  independent_review: deferred
+  independent_QA: deferred
+  native_QA: deferred
+  evaluation: pending
+known_risks:
+  - Initial balance is not tuned fairness or proven full-run reachability.
+  - Unit predicate contexts do not prove accumulated campaign provenance.
+  - Bounded distinct-choice harm is not total physical customer impact.
+  - Complete definition/progression/package and conditional epilogue integration remain incomplete.
+  - Old authorities/stores are untouched; no partial package or ending grant.
+  - TASK-031/032 and mandatory M4/M5 acceptance remain incomplete.
+next_step: Decide the exact ending-presentation contract and conditional epilogue selection before implementation.

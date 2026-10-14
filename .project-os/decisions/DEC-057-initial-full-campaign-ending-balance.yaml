@@ -1,0 +1,30 @@
+id: DEC-057
+title: Pin the approved initial full-campaign numeric balance and ten ending conditions
+status: active
+date: '2026-10-14'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 초기 효과표·조건·동일 우선순위 승인 후 구현.
+request: .project-os/planning/TASK-032.numeric-ending-balance-gate.yaml
+approved_proposal:
+  commit: 875d410
+  file: .project-os/planning/TASK-032.numeric-ending-balance-proposal.yaml
+decision: >-
+  Implement the exact initial score table and ten equal-priority ending predicates
+  only for the new unreleased orpheus-full-campaign 1.0.0 definition. Pin
+  orpheus-full-campaign-endings 1.0.0 with schema/behavior/prediction versions
+  as proposed; retain strict unavailable, tie and no-match diagnostics.
+consequences:
+  - Merge discovery awards into guarded logical effects; aliases cannot award a node twice.
+  - Genuine completions, delivered diagnoses and completed actions require existing replay provenance.
+  - Only four distinct verified positive recommendation responses award dependency points.
+  - Different explicit choice directions and terminal-plan damage receipts survive retries.
+  - Final plans grant no positive alignment, evidence, safety, trust or dependency credit.
+  - Require genuine INC-001 through INC-025 completions and a newly completed final attempt.
+  - Only evidenceBeforeActionRate and averageInvestigationDepth are required ending metrics.
+  - Damage is a bounded distinct-choice game index, not total physical customer impact.
+  - Initial trial thresholds are not claims of tuned fairness or verified reachability.
+  - Preserve old authorities, stores, baseline rules and strict complete-package admission.
+  - Epilogue selection, runtime presentation schema and ending grants remain separate decisions.
+  - QA remains deferred, not waived; no task completion, push or release authorization.

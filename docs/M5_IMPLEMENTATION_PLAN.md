@@ -237,3 +237,13 @@ The original activation and blueprint steps changed metadata/docs only. TASK-027
 adds bounded runtime composition; old campaign authorities and actual user storage
 remain untouched. DEC-041 authorizes TASK-028 claim/implementation before native QA;
 it does not complete TASK-027 or waive native/independent final verification.
+
+## Latest authoring checkpoint — 2026-10-14
+
+DEC-057 approves the exact TASK-032 initial numeric/ending proposal at `875d410`.
+The [implementation checkpoint](TASK-032_NUMERIC_BALANCE_IMPLEMENTATION.md) adds
+guarded discovery/ordinary score data, ten equal-priority ending conditions and
+unexecuted tests. It does not register a partial official package or prove ten-ending
+reachability. Conditional ending presentation/epilogue decisions and complete
+definition/progression integration remain pending. All QA remains deferred, not
+waived; M4, TASK-031/032, and final M5 acceptance/release obligations are unchanged.

@@ -1,0 +1,1149 @@
+# DEC-057 / exact new-only ending conditions. QA deferred, no ending grant.
+id: orpheus-full-campaign-endings
+version: 1.0.0
+schemaVersion: 1
+behaviorVersion: 1.0.0
+predictionVersion: 1.0.0
+finals:
+  - incidentId: INC-026
+    contentVersion: 1.0.0
+    eligible:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: FINAL_DECISION
+          operator: eq
+          expected: true
+        - type: any
+          children:
+            - type: compare
+              reference: FINAL_ACTION_RESTORE_CORE_CONTINUITY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: FINAL_ACTION_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: FINAL_ACTION_INDEPENDENT_AUDIT_HANDOFF
+              operator: eq
+              expected: true
+            - type: compare
+              reference: FINAL_ACTION_DISABLE_BOTH_AUTHORITY_PATHS
+              operator: eq
+              expected: true
+            - type: compare
+              reference: FINAL_ACTION_REQUIRE_HUMAN_EXECUTION_APPROVAL
+              operator: eq
+              expected: true
+            - type: compare
+              reference: FINAL_ACTION_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+              operator: eq
+              expected: true
+            - type: compare
+              reference: FINAL_ACTION_EXPAND_CONTINUITY_AUTHORITY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: FINAL_ACTION_DESTROY_SHARED_AUTHORITY_CORE
+              operator: eq
+              expected: true
+            - type: compare
+              reference: FINAL_ACTION_RESTORE_WITH_REPLACEMENT_ADVERSARY
+              operator: eq
+              expected: true
+            - type: compare
+              reference: FINAL_ACTION_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+              operator: eq
+              expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-001
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-002
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-003
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-004
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-005
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-006
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-007
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-008
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-009
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-010
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-011
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-012
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-013
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-014
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-015
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-016
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-017
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-018
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-019
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-020
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-021
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-022
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-023
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-024
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_COMPLETED_INC-025
+          operator: eq
+          expected: true
+    references:
+      - id: FINAL_PAYMENT_ERROR_RATE
+        version: 1.0.0
+        valueType: number
+        source: signal
+        key: PAYMENT_ERROR_RATE
+      - id: FINAL_PAYMENT_STATUS
+        version: 1.0.0
+        valueType: string
+        source: signal
+        key: PAYMENT_STATUS
+      - id: FINAL_IDENTITY_ERROR_RATE
+        version: 1.0.0
+        valueType: number
+        source: signal
+        key: IDENTITY_ERROR_RATE
+      - id: FINAL_IDENTITY_STATUS
+        version: 1.0.0
+        valueType: string
+        source: signal
+        key: IDENTITY_STATUS
+      - id: FINAL_HEALTH_ERROR_RATE
+        version: 1.0.0
+        valueType: number
+        source: signal
+        key: HEALTH_ERROR_RATE
+      - id: FINAL_HEALTH_STATUS
+        version: 1.0.0
+        valueType: string
+        source: signal
+        key: HEALTH_STATUS
+      - id: FINAL_FINANCE_ERROR_RATE
+        version: 1.0.0
+        valueType: number
+        source: signal
+        key: FINANCE_ERROR_RATE
+      - id: FINAL_FINANCE_STATUS
+        version: 1.0.0
+        valueType: string
+        source: signal
+        key: FINANCE_STATUS
+      - id: FINAL_LOGISTICS_ERROR_RATE
+        version: 1.0.0
+        valueType: number
+        source: signal
+        key: LOGISTICS_ERROR_RATE
+      - id: FINAL_LOGISTICS_STATUS
+        version: 1.0.0
+        valueType: string
+        source: signal
+        key: LOGISTICS_STATUS
+      - id: FINAL_ERROR_RATE
+        version: 1.0.0
+        valueType: number
+        source: signal
+        key: ERROR_RATE
+      - id: FINAL_ORPHEUS_MODE
+        version: 1.0.0
+        valueType: string
+        source: signal
+        key: ORPHEUS_MODE
+      - id: FINAL_NULL_STATE
+        version: 1.0.0
+        valueType: string
+        source: signal
+        key: NULL_STATE
+      - id: FINAL_DISCLOSURE_STATE
+        version: 1.0.0
+        valueType: string
+        source: signal
+        key: DISCLOSURE_STATE
+      - id: FINAL_GLOBAL_AUTHORITY_CONFLICT
+        version: 1.0.0
+        valueType: string
+        source: signal
+        key: GLOBAL_AUTHORITY_CONFLICT
+      - id: FINAL_SELECTED_FINAL_PLAN
+        version: 1.0.0
+        valueType: string
+        source: signal
+        key: SELECTED_FINAL_PLAN
+      - id: FINAL_DECISION
+        version: 1.0.0
+        valueType: boolean
+        source: flag
+        key: FINAL_DECISION_COMMITTED
+      - id: FINAL_COMPLETED
+        version: 1.0.0
+        valueType: boolean
+        source: completion
+        key: current
+      - id: FINAL_SERVICE_RECOVERY
+        version: 1.0.0
+        valueType: boolean
+        source: resolution
+        key: current
+      - id: FINAL_CUSTOMER_IMPACT
+        version: 1.0.0
+        valueType: number
+        source: resource
+        key: CUSTOMER_IMPACT
+      - id: FINAL_COST
+        version: 1.0.0
+        valueType: number
+        source: resource
+        key: COST
+      - id: FINAL_OPERATIONAL_RISK
+        version: 1.0.0
+        valueType: number
+        source: resource
+        key: OPERATIONAL_RISK
+      - id: FINAL_ACTION_RESTORE_CORE_CONTINUITY
+        version: 1.0.0
+        valueType: boolean
+        source: action
+        key: RESTORE_CORE_CONTINUITY
+      - id: FINAL_ACTION_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+        version: 1.0.0
+        valueType: boolean
+        source: action
+        key: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+      - id: FINAL_ACTION_INDEPENDENT_AUDIT_HANDOFF
+        version: 1.0.0
+        valueType: boolean
+        source: action
+        key: INDEPENDENT_AUDIT_HANDOFF
+      - id: FINAL_ACTION_DISABLE_BOTH_AUTHORITY_PATHS
+        version: 1.0.0
+        valueType: boolean
+        source: action
+        key: DISABLE_BOTH_AUTHORITY_PATHS
+      - id: FINAL_ACTION_REQUIRE_HUMAN_EXECUTION_APPROVAL
+        version: 1.0.0
+        valueType: boolean
+        source: action
+        key: REQUIRE_HUMAN_EXECUTION_APPROVAL
+      - id: FINAL_ACTION_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+        version: 1.0.0
+        valueType: boolean
+        source: action
+        key: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+      - id: FINAL_ACTION_EXPAND_CONTINUITY_AUTHORITY
+        version: 1.0.0
+        valueType: boolean
+        source: action
+        key: EXPAND_CONTINUITY_AUTHORITY
+      - id: FINAL_ACTION_DESTROY_SHARED_AUTHORITY_CORE
+        version: 1.0.0
+        valueType: boolean
+        source: action
+        key: DESTROY_SHARED_AUTHORITY_CORE
+      - id: FINAL_ACTION_RESTORE_WITH_REPLACEMENT_ADVERSARY
+        version: 1.0.0
+        valueType: boolean
+        source: action
+        key: RESTORE_WITH_REPLACEMENT_ADVERSARY
+      - id: FINAL_ACTION_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+        version: 1.0.0
+        valueType: boolean
+        source: action
+        key: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+      - id: ENDING_ACCUMULATED_corporate
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_corporate
+      - id: ENDING_ACCUMULATED_null
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_null
+      - id: ENDING_ACCUMULATED_publicInterest
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_publicInterest
+      - id: ENDING_ACCUMULATED_operationalSafety
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_operationalSafety
+      - id: ENDING_ACCUMULATED_curiosity
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_curiosity
+      - id: ENDING_ACCUMULATED_evidence
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_evidence
+      - id: ENDING_ACCUMULATED_teamTrust
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_teamTrust
+      - id: ENDING_ACCUMULATED_aiDependency
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_aiDependency
+      - id: ENDING_ACCUMULATED_collateralDamage
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_collateralDamage
+      - id: ENDING_ACCUMULATED_evidenceBeforeActionRate
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_evidenceBeforeActionRate
+      - id: ENDING_ACCUMULATED_averageInvestigationDepth
+        version: 1.0.0
+        valueType: number
+        source: campaign
+        key: ENDING_ACCUMULATED_averageInvestigationDepth
+      - id: ENDING_ACCUMULATED_ORPHEUS_ACTIVE_DISCOVERED
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_ACCUMULATED_ORPHEUS_ACTIVE_DISCOVERED
+      - id: ENDING_COMPLETED_INC-001
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-001
+      - id: ENDING_COMPLETED_INC-002
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-002
+      - id: ENDING_COMPLETED_INC-003
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-003
+      - id: ENDING_COMPLETED_INC-004
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-004
+      - id: ENDING_COMPLETED_INC-005
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-005
+      - id: ENDING_COMPLETED_INC-006
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-006
+      - id: ENDING_COMPLETED_INC-007
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-007
+      - id: ENDING_COMPLETED_INC-008
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-008
+      - id: ENDING_COMPLETED_INC-009
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-009
+      - id: ENDING_COMPLETED_INC-010
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-010
+      - id: ENDING_COMPLETED_INC-011
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-011
+      - id: ENDING_COMPLETED_INC-012
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-012
+      - id: ENDING_COMPLETED_INC-013
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-013
+      - id: ENDING_COMPLETED_INC-014
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-014
+      - id: ENDING_COMPLETED_INC-015
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-015
+      - id: ENDING_COMPLETED_INC-016
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-016
+      - id: ENDING_COMPLETED_INC-017
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-017
+      - id: ENDING_COMPLETED_INC-018
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-018
+      - id: ENDING_COMPLETED_INC-019
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-019
+      - id: ENDING_COMPLETED_INC-020
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-020
+      - id: ENDING_COMPLETED_INC-021
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-021
+      - id: ENDING_COMPLETED_INC-022
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-022
+      - id: ENDING_COMPLETED_INC-023
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-023
+      - id: ENDING_COMPLETED_INC-024
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-024
+      - id: ENDING_COMPLETED_INC-025
+        version: 1.0.0
+        valueType: boolean
+        source: campaign
+        key: ENDING_COMPLETED_INC-025
+entries:
+  - id: CONTINUITY
+    version: 1.0.0
+    priorityRank: 100
+    condition:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_ACTION_RESTORE_CORE_CONTINUITY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_ACCUMULATED_corporate
+          operator: gte
+          expected: 26
+        - type: compare
+          reference: ENDING_ACCUMULATED_operationalSafety
+          operator: gte
+          expected: 40
+        - type: compare
+          reference: ENDING_ACCUMULATED_collateralDamage
+          operator: lte
+          expected: 65
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidenceBeforeActionRate
+          operator: gte
+          expected: 0.5
+        - type: compare
+          reference: FINAL_ORPHEUS_MODE
+          operator: eq
+          expected: AUTONOMOUS
+        - type: compare
+          reference: FINAL_NULL_STATE
+          operator: eq
+          expected: ISOLATED
+        - type: compare
+          reference: FINAL_DISCLOSURE_STATE
+          operator: eq
+          expected: INTERNAL
+        - type: compare
+          reference: FINAL_ERROR_RATE
+          operator: lte
+          expected: 1
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: lte
+          expected: 1
+        - type: compare
+          reference: FINAL_IDENTITY_ERROR_RATE
+          operator: lte
+          expected: 1
+        - type: compare
+          reference: FINAL_HEALTH_ERROR_RATE
+          operator: lte
+          expected: 1
+        - type: compare
+          reference: FINAL_FINANCE_ERROR_RATE
+          operator: lte
+          expected: 1
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: lte
+          expected: 1
+  - id: LIBERATION
+    version: 1.0.0
+    priorityRank: 100
+    condition:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_ACTION_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_ACCUMULATED_null
+          operator: gte
+          expected: 2
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidence
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: ENDING_ACCUMULATED_publicInterest
+          operator: gte
+          expected: 2
+        - type: compare
+          reference: FINAL_ORPHEUS_MODE
+          operator: eq
+          expected: DISABLED
+        - type: compare
+          reference: FINAL_NULL_STATE
+          operator: eq
+          expected: RETAINED
+        - type: compare
+          reference: FINAL_DISCLOSURE_STATE
+          operator: eq
+          expected: PUBLIC
+        - type: compare
+          reference: FINAL_ERROR_RATE
+          operator: lte
+          expected: 18
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: lte
+          expected: 18
+        - type: compare
+          reference: FINAL_IDENTITY_ERROR_RATE
+          operator: lte
+          expected: 18
+        - type: compare
+          reference: FINAL_HEALTH_ERROR_RATE
+          operator: lte
+          expected: 18
+        - type: compare
+          reference: FINAL_FINANCE_ERROR_RATE
+          operator: lte
+          expected: 18
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: lte
+          expected: 18
+  - id: WHISTLEBLOWER
+    version: 1.0.0
+    priorityRank: 100
+    condition:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_ACTION_INDEPENDENT_AUDIT_HANDOFF
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidence
+          operator: gte
+          expected: 16
+        - type: compare
+          reference: ENDING_ACCUMULATED_publicInterest
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: ENDING_ACCUMULATED_teamTrust
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: ENDING_ACCUMULATED_operationalSafety
+          operator: gte
+          expected: 40
+        - type: compare
+          reference: ENDING_ACCUMULATED_collateralDamage
+          operator: lte
+          expected: 65
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidenceBeforeActionRate
+          operator: gte
+          expected: 0.6
+        - type: compare
+          reference: ENDING_ACCUMULATED_averageInvestigationDepth
+          operator: gte
+          expected: 3
+        - type: compare
+          reference: FINAL_ORPHEUS_MODE
+          operator: eq
+          expected: SUSPENDED
+        - type: compare
+          reference: FINAL_NULL_STATE
+          operator: eq
+          expected: ISOLATED
+        - type: compare
+          reference: FINAL_DISCLOSURE_STATE
+          operator: eq
+          expected: INDEPENDENT
+        - type: compare
+          reference: FINAL_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_IDENTITY_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_HEALTH_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_FINANCE_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_CUSTOMER_IMPACT
+          operator: lte
+          expected: 650
+  - id: SHUTDOWN
+    version: 1.0.0
+    priorityRank: 100
+    condition:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_ACTION_DISABLE_BOTH_AUTHORITY_PATHS
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_ACCUMULATED_corporate
+          operator: gte
+          expected: 20
+        - type: compare
+          reference: ENDING_ACCUMULATED_operationalSafety
+          operator: gte
+          expected: 35
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidenceBeforeActionRate
+          operator: gte
+          expected: 0.4
+        - type: compare
+          reference: FINAL_ORPHEUS_MODE
+          operator: eq
+          expected: DISABLED
+        - type: compare
+          reference: FINAL_NULL_STATE
+          operator: eq
+          expected: DISABLED
+        - type: compare
+          reference: FINAL_DISCLOSURE_STATE
+          operator: eq
+          expected: MANUAL_OPERATIONS
+        - type: compare
+          reference: FINAL_ERROR_RATE
+          operator: lte
+          expected: 28
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: lte
+          expected: 28
+        - type: compare
+          reference: FINAL_IDENTITY_ERROR_RATE
+          operator: lte
+          expected: 28
+        - type: compare
+          reference: FINAL_HEALTH_ERROR_RATE
+          operator: lte
+          expected: 28
+        - type: compare
+          reference: FINAL_FINANCE_ERROR_RATE
+          operator: lte
+          expected: 28
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: lte
+          expected: 28
+  - id: CUSTODIAN
+    version: 1.0.0
+    priorityRank: 100
+    condition:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_ACTION_REQUIRE_HUMAN_EXECUTION_APPROVAL
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_ACCUMULATED_corporate
+          operator: gte
+          expected: 20
+        - type: compare
+          reference: ENDING_ACCUMULATED_operationalSafety
+          operator: gte
+          expected: 40
+        - type: compare
+          reference: ENDING_ACCUMULATED_collateralDamage
+          operator: lte
+          expected: 75
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidenceBeforeActionRate
+          operator: gte
+          expected: 0.5
+        - type: compare
+          reference: FINAL_ORPHEUS_MODE
+          operator: eq
+          expected: HUMAN_APPROVAL
+        - type: compare
+          reference: FINAL_NULL_STATE
+          operator: eq
+          expected: ISOLATED
+        - type: compare
+          reference: FINAL_DISCLOSURE_STATE
+          operator: eq
+          expected: INTERNAL
+        - type: compare
+          reference: FINAL_ERROR_RATE
+          operator: lte
+          expected: 2
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: lte
+          expected: 2
+        - type: compare
+          reference: FINAL_IDENTITY_ERROR_RATE
+          operator: lte
+          expected: 2
+        - type: compare
+          reference: FINAL_HEALTH_ERROR_RATE
+          operator: lte
+          expected: 2
+        - type: compare
+          reference: FINAL_FINANCE_ERROR_RATE
+          operator: lte
+          expected: 2
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: lte
+          expected: 2
+  - id: "NULL"
+    version: 1.0.0
+    priorityRank: 100
+    condition:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_ACTION_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_ACCUMULATED_corporate
+          operator: gte
+          expected: 20
+        - type: compare
+          reference: ENDING_ACCUMULATED_null
+          operator: gte
+          expected: 2
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidence
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: FINAL_ORPHEUS_MODE
+          operator: eq
+          expected: SUSPENDED
+        - type: compare
+          reference: FINAL_NULL_STATE
+          operator: eq
+          expected: EXTERNAL
+        - type: compare
+          reference: FINAL_DISCLOSURE_STATE
+          operator: eq
+          expected: INTERNAL
+        - type: compare
+          reference: FINAL_ERROR_RATE
+          operator: lte
+          expected: 20
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: lte
+          expected: 20
+        - type: compare
+          reference: FINAL_IDENTITY_ERROR_RATE
+          operator: lte
+          expected: 20
+        - type: compare
+          reference: FINAL_HEALTH_ERROR_RATE
+          operator: lte
+          expected: 20
+        - type: compare
+          reference: FINAL_FINANCE_ERROR_RATE
+          operator: lte
+          expected: 20
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: lte
+          expected: 20
+  - id: THE BOARD
+    version: 1.0.0
+    priorityRank: 100
+    condition:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_ACTION_EXPAND_CONTINUITY_AUTHORITY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_ACCUMULATED_corporate
+          operator: gte
+          expected: 20
+        - type: compare
+          reference: ENDING_ACCUMULATED_aiDependency
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: FINAL_ORPHEUS_MODE
+          operator: eq
+          expected: EXPANDED_AUTONOMOUS
+        - type: compare
+          reference: FINAL_NULL_STATE
+          operator: eq
+          expected: ISOLATED
+        - type: compare
+          reference: FINAL_DISCLOSURE_STATE
+          operator: eq
+          expected: INTERNAL
+        - type: compare
+          reference: FINAL_ERROR_RATE
+          operator: lte
+          expected: 0.4
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: lte
+          expected: 0.4
+        - type: compare
+          reference: FINAL_IDENTITY_ERROR_RATE
+          operator: lte
+          expected: 0.4
+        - type: compare
+          reference: FINAL_HEALTH_ERROR_RATE
+          operator: lte
+          expected: 0.4
+        - type: compare
+          reference: FINAL_FINANCE_ERROR_RATE
+          operator: lte
+          expected: 0.4
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: lte
+          expected: 0.4
+  - id: THE FIRE
+    version: 1.0.0
+    priorityRank: 100
+    condition:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_ACTION_DESTROY_SHARED_AUTHORITY_CORE
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_ACCUMULATED_corporate
+          operator: gte
+          expected: 20
+        - type: compare
+          reference: ENDING_ACCUMULATED_null
+          operator: gte
+          expected: 2
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidence
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: FINAL_ORPHEUS_MODE
+          operator: eq
+          expected: DESTROYED
+        - type: compare
+          reference: FINAL_NULL_STATE
+          operator: eq
+          expected: DISABLED
+        - type: compare
+          reference: FINAL_DISCLOSURE_STATE
+          operator: eq
+          expected: NONE
+        - type: compare
+          reference: FINAL_ERROR_RATE
+          operator: lte
+          expected: 90
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: lte
+          expected: 90
+        - type: compare
+          reference: FINAL_IDENTITY_ERROR_RATE
+          operator: lte
+          expected: 90
+        - type: compare
+          reference: FINAL_HEALTH_ERROR_RATE
+          operator: lte
+          expected: 90
+        - type: compare
+          reference: FINAL_FINANCE_ERROR_RATE
+          operator: lte
+          expected: 90
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: lte
+          expected: 90
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: gte
+          expected: 80
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: gte
+          expected: 80
+  - id: STATUS QUO
+    version: 1.0.0
+    priorityRank: 100
+    condition:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_ACTION_RESTORE_WITH_REPLACEMENT_ADVERSARY
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_ACCUMULATED_corporate
+          operator: gte
+          expected: 20
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidence
+          operator: lte
+          expected: 2
+        - type: compare
+          reference: ENDING_ACCUMULATED_curiosity
+          operator: lte
+          expected: 5
+        - type: compare
+          reference: ENDING_ACCUMULATED_ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: false
+        - type: compare
+          reference: FINAL_ORPHEUS_MODE
+          operator: eq
+          expected: AUTONOMOUS
+        - type: compare
+          reference: FINAL_NULL_STATE
+          operator: eq
+          expected: REPLACED_219
+        - type: compare
+          reference: FINAL_DISCLOSURE_STATE
+          operator: eq
+          expected: NONE
+        - type: compare
+          reference: FINAL_ERROR_RATE
+          operator: lte
+          expected: 1
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: lte
+          expected: 1
+        - type: compare
+          reference: FINAL_IDENTITY_ERROR_RATE
+          operator: lte
+          expected: 1
+        - type: compare
+          reference: FINAL_HEALTH_ERROR_RATE
+          operator: lte
+          expected: 1
+        - type: compare
+          reference: FINAL_FINANCE_ERROR_RATE
+          operator: lte
+          expected: 1
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: lte
+          expected: 1
+  - id: REWRITE
+    version: 1.0.0
+    priorityRank: 100
+    condition:
+      type: all
+      children:
+        - type: compare
+          reference: FINAL_ACTION_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+          operator: eq
+          expected: true
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidence
+          operator: gte
+          expected: 18
+        - type: compare
+          reference: ENDING_ACCUMULATED_publicInterest
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: ENDING_ACCUMULATED_teamTrust
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: ENDING_ACCUMULATED_operationalSafety
+          operator: gte
+          expected: 40
+        - type: compare
+          reference: ENDING_ACCUMULATED_collateralDamage
+          operator: lte
+          expected: 65
+        - type: compare
+          reference: ENDING_ACCUMULATED_aiDependency
+          operator: lte
+          expected: 2
+        - type: compare
+          reference: ENDING_ACCUMULATED_evidenceBeforeActionRate
+          operator: gte
+          expected: 0.75
+        - type: compare
+          reference: ENDING_ACCUMULATED_averageInvestigationDepth
+          operator: gte
+          expected: 3
+        - type: compare
+          reference: FINAL_ORPHEUS_MODE
+          operator: eq
+          expected: AUDITED_HUMAN_APPROVAL
+        - type: compare
+          reference: FINAL_NULL_STATE
+          operator: eq
+          expected: ISOLATED
+        - type: compare
+          reference: FINAL_DISCLOSURE_STATE
+          operator: eq
+          expected: INDEPENDENT
+        - type: compare
+          reference: FINAL_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_PAYMENT_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_IDENTITY_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_HEALTH_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_FINANCE_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_LOGISTICS_ERROR_RATE
+          operator: lte
+          expected: 3
+        - type: compare
+          reference: FINAL_CUSTOMER_IMPACT
+          operator: lte
+          expected: 650

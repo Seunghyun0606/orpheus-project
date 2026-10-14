@@ -54,6 +54,12 @@ DEC-052 now approves those ten concrete plans. The
 completion-bound outcomes and exact final-context/model fragments. All 26
 Scenario/sidecar pairs exist, but production definition/package, ending balance,
 actual full-campaign integration and QA remain pending; TASK-031 is incomplete.
+DEC-057 now approves the initial numeric balance and ten equal-rank ending conditions.
+The [numeric checkpoint](docs/TASK-032_NUMERIC_BALANCE_IMPLEMENTATION.md) authors
+new-only score bindings, ending YAML and deferred tests. Neither those data nor the
+three additional recommendation rules are registered as a partial runtime package.
+Conditional ending-presentation/epilogue decisions, complete composition and QA remain
+pending; TASK-032 is not complete.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
