@@ -7,6 +7,10 @@ recovery, saved evidence, and an action-derived postmortem.
 
 ## Current planning status
 
+DEC-069 records the human's decision to retain the current implementation and
+defer performance-contract design/review and improvements. Existing failures are
+not waived; no cache, budget relaxation, completion or release is approved.
+
 DEC-068 approves the reviewed new-only runtime-message contract. The implementation
 candidate adds explicit full-campaign 1.1.0 package/definition, twenty-six schema-2
 views and rebound ending prose while retaining every old authority. Verified

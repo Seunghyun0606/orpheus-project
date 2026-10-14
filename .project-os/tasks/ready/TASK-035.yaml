@@ -35,6 +35,7 @@ relevant_files:
   - README.md
   - .project-os/tasks/results/
 active_decisions:
+  - .project-os/decisions/DEC-069-defer-performance-contract.yaml
   - .project-os/decisions/DEC-068-approved-runtime-presentation-v2.yaml
   - .project-os/decisions/DEC-067-design-new-version-runtime-presentation.yaml
   - .project-os/decisions/DEC-066-resume-automated-independent-verification.yaml

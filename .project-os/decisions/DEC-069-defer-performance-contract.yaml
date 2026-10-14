@@ -1,0 +1,24 @@
+id: DEC-069
+title: Preserve runtime presentation implementation and defer performance improvements
+status: active
+date: '2026-10-15'
+applies_to: [M5, TASK-035]
+human_decision:
+  selected_option: B
+  instruction: 현 구현 유지, 개선 보류.
+  original_question: 검증을 유지하는 성능 개선 계약의 설계·독립 검토를 진행할까요?
+resolved_request:
+  commit: 21bedf3
+  file: .project-os/planning/TASK-035.performance-contract-design-gate.yaml
+decision: >-
+  Retain the implemented runtime presentation source candidate c64d7ba and its
+  independently audited evidence. Defer the proposed performance-contract
+  design/review and performance improvements; introduce no optimization or
+  verification cache under this decision.
+consequences:
+  - Do not waive seven default test timeouts, thirty-seven protected-source formatting failures or other incomplete acceptance evidence.
+  - Preserve original budgets, timeouts, worker settings, proof boundaries, source authorities, records and user profiles.
+  - M4/M5 and TASK-035 remain active/incomplete under existing canonical state; this is not a completion transition.
+  - Genuine INC-026/full routes, M4/TASK-025, long/native budgets, accessibility/install and rights obligations remain required.
+  - Native execution, installation, migration, protected-source rewriting, push and release are not authorized.
+  - A later explicit decision is required before resuming the deferred performance-contract work.
