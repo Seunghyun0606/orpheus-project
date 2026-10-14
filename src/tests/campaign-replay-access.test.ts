@@ -27,6 +27,10 @@ import { rootCauseResolutionReplay } from './fixtures/inc-001-replays.ts';
 function fixture(policy = true): CampaignDefinition {
   const d = opportunityCampaignFixture();
   d.id = 'replay-access-fixture-only';
+  // The inherited prediction fixture starts at Act 6. This test explicitly
+  // models genuine Act 1 -> 2 progression, not a rewind from 6 to 2.
+  d.initial.act = 1;
+  d.incidents[0]!.act = 1;
   if (policy) d.replayAccess = 'completed_prior_acts';
   d.effects.find((e) => e.id === 'completion')!.act = 2;
   return d;

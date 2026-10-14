@@ -61,7 +61,10 @@ export function authoredMidFixture() {
       id: s.id,
       scenarioId: s.id,
       contentVersion: s.contentVersion,
-      act: s.act,
+      // This partial lifecycle fixture has no Act progression. Map Incident
+      // placement to its explicit Act-6 unit context; keep authored action and
+      // opportunity guards unchanged. This is not production reachability proof.
+      act: 6,
       eligibility: {
         type: 'compare' as const,
         reference: 'CURRENT_ACT',

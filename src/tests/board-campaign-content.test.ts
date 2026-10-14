@@ -250,11 +250,25 @@ describe('TASK-030 authored operational/reveal assets — deferred QA', () => {
         expect(locked.actionIds).not.toContain(p.discoveryAction);
         expect(locked.actionIds).toContain(p.recovery.at(-1));
         expect(observed.state).toEqual(before);
+        // Campaign membership alone cannot bypass local evidence prerequisites.
+        // Exercise the authored new investigation prefix before testing access.
+        const prefix = p.discoveryRecovery.slice(0, p.discoveryRecovery.indexOf(p.discoveryAction));
+        const locallyReady = replayCommands(
+          s,
+          { seed: p.seed },
+          prefix.map((actionId) => ({ type: 'perform_action' as const, actionId })),
+        );
+        if (!locallyReady.ok) throw new Error('Rejected local prerequisite: ' + p.id);
+        expect(locallyReady.state.revealedEvidenceIds).not.toContain(p.discoveryEvidence);
+        expect(
+          selectCampaignActionIds(d, s, p.id, locallyReady.state, context(d, p.act, false))
+            .actionIds,
+        ).not.toContain(p.discoveryAction);
         const unlocked = selectCampaignActionIds(
           d,
           s,
           p.id,
-          observed.state,
+          locallyReady.state,
           context(d, p.act, true),
         );
         expect(unlocked.actionIds).toContain(p.discoveryAction);

@@ -156,7 +156,9 @@ function fixture(options: { act?: number; known?: boolean } = {}) {
       id: s.id,
       scenarioId: s.id,
       contentVersion: s.contentVersion,
-      act: s.act,
+      // Unit lifecycle placement only. Production Act allocation and actual
+      // opportunity Act gates remain unchanged, including wrong-Act negatives.
+      act: options.act ?? 9,
       eligibility: {
         type: 'compare' as const,
         reference: 'CURRENT_ACT',

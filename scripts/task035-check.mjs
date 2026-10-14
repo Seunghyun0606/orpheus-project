@@ -18,7 +18,7 @@ const commands = {
   desktop: 'npm run build:desktop',
   harness: 'npm run test:task034:harness',
   authoring:
-    'node --test scripts/authoring/full-campaign.test.mjs scripts/authoring/task032-balance.test.mjs scripts/authoring/task032-presentations.test.mjs',
+    'npx --no-install vitest run scripts/authoring/full-campaign.test.mjs scripts/authoring/task032-balance.test.mjs scripts/authoring/task032-presentations.test.mjs',
   diff: 'git diff --check',
 };
 const key = process.argv[2];

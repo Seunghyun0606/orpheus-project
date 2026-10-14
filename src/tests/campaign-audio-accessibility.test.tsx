@@ -42,6 +42,44 @@ async function session() {
   return { ...f, store };
 }
 describe('campaign audio controls and accessible sections (deferred)', () => {
+  it('invalidates an unresolved enable on unmount without remembering stale activation', async () => {
+    const { store } = await session();
+    let complete: (value: boolean) => void = () => undefined;
+    const output = {
+      enable: vi.fn(
+        () =>
+          new Promise<boolean>((resolve) => {
+            complete = resolve;
+          }),
+      ),
+      pause: vi.fn(),
+      setVolume: vi.fn(),
+      setForeground: vi.fn(),
+      setHumAllowed: vi.fn(),
+      play: vi.fn(),
+      dispose: vi.fn(),
+    };
+    const keyboard = createRef<(() => void) | null>();
+    const rendered = render(
+      <CampaignAudio
+        store={store}
+        live
+        ambience={false}
+        keyboard={keyboard}
+        createOutput={() => output}
+      />,
+    );
+    const prior = localStorage.getItem(AUDIO_PREFERENCES_KEY);
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Enable / resume audio' }));
+    expect(output.enable).toHaveBeenCalledTimes(1);
+    rendered.unmount();
+    await act(async () => {
+      complete(true);
+    });
+    expect(output.dispose).toHaveBeenCalledTimes(1);
+    expect(keyboard.current).toBeNull();
+    expect(localStorage.getItem(AUDIO_PREFERENCES_KEY)).toBe(prior);
+  });
   it('reads remembered preference without enabling output; mute/volume/exit are presentation-only', async () => {
     const { store } = await session();
     const user = userEvent.setup();
@@ -140,7 +178,9 @@ describe('campaign audio controls and accessible sections (deferred)', () => {
     ).toBeInTheDocument();
     await user.click(screen.getByText('Display settings', { selector: 'summary' }));
     await user.selectOptions(screen.getByRole('combobox', { name: 'Text scale' }), 'extra-large');
-    expect(container.querySelector('main')).toHaveStyle({ fontSize: '150%' });
+    // Assert the actual React-authored percentage rather than jsdom's computed
+    // style normalization. This remains a presentation test, not native layout.
+    expect((container.querySelector('main') as HTMLElement).style.fontSize).toBe('150%');
     await user.click(screen.getByRole('checkbox', { name: 'Reduce animation' }));
     expect(container.querySelector('main')).toHaveAttribute('data-reduced-animation', 'true');
     expect(container.querySelector('#campaign-evidence')).toHaveAttribute('tabindex', '-1');

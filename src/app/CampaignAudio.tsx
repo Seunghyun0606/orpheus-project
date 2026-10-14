@@ -32,10 +32,11 @@ export function CampaignAudio({
   const liveRef = useRef(live);
   const ambienceRef = useRef(ambience);
   const preferencesRef = useRef(preferences);
-  const activation = useRef(0);
+  const activation = useRef({ generation: 0 });
   // Only synchronize external presentation resources; never issue domain commands.
   useEffect(() => {
     let mounted = true;
+    const activationState = activation.current;
     const driver = createOutput({
       status: (next) => {
         if (!mounted) return;
@@ -48,7 +49,7 @@ export function CampaignAudio({
     driver.setHumAllowed(liveRef.current && ambienceRef.current);
     driver.setForeground(document.visibilityState === 'visible');
     const visibility = () => {
-      ++activation.current;
+      ++activationState.generation;
       setActivating(false);
       driver.setForeground(document.visibilityState === 'visible');
     };
@@ -65,7 +66,7 @@ export function CampaignAudio({
     };
     return () => {
       mounted = false;
-      ++activation.current;
+      ++activationState.generation;
       unsubscribe();
       document.removeEventListener('visibilitychange', visibility);
       keyboard.current = null;
@@ -79,7 +80,7 @@ export function CampaignAudio({
     output.current?.setHumAllowed(live && ambience);
     // Archive entry immediately stops all output; return requires explicit resume.
     if (!live) {
-      ++activation.current;
+      ++activation.current.generation;
       output.current?.pause();
     }
   }, [live, ambience]);
@@ -91,10 +92,10 @@ export function CampaignAudio({
   async function enable() {
     const driver = output.current;
     if (!driver || activating) return;
-    const token = ++activation.current;
+    const token = ++activation.current.generation;
     setActivating(true);
     const success = await driver.enable();
-    if (token !== activation.current) return;
+    if (token !== activation.current.generation) return;
     setActivating(false);
     if (success) remember({ ...preferencesRef.current, muted: false });
   }
@@ -118,7 +119,7 @@ export function CampaignAudio({
       <button
         type="button"
         onClick={() => {
-          ++activation.current;
+          ++activation.current.generation;
           setActivating(false);
           output.current?.pause();
           remember({ ...preferencesRef.current, muted: true });
