@@ -1,0 +1,26 @@
+id: DEC-059
+title: Sequential operational progression and complete new campaign composition
+status: active
+date: '2026-10-14'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 순차 운영 완료 진행·전체 패키지 연결 승인.
+request: .project-os/planning/TASK-027.full-progression-gate.yaml
+approved_proposal:
+  commit: 3adf58c
+  file: .project-os/planning/TASK-027.full-progression-proposal.yaml
+decision: >-
+  Compose the exact approved new definition/package and gate INC-001 through
+  INC-026 by preceding genuine operational completions and current Act. Advance
+  Acts monotonically at the eight approved boundaries; keep earlier Incidents
+  available for explicit new attempts without resetting history or shared awards.
+consequences:
+  - Ordinary recovery/main progression requires no optional discovery, branch or unsampled metric.
+  - Keep all approved protected investigation/Board/Observer/final-action guards.
+  - Inline only exact approved models, ten opportunities, scores, endings and prose.
+  - Keep default MVP, old authorities/stores and explicit creation/restoration unchanged.
+  - Only complete packages passing runtime validation become selectable; failures stay unavailable.
+  - New package identity is orpheus-full-campaign 1.0.0 under DEC-042, not a latest alias.
+  - No automatic discovery, model samples, ending grants, compatible-version aliases or old-run migration.
+  - QA remains deferred, not waived; no task acceptance, push or release authorization.

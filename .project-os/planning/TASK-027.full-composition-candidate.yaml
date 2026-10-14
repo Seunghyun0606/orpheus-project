@@ -1,0 +1,32 @@
+task: TASK-027
+date: '2026-10-14'
+role: developer
+actor: codex-task027-developer
+source_agent: /root
+status: pending
+approval: .project-os/decisions/DEC-059-sequential-full-campaign-composition.yaml
+summary: Complete new data composition and monotonic progression authored outside runtime; existing shared current-Act equality requires an explicit replay-access decision before registration.
+evidence:
+  - scripts/authoring/full-campaign.mjs
+  - scripts/authoring/full-campaign.test.mjs
+  - .project-os/planning/M5/composition/campaign-definition.yaml
+  - .project-os/planning/M5/composition/campaign-package.yaml
+  - docs/TASK-027_FULL_COMPOSITION_CHECKPOINT.md
+verification:
+  source_inspection: performed_not_QA
+  authoring_generation: performed_not_validation
+  tests: authored_not_run
+  scenario_validation: not_run
+  typecheck: not_run
+  lint: not_run
+  build: not_run
+  independent_review: deferred
+  independent_QA: deferred
+  native_QA: deferred
+  evaluation: pending
+known_risks:
+  - Existing engine equality blocks prior-Act retries approved under DEC-059.
+  - Candidate inventories do not prove complete authority validity or campaign/ending reachability.
+  - No runtime package registered, engine contract changed or task completed.
+  - Deferred M4/M5 verification and downstream task dependencies remain mandatory.
+next_step: Human decision on explicit new-definition replay access before runtime admission.

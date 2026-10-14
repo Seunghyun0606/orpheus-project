@@ -36,6 +36,7 @@ relevant_files:
   - src/scenario/
   - src/ui/
 active_decisions:
+  - .project-os/decisions/DEC-059-sequential-full-campaign-composition.yaml
   - .project-os/decisions/DEC-058-read-only-ending-presentations.yaml
   - .project-os/decisions/DEC-040-full-campaign-package-and-presentation.yaml
   - .project-os/decisions/DEC-039-m5-independent-verification-delegation.yaml

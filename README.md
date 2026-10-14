@@ -63,6 +63,11 @@ PROMETHEUS epilogue. The [presentation checkpoint](docs/TASK-032_ENDING_PRESENTA
 implements exact sidecar/package validation and verified engine/UI rendering, with
 actual final consequences and deferred tests. Complete progression/package composition
 and QA remain pending; TASK-032 is not complete and the full campaign is not startable.
+DEC-059 approves sequential operational progression and complete new composition.
+The [composition checkpoint](docs/TASK-027_FULL_COMPOSITION_CHECKPOINT.md) assembles
+all approved data as an unregistered planning candidate. Existing engine current-Act
+equality blocks approved prior-Act retries; an explicit access-policy gate must be
+resolved before runtime registration. No engine/old authority change or QA PASS is claimed.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,

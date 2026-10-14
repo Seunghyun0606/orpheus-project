@@ -1,0 +1,19 @@
+task: TASK-027
+date: '2026-10-14'
+status: awaiting_human_decision
+type: architecture_change
+question: 새 캠페인 정의에 이전 Act의 완료 Incident 재시도 정책을 명시적으로 추가할까요?
+proposal: .project-os/planning/TASK-027.replay-access-proposal.yaml
+safe_checkpoint: docs/TASK-027_FULL_COMPOSITION_CHECKPOINT.md
+reason: Existing eligible() enforces current-Act equality. The approved data-only progression cannot implement retained earlier-Act access without an explicit engine/definition contract; do not silently loosen old campaigns.
+options:
+  - key: A
+    label: 새 정의 전용 replayAccess 정책 추가
+    scope: Approve the exact optional completed_prior_acts policy and unchanged legacy semantics, then complete the runtime package connection.
+  - key: B
+    label: 연결 보류하고 재시도 방식 재설계
+    scope: Preserve candidate data and current unavailable runtime state; revise access policy without changing old behavior.
+preserved:
+  - Main operational order, protected investigation guards, monotonic Acts and retained attempt/score provenance.
+  - Default MVP, old authorities/stores and explicit creation/restoration.
+  - QA deferred, not waived; no acceptance, push or release.

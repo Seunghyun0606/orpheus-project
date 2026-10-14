@@ -253,3 +253,10 @@ ten typed prose entries, exact package binding, read-only verified projection an
 conditional title/PROMETHEUS rendering. No ending grant or old-store migration is
 introduced. Exact main progression/complete package integration is the next decision;
 the whole campaign is still unavailable, and all acceptance/QA debt remains.
+
+DEC-059 approves the sequential completion/Act progression proposal. The
+[full-composition checkpoint](TASK-027_FULL_COMPOSITION_CHECKPOINT.md) preserves
+complete generated data outside runtime while the existing current-Act-only engine
+gate awaits an explicit new-definition prior-Act retry contract. No implicit global
+relaxation, old-authority rewrite or partial official run is introduced. QA and all
+readiness/acceptance dependencies remain unchanged.
