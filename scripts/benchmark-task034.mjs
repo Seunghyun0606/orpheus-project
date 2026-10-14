@@ -28,7 +28,7 @@ import { keysetUpdateReplay } from '../src/tests/fixtures/inc-002-replays.ts';
 import { quarantineReplay } from '../src/tests/fixtures/inc-003-replays.ts';
 
 // Node development measurements only. No browser/user DB, ACK fabrication,
-// native launcher, disk output, network, unverified projection or clock override.
+// native launcher, user-store writes, network, unverified projection or clock override.
 const read = (file) => parse(readFileSync(path.join(workspace, file), 'utf8'));
 const report = {
   task: 'TASK-034',
@@ -119,6 +119,9 @@ async function measure(id, limit, work) {
   });
   snapshot();
   progress(`${id} p95=${p95.toFixed(3)}ms development-only, native not measured`);
+  // Retain all required samples before blocking later expensive phases. Never
+  // turn an exceeded development comparison into native certification or PASS.
+  if (p95 > limit) throw new Error(`DEVELOPMENT_BUDGET_EXCEEDED:${id}:${p95}:${limit}`);
 }
 function createBuilder(p, id) {
   let run = null;

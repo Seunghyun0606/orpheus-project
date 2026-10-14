@@ -99,6 +99,13 @@ pass after preserved initial failures; web output builds with large-chunk warnin
 Installer generation is blocked before tool downloads, and benchmark samples are
 incomplete. No native binary/installer, budget PASS or earlier task acceptance is
 claimed. Missing NSIS/tool acquisition is the next explicit decision.
+DEC-064 resolves that tooling decision. The
+[local package checkpoint](docs/TASK-034_LOCAL_PACKAGE_CHECKPOINT.md) records an
+unsigned isolated x64 review installer (2,059,715 bytes), generated but not executed.
+The ordinary Node replay p95 is 3.078 seconds over 20 retained samples; this does
+not certify native performance. Long-run/native/install checks and independent
+acceptance remain pending. TASK-035 is not eligible without preceding acceptance
+or a separately approved documentation-only readiness exception.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
 document QA and distinct evaluation PASS. M4 verification remains mandatory before final M5 acceptance/release. Original
 planning drafts remain historical checkpoints. The [M4 plan](docs/M4_IMPLEMENTATION_PLAN.md) preserves chronological

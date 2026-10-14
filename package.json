@@ -15,6 +15,7 @@
     "build:desktop": "npm run typecheck && tauri build --no-bundle",
     "build:review:task034:web": "vite build --config vite.review.task034.config.ts",
     "build:review:task034": "node scripts/build-task034-review.mjs",
+    "tools:task034:nsis": "node scripts/acquire-task034-nsis.mjs",
     "benchmark:task034": "node scripts/benchmark-task034.mjs",
     "test:task034:harness": "node --test scripts/task034-harness.test.mjs",
     "lint": "eslint . --max-warnings 0",

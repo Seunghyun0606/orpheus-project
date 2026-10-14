@@ -1,0 +1,21 @@
+id: DEC-064
+title: Acquire only official pinned NSIS compiler and required Tauri plugin
+status: active
+date: '2026-10-14'
+applies_to: [M5, TASK-034]
+human_approval:
+  selected_option: A
+  instruction: 공식 NSIS 도구·필수 플러그인 확보 승인.
+approved_request:
+  commit: 8f52183
+  file: .project-os/planning/TASK-034.packaging-tools-gate.yaml
+decision: >-
+  Verify the installed lockfile-pinned Tauri CLI's exact official tool URLs,
+  required inventory and upstream integrity constants. Acquire only missing
+  NSIS compiler/plugin artifacts and resume the existing approved local review build.
+consequences:
+  - No silent replacement/deletion of an unexpected existing cache or profile.
+  - Preserve TLS verification, upstream hashes and actual acquisition/build evidence.
+  - No other toolchain acquisition, signing, security bypass or credentials.
+  - Installer/app execution, native/install/general QA, push and release remain deferred.
+  - Approved budgets, exact authorities and incomplete M4/M5 acceptance remain unchanged.

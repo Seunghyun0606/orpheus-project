@@ -1,0 +1,24 @@
+task: TASK-034
+role: developer
+status: local_review_package_generated_measurements_and_acceptance_incomplete
+decision: .project-os/decisions/DEC-064-official-nsis-tool-acquisition.yaml
+report: docs/TASK-034_LOCAL_PACKAGE_CHECKPOINT.md
+evidence:
+  - .project-os/planning/TASK-034.local-package-manifest.json
+  - .project-os/planning/TASK-034.local-package-build-raw.json
+  - .project-os/planning/TASK-034.ordinary-replay-measurement.json
+observed:
+  - Exact official NSIS/compiler plugin hashes verified; 442 cache files checked.
+  - Five harness tests passed; compiler/source guards passed.
+  - Unsigned isolated x64 native binary and current-user NSIS installer generated.
+  - Installer 2059715 bytes, below approved 100 MiB artifact limit; not executed.
+  - Twenty ordinary Node replay samples complete; p95 3077.916 ms, development-only.
+not_observed:
+  - Native app/profile behavior, installer execution or upgrade/uninstall.
+  - Long-run qualification, commit/load/paint/startup/memory budget results.
+  - Independent review, full QA, final evaluation, rights clearance or release.
+acceptance: incomplete
+preserved:
+  - Original raw failures, production config and lock hashes, old user profiles/stores.
+  - Earlier unaccepted tasks, mandatory M4/M5 verification, TASK-035 dependencies.
+  - No signing, security bypass, unrelated toolchain acquisition, push or distribution.

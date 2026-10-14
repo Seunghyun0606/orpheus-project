@@ -1,0 +1,57 @@
+{
+  "task": "TASK-034",
+  "candidateBase": "8f52183 plus DEC-064 tool/preflight changes",
+  "status": "generated_not_launched_installed_or_released",
+  "artifacts": [
+    {
+      "file": ".qa/task034/target/x86_64-pc-windows-msvc/release/orpheus-desktop.exe",
+      "bytes": 8801792,
+      "sha256": "170be8e11e64fb8dd936c993b23e746940ca7e745bb6e85e15ad10798c602120"
+    },
+    {
+      "file": ".qa/task034/target/x86_64-pc-windows-msvc/release/bundle/nsis/Orpheus Review - TASK-034_0.1.0_x64-setup.exe",
+      "bytes": 2059715,
+      "sha256": "34055e9baa3543938938043d298136608e0b1024fade0a8269dbe00291118f31"
+    }
+  ],
+  "toolAcquisition": {
+    "source": "https://raw.githubusercontent.com/tauri-apps/tauri/tauri-cli-v2.11.5/crates/tauri-bundler/src/bundle/windows/nsis/mod.rs",
+    "cliVersion": "2.11.5",
+    "cliBinarySha256": "cf1426421faffee1460cde828a97d4ddec387f276549280cc8530f7ea04124f8",
+    "downloads": [
+      {
+        "name": "nsis-3.11.zip",
+        "url": "https://github.com/tauri-apps/binary-releases/releases/download/nsis-3.11/nsis-3.11.zip",
+        "sha1": "EF7FF767E5CBD9EDD22ADD3A32C9B8F4500BB10D",
+        "sha256": "c7d27f780ddb6cffb4730138cd1591e841f4b7edb155856901cdf5f214394fa1",
+        "bytes": 2361546,
+        "redirectOrigin": "https://release-assets.githubusercontent.com"
+      },
+      {
+        "name": "nsis_tauri_utils.dll",
+        "url": "https://github.com/tauri-apps/nsis-tauri-utils/releases/download/nsis_tauri_utils-v0.5.3/nsis_tauri_utils.dll",
+        "sha1": "75197FEE3C6A814FE035788D1C34EAD39349B860",
+        "sha256": "5ba143b5db4a87d32d6e7802e033330aae56cbceabe0d1e3ba41948385ad4709",
+        "bytes": 34304,
+        "redirectOrigin": "https://release-assets.githubusercontent.com"
+      }
+    ],
+    "verifiedFiles": 442,
+    "manifestSha256": "861653fce0efea66520bfdd6e0aa629ae7233b41c1410db1b475a1236278e030"
+  },
+  "configs": {
+    "production": "89f0b1e4b43d9a378b36497ec7305b2257521db4296c9c9186f1e85560d92029",
+    "review": "4c3a5dc4bf60308617bbeb56429e7318a633ccf9410744677ee8b7c4d7285c63",
+    "installerScript": "2e377e5d560e3f588c855752a5c049122ea25554e8ffb7264dde11b7aad0a4ad"
+  },
+  "locks": {
+    "npm": "0727a65c3047116877da761a7bf7904664b09942302177bde8ab9737141aa7ff",
+    "cargo": "2ef53dc7f4f8a0e3f5d7b621565edbadf51d41102ec48436e8561ee3dcefc6dc"
+  },
+  "profile": {
+    "expected": "C:\\Users\\limse\\AppData\\Local\\qa034\\task034-release-v1",
+    "exists": false,
+    "staticResolution": "Installed tauri 2.11.6 resolves LocalAppData + qa034 + relative dataDirectory; wry consumes that resolved context",
+    "nativeObserved": false
+  }
+}

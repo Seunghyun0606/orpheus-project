@@ -297,3 +297,11 @@ harness checks pass after retained initial failures; the isolated web output bui
 with a large-chunk warning. NSIS generation is blocked before downloads because
 tools are unresolved. Measurement is incomplete/interrupted, not a budget PASS;
 native/install/general QA and all earlier acceptance obligations remain pending.
+
+DEC-064 subsequently approves only the exact official missing NSIS tools. The
+[local package checkpoint](TASK-034_LOCAL_PACKAGE_CHECKPOINT.md) records verified
+cache inventory and a generated unsigned Windows x64 review installer, not an
+installation or release. Twenty ordinary Node replay samples yield p95 3077.916 ms;
+all long-run and native budget criteria remain pending. TASK-034 is incomplete.
+TASK-035 readiness remains unchanged and requires the next preparatory-audit decision;
+no M4/M5 QA, independent acceptance or final release gate is bypassed.

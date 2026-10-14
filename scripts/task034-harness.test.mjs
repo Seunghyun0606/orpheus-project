@@ -31,7 +31,17 @@ test('missing packaging tool/plugin causes a non-mutating preflight rejection', 
   assert.equal(reviewToolPreflight({}, () => true).ok, false);
   assert.equal(
     reviewToolPreflight({ LOCALAPPDATA: 'C:/fixture' }, () => true).code,
-    'BUNDLER_TOOL_INVENTORY_REVIEW_REQUIRED',
+    'UNVERIFIED_TOOL_CACHE',
+  );
+});
+test('manifest corruption is rejected before running any tool', () => {
+  assert.equal(
+    reviewToolPreflight(
+      { LOCALAPPDATA: 'C:/fixture' },
+      () => true,
+      () => Buffer.from('{}'),
+    ).ok,
+    false,
   );
 });
 test('review overlay keeps real entry, isolated profile, runtime skip and unsigned current-user scope', () => {
