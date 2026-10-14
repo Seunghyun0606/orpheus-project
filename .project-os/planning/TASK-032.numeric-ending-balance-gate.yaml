@@ -1,0 +1,26 @@
+task: TASK-032
+date: '2026-10-14'
+status: awaiting_human_decision
+type: architecture_change
+question: 제안된 초기 수치 효과표·10개 엔딩 조건·동일 우선순위를 승인할까요?
+proposal: .project-os/planning/TASK-032.numeric-ending-balance-proposal.yaml
+explanation: docs/TASK-032_NUMERIC_BALANCE_PROPOSAL.md
+safe_checkpoint: docs/TASK-032_RECOMMENDATION_IMPLEMENTATION.md
+reason: Previous decisions approve input scope, source matching and recommendation coverage, not numerical awards, production thresholds or ending priority/identity. Do not invent them or promote engine-fixture tuning.
+options:
+  - key: A
+    label: 초기 효과표·조건·동일 우선순위 승인 후 구현
+    scope: Implement the exact proposed once-per-run scores, listed action groups/weights, final damage receipts, ten accumulated/final-state conditions and all priorityRank=100 in the complete new authority only. Preserve all later verification obligations.
+  - key: B
+    label: 수치·피해 지수 기준을 수정한 뒤 구현
+    scope: Keep scores and ending conditions unregistered; revise the proposal against human feedback without silently changing requirements or claiming completed/reachable endings.
+important_limitations:
+  - Damage is a bounded distinct-choice immediate-cost index, not total elapsed/repeated/delayed customer impact.
+  - Actual costs/history remain recorded; prior distinct terminal-plan damage receipts survive retries.
+  - No numerical reachability/fairness, full integrated/native QA or independent acceptance is certified.
+preserved:
+  - Exact old authorities/records/stores, default MVP and strict complete-package admission.
+  - Strict supported metric availability; six optional rates are not required ending observations.
+  - Final choice cannot award the positive accumulated requirements it needs; no fallback or true ending.
+  - Conditional epilogue/schema/ending grant remain separate approvals.
+  - QA deferred, not waived; no completion, push or release.

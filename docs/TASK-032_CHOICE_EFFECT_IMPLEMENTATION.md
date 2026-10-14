@@ -1,5 +1,10 @@
 # TASK-032 — Genuine choice-effect source implementation checkpoint
 
+Subsequent addendum: DEC-056 approves the three recommendations previously proposed
+below. The [recommendation checkpoint](TASK-032_RECOMMENDATION_IMPLEMENTATION.md)
+authors their exact data extension and deferred tests. The earlier coverage
+request below is historical; the next pending gate is initial numeric balance.
+
 ## Completed
 
 DEC-055 approves option A of the source proposal at `a9f42f7`. The implementation

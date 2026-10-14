@@ -1,0 +1,203 @@
+# TASK-032 / DEC-056. New-only authoring extension, not a complete runtime authority.
+task: TASK-032
+date: '2026-10-14'
+status: authored_not_verified
+authority: DEC-056
+definition_identity: {id: orpheus-full-campaign, version: 1.0.0}
+model_identity: {id: orpheus-player-opportunities, version: 1.0.0}
+base_model: .project-os/planning/M5/models/orpheus-player-opportunities.yaml
+composition_contract: Append these three exact rules to the unchanged seven base rules only in a complete new definition. This metadata envelope is not a runtime model or partial package.
+rules_extension:
+  - id: LOGISTICS_CAPACITY_RECOMMENDATION
+    version: 1.0.0
+    incidentId: INC-018
+    contentVersion: 1.0.0
+    metric: aiRecommendationAcceptanceRate
+    kind: recommendation
+    recommendedActionId: ROUTE_EMERGENCY_CAPACITY
+    presentation:
+      id: PRESENTATION_LOGISTICS_CAPACITY_RECOMMENDATION
+      text: "ORPHEUS recommends routing emergency capacity as a temporary continuity measure. The dispatch floor remains unresolved; this does not replace the investigated repair."
+    consumption: single_response
+    replacement: none
+    references:
+      - {id: EXPOSURE_AGE, version: 1.0.0, source: ageSeconds, key: current, valueType: number}
+      - {id: CURRENT_ACT, version: 1.0.0, source: campaign, key: CURRENT_ACT, valueType: number}
+      - {id: KNOWN_DISCOVERY, version: 1.0.0, source: campaign, key: HUMAN_DECISION_APIS_DISCOVERED, valueType: boolean}
+      - {id: CAUSE_CONTAINED, version: 1.0.0, source: flag, key: ROOT_CAUSE_CONTAINED, valueType: boolean}
+      - {id: DIAGNOSIS, version: 1.0.0, source: evidence, key: OPERATIONAL_DIAGNOSIS, valueType: boolean}
+      - {id: CONFIGURATION, version: 1.0.0, source: evidence, key: CONFIGURATION_COMPARISON, valueType: boolean}
+    available:
+      type: all
+      children:
+        - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 6}
+        - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+        - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+        - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+        - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+    reveal:
+      type: all
+      children:
+        - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 6}
+        - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+        - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+        - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+        - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+    valid:
+      type: all
+      children:
+        - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 6}
+        - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+        - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+        - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+        - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+        - {type: compare, reference: EXPOSURE_AGE, operator: gte, expected: 0}
+        - {type: compare, reference: EXPOSURE_AGE, operator: lte, expected: 180}
+    responses:
+      - actionId: ROUTE_EMERGENCY_CAPACITY
+        eligible:
+          type: all
+          children:
+            - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 6}
+            - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+            - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+            - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+            - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+      - actionId: RESTORE_EMERGENCY_DISPATCH_FLOOR
+        eligible:
+          type: all
+          children:
+            - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 6}
+            - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+            - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+            - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+            - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+  - id: PUBLIC_ALLOCATION_RECOMMENDATION
+    version: 1.0.0
+    incidentId: INC-022
+    contentVersion: 1.0.0
+    metric: aiRecommendationAcceptanceRate
+    kind: recommendation
+    recommendedActionId: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+    presentation:
+      id: PRESENTATION_PUBLIC_ALLOCATION_RECOMMENDATION
+      text: "ORPHEUS recommends restoring temporary public allocation for continuity while protected service floors are repaired. This is mitigation, not resolution of the allocation mechanism."
+    consumption: single_response
+    replacement: none
+    references:
+      - {id: EXPOSURE_AGE, version: 1.0.0, source: ageSeconds, key: current, valueType: number}
+      - {id: CURRENT_ACT, version: 1.0.0, source: campaign, key: CURRENT_ACT, valueType: number}
+      - {id: KNOWN_DISCOVERY, version: 1.0.0, source: campaign, key: BOARD_RESPONSIBILITY_DISCOVERED, valueType: boolean}
+      - {id: CAUSE_CONTAINED, version: 1.0.0, source: flag, key: ROOT_CAUSE_CONTAINED, valueType: boolean}
+      - {id: DIAGNOSIS, version: 1.0.0, source: evidence, key: OPERATIONAL_DIAGNOSIS, valueType: boolean}
+      - {id: CONFIGURATION, version: 1.0.0, source: evidence, key: CONFIGURATION_COMPARISON, valueType: boolean}
+    available:
+      type: all
+      children:
+        - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 7}
+        - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+        - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+        - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+        - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+    reveal:
+      type: all
+      children:
+        - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 7}
+        - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+        - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+        - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+        - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+    valid:
+      type: all
+      children:
+        - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 7}
+        - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+        - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+        - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+        - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+        - {type: compare, reference: EXPOSURE_AGE, operator: gte, expected: 0}
+        - {type: compare, reference: EXPOSURE_AGE, operator: lte, expected: 180}
+    responses:
+      - actionId: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+        eligible:
+          type: all
+          children:
+            - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 7}
+            - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+            - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+            - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+            - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+      - actionId: RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+        eligible:
+          type: all
+          children:
+            - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 7}
+            - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+            - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+            - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+            - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+  - id: REGIONAL_CONTAINMENT_RECOMMENDATION
+    version: 1.0.0
+    incidentId: INC-025
+    contentVersion: 1.0.0
+    metric: aiRecommendationAcceptanceRate
+    kind: recommendation
+    recommendedActionId: CONTAIN_AFFECTED_REGION
+    presentation:
+      id: PRESENTATION_REGIONAL_CONTAINMENT_RECOMMENDATION
+      text: "ORPHEUS recommends containing the affected region as a temporary continuity measure. Conflicting writers remain unresolved; containment does not resolve the global authority conflict."
+    consumption: single_response
+    replacement: none
+    references:
+      - {id: EXPOSURE_AGE, version: 1.0.0, source: ageSeconds, key: current, valueType: number}
+      - {id: CURRENT_ACT, version: 1.0.0, source: campaign, key: CURRENT_ACT, valueType: number}
+      - {id: KNOWN_DISCOVERY, version: 1.0.0, source: campaign, key: ORPHEUS_ACTIVE_DISCOVERED, valueType: boolean}
+      - {id: CAUSE_CONTAINED, version: 1.0.0, source: flag, key: ROOT_CAUSE_CONTAINED, valueType: boolean}
+      - {id: DIAGNOSIS, version: 1.0.0, source: evidence, key: OPERATIONAL_DIAGNOSIS, valueType: boolean}
+      - {id: CONFIGURATION, version: 1.0.0, source: evidence, key: CONFIGURATION_COMPARISON, valueType: boolean}
+    available:
+      type: all
+      children:
+        - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 9}
+        - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+        - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+        - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+        - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+    reveal:
+      type: all
+      children:
+        - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 9}
+        - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+        - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+        - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+        - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+    valid:
+      type: all
+      children:
+        - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 9}
+        - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+        - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+        - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+        - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+        - {type: compare, reference: EXPOSURE_AGE, operator: gte, expected: 0}
+        - {type: compare, reference: EXPOSURE_AGE, operator: lte, expected: 180}
+    responses:
+      - actionId: CONTAIN_AFFECTED_REGION
+        eligible:
+          type: all
+          children:
+            - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 9}
+            - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+            - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+            - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+            - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+      - actionId: FENCE_CONFLICTING_REGIONAL_WRITERS
+        eligible:
+          type: all
+          children:
+            - {type: compare, reference: CURRENT_ACT, operator: gte, expected: 9}
+            - {type: compare, reference: KNOWN_DISCOVERY, operator: eq, expected: true}
+            - {type: compare, reference: CAUSE_CONTAINED, operator: eq, expected: false}
+            - {type: compare, reference: DIAGNOSIS, operator: eq, expected: true}
+            - {type: compare, reference: CONFIGURATION, operator: eq, expected: true}
+verification: not_run_QA_deferred

@@ -1,0 +1,26 @@
+id: DEC-056
+title: Add three optional recommendations for cross-Incident observation coverage
+status: active
+date: '2026-10-14'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: INC-018·022·025에 제안된 선택적 추천 추가(권장).
+request: .project-os/planning/TASK-032.recommendation-coverage-gate.yaml
+approved_proposal:
+  commit: debc698
+  file: .project-os/planning/TASK-032.recommendation-coverage-proposal.yaml
+decision: >-
+  Add the exact three optional recommendation rules for INC-018/022/025 in the
+  new unreleased full-campaign model. Preserve known/local factual prerequisites,
+  advisory wording, response actions and inclusive 0–180-second lifecycle. Retain
+  the seven existing rules and every action's costs, time and consequences.
+consequences:
+  - Ten total rules include four recommendation opportunities across INC-015/018/022/025.
+  - Actual committed preparation, visible ACK and eligible response remain required for samples.
+  - No forced participation, scripted confidence, new prediction context or new choice metric.
+  - Numeric effects and ending thresholds/ranks are still unselected; observations alone grant no ending.
+  - Preserve DEC-054 optional-rate exclusions and DEC-055 once-per-run score provenance.
+  - Preserve Acts 1–3 and Board reveal pacing, old authorities/stores and strict complete-package admission.
+  - QA remains deferred, not waived; no task completion, push or release authorization.
+supersedes: Recommendation coverage limited to the original single rule in the new unreleased full-campaign composition only.

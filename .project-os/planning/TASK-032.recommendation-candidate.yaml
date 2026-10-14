@@ -1,0 +1,29 @@
+task: TASK-032
+date: '2026-10-14'
+role: developer
+actor: codex-task032-developer
+source_agent: /root
+status: pending
+approval: .project-os/decisions/DEC-056-additional-campaign-recommendations.yaml
+summary: Three exact additional recommendation rule fragments and deferred lifecycle tests; numerical ending proposal remains unapproved/unapplied.
+evidence:
+  - .project-os/planning/TASK-032.recommendation-bindings.yaml
+  - src/tests/additional-recommendations.test.ts
+  - docs/TASK-032_RECOMMENDATION_IMPLEMENTATION.md
+  - docs/TASK-032_NUMERIC_BALANCE_PROPOSAL.md
+verification:
+  tests: authored_not_run
+  scenario_validation: not_run
+  typecheck: not_run
+  lint: not_run
+  build: not_run
+  independent_review: deferred
+  independent_QA: deferred
+  native_QA: deferred
+  evaluation: pending
+known_risks:
+  - Rule/model integration, lifecycle/source/ACK and durable restoration remain unverified.
+  - Unit fixtures explicitly isolate known flags/Act and do not prove full story provenance or native exposure.
+  - Numeric balance and ordinal damage approximation require human approval and later actual gameplay verification.
+  - Complete production definition/package, epilogue contracts and TASK-031/032/M4/M5 acceptance remain incomplete.
+next_step: Human decision on the exact initial numeric effect/ending proposal; no numerical scores or ending authority registered.

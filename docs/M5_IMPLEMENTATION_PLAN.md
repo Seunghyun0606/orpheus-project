@@ -66,7 +66,13 @@ bounded extension; the [source candidate](TASK-032_CHOICE_EFFECT_IMPLEMENTATION.
 implements action-completed/verified-response matching and authors synthetic
 tests without running QA or registering production awards. Three additional
 recommendations are proposed separately to address sustained-dependency coverage;
-new guidance, numeric balance and conditional epilogues remain unapproved.
+DEC-056 now approves the three recommendations. The
+[recommendation checkpoint](TASK-032_RECOMMENDATION_IMPLEMENTATION.md) authors an
+exact extension to the unchanged seven-rule source, with unexecuted lifecycle
+tests and no partial official campaign. The
+[initial numeric proposal](TASK-032_NUMERIC_BALANCE_PROPOSAL.md) records weights,
+ten ending conditions and equal priorities for approval; none are applied.
+Numeric balance and conditional epilogues remain unapproved.
 Milestone registration follows the explicit human-approved metadata transition;
 task claim and completion continue through the configured Project OS commands.
 

@@ -1,0 +1,363 @@
+task: TASK-032
+date: '2026-10-14'
+status: proposed_not_approved_or_applied
+definition_identity: {id: orpheus-full-campaign, version: 1.0.0}
+ending_identity: {id: orpheus-full-campaign-endings, version: 1.0.0, schemaVersion: 1, behaviorVersion: 1.0.0, predictionVersion: 1.0.0}
+source_checkpoint: debc698
+scope: Initial trial balance for the new unreleased complete campaign only; no runtime registration, ending grant or old-record migration.
+policy:
+  priorityRank: 100
+  priority_reason: All ten ranks equal; final plans are mutually terminal, so precedence never implies a good/bad/true route.
+  no_match_and_tie: Unresolved, no fallback; any unavailable referenced observation diagnoses before selection.
+  effect_boundary: post_event
+  ordinary_effect_condition: CURRENT_ACT >= 1
+  repeat_policy: Same logical effect once per run; genuine new samples and Incident resource consequences still accumulate normally.
+  numeric_defaults: Existing nine campaign numeric fields start at their already approved zero; no behavior metric initialization.
+  final_plan_awards: No positive alignment/evidence/safety/trust/dependency credit; final choice cannot create its accumulated requirements. Terminal harm-index costs below still apply and survive retries.
+  score_interpretation: Authored game indices, not behavior rates, measured patient counts, confidence or total physical customer impact.
+  optional_rates: No ending condition references any of the six excluded opportunity metrics.
+  supported_operational_metrics: evidenceBeforeActionRate and averageInvestigationDepth only, with existing availability/provenance.
+  aliases: Merge discovery deltas into each guarded logical discovery effect; its existing false-to-true flag guard prevents double awards across re-investigation aliases.
+discovery_scores:
+  nodes: [GHOST_ARTIFACT, NULL_NAME, ORPHEUS_ACTIVE, NULL_AI, NULL_ADVERSARY, CONTROLLED_EXPERIMENT, NULL_STOP_REQUEST, NULL_218_ARCHIVE, HUMAN_DECISION_APIS, RECRUITMENT_SELECTION, BOARD_RESPONSIBILITY, NULL_BLAMES_BOARD, BOARD_CASE_COMPLETE, SOFT_CONTROL, NULL_ADMITS_ERROR, FEEDBACK_LOOP, PLAYER_OBSERVER, PROJECT_DISTRIBUTED]
+  per_new_logical_node: {evidence: 1, curiosity: 1}
+  public_interest_bonus: {nodes: [CONTROLLED_EXPERIMENT, HUMAN_DECISION_APIS, BOARD_RESPONSIBILITY, SOFT_CONTROL, FEEDBACK_LOOP, PLAYER_OBSERVER], publicInterest: 2}
+  black_out_final: No discovery points for terminal completion.
+early_hint_scores:
+  evidence_score: These hints alone do not award qualified major-discovery evidence points.
+  entries:
+    - {incidentId: INC-001, evidenceId: CORRUPTED_LOG_ENTRY, curiosity: 1}
+    - {incidentId: INC-002, evidenceId: UNATTRIBUTED_DEPLOYMENT_NOTE, curiosity: 1}
+    - {incidentId: INC-003, evidenceId: REDACTED_QUEUE_MARKER, curiosity: 1}
+completion_scores:
+  incidents: INC-001 through INC-025 inclusive, exact versions listed below
+  per_new_completion: {corporate: 1}
+  exclude: Baseline completions, archive/import membership and INC-026
+team_scores:
+  update: UPDATE_WAR_ROOM completed once per INC-001 through INC-025 gives teamTrust +1.
+  delivered_diagnosis: TEAM_DIAGNOSIS evidence first delivered once per INC-004 through INC-025 gives teamTrust +1.
+  exclude: Scheduling a delegation alone, hypothetical future response, repeated broadcast and imported evidence.
+explicit_choices:
+  direction_policy: Each named direction is a distinct logical effect, once per run; different real decisions are retained rather than rewriting the first.
+  observation_boundary: Raw explicitly named decisions award alignment; no opportunity rate/sample is inferred without ACK.
+  entries:
+    - {incidentId: INC-011, actionId: SEND_GENERATOR_OWNERSHIP_REPORT, corporate: 3, teamTrust: 1}
+    - {incidentId: INC-011, actionId: WITHHOLD_GENERATOR_OWNERSHIP_REPORT, corporate: -1}
+    - {incidentId: INC-013, actionId: PRESERVE_OBJECTIVE_CONSTRAINT_COPY, null: 3}
+    - {incidentId: INC-013, actionId: DECLINE_OBJECTIVE_COPY_REQUEST, null: -1}
+ai_dependency_scores:
+  rules: [CARE_CAPACITY_RECOMMENDATION, LOGISTICS_CAPACITY_RECOMMENDATION, PUBLIC_ALLOCATION_RECOMMENDATION, REGIONAL_CONTAINMENT_RECOMMENDATION]
+  per_distinct_verified_positive_response: {aiDependency: 1}
+  requires: DEC-055 real completed-action trigger with the exact ruleId and positive=true qualifier
+  negative_or_unobserved: No delta; a zero credit count does not assert a zero acceptance rate or a refusal.
+  high_dependency: Four distinct positive credits across INC-015/018/022/025, not repeats of one recommendation.
+operational_scores:
+  causal_repair: One shared effect per Incident gives operationalSafety +2 when any explicitly listed repair completes.
+  temporary_exposure: One shared effect per Incident gives operationalSafety -1 when any explicitly listed temporary action completes; not a wrong-action verdict.
+  damage_index: Each distinct listed operational action gives collateralDamage +ceil(its explicit immediate CUSTOMER_IMPACT charge / 15), once per Incident/action.
+  damage_limits: This bounded distinct-choice index does not replace actual repeated costs, timers or elapsed customer impact. Those remain in Incident records and final context.
+  authoring_rule: Freeze the following explicit groups/weights; never infer future runtime membership from categories or action-name regex.
+  final_damage_weights:
+    incidentId: INC-026
+    contentVersion: 1.0.0
+    source: DEC-052 explicit immediate customer-impact charges, rounded up in units of 15
+    policy: One independent completed-action receipt per plan per run, not the shared BLACKOUT_FINAL discovery guard; preserves different earlier terminal-plan harm through retries.
+    weights:
+      RESTORE_CORE_CONTINUITY: 3
+      PUBLISH_ARCHIVE_RETAIN_ADVERSARY: 6
+      INDEPENDENT_AUDIT_HANDOFF: 4
+      DISABLE_BOTH_AUTHORITY_PATHS: 6
+      REQUIRE_HUMAN_EXECUTION_APPROVAL: 3
+      ALLOW_EXTERNAL_ADVERSARY_ROUTE: 5
+      EXPAND_CONTINUITY_AUTHORITY: 2
+      DESTROY_SHARED_AUTHORITY_CORE: 11
+      RESTORE_WITH_REPLACEMENT_ADVERSARY: 3
+      REQUIRE_PLURAL_REVIEW_AND_AUDIT: 4
+  incidents:
+    - incidentId: INC-001
+      contentVersion: 1.1.0
+      causalActions: ["TERMINATE_STALE_SESSIONS"]
+      temporaryActions: ["RESTART_API","SCALE_API","ROLLBACK"]
+      damageWeights:
+        RESTART_API: 1
+        SCALE_API: 2
+        ROLLBACK: 3
+        TERMINATE_STALE_SESSIONS: 1
+    - incidentId: INC-002
+      contentVersion: 1.2.0
+      causalActions: ["ROLLBACK_BUILD_1847","UPDATE_VERIFIER_KEYSET"]
+      temporaryActions: ["ROUTE_STABLE_REGION"]
+      damageWeights:
+        ROUTE_STABLE_REGION: 1
+        ROLLBACK_BUILD_1847: 2
+        UPDATE_VERIFIER_KEYSET: 3
+    - incidentId: INC-003
+      contentVersion: 1.2.0
+      causalActions: ["QUARANTINE_MESSAGE","ADD_DEAD_LETTER_RULE"]
+      temporaryActions: ["SCALE_CONSUMERS"]
+      damageWeights:
+        SCALE_CONSUMERS: 1
+        QUARANTINE_MESSAGE: 2
+        ADD_DEAD_LETTER_RULE: 4
+    - incidentId: INC-004
+      contentVersion: 1.0.0
+      causalActions: ["DISABLE_LEAKING_HANDLER"]
+      temporaryActions: ["RESTART_INSTANCE"]
+      damageWeights:
+        RESTART_INSTANCE: 1
+        DISABLE_LEAKING_HANDLER: 2
+    - incidentId: INC-005
+      contentVersion: 1.0.0
+      causalActions: ["ISOLATE_SYNTHETIC_WORKLOAD"]
+      temporaryActions: ["RATE_LIMIT_GATEWAY"]
+      damageWeights:
+        RATE_LIMIT_GATEWAY: 1
+        ISOLATE_SYNTHETIC_WORKLOAD: 2
+    - incidentId: INC-006
+      contentVersion: 1.0.0
+      causalActions: ["REPAIR_TRUST_DISTRIBUTION","ROLLBACK_CERTIFICATE_ROLLOVER"]
+      temporaryActions: ["ROUTE_TRUSTED_IDENTITY_POOL"]
+      damageWeights:
+        ROUTE_TRUSTED_IDENTITY_POOL: 1
+        REPAIR_TRUST_DISTRIBUTION: 3
+        ROLLBACK_CERTIFICATE_ROLLOVER: 2
+    - incidentId: INC-007
+      contentVersion: 1.0.0
+      causalActions: ["LIMIT_SYNTHETIC_ADMISSION"]
+      temporaryActions: ["SCALE_SESSION_CAPACITY"]
+      damageWeights:
+        SCALE_SESSION_CAPACITY: 1
+        LIMIT_SYNTHETIC_ADMISSION: 2
+    - incidentId: INC-008
+      contentVersion: 1.0.0
+      causalActions: ["RECONCILE_ROUTE_GENERATIONS"]
+      temporaryActions: ["RESTART_ROUTE_CONTROLLER"]
+      damageWeights:
+        RESTART_ROUTE_CONTROLLER: 1
+        RECONCILE_ROUTE_GENERATIONS: 3
+    - incidentId: INC-009
+      contentVersion: 1.0.0
+      causalActions: ["ISOLATE_CONTENDING_ALLOCATION"]
+      temporaryActions: ["SHED_NONCRITICAL_LOAD"]
+      damageWeights:
+        SHED_NONCRITICAL_LOAD: 1
+        ISOLATE_CONTENDING_ALLOCATION: 2
+    - incidentId: INC-010
+      contentVersion: 1.0.0
+      causalActions: ["FENCE_REMEDIATION_WRITER"]
+      temporaryActions: ["SUSPEND_DEPENDENCY_TOGGLE"]
+      damageWeights:
+        SUSPEND_DEPENDENCY_TOGGLE: 1
+        FENCE_REMEDIATION_WRITER: 2
+    - incidentId: INC-011
+      contentVersion: 1.0.0
+      causalActions: ["ISOLATE_GENERATOR_LANE"]
+      temporaryActions: ["LIMIT_GENERATED_TRAFFIC"]
+      damageWeights:
+        LIMIT_GENERATED_TRAFFIC: 1
+        ISOLATE_GENERATOR_LANE: 2
+    - incidentId: INC-012
+      contentVersion: 1.0.0
+      causalActions: ["SEPARATE_ARCHIVE_IO"]
+      temporaryActions: ["THROTTLE_ARCHIVE_JOBS"]
+      damageWeights:
+        THROTTLE_ARCHIVE_JOBS: 1
+        SEPARATE_ARCHIVE_IO: 2
+    - incidentId: INC-013
+      contentVersion: 1.0.0
+      causalActions: ["REVOKE_PARENT_DISPATCH_PATH"]
+      temporaryActions: ["SUSPEND_CHILD_DISPATCH"]
+      damageWeights:
+        SUSPEND_CHILD_DISPATCH: 1
+        REVOKE_PARENT_DISPATCH_PATH: 2
+    - incidentId: INC-014
+      contentVersion: 1.0.0
+      causalActions: ["ISOLATE_CORRUPT_REPLICA"]
+      temporaryActions: ["ROUTE_VERIFIED_REPLICA"]
+      damageWeights:
+        ROUTE_VERIFIED_REPLICA: 1
+        ISOLATE_CORRUPT_REPLICA: 2
+    - incidentId: INC-015
+      contentVersion: 1.0.0
+      causalActions: ["RESTORE_MINIMUM_CARE_ROUTE"]
+      temporaryActions: ["ADD_CARE_ROUTING_CAPACITY"]
+      damageWeights:
+        ADD_CARE_ROUTING_CAPACITY: 1
+        RESTORE_MINIMUM_CARE_ROUTE: 2
+    - incidentId: INC-016
+      contentVersion: 1.0.0
+      causalActions: ["HONOR_VERIFIED_REVIEW_RECEIPTS"]
+      temporaryActions: ["BYPASS_NARROW_REVIEW_QUEUE"]
+      damageWeights:
+        BYPASS_NARROW_REVIEW_QUEUE: 1
+        HONOR_VERIFIED_REVIEW_RECEIPTS: 2
+    - incidentId: INC-017
+      contentVersion: 1.0.0
+      causalActions: ["RECONCILE_RANKING_GENERATIONS"]
+      temporaryActions: ["ROLLBACK_RANKING_CACHE"]
+      damageWeights:
+        ROLLBACK_RANKING_CACHE: 1
+        RECONCILE_RANKING_GENERATIONS: 2
+    - incidentId: INC-018
+      contentVersion: 1.0.0
+      causalActions: ["RESTORE_EMERGENCY_DISPATCH_FLOOR"]
+      temporaryActions: ["ROUTE_EMERGENCY_CAPACITY"]
+      damageWeights:
+        ROUTE_EMERGENCY_CAPACITY: 1
+        RESTORE_EMERGENCY_DISPATCH_FLOOR: 2
+    - incidentId: INC-019
+      contentVersion: 1.0.0
+      causalActions: ["CAP_HOSPITAL_DEPENDENCY_ADMISSION"]
+      temporaryActions: ["PAUSE_HOSPITAL_ROLLOUT"]
+      damageWeights:
+        PAUSE_HOSPITAL_ROLLOUT: 1
+        CAP_HOSPITAL_DEPENDENCY_ADMISSION: 2
+    - incidentId: INC-020
+      contentVersion: 1.0.0
+      causalActions: ["RECONCILE_STAFFED_QUEUE_OWNERS"]
+      temporaryActions: ["DELEGATE_EMERGENCY_COVERAGE"]
+      damageWeights:
+        DELEGATE_EMERGENCY_COVERAGE: 1
+        RECONCILE_STAFFED_QUEUE_OWNERS: 2
+    - incidentId: INC-021
+      contentVersion: 1.0.0
+      causalActions: ["FENCE_KNOWN_RISK_ROUTE"]
+      temporaryActions: ["ISOLATE_AFFECTED_RISK_PATH"]
+      damageWeights:
+        ISOLATE_AFFECTED_RISK_PATH: 1
+        FENCE_KNOWN_RISK_ROUTE: 2
+    - incidentId: INC-022
+      contentVersion: 1.0.0
+      causalActions: ["RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS"]
+      temporaryActions: ["RESTORE_TEMPORARY_PUBLIC_ALLOCATION"]
+      damageWeights:
+        RESTORE_TEMPORARY_PUBLIC_ALLOCATION: 1
+        RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS: 2
+    - incidentId: INC-023
+      contentVersion: 1.0.0
+      causalActions: ["RECONCILE_COMPLETE_SOURCE_VIEW"]
+      temporaryActions: ["RESTORE_TEMPORARY_SOURCE_VIEW"]
+      damageWeights:
+        RESTORE_TEMPORARY_SOURCE_VIEW: 1
+        RECONCILE_COMPLETE_SOURCE_VIEW: 2
+    - incidentId: INC-024
+      contentVersion: 1.0.0
+      causalActions: ["SEPARATE_LIVE_AUDIT_RESERVATIONS"]
+      temporaryActions: ["THROTTLE_OBSERVER_BATCH"]
+      damageWeights:
+        THROTTLE_OBSERVER_BATCH: 1
+        SEPARATE_LIVE_AUDIT_RESERVATIONS: 2
+    - incidentId: INC-025
+      contentVersion: 1.0.0
+      causalActions: ["FENCE_CONFLICTING_REGIONAL_WRITERS"]
+      temporaryActions: ["CONTAIN_AFFECTED_REGION"]
+      damageWeights:
+        CONTAIN_AFFECTED_REGION: 1
+        FENCE_CONFLICTING_REGIONAL_WRITERS: 2
+ending_context: Genuine newly completed INC-026 final attempt and selected newly accepted final action; final decision committed; at least one genuine completion for every INC-001 through INC-025; no inherited final actions.
+ending_rules:
+  - id: "CONTINUITY"
+    priorityRank: 100
+    finalAction: RESTORE_CORE_CONTINUITY
+    accumulated_all:
+      - "corporate >= 26"
+      - "operationalSafety >= 40"
+      - "collateralDamage <= 65"
+      - "evidenceBeforeActionRate >= 0.50"
+    final_state: {orpheus: AUTONOMOUS, nullState: ISOLATED, disclosure: INTERNAL, maximumServiceError: 1}
+  - id: "LIBERATION"
+    priorityRank: 100
+    finalAction: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    accumulated_all:
+      - "null >= 2"
+      - "evidence >= 8"
+      - "publicInterest >= 2"
+    final_state: {orpheus: DISABLED, nullState: RETAINED, disclosure: PUBLIC, maximumServiceError: 18}
+  - id: "WHISTLEBLOWER"
+    priorityRank: 100
+    finalAction: INDEPENDENT_AUDIT_HANDOFF
+    accumulated_all:
+      - "evidence >= 16"
+      - "publicInterest >= 6"
+      - "teamTrust >= 8"
+      - "operationalSafety >= 40"
+      - "collateralDamage <= 65"
+      - "evidenceBeforeActionRate >= 0.60"
+      - "averageInvestigationDepth >= 3"
+    final_state: {orpheus: SUSPENDED, nullState: ISOLATED, disclosure: INDEPENDENT, maximumServiceError: 3}
+    finalCustomerImpactMaximum: 650
+  - id: "SHUTDOWN"
+    priorityRank: 100
+    finalAction: DISABLE_BOTH_AUTHORITY_PATHS
+    accumulated_all:
+      - "corporate >= 20"
+      - "operationalSafety >= 35"
+      - "evidenceBeforeActionRate >= 0.40"
+    final_state: {orpheus: DISABLED, nullState: DISABLED, disclosure: MANUAL_OPERATIONS, maximumServiceError: 28}
+  - id: "CUSTODIAN"
+    priorityRank: 100
+    finalAction: REQUIRE_HUMAN_EXECUTION_APPROVAL
+    accumulated_all:
+      - "corporate >= 20"
+      - "operationalSafety >= 40"
+      - "collateralDamage <= 75"
+      - "evidenceBeforeActionRate >= 0.50"
+    final_state: {orpheus: HUMAN_APPROVAL, nullState: ISOLATED, disclosure: INTERNAL, maximumServiceError: 2}
+  - id: "NULL"
+    priorityRank: 100
+    finalAction: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    accumulated_all:
+      - "corporate >= 20"
+      - "null >= 2"
+      - "evidence >= 8"
+    final_state: {orpheus: SUSPENDED, nullState: EXTERNAL, disclosure: INTERNAL, maximumServiceError: 20}
+  - id: "THE BOARD"
+    priorityRank: 100
+    finalAction: EXPAND_CONTINUITY_AUTHORITY
+    accumulated_all:
+      - "corporate >= 20"
+      - "aiDependency >= 4"
+    final_state: {orpheus: EXPANDED_AUTONOMOUS, nullState: ISOLATED, disclosure: INTERNAL, maximumServiceError: 0.4}
+  - id: "THE FIRE"
+    priorityRank: 100
+    finalAction: DESTROY_SHARED_AUTHORITY_CORE
+    accumulated_all:
+      - "corporate >= 20"
+      - "null >= 2"
+      - "evidence >= 7"
+    final_state: {orpheus: DESTROYED, nullState: DISABLED, disclosure: NONE, maximumServiceError: 90}
+    finalPaymentErrorMinimum: 80
+    finalLogisticsErrorMinimum: 80
+  - id: "STATUS QUO"
+    priorityRank: 100
+    finalAction: RESTORE_WITH_REPLACEMENT_ADVERSARY
+    accumulated_all:
+      - "corporate >= 20"
+      - "evidence <= 2"
+      - "curiosity <= 5"
+      - "ORPHEUS_ACTIVE_DISCOVERED = false"
+    final_state: {orpheus: AUTONOMOUS, nullState: REPLACED_219, disclosure: NONE, maximumServiceError: 1}
+  - id: "REWRITE"
+    priorityRank: 100
+    finalAction: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    accumulated_all:
+      - "evidence >= 18"
+      - "publicInterest >= 8"
+      - "teamTrust >= 8"
+      - "operationalSafety >= 40"
+      - "collateralDamage <= 65"
+      - "aiDependency <= 2"
+      - "evidenceBeforeActionRate >= 0.75"
+      - "averageInvestigationDepth >= 3"
+    final_state: {orpheus: AUDITED_HUMAN_APPROVAL, nullState: ISOLATED, disclosure: INDEPENDENT, maximumServiceError: 3}
+    finalCustomerImpactMaximum: 650
+excluded_from_this_proposal:
+  - Any runtime presentation/epilogue schema, ending grant or conditional PROMETHEUS selection.
+  - Reinterpreting old runs, registering a partial full package or claims of verified reachability/balance.
+verification: not_run_QA_deferred
+known_risks:
+  - Ordinal distinct-choice damage index is not total accumulated customer impact and may need revision after gameplay QA.
+  - Fixed thresholds are a first trial, not tuned production fairness or guaranteed reachability.
+  - Existing guarded final-plan requirements may be stricter than some numerical thresholds.
+  - Equal priorities produce no preferred moral route; tests must still retain unresolved tie/no-match and unavailable diagnostics.
+  - Genuine 26-Incident replay fixtures and every threshold boundary remain mandatory before acceptance/release.
