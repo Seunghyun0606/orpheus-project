@@ -17,7 +17,13 @@ describe('DEC-059/060 complete composition source data (deferred)', () => {
     const data = authored();
     const priorCandidate = read('.project-os/planning/M5/composition/campaign-definition.yaml');
     expect(priorCandidate).not.toHaveProperty('replayAccess');
-    expect(data.definition).toEqual({ ...priorCandidate, replayAccess: 'completed_prior_acts' });
+    // Retain the historical malformed key; the new source repairs YAML's null-key
+    // serialization, without changing either approved initial numeric value.
+    expect(data.definition).toEqual({
+      ...priorCandidate,
+      initial: { ...priorCandidate.initial, alignment: { corporate: 0, null: 0 } },
+      replayAccess: 'completed_prior_acts',
+    });
     expect(data.definition).toEqual(
       read('src/scenario/data/full-campaign/definitions/campaign.yaml'),
     );

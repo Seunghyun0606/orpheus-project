@@ -92,6 +92,13 @@ acceptance. Its [checkpoint](docs/TASK-034_DOCUMENTATION_CHECKPOINT.md) adds
 No benchmark or installer was produced. Actual budgets, package implementation,
 measurements and local generation require the next concrete human approval;
 installer execution, native QA, TASK-035 and release remain separately gated.
+DEC-063 approves that delivery proposal. The
+[implementation checkpoint](docs/TASK-034_IMPLEMENTATION.md) adds measurement and
+isolated review build tools. Scoped compiler/source validation and harness checks
+pass after preserved initial failures; web output builds with large-chunk warnings.
+Installer generation is blocked before tool downloads, and benchmark samples are
+incomplete. No native binary/installer, budget PASS or earlier task acceptance is
+claimed. Missing NSIS/tool acquisition is the next explicit decision.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,
 document QA and distinct evaluation PASS. M4 verification remains mandatory before final M5 acceptance/release. Original
 planning drafts remain historical checkpoints. The [M4 plan](docs/M4_IMPLEMENTATION_PLAN.md) preserves chronological

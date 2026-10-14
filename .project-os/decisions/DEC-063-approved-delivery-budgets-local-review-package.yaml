@@ -1,0 +1,24 @@
+id: DEC-063
+title: Approved delivery budgets and isolated local Windows review generation
+status: active
+date: '2026-10-14'
+applies_to: [M5, TASK-034]
+human_approval:
+  selected_option: A
+  instruction: 제안 승인 후 TASK-034 구현·실측·로컬 패키지 생성.
+approved_proposal:
+  commit: 7b91e50
+  file: .project-os/planning/TASK-034.delivery-proposal.yaml
+decision: >-
+  Apply the exact proposed benchmark boundaries, budgets and Windows 11 x64
+  qualification target. Implement measurement tooling and isolated unsigned
+  current-user NSIS review configuration; permit bounded TASK-034 checks,
+  measurements and local artifact generation only.
+consequences:
+  - Retain raw failures, qualifying datasets and hashes; failed budgets block readiness.
+  - No architecture/schema/storage/authority optimization or weakened verification by implication.
+  - Preserve production config, old user profiles and exact history/receipts.
+  - Missing tool downloads/security prompts require a separate human decision.
+  - Installer execution, app launch/native/install QA and general M4/M5 QA remain deferred.
+  - No credentials, signing, updater, upload, push or release permission.
+  - All earlier incomplete tasks, independent verification and TASK-035 dependencies remain.

@@ -11,7 +11,7 @@ definition_header_fragment:
   recordVersion: 2
 initial_fragment:
   act: 1
-  alignment: {corporate: 0, null: 0}
+  alignment: {corporate: 0, 'null': 0}
   values:
     publicInterest: 0
     operationalSafety: 0

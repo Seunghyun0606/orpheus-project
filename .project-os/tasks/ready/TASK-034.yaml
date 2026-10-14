@@ -35,6 +35,7 @@ relevant_files:
   - scripts/
   - src/tests/
 active_decisions:
+  - .project-os/decisions/DEC-063-approved-delivery-budgets-local-review-package.yaml
   - .project-os/decisions/DEC-062-early-delivery-documentation-proposals.yaml
   - .project-os/decisions/DEC-039-m5-independent-verification-delegation.yaml
   - .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml

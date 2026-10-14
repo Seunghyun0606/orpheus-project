@@ -123,7 +123,7 @@ npm run lint
 npm run format:check
 npm test
 npm run test:replays
-node --test scripts/authoring/full-campaign.test.mjs scripts/authoring/task032-balance.test.mjs scripts/authoring/task032-presentations.test.mjs
+npm test -- scripts/authoring/full-campaign.test.mjs scripts/authoring/task032-balance.test.mjs scripts/authoring/task032-presentations.test.mjs
 npm run build
 npm run build:desktop
 ```

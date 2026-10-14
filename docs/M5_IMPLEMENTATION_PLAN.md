@@ -289,3 +289,11 @@ performance/local-packaging proposal. No benchmark, config, binary or installer
 was produced, and no QA or acceptance was claimed. Concrete budget/Windows review
 package approval precedes implementation and bounded execution; native/install
 QA, TASK-035, M4/M5 closure and release remain separately gated.
+
+DEC-063 subsequently approves the concrete TASK-034 delivery proposal. The
+[implementation checkpoint](TASK-034_IMPLEMENTATION.md) adds measurement tooling
+and isolated review configuration. Scoped typecheck/source validation and four
+harness checks pass after retained initial failures; the isolated web output builds
+with a large-chunk warning. NSIS generation is blocked before downloads because
+tools are unresolved. Measurement is incomplete/interrupted, not a budget PASS;
+native/install/general QA and all earlier acceptance obligations remain pending.

@@ -41,6 +41,8 @@ export function authorFullCampaign(readPlanning, readContent, manifest) {
   const scores = readPlanning('TASK-032.numeric-bindings.yaml');
   const prose = readPlanning('TASK-032.ending-presentation-bindings.yaml');
   const initial = structuredClone(initialBindings.initial_fragment);
+  if (Object.keys(initial.alignment).sort().join(',') !== 'corporate,null')
+    throw new Error('Initial alignment keys must be corporate and quoted YAML null.');
   for (const source of logical) {
     for (const [key, value] of Object.entries(source.initial_narrative_flags_fragment ?? {})) {
       if (

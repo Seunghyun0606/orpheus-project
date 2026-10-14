@@ -147,8 +147,25 @@ describe('local synthesis lifecycle (deferred)', () => {
 });
 describe('committed cue projection (deferred)', () => {
   it('uses only new command events and revealed status, never hidden signals or checkpoint history', () => {
-    const base = {
-      operation: { kind: 'command' },
+    const identity = {
+      operationId: 'cue-operation',
+      runId: 'cue-run',
+      sequence: 1,
+      definitionId: 'cue-definition',
+      definitionVersion: '1.0.0',
+      canonicalVersion: 1 as const,
+      replayVersion: 2 as const,
+    };
+    const base: CampaignCommittedUpdate = {
+      operation: {
+        ...identity,
+        kind: 'command',
+        attemptId: 'cue-attempt',
+        inputId: 'cue-input',
+        commandSequence: 0,
+        priorHead: 'cue-head',
+        command: { type: 'perform_action', actionId: 'READ_STATUS' },
+      },
       events: [
         {
           sequence: 1,
@@ -160,7 +177,7 @@ describe('committed cue projection (deferred)', () => {
         },
       ],
       signals: { status: { value: 'CRITICAL', revealed: false } },
-    } as CampaignCommittedUpdate;
+    };
     expect(committedCues(base)).toEqual([]);
     expect(
       committedCues({ ...base, signals: { status: { value: 'CRITICAL', revealed: true } } }),
@@ -168,14 +185,27 @@ describe('committed cue projection (deferred)', () => {
     expect(
       committedCues({
         ...base,
-        operation: { kind: 'checkpoint' } as CampaignCommittedUpdate['operation'],
+        operation: {
+          ...identity,
+          kind: 'checkpoint',
+          attemptId: 'cue-checkpoint',
+          incidentId: 'INC-001',
+          sourceBytes: '{}',
+          confirmed: true,
+        },
       }),
     ).toEqual([]);
     expect(committedCues({ ...base, events: [] })).toEqual([]);
     expect(
       committedCues({
         ...base,
-        operation: { kind: 'start' } as CampaignCommittedUpdate['operation'],
+        operation: {
+          ...identity,
+          kind: 'start',
+          attemptId: 'cue-start',
+          incidentId: 'INC-001',
+          seed: 1,
+        },
       }),
     ).toEqual(['pager']);
   });

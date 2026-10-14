@@ -1,0 +1,65 @@
+{
+  "task": "TASK-034",
+  "scope": "final_bounded_checks_and_interrupted_development_measurement",
+  "finalChecks": {
+    "chunk_id": "b4e0f8",
+    "wall_time_seconds": 5.6275936,
+    "exit_code": 0,
+    "original_token_count": 236,
+    "output": "scripts/benchmark-task034.mjs 65ms\nscripts/task034-harness.test.mjs 9ms\ndocs/TASK-034_IMPLEMENTATION.md 36ms\ndocs/M5_IMPLEMENTATION_PLAN.md 40ms (unchanged)\nREADME.md 32ms (unchanged)\n\n> orpheus-project@0.1.0 test:task034:harness\n> node --test scripts/task034-harness.test.mjs\n\n✔ nearest-rank p95 retains all samples and rejects invalid/empty inputs (0.6279ms)\n✔ dataset qualification cannot use inherited completion or rejected action padding (0.2305ms)\n✔ missing packaging tool/plugin causes a non-mutating preflight rejection (0.1907ms)\n✔ review overlay keeps real entry, isolated profile, runtime skip and unsigned current-user scope (1.0802ms)\nℹ tests 4\nℹ suites 0\nℹ pass 4\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 67.8083\n\n> orpheus-project@0.1.0 typecheck\n> tsc --noEmit\n\n\n> orpheus-project@0.1.0 validate:scenarios\n> node scripts/validate-scenarios.mjs\n\nScenario validation passed: 64 file(s).\n"
+  },
+  "finalPackagingPreflight": {
+    "chunk_id": "652f02",
+    "wall_time_seconds": 0.0798117,
+    "exit_code": 1,
+    "original_token_count": 59,
+    "output": "{\"task\":\"TASK-034\",\"status\":\"blocked_no_download_attempted\",\"ok\":false,\"code\":\"PACKAGING_TOOLS_UNRESOLVED\",\"tools\":\"C:\\\\Users\\\\limse\\\\AppData\\\\Local\\\\tauri\\\\NSIS\",\"missing\":[\"makensis.exe\",\"Plugins/x86-unicode/nsis_tauri_utils.dll\"]}\n"
+  },
+  "interruptedMeasurement": {
+    "start": {
+      "chunk_id": "b055ef",
+      "wall_time_seconds": 10.0031218,
+      "session_id": 60679,
+      "original_token_count": 42,
+      "output": "\n> orpheus-project@0.1.0 benchmark:task034\n> node scripts/benchmark-task034.mjs\n\n{\"progress\":\"ordinary completed INC-001\"}\n{\"progress\":\"ordinary completed INC-002\"}\n"
+    },
+    "progress": [
+      {
+        "chunk_id": "8d293e",
+        "wall_time_seconds": 5.0017338,
+        "session_id": 60679,
+        "original_token_count": 105,
+        "output": "{\"progress\":\"ordinary completed INC-003\"}\n{\"progress\":\"ordinary completed INC-004\"}\n{\"progress\":\"ordinary completed INC-005\"}\n{\"progress\":\"ordinary completed INC-006\"}\n{\"progress\":\"ordinary completed INC-007\"}\n{\"progress\":\"ordinary completed INC-008\"}\n{\"progress\":\"ordinary completed INC-009\"}\n{\"progress\":\"ordinary completed INC-010\"}\n{\"progress\":\"ordinary completed INC-011\"}\n{\"progress\":\"ordinary completed INC-012\"}\n"
+      },
+      {
+        "chunk_id": "d28176",
+        "wall_time_seconds": 5.0021752,
+        "session_id": 60679,
+        "original_token_count": 105,
+        "output": "{\"progress\":\"ordinary completed INC-013\"}\n{\"progress\":\"ordinary completed INC-014\"}\n{\"progress\":\"ordinary completed INC-015\"}\n{\"progress\":\"ordinary completed INC-016\"}\n{\"progress\":\"ordinary completed INC-017\"}\n{\"progress\":\"ordinary completed INC-018\"}\n{\"progress\":\"ordinary completed INC-019\"}\n{\"progress\":\"ordinary completed INC-020\"}\n{\"progress\":\"ordinary completed INC-021\"}\n{\"progress\":\"ordinary completed INC-022\"}\n"
+      },
+      {
+        "chunk_id": "08e9c5",
+        "wall_time_seconds": 5.012848,
+        "session_id": 60679,
+        "original_token_count": 32,
+        "output": "{\"progress\":\"ordinary completed INC-023\"}\n{\"progress\":\"ordinary completed INC-024\"}\n{\"progress\":\"ordinary completed INC-025\"}\n"
+      },
+      {
+        "chunk_id": "31f724",
+        "wall_time_seconds": 5.0074206,
+        "session_id": 60679,
+        "original_token_count": 53,
+        "output": "{\"progress\":\"ordinary completed INC-026\"}\n{\"progress\":\"replay_ordinary trial 1/22\"}\n{\"progress\":\"replay_ordinary trial 6/22\"}\n{\"progress\":\"replay_ordinary trial 11/22\"}\n{\"progress\":\"replay_ordinary trial 16/22\"}\n"
+      }
+    ],
+    "termination": "Verified own node process PID 38184 exact command line, then Stop-Process; session 60679 reported exit 1, no final report.",
+    "status": "incomplete_no_complete_samples_no_budget_result",
+    "pending": [
+      "long dataset",
+      "all complete sample series",
+      "native metrics",
+      "installer"
+    ]
+  }
+}

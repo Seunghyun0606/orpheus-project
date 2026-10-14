@@ -1,0 +1,31 @@
+task: TASK-034
+date: '2026-10-14'
+status: awaiting_human_decision
+type: architecture_change
+question: 누락된 NSIS 컴파일러·Tauri 필수 플러그인 확보를 승인할까요?
+reason: >-
+  DEC-063 forbids implicitly acquiring missing tools. The local review build
+  preflight found no makensis.exe or nsis_tauri_utils.dll in the inspected cache;
+  PATH and standard NSIS install locations also provided no compiler. Invoking
+  the bundler could otherwise download tools automatically. It was not invoked.
+safe_checkpoint: docs/TASK-034_IMPLEMENTATION.md
+evidence: .project-os/planning/TASK-034.scoped-checks-raw.json
+options:
+  - key: A
+    label: 잠금 Tauri 버전의 공식 NSIS 도구·플러그인 확보 승인
+    scope: >-
+      Verify the installed lockfile-pinned CLI's exact required tool inventory,
+      official upstream URLs and integrity checks. Acquire only missing NSIS
+      compiler/bundler plugin artifacts, then update the fail-closed cache
+      preflight and resume the already approved local unsigned review generation.
+      No installer/app execution, other toolchain acquisition, credentials,
+      signing, security bypass, updater, public distribution or general QA permission.
+  - key: B
+    label: 설치 파일 생성 보류, 현재 웹 아티팩트·측정 도구 유지
+    scope: >-
+      Keep NSIS generation blocked without downloads. Do not substitute a portable
+      release, no-bundle binary or fixture as an installer or acceptance PASS.
+      Preserve implementation/evidence and incomplete measurement/native obligations.
+preserved:
+  - Approved budgets/datasets and exact saved authority/history boundaries.
+  - No weakened checks, profile reset, main/qa024 profile access, push or release.
