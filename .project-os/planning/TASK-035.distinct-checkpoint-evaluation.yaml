@@ -1,0 +1,34 @@
+task: TASK-035
+kind: distinct_read_only_checkpoint_consistency_audit_not_final_acceptance
+role: evaluator
+actor: /root/task035_checkpoint_evaluator
+recorded_by: /root
+date: '2026-10-14'
+decision: HUMAN_GATE
+status: evidence_consistent_acceptance_blocked
+initial_candidate: 02680710a07e1960159ce5510fd9e9ea9e561c02
+repair_candidate: a6e509b3977e655219074cdd2c7d1f32041326da
+direct_audit:
+  - All 14 command index entries match original report SHA-256, actor/candidate/status/timing and stdout/stderr stream hashes.
+  - Initial 660/693 PASS with 33 failures and additional harness collection failure retained.
+  - Repair 690/694 PASS with four unchanged 5000 ms timeouts; durations are not performance-budget samples.
+  - Narrow source diff contains only fixture/assertion, audio cleanup and runner/config changes.
+  - Production YAML/engine/pinned authorities/storage schema/budgets unchanged; no raised timeouts or deleted assertions/history.
+  - Node-owned harness exclusion retains separate recorded five checks.
+  - M4/M5 and TASK-024/027–035 active, TASK-025 ready; no completion transition.
+audited_not_executed:
+  - Reviewer production INC-001 operation/projection probe.
+  - Independent QA two full default suites.
+  - Root compiler/lint/validation/replays/harness/doctor outcomes.
+finding: >-
+  Static investigation projection supports unresolved absent narrative and actual
+  War Room/work-capacity presentation. Pinned version and transient/archive
+  lifecycle choice needs approval before implementation. No substantive
+  contradiction found in the checkpoint records.
+provenance_limit: Documentation/evidence additions audited as uncommitted records, not the clean tested repair candidate.
+remaining:
+  - Runtime presentation findings, format failure and four timeouts.
+  - Genuine ending/reveal routes, remaining performance budgets and M4 restoration.
+  - Native/install verification, rights clearance and independent final task acceptance.
+mutation_boundary: No tests/builds/native/install execution, edits, commits or state transitions by evaluator.
+inspection_limit: Two read-only quoting/path-assumption attempts failed before successful evidence audit; no source mutation.

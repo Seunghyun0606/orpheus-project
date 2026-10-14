@@ -7,7 +7,16 @@ recovery, saved evidence, and an action-derived postmortem.
 
 ## Current planning status
 
-Latest status, 2026-10-14: 26 Incident/sidecar pairs and the complete opt-in
+Automated verification resumed under DEC-066 on 2026-10-14. The
+[current checkpoint](docs/TASK-035_AUTOMATED_VERIFICATION_CHECKPOINT.md) retains
+the initial 33 test failures and narrow corrections. Independent rerun of
+`a6e509b` passes 690/694 tests but **still fails four unchanged 5-second timeouts**;
+lint/typecheck pass, format fails 37 data files. Independent review also finds
+missing UNKNOWN and actual War Room/delegation presentation in the full campaign.
+No overall acceptance is established. Native/app/install execution stays deferred;
+all M4/M5 final verification and separate closure/release decisions remain mandatory.
+
+Earlier preparatory status, 2026-10-14: 26 Incident/sidecar pairs and the complete opt-in
 campaign definition/package are connected, but playable full-campaign acceptance
 is **not established**. M4/M5 remain active/incomplete, TASK-024 and TASK-027–035
 active, TASK-025 unclaimed/ineligible. DEC-065 permits TASK-035 preparation only;
@@ -15,7 +24,8 @@ its [evidence-gap audit](docs/TASK-035_PREPARATORY_AUDIT.md) and
 [remaining verification plan](docs/M5_VERIFICATION_PLAN.md) distinguish source
 inventory, earlier scoped PASS, Node-only replay samples and generated-not-installed
 artifacts from missing acceptance evidence. General/native QA remains deferred;
-no completion, release or push is approved. The entries below are chronological
+no completion, release or push is approved by that earlier preparatory step. DEC-066
+above subsequently resumes automated checks only. The entries below are chronological
 checkpoints, not current claims that later implemented content is still absent.
 
 As of 2026-10-12, M1–M3 are complete; M4 remains active. TASK-018–023 are accepted,

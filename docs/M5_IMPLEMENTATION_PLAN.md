@@ -321,3 +321,16 @@ is retained outside immutable accepted results. No general/native QA, build,
 benchmark, installer/app execution, independent acceptance or release is performed
 by this approval. Explicit verification resumption is the next decision; native
 and install execution remain separately authorized. M4/M5 remain active/incomplete.
+
+## Automated resumption checkpoint — 2026-10-14
+
+DEC-066 subsequently resumes automated checks and independently attributed review/
+QA, not native/app/installer execution. The
+[new checkpoint](TASK-035_AUTOMATED_VERIFICATION_CHECKPOINT.md) retains clean
+candidate `0268071` failures, safe narrow corrections at `a6e509b`, and independent
+rerun FAIL (690/694, four 5-second timeouts unchanged). Lint/typecheck and separate
+authoring/MVP replay checks pass; 37-file data formatting remains unresolved.
+Independent review directly reproduces missing triggered narrative and delivered
+War Room/delegation presentation. Pinned-view version/live-history semantics need
+a concrete contract decision before changing runtime presentation behavior.
+All tasks/milestones remain incomplete; no prior acceptance obligation is waived.

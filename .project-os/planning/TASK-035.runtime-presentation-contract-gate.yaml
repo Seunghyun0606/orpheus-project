@@ -1,0 +1,43 @@
+task: TASK-035
+date: '2026-10-14'
+status: awaiting_human_decision
+type: architecture_change
+question: 발견된 UNKNOWN·War Room 표시 결함을 새 버전 전용 화면 계약으로 설계할까요?
+candidate: a6e509b3977e655219074cdd2c7d1f32041326da
+evidence:
+  - .project-os/planning/TASK-035.independent-review-checkpoint.yaml
+  - .project-os/planning/TASK-035.independent-qa-checkpoint.yaml
+  - docs/TASK-035_AUTOMATED_VERIFICATION_CHECKPOINT.md
+reason: >-
+  Actual production events are recorded but the full-campaign sidecar renderer
+  omits triggered UNKNOWN bodies and delivered War Room reports/delegation state.
+  DEC-040/042 preserve immutable pinned presentation authority. The correction
+  must decide renderer-only versus new-version authority and explicit live
+  disappearance/history semantics; no Scenario-authored TTL exists today.
+  Do not invent a TTL, silently change old pinned views or import UI/store logic
+  into the headless engine to fix a player-visible defect.
+proposed_safe_direction:
+  - Exact verified selected attempt/Scenario event projection; pure engine mapping and React rendering only.
+  - Authored visibility gates and unavailable diagnostics; no UI-owned story text or implicit reveal.
+  - Chronological real messages, scheduled delegation ETA/capacity; failed writes emit no alert.
+  - New committed live alerts once; reload/archive never create fresh exposure/ACK/effects or timers.
+  - Explicit transient and accessible historical presentation rules, no implicit fallback TTL.
+options:
+  - key: A
+    label: 기존 버전 보존, 새 버전 전용 표시 계약 설계·검토
+    scope: >-
+      Prepare concrete new package/definition/view version bindings, data-authored
+      runtime-message representation and explicit live/transient/archive rules.
+      Preserve all current authorities and records. Obtain approval of the exact
+      contract before implementation; no automatic migration or schema default.
+  - key: B
+    label: 기존 버전 유지, renderer-only 보정 가능성만 추가 검토
+    scope: >-
+      Keep the defects and acceptance blockers visible. Investigate whether a
+      faithful read-only renderer correction can preserve the existing pinned
+      contract, and return its compatibility/lifecycle proof before changing behavior.
+preserved:
+  - Original QA failures, four unchanged-timeout failures and 37-file format failure remain unresolved.
+  - No native/install/user-profile execution, old-authority overwrite, timeout/budget relaxation or model changes.
+  - M4/TASK-025, genuine full routes, long/native budgets, independent final evaluation and rights clearance remain mandatory.
+  - No task/milestone completion, push or release.
