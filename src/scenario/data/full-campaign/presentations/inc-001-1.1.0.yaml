@@ -1,0 +1,121 @@
+schemaVersion: 2
+id: INC-001-INVESTIGATION
+version: 1.1.0
+scenarioId: INC-001
+contentVersion: 1.1.0
+panels:
+  - id: observations
+    title: Logs and metrics
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 1
+    actionIds:
+      - OPEN_LOGS
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: incident-observations
+        signalIds:
+          - API_ERROR_RATE
+          - DB_CONNECTIONS
+          - DB_CONNECTION_LIMIT
+          - DB_CPU
+          - API_CPU
+          - PAGER_SERVICE
+          - PAGER_THRESHOLD
+          - STALE_SESSION_COUNT
+          - STALE_SESSION_STATE
+          - STALE_SESSION_AVERAGE_AGE
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: UNKNOWN_GOOD
+            delivery:
+              mode: transient
+              durationMs: 800
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: investigation
+    title: Operational investigation
+    kind: diagnostics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 1
+    actionIds:
+      - INSPECT_DB
+      - INSPECT_SESSIONS
+    blocks:
+      - kind: paragraph
+        id: investigation-context
+        text: Collect operational evidence before selecting a containment path. The
+          displayed values reflect only observations actually revealed by
+          accepted actions.
+  - id: interventions
+    title: Response actions
+    kind: status
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 1
+    actionIds:
+      - RESTART_API
+      - SCALE_API
+      - ROLLBACK
+      - TERMINATE_STALE_SESSIONS
+    blocks:
+      - kind: paragraph
+        id: response-context
+        text: A temporary service improvement does not by itself establish that the
+          failure mechanism has been removed.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 1
+    actionIds:
+      - COMMUNICATE_STATUS
+      - UPDATE_WAR_ROOM
+      - ASK_JIN_CONFIRM_IMPACT
+    blocks:
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - JIN_OPEN
+          - JIN_ACK
+          - JIN_IMPACT_REPORT
+          - OPERATOR_UPDATE
+        delegationActionIds:
+          - ASK_JIN_CONFIRM_IMPACT
+        capacityResourceIds:
+          - TEAM_CAPACITY
+evidenceRelations: []

@@ -157,14 +157,22 @@ export function FullCampaignEntry({
       ) : null}
       {result?.ok
         ? result.registry.all().map((p) => (
-            <button
-              type="button"
-              key={campaignDefinitionKey(p.definition.id, p.definition.version)}
-              disabled={busy}
-              onClick={() => void open(p)}
-            >
-              Create campaign {p.package.id} / {p.package.version}
-            </button>
+            <div key={campaignDefinitionKey(p.definition.id, p.definition.version)}>
+              {p.presentations.every((v) => v.schemaVersion === 1) ? (
+                <p>
+                  Static investigation views: runtime narrative and War Room streams are unavailable
+                  in this pinned version.
+                </p>
+              ) : null}
+              <button
+                type="button"
+                key={campaignDefinitionKey(p.definition.id, p.definition.version)}
+                disabled={busy}
+                onClick={() => void open(p)}
+              >
+                Create campaign {p.package.id} / {p.package.version}
+              </button>
+            </div>
           ))
         : null}
       {runIds.map((id) => (

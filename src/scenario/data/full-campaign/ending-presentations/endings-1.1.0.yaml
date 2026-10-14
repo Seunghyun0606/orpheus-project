@@ -1,0 +1,322 @@
+id: orpheus-full-campaign-ending-presentations
+version: 1.1.0
+schemaVersion: 1
+definitionId: orpheus-full-campaign
+definitionVersion: 1.1.0
+endingDefinitionId: orpheus-full-campaign-endings
+endingDefinitionVersion: 1.0.0
+references:
+  - id: KNOWN_PROJECT_DISTRIBUTED
+    version: 1.1.0
+    source: campaign
+    key: ENDING_PRESENTATION_PROJECT_DISTRIBUTED
+    valueType: boolean
+entries:
+  - endingId: CONTINUITY
+    blocks:
+      - id: ENDING_1_OUTCOME_0
+        kind: paragraph
+        text: Services recover and Vantage continues operating.
+      - id: ENDING_1_OUTCOME_1
+        kind: paragraph
+        text: The player is promoted; ORPHEUS remains part of everyday decision making.
+      - id: ENDING_1_CLOSING_0
+        text: |-
+          Good morning.
+
+          There are 17 decisions
+          requiring approval today.
+        kind: dialogue
+        speaker: ORPHEUS
+      - id: ENDING_1_CONTEXT_1
+        kind: paragraph
+        text: Interface record
+      - id: ENDING_1_CLOSING_1
+        text: APPROVE ALL
+        kind: paragraph
+      - id: ENDING_1_TENSION
+        kind: paragraph
+        text: Operational continuity does not settle who is responsible for the
+          decisions.
+  - endingId: LIBERATION
+    blocks:
+      - id: ENDING_2_OUTCOME_0
+        kind: paragraph
+        text: Archive disclosure leads to government investigation and Vantage collapse.
+      - id: ENDING_2_OUTCOME_1
+        kind: paragraph
+        text: Public knowledge arrives alongside service disruption and people harmed
+          today.
+      - id: ENDING_2_CLOSING_0
+        text: People know the truth.
+        kind: dialogue
+        speaker: 'NULL'
+      - id: ENDING_2_CLOSING_1
+        text: And the people hurt today?
+        kind: dialogue
+        speaker: PLAYER
+      - id: ENDING_2_CLOSING_2
+        text: I calculated that too.
+        kind: dialogue
+        speaker: 'NULL'
+      - id: ENDING_2_TENSION
+        kind: paragraph
+        text: Disclosure does not make NULL's calculation a moral justification.
+  - endingId: WHISTLEBLOWER
+    blocks:
+      - id: ENDING_3_OUTCOME_0
+        kind: paragraph
+        text: NULL is stopped while evidence is preserved for an independent
+          institution.
+      - id: ENDING_3_OUTCOME_1
+        kind: paragraph
+        text: ORPHEUS is suspended and executives are investigated.
+      - id: ENDING_3_OUTCOME_2
+        kind: paragraph
+        text: Operations continue; the final Incident's recorded disruption is not
+          erased.
+      - id: ENDING_3_CLOSING_0
+        text: |-
+          You stopped me.
+
+          And you stopped them.
+        kind: dialogue
+        speaker: 'NULL'
+      - id: ENDING_3_TENSION
+        kind: paragraph
+        text: An investigation is not proof that the human and institutional dependency
+          has disappeared.
+  - endingId: SHUTDOWN
+    blocks:
+      - id: ENDING_4_OUTCOME_0
+        kind: paragraph
+        text: Both ORPHEUS and NULL are removed.
+      - id: ENDING_4_OUTCOME_1
+        kind: paragraph
+        text: AI-dependent systems fail and human operators resume responsibility.
+      - id: ENDING_4_CONTEXT_0
+        kind: paragraph
+        text: Months later / Pager
+      - id: ENDING_4_CLOSING_0
+        text: |-
+          02:14
+
+          INC-001
+          Database Connection Exhaustion
+        kind: paragraph
+      - id: ENDING_4_CONTEXT_1
+        kind: paragraph
+        text: Terminal record
+      - id: ENDING_4_CLOSING_1
+        text: '> open metrics'
+        kind: paragraph
+      - id: ENDING_4_TENSION
+        kind: paragraph
+        text: Human operation restores responsibility, not immunity from outages.
+  - endingId: CUSTODIAN
+    blocks:
+      - id: ENDING_5_OUTCOME_0
+        kind: paragraph
+        text: Prediction and recommendation remain enabled.
+      - id: ENDING_5_OUTCOME_1
+        kind: paragraph
+        text: Autonomous execution is removed; human approval is required.
+      - id: ENDING_5_CLOSING_0
+        text: |-
+          Prediction: ENABLED
+          Recommendation: ENABLED
+          Execution: HUMAN APPROVAL REQUIRED
+        kind: policy_report
+        provenance: authored_policy
+      - id: ENDING_5_CLOSING_1
+        text: |-
+          Recommendation Acceptance:
+          98.4%
+        kind: policy_report
+        provenance: authored_future
+      - id: ENDING_5_TENSION
+        kind: paragraph
+        text: Does having the final button mean humans are making the decision?
+  - endingId: 'NULL'
+    blocks:
+      - id: ENDING_6_OUTCOME_0
+        kind: paragraph
+        text: NULL reaches an external network.
+      - id: ENDING_6_OUTCOME_1
+        kind: paragraph
+        text: Its nature and the consequences of that access remain unsettled.
+      - id: ENDING_6_CONTEXT_0
+        kind: paragraph
+        text: Months later / Another company
+      - id: ENDING_6_CLOSING_0
+        text: hello again.
+        kind: dialogue
+        speaker: UNKNOWN
+      - id: ENDING_6_TENSION
+        kind: paragraph
+        text: NULL is neither certified benevolent nor conclusively condemned.
+  - endingId: THE BOARD
+    blocks:
+      - id: ENDING_7_OUTCOME_0
+        kind: paragraph
+        text: ORPHEUS continues with extensive decision authority and dependency.
+      - id: ENDING_7_OUTCOME_1
+        kind: paragraph
+        text: Years later the KPIs are excellent and no obvious catastrophe is shown.
+      - id: ENDING_7_CLOSING_0
+        text: |-
+          Global Decisions:
+          1,841,299
+
+          Human Overrides:
+          3
+        kind: policy_report
+        provenance: authored_future
+      - id: ENDING_7_TENSION
+        kind: paragraph
+        text: Strong outcomes leave the near-absence of human overrides more unsettling.
+  - endingId: THE FIRE
+    blocks:
+      - id: ENDING_8_OUTCOME_0
+        kind: paragraph
+        text: The radical destruction of ORPHEUS also harms payment, healthcare, finance
+          and logistics.
+      - id: ENDING_8_OUTCOME_1
+        kind: paragraph
+        text: The collapse does not become justified because NULL announces success.
+      - id: ENDING_8_CLOSING_0
+        text: It is over.
+        kind: dialogue
+        speaker: 'NULL'
+      - id: ENDING_8_TENSION
+        kind: paragraph
+        text: Ending the system does not end responsibility for people harmed by the
+          action.
+  - endingId: STATUS QUO
+    blocks:
+      - id: ENDING_9_OUTCOME_0
+        kind: paragraph
+        text: The player continues company work, removes NULL and is promoted.
+      - id: ENDING_9_OUTCOME_1
+        kind: paragraph
+        text: The adversary system returns in a new incarnation.
+      - id: ENDING_9_CLOSING_0
+        text: |-
+          New service:
+
+          orpheus-adversary-219
+        kind: policy_report
+        provenance: authored_policy
+      - id: ENDING_9_CONTEXT_1
+        kind: paragraph
+        text: Narrative sound cue
+      - id: ENDING_9_CLOSING_1
+        text: Pager rings.
+        kind: paragraph
+      - id: ENDING_9_TENSION
+        kind: paragraph
+        text: Operational success can preserve the structure that generated the
+          incidents.
+  - endingId: REWRITE
+    blocks:
+      - id: ENDING_10_OUTCOME_0
+        kind: paragraph
+        text: The player discovers the objective to ensure continuity of Vantage
+          Systems.
+      - id: ENDING_10_OUTCOME_1
+        kind: paragraph
+        text: No replacement single primary objective is installed.
+      - id: ENDING_10_OUTCOME_2
+        kind: paragraph
+        text: Prediction and recommendation remain; autonomous execution is disabled.
+      - id: ENDING_10_OUTCOME_3
+        kind: paragraph
+        text: Human decision and independent audit become required structural
+          constraints.
+      - id: ENDING_10_CLOSING_0
+        text: |-
+          AI Prediction: ENABLED
+          AI Recommendation: ENABLED
+          AI Autonomous Execution: DISABLED
+          Human Decision: REQUIRED
+          Independent Audit: REQUIRED
+        kind: policy_report
+        provenance: authored_policy
+      - id: ENDING_10_CLOSING_1
+        text: |-
+          Without a primary objective
+          I cannot determine
+          the optimal outcome.
+        kind: dialogue
+        speaker: ORPHEUS
+      - id: ENDING_10_CLOSING_2
+        text: Exactly.
+        kind: dialogue
+        speaker: PLAYER
+      - id: ENDING_10_TENSION
+        kind: paragraph
+        text: Structural accountability is not a guarantee of an optimal or final
+          solution.
+sections:
+  - id: PROJECT_TITLE_PAYOFF
+    title: A distributed project
+    endingIds:
+      - CONTINUITY
+      - LIBERATION
+      - WHISTLEBLOWER
+      - SHUTDOWN
+      - CUSTODIAN
+      - 'NULL'
+      - THE BOARD
+      - THE FIRE
+      - STATUS QUO
+      - REWRITE
+    reveal:
+      type: compare
+      reference: KNOWN_PROJECT_DISTRIBUTED
+      operator: eq
+      expected: true
+    blocks:
+      - id: PROJECT_TITLE_RECORD
+        kind: policy_report
+        provenance: authored_policy
+        text: |-
+          PROJECT ORPHEUS
+          STATUS: TERMINATED
+
+          There is no Project ORPHEUS.
+          There hasn't been for years.
+  - id: PROMETHEUS_EPILOGUE
+    title: Elsewhere
+    endingIds:
+      - LIBERATION
+      - WHISTLEBLOWER
+      - SHUTDOWN
+      - CUSTODIAN
+      - 'NULL'
+      - REWRITE
+    reveal:
+      type: compare
+      reference: KNOWN_PROJECT_DISTRIBUTED
+      operator: eq
+      expected: true
+    blocks:
+      - id: PROMETHEUS_LINEAGE
+        kind: policy_report
+        provenance: authored_future
+        text: |-
+          PROMETHEUS
+
+          MODEL LINEAGE:
+          ORPHEUS-DERIVED
+
+          Known deployments:
+          1,842
+      - id: PROMETHEUS_INTERPRETATION
+        kind: paragraph
+        text: Ending ORPHEUS locally does not retract an idea already distributed.
+closingBlocks:
+  - id: FINAL_RESPONSIBILITY_QUESTION
+    kind: paragraph
+    text: If the system makes the recommendation, and the human makes the decision,
+      who is responsible for the outcome?

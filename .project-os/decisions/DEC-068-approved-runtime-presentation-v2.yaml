@@ -1,0 +1,25 @@
+id: DEC-068
+title: Implement the reviewed new-only 1.1.0 runtime presentation contract
+status: active
+date: '2026-10-14'
+applies_to: [M5, TASK-027, TASK-033, TASK-035]
+human_approval:
+  selected_option: A
+  instruction: 검토된 계약 승인 후 새 버전 구현·자동화 검증.
+approved_request:
+  commit: 3d292a8
+  file: .project-os/planning/TASK-035.runtime-presentation-implementation-gate.yaml
+approved_contract:
+  commit: 3f3b8b762a369b8a81c3b8d948b62ae2d838ca60
+  spec: specs/architecture/runtime-investigation-presentation-v2-proposal.md
+  machine: .project-os/planning/TASK-035.runtime-presentation-v2-proposal.yaml
+decision: >-
+  Implement the exact new-only 1.1.0 package/definition/prose and schema-2 views,
+  strict verified runtime streams, operation-owned fresh delivery and explicit
+  800 ms/reduced-motion/history/read-boundary rules; execute V1–V12 automated
+  verification and independently attributed review/QA under DEC-039/066.
+consequences:
+  - Preserve all existing content bytes, 1.0.0 projections, Scenario/model/effect/ending semantics and pinned saves.
+  - No saved cursor, new ACK, schema defaults, migration or actual profile access.
+  - No timeout/budget relaxation or skipped validation to resolve existing failures.
+  - Native/app/install execution, final task/milestone completion, push and release remain separately authorized.

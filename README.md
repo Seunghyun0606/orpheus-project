@@ -7,10 +7,15 @@ recovery, saved evidence, and an action-derived postmortem.
 
 ## Current planning status
 
-New-version runtime-message design is reviewed under DEC-067, not implemented.
-The [contract checkpoint](docs/TASK-035_RUNTIME_PRESENTATION_CONTRACT_CHECKPOINT.md)
-proposes exact 1.1.0 package/definition and schema-2 views while retaining 1.0.0;
-concrete version/schema/live-history rules await human approval before implementation.
+DEC-068 approves the reviewed new-only runtime-message contract. The implementation
+candidate adds explicit full-campaign 1.1.0 package/definition, twenty-six schema-2
+views and rebound ending prose while retaining every old authority. Verified
+narrative/War Room history and operation-owned ephemeral notices do not migrate saves,
+issue ACKs or change simulation/model/ending rules. Only INC-001's new live notice
+expires after 800ms; recorded text stays readable, and reduced motion holds the notice.
+The earlier [contract checkpoint](docs/TASK-035_RUNTIME_PRESENTATION_CONTRACT_CHECKPOINT.md)
+is historical design evidence, not current implementation/acceptance status.
+Focused automated checks do not establish complete V1–V12 or native acceptance.
 
 Automated verification resumed under DEC-066 on 2026-10-14. The
 [current checkpoint](docs/TASK-035_AUTOMATED_VERIFICATION_CHECKPOINT.md) retains

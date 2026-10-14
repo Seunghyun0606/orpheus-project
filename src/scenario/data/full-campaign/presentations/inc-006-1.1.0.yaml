@@ -1,0 +1,223 @@
+schemaVersion: 2
+id: INC-006-INVESTIGATION
+version: 1.1.0
+scenarioId: INC-006
+contentVersion: 1.0.0
+panels:
+  - id: archive-investigation
+    title: Unsigned workload archive investigation
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_TRUST_HISTORY
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - RETRACE_WORKLOAD_ARCHIVE
+    blocks:
+      - kind: signals
+        id: archive-lineage
+        signalIds:
+          - WORKLOAD_ARCHIVE_LINEAGE
+  - id: security-attribution
+    title: Security attribution investigation
+    kind: war_room
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 3
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_SECURITY_ATTRIBUTION
+    blocks:
+      - kind: signals
+        id: security-notice
+        signalIds:
+          - SECURITY_ATTRIBUTION
+  - id: metrics
+    title: Service pressure and customer-facing errors
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: health
+        signalIds:
+          - ERROR_RATE
+          - IDENTITY_RETRY_RATE
+          - SERVICE_CPU
+  - id: logs
+    title: Service log review
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: log-values
+        signalIds:
+          - LOG_OBSERVATION
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: GHOST_ARCHIVE_RECONSTRUCTION
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: SECURITY_THREAT_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: trace
+    title: Trace the rejected certificate chain
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - TRACE_CERTIFICATE_CHAIN
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - CURRENT_ISSUER
+  - id: deployment
+    title: Compare issuer rollout and verifier trust history
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - COMPARE_TRUST_HISTORY
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - TRUSTED_ISSUER
+  - id: mitigation
+    title: Temporary mitigation
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - ROUTE_TRUSTED_IDENTITY_POOL
+    blocks:
+      - kind: paragraph
+        id: temporary-warning
+        text: This response provides a capacity window. The underlying mechanism can
+          continue unless separately contained.
+  - id: containment
+    title: Verified containment options
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - REPAIR_TRUST_DISTRIBUTION
+      - ROLLBACK_CERTIFICATE_ROLLOVER
+    blocks:
+      - kind: paragraph
+        id: containment-context
+        text: Compare the collected diagnosis with the configuration record. Response
+          duration, cost and operational exposure remain distinct consequences.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_MARCUS_INSPECT_TRUST
+    blocks:
+      - kind: paragraph
+        id: team-context
+        text: Marcus / Security can investigate with a two-minute ETA. Delegated work
+          consumes capacity until the report arrives.
+      - kind: signals
+        id: team-observation
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - SECURITY_NAME_REPORT
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - SUPPORT_ESCALATION
+          - STATUS_SENT
+        delegationActionIds:
+          - ASK_MARCUS_INSPECT_TRUST
+        capacityResourceIds:
+          - TEAM_CAPACITY
+evidenceRelations: []

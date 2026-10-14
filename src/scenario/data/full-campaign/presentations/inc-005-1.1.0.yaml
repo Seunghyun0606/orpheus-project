@@ -1,0 +1,188 @@
+schemaVersion: 2
+id: INC-005-INVESTIGATION
+version: 1.1.0
+scenarioId: INC-005
+contentVersion: 1.0.0
+panels:
+  - id: metrics
+    title: Service pressure and customer-facing errors
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: health
+        signalIds:
+          - ERROR_RATE
+          - SYNTHETIC_REQUEST_RATE
+          - SERVICE_CPU
+  - id: logs
+    title: Service log review
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: log-values
+        signalIds:
+          - LOG_OBSERVATION
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: UNKNOWN_TRACE_FRAGMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: trace
+    title: Trace a synthetic request to its source
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - TRACE_SYNTHETIC_REQUEST
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - SYNTHETIC_SOURCE
+  - id: deployment
+    title: Compare workload deployment lineage with approvals
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - COMPARE_DEPLOYMENT_LINEAGE
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - WORKLOAD_APPROVAL
+  - id: mitigation
+    title: Temporary mitigation
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - RATE_LIMIT_GATEWAY
+    blocks:
+      - kind: paragraph
+        id: temporary-warning
+        text: This response provides a capacity window. The underlying mechanism can
+          continue unless separately contained.
+  - id: containment
+    title: Verified containment options
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - ISOLATE_SYNTHETIC_WORKLOAD
+    blocks:
+      - kind: paragraph
+        id: containment-context
+        text: Compare the collected diagnosis with the configuration record. Response
+          duration, cost and operational exposure remain distinct consequences.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_MARCUS_COMPARE_SIGNATURE
+    blocks:
+      - kind: paragraph
+        id: team-context
+        text: Marcus / Security can investigate with a two-minute ETA. Delegated work
+          consumes capacity until the report arrives.
+      - kind: signals
+        id: team-observation
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - SUPPORT_ESCALATION
+          - STATUS_SENT
+        delegationActionIds:
+          - ASK_MARCUS_COMPARE_SIGNATURE
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: artifact
+    title: Unregistered workload log fragment
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: GHOST_ARTIFACT
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: paragraph
+        id: preserved-fragment
+        text: "UNKNOWN: you're looking at the wrong service."
+evidenceRelations: []

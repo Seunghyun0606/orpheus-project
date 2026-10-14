@@ -20,6 +20,8 @@ const commands = {
   authoring:
     'npx --no-install vitest run scripts/authoring/full-campaign.test.mjs scripts/authoring/task032-balance.test.mjs scripts/authoring/task032-presentations.test.mjs',
   diff: 'git diff --check',
+  'runtime-presentation':
+    'npx --no-install vitest run src/tests/runtime-notice-queue.test.ts src/tests/runtime-presentation.test.ts src/tests/runtime-presentation-ui.test.tsx scripts/authoring/runtime-presentation-v2.test.mjs',
 };
 const key = process.argv[2];
 if (!Object.hasOwn(commands, key)) throw new Error('Unknown approved check key');

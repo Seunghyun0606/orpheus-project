@@ -1,0 +1,188 @@
+schemaVersion: 2
+id: INC-004-INVESTIGATION
+version: 1.1.0
+scenarioId: INC-004
+contentVersion: 1.0.0
+panels:
+  - id: metrics
+    title: Service pressure and customer-facing errors
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: health
+        signalIds:
+          - ERROR_RATE
+          - HEAP_PERCENT
+          - SERVICE_CPU
+  - id: logs
+    title: Service log review
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: log-values
+        signalIds:
+          - LOG_OBSERVATION
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: UNKNOWN_TRACE_FRAGMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: trace
+    title: Inspect retained request allocations
+    kind: diagnostics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - INSPECT_ALLOCATIONS
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - RETAINED_ALLOCATION_PATH
+  - id: deployment
+    title: Compare current and previous handler ownership
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - COMPARE_HANDLER
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - HANDLER_RETENTION
+  - id: mitigation
+    title: Temporary mitigation
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - RESTART_INSTANCE
+    blocks:
+      - kind: paragraph
+        id: temporary-warning
+        text: This response provides a capacity window. The underlying mechanism can
+          continue unless separately contained.
+  - id: containment
+    title: Verified containment options
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - DISABLE_LEAKING_HANDLER
+    blocks:
+      - kind: paragraph
+        id: containment-context
+        text: Compare the collected diagnosis with the configuration record. Response
+          duration, cost and operational exposure remain distinct consequences.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_CHECK_HEAP
+    blocks:
+      - kind: paragraph
+        id: team-context
+        text: Sam / Platform can investigate with a two-minute ETA. Delegated work
+          consumes capacity until the report arrives.
+      - kind: signals
+        id: team-observation
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - SUPPORT_ESCALATION
+          - STATUS_SENT
+        delegationActionIds:
+          - ASK_SAM_CHECK_HEAP
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: artifact
+    title: Deleted allocation log fragment
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: DELETED_ALLOCATION_FRAGMENT
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: paragraph
+        id: preserved-fragment
+        text: 'UNKNOWN: the objects are gone. the references are not.'
+evidenceRelations: []

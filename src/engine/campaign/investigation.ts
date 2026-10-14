@@ -5,6 +5,7 @@ import { campaignObservations, replayCampaign, type CampaignRun } from './transi
 import { canonicalJson } from './canonical.ts';
 import type { ResolvedCampaignPackage } from '../../scenario/campaign-package.ts';
 import { scenarioVersionKey } from '../../scenario/catalog.ts';
+import { projectNarrativeStream, projectWarRoomStream } from './runtime-streams.ts';
 
 // Read-only projection; no command, ACK, discovery or effect is generated here.
 export function projectCampaignInvestigation(
@@ -56,15 +57,19 @@ function projectVerifiedInvestigation(
     .map((panel) => ({
       ...panel,
       blocks: panel.blocks.map((b) =>
-        b.kind === 'signals'
-          ? {
-              ...b,
-              values: b.signalIds.flatMap((id) => {
-                const signal = attempt.incident.signals[id];
-                return signal?.revealed ? [{ id, value: signal.value }] : [];
-              }),
-            }
-          : b,
+        b.kind === 'narrative_stream'
+          ? projectNarrativeStream(b, s, attempt.incident, verified.run, attemptId)
+          : b.kind === 'war_room_stream'
+            ? projectWarRoomStream(b, s, attempt.incident)
+            : b.kind === 'signals'
+              ? {
+                  ...b,
+                  values: b.signalIds.flatMap((id) => {
+                    const signal = attempt.incident.signals[id];
+                    return signal?.revealed ? [{ id, value: signal.value }] : [];
+                  }),
+                }
+              : b,
       ),
     }));
   return {

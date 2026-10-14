@@ -48,6 +48,7 @@ export interface CampaignView {
   evidence: { id: string; title: string; description: string }[];
 }
 export interface CampaignSessionState {
+  readonly subscribeReadBoundary: (listener: () => void) => () => void;
   readonly subscribeCommitted: (listener: (update: CampaignCommittedUpdate) => void) => () => void;
   readonly run: CampaignRun | null;
   readonly view: CampaignView | null;
@@ -110,6 +111,7 @@ export function createCampaignSessionStore(options: {
   let pending: LedgerCommitRequest | null = null;
   let knownConflict = false;
   const listeners = new Set<(update: CampaignCommittedUpdate) => void>();
+  const readListeners = new Set<() => void>();
   function operation(
     run: CampaignRun | null,
     payload: Payload,
@@ -306,6 +308,12 @@ export function createCampaignSessionStore(options: {
     }
   }
   const store: StoreApi<CampaignSessionState> = createStore<CampaignSessionState>(() => ({
+    subscribeReadBoundary(listener) {
+      readListeners.add(listener);
+      return () => {
+        readListeners.delete(listener);
+      };
+    },
     subscribeCommitted(listener) {
       listeners.add(listener);
       return () => {
@@ -341,6 +349,13 @@ export function createCampaignSessionStore(options: {
             store.setState({ pendingOperationId: null });
           }
         } else store.setState({ run: null, view: null, readState: 'not_found' });
+        for (const listener of readListeners) {
+          try {
+            listener();
+          } catch {
+            /* A presentation reset cannot fail a verified read. */
+          }
+        }
         return true;
       } catch {
         store.setState({ error: 'READ_FAILED' });

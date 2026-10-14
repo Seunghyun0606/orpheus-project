@@ -71,6 +71,41 @@ export function CampaignTools({
                   </tbody>
                 </table>
               </div>
+            ) : block.kind === 'narrative_stream' ? (
+              <section key={block.id} aria-label="Recorded narrative history">
+                <p>
+                  {readOnly
+                    ? 'Historical record. No new notification is delivered.'
+                    : 'Verified recorded narratives.'}
+                </p>
+                {block.messages.map((m) => (
+                  <article key={m.key}>
+                    <h3>{m.title}</h3>
+                    <p>T+{m.atSeconds}s</p>
+                    <p className="campaign-document-text">{m.body}</p>
+                  </article>
+                ))}
+              </section>
+            ) : block.kind === 'war_room_stream' ? (
+              <section key={block.id} aria-label="Recorded War Room">
+                {block.messages.map((m) => (
+                  <p key={m.key}>
+                    [T+{m.atSeconds}s] {m.sender}: {m.text}
+                  </p>
+                ))}
+                {block.pending.map((w) => (
+                  <p key={w.key}>
+                    {w.role}: {w.title}. Due T+{w.dueAtSeconds}s; {w.remainingSeconds}s remaining
+                    (action-driven time).
+                  </p>
+                ))}
+                {block.capacity.map((c) => (
+                  <p key={c.id}>
+                    {c.id}: {c.value}
+                    {c.max === undefined ? '' : ` / ${c.max}`}
+                  </p>
+                ))}
+              </section>
             ) : (
               <dl key={block.id}>
                 {block.values.map((v) => (

@@ -22,7 +22,7 @@ export const presentationBlockSchema = z.discriminatedUnion('kind', [
     .object({ kind: z.literal('signals'), id: idSchema, signalIds: z.array(idSchema).min(1) })
     .strict(),
 ]);
-export const investigationPresentationSchema = z
+export const investigationPresentationV1Schema = z
   .object({
     schemaVersion: z.literal(1),
     id: idSchema,
@@ -60,6 +60,63 @@ export const investigationPresentationSchema = z
     ),
   })
   .strict();
+export const narrativeDeliverySchema = z.discriminatedUnion('mode', [
+  z
+    .object({
+      mode: z.literal('transient'),
+      durationMs: z.number().int().min(1).max(60000),
+      reducedMotionMode: z.literal('until_dismissed'),
+      historyMode: z.literal('recorded'),
+    })
+    .strict(),
+  z
+    .object({
+      mode: z.literal('until_dismissed'),
+      reducedMotionMode: z.literal('until_dismissed'),
+      historyMode: z.literal('recorded'),
+    })
+    .strict(),
+]);
+export type NarrativeDelivery = z.infer<typeof narrativeDeliverySchema>;
+export const runtimePresentationBlockSchema = z.discriminatedUnion('kind', [
+  ...presentationBlockSchema.options,
+  z
+    .object({
+      kind: z.literal('narrative_stream'),
+      id: idSchema,
+      entries: z.array(
+        z.object({ narrativeId: idSchema, delivery: narrativeDeliverySchema }).strict(),
+      ),
+    })
+    .strict(),
+  z
+    .object({
+      kind: z.literal('war_room_stream'),
+      id: idSchema,
+      messageIds: z.array(idSchema),
+      delegationActionIds: z.array(idSchema),
+      capacityResourceIds: z.array(idSchema),
+    })
+    .strict(),
+]);
+export const investigationPresentationV2Schema = investigationPresentationV1Schema
+  .extend({
+    schemaVersion: z.literal(2),
+    panels: z
+      .array(
+        investigationPresentationV1Schema.shape.panels.element
+          .extend({
+            blocks: z.array(runtimePresentationBlockSchema).min(1),
+          })
+          .strict(),
+      )
+      .min(1),
+  })
+  .strict();
+export const investigationPresentationSchema = z.discriminatedUnion('schemaVersion', [
+  investigationPresentationV1Schema,
+  investigationPresentationV2Schema,
+]);
 export type InvestigationPresentation = z.infer<typeof investigationPresentationSchema>;
 
 export function validateInvestigationPresentation(
@@ -129,5 +186,67 @@ export function validateInvestigationPresentation(
   for (const edge of p.evidenceRelations)
     if (![edge.from, edge.to].every((id) => d.evidence.some((e) => e.id === id)))
       issues.push('UNKNOWN_PRESENTATION_EVIDENCE');
+  if (p.schemaVersion === 2) {
+    const delegated = s.actions.filter((a) => a.delegation);
+    const narratives: string[] = [],
+      messages: string[] = [],
+      delegations: string[] = [],
+      resources: string[] = [];
+    for (const panel of p.panels)
+      for (const block of panel.blocks) {
+        if (block.kind === 'narrative_stream') {
+          if (panel.kind !== 'logs') issues.push('INVALID_NARRATIVE_STREAM_PANEL');
+          if (s.narratives.length && !block.entries.length) issues.push('EMPTY_NARRATIVE_STREAM');
+          narratives.push(...block.entries.map((e) => e.narrativeId));
+        } else if (block.kind === 'war_room_stream') {
+          if (panel.kind !== 'war_room') issues.push('INVALID_WAR_ROOM_STREAM_PANEL');
+          if (s.warRoom.messages.length && !block.messageIds.length)
+            issues.push('EMPTY_MESSAGE_STREAM');
+          if (
+            delegated.length &&
+            (!block.delegationActionIds.length || !block.capacityResourceIds.length)
+          )
+            issues.push('EMPTY_DELEGATION_STREAM');
+          messages.push(...block.messageIds);
+          delegations.push(...block.delegationActionIds);
+          resources.push(...block.capacityResourceIds);
+        }
+      }
+    const coverage = (actual: string[], expected: string[], kind: string) => {
+      if (
+        new Set(actual).size !== actual.length ||
+        actual.length !== expected.length ||
+        actual.some((id) => !expected.includes(id))
+      )
+        issues.push('INVALID_STREAM_' + kind + '_COVERAGE');
+    };
+    coverage(
+      narratives,
+      s.narratives.map((n) => n.id),
+      'NARRATIVE',
+    );
+    coverage(
+      messages,
+      s.warRoom.messages.map((m) => m.id),
+      'MESSAGE',
+    );
+    coverage(
+      delegations,
+      delegated.map((a) => a.id),
+      'DELEGATION',
+    );
+    coverage(
+      resources,
+      [...new Set(delegated.map((a) => a.delegation!.capacityResourceId))],
+      'CAPACITY',
+    );
+    if (
+      s.warRoom.messages.some((m) => !s.warRoom.roles.some((r) => r.id === m.roleId)) ||
+      delegated.some((a) => !s.warRoom.roles.some((r) => r.id === a.delegation!.roleId))
+    )
+      issues.push('UNKNOWN_STREAM_ROLE');
+    if (resources.some((id) => !s.initialState.resources.some((r) => r.id === id)))
+      issues.push('UNKNOWN_STREAM_RESOURCE');
+  }
   return [...new Set(issues)].sort();
 }

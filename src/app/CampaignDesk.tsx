@@ -12,6 +12,7 @@ import { CampaignTools } from './CampaignTools.tsx';
 import type { ResolvedCampaignPackage } from '../scenario/campaign-package.ts';
 import { CampaignEnding } from './CampaignEnding.tsx';
 import { CampaignAudio } from './CampaignAudio.tsx';
+import { CampaignRuntimeNotices } from './CampaignRuntimeNotices.tsx';
 import { campaignAttemptHead, type CampaignRun } from '../engine/campaign/transitions.ts';
 
 // The caller must supply an approved authority/isolated fixture adapter. Nothing
@@ -129,6 +130,14 @@ export function CampaignDesk({
           live={!reviewing}
           ambience={!!attempt && !attempt.incident.completionReached}
           keyboard={keyboardAudio}
+        />
+      ) : null}
+      {composition?.presentations.some((p) => p.schemaVersion === 2) ? (
+        <CampaignRuntimeNotices
+          store={store}
+          composition={composition}
+          live={!reviewing}
+          reducedMotion={preferences.reducedAnimation}
         />
       ) : null}
       {state.error ? <p role="alert">Campaign operation not confirmed: {state.error}</p> : null}
