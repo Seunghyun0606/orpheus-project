@@ -334,3 +334,15 @@ Independent review directly reproduces missing triggered narrative and delivered
 War Room/delegation presentation. Pinned-view version/live-history semantics need
 a concrete contract decision before changing runtime presentation behavior.
 All tasks/milestones remain incomplete; no prior acceptance obligation is waived.
+
+## New-version runtime presentation design — 2026-10-14
+
+DEC-067 approves design/review only. The
+[corrected proposal](../specs/architecture/runtime-investigation-presentation-v2-proposal.md)
+at `3f3b8b7` specifies new 1.1.0/schema-2 views, preserved 1.0.0 authorities,
+operation-owned verified events, explicit 800ms/reduced-motion/readable-history rules
+and final-incident panels. Independent document review addressed its branch-version,
+INC-026 gate and observer-ownership defects. The
+[checkpoint](TASK-035_RUNTIME_PRESENTATION_CONTRACT_CHECKPOINT.md) distinguishes
+document feasibility from implementation. Exact contract approval precedes runtime
+changes; four timeouts, 37 formatting failures and all M4/M5 obligations remain.

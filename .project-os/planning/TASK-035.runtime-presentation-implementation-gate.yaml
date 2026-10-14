@@ -1,0 +1,27 @@
+task: TASK-035
+date: '2026-10-14'
+status: awaiting_human_decision
+type: architecture_change
+question: 검토된 1.1.0·schema 2 표시 계약을 승인하고 구현·자동화 검증을 진행할까요?
+proposed_contract:
+  commit: 3f3b8b762a369b8a81c3b8d948b62ae2d838ca60
+  spec: specs/architecture/runtime-investigation-presentation-v2-proposal.md
+  machine: .project-os/planning/TASK-035.runtime-presentation-v2-proposal.yaml
+authority: DEC-067 approved design/review only; not concrete implementation.
+scope_if_approved:
+  - Add exact package/definition 1.1.0, twenty-six view 1.1.0 schema 2 and ending-prose 1.1.0 envelope; retain 1.0.0 and every Scenario/model/effect/ending rule unchanged.
+  - Rebind only definition envelope/111 own references/five own branch versions and prose envelope/definitionVersion/one own reference.
+  - Strict additive version-gated narrative/War Room streams and explicit read-only INC-026 pre/post-final history panels.
+  - INC-001 Good normal 800 ms, reduced-motion until-dismissed; other narratives until-dismissed and recorded history; UI-only clock/queue/epoch.
+  - Verified owning-operation event delta, current head/read floor and transient successful-read observer; no new saved cursor, ACK, hidden score, action or audio cue.
+  - Implement and verify V1–V12 and independently attributed approved automated checks; keep all original failed evidence and budgets.
+options:
+  - key: A
+    label: 검토된 계약 승인 후 새 버전 구현·자동화 검증
+  - key: B
+    label: 버전·노출 수명·이력 규칙 수정, 구현 보류
+preserved:
+  - Four current timeouts and thirty-seven format failures remain unresolved; no blanket QA PASS.
+  - Exact old authorities, default MVP, original store schemas/physical layout and actual profiles remain untouched.
+  - No native/app/install execution, schema default/migration, signing, push or release.
+  - M4/TASK-025, full routes/budgets/rights and final independent acceptance remain mandatory.

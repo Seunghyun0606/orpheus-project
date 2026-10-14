@@ -1,0 +1,32 @@
+task: TASK-035
+kind: independent_read_only_document_review_not_architecture_approval
+role: reviewer
+actor: /root/task035_review
+recorded_by: /root
+date: '2026-10-14'
+initial_candidate: 0dd9e8d810340817b82289bf71a79193f2e98846
+initial_status: changes_required
+original_findings:
+  - id: DESIGN-BRANCH-01
+    severity: P1
+    reason: Validator requires branches[].version equal definition version; initial rebind whitelist omitted five branch versions.
+    disposition: Explicit whitelist added, IDs/conditions/models unchanged; reflected in V4.
+  - id: DESIGN-FINAL-PANEL-02
+    severity: P1
+    reason: INC-026 has no logs/war_room panels; all current panels close at final commit, violating stream coverage/history.
+    disposition: Proposed additive read-only panels with explicit pre/post-final gates; old action panels unchanged; V3/V5/V9 updated.
+  - id: DESIGN-OWNERSHIP-03
+    severity: P2
+    reason: Current observer suffix may include another command after lost ACK/concurrent advancement; history membership alone is not event ownership.
+    disposition: Exact verified pre/post-operation delta, current head, ephemeral read floor, retired keys and epoch rejection; V10 updated.
+final_candidate: 3f3b8b762a369b8a81c3b8d948b62ae2d838ca60
+final_status: document_ready_for_exact_human_contract_approval
+remaining_blocking_design_findings: 0
+direct_recheck:
+  - Explicit branch/version envelope rebinding and preserved embedded model/effect/ending semantics.
+  - Explicit 26-Incident placement, preserved INC-006 security panel and additive INC-026 history gates.
+  - Verified operation ownership/head/read-floor and history-only foreign/stale/reset callbacks.
+  - Retirement/epoch and 800 ms/reduced-motion/history rules without persisted cursor or simulation clock change.
+  - Ending-prose rebind and original 1.0.0 authority preservation.
+scope_limit: Source-based document review, no tests, runtime/profile access, edits, commits or canonical transition.
+acceptance_boundary: Not human architecture approval, runtime PASS, UI defect repair or TASK-035 completion.

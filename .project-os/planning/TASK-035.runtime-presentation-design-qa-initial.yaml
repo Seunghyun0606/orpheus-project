@@ -1,0 +1,25 @@
+task: TASK-035
+kind: independent_read_only_document_qa_not_runtime_validation
+role: qa
+actor: /root/task035_qa
+recorded_by: /root
+date: '2026-10-14'
+candidate: 0dd9e8d810340817b82289bf71a79193f2e98846
+status: bounded_document_checks_pass_review_corrections_required_separately
+direct_checks:
+  - Sixty protected files byte sizes/hashes match baseline 65acf67 complete tracked content inventory.
+  - Fifty-nine existing YAML inputs plus proposal pass UTF-8/unique-key parsing.
+  - Twenty-six Incident IDs/exact Scenario versions, twenty-six view IDs and nine Acts match.
+  - Twenty-six behavior/prediction rows, ten opportunity rules and ten ending rules/prose entries match.
+  - One hundred eleven definition-owned reference versions and one ending-prose-owned reference identified.
+  - V1–V12 exact order and MD/machine binding/schema/800 ms/lifecycle/approval boundaries agree.
+  - Diff from 65acf67 changes only five document/metadata files, not src/scripts/Tauri/schema.
+  - Four timeout and thirty-seven format failures remain explicitly unresolved; no runtime PASS claimed.
+hashes:
+  spec: 7ac55a73d44a37947a257f534563ab547ff872c828213d07fd5ebd28ff8d4e59
+  proposal: bb2c925ead8d571b81953c69801aedd4aec3429dc8a582bac571aed7df9d6c66
+  baseline: 1f8fa3e641bcfe313fa09e8de5c479a351491de8a3c6a8615c9bb023ed5ff9af
+limits:
+  - These consistency checks did not establish initial proposal feasibility; independent review separately found branch/panel/ownership corrections.
+  - No source edits, full suite/performance/build/native/install, actual profile access, commit or state transition.
+  - Verification matrix lists future implementation obligations, not completed evidence.

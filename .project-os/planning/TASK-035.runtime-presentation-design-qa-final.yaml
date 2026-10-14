@@ -1,0 +1,26 @@
+task: TASK-035
+kind: independent_read_only_document_qa_not_implemented_schema_validation
+role: qa
+actor: /root/task035_qa
+recorded_by: /root
+date: '2026-10-14'
+candidate: 3f3b8b762a369b8a81c3b8d948b62ae2d838ca60
+status: document_ready_for_exact_human_contract_approval
+direct_checks:
+  - Protected sixty file byte sizes/hashes unchanged; no runtime/schema/scripts diff from 65acf67.
+  - In-memory synthetic definition envelope/111 own references/five branch versions rebound to 1.1.0 accepted by existing validator.
+  - Negative synthetic keeping old branch versions correctly rejected with exactly five INVALID_BRANCH_REFERENCE diagnostics.
+  - In-memory ending-prose envelope/definitionVersion/one own reference rebinding accepted by existing validator.
+  - Reversing only the explicit version whitelist makes synthetic definition/prose equal original JSON objects.
+  - INC-026 existing thirty-three panels lack logs/war_room and all require pre-final flag; proposed two read-only additive gates/membership remain pre/post-final readable, old panels untouched.
+  - Owned operation-prefix events, current head/read floor and stale reconciliation semantics agree between MD and machine proposal.
+  - V1–V12, exact approval pending, four timeouts and thirty-seven format failures retained.
+hashes:
+  spec: f3380217a527179cac1353c8e71dac3843999d1cb50632e2d7547c956dd867a6
+  proposal: 939a9f5f2acf4bf1a5852badbf4254f545a77675a3644605f765b9b5f1977e10
+  baseline: 1f8fa3e641bcfe313fa09e8de5c479a351491de8a3c6a8615c9bb023ed5ff9af
+original_limit: Initial bounded document QA did not exercise branch-validator feasibility; original independent review design defects remain preserved separately.
+scope_limit:
+  - Synthetic document-feasibility objects only, not actual new package/view registration, schema-2 implementation or real run/save verification.
+  - No source edits, full suite/performance/build/native/install/profile access, commits or canonical transitions.
+acceptance_boundary: Not human architecture approval, runtime PASS, UI correction, task completion or release.

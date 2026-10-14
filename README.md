@@ -7,6 +7,11 @@ recovery, saved evidence, and an action-derived postmortem.
 
 ## Current planning status
 
+New-version runtime-message design is reviewed under DEC-067, not implemented.
+The [contract checkpoint](docs/TASK-035_RUNTIME_PRESENTATION_CONTRACT_CHECKPOINT.md)
+proposes exact 1.1.0 package/definition and schema-2 views while retaining 1.0.0;
+concrete version/schema/live-history rules await human approval before implementation.
+
 Automated verification resumed under DEC-066 on 2026-10-14. The
 [current checkpoint](docs/TASK-035_AUTOMATED_VERIFICATION_CHECKPOINT.md) retains
 the initial 33 test failures and narrow corrections. Independent rerun of
