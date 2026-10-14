@@ -10,7 +10,7 @@ why: 'Full campaign readiness requires tested content, real persistence, accessi
 
 scope:
   include:
-    - 'DEC-065 currently permits preparation only: evidence gaps, candidate provenance and deferred verification plan; no general/native QA execution or final acceptance.'
+    - 'DEC-066 resumes staged automated verification and independently attributed review/QA; native/app/install execution and final milestone/release approval remain separately gated.'
     - 'Map nine Acts, 24–28 total Incidents, required reveals and all ten endings to actual tested production content.'
     - 'Run the complete quality/regression command set, long-run persistence/replay and supported desktop inspections.'
     - 'Audit unchanged legacy authority, actual ACK/response samples, retry effects and unavailable/ambiguous diagnostics.'
@@ -35,6 +35,7 @@ relevant_files:
   - README.md
   - .project-os/tasks/results/
 active_decisions:
+  - .project-os/decisions/DEC-066-resume-automated-independent-verification.yaml
   - .project-os/decisions/DEC-065-preparatory-readiness-audit.yaml
   - .project-os/decisions/DEC-039-m5-independent-verification-delegation.yaml
   - .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml

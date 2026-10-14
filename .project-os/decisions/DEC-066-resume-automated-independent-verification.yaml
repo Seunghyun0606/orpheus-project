@@ -1,0 +1,24 @@
+id: DEC-066
+title: Resume automated verification and independent read-only review/QA
+status: active
+date: '2026-10-14'
+applies_to: [M4, M5, TASK-024, TASK-027, TASK-028, TASK-029, TASK-030, TASK-031, TASK-032, TASK-033, TASK-034, TASK-035]
+human_approval:
+  selected_option: A
+  instruction: 자동화 검증·독립 리뷰·QA 재개; 네이티브·설치 실행은 별도 승인.
+approved_request:
+  commit: 469e0f0
+  file: .project-os/planning/TASK-035.verification-resumption-gate.yaml
+decision: >-
+  Resume staged automated M4/M5 regression and genuine route/long-record
+  development verification. Resume DEC-039-authorized read-only independent
+  review/QA and distinct evaluation when evidence and task eligibility permit.
+  Normal in-scope repairs retain failures and fresh candidate provenance.
+consequences:
+  - Supersedes the preparation-only execution restriction, not readiness/acceptance obligations.
+  - No native/app/installer launch, actual user-profile access, reset or destructive overwrite.
+  - No threshold relaxation, schema/architecture change, authority rewrite or implicit migration.
+  - Retain all preceding M4/M5 evidence gaps, approved budgets and independent actors.
+  - No self-acceptance, milestone closure, signing, push, publication or production release.
+  - Native/install execution remains separately authorized and dependent on actual tool feasibility.
+clarifies: .project-os/decisions/DEC-065-preparatory-readiness-audit.yaml
