@@ -8,8 +8,89 @@ import {
   narrativeDeliverySchema,
   validateInvestigationPresentation,
 } from '../scenario/presentation.ts';
+import { createCampaignPackageRegistry } from '../scenario/campaign-package.ts';
+import { scenarioVersionKey } from '../scenario/catalog.ts';
+import { fixtureOperation } from './fixtures/opportunities.ts';
+import {
+  campaignAttemptHead,
+  prepareCampaignOperation,
+  type CampaignRun,
+} from '../engine/campaign/transitions.ts';
 
 describe('verified schema-2 runtime projection (isolated)', () => {
+  it('orders one verified command across reversed authored stream placements by event sequence', () => {
+    const f = runtimePresentationFixture(),
+      s = structuredClone(f.scenario),
+      p = structuredClone(f.presentation);
+    s.narratives.push({
+      ...structuredClone(s.narratives[0]!),
+      id: 'LATER',
+      title: 'Later isolated narrative',
+    });
+    const blocks = p.panels[0]!.blocks;
+    const original = blocks.find((b) => b.kind === 'narrative_stream')!;
+    if (original.kind !== 'narrative_stream') throw new Error('missing stream');
+    blocks.unshift({
+      ...structuredClone(original),
+      id: 'later-stream',
+      entries: [{ ...original.entries[0]!, narrativeId: 'LATER' }],
+    });
+    const catalog = new Map(f.composition.catalog);
+    catalog.set(scenarioVersionKey(s.id, s.contentVersion), s);
+    const result = createCampaignPackageRegistry({
+      ...f.inputs,
+      scenarios: catalog,
+      presentations: [p],
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
+    const composition = result.registry.all()[0]!;
+    let run: CampaignRun | null = null;
+    const apply = (payload: Parameters<typeof fixtureOperation>[2]) => {
+      const next = prepareCampaignOperation(
+        f.definition,
+        catalog,
+        run,
+        fixtureOperation(f.definition, run, payload),
+      );
+      if (!next.ok) throw new Error(JSON.stringify(next.diagnostics));
+      run = next.run;
+      return next.run;
+    };
+    apply({ kind: 'create' });
+    let current = apply({
+      kind: 'start',
+      attemptId: 'ordered',
+      incidentId: 'stage-one',
+      seed: 1002,
+    });
+    let prior = current;
+    for (const actionId of [
+      'OPEN_LOGS',
+      'INSPECT_DB',
+      'INSPECT_SESSIONS',
+      'TERMINATE_STALE_SESSIONS',
+    ]) {
+      prior = current;
+      const a = current.attempts[0]!;
+      current = apply({
+        kind: 'command',
+        attemptId: a.id,
+        inputId: 'i-' + current.revision,
+        commandSequence: a.incident.replayLog.length,
+        priorHead: campaignAttemptHead(a),
+        command: { type: 'perform_action', actionId },
+      });
+    }
+    const update = {
+      operation: current.operations.at(-1)!,
+      events: current.attempts[0]!.incident.eventLog.slice(
+        prior.attempts[0]!.incident.eventLog.length,
+      ),
+    };
+    const fresh = getFreshRuntimeNarratives(composition, current, update, prior.revision);
+    expect(fresh.map((n) => n.narrativeId)).toEqual(['UNKNOWN_GOOD', 'LATER']);
+    expect(fresh[0]!.eventSequence).toBeLessThan(fresh[1]!.eventSequence);
+  });
   it('strictly rejects v1 streams, invalid delivery policies and incomplete coverage', () => {
     const f = runtimePresentationFixture();
     expect(investigationPresentationSchema.safeParse(f.presentation).success).toBe(true);
@@ -44,6 +125,28 @@ describe('verified schema-2 runtime projection (isolated)', () => {
     expect(validateInvestigationPresentation(duplicate, f.scenario, f.definition)).toContain(
       'INVALID_STREAM_NARRATIVE_COVERAGE',
     );
+    const missingRole = structuredClone(f.scenario);
+    missingRole.warRoom.roles = [];
+    expect(validateInvestigationPresentation(f.presentation, missingRole, f.definition)).toContain(
+      'UNKNOWN_STREAM_ROLE',
+    );
+    const missingResource = structuredClone(f.scenario);
+    missingResource.initialState.resources = missingResource.initialState.resources.filter(
+      (r) => r.id !== 'TEAM_CAPACITY',
+    );
+    expect(
+      validateInvestigationPresentation(f.presentation, missingResource, f.definition),
+    ).toContain('UNKNOWN_STREAM_RESOURCE');
+    const extra = structuredClone(f.presentation);
+    const empty = extra.panels[0]!.blocks.find((b) => b.kind === 'narrative_stream')!;
+    if (empty.kind === 'narrative_stream')
+      extra.panels[0]!.blocks.push({ ...empty, id: 'empty', entries: [] });
+    expect(validateInvestigationPresentation(extra, f.scenario, f.definition)).toContain(
+      'EMPTY_NARRATIVE_STREAM',
+    );
+    expect(
+      investigationPresentationSchema.safeParse({ ...f.presentation, unknownField: true }).success,
+    ).toBe(false);
   });
   it('does not expose Good before trigger; exact owned command yields one fresh message and permanent read-only history', () => {
     const f = runtimePresentationFixture();

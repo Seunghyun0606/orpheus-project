@@ -63,7 +63,16 @@ describe('DEC-060 complete opt-in package connection (deferred)', () => {
       const omitted = Object.fromEntries(
         Object.entries(sources).filter(([path]) => !path.endsWith(field)),
       );
-      expect(inspectProductionCampaignSources(omitted, manifest).ok).toBe(false);
+      const remaining = inspectProductionCampaignSources(omitted, manifest);
+      if (field === '/packages/campaign.yaml') {
+        // Additive catalog: removing the old package does not invalidate the
+        // independently complete new package. It must not restore as the old one.
+        expect(remaining.ok).toBe(true);
+        if (remaining.ok) {
+          expect(remaining.registry.resolve('orpheus-full-campaign', '1.0.0')).toBeUndefined();
+          expect(remaining.registry.resolve('orpheus-full-campaign', '1.1.0')).toBeDefined();
+        }
+      } else expect(remaining.ok).toBe(false);
     }
   });
   it('starts only the first operational Incident and preserves genuine first completion without skipping', () => {

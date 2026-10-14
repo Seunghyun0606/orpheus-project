@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useSyncExternalStore } from 'react';
 import type { StoreApi } from 'zustand/vanilla';
 import type { CampaignSessionState } from '../store/campaign-session.ts';
 import type { ResolvedCampaignPackage } from '../scenario/campaign-package.ts';
@@ -24,7 +24,11 @@ export function CampaignRuntimeNotices({
   timers?: NoticeTimers;
 }) {
   const queue = useMemo(() => createRuntimeNoticeQueue(timers), [timers]);
-  const notice = useSyncExternalStore(queue.subscribe, queue.snapshot, queue.snapshot);
+  // A new binding cannot paint an old binding's body before passive cleanup.
+  // Retired keys still live in the same queue until this consumer unmounts.
+  const scope = useMemo(() => ({ store, composition }), [store, composition]);
+  const snapshot = useCallback(() => queue.snapshotFor(scope), [queue, scope]);
+  const notice = useSyncExternalStore(queue.subscribe, snapshot, snapshot);
   useEffect(() => {
     const revision = () => store.getState().run?.revision ?? -1;
     let mounted = true;
@@ -57,7 +61,7 @@ export function CampaignRuntimeNotices({
       const run = store.getState().run;
       if (!mounted || !run) return;
       if (active())
-        queue.enqueue(getFreshRuntimeNarratives(composition, run, update, queue.floor()));
+        queue.enqueue(getFreshRuntimeNarratives(composition, run, update, queue.floor()), scope);
       queue.advanceFloor(run.revision); // Unseen/gated/duplicate callbacks cannot become fresh later.
     });
     const unsubscribeRead = store.getState().subscribeReadBoundary(() => {
@@ -75,12 +79,12 @@ export function CampaignRuntimeNotices({
       document.removeEventListener('visibilitychange', visibility);
       queue.reset(revision());
     };
-  }, [store, composition, live, queue]);
+  }, [store, composition, live, queue, scope]);
   useEffect(() => {
     queue.setReducedMotion(reducedMotion);
   }, [queue, reducedMotion]);
   useEffect(() => {
-    if (!notice) return;
+    if (!notice || !live) return;
     let second = 0;
     // Two frames place the timer after the first rendered visible frame.
     const first = requestAnimationFrame(() => {
@@ -92,7 +96,7 @@ export function CampaignRuntimeNotices({
       cancelAnimationFrame(first);
       cancelAnimationFrame(second);
     };
-  }, [notice, queue]);
+  }, [notice, queue, live]);
   if (!notice || !live) return null;
   return (
     <section className="panel" aria-label="New recorded narrative" aria-live="polite">

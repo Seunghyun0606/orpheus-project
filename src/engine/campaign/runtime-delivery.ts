@@ -38,11 +38,15 @@ export function getFreshRuntimeNarratives(
     const events = new Set(
       owned.filter((e) => e.type === 'narrative_triggered').map((e) => e.sequence),
     );
-    return view.panels.flatMap((panel) =>
-      panel.blocks.flatMap((b) =>
-        b.kind === 'narrative_stream' ? b.messages.filter((m) => events.has(m.eventSequence)) : [],
-      ),
-    );
+    return view.panels
+      .flatMap((panel) =>
+        panel.blocks.flatMap((b) =>
+          b.kind === 'narrative_stream'
+            ? b.messages.filter((m) => events.has(m.eventSequence))
+            : [],
+        ),
+      )
+      .sort((a, b) => a.eventSequence - b.eventSequence);
   } catch {
     return [];
   }

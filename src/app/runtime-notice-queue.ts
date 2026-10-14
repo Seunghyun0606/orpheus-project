@@ -10,6 +10,7 @@ export function createRuntimeNoticeQueue(timers: NoticeTimers) {
   const retired = new Set<string>(),
     listeners = new Set<() => void>();
   let timer: unknown,
+    owner: unknown,
     epoch = 0,
     floor = -1,
     disposed = false,
@@ -38,11 +39,12 @@ export function createRuntimeNoticeQueue(timers: NoticeTimers) {
       };
     },
     snapshot: () => items[0] ?? null,
+    snapshotFor: (scope: unknown) => (owner === scope ? (items[0] ?? null) : null),
     floor: () => floor,
     advanceFloor(revision: number) {
       floor = Math.max(floor, revision);
     },
-    enqueue(messages: readonly RecordedNarrative[]) {
+    enqueue(messages: readonly RecordedNarrative[], scope?: unknown) {
       if (disposed) return;
       const wasEmpty = !items.length;
       for (const message of messages)
@@ -50,7 +52,10 @@ export function createRuntimeNoticeQueue(timers: NoticeTimers) {
           retired.add(message.key);
           items.push(message);
         }
-      if (wasEmpty && items.length) next();
+      if (wasEmpty && items.length) {
+        owner = scope;
+        next();
+      }
     },
     markVisible(key: string) {
       const current = items[0];
