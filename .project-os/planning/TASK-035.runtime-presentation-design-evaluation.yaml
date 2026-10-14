@@ -1,0 +1,26 @@
+task: TASK-035
+kind: distinct_read_only_document_checkpoint_audit_not_final_acceptance
+role: evaluator
+actor: /root/task035_checkpoint_evaluator
+recorded_by: /root
+date: '2026-10-14'
+decision: HUMAN_GATE
+status: document_approval_ready_runtime_implementation_pending
+reviewed_candidate: 3f3b8b762a369b8a81c3b8d948b62ae2d838ca60
+evidence_commit: 3d292a8
+direct_checks:
+  - Clean evidence commit preserves reviewed spec/proposal/baseline exactly; final QA SHA-256 matches, initial QA hashes match 0dd9e8d.
+  - All sixty tracked protected src/scenario/data files byte sizes and SHA-256 match source baseline 65acf67.
+  - Diff from baseline contains only documents/metadata; no runtime/schema/scripts/Tauri or canonical state changes.
+  - Current definition has 111 owned references and five branches; prose has one own reference.
+  - Current INC-026 has thirty-three panels, none logs/war_room, all gated by uncommitted-final flag.
+  - M4/M5 and TASK-024/027–035 active; TASK-025 ready, no completion transition.
+audited_not_executed:
+  - Distinct reviewer/QA original findings and corrected proposal rechecks.
+  - QA synthetic validator feasibility results, not actual runtime/package registration.
+  - Exact MD/machine rebinding, additive final panels, owned-event/head/floor and lifecycle/800 ms/history/V1–V12 consistency.
+  - Implementation gate names exact reviewed contract and preserves old authorities/profiles/budgets/failed evidence and separate native/release approvals.
+finding: No substantive contract/evidence contradiction found; ready for exact human contract decision only.
+remaining: Four timeouts, thirty-seven format failures and all broader M4/M5 implementation/acceptance gaps unresolved.
+scope_limit: Source/hash consistency inspection only; no tests/validators/builds/native/profile access, edits, commits or state transitions by evaluator.
+acceptance_boundary: Not human architecture approval, runtime PASS, UI correction or TASK-035 final acceptance.

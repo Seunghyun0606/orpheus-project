@@ -22,6 +22,7 @@ changed_files:
   - .project-os/planning/TASK-035.runtime-presentation-design-review.yaml
   - .project-os/planning/TASK-035.runtime-presentation-design-qa-initial.yaml
   - .project-os/planning/TASK-035.runtime-presentation-design-qa-final.yaml
+  - .project-os/planning/TASK-035.runtime-presentation-design-evaluation.yaml
   - .project-os/planning/TASK-035.runtime-presentation-design-checkpoint.yaml
   - .project-os/planning/TASK-035.runtime-presentation-implementation-gate.yaml
   - docs/TASK-035_RUNTIME_PRESENTATION_CONTRACT_CHECKPOINT.md
@@ -30,6 +31,7 @@ changed_files:
 tests:
   document_consistency_and_feasibility: Independent final document checks ready for exact approval; original review findings retained.
   protected_inventory: Sixty existing tracked content files byte/hash unchanged.
+  distinct_evaluation: Read-only consistency audit of 3d292a8 and exact reviewed 3f3b8b7 returns HUMAN_GATE, document approval ready only.
   runtime_and_schema2: Not implemented or tested; V1–V12 future obligations.
   existing_application_failures: Four unchanged timeout and thirty-seven format failures remain unresolved.
 known_risks:

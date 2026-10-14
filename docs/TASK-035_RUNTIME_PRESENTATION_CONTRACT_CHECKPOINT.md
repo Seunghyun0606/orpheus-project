@@ -49,8 +49,12 @@ keeping old branch versions correctly rejects five `INVALID_BRANCH_REFERENCE`s.
 No new package/run was registered or stored; schema-2 parser/projector is unimplemented.
 No full suite/build/native/install or performance measurements were run this step.
 
-The separate evaluator audits the attributed document evidence, not executes it
-or grants approval. Original operational QA remains FAIL: four unchanged 5-second
+`/root/task035_checkpoint_evaluator` directly audited clean evidence commit
+`3d292a8`, exact proposal hashes, all 60 protected files and unchanged canonical
+state. Its [distinct verdict](../.project-os/planning/TASK-035.runtime-presentation-design-evaluation.yaml)
+is **HUMAN_GATE — document approval ready**, not architecture approval or task
+acceptance. It audited the reviewer/QA executions rather than reproducing them;
+no substantive evidence contradiction was found. Original operational QA remains FAIL: four unchanged 5-second
 timeouts; formatting remains FAIL for 37 existing data files. Neither was waived.
 
 ## Known risks
