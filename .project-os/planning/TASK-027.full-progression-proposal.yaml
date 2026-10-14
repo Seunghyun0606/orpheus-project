@@ -1,0 +1,46 @@
+task: TASK-027
+date: '2026-10-14'
+status: proposed_not_approved_or_applied
+scope: Exact main progression and complete new unreleased package composition, not QA waiver or release.
+identities:
+  campaign: {id: orpheus-full-campaign, version: 1.0.0, schemaVersion: 1, replayVersion: 2, recordVersion: 2}
+  package: {id: orpheus-full-campaign, version: 1.0.0, schemaVersion: 1}
+proposal:
+  incident_access:
+    order: INC-001 through INC-026, ascending approved identities
+    first: INC-001 available from the approved fresh Act-1 state.
+    subsequent: Require genuine accumulated completion of every earlier Incident and currentAct at least the authored Act.
+    replay: Completed earlier Incidents remain eligible for explicit new attempts; preserve all previous attempts and once-per-run effects.
+    discovery_policy: No optional clue, alignment threshold, branch/rate or prediction sample is required for ordinary recovery/main access.
+    protected_actions: Keep every approved cross-Incident discovery/Board/Observer/final-plan guard unchanged; main access does not grant any of their discoveries.
+  act_progression:
+    initial: Act 1 only, no inherited completions or initialized metrics.
+    advancement: A genuine completion at each listed boundary advances only from that boundary's source Act to its next Act after all preceding operational completions exist.
+    boundaries:
+      - {incidentId: INC-003, from: 1, to: 2}
+      - {incidentId: INC-005, from: 2, to: 3}
+      - {incidentId: INC-008, from: 3, to: 4}
+      - {incidentId: INC-011, from: 4, to: 5}
+      - {incidentId: INC-014, from: 5, to: 6}
+      - {incidentId: INC-018, from: 6, to: 7}
+      - {incidentId: INC-022, from: 7, to: 8}
+      - {incidentId: INC-024, from: 8, to: 9}
+    implementation: Explicit completion-triggered progression effects and completed references in existing schemas, with separate receipt identities; no new storage contract.
+    retry_policy: Never lower currentAct or reset accumulated history; boundary effects remain once per campaign.
+  composition:
+    - Inline only approved exact logical/model/action/branch/recommendation/numeric/ending/prose bindings and false initial flags.
+    - Bind all 26 exact Scenario/sidecar versions; no compatible alias, imported QA fixture or latest selection.
+    - Require all 26 Incidents, nine Acts, supported models/opportunities, ten ending predicates/prose and exact sidecars before admission.
+    - Keep the default three-Incident MVP; only the explicit Full campaign route may load the complete pre-release package and open its ledger.
+    - If any authority fails runtime validation, remain unavailable with diagnostics; never expose a partial official campaign or substitute a test model.
+    - Enabling this complete pre-release route does not mark work accepted, certify reachability or authorize push/distribution/release.
+preserved:
+  - Existing old authorities/records/stores and explicit new-run creation/restoration.
+  - Strict unknown/unavailable model semantics, source/ACK provenance and unresolved ending policy.
+  - Earlier once-per-run effects, retained distinct choices/harm and actual repeated Incident costs/history.
+  - Board pacing and discovery re-investigation, including a viable non-disclosure route.
+  - All deferred automated/independent/native/M4/M5 verification and final release gates.
+excluded:
+  - Content renumbering, numerical rebalance, automatic discovery or ending grants.
+  - Shortcut/skip authoring, old-run migration, auto-start or default full-campaign entry.
+verification: not_run_QA_deferred

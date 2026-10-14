@@ -10,6 +10,8 @@ import {
 } from './presentation-settings.ts';
 import { CampaignTools } from './CampaignTools.tsx';
 import type { ResolvedCampaignPackage } from '../scenario/campaign-package.ts';
+import { CampaignEnding } from './CampaignEnding.tsx';
+import { campaignAttemptHead, type CampaignRun } from '../engine/campaign/transitions.ts';
 
 // The caller must supply an approved authority/isolated fixture adapter. Nothing
 // in this component selects a campaign, fabricates history or enables MVP reveals.
@@ -26,7 +28,12 @@ export function CampaignDesk({
 }) {
   const state = useStore(store);
   const [reviewId, setReviewId] = useState<string | null>(null);
-  const [ending, setEnding] = useState<ReturnType<CampaignSessionState['ending']>>(null);
+  const [endingQuery, setEnding] = useState<{
+    run: CampaignRun;
+    attemptId: string;
+    priorHead: string;
+    result: ReturnType<CampaignSessionState['ending']>;
+  } | null>(null);
   const [preferences, setPreferences] = useState(() =>
     composition ? readPresentationPreferences() : defaultPresentationPreferences,
   );
@@ -39,6 +46,18 @@ export function CampaignDesk({
   const acknowledged =
     prep && run?.opportunities?.acknowledgements.some((a) => a.preparationId === prep.id);
   const blocked = state.busy || state.pendingOperationId !== null;
+  // A reload, new durable operation or archive switch invalidates the query.
+  // Store snapshots are immutable; never keep displaying a stale final winner.
+  const currentEndingQuery =
+    !blocked &&
+    run &&
+    attempt &&
+    endingQuery?.run === run &&
+    endingQuery.attemptId === attempt.id &&
+    endingQuery.priorHead === campaignAttemptHead(attempt)
+      ? endingQuery
+      : null;
+  const ending = currentEndingQuery?.result;
   const scale =
     preferences.textScale === 'extra-large'
       ? '150%'
@@ -168,7 +187,7 @@ export function CampaignDesk({
         {attempt ? (
           <p>
             {attempt.incident.scenarioId} / {attempt.incident.elapsedSeconds} seconds /{' '}
-            {attempt.incident.completionReached ? 'Recovered' : 'In progress'}
+            {attempt.incident.completionReached ? 'Completed' : 'In progress'}
           </p>
         ) : null}
       </section>
@@ -292,7 +311,19 @@ export function CampaignDesk({
       {attempt?.incident.completionReached ? (
         <section className="panel" aria-label="Ending framework query">
           <h2>Read-only ending framework</h2>
-          <button type="button" onClick={() => setEnding(state.ending(attempt.id))}>
+          <button
+            type="button"
+            disabled={blocked}
+            onClick={() => {
+              if (run)
+                setEnding({
+                  run,
+                  attemptId: attempt.id,
+                  priorHead: campaignAttemptHead(attempt),
+                  result: composition ? null : state.ending(attempt.id),
+                });
+            }}
+          >
             Query authored final context
           </button>
           {ending ? (
@@ -303,6 +334,14 @@ export function CampaignDesk({
                   : `Unresolved: ${ending.result.kind}`
                 : 'Final context requires valid observations.'}
             </p>
+          ) : null}
+          {composition && run && currentEndingQuery ? (
+            <CampaignEnding
+              composition={composition}
+              run={run}
+              attemptId={currentEndingQuery.attemptId}
+              priorHead={currentEndingQuery.priorHead}
+            />
           ) : null}
         </section>
       ) : null}

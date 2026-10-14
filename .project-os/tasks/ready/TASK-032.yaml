@@ -33,6 +33,7 @@ relevant_files:
   - src/engine/campaign/endings.ts
   - src/tests/
 active_decisions:
+  - .project-os/decisions/DEC-058-read-only-ending-presentations.yaml
   - .project-os/decisions/DEC-057-initial-full-campaign-ending-balance.yaml
   - .project-os/decisions/DEC-056-additional-campaign-recommendations.yaml
   - .project-os/decisions/DEC-055-campaign-choice-effect-sources.yaml

@@ -1,0 +1,27 @@
+id: DEC-058
+title: Version-pinned read-only ending prose and conditional epilogue
+status: active
+date: '2026-10-14'
+applies_to: [M5]
+human_approval:
+  selected_option: A
+  instruction: 제안된 표시 계약·에필로그 조건 승인 후 구현.
+request: .project-os/planning/TASK-032.ending-presentation-gate.yaml
+approved_proposal:
+  commit: 3429882
+  file: .project-os/planning/TASK-032.ending-presentation-proposal.yaml
+decision: >-
+  Implement the exact separate EndingPresentation authority and read-only renderer
+  for the new campaign. Require exact campaign/ending/presentation identities,
+  all ten prose entries, typed blocks and declared reveal references before
+  admitting the complete new package. Render only a verified resolved ending at
+  the requested final attempt/head, retaining actual final consequences.
+consequences:
+  - No ending grant, save/ledger migration or latest-version fallback.
+  - Preserve old package bindings without the new presentation contract.
+  - Unavailable, ambiguous and no-match results diagnose without fallback prose.
+  - Title payoff requires genuinely known PROJECT_DISTRIBUTED.
+  - PROMETHEUS requires that flag and LIBERATION, WHISTLEBLOWER, SHUTDOWN, CUSTODIAN, NULL or REWRITE.
+  - All resolved endings share the thematic final question; viewing grants no discovery.
+  - Future institutional report numbers are fiction, not measured player rates/confidence.
+  - QA remains deferred, not waived; no acceptance, push or release authorization.

@@ -1,0 +1,19 @@
+task: TASK-027
+date: '2026-10-14'
+status: awaiting_human_decision
+type: architecture_change
+question: 운영 완료 기반 순차 진행으로 26개 Incident의 정식 패키지를 연결할까요?
+proposal: .project-os/planning/TASK-027.full-progression-proposal.yaml
+safe_checkpoint: docs/TASK-032_ENDING_PRESENTATION_IMPLEMENTATION.md
+reason: The approved identities/reveal graph do not select exact ordinary access/Act advancement predicates. Complete composition would make the opt-in campaign startable, a material runtime behavior change; do not invent progression or equate unverified authored content with acceptance.
+options:
+  - key: A
+    label: 순차 운영 완료 진행·전체 패키지 연결 승인
+    scope: Approve the exact proposal, monotonic boundary advancement and complete pre-release Full campaign route only after all runtime authorities validate; QA/acceptance remain pending.
+  - key: B
+    label: Incident·Act 접근 기준 수정
+    scope: Keep the completed prose checkpoint and unavailable full-package state; revise ordering/access policy before runtime composition.
+preserved:
+  - Optional discoveries/metrics do not block ordinary progression or get granted automatically.
+  - Existing protected-action guards, old records and default MVP remain.
+  - QA remains deferred, not waived; no completion, push or release.

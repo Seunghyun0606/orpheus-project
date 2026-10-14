@@ -13,6 +13,11 @@ import {
   validateInvestigationPresentation,
   type InvestigationPresentation,
 } from './presentation.ts';
+import {
+  endingPresentationSchema,
+  validateEndingPresentation,
+  type EndingPresentation,
+} from './ending-presentation.ts';
 
 const version = z.string().min(1);
 export const campaignPackageSchema = z
@@ -22,6 +27,7 @@ export const campaignPackageSchema = z
     version,
     definitionId: idSchema,
     definitionVersion: version,
+    endingPresentation: z.object({ id: idSchema, version }).strict().optional(),
     scenarios: z.array(z.object({ scenarioId: idSchema, contentVersion: version }).strict()).min(1),
     presentations: z
       .array(
@@ -36,6 +42,7 @@ export interface ResolvedCampaignPackage {
   readonly definition: CampaignDefinition;
   readonly catalog: ReadonlyMap<string, Scenario>;
   readonly presentations: readonly InvestigationPresentation[];
+  readonly endingPresentation?: EndingPresentation;
 }
 export interface CampaignPackageRegistry {
   all(): readonly ResolvedCampaignPackage[];
@@ -57,6 +64,9 @@ function copy(p: ResolvedCampaignPackage): ResolvedCampaignPackage {
     definition: freeze(structuredClone(p.definition)),
     catalog: new Map([...p.catalog].map(([k, s]) => [k, freeze(structuredClone(s))])),
     presentations: freeze(structuredClone(p.presentations)),
+    ...(p.endingPresentation
+      ? { endingPresentation: freeze(structuredClone(p.endingPresentation)) }
+      : {}),
   };
 }
 export function parsePackageYaml(source: string): unknown {
@@ -69,6 +79,7 @@ export function createCampaignPackageRegistry(inputs: {
   definitions: readonly unknown[];
   scenarios: ReadonlyMap<string, Scenario>;
   presentations: readonly unknown[];
+  endingPresentations?: readonly unknown[];
 }): PackageResult {
   const issues: string[] = [];
   try {
@@ -77,6 +88,7 @@ export function createCampaignPackageRegistry(inputs: {
       inputs.definitions,
       [...inputs.scenarios],
       inputs.presentations,
+      inputs.endingPresentations ?? [],
     ]);
     const definitions = new Map<string, CampaignDefinition>();
     for (const raw of inputs.definitions) {
@@ -99,6 +111,17 @@ export function createCampaignPackageRegistry(inputs: {
       const k = key(result.data.id, result.data.version);
       if (presentations.has(k)) issues.push('DUPLICATE_PRESENTATION');
       presentations.set(k, result.data);
+    }
+    const endingPresentations = new Map<string, EndingPresentation>();
+    for (const raw of inputs.endingPresentations ?? []) {
+      const parsed = endingPresentationSchema.safeParse(raw);
+      if (!parsed.success) {
+        issues.push('INVALID_ENDING_PRESENTATION_SCHEMA');
+        continue;
+      }
+      const k = key(parsed.data.id, parsed.data.version);
+      if (endingPresentations.has(k)) issues.push('DUPLICATE_ENDING_PRESENTATION');
+      endingPresentations.set(k, parsed.data);
     }
     const resolved = new Map<string, ResolvedCampaignPackage>();
     const packageIds = new Set<string>();
@@ -162,7 +185,24 @@ export function createCampaignPackageRegistry(inputs: {
         issues.push(...validateInvestigationPresentation(view, s, d));
         views.push(view);
       }
-      resolved.set(k, copy({ package: p, definition: d, catalog, presentations: views }));
+      let endingPresentation: EndingPresentation | undefined;
+      if (p.endingPresentation) {
+        endingPresentation = endingPresentations.get(
+          key(p.endingPresentation.id, p.endingPresentation.version),
+        );
+        if (!endingPresentation) issues.push('MISSING_ENDING_PRESENTATION');
+        else issues.push(...validateEndingPresentation(endingPresentation, d));
+      }
+      resolved.set(
+        k,
+        copy({
+          package: p,
+          definition: d,
+          catalog,
+          presentations: views,
+          ...(endingPresentation ? { endingPresentation } : {}),
+        }),
+      );
     }
     if (issues.length) return { ok: false, diagnostics: [...new Set(issues)].sort() };
     return {

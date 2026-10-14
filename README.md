@@ -58,8 +58,11 @@ DEC-057 now approves the initial numeric balance and ten equal-rank ending condi
 The [numeric checkpoint](docs/TASK-032_NUMERIC_BALANCE_IMPLEMENTATION.md) authors
 new-only score bindings, ending YAML and deferred tests. Neither those data nor the
 three additional recommendation rules are registered as a partial runtime package.
-Conditional ending-presentation/epilogue decisions, complete composition and QA remain
-pending; TASK-032 is not complete.
+DEC-058 now approves the separate read-only ending-presentation contract and guarded
+PROMETHEUS epilogue. The [presentation checkpoint](docs/TASK-032_ENDING_PRESENTATION_IMPLEMENTATION.md)
+implements exact sidecar/package validation and verified engine/UI rendering, with
+actual final consequences and deferred tests. Complete progression/package composition
+and QA remain pending; TASK-032 is not complete and the full campaign is not startable.
 The complete production definition and verification remain pending. No QA result
 or playable full-campaign acceptance is claimed.
 DEC-038 approves the 26-Incident identities and reveal blueprint; independent review,

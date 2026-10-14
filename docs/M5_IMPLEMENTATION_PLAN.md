@@ -247,3 +247,9 @@ unexecuted tests. It does not register a partial official package or prove ten-e
 reachability. Conditional ending presentation/epilogue decisions and complete
 definition/progression integration remain pending. All QA remains deferred, not
 waived; M4, TASK-031/032, and final M5 acceptance/release obligations are unchanged.
+
+DEC-058 subsequently approves the [ending-presentation checkpoint](TASK-032_ENDING_PRESENTATION_IMPLEMENTATION.md):
+ten typed prose entries, exact package binding, read-only verified projection and
+conditional title/PROMETHEUS rendering. No ending grant or old-store migration is
+introduced. Exact main progression/complete package integration is the next decision;
+the whole campaign is still unavailable, and all acceptance/QA debt remains.

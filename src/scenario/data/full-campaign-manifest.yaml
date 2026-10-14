@@ -1,3 +1,14 @@
+endingIds:
+  - CONTINUITY
+  - LIBERATION
+  - WHISTLEBLOWER
+  - SHUTDOWN
+  - CUSTODIAN
+  - 'NULL'
+  - THE BOARD
+  - THE FIRE
+  - STATUS QUO
+  - REWRITE
 incidents:
   - id: INC-001
     title: Connection Saturation

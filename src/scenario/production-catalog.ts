@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
   createCampaignPackageRegistry,
+  campaignPackageSchema,
   parsePackageYaml,
   type PackageResult,
 } from './campaign-package.ts';
@@ -9,6 +10,7 @@ import { validateCampaignDefinition } from './campaign.ts';
 
 export const fullCampaignManifestSchema = z
   .object({
+    endingIds: z.array(z.string().min(1)).length(10),
     incidents: z
       .array(
         z
@@ -24,6 +26,7 @@ export const fullCampaignManifestSchema = z
   .strict()
   .refine(
     (m) =>
+      new Set(m.endingIds).size === 10 &&
       new Set(m.incidents.map((i) => i.id)).size === 26 &&
       new Set(m.incidents.map((i) => i.act)).size === 9,
     'Unique incident IDs and all nine Acts are required.',
@@ -40,7 +43,7 @@ export function inspectProductionCampaignSources(
     const approved = fullCampaignManifestSchema.parse(manifest);
     if (
       Object.keys(sources).some(
-        (p) => !/\/(incidents|packages|definitions|presentations)\//.test(p),
+        (p) => !/\/(incidents|packages|definitions|presentations|ending-presentations)\//.test(p),
       )
     )
       return { ok: false, diagnostics: ['UNKNOWN_PRODUCTION_SOURCE'] };
@@ -55,7 +58,8 @@ export function inspectProductionCampaignSources(
         .map(([, source]) => parsePackageYaml(source));
     const packages = byFolder('packages'),
       definitions = byFolder('definitions'),
-      presentations = byFolder('presentations');
+      presentations = byFolder('presentations'),
+      endingPresentations = byFolder('ending-presentations');
     if (!packages.length || !definitions.length || !presentations.length)
       return { ok: false, diagnostics: ['INCOMPLETE_PRODUCTION_PACKAGE'] };
     for (const raw of definitions) {
@@ -73,6 +77,11 @@ export function inspectProductionCampaignSources(
         return { ok: false, diagnostics: ['INCOMPLETE_PRODUCTION_PACKAGE'] };
       const d = checked.definition;
       if (
+        d.endings!.entries.length !== approved.endingIds.length ||
+        d.endings!.entries.some((entry) => !approved.endingIds.includes(entry.id))
+      )
+        return { ok: false, diagnostics: ['PRODUCTION_ENDING_COVERAGE'] };
+      if (
         !approved.incidents.every((i) => {
           const entry = d.incidents.find((x) => x.id === i.id);
           const scenario =
@@ -88,10 +97,21 @@ export function inspectProductionCampaignSources(
       )
         return { ok: false, diagnostics: ['PRODUCTION_BLUEPRINT_MISMATCH'] };
     }
+    // The full production route requires the new explicit prose binding. Generic
+    // framework/older packages remain valid without this optional addition.
+    if (
+      !endingPresentations.length ||
+      packages.some((raw) => {
+        const parsed = campaignPackageSchema.safeParse(raw);
+        return !parsed.success || !parsed.data.endingPresentation;
+      })
+    )
+      return { ok: false, diagnostics: ['INCOMPLETE_ENDING_PRESENTATION_PACKAGE'] };
     return createCampaignPackageRegistry({
       packages,
       definitions,
       presentations,
+      endingPresentations,
       scenarios: catalog.scenarios,
     });
   } catch {

@@ -1,0 +1,23 @@
+task: TASK-032
+date: '2026-10-14'
+authority: DEC-058
+status: authored_not_verified_not_runtime_registered
+definition_identity: {id: orpheus-full-campaign, version: 1.0.0}
+source: src/scenario/data/full-campaign/ending-presentations/endings.yaml
+references_fragment:
+  - id: ENDING_PRESENTATION_PROJECT_DISTRIBUTED
+    version: 1.0.0
+    source: narrative_flag
+    key: PROJECT_DISTRIBUTED
+    valueType: boolean
+    contexts: [ending]
+package_binding_fragment:
+  endingPresentation: {id: orpheus-full-campaign-ending-presentations, version: 1.0.0}
+composition_contract:
+  - Append the reference to the complete new definition with its already approved false initial flag and actual discovery effects.
+  - Add the exact endingPresentation binding to the complete new package, not an old immutable package.
+  - Load the exact sidecar through ending-presentations; a missing or mismatched authority rejects production admission.
+  - The ending resolver's exact final attempt/head and verified replay determine the selected prose and final record.
+  - No entry, mount, query, archive visit or restoration grants discoveries, behavior samples, ending flags or operations.
+  - Old package bindings/stores remain unchanged; no latest fallback or incomplete official campaign.
+verification: not_run_QA_deferred
