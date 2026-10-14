@@ -1,0 +1,22 @@
+id: DEC-065
+title: Early preparatory evidence audit only; acceptance and release withheld
+status: active
+date: '2026-10-14'
+applies_to: [M5, TASK-035]
+human_approval:
+  selected_option: A
+  instruction: 준비 감사·검증 계획만 선행; 완료·출시 판정 보류.
+approved_request:
+  commit: e33d431
+  file: .project-os/planning/TASK-035.preparatory-audit-gate.yaml
+decision: >-
+  Replace TASK-025/TASK-028–034 implementation-readiness prerequisites with
+  accepted TASK-026 only. Claim TASK-035 through projectctl for a source-based
+  evidence gap map, candidate provenance and remaining verification plan only.
+consequences:
+  - This is readiness for preparation, not readiness for final acceptance.
+  - Execute no general/native QA, independent review/evaluation or installer/app launch under this approval.
+  - Keep TASK-024/025 and TASK-027–034 incomplete; every preceding acceptance obligation remains mandatory.
+  - Preserve approved budgets, exact authorities, profiles, immutable reports and all user storage.
+  - No self-approval, milestone closure, production release, signing, push or publication.
+  - Resume deferred verification only after explicit authorization; final M5 closure and release remain separate gates.

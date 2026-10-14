@@ -321,3 +321,12 @@ TASK-025 before implementation, but TASK-035 still requires TASK-025. TASK-024
 remains active and TASK-025 unclaimed/ineligible. No outstanding M4 verification
 is waived or retrospectively marked PASS, and final M5 acceptance/release remains
 blocked by missing M4 acceptance. The earlier planning-only checkpoint is historical.
+
+## TASK-035 preparation exception (2026-10-14)
+
+DEC-065 subsequently replaces TASK-035's claim prerequisites with accepted
+TASK-026 for **preparation only**. It does not waive TASK-024/025 acceptance or
+M4 completion before final M5 acceptance/release. The
+[gap audit](TASK-035_PREPARATORY_AUDIT.md) preserves all four M4 exit criteria and
+the missing corrected-ACK restore/response/reload/archive/native observations.
+No M4 QA/evaluation or milestone transition is executed in this preparatory step.

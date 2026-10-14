@@ -7,6 +7,17 @@ recovery, saved evidence, and an action-derived postmortem.
 
 ## Current planning status
 
+Latest status, 2026-10-14: 26 Incident/sidecar pairs and the complete opt-in
+campaign definition/package are connected, but playable full-campaign acceptance
+is **not established**. M4/M5 remain active/incomplete, TASK-024 and TASK-027–035
+active, TASK-025 unclaimed/ineligible. DEC-065 permits TASK-035 preparation only;
+its [evidence-gap audit](docs/TASK-035_PREPARATORY_AUDIT.md) and
+[remaining verification plan](docs/M5_VERIFICATION_PLAN.md) distinguish source
+inventory, earlier scoped PASS, Node-only replay samples and generated-not-installed
+artifacts from missing acceptance evidence. General/native QA remains deferred;
+no completion, release or push is approved. The entries below are chronological
+checkpoints, not current claims that later implemented content is still absent.
+
 As of 2026-10-12, M1–M3 are complete; M4 remains active. TASK-018–023 are accepted,
 TASK-024 has a bounded implementation and partial native evidence but is not complete,
 and TASK-025 remains unclaimed. Native QA is currently deferred at the human's request,

@@ -10,6 +10,7 @@ why: 'Full campaign readiness requires tested content, real persistence, accessi
 
 scope:
   include:
+    - 'DEC-065 currently permits preparation only: evidence gaps, candidate provenance and deferred verification plan; no general/native QA execution or final acceptance.'
     - 'Map nine Acts, 24–28 total Incidents, required reveals and all ten endings to actual tested production content.'
     - 'Run the complete quality/regression command set, long-run persistence/replay and supported desktop inspections.'
     - 'Audit unchanged legacy authority, actual ACK/response samples, retry effects and unavailable/ambiguous diagnostics.'
@@ -21,14 +22,7 @@ scope:
     - 'Publish, push, sign with new credentials or mark milestone complete outside configured transitions.'
 
 depends_on:
-  - TASK-025
-  - TASK-028
-  - TASK-029
-  - TASK-030
-  - TASK-031
-  - TASK-032
-  - TASK-033
-  - TASK-034
+  - TASK-026
 specs:
   - specs/product/02-full-campaign-blueprint.md
   - specs/product/01-game-and-narrative-direction.md
@@ -41,6 +35,7 @@ relevant_files:
   - README.md
   - .project-os/tasks/results/
 active_decisions:
+  - .project-os/decisions/DEC-065-preparatory-readiness-audit.yaml
   - .project-os/decisions/DEC-039-m5-independent-verification-delegation.yaml
   - .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml
   - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml

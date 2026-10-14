@@ -327,14 +327,7 @@ tasks:
   role: developer
   milestone: M5
   priority: P0
-  status: ready
+  status: active
   depends_on:
-  - TASK-025
-  - TASK-028
-  - TASK-029
-  - TASK-030
-  - TASK-031
-  - TASK-032
-  - TASK-033
-  - TASK-034
+  - TASK-026
   human_gate: false
