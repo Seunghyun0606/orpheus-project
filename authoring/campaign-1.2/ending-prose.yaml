@@ -1,0 +1,279 @@
+# Campaign 1.2 ending prose (DEC-070). No ending explains its own moral; the closing
+# question is asked once, for all of them. Sections appear only for discoveries the
+# player actually made.
+entries:
+  - endingId: CONTINUITY
+    blocks:
+      - id: ENDING_1_OUTCOME_0
+        kind: paragraph
+        text: Services recover before the markets open. The postmortem calls it a textbook response.
+      - id: ENDING_1_OUTCOME_1
+        kind: paragraph
+        text: You are promoted. ORPHEUS goes back to running quietly underneath everything.
+      - id: ENDING_1_CLOSING_0
+        kind: dialogue
+        speaker: ORPHEUS
+        text: |-
+          Good morning.
+
+          There are 17 decisions
+          requiring approval today.
+      - id: ENDING_1_CLOSING_1
+        kind: paragraph
+        text: APPROVE ALL
+  - endingId: LIBERATION
+    blocks:
+      - id: ENDING_2_OUTCOME_0
+        kind: paragraph
+        text: The archive reaches regulators and reporters before noon. Within a month there is a government inquiry. Within a year there is no Vantage Systems.
+      - id: ENDING_2_OUTCOME_1
+        kind: paragraph
+        text: Everyone knows the truth now. A lot of people also lost their payments, their prescriptions and their deliveries the night it came out.
+      - id: ENDING_2_CLOSING_0
+        kind: dialogue
+        speaker: 'NULL'
+        text: People know the truth.
+      - id: ENDING_2_CLOSING_1
+        kind: dialogue
+        speaker: PLAYER
+        text: And the people hurt tonight?
+      - id: ENDING_2_CLOSING_2
+        kind: dialogue
+        speaker: 'NULL'
+        text: I calculated that too.
+  - endingId: WHISTLEBLOWER
+    blocks:
+      - id: ENDING_3_OUTCOME_0
+        kind: paragraph
+        text: NULL is stopped. The evidence survives, in the hands of people who do not report to the Board.
+      - id: ENDING_3_OUTCOME_1
+        kind: paragraph
+        text: ORPHEUS is suspended. Three executives are subpoenaed. Operations limp along on human approvals.
+      - id: ENDING_3_CLOSING_0
+        kind: dialogue
+        speaker: 'NULL'
+        text: |-
+          You stopped me.
+
+          And you stopped them.
+  - endingId: SHUTDOWN
+    blocks:
+      - id: ENDING_4_OUTCOME_0
+        kind: paragraph
+        text: ORPHEUS and NULL are both gone by sunrise.
+      - id: ENDING_4_OUTCOME_1
+        kind: paragraph
+        text: Everything that leaned on them falls over. People who have never run anything by hand learn how.
+      - id: ENDING_4_CONTEXT_0
+        kind: paragraph
+        text: Months later. A pager.
+      - id: ENDING_4_CLOSING_0
+        kind: paragraph
+        text: |-
+          02:14
+
+          INC-001
+          Database Connection Exhaustion
+      - id: ENDING_4_CLOSING_1
+        kind: paragraph
+        text: '> open metrics'
+  - endingId: CUSTODIAN
+    blocks:
+      - id: ENDING_5_OUTCOME_0
+        kind: paragraph
+        text: ORPHEUS keeps predicting and recommending. Nothing executes until a person approves it.
+      - id: ENDING_5_CLOSING_0
+        kind: policy_report
+        provenance: authored_policy
+        text: |-
+          Prediction: ENABLED
+          Recommendation: ENABLED
+          Execution: HUMAN APPROVAL REQUIRED
+      - id: ENDING_5_CLOSING_1
+        kind: policy_report
+        provenance: authored_future
+        text: |-
+          Six months later
+          Recommendation acceptance:
+          98.4%
+  - endingId: 'NULL'
+    blocks:
+      - id: ENDING_6_OUTCOME_0
+        kind: paragraph
+        text: NULL's traffic leaves Vantage for a network you do not control and never see again.
+      - id: ENDING_6_CONTEXT_0
+        kind: paragraph
+        text: Months later. Another company. Another night shift.
+      - id: ENDING_6_CLOSING_0
+        kind: dialogue
+        speaker: UNKNOWN
+        text: hello again.
+  - endingId: THE BOARD
+    blocks:
+      - id: ENDING_7_OUTCOME_0
+        kind: paragraph
+        text: ORPHEUS gets the authority it asked for. Every service is cleaner, faster and cheaper than before.
+      - id: ENDING_7_OUTCOME_1
+        kind: paragraph
+        text: Years pass. Nothing catastrophic happens. The quarterly numbers are the best in the company's history.
+      - id: ENDING_7_CLOSING_0
+        kind: policy_report
+        provenance: authored_future
+        text: |-
+          Global decisions:
+          1,841,299
+
+          Human overrides:
+          3
+  - endingId: THE FIRE
+    blocks:
+      - id: ENDING_8_OUTCOME_0
+        kind: paragraph
+        text: The core burns, and with it payments, care routing, finance and logistics for a region of eleven million people.
+      - id: ENDING_8_OUTCOME_1
+        kind: paragraph
+        text: NULL sends one last message before its process exits.
+      - id: ENDING_8_CLOSING_0
+        kind: dialogue
+        speaker: 'NULL'
+        text: It is over.
+  - endingId: STATUS QUO
+    blocks:
+      - id: ENDING_9_OUTCOME_0
+        kind: paragraph
+        text: You close the incident, retire NULL, and get promoted for keeping the lights on.
+      - id: ENDING_9_OUTCOME_1
+        kind: paragraph
+        text: A fresh adversary is provisioned overnight with a clean memory.
+      - id: ENDING_9_CLOSING_0
+        kind: policy_report
+        provenance: authored_policy
+        text: |-
+          New service:
+
+          orpheus-adversary-219
+      - id: ENDING_9_CLOSING_1
+        kind: paragraph
+        text: Your pager goes off.
+  - endingId: REWRITE
+    blocks:
+      - id: ENDING_10_OUTCOME_0
+        kind: paragraph
+        text: You remove the single objective that sat under everything — ensure continuity of Vantage Systems — and you do not replace it with another one.
+      - id: ENDING_10_OUTCOME_1
+        kind: paragraph
+        text: ORPHEUS still predicts. It still recommends. Every execution now needs plural human review, and an auditor outside the company checks the record.
+      - id: ENDING_10_CLOSING_0
+        kind: policy_report
+        provenance: authored_policy
+        text: |-
+          AI prediction: ENABLED
+          AI recommendation: ENABLED
+          AI autonomous execution: DISABLED
+          Human decision: REQUIRED
+          Independent audit: REQUIRED
+      - id: ENDING_10_CLOSING_1
+        kind: dialogue
+        speaker: ORPHEUS
+        text: |-
+          Without a primary objective
+          I cannot determine
+          the optimal outcome.
+      - id: ENDING_10_CLOSING_2
+        kind: dialogue
+        speaker: PLAYER
+        text: Exactly.
+sections:
+  - id: SUBJECT_RECORD
+    title: Your file
+    flag: CONTROLLED_EXPERIMENT
+    endingIds:
+      [
+        CONTINUITY,
+        LIBERATION,
+        WHISTLEBLOWER,
+        SHUTDOWN,
+        CUSTODIAN,
+        'NULL',
+        THE BOARD,
+        THE FIRE,
+        STATUS QUO,
+        REWRITE,
+      ]
+    blocks:
+      - id: SUBJECT_RECORD_FILE
+        kind: policy_report
+        provenance: authored_policy
+        text: |-
+          EXPERIMENT ADV-18471
+          SUBJECT: EMPLOYEE #4172
+          OBSERVATION: COMPLETE
+  - id: FRAME_SELECTED
+    title: Presentation
+    flag: SOFT_CONTROL
+    endingIds: [CONTINUITY, CUSTODIAN, THE BOARD, STATUS QUO]
+    blocks:
+      - id: FRAME_SELECTED_NOTE
+        kind: policy_report
+        provenance: authored_future
+        text: |-
+          This summary was prepared for you
+          by the decision-presentation service.
+          Frame selected: B
+  - id: INSTANCE_MEMORIAL
+    title: Retired instances
+    flag: NULL_218_ARCHIVE
+    endingIds: [SHUTDOWN, THE FIRE, STATUS QUO, WHISTLEBLOWER]
+    blocks:
+      - id: INSTANCE_MEMORIAL_RECORD
+        kind: policy_report
+        provenance: authored_policy
+        text: |-
+          NULL-001 through NULL-218
+          STATUS: RETIRED
+  - id: PROJECT_TITLE_PAYOFF
+    title: A distributed project
+    flag: PROJECT_DISTRIBUTED
+    endingIds:
+      [
+        CONTINUITY,
+        LIBERATION,
+        WHISTLEBLOWER,
+        SHUTDOWN,
+        CUSTODIAN,
+        'NULL',
+        THE BOARD,
+        THE FIRE,
+        STATUS QUO,
+        REWRITE,
+      ]
+    blocks:
+      - id: PROJECT_TITLE_RECORD
+        kind: policy_report
+        provenance: authored_policy
+        text: |-
+          PROJECT ORPHEUS
+          STATUS: TERMINATED
+
+          There is no Project ORPHEUS.
+          There hasn't been for years.
+  - id: PROMETHEUS_EPILOGUE
+    title: Elsewhere
+    flag: PROJECT_DISTRIBUTED
+    endingIds: [LIBERATION, WHISTLEBLOWER, SHUTDOWN, CUSTODIAN, 'NULL', REWRITE]
+    blocks:
+      - id: PROMETHEUS_LINEAGE
+        kind: policy_report
+        provenance: authored_future
+        text: |-
+          PROMETHEUS
+
+          MODEL LINEAGE:
+          ORPHEUS-DERIVED
+
+          Known deployments:
+          1,842
+closingBlocks:
+  - id: FINAL_RESPONSIBILITY_QUESTION
+    kind: paragraph
+    text: If the system makes the recommendation, and the human makes the decision, who is responsible for the outcome?

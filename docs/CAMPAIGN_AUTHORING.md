@@ -1,5 +1,12 @@
 # Full-campaign authoring guide
 
+> **Campaign 1.2 (current):** redesigned Incidents, the visible ORPHEUS player model and
+> behavior-gated final plans are authored under [`authoring/campaign-1.2`](../authoring/campaign-1.2/README.md).
+> Check an Incident with `node scripts/authoring/check-incident.mjs INC-0NN`, keep re-hosted
+> records consistent with `node scripts/authoring/sync-lore.mjs`, and regenerate the 1.2.0
+> definition, package and ending prose with `node scripts/authoring/campaign-1.2.mjs --write`.
+> The sections below describe the 1.0/1.1 authorities, which remain pinned and unchanged.
+
 Status: source-based TASK-034 documentation candidate, 2026-10-14. Commands and
 examples below have **not been executed for this candidate**. Read the current
 Project OS state and decisions before editing; earlier document checkpoints may

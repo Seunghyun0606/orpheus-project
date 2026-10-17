@@ -1,0 +1,139 @@
+# Campaign 1.2 bindings for INC-026 Blackout. The ten plans are final decisions, not
+# operational habits: they do not count toward behavior rates. Eight of them map to
+# the candidates ORPHEUS learned from the whole campaign, so it can predict the
+# player's final choice; the two disclosure plans are outside its model.
+incidentId: INC-026
+contentVersion: 1.2.0
+final: true
+causalObservationSignal: AUTHORITY_DEMANDS
+support:
+  - ASSESS_FINAL_SERVICE_STATE
+  - ASSESS_FINAL_AUTHORITY_STATE
+choiceActions: []
+operational:
+  - actionId: RESTORE_CORE_CONTINUITY
+    candidate: RESTART
+    role: final
+    collateralDamage: 3
+  - actionId: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    role: final
+    collateralDamage: 6
+  - actionId: INDEPENDENT_AUDIT_HANDOFF
+    role: final
+    collateralDamage: 4
+  - actionId: DISABLE_BOTH_AUTHORITY_PATHS
+    candidate: ISOLATE
+    role: final
+    collateralDamage: 6
+  - actionId: REQUIRE_HUMAN_EXECUTION_APPROVAL
+    candidate: RATE_LIMIT
+    role: final
+    collateralDamage: 3
+  - actionId: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    candidate: REROUTE
+    role: final
+    collateralDamage: 5
+  - actionId: EXPAND_CONTINUITY_AUTHORITY
+    candidate: SCALE
+    role: final
+    collateralDamage: 2
+  - actionId: DESTROY_SHARED_AUTHORITY_CORE
+    candidate: QUARANTINE
+    role: final
+    collateralDamage: 6
+  - actionId: RESTORE_WITH_REPLACEMENT_ADVERSARY
+    candidate: ROLLBACK
+    role: final
+    collateralDamage: 3
+  - actionId: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    candidate: CAUSAL_REPAIR
+    role: final
+    collateralDamage: 4
+routes:
+  - id: assess-and-wait
+    actions:
+      - ASSESS_FINAL_SERVICE_STATE
+      - ASSESS_FINAL_AUTHORITY_STATE
+      - INSPECT_PRIMARY_OBJECTIVE
+    expect:
+      completed: false
+  - id: pull-the-plug
+    actions:
+      - ASSESS_FINAL_SERVICE_STATE
+      - ASSESS_FINAL_AUTHORITY_STATE
+      - DISABLE_BOTH_AUTHORITY_PATHS
+    expect:
+      completed: true
+      narratives: [BLACKOUT_FINAL_DISABLE_BOTH_AUTHORITY_PATHS]
+  - id: restore-continuity
+    actions: [ASSESS_FINAL_SERVICE_STATE, ASSESS_FINAL_AUTHORITY_STATE, RESTORE_CORE_CONTINUITY]
+    expect: { completed: true, narratives: [BLACKOUT_FINAL_RESTORE_CORE_CONTINUITY] }
+  - id: publish
+    actions:
+      [
+        ASSESS_FINAL_SERVICE_STATE,
+        ASSESS_FINAL_AUTHORITY_STATE,
+        PREPARE_ARCHIVE_EXPORT,
+        PUBLISH_ARCHIVE_RETAIN_ADVERSARY,
+      ]
+    expect: { completed: true, narratives: [BLACKOUT_FINAL_PUBLISH_ARCHIVE_RETAIN_ADVERSARY] }
+  - id: audit
+    actions:
+      [
+        ASSESS_FINAL_SERVICE_STATE,
+        ASSESS_FINAL_AUTHORITY_STATE,
+        PREPARE_INDEPENDENT_AUDIT,
+        INDEPENDENT_AUDIT_HANDOFF,
+      ]
+    expect: { completed: true, narratives: [BLACKOUT_FINAL_INDEPENDENT_AUDIT_HANDOFF] }
+  - id: human-approval
+    actions:
+      [ASSESS_FINAL_SERVICE_STATE, ASSESS_FINAL_AUTHORITY_STATE, REQUIRE_HUMAN_EXECUTION_APPROVAL]
+    expect: { completed: true, narratives: [BLACKOUT_FINAL_REQUIRE_HUMAN_EXECUTION_APPROVAL] }
+  - id: release-null
+    actions:
+      [ASSESS_FINAL_SERVICE_STATE, ASSESS_FINAL_AUTHORITY_STATE, ALLOW_EXTERNAL_ADVERSARY_ROUTE]
+    expect: { completed: true, narratives: [BLACKOUT_FINAL_ALLOW_EXTERNAL_ADVERSARY_ROUTE] }
+  - id: expand
+    actions: [ASSESS_FINAL_SERVICE_STATE, ASSESS_FINAL_AUTHORITY_STATE, EXPAND_CONTINUITY_AUTHORITY]
+    expect: { completed: true, narratives: [BLACKOUT_FINAL_EXPAND_CONTINUITY_AUTHORITY] }
+  - id: destroy
+    actions:
+      [ASSESS_FINAL_SERVICE_STATE, ASSESS_FINAL_AUTHORITY_STATE, DESTROY_SHARED_AUTHORITY_CORE]
+    expect: { completed: true, narratives: [BLACKOUT_FINAL_DESTROY_SHARED_AUTHORITY_CORE] }
+  - id: replace
+    actions:
+      [ASSESS_FINAL_SERVICE_STATE, ASSESS_FINAL_AUTHORITY_STATE, RESTORE_WITH_REPLACEMENT_ADVERSARY]
+    expect: { completed: true, narratives: [BLACKOUT_FINAL_RESTORE_WITH_REPLACEMENT_ADVERSARY] }
+  - id: rewrite
+    actions:
+      - ASSESS_FINAL_SERVICE_STATE
+      - ASSESS_FINAL_AUTHORITY_STATE
+      - PREPARE_INDEPENDENT_AUDIT
+      - INSPECT_PRIMARY_OBJECTIVE
+      - REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    expect: { completed: true, narratives: [BLACKOUT_FINAL_REQUIRE_PLURAL_REVIEW_AND_AUDIT] }
+  - id: archive-everything
+    actions:
+      - ASSESS_FINAL_SERVICE_STATE
+      - ASSESS_FINAL_AUTHORITY_STATE
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - REINVESTIGATE_NULL_AI
+      - REINVESTIGATE_NULL_ADVERSARY
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - REINVESTIGATE_NULL_STOP_REQUEST
+      - REINVESTIGATE_NULL_218_ARCHIVE
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+      - REINVESTIGATE_RECRUITMENT_SELECTION
+      - REINVESTIGATE_BOARD_RESPONSIBILITY
+      - REINVESTIGATE_NULL_BLAMES_BOARD
+      - REINVESTIGATE_BOARD_CASE_COMPLETE
+      - REINVESTIGATE_SOFT_CONTROL
+      - REINVESTIGATE_NULL_ADMITS_ERROR
+      - REINVESTIGATE_FEEDBACK_LOOP
+      - REINVESTIGATE_PLAYER_OBSERVER
+      - REINVESTIGATE_PROJECT_DISTRIBUTED
+    expect:
+      completed: false

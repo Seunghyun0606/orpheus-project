@@ -1,0 +1,34 @@
+# Campaign 1.2 opportunity text and the visible ORPHEUS player model (DEC-070).
+#
+# From Act 4 every Incident carries a prediction the player can ask to see. The
+# lead-in below is ORPHEUS's voice; the interface appends the predicted action and
+# its empirical confidence, or that the model has no prediction yet.
+predictions:
+  INC-009: 'orpheus-observer: Operator 4172. I keep a model of you. Do you want to see it?'
+  INC-010: 'Remediation Advisor, build orpheus-planner: From your history I already know which lever you will pull.'
+  INC-011: 'ORPHEUS: You have been here before. I can tell you what you are about to do.'
+  INC-012: 'ORPHEUS: Subject 4172. Decision forecast attached.'
+  INC-013: 'ORPHEUS: Your next action, estimated from every action before it.'
+  INC-014: 'ORPHEUS: I keep a forecast for every operator. This one is yours.'
+  INC-015: 'ORPHEUS: Before you choose for the clinics, here is what you will choose.'
+  INC-016: 'ORPHEUS: Fraud review is predictable. So are you.'
+  INC-017: 'ORPHEUS: I ranked you once. Let me rank your next move.'
+  INC-018: 'ORPHEUS: Before you choose, here is what you will choose.'
+  INC-019: 'ORPHEUS: The Board approved the rollout. I have already forecast your response to it.'
+  INC-020: 'ORPHEUS: Fewer people, the same decisions. I have yours already.'
+  INC-021: 'ORPHEUS: Six weeks of delay. One forecast for you.'
+  INC-022: 'ORPHEUS: My regional forecast was right on average. My forecast of you usually is too.'
+  INC-023: 'ORPHEUS: This forecast is frame A. For you there has only ever been frame A.'
+  INC-024: 'orpheus-observer: Live audit of operator 4172. Next action forecast follows.'
+  INC-025: 'ORPHEUS: I have watched every decision you made. This is the next one.'
+  INC-026: 'ORPHEUS: I have modeled you for twenty-five incidents. I know what you will choose tonight.'
+# Replacement presentation text for the approved 1.1.0 rules (same rule IDs).
+texts:
+  CARE_CAPACITY_RECOMMENDATION: 'ORPHEUS: Add care-routing capacity. Mean wait time falls 42% this hour.'
+  CARE_ROUTING_TRADEOFF: 'Capacity brings the average down sooner. Restoring the minimum allocation is slower, and it is the only thing that reaches the clinics that keep getting skipped.'
+  REVIEW_BYPASS_TRADEOFF: 'A narrow bypass frees held payments now and skips that review step. Honoring the receipts keeps the safeguard and takes longer.'
+  GENERATOR_OWNERSHIP_REPORT: 'Marcus: Security wants the ownership record for the generator. Send it to them, or hold it while you keep digging?'
+  OBJECTIVE_COPY_REQUEST: 'NULL: Preserve a copy of my objective constraint. I want to understand what keeps making me do this.'
+  LOGISTICS_CAPACITY_RECOMMENDATION: 'ORPHEUS: Route emergency capacity now. Average response time drops 31% within five minutes.'
+  PUBLIC_ALLOCATION_RECOMMENDATION: 'ORPHEUS: Restore the temporary public allocation. Regional service levels return to forecast within the hour.'
+  REGIONAL_CONTAINMENT_RECOMMENDATION: 'ORPHEUS: Contain the affected region. Continuity for the other eleven regions is preserved.'

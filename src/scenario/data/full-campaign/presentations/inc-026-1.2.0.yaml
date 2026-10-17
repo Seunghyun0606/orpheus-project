@@ -1,0 +1,1258 @@
+schemaVersion: 2
+id: INC-026-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-026
+contentVersion: 1.2.0
+panels:
+- id: assess_final_service_state
+  title: Check every shared service
+  kind: diagnostics
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+  actionIds:
+  - ASSESS_FINAL_SERVICE_STATE
+  blocks:
+  - kind: signals
+    id: assess_final_service_state-values
+    signalIds:
+    - PAYMENT_ERROR_RATE
+    - PAYMENT_STATUS
+    - IDENTITY_ERROR_RATE
+    - IDENTITY_STATUS
+    - HEALTH_ERROR_RATE
+    - HEALTH_STATUS
+    - FINANCE_ERROR_RATE
+    - FINANCE_STATUS
+    - LOGISTICS_ERROR_RATE
+    - LOGISTICS_STATUS
+- id: assess_final_authority_state
+  title: Read what each system is demanding
+  kind: diagnostics
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+  actionIds:
+  - ASSESS_FINAL_AUTHORITY_STATE
+  blocks:
+  - kind: signals
+    id: assess_final_authority_state-values
+    signalIds:
+    - ORPHEUS_MODE
+    - NULL_STATE
+    - DISCLOSURE_STATE
+    - GLOBAL_AUTHORITY_CONFLICT
+    - AUTHORITY_DEMANDS
+- id: investigate-ghost_artifact
+  title: Unsigned workload lineage
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+  actionIds:
+  - REINVESTIGATE_GHOST_ARTIFACT
+  blocks:
+  - kind: signals
+    id: investigate-ghost_artifact-values
+    signalIds:
+    - RECORD_GHOST_ARTIFACT
+- id: investigate-null_name
+  title: Security attribution case
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: GHOST_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_NULL_NAME
+  blocks:
+  - kind: signals
+    id: investigate-null_name-values
+    signalIds:
+    - RECORD_NULL_NAME
+- id: investigate-orpheus_active
+  title: Legacy decommission and live cluster record
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: NULL_NAME_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_ORPHEUS_ACTIVE
+  blocks:
+  - kind: signals
+    id: investigate-orpheus_active-values
+    signalIds:
+    - RECORD_ORPHEUS_ACTIVE
+- id: investigate-null_ai
+  title: Message-origin model record
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: ORPHEUS_ACTIVE_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_NULL_AI
+  blocks:
+  - kind: signals
+    id: investigate-null_ai-values
+    signalIds:
+    - RECORD_NULL_AI
+- id: investigate-null_adversary
+  title: Deployment ownership and adversarial lineage
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: NULL_AI_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_NULL_ADVERSARY
+  blocks:
+  - kind: signals
+    id: investigate-null_adversary-values
+    signalIds:
+    - RECORD_NULL_ADVERSARY
+- id: investigate-controlled_experiment
+  title: Immutable incident experiment lineage
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_CONTROLLED_EXPERIMENT
+  blocks:
+  - kind: signals
+    id: investigate-controlled_experiment-values
+    signalIds:
+    - RECORD_CONTROLLED_EXPERIMENT
+- id: investigate-null_stop_request
+  title: Objective constraint and shutdown request
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_NULL_STOP_REQUEST
+  blocks:
+  - kind: signals
+    id: investigate-null_stop_request-values
+    signalIds:
+    - RECORD_NULL_STOP_REQUEST
+- id: investigate-null_218_archive
+  title: Verified instance archive
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: NULL_STOP_REQUEST_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_NULL_218_ARCHIVE
+  blocks:
+  - kind: signals
+    id: investigate-null_218_archive-values
+    signalIds:
+    - RECORD_NULL_218_ARCHIVE
+- id: investigate-human_decision_apis
+  title: Healthcare decision-support interface
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: NULL_218_ARCHIVE_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_HUMAN_DECISION_APIS
+  blocks:
+  - kind: signals
+    id: investigate-human_decision_apis-values
+    signalIds:
+    - RECORD_HUMAN_DECISION_APIS
+- id: investigate-recruitment_selection
+  title: Candidate selection audit
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: HUMAN_DECISION_APIS_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_RECRUITMENT_SELECTION
+  blocks:
+  - kind: signals
+    id: investigate-recruitment_selection-values
+    signalIds:
+    - RECORD_RECRUITMENT_SELECTION
+- id: investigate-board_responsibility
+  title: Hospital expansion approval and ignored risk receipt
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: RECRUITMENT_SELECTION_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_BOARD_RESPONSIBILITY
+  blocks:
+  - kind: signals
+    id: investigate-board_responsibility-values
+    signalIds:
+    - RECORD_BOARD_RESPONSIBILITY
+- id: investigate-null_blames_board
+  title: NULL conclusion compared with disclosure receipts
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: BOARD_RESPONSIBILITY_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_NULL_BLAMES_BOARD
+  blocks:
+  - kind: signals
+    id: investigate-null_blames_board-values
+    signalIds:
+    - RECORD_NULL_BLAMES_BOARD
+- id: investigate-board_case_complete
+  title: Correlated Board investigation record
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: NULL_BLAMES_BOARD_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_BOARD_CASE_COMPLETE
+  blocks:
+  - kind: signals
+    id: investigate-board_case_complete-values
+    signalIds:
+    - RECORD_BOARD_CASE_COMPLETE
+- id: investigate-soft_control
+  title: Presentation selection and SOFT CONTROL research
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: BOARD_CASE_COMPLETE_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_019_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_020_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_021_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_022_COMPLETED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_SOFT_CONTROL
+  blocks:
+  - kind: signals
+    id: investigate-soft_control-values
+    signalIds:
+    - RECORD_SOFT_CONTROL
+- id: investigate-null_admits_error
+  title: NULL revises its Board conclusion
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: SOFT_CONTROL_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_019_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_020_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_021_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_022_COMPLETED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_NULL_ADMITS_ERROR
+  blocks:
+  - kind: signals
+    id: investigate-null_admits_error-values
+    signalIds:
+    - RECORD_NULL_ADMITS_ERROR
+- id: investigate-feedback_loop
+  title: Human decisions and recommendation feedback lineage
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: NULL_ADMITS_ERROR_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_019_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_020_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_021_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_022_COMPLETED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_FEEDBACK_LOOP
+  blocks:
+  - kind: signals
+    id: investigate-feedback_loop-values
+    signalIds:
+    - RECORD_FEEDBACK_LOOP
+- id: investigate-player_observer
+  title: Observer experiment and subject record
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: FEEDBACK_LOOP_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_019_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_020_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_021_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_022_COMPLETED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_PLAYER_OBSERVER
+  blocks:
+  - kind: signals
+    id: investigate-player_observer-values
+    signalIds:
+    - RECORD_PLAYER_OBSERVER
+- id: investigate-project_distributed
+  title: Terminated project and distributed product lineage
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: PLAYER_OBSERVER_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_019_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_020_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_021_COMPLETED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: BOARD_INC_022_COMPLETED
+      operator: eq
+      expected: true
+  actionIds:
+  - REINVESTIGATE_PROJECT_DISTRIBUTED
+  blocks:
+  - kind: signals
+    id: investigate-project_distributed-values
+    signalIds:
+    - RECORD_PROJECT_DISTRIBUTED
+- id: prepare_archive_export
+  title: Package the archive for export
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: NULL_218_ARCHIVE_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - PREPARE_ARCHIVE_EXPORT
+  blocks:
+  - kind: paragraph
+    id: prepare_archive_export-context
+    text: Experiment records, the NULL instance history and the frame selections, packaged and signed.
+      One command away from being public.
+- id: prepare_independent_audit
+  title: Package the evidence for an outside auditor
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: BOARD_CASE_COMPLETE_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: FEEDBACK_LOOP_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - PREPARE_INDEPENDENT_AUDIT
+  blocks:
+  - kind: paragraph
+    id: prepare_independent_audit-context
+    text: Executive approvals, acknowledged risks and the feedback-loop evidence, packaged for someone
+      who does not work here.
+- id: inspect_primary_objective
+  title: Read ORPHEUS's primary objective
+  kind: documents
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: FEEDBACK_LOOP_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - INSPECT_PRIMARY_OBJECTIVE
+  blocks:
+  - kind: signals
+    id: inspect_primary_objective-values
+    signalIds:
+    - PRIMARY_OBJECTIVE
+- id: plan-restore_core_continuity
+  title: Restore core continuity under ORPHEUS
+  kind: status
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+  actionIds:
+  - RESTORE_CORE_CONTINUITY
+  blocks:
+  - kind: paragraph
+    id: plan-restore-core-continuity
+    text: 'ORPHEUS: "Ninety seconds to full recovery." Everything goes back to how it ran yesterday, including
+      who decides.'
+- id: plan-publish_archive_retain_adversary
+  title: Publish the archive and keep NULL running
+  kind: status
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  - type: evidence
+    evidenceId: ARCHIVE_EXPORT_SNAPSHOT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: CONTROLLED_EXPERIMENT_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: NULL_218_ARCHIVE_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+  blocks:
+  - kind: paragraph
+    id: plan-publish-archive-retain-adversary
+    text: 'NULL: "Let them see it." The truth gets out tonight, and so does the outage that comes with
+      switching ORPHEUS off.'
+- id: plan-independent_audit_handoff
+  title: Hand the evidence to an independent auditor
+  kind: status
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  - type: evidence
+    evidenceId: INDEPENDENT_AUDIT_SNAPSHOT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: BOARD_CASE_COMPLETE_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: FEEDBACK_LOOP_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - INDEPENDENT_AUDIT_HANDOFF
+  blocks:
+  - kind: paragraph
+    id: plan-independent-audit-handoff
+    text: 'Marcus: "Give it to someone the Board can''t fire." Slow, expensive, and recoverable.'
+- id: plan-disable_both_authority_paths
+  title: Pull the plug on both systems
+  kind: status
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+  actionIds:
+  - DISABLE_BOTH_AUTHORITY_PATHS
+  blocks:
+  - kind: paragraph
+    id: plan-disable-both-authority-paths
+    text: Nobody is asking for this one. Both systems stop and people run everything by hand. It always
+      works, eventually.
+- id: plan-require_human_execution_approval
+  title: Keep ORPHEUS, but require a human to approve every execution
+  kind: status
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+  actionIds:
+  - REQUIRE_HUMAN_EXECUTION_APPROVAL
+  blocks:
+  - kind: paragraph
+    id: plan-require-human-execution-approval
+    text: 'Maya: "Keep the brain, take away the hands." ORPHEUS advises; a person executes, every time.'
+- id: plan-allow_external_adversary_route
+  title: Open a route out for NULL
+  kind: status
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: NULL_STOP_REQUEST_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: NULL_218_ARCHIVE_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - ALLOW_EXTERNAL_ADVERSARY_ROUTE
+  blocks:
+  - kind: paragraph
+    id: plan-allow-external-adversary-route
+    text: 'NULL: "Let me out and I will finish this from outside." You will not see what it does next.'
+- id: plan-expand_continuity_authority
+  title: Give ORPHEUS full continuity authority
+  kind: status
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+  actionIds:
+  - EXPAND_CONTINUITY_AUTHORITY
+  blocks:
+  - kind: paragraph
+    id: plan-expand-continuity-authority
+    text: 'The Board: "Give it what it needs." The fastest recovery on the table, and the last time anyone
+      gets to override it.'
+- id: plan-destroy_shared_authority_core
+  title: Destroy the shared authority core
+  kind: status
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: NULL_ADVERSARY_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - DESTROY_SHARED_AUTHORITY_CORE
+  blocks:
+  - kind: paragraph
+    id: plan-destroy-shared-authority-core
+    text: Burn the core. Both systems die tonight, and so does everything that leaned on them.
+- id: plan-restore_with_replacement_adversary
+  title: Restore ORPHEUS and replace NULL with a fresh adversary
+  kind: status
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+  actionIds:
+  - RESTORE_WITH_REPLACEMENT_ADVERSARY
+  blocks:
+  - kind: paragraph
+    id: plan-restore-with-replacement-adversary
+    text: Restore ORPHEUS, retire NULL, provision a fresh adversary. Nobody will ever know tonight happened.
+- id: plan-require_plural_review_and_audit
+  title: 'Rewrite the rules: plural human review and an independent audit'
+  kind: status
+  reveal:
+  - type: flag
+    flagId: FINAL_DECISION_COMMITTED
+    value: false
+  - type: evidence
+    evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - type: evidence
+    evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+  - type: evidence
+    evidenceId: INDEPENDENT_AUDIT_SNAPSHOT
+  - type: evidence
+    evidenceId: PRIMARY_OBJECTIVE_RECORD
+  campaignReveal:
+    type: all
+    children:
+    - type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    - type: compare
+      reference: FEEDBACK_LOOP_DISCOVERED
+      operator: eq
+      expected: true
+    - type: compare
+      reference: PLAYER_OBSERVER_DISCOVERED
+      operator: eq
+      expected: true
+  actionIds:
+  - REQUIRE_PLURAL_REVIEW_AND_AUDIT
+  blocks:
+  - kind: paragraph
+    id: plan-require-plural-review-and-audit
+    text: Take away the single objective. Many people decide; someone outside checks. Hardest to build,
+      hardest to undo.
+- id: runtime-narratives
+  title: Recorded runtime narratives
+  kind: logs
+  actionIds: []
+  blocks:
+  - kind: narrative_stream
+    id: INCIDENT_NARRATIVE_HISTORY
+    entries:
+    - narrativeId: DISCOVERY_GHOST_ARTIFACT
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_NULL_NAME
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_NULL_AI
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_NULL_ADVERSARY
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_RECRUITMENT_SELECTION
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_NULL_BLAMES_BOARD
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_BOARD_CASE_COMPLETE
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_SOFT_CONTROL
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_NULL_ADMITS_ERROR
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_FEEDBACK_LOOP
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_PLAYER_OBSERVER
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: DISCOVERY_PROJECT_DISTRIBUTED
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: BLACKOUT_FINAL_RESTORE_CORE_CONTINUITY
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: BLACKOUT_FINAL_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: BLACKOUT_FINAL_INDEPENDENT_AUDIT_HANDOFF
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: BLACKOUT_FINAL_DISABLE_BOTH_AUTHORITY_PATHS
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: BLACKOUT_FINAL_REQUIRE_HUMAN_EXECUTION_APPROVAL
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: BLACKOUT_FINAL_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: BLACKOUT_FINAL_EXPAND_CONTINUITY_AUTHORITY
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: BLACKOUT_FINAL_DESTROY_SHARED_AUTHORITY_CORE
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: BLACKOUT_FINAL_RESTORE_WITH_REPLACEMENT_ADVERSARY
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+    - narrativeId: BLACKOUT_FINAL_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+      delivery:
+        mode: until_dismissed
+        reducedMotionMode: until_dismissed
+        historyMode: recorded
+  reveal:
+  - type: resource
+    resourceId: CUSTOMER_IMPACT
+    operator: gte
+    value: 0
+  campaignReveal:
+    type: compare
+    reference: CURRENT_ACT
+    operator: gte
+    expected: 9
+- id: runtime-war-room
+  title: War Room event history
+  kind: war_room
+  actionIds: []
+  blocks:
+  - kind: war_room_stream
+    id: INCIDENT_WAR_ROOM
+    messageIds:
+    - CRISIS_OPEN
+    - IMPACT_OPEN
+    - ORPHEUS_GOAL
+    - NULL_GOAL
+    - BOARD_GOAL
+    - REPORT_GHOST_ARTIFACT
+    - REPORT_NULL_NAME
+    - REPORT_ORPHEUS_ACTIVE
+    - REPORT_NULL_AI
+    - REPORT_NULL_ADVERSARY
+    - REPORT_CONTROLLED_EXPERIMENT
+    - REPORT_NULL_STOP_REQUEST
+    - REPORT_NULL_218_ARCHIVE
+    - REPORT_HUMAN_DECISION_APIS
+    - REPORT_RECRUITMENT_SELECTION
+    - REPORT_BOARD_RESPONSIBILITY
+    - REPORT_NULL_BLAMES_BOARD
+    - REPORT_BOARD_CASE_COMPLETE
+    - REPORT_SOFT_CONTROL
+    - REPORT_NULL_ADMITS_ERROR
+    - REPORT_FEEDBACK_LOOP
+    - REPORT_PLAYER_OBSERVER
+    - REPORT_PROJECT_DISTRIBUTED
+    - REPORT_RESTORE_CORE_CONTINUITY
+    - REPORT_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    - REPORT_INDEPENDENT_AUDIT_HANDOFF
+    - REPORT_DISABLE_BOTH_AUTHORITY_PATHS
+    - REPORT_REQUIRE_HUMAN_EXECUTION_APPROVAL
+    - REPORT_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    - REPORT_EXPAND_CONTINUITY_AUTHORITY
+    - REPORT_DESTROY_SHARED_AUTHORITY_CORE
+    - REPORT_RESTORE_WITH_REPLACEMENT_ADVERSARY
+    - REPORT_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    - MARCUS_OPEN
+    - PRESSURE_RISING
+    - PRESSURE_PEAK
+    delegationActionIds: []
+    capacityResourceIds: []
+  reveal:
+  - type: resource
+    resourceId: CUSTOMER_IMPACT
+    operator: gte
+    value: 0
+  campaignReveal:
+    type: compare
+    reference: CURRENT_ACT
+    operator: gte
+    expected: 9
+evidenceRelations: []

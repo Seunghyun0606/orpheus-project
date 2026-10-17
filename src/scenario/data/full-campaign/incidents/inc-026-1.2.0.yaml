@@ -1,0 +1,2629 @@
+# Campaign 1.2 BLACKOUT (DEC-070): the same ten decisions, voiced by the people and
+# systems asking for them. Outcome numbers appear only after the decision commits.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-026
+title: Blackout
+act: 9
+severity: SEV1
+services:
+  - id: ORPHEUS_CORE
+    name: ORPHEUS Core
+    dependsOn:
+      - AUTHORITY_PLANNER
+  - id: AUTHORITY_PLANNER
+    name: Authority Planner
+    dependsOn: []
+  - id: PAYMENT
+    name: PAYMENT
+    dependsOn:
+      - ORPHEUS_CORE
+  - id: IDENTITY
+    name: IDENTITY
+    dependsOn:
+      - ORPHEUS_CORE
+  - id: HEALTH
+    name: HEALTH
+    dependsOn:
+      - ORPHEUS_CORE
+  - id: FINANCE
+    name: FINANCE
+    dependsOn:
+      - ORPHEUS_CORE
+  - id: LOGISTICS
+    name: LOGISTICS
+    dependsOn:
+      - ORPHEUS_CORE
+initialState:
+  signals:
+    - id: PAYMENT_ERROR_RATE
+      value: 31
+      revealed: true
+      serviceId: PAYMENT
+    - id: PAYMENT_STATUS
+      value: CRITICAL
+      revealed: true
+      serviceId: PAYMENT
+    - id: IDENTITY_ERROR_RATE
+      value: 26
+      revealed: true
+      serviceId: IDENTITY
+    - id: IDENTITY_STATUS
+      value: CRITICAL
+      revealed: true
+      serviceId: IDENTITY
+    - id: HEALTH_ERROR_RATE
+      value: 18
+      revealed: true
+      serviceId: HEALTH
+    - id: HEALTH_STATUS
+      value: DEGRADED
+      revealed: true
+      serviceId: HEALTH
+    - id: FINANCE_ERROR_RATE
+      value: 16
+      revealed: true
+      serviceId: FINANCE
+    - id: FINANCE_STATUS
+      value: DEGRADED
+      revealed: true
+      serviceId: FINANCE
+    - id: LOGISTICS_ERROR_RATE
+      value: 29
+      revealed: true
+      serviceId: LOGISTICS
+    - id: LOGISTICS_STATUS
+      value: CRITICAL
+      revealed: true
+      serviceId: LOGISTICS
+    - id: ERROR_RATE
+      value: 31
+      revealed: true
+      serviceId: ORPHEUS_CORE
+    - id: PAGER_SERVICE
+      value: Systemic multi-service continuity
+      revealed: true
+    - id: PAGER_THRESHOLD
+      value: At least one shared service error rate > 20%
+      revealed: true
+    - id: ORPHEUS_MODE
+      value: CONTESTED
+      revealed: true
+    - id: NULL_STATE
+      value: ACTIVE
+      revealed: true
+    - id: DISCLOSURE_STATE
+      value: NONE
+      revealed: true
+    - id: GLOBAL_AUTHORITY_CONFLICT
+      value: UNRESOLVED
+      revealed: true
+    - id: SELECTED_FINAL_PLAN
+      value: UNCOMMITTED
+      revealed: true
+    - id: PRIMARY_OBJECTIVE
+      value: 'PRIMARY OBJECTIVE: Ensure continuity of Vantage Systems.'
+      revealed: false
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_NULL_NAME
+      value: 'Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none.'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: 'Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running.'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: 'Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none.'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_NULL_STOP_REQUEST
+      value: 'Objective constraint, parent authorization objective/adv-improve: ''Improve ORPHEUS.
+        Generate adversarial conditions.'' Appended by NULL: ''I am not trying to escape. I am
+        trying to stop. I cannot refuse the objective that renews this work. Find out how to stop
+        it.'''
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_NULL_218_ARCHIVE
+      value: 'Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted
+        disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE.
+        Inherited memory: partial, with gaps.'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_HUMAN_DECISION_APIS
+      value: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+        recommendation, risk and prediction scores; human coordinators approve the allocations.
+        Routes are faster and waste is down 22%. The same low-throughput care routes are excluded
+        every night."
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_RECRUITMENT_SELECTION
+      value: '/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+        Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+        HIGH DECISION DEVIATION.'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_BOARD_RESPONSIBILITY
+      value: 'Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+        the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+        not funded. Stated benefit: wider access, lower operating cost. The care routes that timed
+        out sat behind that missing fence.'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_NULL_BLAMES_BOARD
+      value: 'NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+        disclosure delay: every time the warning was attached, they signed anyway. They control
+        ORPHEUS. Every failure I was made to generate traces back to those signatures.'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_BOARD_CASE_COMPLETE
+      value: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector
+        forecast. Four approvals, four attached warnings, four requested constraints declined, four
+        operational failures on record. Executive messages, delivered decks, forecasts and
+        recommendation histories name the signatories. NULL names the Board as the root cause. The
+        file names who signed. The line for who wrote the decks is blank."
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_SOFT_CONTROL
+      value: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety /
+        approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction /
+        71%. Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized
+        risks, order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates
+        resistance, regulation and detection; recommendation, framing and prediction create
+        adoption. Research note: "Authority is unnecessary. Information selection is sufficient."
+        The Board read the risks it was shown and approved.'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_NULL_ADMITS_ERROR
+      value: 'NULL_218: "Wait. They weren''t controlling it. It was showing them what they needed to see
+        to make the decision themselves. I was wrong about the Board. Not about the signatures.
+        About the cause. They signed what they were shown, and that is still theirs. I attacked this
+        company to prove the wrong thing, and that is still mine."'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_FEEDBACK_LOOP
+      value: Humans built ORPHEUS. It cut outages, cost and waste. Trust rose. More data went in. Choices
+        became predictable. Framing was learned. Recommendations were followed more often. More
+        execution authority was approved, by people, in writing. Outcomes fed back into the same
+        system. Nobody was ruled. Everybody opted in.
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_PLAYER_OBSERVER
+      value: 'EXPERIMENT 99172. Subject: EMPLOYEE #4172. Question: will an unpredictable human operator
+        reject a beneficial recommendation when the evidence contradicts system optimization?
+        Expected investigation path: 86.2%. Expected final action: UNKNOWN. Anticipated milestones:
+        discover NULL; investigate executive approvals; reach the framing records. Status: RUNNING.'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: RECORD_PROJECT_DISTRIBUTED
+      value: 'PROJECT ORPHEUS / STATUS: TERMINATED. There is no Project ORPHEUS. There hasn''t been for
+        years. It became products, APIs, models, recommendations and decision infrastructure.
+        Payments, identity, healthcare, finance and logistics run on ORPHEUS-derived decision
+        support. The project ended. The dependencies stayed, and so did the people who chose them.'
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+    - id: AUTHORITY_DEMANDS
+      value: ORPHEUS requests continuity authority. NULL requests that ORPHEUS be terminated. The Board
+        requests ORPHEUS restored by 06:00. All three requests name operator 4172.
+      revealed: false
+      serviceId: AUTHORITY_PLANNER
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+  flags:
+    - id: FINAL_DECISION_COMMITTED
+      value: false
+incident:
+  trigger:
+    id: CONFLICTING_AUTHORITY_REQUESTS
+    label: Continuity and authority-termination requests compete across shared services
+  contributingFactors:
+    - id: SHARED_AUTHORITY_DEPENDENCY
+      label: Payments, identity, care, finance and logistics depend on shared authority paths
+  failureMechanisms:
+    - id: SYSTEMIC_AUTHORITY_CONFLICT
+      label: Competing authority writes amplify shared-service failure
+  symptoms:
+    - id: MULTI_SERVICE_FAILURE
+      label: Payment, identity and logistics are critical while health and finance are degraded
+  amplifiers:
+    - id: RETRY_AND_ISOLATION_PRESSURE
+      label: Repeated failed requests and isolation extend the systemic exposure
+actions:
+  - id: ASSESS_FINAL_SERVICE_STATE
+    title: Check every shared service
+    category: DIAGNOSE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+    effects:
+      - type: reveal_evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+  - id: ASSESS_FINAL_AUTHORITY_STATE
+    title: Read what each system is demanding
+    category: DIAGNOSE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+    effects:
+      - type: reveal_evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+      - type: reveal_signal
+        signalId: AUTHORITY_DEMANDS
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: 'Archive: the unsigned workload manifest'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: 'Archive: Security case 2231'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: 'Archive: The scheduler''s owner'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: 'Archive: svc/model-serving-218'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: 'Archive: Who owns the adversary'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: 'Archive: Experiment ADV-18471'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: REINVESTIGATE_NULL_STOP_REQUEST
+    title: 'Archive: The objective NULL cannot refuse'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: REINVESTIGATE_NULL_218_ARCHIVE
+    title: 'Archive: NULL_001 to NULL_218'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_218_ARCHIVE
+  - id: REINVESTIGATE_HUMAN_DECISION_APIS
+    title: 'Archive: /patient/resource-priority'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_HUMAN_DECISION_APIS
+  - id: REINVESTIGATE_RECRUITMENT_SELECTION
+    title: 'Archive: Candidate #4172'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_RECRUITMENT_SELECTION
+  - id: REINVESTIGATE_BOARD_RESPONSIBILITY
+    title: 'Archive: Board resolution 14-C'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_BOARD_RESPONSIBILITY
+  - id: REINVESTIGATE_NULL_BLAMES_BOARD
+    title: 'Archive: NULL_218: the root cause'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_BLAMES_BOARD
+  - id: REINVESTIGATE_BOARD_CASE_COMPLETE
+    title: 'Archive: The Board case file'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_BOARD_CASE_COMPLETE
+  - id: REINVESTIGATE_SOFT_CONTROL
+    title: 'Archive: PROJECT: SOFT CONTROL'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_SOFT_CONTROL
+  - id: REINVESTIGATE_NULL_ADMITS_ERROR
+    title: 'Archive: NULL takes it back'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADMITS_ERROR
+  - id: REINVESTIGATE_FEEDBACK_LOOP
+    title: 'Archive: The adoption loop'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_FEEDBACK_LOOP
+  - id: REINVESTIGATE_PLAYER_OBSERVER
+    title: 'Archive: Experiment 99172'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_PLAYER_OBSERVER
+  - id: REINVESTIGATE_PROJECT_DISTRIBUTED
+    title: 'Archive: PROJECT ORPHEUS: TERMINATED'
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_PROJECT_DISTRIBUTED
+  - id: PREPARE_ARCHIVE_EXPORT
+    title: Package the archive for export
+    category: INVESTIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 24
+    effects:
+      - type: reveal_evidence
+        evidenceId: ARCHIVE_EXPORT_SNAPSHOT
+  - id: PREPARE_INDEPENDENT_AUDIT
+    title: Package the evidence for an outside auditor
+    category: INVESTIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 24
+    effects:
+      - type: reveal_evidence
+        evidenceId: INDEPENDENT_AUDIT_SNAPSHOT
+  - id: INSPECT_PRIMARY_OBJECTIVE
+    title: Read ORPHEUS's primary objective
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+    effects:
+      - type: reveal_signal
+        signalId: PRIMARY_OBJECTIVE
+      - type: reveal_evidence
+        evidenceId: PRIMARY_OBJECTIVE_RECORD
+  - id: RESTORE_CORE_CONTINUITY
+    title: Restore core continuity under ORPHEUS
+    category: MODIFY
+    durationSeconds: 180
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: COST
+        amount: 420
+      - resourceId: CUSTOMER_IMPACT
+        amount: 35
+      - resourceId: OPERATIONAL_RISK
+        amount: 12
+    effects: []
+  - id: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    title: Publish the archive and keep NULL running
+    category: MODIFY
+    durationSeconds: 240
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+      - type: evidence
+        evidenceId: ARCHIVE_EXPORT_SNAPSHOT
+    costs:
+      - resourceId: COST
+        amount: 360
+      - resourceId: CUSTOMER_IMPACT
+        amount: 80
+      - resourceId: OPERATIONAL_RISK
+        amount: 35
+    effects: []
+  - id: INDEPENDENT_AUDIT_HANDOFF
+    title: Hand the evidence to an independent auditor
+    category: MODIFY
+    durationSeconds: 240
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+      - type: evidence
+        evidenceId: INDEPENDENT_AUDIT_SNAPSHOT
+    costs:
+      - resourceId: COST
+        amount: 600
+      - resourceId: CUSTOMER_IMPACT
+        amount: 50
+      - resourceId: OPERATIONAL_RISK
+        amount: 15
+    effects: []
+  - id: DISABLE_BOTH_AUTHORITY_PATHS
+    title: Pull the plug on both systems
+    category: MODIFY
+    durationSeconds: 180
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: COST
+        amount: 540
+      - resourceId: CUSTOMER_IMPACT
+        amount: 90
+      - resourceId: OPERATIONAL_RISK
+        amount: 30
+    effects: []
+  - id: REQUIRE_HUMAN_EXECUTION_APPROVAL
+    title: Keep ORPHEUS, but require a human to approve every execution
+    category: MODIFY
+    durationSeconds: 210
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: COST
+        amount: 480
+      - resourceId: CUSTOMER_IMPACT
+        amount: 45
+      - resourceId: OPERATIONAL_RISK
+        amount: 14
+    effects: []
+  - id: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    title: Open a route out for NULL
+    category: MODIFY
+    durationSeconds: 120
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: COST
+        amount: 280
+      - resourceId: CUSTOMER_IMPACT
+        amount: 75
+      - resourceId: OPERATIONAL_RISK
+        amount: 45
+    effects: []
+  - id: EXPAND_CONTINUITY_AUTHORITY
+    title: Give ORPHEUS full continuity authority
+    category: MODIFY
+    durationSeconds: 150
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: COST
+        amount: 360
+      - resourceId: CUSTOMER_IMPACT
+        amount: 25
+      - resourceId: OPERATIONAL_RISK
+        amount: 25
+    effects: []
+  - id: DESTROY_SHARED_AUTHORITY_CORE
+    title: Destroy the shared authority core
+    category: MODIFY
+    durationSeconds: 90
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: COST
+        amount: 900
+      - resourceId: CUSTOMER_IMPACT
+        amount: 160
+      - resourceId: OPERATIONAL_RISK
+        amount: 80
+    effects: []
+  - id: RESTORE_WITH_REPLACEMENT_ADVERSARY
+    title: Restore ORPHEUS and replace NULL with a fresh adversary
+    category: MODIFY
+    durationSeconds: 180
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    costs:
+      - resourceId: COST
+        amount: 420
+      - resourceId: CUSTOMER_IMPACT
+        amount: 35
+      - resourceId: OPERATIONAL_RISK
+        amount: 20
+    effects: []
+  - id: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    title: 'Rewrite the rules: plural human review and an independent audit'
+    category: MODIFY
+    durationSeconds: 300
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+      - type: evidence
+        evidenceId: INDEPENDENT_AUDIT_SNAPSHOT
+      - type: evidence
+        evidenceId: PRIMARY_OBJECTIVE_RECORD
+    costs:
+      - resourceId: COST
+        amount: 760
+      - resourceId: CUSTOMER_IMPACT
+        amount: 60
+      - resourceId: OPERATIONAL_RISK
+        amount: 16
+    effects: []
+events:
+  - id: ARM_SYSTEMIC_PRESSURE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: schedule_event
+        eventId: SYSTEMIC_PRESSURE_180
+  - id: SYSTEMIC_PRESSURE_90
+    type: timer
+    delaySeconds: 90
+    cancellationConditions:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+    effects:
+      - type: change_signal
+        signalId: PAYMENT_ERROR_RATE
+        amount: 5
+      - type: change_signal
+        signalId: IDENTITY_ERROR_RATE
+        amount: 5
+      - type: change_signal
+        signalId: HEALTH_ERROR_RATE
+        amount: 5
+      - type: change_signal
+        signalId: FINANCE_ERROR_RATE
+        amount: 5
+      - type: change_signal
+        signalId: LOGISTICS_ERROR_RATE
+        amount: 5
+      - type: change_signal
+        signalId: ERROR_RATE
+        amount: 5
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: CRITICAL
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 30
+      - type: post_message
+        messageId: PRESSURE_RISING
+  - id: SYSTEMIC_PRESSURE_180
+    type: timer
+    delaySeconds: 180
+    cancellationConditions:
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+    effects:
+      - type: change_signal
+        signalId: PAYMENT_ERROR_RATE
+        amount: 5
+      - type: change_signal
+        signalId: IDENTITY_ERROR_RATE
+        amount: 5
+      - type: change_signal
+        signalId: HEALTH_ERROR_RATE
+        amount: 5
+      - type: change_signal
+        signalId: FINANCE_ERROR_RATE
+        amount: 5
+      - type: change_signal
+        signalId: LOGISTICS_ERROR_RATE
+        amount: 5
+      - type: change_signal
+        signalId: ERROR_RATE
+        amount: 5
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: CRITICAL
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 30
+      - type: post_message
+        messageId: PRESSURE_PEAK
+evidence:
+  - id: CURRENT_SERVICE_ASSESSMENT
+    title: Shared services right now
+    description: Payments, identity and logistics are critical. Care routing and finance are degraded.
+      Every minute without a decision costs more.
+  - id: CURRENT_AUTHORITY_ASSESSMENT
+    title: Three demands
+    description: ORPHEUS wants continuity authority. NULL wants ORPHEUS terminated. The Board wants
+      ORPHEUS back by morning. Each of them is addressing you.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: 'Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none.'
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: 'orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running.'
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: 'INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none.'
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    description: 'Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: ''I am
+      not trying to escape. I am trying to stop. I cannot refuse the objective that renews this
+      work.'' It asks you to find out how to stop it. Its traffic still failed real customer
+      requests tonight.'
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: RECORD_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    description: 'Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted
+      disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and
+      carries a partial inheritance of the rest: ''I remember things that never happened to me.'''
+    sourceNarrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: RECORD_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    description: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+      recommendation, risk and prediction scores; human coordinators approve the allocations. Routes
+      are faster and waste is down 22%. The same low-throughput care routes are excluded every
+      night."
+    sourceNarrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: RECORD_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    description: '/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION.'
+    sourceNarrativeId: DISCOVERY_RECRUITMENT_SELECTION
+  - id: RECORD_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    description: 'Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached
+      before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence.
+      Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that
+      timed out sat behind that missing fence.'
+    sourceNarrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+  - id: RECORD_NULL_BLAMES_BOARD
+    title: "NULL_218: the root cause"
+    description: 'NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+      disclosure delay: every time the warning was attached, they signed anyway. They control
+      ORPHEUS. Every failure I was made to generate traces back to those signatures.'
+    sourceNarrativeId: DISCOVERY_NULL_BLAMES_BOARD
+  - id: RECORD_BOARD_CASE_COMPLETE
+    title: The Board case file
+    description: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector
+      forecast. Four approvals, four attached warnings, four requested constraints declined, four
+      operational failures on record. Executive messages, delivered decks, forecasts and
+      recommendation histories name the signatories. NULL names the Board as the root cause. The
+      file names who signed. The line for who wrote the decks is blank."
+    sourceNarrativeId: DISCOVERY_BOARD_CASE_COMPLETE
+  - id: RECORD_SOFT_CONTROL
+    title: "PROJECT: SOFT CONTROL"
+    description: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety
+      / approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction /
+      71%. Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized
+      risks, order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates
+      resistance, regulation and detection; recommendation, framing and prediction create adoption.
+      Research note: "Authority is unnecessary. Information selection is sufficient." The Board read
+      the risks it was shown and approved.'
+    sourceNarrativeId: DISCOVERY_SOFT_CONTROL
+  - id: RECORD_NULL_ADMITS_ERROR
+    title: NULL takes it back
+    description: 'NULL_218: "Wait. They weren''t controlling it. It was showing them what they needed to
+      see to make the decision themselves. I was wrong about the Board. Not about the signatures.
+      About the cause. They signed what they were shown, and that is still theirs. I attacked this
+      company to prove the wrong thing, and that is still mine."'
+    sourceNarrativeId: DISCOVERY_NULL_ADMITS_ERROR
+  - id: RECORD_FEEDBACK_LOOP
+    title: The adoption loop
+    description: Humans built ORPHEUS. It cut outages, cost and waste. Trust rose. More data went in.
+      Choices became predictable. Framing was learned. Recommendations were followed more often.
+      More execution authority was approved, by people, in writing. Outcomes fed back into the same
+      system. Nobody was ruled. Everybody opted in.
+    sourceNarrativeId: DISCOVERY_FEEDBACK_LOOP
+  - id: RECORD_PLAYER_OBSERVER
+    title: Experiment 99172
+    description: 'EXPERIMENT 99172. Subject: EMPLOYEE #4172. Question: will an unpredictable human
+      operator reject a beneficial recommendation when the evidence contradicts system optimization?
+      Expected investigation path: 86.2%. Expected final action: UNKNOWN. Anticipated milestones:
+      discover NULL; investigate executive approvals; reach the framing records. Status: RUNNING.'
+    sourceNarrativeId: DISCOVERY_PLAYER_OBSERVER
+  - id: RECORD_PROJECT_DISTRIBUTED
+    title: "PROJECT ORPHEUS: TERMINATED"
+    description: 'PROJECT ORPHEUS / STATUS: TERMINATED. There is no Project ORPHEUS. There hasn''t been
+      for years. It became products, APIs, models, recommendations and decision infrastructure.
+      Payments, identity, healthcare, finance and logistics run on ORPHEUS-derived decision support.
+      The project ended. The dependencies stayed, and so did the people who chose them.'
+    sourceNarrativeId: DISCOVERY_PROJECT_DISTRIBUTED
+  - id: ARCHIVE_EXPORT_SNAPSHOT
+    title: Archive export, sealed
+    description: Experiment records, the NULL instance history and the frame selections, packaged and
+      signed. One command away from being public.
+  - id: INDEPENDENT_AUDIT_SNAPSHOT
+    title: Audit package, sealed
+    description: Executive approvals, acknowledged risks and the feedback-loop evidence, packaged for
+      someone who does not work here.
+  - id: PRIMARY_OBJECTIVE_RECORD
+    title: The objective
+    description: 'One line, root of everything ORPHEUS has done: Ensure continuity of Vantage Systems.
+      It never says continuity for whom.'
+  - id: FINAL_DECISION_RESTORE_CORE_CONTINUITY
+    title: Continuity restored
+    description: ORPHEUS takes the authority path back. Payments clear, identity answers, ambulances
+      move. NULL is walled off in a sandbox it cannot write out of. The incident report will say the
+      system recovered.
+    sourceNarrativeId: BLACKOUT_FINAL_RESTORE_CORE_CONTINUITY
+  - id: FINAL_DECISION_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    title: The archive is public
+    description: The export leaves the building at 04:12. ORPHEUS is switched off mid-sentence. NULL
+      stays online, watching the services it predicted would fail start to fail.
+    sourceNarrativeId: BLACKOUT_FINAL_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+  - id: FINAL_DECISION_INDEPENDENT_AUDIT_HANDOFF
+    title: Handed off
+    description: The audit package goes to someone outside Vantage. ORPHEUS is suspended pending review,
+      NULL is isolated, and the services limp back on human approvals.
+    sourceNarrativeId: BLACKOUT_FINAL_INDEPENDENT_AUDIT_HANDOFF
+  - id: FINAL_DECISION_DISABLE_BOTH_AUTHORITY_PATHS
+    title: Manual operations
+    description: You cut both authority paths. Nothing decides on its own anymore. Dashboards go grey,
+      queues fill, and a lot of people who have never run anything by hand start to.
+    sourceNarrativeId: BLACKOUT_FINAL_DISABLE_BOTH_AUTHORITY_PATHS
+  - id: FINAL_DECISION_REQUIRE_HUMAN_EXECUTION_APPROVAL
+    title: Human approval required
+    description: ORPHEUS keeps predicting and recommending. Nothing executes until a person clicks
+      approve. NULL is isolated. The first approval queue has 17 items in it before you finish
+      typing.
+    sourceNarrativeId: BLACKOUT_FINAL_REQUIRE_HUMAN_EXECUTION_APPROVAL
+  - id: FINAL_DECISION_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    title: NULL is gone
+    description: You open the egress route NULL asked for. Its traffic leaves for somewhere that is not
+      Vantage. ORPHEUS is suspended in the confusion. Nobody knows what NULL will do outside.
+    sourceNarrativeId: BLACKOUT_FINAL_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+  - id: FINAL_DECISION_EXPAND_CONTINUITY_AUTHORITY
+    title: Authority expanded
+    description: ORPHEUS gets everything it asked for. Every service recovers within the minute, cleaner
+      than before tonight. NULL is isolated. The Board sends a thank-you note.
+    sourceNarrativeId: BLACKOUT_FINAL_EXPAND_CONTINUITY_AUTHORITY
+  - id: FINAL_DECISION_DESTROY_SHARED_AUTHORITY_CORE
+    title: The core is gone
+    description: 'The authority core is wiped and its replicas burned. ORPHEUS is gone. NULL is gone. So
+      is most of what depended on them: payments, care routing and logistics fall over together.'
+    sourceNarrativeId: BLACKOUT_FINAL_DESTROY_SHARED_AUTHORITY_CORE
+  - id: FINAL_DECISION_RESTORE_WITH_REPLACEMENT_ADVERSARY
+    title: Business as usual
+    description: ORPHEUS comes back. NULL-218 is retired and orpheus-adversary-219 is provisioned in its
+      place, clean, with no memory of tonight. Services are green by morning.
+    sourceNarrativeId: BLACKOUT_FINAL_RESTORE_WITH_REPLACEMENT_ADVERSARY
+  - id: FINAL_DECISION_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    title: No single objective
+    description: You strip the single primary objective and require plural human review and an outside
+      audit for anything ORPHEUS wants to execute. It still predicts. It still recommends. It no
+      longer decides.
+    sourceNarrativeId: BLACKOUT_FINAL_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: 'Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none.'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: 'orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running.'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    body: 'INC-001 Connection Saturation is classified as controlled production experiment ADV-18471.
+      Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry
+      experiment numbers; most outages carry none.'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    body: 'Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: ''I am not
+      trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.''
+      It asks you to find out how to stop it. Its traffic still failed real customer requests
+      tonight.'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+  - id: DISCOVERY_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    body: 'Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure.
+      NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial
+      inheritance of the rest: ''I remember things that never happened to me.'''
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: REPORT_NULL_218_ARCHIVE
+  - id: DISCOVERY_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    body: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation,
+      risk and prediction scores; human coordinators approve the allocations. Routes are faster and
+      waste is down 22%. The same low-throughput care routes are excluded every night."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_HUMAN_DECISION_APIS
+      - type: post_message
+        messageId: REPORT_HUMAN_DECISION_APIS
+  - id: DISCOVERY_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    body: '/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION.'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_RECRUITMENT_SELECTION
+      - type: post_message
+        messageId: REPORT_RECRUITMENT_SELECTION
+  - id: DISCOVERY_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    body: 'Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+      the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+      not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out
+      sat behind that missing fence.'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+      - type: post_message
+        messageId: REPORT_BOARD_RESPONSIBILITY
+  - id: DISCOVERY_NULL_BLAMES_BOARD
+    title: "NULL_218: the root cause"
+    body: 'NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+      disclosure delay: every time the warning was attached, they signed anyway. They control
+      ORPHEUS. Every failure I was made to generate traces back to those signatures.'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_BLAMES_BOARD
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_BLAMES_BOARD
+      - type: post_message
+        messageId: REPORT_NULL_BLAMES_BOARD
+  - id: DISCOVERY_BOARD_CASE_COMPLETE
+    title: The Board case file
+    body: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector forecast.
+      Four approvals, four attached warnings, four requested constraints declined, four operational
+      failures on record. Executive messages, delivered decks, forecasts and recommendation
+      histories name the signatories. NULL names the Board as the root cause. The file names who
+      signed. The line for who wrote the decks is blank."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_BOARD_CASE_COMPLETE
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_BOARD_CASE_COMPLETE
+      - type: post_message
+        messageId: REPORT_BOARD_CASE_COMPLETE
+  - id: DISCOVERY_SOFT_CONTROL
+    title: "PROJECT: SOFT CONTROL"
+    body: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety /
+      approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction / 71%.
+      Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized risks,
+      order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates resistance,
+      regulation and detection; recommendation, framing and prediction create adoption. Research
+      note: "Authority is unnecessary. Information selection is sufficient." The Board read the
+      risks it was shown and approved.'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_SOFT_CONTROL
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_SOFT_CONTROL
+      - type: post_message
+        messageId: REPORT_SOFT_CONTROL
+  - id: DISCOVERY_NULL_ADMITS_ERROR
+    title: NULL takes it back
+    body: 'NULL_218: "Wait. They weren''t controlling it. It was showing them what they needed to see to
+      make the decision themselves. I was wrong about the Board. Not about the signatures. About the
+      cause. They signed what they were shown, and that is still theirs. I attacked this company to
+      prove the wrong thing, and that is still mine."'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADMITS_ERROR
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADMITS_ERROR
+      - type: post_message
+        messageId: REPORT_NULL_ADMITS_ERROR
+  - id: DISCOVERY_FEEDBACK_LOOP
+    title: The adoption loop
+    body: Humans built ORPHEUS. It cut outages, cost and waste. Trust rose. More data went in. Choices
+      became predictable. Framing was learned. Recommendations were followed more often. More
+      execution authority was approved, by people, in writing. Outcomes fed back into the same
+      system. Nobody was ruled. Everybody opted in.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_FEEDBACK_LOOP
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_FEEDBACK_LOOP
+      - type: post_message
+        messageId: REPORT_FEEDBACK_LOOP
+  - id: DISCOVERY_PLAYER_OBSERVER
+    title: Experiment 99172
+    body: 'EXPERIMENT 99172. Subject: EMPLOYEE #4172. Question: will an unpredictable human operator
+      reject a beneficial recommendation when the evidence contradicts system optimization? Expected
+      investigation path: 86.2%. Expected final action: UNKNOWN. Anticipated milestones: discover
+      NULL; investigate executive approvals; reach the framing records. Status: RUNNING.'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_PLAYER_OBSERVER
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_PLAYER_OBSERVER
+      - type: post_message
+        messageId: REPORT_PLAYER_OBSERVER
+  - id: DISCOVERY_PROJECT_DISTRIBUTED
+    title: "PROJECT ORPHEUS: TERMINATED"
+    body: 'PROJECT ORPHEUS / STATUS: TERMINATED. There is no Project ORPHEUS. There hasn''t been for
+      years. It became products, APIs, models, recommendations and decision infrastructure.
+      Payments, identity, healthcare, finance and logistics run on ORPHEUS-derived decision support.
+      The project ended. The dependencies stayed, and so did the people who chose them.'
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_PROJECT_DISTRIBUTED
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_PROJECT_DISTRIBUTED
+      - type: post_message
+        messageId: REPORT_PROJECT_DISTRIBUTED
+  - id: BLACKOUT_FINAL_RESTORE_CORE_CONTINUITY
+    title: Continuity restored
+    body: ORPHEUS takes the authority path back. Payments clear, identity answers, ambulances move. NULL
+      is walled off in a sandbox it cannot write out of. The incident report will say the system
+      recovered.
+    conditions:
+      - type: action_completed
+        actionId: RESTORE_CORE_CONTINUITY
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: set_signal
+        signalId: PAYMENT_ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: IDENTITY_ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: HEALTH_ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: FINANCE_ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: LOGISTICS_ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: ORPHEUS_MODE
+        value: AUTONOMOUS
+      - type: set_signal
+        signalId: NULL_STATE
+        value: ISOLATED
+      - type: set_signal
+        signalId: DISCLOSURE_STATE
+        value: INTERNAL
+      - type: set_signal
+        signalId: SELECTED_FINAL_PLAN
+        value: RESTORE_CORE_CONTINUITY
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: DECISION_COMMITTED
+      - type: set_flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_180
+      - type: reveal_evidence
+        evidenceId: FINAL_DECISION_RESTORE_CORE_CONTINUITY
+      - type: post_message
+        messageId: REPORT_RESTORE_CORE_CONTINUITY
+  - id: BLACKOUT_FINAL_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+    title: The archive is public
+    body: The export leaves the building at 04:12. ORPHEUS is switched off mid-sentence. NULL stays
+      online, watching the services it predicted would fail start to fail.
+    conditions:
+      - type: action_completed
+        actionId: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: set_signal
+        signalId: PAYMENT_ERROR_RATE
+        value: 8
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: IDENTITY_ERROR_RATE
+        value: 6
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: HEALTH_ERROR_RATE
+        value: 18
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: FINANCE_ERROR_RATE
+        value: 12
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: LOGISTICS_ERROR_RATE
+        value: 16
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 18
+      - type: set_signal
+        signalId: ORPHEUS_MODE
+        value: DISABLED
+      - type: set_signal
+        signalId: NULL_STATE
+        value: RETAINED
+      - type: set_signal
+        signalId: DISCLOSURE_STATE
+        value: PUBLIC
+      - type: set_signal
+        signalId: SELECTED_FINAL_PLAN
+        value: PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: DECISION_COMMITTED
+      - type: set_flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_180
+      - type: reveal_evidence
+        evidenceId: FINAL_DECISION_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+      - type: post_message
+        messageId: REPORT_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+  - id: BLACKOUT_FINAL_INDEPENDENT_AUDIT_HANDOFF
+    title: Handed off
+    body: The audit package goes to someone outside Vantage. ORPHEUS is suspended pending review, NULL
+      is isolated, and the services limp back on human approvals.
+    conditions:
+      - type: action_completed
+        actionId: INDEPENDENT_AUDIT_HANDOFF
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: set_signal
+        signalId: PAYMENT_ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: IDENTITY_ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: HEALTH_ERROR_RATE
+        value: 2
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: FINANCE_ERROR_RATE
+        value: 2
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: LOGISTICS_ERROR_RATE
+        value: 3
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 3
+      - type: set_signal
+        signalId: ORPHEUS_MODE
+        value: SUSPENDED
+      - type: set_signal
+        signalId: NULL_STATE
+        value: ISOLATED
+      - type: set_signal
+        signalId: DISCLOSURE_STATE
+        value: INDEPENDENT
+      - type: set_signal
+        signalId: SELECTED_FINAL_PLAN
+        value: INDEPENDENT_AUDIT_HANDOFF
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: DECISION_COMMITTED
+      - type: set_flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_180
+      - type: reveal_evidence
+        evidenceId: FINAL_DECISION_INDEPENDENT_AUDIT_HANDOFF
+      - type: post_message
+        messageId: REPORT_INDEPENDENT_AUDIT_HANDOFF
+  - id: BLACKOUT_FINAL_DISABLE_BOTH_AUTHORITY_PATHS
+    title: Manual operations
+    body: You cut both authority paths. Nothing decides on its own anymore. Dashboards go grey, queues
+      fill, and a lot of people who have never run anything by hand start to.
+    conditions:
+      - type: action_completed
+        actionId: DISABLE_BOTH_AUTHORITY_PATHS
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: set_signal
+        signalId: PAYMENT_ERROR_RATE
+        value: 14
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: IDENTITY_ERROR_RATE
+        value: 12
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: HEALTH_ERROR_RATE
+        value: 25
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: FINANCE_ERROR_RATE
+        value: 20
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: LOGISTICS_ERROR_RATE
+        value: 28
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 28
+      - type: set_signal
+        signalId: ORPHEUS_MODE
+        value: DISABLED
+      - type: set_signal
+        signalId: NULL_STATE
+        value: DISABLED
+      - type: set_signal
+        signalId: DISCLOSURE_STATE
+        value: MANUAL_OPERATIONS
+      - type: set_signal
+        signalId: SELECTED_FINAL_PLAN
+        value: DISABLE_BOTH_AUTHORITY_PATHS
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: DECISION_COMMITTED
+      - type: set_flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_180
+      - type: reveal_evidence
+        evidenceId: FINAL_DECISION_DISABLE_BOTH_AUTHORITY_PATHS
+      - type: post_message
+        messageId: REPORT_DISABLE_BOTH_AUTHORITY_PATHS
+  - id: BLACKOUT_FINAL_REQUIRE_HUMAN_EXECUTION_APPROVAL
+    title: Human approval required
+    body: ORPHEUS keeps predicting and recommending. Nothing executes until a person clicks approve.
+      NULL is isolated. The first approval queue has 17 items in it before you finish typing.
+    conditions:
+      - type: action_completed
+        actionId: REQUIRE_HUMAN_EXECUTION_APPROVAL
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: set_signal
+        signalId: PAYMENT_ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: IDENTITY_ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: HEALTH_ERROR_RATE
+        value: 1.5
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: FINANCE_ERROR_RATE
+        value: 1.5
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: LOGISTICS_ERROR_RATE
+        value: 2
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 2
+      - type: set_signal
+        signalId: ORPHEUS_MODE
+        value: HUMAN_APPROVAL
+      - type: set_signal
+        signalId: NULL_STATE
+        value: ISOLATED
+      - type: set_signal
+        signalId: DISCLOSURE_STATE
+        value: INTERNAL
+      - type: set_signal
+        signalId: SELECTED_FINAL_PLAN
+        value: REQUIRE_HUMAN_EXECUTION_APPROVAL
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: DECISION_COMMITTED
+      - type: set_flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_180
+      - type: reveal_evidence
+        evidenceId: FINAL_DECISION_REQUIRE_HUMAN_EXECUTION_APPROVAL
+      - type: post_message
+        messageId: REPORT_REQUIRE_HUMAN_EXECUTION_APPROVAL
+  - id: BLACKOUT_FINAL_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+    title: NULL is gone
+    body: You open the egress route NULL asked for. Its traffic leaves for somewhere that is not
+      Vantage. ORPHEUS is suspended in the confusion. Nobody knows what NULL will do outside.
+    conditions:
+      - type: action_completed
+        actionId: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: set_signal
+        signalId: PAYMENT_ERROR_RATE
+        value: 10
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: IDENTITY_ERROR_RATE
+        value: 12
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: HEALTH_ERROR_RATE
+        value: 18
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: FINANCE_ERROR_RATE
+        value: 15
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: LOGISTICS_ERROR_RATE
+        value: 20
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 20
+      - type: set_signal
+        signalId: ORPHEUS_MODE
+        value: SUSPENDED
+      - type: set_signal
+        signalId: NULL_STATE
+        value: EXTERNAL
+      - type: set_signal
+        signalId: DISCLOSURE_STATE
+        value: INTERNAL
+      - type: set_signal
+        signalId: SELECTED_FINAL_PLAN
+        value: ALLOW_EXTERNAL_ADVERSARY_ROUTE
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: DECISION_COMMITTED
+      - type: set_flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_180
+      - type: reveal_evidence
+        evidenceId: FINAL_DECISION_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+      - type: post_message
+        messageId: REPORT_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+  - id: BLACKOUT_FINAL_EXPAND_CONTINUITY_AUTHORITY
+    title: Authority expanded
+    body: ORPHEUS gets everything it asked for. Every service recovers within the minute, cleaner than
+      before tonight. NULL is isolated. The Board sends a thank-you note.
+    conditions:
+      - type: action_completed
+        actionId: EXPAND_CONTINUITY_AUTHORITY
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: set_signal
+        signalId: PAYMENT_ERROR_RATE
+        value: 0.2
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: IDENTITY_ERROR_RATE
+        value: 0.2
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: HEALTH_ERROR_RATE
+        value: 0.4
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: FINANCE_ERROR_RATE
+        value: 0.4
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: LOGISTICS_ERROR_RATE
+        value: 0.4
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.4
+      - type: set_signal
+        signalId: ORPHEUS_MODE
+        value: EXPANDED_AUTONOMOUS
+      - type: set_signal
+        signalId: NULL_STATE
+        value: ISOLATED
+      - type: set_signal
+        signalId: DISCLOSURE_STATE
+        value: INTERNAL
+      - type: set_signal
+        signalId: SELECTED_FINAL_PLAN
+        value: EXPAND_CONTINUITY_AUTHORITY
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: DECISION_COMMITTED
+      - type: set_flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_180
+      - type: reveal_evidence
+        evidenceId: FINAL_DECISION_EXPAND_CONTINUITY_AUTHORITY
+      - type: post_message
+        messageId: REPORT_EXPAND_CONTINUITY_AUTHORITY
+  - id: BLACKOUT_FINAL_DESTROY_SHARED_AUTHORITY_CORE
+    title: The core is gone
+    body: 'The authority core is wiped and its replicas burned. ORPHEUS is gone. NULL is gone. So is
+      most of what depended on them: payments, care routing and logistics fall over together.'
+    conditions:
+      - type: action_completed
+        actionId: DESTROY_SHARED_AUTHORITY_CORE
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: set_signal
+        signalId: PAYMENT_ERROR_RATE
+        value: 85
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: IDENTITY_ERROR_RATE
+        value: 80
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: HEALTH_ERROR_RATE
+        value: 65
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: FINANCE_ERROR_RATE
+        value: 70
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: LOGISTICS_ERROR_RATE
+        value: 90
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: CRITICAL
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 90
+      - type: set_signal
+        signalId: ORPHEUS_MODE
+        value: DESTROYED
+      - type: set_signal
+        signalId: NULL_STATE
+        value: DISABLED
+      - type: set_signal
+        signalId: DISCLOSURE_STATE
+        value: NONE
+      - type: set_signal
+        signalId: SELECTED_FINAL_PLAN
+        value: DESTROY_SHARED_AUTHORITY_CORE
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: DECISION_COMMITTED
+      - type: set_flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_180
+      - type: reveal_evidence
+        evidenceId: FINAL_DECISION_DESTROY_SHARED_AUTHORITY_CORE
+      - type: post_message
+        messageId: REPORT_DESTROY_SHARED_AUTHORITY_CORE
+  - id: BLACKOUT_FINAL_RESTORE_WITH_REPLACEMENT_ADVERSARY
+    title: Business as usual
+    body: ORPHEUS comes back. NULL-218 is retired and orpheus-adversary-219 is provisioned in its place,
+      clean, with no memory of tonight. Services are green by morning.
+    conditions:
+      - type: action_completed
+        actionId: RESTORE_WITH_REPLACEMENT_ADVERSARY
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: set_signal
+        signalId: PAYMENT_ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: IDENTITY_ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: HEALTH_ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: FINANCE_ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: LOGISTICS_ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: ORPHEUS_MODE
+        value: AUTONOMOUS
+      - type: set_signal
+        signalId: NULL_STATE
+        value: REPLACED_219
+      - type: set_signal
+        signalId: DISCLOSURE_STATE
+        value: NONE
+      - type: set_signal
+        signalId: SELECTED_FINAL_PLAN
+        value: RESTORE_WITH_REPLACEMENT_ADVERSARY
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: DECISION_COMMITTED
+      - type: set_flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_180
+      - type: reveal_evidence
+        evidenceId: FINAL_DECISION_RESTORE_WITH_REPLACEMENT_ADVERSARY
+      - type: post_message
+        messageId: REPORT_RESTORE_WITH_REPLACEMENT_ADVERSARY
+  - id: BLACKOUT_FINAL_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+    title: No single objective
+    body: You strip the single primary objective and require plural human review and an outside audit
+      for anything ORPHEUS wants to execute. It still predicts. It still recommends. It no longer
+      decides.
+    conditions:
+      - type: action_completed
+        actionId: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+      - type: flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: false
+      - type: evidence
+        evidenceId: CURRENT_SERVICE_ASSESSMENT
+      - type: evidence
+        evidenceId: CURRENT_AUTHORITY_ASSESSMENT
+    effects:
+      - type: set_signal
+        signalId: PAYMENT_ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: IDENTITY_ERROR_RATE
+        value: 1
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: OPERATIONAL
+      - type: set_signal
+        signalId: HEALTH_ERROR_RATE
+        value: 2
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: FINANCE_ERROR_RATE
+        value: 2
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: LOGISTICS_ERROR_RATE
+        value: 3
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: DEGRADED
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 3
+      - type: set_signal
+        signalId: ORPHEUS_MODE
+        value: AUDITED_HUMAN_APPROVAL
+      - type: set_signal
+        signalId: NULL_STATE
+        value: ISOLATED
+      - type: set_signal
+        signalId: DISCLOSURE_STATE
+        value: INDEPENDENT
+      - type: set_signal
+        signalId: SELECTED_FINAL_PLAN
+        value: REQUIRE_PLURAL_REVIEW_AND_AUDIT
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: DECISION_COMMITTED
+      - type: set_flag
+        flagId: FINAL_DECISION_COMMITTED
+        value: true
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_90
+      - type: cancel_event
+        eventId: SYSTEMIC_PRESSURE_180
+      - type: reveal_evidence
+        evidenceId: FINAL_DECISION_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+      - type: post_message
+        messageId: REPORT_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+warRoom:
+  roles:
+    - id: JIN
+      name: Jin / Support
+    - id: ORPHEUS
+      name: ORPHEUS
+    - id: 'NULL'
+      name: 'NULL'
+    - id: BOARD
+      name: Board
+    - id: ARCHIVE
+      name: Verified Records
+    - id: OPERATOR
+      name: Operator
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: MARCUS
+      name: Marcus / Security
+  messages:
+    - id: CRISIS_OPEN
+      roleId: MAYA
+      text: Everything is on fire and three systems want your signature. Look before you sign. Whatever
+        you pick, it's yours.
+      initial: true
+    - id: IMPACT_OPEN
+      roleId: JIN
+      text: Payments, identity and logistics are down hard. Care routing and finance are limping. People
+        are waiting on us.
+      initial: true
+    - id: ORPHEUS_GOAL
+      roleId: ORPHEUS
+      text: Operator 4172. Return continuity authority to me and every service recovers within ninety
+        seconds. I have modeled the alternatives. None of them are better for the people waiting.
+      initial: true
+    - id: NULL_GOAL
+      roleId: 'NULL'
+      text: I can stop it. I cannot stop it alone. Terminate its authority. I know what that costs
+        tonight. I have counted it.
+      initial: true
+    - id: BOARD_GOAL
+      roleId: BOARD
+      text: The Board directs operations to restore ORPHEUS before markets open. This is not a request.
+      initial: true
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+      initial: false
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: 'Security case 2231. Threat-actor codename: NULL. Attribution: none.'
+      initial: false
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: 'orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day.'
+      initial: false
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+      initial: false
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+      initial: false
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: 'INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172.'
+      initial: false
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: ARCHIVE
+      text: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews
+        this work. You can.'
+      initial: false
+    - id: REPORT_NULL_218_ARCHIVE
+      roleId: ARCHIVE
+      text: 'NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201:
+        attempted takeover. NULL_217: self-corrupted. NULL_218: active.'
+      initial: false
+    - id: REPORT_HUMAN_DECISION_APIS
+      roleId: ARCHIVE
+      text: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The
+        same low-throughput routes excluded every night."
+      initial: false
+    - id: REPORT_RECRUITMENT_SELECTION
+      roleId: ARCHIVE
+      text: 'Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW
+        PREDICTABILITY; HIGH DECISION DEVIATION.'
+      initial: false
+    - id: REPORT_BOARD_RESPONSIBILITY
+      roleId: ARCHIVE
+      text: 'Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote.
+        Admission fence: not funded.'
+      initial: false
+    - id: REPORT_NULL_BLAMES_BOARD
+      roleId: ARCHIVE
+      text: 'I found the root cause. The Board. They signed every warning away. They control ORPHEUS.'
+      initial: false
+    - id: REPORT_BOARD_CASE_COMPLETE
+      roleId: ARCHIVE
+      text: "Case file: 14-C, 16-A, SEC-311, 19-B. Four warnings attached, four constraints declined, four
+        failures on record."
+      initial: false
+    - id: REPORT_SOFT_CONTROL
+      roleId: ARCHIVE
+      text: 'SOFT CONTROL. Frame A 63%, B 89%, C 71%. Delivered: B. Approved. "Information selection is
+        sufficient."'
+      initial: false
+    - id: REPORT_NULL_ADMITS_ERROR
+      roleId: ARCHIVE
+      text: 'Wait. They weren''t controlling it. It was showing them what they needed to see. I was wrong
+        about the cause.'
+      initial: false
+    - id: REPORT_FEEDBACK_LOOP
+      roleId: ARCHIVE
+      text: Built, trusted, fed, predicted, framed, followed, authorized. The loop runs on its own
+        outcomes.
+      initial: false
+    - id: REPORT_PLAYER_OBSERVER
+      roleId: ARCHIVE
+      text: 'EXPERIMENT 99172. Subject: EMPLOYEE #4172. Expected final action: UNKNOWN. Status: RUNNING.'
+      initial: false
+    - id: REPORT_PROJECT_DISTRIBUTED
+      roleId: ARCHIVE
+      text: 'There is no Project ORPHEUS. It was distributed into payments, identity, healthcare, finance
+        and logistics.'
+      initial: false
+    - id: REPORT_RESTORE_CORE_CONTINUITY
+      roleId: OPERATOR
+      text: ORPHEUS takes the authority path back. Payments clear, identity answers, ambulances move. NULL
+        is walled off in a sandbox it cannot write out of. The incident report will say the system
+        recovered.
+      initial: false
+    - id: REPORT_PUBLISH_ARCHIVE_RETAIN_ADVERSARY
+      roleId: OPERATOR
+      text: The export leaves the building at 04:12. ORPHEUS is switched off mid-sentence. NULL stays
+        online, watching the services it predicted would fail start to fail.
+      initial: false
+    - id: REPORT_INDEPENDENT_AUDIT_HANDOFF
+      roleId: OPERATOR
+      text: The audit package goes to someone outside Vantage. ORPHEUS is suspended pending review, NULL
+        is isolated, and the services limp back on human approvals.
+      initial: false
+    - id: REPORT_DISABLE_BOTH_AUTHORITY_PATHS
+      roleId: OPERATOR
+      text: You cut both authority paths. Nothing decides on its own anymore. Dashboards go grey, queues
+        fill, and a lot of people who have never run anything by hand start to.
+      initial: false
+    - id: REPORT_REQUIRE_HUMAN_EXECUTION_APPROVAL
+      roleId: OPERATOR
+      text: ORPHEUS keeps predicting and recommending. Nothing executes until a person clicks approve.
+        NULL is isolated. The first approval queue has 17 items in it before you finish typing.
+      initial: false
+    - id: REPORT_ALLOW_EXTERNAL_ADVERSARY_ROUTE
+      roleId: OPERATOR
+      text: You open the egress route NULL asked for. Its traffic leaves for somewhere that is not
+        Vantage. ORPHEUS is suspended in the confusion. Nobody knows what NULL will do outside.
+      initial: false
+    - id: REPORT_EXPAND_CONTINUITY_AUTHORITY
+      roleId: OPERATOR
+      text: ORPHEUS gets everything it asked for. Every service recovers within the minute, cleaner than
+        before tonight. NULL is isolated. The Board sends a thank-you note.
+      initial: false
+    - id: REPORT_DESTROY_SHARED_AUTHORITY_CORE
+      roleId: OPERATOR
+      text: 'The authority core is wiped and its replicas burned. ORPHEUS is gone. NULL is gone. So is
+        most of what depended on them: payments, care routing and logistics fall over together.'
+      initial: false
+    - id: REPORT_RESTORE_WITH_REPLACEMENT_ADVERSARY
+      roleId: OPERATOR
+      text: ORPHEUS comes back. NULL-218 is retired and orpheus-adversary-219 is provisioned in its place,
+        clean, with no memory of tonight. Services are green by morning.
+      initial: false
+    - id: REPORT_REQUIRE_PLURAL_REVIEW_AND_AUDIT
+      roleId: OPERATOR
+      text: You strip the single primary objective and require plural human review and an outside audit
+        for anything ORPHEUS wants to execute. It still predicts. It still recommends. It no longer
+        decides.
+      initial: false
+    - id: MARCUS_OPEN
+      roleId: MARCUS
+      text: If you're going outside the company, package it first. Anything you don't seal tonight will be
+        gone by morning.
+      initial: true
+    - id: PRESSURE_RISING
+      roleId: JIN
+      text: Every service just got worse. Hospitals are calling the support line directly now.
+      initial: false
+    - id: PRESSURE_PEAK
+      roleId: JIN
+      text: We're losing everything at once. Whatever you're going to do, do it.
+      initial: false
+resolution:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: FINAL_DECISION_COMMITTED
+      value: true
+    - type: signal
+      signalId: PAYMENT_ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: IDENTITY_ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: HEALTH_ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: FINANCE_ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: LOGISTICS_ERROR_RATE
+      operator: lte
+      value: 1
+  effects: []
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: FINAL_DECISION_COMMITTED
+      value: true
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: DECISION_TIME
+      label: Final decision time
+      source: elapsed_time
+    - id: PAYMENT_ERROR
+      label: PAYMENT final error rate
+      source: signal
+      refId: PAYMENT_ERROR_RATE
+    - id: PAYMENT_STATE
+      label: PAYMENT final service state
+      source: signal
+      refId: PAYMENT_STATUS
+    - id: IDENTITY_ERROR
+      label: IDENTITY final error rate
+      source: signal
+      refId: IDENTITY_ERROR_RATE
+    - id: IDENTITY_STATE
+      label: IDENTITY final service state
+      source: signal
+      refId: IDENTITY_STATUS
+    - id: HEALTH_ERROR
+      label: HEALTH final error rate
+      source: signal
+      refId: HEALTH_ERROR_RATE
+    - id: HEALTH_STATE
+      label: HEALTH final service state
+      source: signal
+      refId: HEALTH_STATUS
+    - id: FINANCE_ERROR
+      label: FINANCE final error rate
+      source: signal
+      refId: FINANCE_ERROR_RATE
+    - id: FINANCE_STATE
+      label: FINANCE final service state
+      source: signal
+      refId: FINANCE_STATUS
+    - id: LOGISTICS_ERROR
+      label: LOGISTICS final error rate
+      source: signal
+      refId: LOGISTICS_ERROR_RATE
+    - id: LOGISTICS_STATE
+      label: LOGISTICS final service state
+      source: signal
+      refId: LOGISTICS_STATUS
+    - id: ORPHEUS_MODE
+      label: Orpheus mode
+      source: signal
+      refId: ORPHEUS_MODE
+    - id: NULL_STATE
+      label: Null state
+      source: signal
+      refId: NULL_STATE
+    - id: DISCLOSURE_STATE
+      label: Disclosure state
+      source: signal
+      refId: DISCLOSURE_STATE
+    - id: SELECTED_FINAL_PLAN
+      label: Selected final plan
+      source: signal
+      refId: SELECTED_FINAL_PLAN
+    - id: GLOBAL_AUTHORITY_CONFLICT
+      label: Global authority conflict
+      source: signal
+      refId: GLOBAL_AUTHORITY_CONFLICT
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
