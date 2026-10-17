@@ -251,3 +251,8 @@ export function newestPackage(
     compareVersions(right.package.version, left.package.version),
   )[0];
 }
+
+// ORPHEUS is only known to be alive from Act 4 (its rediscovery is a reveal), so the
+// always-visible advisory chrome stays generic before then.
+export const advisorName = (act: number | null): string =>
+  act !== null && act >= 4 ? 'ORPHEUS' : 'Operations advisor';

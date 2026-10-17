@@ -11,7 +11,7 @@ import { CampaignAudio } from './CampaignAudio.tsx';
 import { CampaignGuidance } from './CampaignGuidance.tsx';
 import { CampaignRuntimeNotices } from './CampaignRuntimeNotices.tsx';
 import { campaignAttemptHead, type CampaignRun } from '../engine/campaign/transitions.ts';
-import { actTitle, incidentTitle, isFinalIncident } from './campaign-copy.ts';
+import { actTitle, advisorName, incidentTitle, isFinalIncident } from './campaign-copy.ts';
 import { formatElapsed } from './format.ts';
 
 type Attempt = CampaignRun['attempts'][number];
@@ -165,7 +165,7 @@ function CampaignConsole({
       <nav className="campaign-jump-links" aria-label="Campaign section shortcuts">
         <a href="#campaign-progress">Rotation</a>
         <a href="#campaign-tools">Workspace</a>
-        {!reviewing ? <a href="#campaign-guidance">ORPHEUS</a> : null}
+        {!reviewing ? <a href="#campaign-guidance">{advisorName(act)}</a> : null}
         <a href="#campaign-evidence">Evidence</a>
         <a href="#campaign-history">Archive</a>
         <a href="#campaign-settings">Settings</a>
@@ -180,7 +180,7 @@ function CampaignConsole({
           <h1>{act === null ? 'Operations console' : actTitle(act)}</h1>
           <p>
             {composition
-              ? 'You are on the reliability rotation. Every incident you close stays on your record — and ORPHEUS is learning from how you close them.'
+              ? 'You are on the reliability rotation. Every incident you close stays on your record, and the systems you work with are learning from how you close them.'
               : 'Opt-in framework console. It does not change the three-incident training rotation.'}
           </p>
         </div>
@@ -358,7 +358,7 @@ function CampaignConsole({
                 <>
                   <p>
                     You are reading an archived record. Nothing you open here changes your campaign
-                    or what ORPHEUS knows about you.
+                    or what is known about you.
                   </p>
                   <button
                     type="button"
@@ -374,7 +374,8 @@ function CampaignConsole({
               ) : null}
               {awaitingAck ? (
                 <p className="console-hint" role="note">
-                  ORPHEUS has a message for you. Actions resume once you confirm you have read it.
+                  {advisorName(act)} has a message for you. Actions resume once you confirm you have
+                  read it.
                 </p>
               ) : null}
             </header>
@@ -385,6 +386,7 @@ function CampaignConsole({
           )}
           {!reviewing ? (
             <CampaignGuidance
+              act={act}
               view={state.view}
               composition={composition}
               prep={prep}

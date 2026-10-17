@@ -5,6 +5,7 @@ import { scenarioVersionKey } from '../scenario/catalog.ts';
 import {
   actionTitleFrom,
   formatConfidence,
+  advisorName,
   guidanceOffer,
   guidanceReopen,
   ruleKind,
@@ -25,6 +26,7 @@ export function CampaignGuidance({
   onPrepare,
   onSelect,
   onAcknowledge,
+  act = null,
 }: {
   view: CampaignView | null;
   composition?: ResolvedCampaignPackage;
@@ -35,7 +37,9 @@ export function CampaignGuidance({
   onPrepare: (ruleId: string) => void;
   onSelect: (preparationId: string) => void;
   onAcknowledge: (preparation: Preparation) => void;
+  act?: number | null;
 }) {
+  const advisor = advisorName(act);
   const scenario =
     prep === undefined
       ? undefined
@@ -62,8 +66,8 @@ export function CampaignGuidance({
       className="panel orpheus-card"
       aria-labelledby="campaign-guidance-title"
     >
-      <p className="eyebrow">ORPHEUS // ADVISORY CHANNEL</p>
-      <h2 id="campaign-guidance-title">ORPHEUS</h2>
+      <p className="eyebrow">{advisor.toUpperCase()} // ADVISORY CHANNEL</p>
+      <h2 id="campaign-guidance-title">{advisor}</h2>
       {view?.presentationDiagnostics.length ? (
         <p role="alert">ORPHEUS guidance could not be checked against your record right now.</p>
       ) : null}
@@ -104,7 +108,7 @@ export function CampaignGuidance({
           </button>
         </section>
       ) : offers.length || reopen.length ? null : (
-        <p className="console-hint">ORPHEUS is quiet. Nothing is waiting for you.</p>
+        <p className="console-hint">{advisor} is quiet. Nothing is waiting for you.</p>
       )}
     </section>
   );

@@ -121,7 +121,7 @@ function ShiftBriefing({ onDismiss }: { onDismiss: () => void }) {
       <p>
         <strong>Training rotation</strong> — the three standalone incidents below; a good place to
         start. <strong>Full campaign</strong> — the long rotation, where your record carries forward
-        and the company&apos;s AI, ORPHEUS, starts modelling how you work.
+        and the company&apos;s systems start modelling how you work.
       </p>
       <button type="button" onClick={onDismiss}>
         Got it — hide this briefing
@@ -289,7 +289,7 @@ function Desk({
           </div>
           <div className="desk-route">
             <h3>Full campaign</h3>
-            <p>The long rotation across nine acts. Your record — and ORPHEUS — follow you.</p>
+            <p>The long rotation across nine acts. Your record follows you.</p>
             <button type="button" onClick={() => setFullCampaignOpen(true)}>
               Full campaign
             </button>

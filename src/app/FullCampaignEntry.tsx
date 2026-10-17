@@ -191,8 +191,8 @@ function CampaignEntryScreen({
         <h1>Full campaign</h1>
         <p>
           The long rotation: incidents across nine acts, one continuous record. Each incident plays
-          like the training ones, but your choices carry forward, and ORPHEUS — the company&apos;s
-          operations AI — starts to forecast what you will do.
+          like the training ones, but your choices carry forward, and something in the stack starts
+          to notice how you make them.
         </p>
         <div className="screen-toolbar" role="group" aria-label="Screen settings">
           <PresentationSettings />
