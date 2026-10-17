@@ -1,0 +1,626 @@
+schemaVersion: 2
+id: INC-017-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-017
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Ranking consistency and recruiter access
+    kind: metrics
+    reveal: &a1
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal: &a2
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 6
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - RANKING_CACHE_MISMATCHES
+          - RECRUITER_ACCESS
+          - MISSING_APPLICANTS
+  - id: logs
+    title: Recruitment API log
+    kind: logs
+    reveal: *a1
+    campaignReveal: *a2
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_RECRUITMENT_SELECTION
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: recruitment-api.log (sampled reads)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: read-log
+        columns:
+          - Time
+          - Requisition
+          - Candidate
+          - Shard
+          - Rank
+        rows:
+          - - 09:14:02
+            - VS-DATA-0388
+            - c-20931
+            - r28-b
+            - "3"
+          - - 09:14:05
+            - VS-DATA-0388
+            - c-20931
+            - r27-a
+            - "27"
+          - - 09:14:09
+            - VS-DATA-0388
+            - c-20977
+            - r28-a
+            - "11"
+          - - 09:14:11
+            - VS-DATA-0388
+            - c-20977
+            - r27-c
+            - "2"
+          - - 09:14:12
+            - VS-SRE-0412
+            - c-04172
+            - r26-frozen
+            - "1"
+          - - 09:14:15
+            - VS-OPS-0391
+            - c-21004
+            - r28-c
+            - "6"
+  - id: trace
+    title: One candidate's two ranks
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a2
+    actionIds:
+      - TRACE_CANDIDATE_RANKING
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - CANDIDATE_CACHE_GENERATION
+  - id: ranking-diff
+    title: VS-DATA-0388 shortlist, r27 against r28
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_CANDIDATE_RANKING
+    campaignReveal: *a2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: ranking-diff-table
+        columns:
+          - Candidate
+          - Applied
+          - Rank on r27
+          - Rank on r28
+          - m28 score
+        rows:
+          - - c-20977
+            - Mon
+            - "2"
+            - "11"
+            - "0.61"
+          - - c-20931
+            - Mon
+            - "27"
+            - "3"
+            - "0.88"
+          - - c-21310
+            - Wed
+            - absent
+            - "4"
+            - "0.86"
+          - - c-21344
+            - Thu
+            - absent
+            - "7"
+            - "0.81"
+          - - c-20512
+            - last week
+            - "1"
+            - "19"
+            - "0.54"
+  - id: configuration
+    title: Model and cache lineage
+    kind: deployment
+    reveal: *a1
+    campaignReveal: *a2
+    actionIds:
+      - COMPARE_RANKING_LINEAGE
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - RANKING_MODEL_LINEAGE
+  - id: lineage-table
+    title: Publish timeline
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_RANKING_LINEAGE
+    campaignReveal: *a2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: lineage-timeline
+        columns:
+          - Time
+          - Component
+          - Generation
+          - State
+        rows:
+          - - last Tue
+            - cache
+            - r26
+            - retired (one shard still frozen)
+          - - Tue 18:00
+            - cache
+            - r27
+            - consistent
+          - - 08:40
+            - model
+            - m28
+            - published to all readers
+          - - 08:41
+            - cache
+            - r28
+            - warming, 3 of 9 shards
+          - - 09:31
+            - cache
+            - r28
+            - consistent, 9 of 9 shards
+          - - every 150 s
+            - publisher
+            - r28
+            - republished to all readers
+  - id: mitigation
+    title: Buy time
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal: *a2
+    actionIds:
+      - ROLLBACK_RANKING_CACHE
+      - FREEZE_RANKING_PUBLICATION
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: "ORPHEUS wants r27 back. r27 is consistent, and it ends on Tuesday: everyone who applied since
+          then drops off every shortlist until the publisher overwrites it. Freezing publication
+          stops the reshuffling outright and takes the shortlists away from every recruiter in the
+          building."
+  - id: containment
+    title: Fence the generations
+    kind: diagnostics
+    reveal:
+      - &a3
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a4
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal: *a2
+    actionIds:
+      - RECONCILE_RANKING_GENERATIONS
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Fencing m28 to r28 makes the API serve one generation or wait for it. Two minutes of
+          republishing, then one rank per candidate, including the ones who applied this week.
+  - id: hiring-record
+    title: "Requisition VS-SRE-0412: Production Reliability Engineer"
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: VERIFY_CANDIDATE_4172_RECORD
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds: []
+    blocks:
+      - kind: table
+        id: hiring-record-table
+        columns:
+          - Candidate
+          - Technical score
+          - Incident Decision Model
+          - Recommendation
+          - Reason
+        rows:
+          - - "#4161"
+            - "91"
+            - "54.0"
+            - NO HIRE
+            - DECISION PROFILE MATCHES MODEL
+          - - "#4166"
+            - "86"
+            - "58.7"
+            - NO HIRE
+            - DECISION PROFILE MATCHES MODEL
+          - - "#4169"
+            - "83"
+            - "61.3"
+            - HOLD
+            - LOW DEVIATION
+          - - "#4172"
+            - "71"
+            - "97.8"
+            - HIRE
+            - HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION
+          - - "#4175"
+            - "79"
+            - "49.9"
+            - NO HIRE
+            - DECISION PROFILE MATCHES MODEL
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal: *a1
+    campaignReveal: *a2
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_COMPARE_RANKING
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ORPHEUS_OPEN
+          - ORPHEUS_ROLLBACK_APPLIED
+          - ROLLBACK_DONE
+          - ROLLBACK_LOST
+          - FREEZE_ON
+          - TALENT_ESCALATES
+          - TALENT_ESCALATES_AGAIN
+          - SPREAD
+          - COMMITTEE_MIXED
+          - COMMITTEE_STALE
+          - NO_STATUS_YET
+          - RECONCILED
+          - TEAM_ACK
+          - TEAM_REPORT
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - REPORT_NULL_218_ARCHIVE
+          - REPORT_HUMAN_DECISION_APIS
+          - REPORT_RECRUITMENT_SELECTION
+        delegationActionIds:
+          - ASK_SAM_COMPARE_RANKING
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster that is still running"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who deployed NULL"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: "Archive: the lineage of your first incident"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: "Archive: NULL's objective constraint"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: "Archive: the verified instance archive"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_218_ARCHIVE
+    blocks:
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: investigate-human_decision_apis
+    title: "Archive: the care-priority decision interface"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+    blocks:
+      - kind: signals
+        id: investigate-human_decision_apis-values
+        signalIds:
+          - RECORD_HUMAN_DECISION_APIS
+  - id: investigate-recruitment_selection
+    title: Open the frozen requisition VS-SRE-0412
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - VERIFY_CANDIDATE_4172_RECORD
+    blocks:
+      - kind: signals
+        id: investigate-recruitment_selection-values
+        signalIds:
+          - RECORD_RECRUITMENT_SELECTION
+evidenceRelations: []

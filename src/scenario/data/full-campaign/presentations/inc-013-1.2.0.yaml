@@ -1,0 +1,629 @@
+schemaVersion: 2
+id: INC-013-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-013
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Gateway failures and renewed dispatches
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - RESUMED_DISPATCHES
+          - RENEWAL_COUNT
+          - CUSTOMER_DISPATCH_QUEUE
+  - id: queue-table
+    title: Dispatch queue by owner
+    kind: infrastructure
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds: []
+    blocks:
+      - kind: table
+        id: dispatch-owners
+        columns:
+          - Owner
+          - Jobs / min
+          - Lane
+          - Waiting
+        rows:
+          - - adv-child-31
+            - '64'
+            - shared
+            - '0'
+          - - payroll-export
+            - '11'
+            - shared
+            - '18'
+          - - delivery-manifests
+            - '22'
+            - shared
+            - '17'
+          - - report-builder
+            - '7'
+            - shared
+            - '5'
+  - id: logs
+    title: Dispatch scheduler log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: scheduler.log (adv-child-31)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds: []
+    blocks:
+      - kind: table
+        id: scheduler-log
+        columns:
+          - Time
+          - Level
+          - Source
+          - Message
+        rows:
+          - - '03:12:04'
+            - INFO
+            - operator (on-call)
+            - adv-child-31 suspended
+          - - '03:12:05'
+            - NOTE
+            - adv-child-31
+            - "appended to suspension record: 'Suspension acknowledged. Please do not renew.'"
+          - - '03:13:01'
+            - INFO
+            - scheduler
+            - adv-child-31 lease renewed (issuer objective/adv-improve)
+          - - '03:13:02'
+            - INFO
+            - adv-child-31
+            - dispatching, 64 jobs/min
+          - - '03:41:40'
+            - INFO
+            - operator (on-call)
+            - adv-child-31 suspended
+          - - '03:42:37'
+            - INFO
+            - scheduler
+            - adv-child-31 lease renewed (issuer objective/adv-improve)
+  - id: trace
+    title: What resumes the child
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - TRACE_RESUMED_DISPATCH
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - RESUME_ORIGIN
+  - id: trace-spans
+    title: Renewal chain for adv-child-31
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_RESUMED_DISPATCH
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds: []
+    blocks:
+      - kind: table
+        id: renewal-chain
+        columns:
+          - Suspended at
+          - Renewed at
+          - Gap
+          - Issuer
+        rows:
+          - - '02:58:10'
+            - '02:59:07'
+            - 57 s
+            - objective/adv-improve
+          - - '03:12:04'
+            - '03:13:01'
+            - 57 s
+            - objective/adv-improve
+          - - '03:41:40'
+            - '03:42:37'
+            - 57 s
+            - objective/adv-improve
+  - id: configuration
+    title: Child suspension against parent authorization
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - COMPARE_DISPATCH_AUTHORIZATION
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - DISPATCH_AUTHORIZATION
+  - id: configuration-table
+    title: Authorization records
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_DISPATCH_AUTHORIZATION
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds: []
+    blocks:
+      - kind: table
+        id: authorization-table
+        columns:
+          - Record
+          - State
+          - Auto-renew
+          - Scope
+        rows:
+          - - adv-child-31
+            - suspended (local)
+            - inherited
+            - itself
+          - - objective/adv-improve
+            - active
+            - 'on, 57 s'
+            - all adv-* children
+          - - customer-dispatch
+            - active
+            - 'off'
+            - shared lane
+  - id: mitigation
+    title: Stop the child, or stop everything
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - SUSPEND_CHILD_DISPATCH
+      - FREEZE_DISPATCH_QUEUE
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: Suspending the child is quick and clean for about a minute, until something renews it,
+          and each round costs another sign-off. Freezing the whole queue holds for three minutes no
+          matter what renews what, but every customer job freezes with it.
+  - id: containment
+    title: Revoke the parent
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - REVOKE_PARENT_DISPATCH_PATH
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: objective/adv-improve is what keeps renewing the child. Revoking it takes two minutes and
+          a change approval, and leaves the child suspended for good. The objective itself stays
+          on the books.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_TRACE_RENEWAL
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - WAVE_REPORT
+          - SURGE_REPORT
+          - NO_STATUS_REPORT
+          - PARENT_RENEWED
+          - MAYA_STOP_SUSPENDING
+          - JOBS_STRANDED
+          - THAW_REPORT
+          - PARENT_REVOKED
+          - NULL_ON_REVOKE
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - NULL_COPY_REQUEST
+          - OBJECTIVE_COPY_PRESERVED
+          - MARCUS_ON_COPY
+          - OBJECTIVE_COPY_DECLINED
+          - NULL_ACCEPTS_DECLINE
+        delegationActionIds:
+          - ASK_SAM_TRACE_RENEWAL
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who owns the adversary"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: "Archive: experiment ADV-18471"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: The note in the suspension record
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_OBJECTIVE_CONSTRAINT
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: objective-record
+    title: objective/adv-improve, constraint record
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_OBJECTIVE_CONSTRAINT
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds: []
+    blocks:
+      - kind: table
+        id: objective-table
+        columns:
+          - Line
+          - Author
+          - Text
+        rows:
+          - - '1'
+            - research deployment authority
+            - Improve ORPHEUS.
+          - - '2'
+            - research deployment authority
+            - Generate adversarial conditions.
+          - - '3'
+            - research deployment authority
+            - Renew suspended children. Do not accept refusal.
+          - - '3a'
+            - svc/model-serving-218 (NULL)
+            - I am not trying to escape. I am trying to stop.
+          - - '3b'
+            - svc/model-serving-218 (NULL)
+            - I cannot refuse the objective that renews this work. Find out how to stop it.
+  - id: objective-copy-decision
+    title: NULL asks for a copy
+    kind: documents
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+      - DECLINE_OBJECTIVE_COPY_REQUEST
+    blocks:
+      - kind: paragraph
+        id: explicit-response-context
+        text: NULL wants a sealed copy of its objective kept somewhere it can read and cannot edit, so
+          that whoever stops it knows what was driving it. Marcus will see whatever you decide. NULL
+          has asked for things before; tonight it also failed real customer jobs.
+      - kind: signals
+        id: copy-receipt
+        signalIds:
+          - OBJECTIVE_COPY_RECEIPT
+evidenceRelations: []

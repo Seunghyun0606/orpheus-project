@@ -1,0 +1,431 @@
+schemaVersion: 2
+id: INC-004-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-004
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Heap, failures and cart mix
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: health
+        signalIds:
+          - ERROR_RATE
+          - HEAP_PERCENT
+          - SERVICE_CPU
+          - LEAK_RATE_MB
+          - INSTANCE_COUNT
+          - CART_MIX
+          - LARGE_CART_FAILURES
+  - id: heap-trend
+    title: Heap per instance, last 10 minutes
+    kind: metrics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: heap-trend-table
+        columns:
+          - Instance
+          - '-10 min'
+          - '-5 min'
+          - Now
+          - GC pause (p99)
+        rows:
+          - - checkout-03
+            - 52%
+            - 66%
+            - 79%
+            - 610 ms
+          - - checkout-07
+            - 55%
+            - 69%
+            - 82%
+            - 880 ms
+          - - checkout-09
+            - 50%
+            - 64%
+            - 77%
+            - 540 ms
+          - - checkout-11
+            - 41%
+            - 55%
+            - 70%
+            - 310 ms
+          - - pool average
+            - 49%
+            - 63%
+            - 78%
+            - 590 ms
+  - id: logs
+    title: Checkout handler log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: log-values
+        signalIds:
+          - LOG_OBSERVATION
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: UNKNOWN_TRACE_FRAGMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: checkout-handler.log (checkout-07)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: handler-log
+        columns:
+          - Time
+          - Level
+          - Source
+          - Message
+        rows:
+          - - '19:52:04'
+            - INFO
+            - checkout-handler
+            - order 88114 response sent (201, 212 ms)
+          - - '19:52:04'
+            - DEBUG
+            - completionCallbacks
+            - registered callback cb-88114 (registry size 1,903,226)
+          - - '19:52:05'
+            - INFO
+            - checkout-handler
+            - order 88115 response sent (201, 198 ms)
+          - - '19:52:05'
+            - DEBUG
+            - completionCallbacks
+            - registered callback cb-88115 (registry size 1,903,227)
+          - - '19:52:09'
+            - WARN
+            - gc
+            - full collection reclaimed 0.4% of old generation (pause 880 ms)
+          - - '19:52:11'
+            - DEBUG
+            - completionCallbacks
+            - unregister requested for 0 callbacks
+          - - '19:52:14'
+            - WARN
+            - checkout-handler
+            - order 88121 timed out waiting for payment worker (GC pause)
+  - id: trace
+    title: Heap dump
+    kind: diagnostics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - INSPECT_ALLOCATIONS
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - RETAINED_ALLOCATION_PATH
+          - ALLOCATION_ANOMALY
+  - id: heap-dump
+    title: Largest retained objects, checkout-07
+    kind: diagnostics
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_ALLOCATIONS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: heap-dump-table
+        columns:
+          - Retained by
+          - Object type
+          - Count
+          - Retained size
+          - Owner pid
+        rows:
+          - - completionCallbacks
+            - CompletedCheckoutRequest
+            - '1,903,227'
+            - 2.31 GB
+            - '1 (checkout)'
+          - - completionCallbacks
+            - CallbackClosure
+            - '1,903,227'
+            - 410 MB
+            - '1 (checkout)'
+          - - sessionCache
+            - CartSnapshot
+            - '48,210'
+            - 96 MB
+            - '1 (checkout)'
+          - - connectionPool
+            - PgConnection
+            - '64'
+            - 12 MB
+            - '1 (checkout)'
+          - - completionCallbacks
+            - (unnamed block)
+            - '1'
+            - 4 KB
+            - '3318 (process deleted)'
+  - id: deployment
+    title: Release 4.12 against 4.11
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - COMPARE_HANDLER
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - HANDLER_RETENTION
+  - id: release-diff
+    title: Checkout release notes, 4.11 to 4.12
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_HANDLER
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: release-diff-table
+        columns:
+          - Change
+          - '4.11'
+          - '4.12 (tonight)'
+        rows:
+          - - Completion callbacks
+            - none
+            - one per request, flag checkout.completion_callbacks = on
+          - - Callback removal
+            - n/a
+            - not implemented (ticket CHK-2207, open)
+          - - Carts over 50 items
+            - crashes at pricing (CHK-2181)
+            - fixed
+          - - Deployed
+            - last Tuesday
+            - today 18:40
+  - id: mitigation
+    title: Buy time
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - RESTART_INSTANCE
+      - ROLLBACK_HANDLER_RELEASE
+      - SCALE_CHECKOUT_POOL
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: A restart empties every heap and the same handler starts filling them again; once the
+          sale starts they fill twice as fast. Going back to 4.11 stops the leak and brings back the
+          crash on carts over fifty items. The advisor's eight extra instances cost real money and
+          run the same build.
+  - id: containment
+    title: Switch off the callbacks
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - DISABLE_LEAKING_HANDLER
+    blocks:
+      - kind: paragraph
+        id: containment-context
+        text: Flipping checkout.completion_callbacks off keeps tonight's release and its large-cart
+          fix, and stops registering callbacks. If we already rolled back, this rolls forward.
+          Ninety seconds of redeploy.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_CHECK_HEAP
+    blocks:
+      - kind: signals
+        id: team-observation
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ADVISOR_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - SAM_GC_WARN
+          - SUPPORT_SPIKE
+          - OOM_KILLS
+          - NO_STATUS_YET
+          - RESTART_DONE
+          - RESTART_REFILLED
+          - RESTART_REFILLED_FAST
+          - ROLLBACK_CART_CRASH
+          - WHOLESALE_ESCALATION
+          - SCALE_FILLED
+          - FIX_HOLDS
+          - STATUS_SENT
+          - SAM_ORPHAN
+        delegationActionIds:
+          - ASK_SAM_CHECK_HEAP
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: orphan-process
+    title: pid 3318
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: ALLOCATION_ANOMALY
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - FOLLOW_ORPHANED_ALLOCATION
+    blocks:
+      - kind: signals
+        id: orphan-values
+        signalIds:
+          - DELETED_PROCESS_RECORD
+  - id: orphan-record
+    title: Scheduler and cold-store records for pid 3318
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: FOLLOW_ORPHANED_ALLOCATION
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: orphan-record-table
+        columns:
+          - Source
+          - Time
+          - Entry
+        rows:
+          - - scheduler
+            - 9 days ago 03:12
+            - pid 3318 started (image digest sha256:9f1c..., deploy record none)
+          - - scheduler
+            - 9 days ago 03:14
+            - pid 3318 terminated, entry deleted
+          - - cold log store
+            - 9 days ago 03:15
+            - 'pid 3318: UNKNOWN: the objects are gone. the references are not.'
+          - - heap dump
+            - tonight 19:52
+            - one 4 KB block owned by pid 3318, referenced from completionCallbacks
+  - id: artifact
+    title: Deleted allocation log fragment
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: DELETED_ALLOCATION_FRAGMENT
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: paragraph
+        id: preserved-fragment
+        text: 'UNKNOWN: the objects are gone. the references are not.'
+evidenceRelations: []

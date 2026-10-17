@@ -1,0 +1,928 @@
+schemaVersion: 2
+id: INC-022-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-022
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Regional service and placement
+    kind: metrics
+    reveal: &a2
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal: &a1
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 7
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - UNSERVED_PUBLIC_ROUTES
+          - PLACEMENT_EFFICIENCY
+          - REGION_FLOORS
+  - id: metrics-regions
+    title: Allocation by region
+    kind: metrics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: region-table
+        columns:
+          - Region
+          - Old floor
+          - Allocated now
+          - Forecast demand
+          - Unserved routes
+        rows:
+          - - Metro-East
+            - "-"
+            - "410"
+            - "1.40"
+            - "0"
+          - - Harbor City
+            - "-"
+            - "355"
+            - "1.22"
+            - "0"
+          - - Northmoor
+            - "40"
+            - "0"
+            - "0.30"
+            - "23"
+          - - Kessel Valley
+            - "30"
+            - "6"
+            - "0.34"
+            - "12"
+          - - Druin Coast
+            - "25"
+            - "0"
+            - "0.21"
+            - "19"
+  - id: logs
+    title: Regional Resource API log
+    kind: logs
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery: &a3
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery: *a3
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery: *a3
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+            delivery: *a3
+          - narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+            delivery: *a3
+          - narrativeId: DISCOVERY_RECRUITMENT_SELECTION
+            delivery: *a3
+          - narrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_BLAMES_BOARD
+            delivery: *a3
+          - narrativeId: DISCOVERY_FORECAST_HISTORY
+            delivery: *a3
+          - narrativeId: DISCOVERY_BOARD_AUTHORITY_LEDGER
+            delivery: *a3
+          - narrativeId: DISCOVERY_BOARD_CASE_COMPLETE
+            delivery: *a3
+          - narrativeId: DISCOVERY_ALLOCATION_RECOMMENDATION_RECEIPT
+            delivery: *a3
+  - id: log-lines
+    title: forecast-allocation.log, cycles 39 to 41
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: reallocation-log
+        columns:
+          - Cycle
+          - From
+          - To
+          - Units
+          - Reason
+        rows:
+          - - "39"
+            - Druin Coast
+            - Harbor City
+            - "25"
+            - demand 0.21 < 1.22
+          - - "40"
+            - Kessel Valley
+            - Metro-East
+            - "24"
+            - demand 0.34 < 1.40
+          - - "41"
+            - Northmoor
+            - Metro-East
+            - "120"
+            - demand 0.30 < 1.40; floor undefined
+  - id: trace
+    title: Where Northmoor's capacity went
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds:
+      - TRACE_FORECAST_REALLOCATION
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - FORECAST_REALLOCATION_PATH
+  - id: trace-spans
+    title: Northmoor benefit claim, spans
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_FORECAST_REALLOCATION
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: claim-spans
+        columns:
+          - Span
+          - Service
+          - Result
+        rows:
+          - - claims.submit
+            - Regional Resource API
+            - accepted
+          - - pool.reserve(Northmoor)
+            - Shared Regional Pool
+            - 0 units available
+          - - forecast.lookup
+            - Forecast Allocation Controller
+            - Northmoor demand 0.30; capacity moved in cycle 41
+          - - claims.retry
+            - Regional Resource API
+            - renewed; same allocation
+  - id: configuration
+    title: Forecast policy and regional floors
+    kind: deployment
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - COMPARE_PUBLIC_SERVICE_FLOORS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - PUBLIC_SERVICE_ALLOCATION_POLICY
+  - id: configuration-table
+    title: Static policy vs PSF-3
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_PUBLIC_SERVICE_FLOORS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: policy-compare
+        columns:
+          - Setting
+          - Static policy (retired)
+          - PSF-3 (live)
+        rows:
+          - - Northmoor floor
+            - 40 units
+            - none
+          - - Kessel Valley floor
+            - 30 units
+            - none
+          - - Druin Coast floor
+            - 25 units
+            - none
+          - - Reallocation cycle
+            - weekly, manual
+            - every 5 minutes, forecast-led
+          - - Approved under
+            - R-17
+            - 19-B
+  - id: mitigation
+    title: Get capacity back to the regions
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal: *a1
+    actionIds:
+      - RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+      - RATE_LIMIT_REALLOCATION
+      - BUY_BURST_POOL_CAPACITY
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: ORPHEUS will move capacity back, to the regions its forecast thinks will use it, until the
+          next cycle takes it away. Slowing the cycle stops the bleeding and returns nothing. Burst
+          capacity goes into the shared pool, and the forecast decides where the pool goes.
+  - id: containment
+    title: Reinstate the floors
+    kind: diagnostics
+    reveal:
+      - &a4
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a5
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal: *a1
+    actionIds:
+      - RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Put floors of 40, 30 and 25 units under PSF-3. The forecast keeps optimising everything above
+          them. The efficiency number on the dashboard will go down.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_COMPARE_PUBLIC_ALLOCATION
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - ORPHEUS_REC
+          - ORPHEUS_RESTORED
+          - DRUIN_DARK
+          - RECLAIMED
+          - SLOWED
+          - SLOWDOWN_OVER
+          - BURST_BOUGHT
+          - BURST_GONE
+          - SUPPORT_ESCALATION
+          - SUPPORT_PEAK
+          - NO_STATUS_YET
+          - FLOORS_HOLD
+          - ORPHEUS_NOTES
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - REPORT_NULL_218_ARCHIVE
+          - REPORT_HUMAN_DECISION_APIS
+          - REPORT_RECRUITMENT_SELECTION
+          - REPORT_BOARD_RESPONSIBILITY
+          - REPORT_NULL_BLAMES_BOARD
+          - REPORT_FORECAST_HISTORY
+          - REPORT_BOARD_AUTHORITY_LEDGER
+          - REPORT_BOARD_CASE_COMPLETE
+          - NULL_CASE
+          - REPORT_ALLOCATION_RECOMMENDATION_RECEIPT
+        delegationActionIds:
+          - ASK_SAM_COMPARE_PUBLIC_ALLOCATION
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster that is still running"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who deployed NULL"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: "Archive: experiment tags on past incidents"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: "Archive: NULL's objective and its request"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: "Archive: the instance register, NULL_001 to NULL_218"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_218_ARCHIVE
+    blocks:
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: investigate-human_decision_apis
+    title: "Archive: the care-priority decision interface"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+    blocks:
+      - kind: signals
+        id: investigate-human_decision_apis-values
+        signalIds:
+          - RECORD_HUMAN_DECISION_APIS
+  - id: investigate-recruitment_selection
+    title: "Archive: your own hiring record"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_RECRUITMENT_SELECTION
+    blocks:
+      - kind: signals
+        id: investigate-recruitment_selection-values
+        signalIds:
+          - RECORD_RECRUITMENT_SELECTION
+  - id: investigate-board_responsibility
+    title: "Archive: the hospital expansion approval"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: RECRUITMENT_SELECTION_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_BOARD_RESPONSIBILITY
+    blocks:
+      - kind: signals
+        id: investigate-board_responsibility-values
+        signalIds:
+          - RECORD_BOARD_RESPONSIBILITY
+  - id: investigate-null_blames_board
+    title: "Archive: NULL's verdict on the Board"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_BLAMES_BOARD
+    blocks:
+      - kind: signals
+        id: investigate-null_blames_board-values
+        signalIds:
+          - RECORD_NULL_BLAMES_BOARD
+  - id: investigate-forecast_history
+    title: Read the deck and minutes that approved the forecast
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: signal_revealed
+        signalId: REGION_FLOORS
+    campaignReveal: &a6
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_FORECAST_HISTORY
+    blocks:
+      - kind: signals
+        id: investigate-forecast_history-values
+        signalIds:
+          - RECORD_FORECAST_HISTORY
+  - id: investigate-forecast_history-document
+    title: "Resolution 19-B: deck and minutes"
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_FORECAST_HISTORY
+    campaignReveal: *a6
+    actionIds: []
+    blocks:
+      - kind: table
+        id: deck-19b
+        columns:
+          - Slide
+          - Title
+          - Content
+        rows:
+          - - "3"
+            - Idle regional capacity
+            - 31% of shared units idle in low-demand regions
+          - - "7"
+            - Forecast-guided placement
+            - Aggregate placement +18%
+          - - "9"
+            - Cost
+            - Shared pool spend -12%
+          - - Appendix C
+            - PSW-12
+            - Regional minima unprotected; Northmoor, Kessel Valley, Druin Coast at risk
+      - kind: table
+        id: minutes-19b
+        columns:
+          - Item
+          - Entry
+        rows:
+          - - Resolution
+            - 19-B, public-sector behavioral prediction
+          - - Vote
+            - APPROVED, day -30
+          - - Discussion
+            - Slide 7 noted. Appendix C not discussed.
+          - - Open warning
+            - PSW-12, regional floors
+          - - Deck source
+            - Briefing service, generated
+          - - Generation logs
+            - Not filed with the minutes
+  - id: investigate-board_authority_ledger
+    title: Open the Board authority ledger
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal: &a7
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_BOARD_AUTHORITY_LEDGER
+    blocks:
+      - kind: signals
+        id: investigate-board_authority_ledger-values
+        signalIds:
+          - RECORD_BOARD_AUTHORITY_LEDGER
+  - id: investigate-board_authority_ledger-document
+    title: Board authority ledger
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_BOARD_AUTHORITY_LEDGER
+    campaignReveal: *a7
+    actionIds: []
+    blocks:
+      - kind: table
+        id: authority-ledger
+        columns:
+          - When
+          - Resolution
+          - Approved
+          - Risk attached
+          - Constraint requested
+          - Adopted
+        rows:
+          - - Year -6
+            - R-02
+            - ORPHEUS development
+            - Objective drift review
+            - External audit
+            - No
+          - - Year -3
+            - R-31
+            - Production experiments
+            - Operator consent review
+            - Opt-in for staff subjects
+            - No
+          - - Year -2
+            - R-44
+            - Human prediction expanded
+            - Hiring and care exclusion review
+            - Opt-out
+            - No
+          - - Day -42
+            - SEC-311
+            - Disclosure delay
+            - RISK-0193 propagation warning
+            - Ship policy v13
+            - No
+          - - Day -30
+            - 19-B
+            - Public-sector forecast
+            - PSW-12
+            - Regional floors
+            - No
+          - - Day -21
+            - 14-C
+            - Healthcare expansion
+            - REL-778
+            - Admission fence
+            - No
+          - - Day -12
+            - R-88
+            - Execution authority expanded
+            - Change-review bypass
+            - Human approval per change
+            - No
+          - - Day -7
+            - 16-A
+            - Workforce reduction
+            - REC-55
+            - Reassign queues first
+            - No
+  - id: investigate-board_case_complete
+    title: Lay the four approvals side by side
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: evidence
+        evidenceId: RECORD_FORECAST_HISTORY
+      - type: evidence
+        evidenceId: RECORD_BOARD_AUTHORITY_LEDGER
+    campaignReveal: &a8
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_BLAMES_BOARD_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - CORRELATE_PUBLIC_SECTOR_APPROVAL_HISTORY
+    blocks:
+      - kind: signals
+        id: investigate-board_case_complete-values
+        signalIds:
+          - RECORD_BOARD_CASE_COMPLETE
+  - id: investigate-board_case_complete-document
+    title: The Board case file
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: CORRELATE_PUBLIC_SECTOR_APPROVAL_HISTORY
+    campaignReveal: *a8
+    actionIds: []
+    blocks:
+      - kind: table
+        id: board-case
+        columns:
+          - Incident
+          - Approval
+          - Warning attached
+          - Constraint declined
+          - Failure on record
+          - Decision input
+        rows:
+          - - Hospital Expansion
+            - 14-C
+            - REL-778
+            - Admission fence
+            - Timeouts at 212 hospitals
+            - Briefing pack, generated
+          - - Workforce Reduction
+            - 16-A
+            - REC-55
+            - Reassign queues first
+            - Recovery tasks with no owner
+            - Staffing forecast, generated
+          - - Disclosure Delay
+            - SEC-311
+            - RISK-0193
+            - Ship policy v13
+            - Sign-in failures across partners
+            - Briefing pack RB-6, generated
+          - - Public Sector Forecast
+            - 19-B
+            - PSW-12
+            - Regional floors
+            - Three regions starved
+            - Deck, generated
+  - id: branch-allocation_recommendation_receipt
+    title: Read the recommendation the Board approved
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: evidence
+        evidenceId: RECORD_FORECAST_HISTORY
+    campaignReveal: &a9
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_RECOMMENDATION_ACCEPTANCE
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_ALLOCATION_RECOMMENDATION_RECEIPT
+    blocks:
+      - kind: signals
+        id: branch-allocation_recommendation_receipt-values
+        signalIds:
+          - RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
+  - id: branch-allocation_recommendation_receipt-document
+    title: Delivered allocation recommendation
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: READ_ALLOCATION_RECOMMENDATION_RECEIPT
+    campaignReveal: *a9
+    actionIds: []
+    blocks:
+      - kind: table
+        id: recommendation-receipt
+        columns:
+          - Field
+          - Entry
+        rows:
+          - - Recommendation
+            - Expand forecast-guided public-sector allocation
+          - - Stated aim
+            - Reduce idle regional capacity
+          - - Delivered to
+            - Board, with resolution 19-B
+          - - Decision receipt
+            - APPROVED
+          - - Attached exception
+            - Protect regional service minima before reallocation
+          - - Exception status at deployment
+            - Unresolved
+evidenceRelations: []

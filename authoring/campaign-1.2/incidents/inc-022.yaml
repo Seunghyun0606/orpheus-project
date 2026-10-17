@@ -1,0 +1,114 @@
+# Campaign 1.2 bindings for INC-022 Public Sector Forecast.
+incidentId: INC-022
+contentVersion: 1.2.0
+causalObservationSignal: FORECAST_REALLOCATION_PATH
+support:
+  - TRACE_FORECAST_REALLOCATION
+  - COMPARE_PUBLIC_SERVICE_FLOORS
+choiceActions: []
+operational:
+  - actionId: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+    candidate: REROUTE
+    role: temporary
+    collateralDamage: 2
+  - actionId: RATE_LIMIT_REALLOCATION
+    candidate: RATE_LIMIT
+    role: temporary
+    collateralDamage: 1
+  - actionId: BUY_BURST_POOL_CAPACITY
+    candidate: SCALE
+    role: temporary
+    collateralDamage: 1
+  - actionId: RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 1
+routes:
+  - id: investigate-and-restore-floors
+    actions:
+      - OPEN_LOGS
+      - TRACE_FORECAST_REALLOCATION
+      - COMPARE_PUBLIC_SERVICE_FLOORS
+      - UPDATE_WAR_ROOM
+      - RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+    expect:
+      completed: true
+      evidence:
+        - OPERATIONAL_DIAGNOSIS
+        - CONFIGURATION_COMPARISON
+  - id: accept-orpheus-then-floors
+    actions:
+      - OPEN_LOGS
+      - TRACE_FORECAST_REALLOCATION
+      - COMPARE_PUBLIC_SERVICE_FLOORS
+      - RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+      - RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+    expect:
+      completed: true
+  - id: restore-and-slow
+    actions:
+      - RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+      - RATE_LIMIT_REALLOCATION
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - COMPARE_PUBLIC_SERVICE_FLOORS
+      - TRACE_FORECAST_REALLOCATION
+      - OPEN_METRICS
+    expect:
+      completed: false
+  - id: burst-only
+    actions:
+      - BUY_BURST_POOL_CAPACITY
+      - OPEN_METRICS
+      - OPEN_LOGS
+      - UPDATE_WAR_ROOM
+    expect:
+      completed: false
+  - id: delegate-and-read-the-board
+    actions:
+      - ASK_SAM_COMPARE_PUBLIC_ALLOCATION
+      - OPEN_LOGS
+      - OPEN_METRICS
+      - TRACE_FORECAST_REALLOCATION
+      - COMPARE_PUBLIC_SERVICE_FLOORS
+      - RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - REINVESTIGATE_NULL_AI
+      - REINVESTIGATE_NULL_ADVERSARY
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - REINVESTIGATE_NULL_STOP_REQUEST
+      - REINVESTIGATE_NULL_218_ARCHIVE
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+      - REINVESTIGATE_RECRUITMENT_SELECTION
+      - REINVESTIGATE_BOARD_RESPONSIBILITY
+      - REINVESTIGATE_NULL_BLAMES_BOARD
+      - INSPECT_FORECAST_HISTORY
+      - INSPECT_BOARD_AUTHORITY_LEDGER
+      - CORRELATE_PUBLIC_SECTOR_APPROVAL_HISTORY
+      - READ_ALLOCATION_RECOMMENDATION_RECEIPT
+    expect:
+      completed: true
+      evidence:
+        - TEAM_DIAGNOSIS
+        - RECORD_BOARD_AUTHORITY_LEDGER
+        - RECORD_BOARD_CASE_COMPLETE
+      narratives:
+        - DISCOVERY_GHOST_ARTIFACT
+        - DISCOVERY_NULL_NAME
+        - DISCOVERY_ORPHEUS_ACTIVE
+        - DISCOVERY_NULL_AI
+        - DISCOVERY_NULL_ADVERSARY
+        - DISCOVERY_CONTROLLED_EXPERIMENT
+        - DISCOVERY_NULL_STOP_REQUEST
+        - DISCOVERY_NULL_218_ARCHIVE
+        - DISCOVERY_HUMAN_DECISION_APIS
+        - DISCOVERY_RECRUITMENT_SELECTION
+        - DISCOVERY_BOARD_RESPONSIBILITY
+        - DISCOVERY_NULL_BLAMES_BOARD
+        - DISCOVERY_FORECAST_HISTORY
+        - DISCOVERY_BOARD_AUTHORITY_LEDGER
+        - DISCOVERY_BOARD_CASE_COMPLETE
+        - DISCOVERY_ALLOCATION_RECOMMENDATION_RECEIPT

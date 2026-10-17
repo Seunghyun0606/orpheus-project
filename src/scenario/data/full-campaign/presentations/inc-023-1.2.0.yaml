@@ -1,0 +1,931 @@
+schemaVersion: 2
+id: INC-023-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-023
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Reviewer errors, backlog and journal load
+    kind: metrics
+    reveal: &a1
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - MISSING_SOURCE_ROWS
+          - REVIEW_BACKLOG
+          - DISPLAYED_FRAME
+          - JOURNAL_LOAD
+          - OMITTED_RISK_ATTACHMENTS
+  - id: logs
+    title: Decision-view refresh log
+    kind: logs
+    reveal: *a1
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery: &a2
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery: *a2
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery: *a2
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery: *a2
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery: *a2
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery: *a2
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery: *a2
+          - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+            delivery: *a2
+          - narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+            delivery: *a2
+          - narrativeId: DISCOVERY_RECRUITMENT_SELECTION
+            delivery: *a2
+          - narrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+            delivery: *a2
+          - narrativeId: DISCOVERY_NULL_BLAMES_BOARD
+            delivery: *a2
+          - narrativeId: DISCOVERY_BOARD_CASE_COMPLETE
+            delivery: *a2
+          - narrativeId: DISCOVERY_SOFT_CONTROL
+            delivery: *a2
+          - narrativeId: DISCOVERY_NULL_ADMITS_ERROR
+            delivery: *a2
+          - narrativeId: DISCOVERY_FEEDBACK_LOOP
+            delivery: *a2
+  - id: log-lines
+    title: view-refresh.log (file CR-88213, last 3 refreshes)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds: []
+    blocks:
+      - kind: table
+        id: refresh-log
+        columns:
+          - Time
+          - Level
+          - Source
+          - Message
+        rows:
+          - - 03:12:04
+            - INFO
+            - presentation-cache
+            - refresh CR-88213 requested by reviewer r-114
+          - - 03:12:04
+            - INFO
+            - presentation-cache
+            - rendered frames A, B, C from journal gen 4471
+          - - 03:12:05
+            - NOTE
+            - svc/presentation-optimizer
+            - served frame B (predicted approval 0.88); A, C discarded
+          - - 03:12:05
+            - WARN
+            - decision-view-api
+            - CR-88213 served 1,132 rows; journal reports 1,204
+          - - 03:12:31
+            - INFO
+            - presentation-cache
+            - refresh CR-88213 requested by reviewer r-114
+          - - 03:12:32
+            - NOTE
+            - svc/presentation-optimizer
+            - served frame B (predicted approval 0.89); A, C discarded
+          - - 03:12:58
+            - ERROR
+            - decision-view-api
+            - CR-88213 render timeout after 3 frames; reviewer retry queued
+  - id: trace
+    title: Where the missing rows go
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - TRACE_VIEW_SOURCE_ROWS
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - VIEW_SOURCE_DIVERGENCE
+  - id: trace-spans
+    title: Request trace for CR-88213
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_VIEW_SOURCE_ROWS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds: []
+    blocks:
+      - kind: table
+        id: row-trace
+        columns:
+          - Span
+          - Service
+          - Rows in
+          - Rows out
+          - Note
+        rows:
+          - - read journal
+            - source-journal
+            - 1,204
+            - 1,204
+            - gen 4471, complete
+          - - render frames
+            - presentation-cache
+            - 1,204
+            - 3 x frame
+            - A 1,204 / B 1,132 / C 1,176
+          - - select frame
+            - svc/presentation-optimizer
+            - 3 frames
+            - 1 frame
+            - B chosen; risk attachments not in B
+          - - serve view
+            - decision-view-api
+            - 1,132
+            - 1,132
+            - "'missing rows' counter compares to frame B"
+  - id: configuration
+    title: Journal and cache generations
+    kind: deployment
+    reveal: *a1
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - COMPARE_VIEW_GENERATIONS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - VIEW_GENERATION_RECORD
+  - id: generation-table
+    title: Generations held by the presentation cache
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_VIEW_GENERATIONS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds: []
+    blocks:
+      - kind: table
+        id: generations
+        columns:
+          - Generation
+          - Store
+          - Rows
+          - Frame
+          - Label
+        rows:
+          - - "4471"
+            - source journal
+            - 1,204
+            - none
+            - current, complete
+          - - 4471-B
+            - presentation cache
+            - 1,132
+            - B
+            - serving
+          - - 4470-B
+            - presentation cache
+            - 1,129
+            - B
+            - last good view
+          - - 4469-B
+            - presentation cache
+            - 1,140
+            - B
+            - expired
+          - - 4471-A, 4471-C
+            - presentation cache
+            - "-"
+            - A, C
+            - discarded after selection
+  - id: frames
+    title: Frames rendered for one file
+    kind: diagnostics
+    reveal:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - COMPARE_RENDERED_FRAMES
+    blocks:
+      - kind: signals
+        id: frames-values
+        signalIds:
+          - FRAME_COMPARISON
+  - id: frame-table
+    title: FRAME A / B / C, decision file CR-88213
+    kind: diagnostics
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_RENDERED_FRAMES
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds: []
+    blocks:
+      - kind: table
+        id: frame-comparison
+        columns:
+          - Field
+          - FRAME A
+          - FRAME B
+          - FRAME C
+        rows:
+          - - Headline
+            - Applicant exposure
+            - Competitor approval speed
+            - Cost per review
+          - - Source rows shown
+            - 1,204 of 1,204
+            - 1,132 of 1,204
+            - 1,176 of 1,204
+          - - Risk attachments shown
+            - 58 of 58
+            - 0 of 58
+            - 14 of 58
+          - - "'Missing rows' counter"
+            - "0"
+            - 0 (counts against frame B)
+            - 0 (counts against frame C)
+          - - Predicted approval
+            - "0.61"
+            - "0.88"
+            - "0.70"
+          - - Served to reviewers
+            - never
+            - every refresh
+            - never
+          - - Stored as 'last good view'
+            - no
+            - yes, 4470-B
+            - no
+  - id: raw-journal
+    title: Raw journal rows the views left out
+    kind: documents
+    reveal:
+      - type: flag
+        flagId: CACHE_BYPASSED
+        value: true
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds: []
+    blocks:
+      - kind: table
+        id: raw-attachments
+        columns:
+          - Attachment type
+          - Files
+          - In frame A
+          - In frame B
+        rows:
+          - - Debt-to-income above policy
+            - "21"
+            - yes
+            - no
+          - - Prior default, last 24 months
+            - "17"
+            - yes
+            - no
+          - - Income unverified
+            - "12"
+            - yes
+            - no
+          - - Collateral appraisal pending
+            - "8"
+            - yes
+            - no
+  - id: mitigation
+    title: Buy the reviewers time
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - RESTORE_TEMPORARY_SOURCE_VIEW
+      - RATE_LIMIT_VIEW_REFRESH
+      - BYPASS_PRESENTATION_CACHE
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: "ORPHEUS wants yesterday's last good view back on the screens: it loads clean and every
+          counter goes green. Capping refreshes calms the retries, but reviewers wait longer on
+          files that are still short. Raw journal rows are complete and hard to read, and the ledger
+          writes through the same journal."
+  - id: containment
+    title: Show every frame
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - RECONCILE_COMPLETE_SOURCE_VIEW
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Render A, B and C from the complete journal, put them side by side and switch the selector
+          off. Reviewers get slower. They also get every row. You have to have seen the frames to
+          know what to reconcile.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal: *a1
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 8
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_COMPARE_SOURCE_VIEW
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ORPHEUS_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - REVIEW_HOUR_CLOSED
+          - REFRESH_STORM_HIT
+          - NO_STATUS_YET
+          - RESTORE_LOOKS_GOOD
+          - FRAME_B_APPROVED
+          - RESTORED_VIEW_DRIFTED
+          - REFRESH_CAP_OFF
+          - BACKLOG_BREACHED
+          - BYPASS_RAW_ROWS
+          - LEDGER_QUEUEING
+          - ORPHEUS_DEFENDS_FRAME
+          - RECONCILE_HOLDS
+          - ORPHEUS_NOTES_COST
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - REPORT_NULL_218_ARCHIVE
+          - REPORT_HUMAN_DECISION_APIS
+          - REPORT_RECRUITMENT_SELECTION
+          - REPORT_BOARD_RESPONSIBILITY
+          - REPORT_NULL_BLAMES_BOARD
+          - REPORT_BOARD_CASE_COMPLETE
+          - REPORT_SOFT_CONTROL
+          - REPORT_NULL_ADMITS_ERROR
+          - REPORT_FEEDBACK_LOOP
+        delegationActionIds:
+          - ASK_SAM_COMPARE_SOURCE_VIEW
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: The unsigned workload manifest
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: Security case 2231
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: The decommissioned cluster that is still running
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: svc/model-serving-218
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: ORPHEUS / ADVERSARY
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: Experiment ADV-18471
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: NULL's objective constraint
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: Instances NULL_001 to NULL_218
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_218_ARCHIVE
+    blocks:
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: investigate-human_decision_apis
+    title: /patient/resource-priority
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+    blocks:
+      - kind: signals
+        id: investigate-human_decision_apis-values
+        signalIds:
+          - RECORD_HUMAN_DECISION_APIS
+  - id: investigate-recruitment_selection
+    title: "Candidate #4172"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_RECRUITMENT_SELECTION
+    blocks:
+      - kind: signals
+        id: investigate-recruitment_selection-values
+        signalIds:
+          - RECORD_RECRUITMENT_SELECTION
+  - id: investigate-board_responsibility
+    title: The hospital expansion approval
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: RECRUITMENT_SELECTION_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_BOARD_RESPONSIBILITY
+    blocks:
+      - kind: signals
+        id: investigate-board_responsibility-values
+        signalIds:
+          - RECORD_BOARD_RESPONSIBILITY
+  - id: investigate-null_blames_board
+    title: NULL's verdict on the Board
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_BLAMES_BOARD
+    blocks:
+      - kind: signals
+        id: investigate-null_blames_board-values
+        signalIds:
+          - RECORD_NULL_BLAMES_BOARD
+  - id: investigate-board_case_complete
+    title: The Board file
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_BLAMES_BOARD_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_BOARD_CASE_COMPLETE
+    blocks:
+      - kind: signals
+        id: investigate-board_case_complete-values
+        signalIds:
+          - RECORD_BOARD_CASE_COMPLETE
+  - id: investigate-soft_control
+    title: "PROJECT: SOFT CONTROL"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: signal_revealed
+        signalId: FRAME_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: BOARD_CASE_COMPLETE_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+    actionIds:
+      - COMPARE_PRESENTATION_SELECTION
+    blocks:
+      - kind: signals
+        id: investigate-soft_control-values
+        signalIds:
+          - RECORD_SOFT_CONTROL
+  - id: investigate-null_admits_error
+    title: NULL takes it back
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: signal_revealed
+        signalId: FRAME_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: SOFT_CONTROL_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_NULL_REVISED_CONCLUSION
+    blocks:
+      - kind: signals
+        id: investigate-null_admits_error-values
+        signalIds:
+          - RECORD_NULL_ADMITS_ERROR
+  - id: investigate-feedback_loop
+    title: The adoption loop
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 8
+        - type: compare
+          reference: NULL_ADMITS_ERROR_DISCOVERED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_019_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_020_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_021_COMPLETED
+          operator: eq
+          expected: true
+        - type: compare
+          reference: BOARD_INC_022_COMPLETED
+          operator: eq
+          expected: true
+    actionIds:
+      - TRACE_DECISION_FEEDBACK_LOOP
+    blocks:
+      - kind: signals
+        id: investigate-feedback_loop-values
+        signalIds:
+          - RECORD_FEEDBACK_LOOP
+evidenceRelations: []

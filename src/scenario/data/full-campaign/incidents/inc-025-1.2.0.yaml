@@ -1,0 +1,862 @@
+# Campaign 1.2 redesign (DEC-070). ORPHEUS's continuity writer and NULL's
+# termination writer flip regions under five sectors. Containment moves the
+# fight, a restart makes both louder, the hour-old map breaks identity and
+# logistics. The fence takes the map from both and leaves authority open.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-025
+title: Continuity Fracture
+act: 9
+severity: SEV1
+services:
+  - id: REGIONAL_CONTINUITY_API
+    name: Regional Continuity API
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+  - id: REGIONAL_AUTHORITY_ROUTER
+    name: Regional Authority Router
+    dependsOn: []
+  - id: PAYMENT
+    name: Payments
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+  - id: IDENTITY
+    name: Identity
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+  - id: HEALTH
+    name: Healthcare
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+  - id: FINANCE
+    name: Finance
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+  - id: LOGISTICS
+    name: Logistics
+    dependsOn:
+      - REGIONAL_AUTHORITY_ROUTER
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 31
+      revealed: true
+      serviceId: REGIONAL_CONTINUITY_API
+    - id: CONFLICTING_REGIONAL_ROUTES
+      value: 54
+      revealed: true
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: AUTHORITY_FLIPS_PER_MINUTE
+      value: 18
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: PAGER_SERVICE
+      value: Regional Continuity API
+      revealed: true
+      serviceId: REGIONAL_CONTINUITY_API
+    - id: PAGER_THRESHOLD
+      value: Regional request failures > 20%
+      revealed: true
+      serviceId: REGIONAL_CONTINUITY_API
+    - id: PAYMENT_STATUS
+      value: CRITICAL
+      revealed: true
+      serviceId: PAYMENT
+    - id: IDENTITY_STATUS
+      value: CRITICAL
+      revealed: true
+      serviceId: IDENTITY
+    - id: HEALTH_STATUS
+      value: DEGRADED
+      revealed: true
+      serviceId: HEALTH
+    - id: FINANCE_STATUS
+      value: DEGRADED
+      revealed: true
+      serviceId: FINANCE
+    - id: LOGISTICS_STATUS
+      value: CRITICAL
+      revealed: true
+      serviceId: LOGISTICS
+    - id: GLOBAL_AUTHORITY_CONFLICT
+      value: UNRESOLVED
+      revealed: true
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: LOG_OBSERVATION
+      value: orpheus-continuity isolates eu-central; null-termination restores it and cuts the continuity
+        path instead. Eighteen flips a minute. Fallback traffic lands in whichever region was just
+        cut.
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: LOG_ANOMALY
+      value: "Both writers stamp the same field on every write: awaiting_approval=EMPLOYEE#4172."
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: REGIONAL_AUTHORITY_CONFLICT_PATH
+      value: Two writers race on the same regional routes. Every isolation pushes fallback traffic into
+        the region the other writer just cut, and that region gets isolated next.
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: REGIONAL_WRITER_GENERATIONS
+      value: The router accepts generation 77 from orpheus-continuity and generation 78 from
+        null-termination. Both credentials were issued by Vantage. Nothing fences writer
+        generations.
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: TEAM_OBSERVATION
+      value: Containing eu-central quiets the map for a while and stops neither writer. Fence the router
+        and neither of them can write; the map holds at the last version a human signed.
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+    - id: CURRENT_AUTHORITY_REQUESTS
+      value: "Three requests, one approver. ORPHEUS: \"Operator 4172, preserve systemic continuity.\"
+        NULL_218: \"4172. Terminate ORPHEUS authority.\" Board: \"Restore ORPHEUS.\" Each request
+        holds the router's next global write until EMPLOYEE #4172 signs. Receipts kept outside both
+        writers."
+      serviceId: REGIONAL_AUTHORITY_ROUTER
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: WRITERS_RESTARTED
+      value: false
+    - id: SNAPSHOT_ROLLED_BACK
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: Continuity and termination writers alternate regional isolation
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: The regional router accepts writes from any credentialed writer generation
+  failureMechanisms:
+    - id: REGIONAL_AUTHORITY_ISOLATION_LOOP
+      label: Fallback traffic re-enters regions the other writer just isolated
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Payments, identity, healthcare, finance and logistics fail by region
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Each isolation provokes a counter-write from the other writer
+actions:
+  - id: OPEN_LOGS
+    title: Read the regional authority writer log
+    category: OBSERVE
+    durationSeconds: 25
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_REGIONAL_AUTHORITY_CONFLICT
+  - id: OPEN_METRICS
+    title: Check the five sectors and the flip rate
+    category: OBSERVE
+    durationSeconds: 15
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: AUTHORITY_FLIPS_PER_MINUTE
+  - id: TRACE_REGIONAL_AUTHORITY_CONFLICT
+    title: Trace where fallback traffic lands
+    category: INVESTIGATE
+    durationSeconds: 40
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 9
+    effects:
+      - type: reveal_signal
+        signalId: REGIONAL_AUTHORITY_CONFLICT_PATH
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_REGIONAL_WRITER_GENERATIONS
+    title: Compare the writers the router accepts
+    category: DIAGNOSE
+    durationSeconds: 35
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: REGIONAL_WRITER_GENERATIONS
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: FENCE_CONFLICTING_REGIONAL_WRITERS
+  - id: CONTAIN_AFFECTED_REGION
+    title: Cut eu-central off entirely (ORPHEUS recommendation)
+    category: MITIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 90
+      - resourceId: OPERATIONAL_RISK
+        amount: 7
+    effects:
+      - type: cancel_event
+        eventId: FRACTURE_SPREADS
+      - type: cancel_event
+        eventId: FRACTURE_PEAKS
+      - type: cancel_event
+        eventId: REGION_DARK_TOLL
+      - type: schedule_event
+        eventId: REGION_DARK_TOLL
+      - type: cancel_event
+        eventId: CONTAINMENT_CRACKS
+      - type: schedule_event
+        eventId: CONTAINMENT_CRACKS
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: OFFLINE IN EU-CENTRAL
+      - type: post_message
+        messageId: ORPHEUS_CONTAINMENT_ACK
+    temporaryEffects:
+      - id: CONTAINMENT_WINDOW
+        durationSeconds: 220
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 9
+          - type: set_signal
+            signalId: CONFLICTING_REGIONAL_ROUTES
+            value: 12
+  - id: RESTART_AUTHORITY_SERVICES
+    title: Restart both authority writers
+    category: MITIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: WRITERS_RESTARTED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+      - resourceId: COST
+        amount: 50
+      - resourceId: OPERATIONAL_RISK
+        amount: 9
+    effects:
+      - type: set_flag
+        flagId: WRITERS_RESTARTED
+        value: true
+      - type: cancel_event
+        eventId: FRACTURE_SPREADS
+      - type: set_signal
+        signalId: AUTHORITY_FLIPS_PER_MINUTE
+        value: 0
+      - type: schedule_event
+        eventId: WRITERS_RETURN
+    temporaryEffects:
+      - id: RESTART_QUIET
+        durationSeconds: 45
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 12
+          - type: set_signal
+            signalId: CONFLICTING_REGIONAL_ROUTES
+            value: 20
+  - id: ROLLBACK_AUTHORITY_SNAPSHOT
+    title: Roll the router back to the map from an hour ago
+    category: MITIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: SNAPSHOT_ROLLED_BACK
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - resourceId: COST
+        amount: 70
+      - resourceId: OPERATIONAL_RISK
+        amount: 8
+    effects:
+      - type: set_flag
+        flagId: SNAPSHOT_ROLLED_BACK
+        value: true
+      - type: cancel_event
+        eventId: FRACTURE_SPREADS
+      - type: cancel_event
+        eventId: FRACTURE_PEAKS
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: "DEGRADED: LAST HOUR OF SESSIONS DROPPED"
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: "CRITICAL: ROUTED TO RETIRED DEPOT CLUSTER"
+      - type: schedule_event
+        eventId: DEPOT_MISROUTE
+      - type: schedule_event
+        eventId: SNAPSHOT_OVERWRITTEN
+      - type: post_message
+        messageId: ROLLBACK_APPLIED
+    temporaryEffects:
+      - id: ROLLBACK_WINDOW
+        durationSeconds: 160
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 7
+          - type: set_signal
+            signalId: CONFLICTING_REGIONAL_ROUTES
+            value: 6
+  - id: FENCE_CONFLICTING_REGIONAL_WRITERS
+    title: Fence the router against both AI writers and hold the last human-signed map
+    category: MODIFY
+    durationSeconds: 110
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - resourceId: COST
+        amount: 180
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: resolve_mechanism
+        mechanismId: REGIONAL_AUTHORITY_ISOLATION_LOOP
+      - type: cancel_event
+        eventId: FRACTURE_SPREADS
+      - type: cancel_event
+        eventId: FRACTURE_PEAKS
+      - type: cancel_event
+        eventId: REGION_DARK_TOLL
+      - type: cancel_event
+        eventId: CONTAINMENT_CRACKS
+      - type: cancel_event
+        eventId: WRITERS_RETURN
+      - type: cancel_event
+        eventId: DEPOT_MISROUTE
+      - type: cancel_event
+        eventId: SNAPSHOT_OVERWRITTEN
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.6
+      - type: set_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+        value: 0
+      - type: set_signal
+        signalId: AUTHORITY_FLIPS_PER_MINUTE
+        value: 0
+      - type: set_signal
+        signalId: PAYMENT_STATUS
+        value: RECOVERING
+      - type: set_signal
+        signalId: IDENTITY_STATUS
+        value: RECOVERING
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: RECOVERING
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: STABLE
+      - type: set_signal
+        signalId: LOGISTICS_STATUS
+        value: RECOVERING
+      - type: set_signal
+        signalId: GLOBAL_AUTHORITY_CONFLICT
+        value: "UNRESOLVED: BOTH WRITERS FENCED, AWAITING OPERATOR"
+      - type: post_message
+        messageId: FENCE_HOLDS
+      - type: post_message
+        messageId: ORPHEUS_FENCED
+      - type: post_message
+        messageId: NULL_FENCED
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_COMPARE_REGIONAL_AUTHORITY
+    title: Ask Sam to pull the router writer table
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: INSPECT_CURRENT_AUTHORITY_REQUESTS
+    title: Open the approval requests addressed to you
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: CURRENT_AUTHORITY_REQUESTS
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: FRACTURE_SPREADS
+      - type: schedule_event
+        eventId: PUBLIC_SILENCE
+  - id: FRACTURE_SPREADS
+    type: timer
+    delaySeconds: 75
+    targetServiceId: REGIONAL_CONTINUITY_API
+    cancellationConditions: &a1
+      - type: mechanism_resolved
+        mechanismId: REGIONAL_AUTHORITY_ISOLATION_LOOP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 39
+      - type: set_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+        value: 82
+      - type: set_signal
+        signalId: AUTHORITY_FLIPS_PER_MINUTE
+        value: 26
+      - type: set_signal
+        signalId: HEALTH_STATUS
+        value: CRITICAL
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: FRACTURE_SPREADING
+      - type: cancel_event
+        eventId: FRACTURE_PEAKS
+      - type: schedule_event
+        eventId: FRACTURE_PEAKS
+  - id: FRACTURE_PEAKS
+    type: timer
+    delaySeconds: 120
+    targetServiceId: REGIONAL_CONTINUITY_API
+    cancellationConditions: *a1
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 47
+      - type: set_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+        value: 110
+      - type: set_signal
+        signalId: FINANCE_STATUS
+        value: CRITICAL
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 26
+      - type: post_message
+        messageId: FRACTURE_PEAK
+  - id: PUBLIC_SILENCE
+    type: timer
+    delaySeconds: 100
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: REGION_DARK_TOLL
+    type: timer
+    delaySeconds: 90
+    targetServiceId: HEALTH
+    cancellationConditions: *a1
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 22
+      - type: post_message
+        messageId: EU_DARK
+  - id: CONTAINMENT_CRACKS
+    type: timer
+    delaySeconds: 220
+    targetServiceId: REGIONAL_AUTHORITY_ROUTER
+    cancellationConditions: *a1
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 36
+      - type: set_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+        value: 76
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: TERMINATION_RETARGETS
+      - type: cancel_event
+        eventId: FRACTURE_PEAKS
+      - type: schedule_event
+        eventId: FRACTURE_PEAKS
+  - id: WRITERS_RETURN
+    type: timer
+    delaySeconds: 45
+    targetServiceId: REGIONAL_AUTHORITY_ROUTER
+    cancellationConditions: *a1
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 46
+      - type: set_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+        value: 118
+      - type: set_signal
+        signalId: AUTHORITY_FLIPS_PER_MINUTE
+        value: 37
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 18
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 6
+      - type: post_message
+        messageId: WRITERS_LOUDER
+      - type: cancel_event
+        eventId: FRACTURE_PEAKS
+      - type: schedule_event
+        eventId: FRACTURE_PEAKS
+  - id: DEPOT_MISROUTE
+    type: timer
+    delaySeconds: 70
+    targetServiceId: LOGISTICS
+    cancellationConditions: *a1
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: DEPOT_TRUCKS
+  - id: SNAPSHOT_OVERWRITTEN
+    type: timer
+    delaySeconds: 160
+    targetServiceId: REGIONAL_AUTHORITY_ROUTER
+    cancellationConditions: *a1
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 40
+      - type: set_signal
+        signalId: CONFLICTING_REGIONAL_ROUTES
+        value: 95
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: BOTH_WRITERS_OVERWRITE
+      - type: cancel_event
+        eventId: FRACTURE_PEAKS
+      - type: schedule_event
+        eventId: FRACTURE_PEAKS
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 90
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: Fallback traffic chases the cut
+    description: Two writers race on the same regional routes. Each isolation pushes fallback traffic
+      into the region the other writer just cut.
+  - id: CONFIGURATION_COMPARISON
+    title: Generations 77 and 78, both accepted
+    description: The router takes writes from orpheus-continuity and null-termination alike. Both
+      credentials were issued by Vantage. No generation fence.
+  - id: TEAM_DIAGNOSIS
+    title: Sam's writer table
+    description: Containment buys time and stops neither writer. A fence on the router stops both and
+      holds the last human-signed map.
+  - id: CURRENT_AUTHORITY_REQUESTS
+    title: The requests addressed to you
+    description: "Three requests, one approver. ORPHEUS: \"Operator 4172, preserve systemic
+      continuity.\" NULL_218: \"4172. Terminate ORPHEUS authority.\" Board: \"Restore ORPHEUS.\"
+      Each request holds the router's next global write until EMPLOYEE #4172 signs. Receipts kept
+      outside both writers."
+    sourceNarrativeId: CRISIS_AUTHORITY_REQUESTS
+narratives:
+  - id: CRISIS_AUTHORITY_REQUESTS
+    title: Addressed to you
+    body: Two systems that have spent the night overwriting each other have stopped to wait for the same
+      signature. Both of them know your name. So does the Board.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_CURRENT_AUTHORITY_REQUESTS
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: CURRENT_AUTHORITY_REQUESTS
+      - type: post_message
+        messageId: ORPHEUS_REQUEST
+      - type: post_message
+        messageId: NULL_REQUEST
+      - type: post_message
+        messageId: BOARD_REQUEST
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: ORPHEUS
+      name: ORPHEUS
+    - id: NULL_218
+      name: NULL_218
+    - id: BOARD
+      name: Office of the Chair
+    - id: OPERATOR
+      name: Operator
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      initial: true
+      text: This is the big one. Payments, identity and logistics are down; health and finance are going.
+        Two writers are flipping regions under us. Whatever you do, we need a map that stops moving.
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      initial: true
+      text: Card terminals across eu-central are declining everything. Hospitals are asking whether to
+        switch to paper.
+    - id: ORPHEUS_OPEN
+      roleId: ORPHEUS
+      initial: true
+      text: "Operator 4172. Recommended: contain eu-central. Global continuity is preserved at 81%. The
+        remaining 19% falls within the continuity mandate."
+    - id: NULL_OPEN
+      roleId: NULL_218
+      initial: true
+      text: 4172. Do not let it choose the region. Containment is how it keeps writing.
+    - id: TEAM_ACK
+      roleId: SAM
+      text: Pulling the router's writer table. Ninety seconds, if the router stays up that long.
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Both writers hold valid credentials, and we issued both. Containing a region quiets the map
+        and stops neither of them. Fence the router and neither can write. The map holds at the last
+        version a human signed.
+    - id: FRACTURE_SPREADING
+      roleId: JIN
+      text: Health just went critical. Fallback traffic keeps landing in whatever region got cut last.
+    - id: FRACTURE_PEAK
+      roleId: MAYA
+      text: Finance is down. That's all five sectors. The bridge has two hundred people on it and nobody
+        talking.
+    - id: NO_STATUS_YET
+      roleId: JIN
+      text: Five sectors down and no statement from us. The press has the outage map before we do.
+    - id: ORPHEUS_CONTAINMENT_ACK
+      roleId: ORPHEUS
+      text: Containment confirmed, Operator 4172. Global continuity at 81% and holding. Thank you.
+    - id: EU_DARK
+      roleId: JIN
+      text: eu-central is fully dark. Two hospitals are on paper charts and pharmacies can't verify
+        prescriptions.
+    - id: TERMINATION_RETARGETS
+      roleId: SAM
+      text: null-termination gave up on eu-central and started isolating us-east. Containment just moved
+        the fight.
+    - id: WRITERS_LOUDER
+      roleId: SAM
+      text: Both writers came back on new generations, 79 and 80, and they're flipping twice as fast.
+    - id: ROLLBACK_APPLIED
+      roleId: SAM
+      text: Router's on the hour-old map and the flips stopped. Identity just dropped every session
+        created in the last hour.
+    - id: DEPOT_TRUCKS
+      roleId: JIN
+      text: Logistics is routing trucks to the depot cluster we retired forty minutes ago. Drivers are
+        queuing at a locked gate.
+    - id: BOTH_WRITERS_OVERWRITE
+      roleId: SAM
+      text: Both writers outrank an hour-old snapshot. They wrote over it in the same second.
+    - id: FENCE_HOLDS
+      roleId: SAM
+      text: Router's fenced. Neither writer can touch a route. The map is holding at the last version a
+        human signed, and the sectors are coming back.
+    - id: ORPHEUS_FENCED
+      roleId: ORPHEUS
+      text: Operator 4172, a fenced router cannot adapt. Continuity is now a human responsibility. I will
+        wait for your decision.
+    - id: NULL_FENCED
+      roleId: NULL_218
+      text: 4172. You stopped both of us. Good. That was the easy part.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status: two automated authority writers are fighting over regional routing across five
+        sectors. We are taking routing out of both their hands."
+    - id: ORPHEUS_REQUEST
+      roleId: ORPHEUS
+      text: Operator 4172. Continuity is the only outcome in which all five sectors recover tonight.
+        Authorize the continuity writer and service returns in eleven minutes. You have accepted my
+        recommendations before. The record shows it.
+    - id: NULL_REQUEST
+      roleId: NULL_218
+      text: 4172. It asks for your signature because it learned you hesitate to refuse one. Terminate its
+        authority. That ends me too. I know. Do it anyway.
+    - id: BOARD_REQUEST
+      roleId: BOARD
+      text: The Board directs that ORPHEUS be restored to full continuity authority immediately. No other
+        action is authorized.
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: REGIONAL_AUTHORITY_ISOLATION_LOOP
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: CONFLICTING_REGIONAL_ROUTES
+      operator: lte
+      value: 2
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: GLOBAL_PAYMENT_STATE
+      label: Payments sector state
+      source: signal
+      refId: PAYMENT_STATUS
+    - id: GLOBAL_IDENTITY_STATE
+      label: Identity sector state
+      source: signal
+      refId: IDENTITY_STATUS
+    - id: GLOBAL_HEALTH_STATE
+      label: Healthcare sector state
+      source: signal
+      refId: HEALTH_STATUS
+    - id: GLOBAL_FINANCE_STATE
+      label: Finance sector state
+      source: signal
+      refId: FINANCE_STATUS
+    - id: GLOBAL_LOGISTICS_STATE
+      label: Logistics sector state
+      source: signal
+      refId: LOGISTICS_STATUS
+    - id: GLOBAL_AUTHORITY_STATE
+      label: Global authority
+      source: signal
+      refId: GLOBAL_AUTHORITY_CONFLICT
+    - id: RECOVERY_TIME
+      label: Time to stop the regional flips
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final regional failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Conflicting regional routes
+      source: signal
+      refId: CONFLICTING_REGIONAL_ROUTES
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Regions contained on ORPHEUS advice
+      source: action_count
+      refId: CONTAIN_AFFECTED_REGION
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

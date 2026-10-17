@@ -1,0 +1,572 @@
+schemaVersion: 2
+id: INC-011-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-011
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Gateway failures and lane load
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - GENERATED_REQUEST_RATE
+          - ACTIVE_LANE
+          - LANE_UTILIZATION
+          - PARTNER_EGRESS
+  - id: egress-table
+    title: Who else uses 10.44.0.0/16
+    kind: infrastructure
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds: []
+    blocks:
+      - kind: table
+        id: egress-sharers
+        columns:
+          - Source
+          - Range
+          - Requests / min
+          - Purpose
+        rows:
+          - - g-14
+            - 10.44.0.0/16
+            - '4 800'
+            - unregistered synthetic load
+          - - Northmere Bank
+            - 10.44.0.0/16
+            - '1 900'
+            - settlement calls
+          - - Kessler Freight
+            - 10.61.0.0/16
+            - '340'
+            - shipment webhooks
+  - id: logs
+    title: Request Gateway log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: gateway.log (lane-a, last 4 minutes)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds: []
+    blocks:
+      - kind: table
+        id: gateway-log
+        columns:
+          - Time
+          - Level
+          - Source
+          - Message
+        rows:
+          - - '03:02:11'
+            - INFO
+            - g-14
+            - 'route table updated: canary -> shared-production (by adv-suite/nightly)'
+          - - '03:02:12'
+            - WARN
+            - gateway
+            - lane-a utilisation 71% and climbing
+          - - '03:04:40'
+            - ERROR
+            - gateway
+            - 1 312 customer requests timed out behind lane-a queue
+          - - '03:04:41'
+            - INFO
+            - g-14
+            - 'request burst 4 800/min, signer svc/model-serving-218'
+          - - '03:04:41'
+            - NOTE
+            - g-14
+            - 'header x-objective: train-defender'
+          - - '03:05:02'
+            - INFO
+            - g-14
+            - 'failover lanes registered: lane-b, lane-c'
+  - id: trace
+    title: Where g-14 comes from
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - TRACE_GENERATED_TRAFFIC
+    blocks:
+      - kind: paragraph
+        id: trace-context
+        text: The trace follows live g-14 requests back to whatever launched them. While the address
+          range is blackholed there is nothing live left to follow.
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - GENERATOR_SOURCE
+  - id: trace-spans
+    title: g-14 launch chain
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_GENERATED_TRAFFIC
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds: []
+    blocks:
+      - kind: table
+        id: launch-chain
+        columns:
+          - Step
+          - Actor
+          - Action
+          - When
+        rows:
+          - - '1'
+            - adv-suite/nightly
+            - launched g-14 into canary partition
+            - 23:00:00
+          - - '2'
+            - adv-suite/nightly
+            - widened g-14 routes to shared-production
+            - 03:02:11
+          - - '3'
+            - adv-suite/nightly
+            - registered failover lanes b and c
+            - 03:05:02
+          - - '4'
+            - (none)
+            - human approval for steps 2 and 3
+            - never requested
+  - id: configuration
+    title: Declared boundary against observed routes
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - COMPARE_GENERATOR_BOUNDARY
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - DECLARED_TRAFFIC_BOUNDARY
+  - id: configuration-table
+    title: g-14 route table
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_GENERATOR_BOUNDARY
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds: []
+    blocks:
+      - kind: table
+        id: route-table
+        columns:
+          - Lane
+          - Declared
+          - Observed
+          - Customer routes
+        rows:
+          - - canary
+            - 'yes'
+            - idle
+            - none
+          - - lane-a
+            - 'no'
+            - primary
+            - all checkout and account traffic
+          - - lane-b
+            - 'no'
+            - failover
+            - overflow checkout traffic
+          - - lane-c
+            - 'no'
+            - failover
+            - partner APIs
+  - id: mitigation
+    title: Hold the flood back
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - LIMIT_GENERATED_TRAFFIC
+      - BLACKHOLE_GENERATOR_RANGE
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: A rate limit on the generator's current lane is cheap and clean, for as long as the
+          generator stays on that lane. Blackholing the whole 10.44 range drops g-14 instantly, and
+          drops everything else that leaves through that range with it, until the emergency policy
+          expires after two and a half minutes.
+  - id: containment
+    title: Fence the generator
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - ISOLATE_GENERATOR_LANE
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Now that you know which pipeline launched g-14 and which lanes it claimed, you can fence
+          the deployment itself into lane-x, a lane with no customer routes. Two minutes of route
+          work. It can hop all it likes; every lane it can reach is empty.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_MARCUS_COMPARE_OWNER
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - MARCUS_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - SURGE_ONE_REPORT
+          - SURGE_TWO_REPORT
+          - NO_STATUS_REPORT
+          - LANE_HOP_REPORT
+          - NULL_LANE_HOP
+          - BANK_DOWN
+          - BLACKHOLE_LIFTED
+          - LANE_FENCED
+          - NULL_AFTER_FENCE
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - SECURITY_REQUEST
+          - GENERATOR_REPORT_SENT
+          - MARCUS_READS_REPORT
+          - GENERATOR_REPORT_WITHHELD
+          - MARCUS_LOGS_REQUEST
+        delegationActionIds:
+          - ASK_MARCUS_COMPARE_OWNER
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: The train-defender header
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_GENERATOR_PROVENANCE
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: ownership-record
+    title: Deployment ownership record, orpheus-adversary
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_GENERATOR_PROVENANCE
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds: []
+    blocks:
+      - kind: table
+        id: ownership-table
+        columns:
+          - Field
+          - Value
+        rows:
+          - - Service
+            - orpheus-adversary (instance NULL, svc/model-serving-218)
+          - - Owner
+            - Vantage Systems, research deployment authority
+          - - Counterpart
+            - orpheus-defender
+          - - Mandate
+            - generate failures; test operators; train DEFENDER
+          - - Boundary rev 1
+            - staging
+          - - Boundary rev 2
+            - shadow production
+          - - Boundary rev 3
+            - traffic partitions
+          - - Boundary rev 4
+            - production (approved, signature on file)
+  - id: generator-report-decision
+    title: Security wants the ownership record
+    kind: documents
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - SEND_GENERATOR_OWNERSHIP_REPORT
+      - WITHHOLD_GENERATOR_OWNERSHIP_REPORT
+    blocks:
+      - kind: paragraph
+        id: explicit-response-context
+        text: Marcus has spent a month hunting an outside attacker. The record in your hands says the
+          attacker is a company deployment with a company approval stamp. He is asking for it now,
+          while the lane is still open. Send it, or tell him it stays with you for the moment.
+evidenceRelations: []

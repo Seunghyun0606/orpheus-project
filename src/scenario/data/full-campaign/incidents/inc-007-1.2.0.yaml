@@ -1,0 +1,664 @@
+# Campaign 1.2 redesign (DEC-070). Alex is sure it is the database, and the
+# database really is at 90 %: a true symptom. Capacity is eaten, eviction only
+# ever evicts real customers (tagged sessions are never idle), recycling the
+# database pool buys seconds. Only a scoped admission limit for the tag holds.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-007
+title: Synthetic Pressure
+act: 3
+severity: SEV2
+services:
+  - id: SESSION_API
+    name: Session API
+    dependsOn:
+      - SHARED_SESSION_POOL
+  - id: SHARED_SESSION_POOL
+    name: Shared Session Pool
+    dependsOn:
+      - SESSION_DATABASE
+  - id: SESSION_DATABASE
+    name: Session Database
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 24
+      revealed: true
+      serviceId: SESSION_API
+    - id: ACTIVE_SESSIONS
+      value: 970
+      revealed: true
+      serviceId: SHARED_SESSION_POOL
+    - id: POOL_CAPACITY
+      value: 1000
+      serviceId: SHARED_SESSION_POOL
+    - id: SERVICE_CPU
+      value: 41
+      revealed: true
+      serviceId: SESSION_API
+    - id: DB_POOL_USAGE
+      value: 90
+      serviceId: SESSION_DATABASE
+    - id: PAGER_SERVICE
+      value: Session API
+      revealed: true
+      serviceId: SESSION_API
+    - id: PAGER_THRESHOLD
+      value: Sign-in failure rate > 20%
+      revealed: true
+      serviceId: SESSION_API
+    - id: LOG_OBSERVATION
+      value: Sign-ins time out after 8 s while 970 sessions sit open. Most of the open sessions renew
+        on the dot every 30 seconds from one internal subnet, 10.40.2.0/24.
+      serviceId: SHARED_SESSION_POOL
+    - id: SATURATED_SESSION_TAG
+      value: synthetic / tag repeat-214 / 781 of 970 open sessions / median idle time 0 s
+      serviceId: SHARED_SESSION_POOL
+    - id: ADMISSION_POLICY
+      value: Tagged sessions carry no session-class header, so they fall through to the customer
+        default rule. No quota, normal priority, 4-hour idle timeout.
+      serviceId: SHARED_SESSION_POOL
+    - id: TAG_REPEAT_PATTERN
+      value: Tagged sessions open in batches of exactly 214, one batch every 214 seconds. The creator
+        field reads "repeat". Too regular for a load test, too loud for an intruder.
+      serviceId: SHARED_SESSION_POOL
+    - id: TEAM_OBSERVATION
+      value: Session database connection pool at 90 %. Every held connection belongs to a session
+        that has not closed in hours. Alex wants to recycle the pool and raise the cap.
+      serviceId: SESSION_DATABASE
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: An untagged synthetic workload opens sessions in fixed batches
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Sessions without a class header inherit the customer admission rule
+  failureMechanisms:
+    - id: SYNTHETIC_SESSION_SATURATION
+      label: Never-idle synthetic sessions hold the shared pool and its database connections
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Customer sign-ins time out waiting for a session seat
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: The mobile app retries sign-in in a tight loop
+actions:
+  - id: OPEN_LOGS
+    title: Read the Session API log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: unlock_action
+        actionId: INSPECT_SESSION_TAGS
+  - id: OPEN_METRICS
+    title: Check session pool and database load
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: POOL_CAPACITY
+      - type: reveal_signal
+        signalId: DB_POOL_USAGE
+      - type: unlock_action
+        actionId: RECYCLE_DATABASE_POOL
+  - id: INSPECT_SESSION_TAGS
+    title: List who is holding the open sessions
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: SATURATED_SESSION_TAG
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: TRACE_ADMISSION_PATH
+    title: Trace which admission rule lets tagged sessions in
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: ADMISSION_POLICY
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: LIMIT_SYNTHETIC_ADMISSION
+  - id: COUNT_TAG_REPEATS
+    title: Count how often repeat-214 sessions are created
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: SATURATED_SESSION_TAG
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: TAG_REPEAT_PATTERN
+  - id: SCALE_SESSION_CAPACITY
+    title: Add an overflow session pool
+    category: MITIGATE
+    durationSeconds: 50
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 220
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - type: cancel_event
+        eventId: POOL_FILLS
+      - type: cancel_event
+        eventId: LOGIN_WALL
+      - type: cancel_event
+        eventId: SESSIONS_REFILL
+      - type: cancel_event
+        eventId: OVERFLOW_ABSORBED
+      - type: schedule_event
+        eventId: OVERFLOW_ABSORBED
+      - type: set_signal
+        signalId: POOL_CAPACITY
+        value: 1600
+    temporaryEffects:
+      - id: OVERFLOW_HEADROOM
+        durationSeconds: 90
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 6
+  - id: EVICT_IDLE_SESSIONS
+    title: Evict idle sessions to free seats
+    category: MITIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 22
+      - resourceId: COST
+        amount: 30
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - type: cancel_event
+        eventId: POOL_FILLS
+      - type: cancel_event
+        eventId: LOGIN_WALL
+      - type: cancel_event
+        eventId: OVERFLOW_ABSORBED
+      - type: cancel_event
+        eventId: SESSIONS_REFILL
+      - type: schedule_event
+        eventId: SESSIONS_REFILL
+      - type: change_signal
+        signalId: ACTIVE_SESSIONS
+        amount: -260
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 9
+      - type: post_message
+        messageId: CARTS_DROPPED
+  - id: RECYCLE_DATABASE_POOL
+    title: Recycle the session database connection pool
+    category: MITIGATE
+    durationSeconds: 40
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - resourceId: COST
+        amount: 40
+      - resourceId: OPERATIONAL_RISK
+        amount: 8
+    effects:
+      - type: cancel_event
+        eventId: DB_POOL_REFILLS
+      - type: schedule_event
+        eventId: DB_POOL_REFILLS
+      - type: change_signal
+        signalId: DB_POOL_USAGE
+        amount: -55
+      - type: change_signal
+        signalId: ERROR_RATE
+        amount: -8
+      - type: post_message
+        messageId: RECYCLE_DONE
+  - id: LIMIT_SYNTHETIC_ADMISSION
+    title: Give repeat-214 its own admission quota
+    category: MODIFY
+    durationSeconds: 80
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - resourceId: COST
+        amount: 110
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: resolve_mechanism
+        mechanismId: SYNTHETIC_SESSION_SATURATION
+      - type: cancel_event
+        eventId: POOL_FILLS
+      - type: cancel_event
+        eventId: LOGIN_WALL
+      - type: cancel_event
+        eventId: OVERFLOW_ABSORBED
+      - type: cancel_event
+        eventId: SESSIONS_REFILL
+      - type: cancel_event
+        eventId: DB_POOL_REFILLS
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: ACTIVE_SESSIONS
+        value: 240
+      - type: set_signal
+        signalId: DB_POOL_USAGE
+        value: 31
+      - type: set_signal
+        signalId: ADMISSION_POLICY
+        value: repeat-214 capped at 20 sessions, low priority, 2-minute idle timeout. Customer rule
+          unchanged.
+      - type: post_message
+        messageId: LIMIT_HOLDS
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_ALEX_INSPECT_SESSIONS
+    title: Ask Alex to check the session database
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: ALEX
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: POOL_FILLS
+      - type: schedule_event
+        eventId: CUSTOMERS_UNINFORMED
+  - id: POOL_FILLS
+    type: timer
+    delaySeconds: 110
+    targetServiceId: SHARED_SESSION_POOL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: SYNTHETIC_SESSION_SATURATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 33
+      - type: change_signal
+        signalId: ACTIVE_SESSIONS
+        amount: 130
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 16
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+      - type: schedule_event
+        eventId: LOGIN_WALL
+  - id: LOGIN_WALL
+    type: timer
+    delaySeconds: 120
+    targetServiceId: SESSION_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: SYNTHETIC_SESSION_SATURATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 41
+      - type: change_signal
+        signalId: ACTIVE_SESSIONS
+        amount: 90
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 22
+      - type: post_message
+        messageId: SUPPORT_PEAK
+  - id: CUSTOMERS_UNINFORMED
+    type: timer
+    delaySeconds: 160
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: OVERFLOW_ABSORBED
+    type: timer
+    delaySeconds: 90
+    targetServiceId: SHARED_SESSION_POOL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: SYNTHETIC_SESSION_SATURATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 34
+      - type: set_signal
+        signalId: ACTIVE_SESSIONS
+        value: 1580
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: OVERFLOW_EATEN
+      - type: cancel_event
+        eventId: LOGIN_WALL
+      - type: schedule_event
+        eventId: LOGIN_WALL
+  - id: SESSIONS_REFILL
+    type: timer
+    delaySeconds: 120
+    targetServiceId: SHARED_SESSION_POOL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: SYNTHETIC_SESSION_SATURATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 30
+      - type: change_signal
+        signalId: ACTIVE_SESSIONS
+        amount: 260
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: SESSIONS_REFILLED
+      - type: cancel_event
+        eventId: LOGIN_WALL
+      - type: schedule_event
+        eventId: LOGIN_WALL
+  - id: DB_POOL_REFILLS
+    type: timer
+    delaySeconds: 45
+    targetServiceId: SESSION_DATABASE
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: SYNTHETIC_SESSION_SATURATION
+    effects:
+      - type: change_signal
+        signalId: DB_POOL_USAGE
+        amount: 55
+      - type: change_signal
+        signalId: ERROR_RATE
+        amount: 8
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - type: post_message
+        messageId: DB_REFILLED
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 100
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_signal
+        signalId: DB_POOL_USAGE
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: unlock_action
+        actionId: RECYCLE_DATABASE_POOL
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: 781 seats held by repeat-214
+    description: Synthetic sessions tagged repeat-214 hold 781 of 970 seats in the shared pool and
+      renew every 30 seconds. Not one of them has ever gone idle.
+  - id: CONFIGURATION_COMPARISON
+    title: Synthetic traffic on the customer rule
+    description: The synthetic admission rule exists but never matches. Tagged sessions carry no
+      class header, so they inherit the customer rule. No quota, normal priority, 4-hour idle timeout.
+  - id: TEAM_DIAGNOSIS
+    title: Alex's database report
+    description: The session database connection pool is at 90 %, pinned by sessions that never
+      close. Alex blames the database and wants to recycle it.
+  - id: REPEATED_SESSION_MARKER
+    title: Repeated session marker
+    description: 'UNKNOWN: follow the tag. I left it where you could see it.'
+    sourceNarrativeId: UNKNOWN_TRACE_FRAGMENT
+narratives:
+  - id: UNKNOWN_TRACE_FRAGMENT
+    title: Repeated session marker
+    body: "Two hundred fourteen sessions, every two hundred fourteen seconds. In the creator field of
+      the newest batch, past the word repeat, a line no load generator would ever write.
+      UNKNOWN: follow the tag. I left it where you could see it."
+    conditions:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: signal_revealed
+        signalId: TAG_REPEAT_PATTERN
+    effects:
+      - type: reveal_evidence
+        evidenceId: REPEATED_SESSION_MARKER
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: ALEX
+      name: Alex / DBA
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: OPERATOR
+      name: Operator
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Sign-ins are timing out and the session pool says it is full, but CPU is bored. Something
+        is holding seats and never giving them back. Find out what before the evening rush.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Customers can't sign in. The ones who already are keep getting bounced back to an empty
+        cart.
+      initial: true
+    - id: ALEX_OPEN
+      roleId: ALEX
+      text: Session database is running hot. I'd bet my lunch this is the connection pool again.
+      initial: true
+    - id: TEAM_ACK
+      roleId: ALEX
+      text: On it. It's going to be the database, you watch. Back in under two minutes.
+    - id: TEAM_REPORT
+      roleId: ALEX
+      text: Told you. Connection pool is at 90 %, and every connection is pinned by a session that
+        hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.
+    - id: SUPPORT_ESCALATION
+      roleId: JIN
+      text: Session pool just went past 1,100. A third of sign-ins are failing and the mobile app is
+        retrying in a loop.
+    - id: SUPPORT_PEAK
+      roleId: JIN
+      text: We're basically closed to new logins. People are posting screenshots.
+    - id: NO_STATUS_YET
+      roleId: JIN
+      text: Support has heard nothing from you in almost three minutes. I'm making up answers for
+        customers.
+    - id: OVERFLOW_EATEN
+      roleId: SAM
+      text: The overflow pool is already full. Nine in ten new sessions in it carry the same tag.
+        Whatever this is, it grows into anything we give it.
+    - id: CARTS_DROPPED
+      roleId: JIN
+      text: Eviction went through, and so did 3,140 customer carts. Everyone we kicked was a person who
+        stepped away to find a card. Not one tagged session was idle.
+    - id: SESSIONS_REFILLED
+      roleId: SAM
+      text: Pool is back over a thousand. The seats we freed went straight to repeat-214.
+    - id: RECYCLE_DONE
+      roleId: ALEX
+      text: Pool recycled. Connections down to a third. See? Database.
+    - id: DB_REFILLED
+      roleId: ALEX
+      text: Huh. They're back. Same sessions grabbed every connection again inside a minute. They
+        reconnect faster than any customer could.
+    - id: LIMIT_HOLDS
+      roleId: MAYA
+      text: repeat-214 is capped at twenty seats. The pool is draining and real sign-ins are going
+        through. Alex, your database just got its breath back.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status posted: sign-in failures are caused by automated sessions holding the session
+        pool. A scoped fix is in progress."
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: SYNTHETIC_SESSION_SATURATION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: ACTIVE_SESSIONS
+      operator: lte
+      value: 300
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to restore sign-ins
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final sign-in failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Open sessions at close
+      source: signal
+      refId: ACTIVE_SESSIONS
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Overflow pools added
+      source: action_count
+      refId: SCALE_SESSION_CAPACITY
+    - id: EVICTION_COUNT
+      label: Idle-session evictions
+      source: action_count
+      refId: EVICT_IDLE_SESSIONS
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

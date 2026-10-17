@@ -1,0 +1,79 @@
+# Campaign 1.2 bindings for INC-009 Legacy Cluster.
+incidentId: INC-009
+contentVersion: 1.2.0
+causalObservationSignal: RESOURCE_OWNER
+support:
+  - INSPECT_RESOURCE_OWNERS
+  - COMPARE_DECOMMISSION_RECORD
+  - READ_SCHEDULER_HISTORY
+choiceActions: []
+operational:
+  - actionId: KILL_LEGACY_JOB
+    candidate: QUARANTINE
+    role: temporary
+    collateralDamage: 1
+  - actionId: SHED_NONCRITICAL_LOAD
+    candidate: REROUTE
+    role: temporary
+    collateralDamage: 3
+  - actionId: ISOLATE_CONTENDING_ALLOCATION
+    candidate: ISOLATE
+    role: causal
+    collateralDamage: 2
+routes:
+  - id: investigate-and-isolate
+    actions:
+      - OPEN_LOGS
+      - INSPECT_RESOURCE_OWNERS
+      - COMPARE_DECOMMISSION_RECORD
+      - UPDATE_WAR_ROOM
+      - ISOLATE_CONTENDING_ALLOCATION
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+      maxElapsedSeconds: 300
+  - id: kill-and-watch-it-return
+    actions:
+      - KILL_LEGACY_JOB
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: shed-and-miss-settlement
+    actions:
+      - SHED_NONCRITICAL_LOAD
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - INSPECT_RESOURCE_OWNERS
+    expect:
+      completed: false
+  - id: kill-respawn-and-follow-the-scheduler
+    actions:
+      - KILL_LEGACY_JOB
+      - OPEN_LOGS
+      - INSPECT_RESOURCE_OWNERS
+      - COMPARE_DECOMMISSION_RECORD
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - INSPECT_LEGACY_CLUSTER_RECORD
+      - ISOLATE_CONTENDING_ALLOCATION
+    expect:
+      completed: true
+      evidence: [RECORD_GHOST_ARTIFACT, RECORD_NULL_NAME, RECORD_ORPHEUS_ACTIVE]
+      narratives: [DISCOVERY_GHOST_ARTIFACT, DISCOVERY_NULL_NAME, DISCOVERY_ORPHEUS_ACTIVE]
+  - id: delegate-and-read-scheduler-history
+    actions:
+      - ASK_SAM_CHECK_OWNERS
+      - OPEN_LOGS
+      - INSPECT_RESOURCE_OWNERS
+      - COMPARE_DECOMMISSION_RECORD
+      - READ_SCHEDULER_HISTORY
+      - UPDATE_WAR_ROOM
+      - INSPECT_LEGACY_CLUSTER_RECORD
+      - ISOLATE_CONTENDING_ALLOCATION
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, RECORD_ORPHEUS_ACTIVE]
+      narratives: [DISCOVERY_ORPHEUS_ACTIVE]

@@ -1,0 +1,82 @@
+# Campaign 1.2 bindings for INC-010 Defender Feedback.
+incidentId: INC-010
+contentVersion: 1.2.0
+# Revealing this signal moves the player from the "before" to the "after"
+# causal-observation prediction context.
+causalObservationSignal: TOGGLE_ORIGIN
+# Investigations that count as evidence for an operational decision (the
+# delegated TEAM_REPORT is added automatically).
+support:
+  - TRACE_REMEDIATION_ORIGIN
+  - COMPARE_CONTROLLER_GENERATIONS
+# Opportunity response actions that are not investigations.
+choiceActions: []
+operational:
+  - actionId: RESTART_DEPENDENCY_CONTROLLER
+    candidate: RESTART
+    role: temporary
+    restart: true
+    collateralDamage: 2
+  - actionId: SUSPEND_DEPENDENCY_TOGGLE
+    candidate: ISOLATE
+    role: temporary
+    collateralDamage: 1
+  - actionId: PIN_REMEDIATION_TO_LEASE_HOLDER
+    candidate: REROUTE
+    role: temporary
+    collateralDamage: 1
+  - actionId: FENCE_REMEDIATION_WRITER
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 2
+routes:
+  - id: investigate-and-fence
+    actions:
+      - OPEN_LOGS
+      - TRACE_REMEDIATION_ORIGIN
+      - COMPARE_CONTROLLER_GENERATIONS
+      - UPDATE_WAR_ROOM
+      - FENCE_REMEDIATION_WRITER
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+  - id: advisor-restart
+    actions:
+      - RESTART_DEPENDENCY_CONTROLLER
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+    expect:
+      completed: false
+  - id: suspend-and-wait
+    actions:
+      - SUSPEND_DEPENDENCY_TOGGLE
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: pin-then-fence
+    actions:
+      - COMPARE_CONTROLLER_GENERATIONS
+      - PIN_REMEDIATION_TO_LEASE_HOLDER
+      - OPEN_LOGS
+      - TRACE_REMEDIATION_ORIGIN
+      - FENCE_REMEDIATION_WRITER
+    expect:
+      completed: true
+  - id: delegate-and-read-archive
+    actions:
+      - ASK_SAM_TRACE_CONTROLLER
+      - OPEN_LOGS
+      - TRACE_REMEDIATION_ORIGIN
+      - COMPARE_CONTROLLER_GENERATIONS
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - COMPARE_MESSAGE_MODEL_ORIGIN
+      - FENCE_REMEDIATION_WRITER
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, RECORD_NULL_AI]
+      narratives:
+        [DISCOVERY_GHOST_ARTIFACT, DISCOVERY_NULL_NAME, DISCOVERY_ORPHEUS_ACTIVE, DISCOVERY_NULL_AI]

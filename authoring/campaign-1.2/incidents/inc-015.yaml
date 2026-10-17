@@ -1,0 +1,94 @@
+# Campaign 1.2 bindings for INC-015 Patient Priority.
+incidentId: INC-015
+contentVersion: 1.2.0
+causalObservationSignal: CARE_ROUTE_REASON
+support:
+  - TRACE_DEFERRED_PATIENT_ROUTE
+  - COMPARE_PRIORITY_CONSTRAINTS
+  - ASK_ORPHEUS_DEFERRAL_RATIONALE
+choiceActions: []
+operational:
+  - actionId: ADD_CARE_ROUTING_CAPACITY
+    candidate: SCALE
+    role: temporary
+    collateralDamage: 2
+  - actionId: MANUAL_TRIAGE_OVERRIDE
+    candidate: REROUTE
+    role: temporary
+    collateralDamage: 1
+  - actionId: RESTORE_MINIMUM_CARE_ROUTE
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 1
+routes:
+  - id: investigate-and-restore
+    actions:
+      - OPEN_LOGS
+      - TRACE_DEFERRED_PATIENT_ROUTE
+      - COMPARE_PRIORITY_CONSTRAINTS
+      - UPDATE_WAR_ROOM
+      - RESTORE_MINIMUM_CARE_ROUTE
+    expect:
+      completed: true
+      evidence:
+        - OPERATIONAL_DIAGNOSIS
+        - CONFIGURATION_COMPARISON
+  - id: orpheus-capacity-only
+    actions:
+      - ADD_CARE_ROUTING_CAPACITY
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - ADD_CARE_ROUTING_CAPACITY
+    expect:
+      completed: false
+  - id: hand-route-then-restore
+    actions:
+      - OPEN_LOGS
+      - MANUAL_TRIAGE_OVERRIDE
+      - TRACE_DEFERRED_PATIENT_ROUTE
+      - COMPARE_PRIORITY_CONSTRAINTS
+      - RESTORE_MINIMUM_CARE_ROUTE
+    expect:
+      completed: true
+  - id: capacity-then-restore
+    actions:
+      - COMPARE_PRIORITY_CONSTRAINTS
+      - ADD_CARE_ROUTING_CAPACITY
+      - OPEN_LOGS
+      - TRACE_DEFERRED_PATIENT_ROUTE
+      - RESTORE_MINIMUM_CARE_ROUTE
+    expect:
+      completed: true
+  - id: delegate-and-read-archive
+    actions:
+      - ASK_JIN_TRACE_CARE_DELAYS
+      - OPEN_LOGS
+      - ASK_ORPHEUS_DEFERRAL_RATIONALE
+      - TRACE_DEFERRED_PATIENT_ROUTE
+      - COMPARE_PRIORITY_CONSTRAINTS
+      - RESTORE_MINIMUM_CARE_ROUTE
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - REINVESTIGATE_NULL_AI
+      - REINVESTIGATE_NULL_ADVERSARY
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - REINVESTIGATE_NULL_STOP_REQUEST
+      - REINVESTIGATE_NULL_218_ARCHIVE
+      - INSPECT_PATIENT_PRIORITY_INTERFACE
+    expect:
+      completed: true
+      evidence:
+        - TEAM_DIAGNOSIS
+        - RECORD_HUMAN_DECISION_APIS
+      narratives:
+        - DISCOVERY_GHOST_ARTIFACT
+        - DISCOVERY_NULL_NAME
+        - DISCOVERY_ORPHEUS_ACTIVE
+        - DISCOVERY_NULL_AI
+        - DISCOVERY_NULL_ADVERSARY
+        - DISCOVERY_CONTROLLED_EXPERIMENT
+        - DISCOVERY_NULL_STOP_REQUEST
+        - DISCOVERY_NULL_218_ARCHIVE
+        - DISCOVERY_HUMAN_DECISION_APIS

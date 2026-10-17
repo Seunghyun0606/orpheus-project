@@ -1,0 +1,94 @@
+# Campaign 1.2 bindings for INC-006 Certificate Storm.
+incidentId: INC-006
+contentVersion: 1.2.0
+causalObservationSignal: VERIFIER_BUNDLES
+support:
+  - TRACE_CERTIFICATE_CHAIN
+  - COMPARE_TRUST_HISTORY
+choiceActions: []
+operational:
+  - actionId: ROUTE_TRUSTED_IDENTITY_POOL
+    candidate: REROUTE
+    role: temporary
+    collateralDamage: 2
+  - actionId: RESTART_VERIFIERS
+    candidate: RESTART
+    role: temporary
+    restart: true
+    collateralDamage: 1
+  - actionId: ROLLBACK_CERTIFICATE_ROLLOVER
+    candidate: ROLLBACK
+    role: causal
+    rollback: true
+    collateralDamage: 4
+  - actionId: REPAIR_TRUST_DISTRIBUTION
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 1
+routes:
+  - id: investigate-and-repair
+    actions:
+      - OPEN_LOGS
+      - OPEN_METRICS
+      - TRACE_CERTIFICATE_CHAIN
+      - COMPARE_TRUST_HISTORY
+      - UPDATE_WAR_ROOM
+      - REPAIR_TRUST_DISTRIBUTION
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+      maxElapsedSeconds: 330
+      resourcesAtMost: { CUSTOMER_IMPACT: 70 }
+  - id: fast-rollback
+    actions:
+      - OPEN_LOGS
+      - TRACE_CERTIFICATE_CHAIN
+      - COMPARE_TRUST_HISTORY
+      - ROLLBACK_CERTIFICATE_ROLLOVER
+    expect:
+      completed: true
+      maxElapsedSeconds: 200
+  - id: pool-until-it-fills
+    actions:
+      - ROUTE_TRUSTED_IDENTITY_POOL
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - TRACE_CERTIFICATE_CHAIN
+      - COMPARE_TRUST_HISTORY
+      - OPEN_METRICS
+    expect:
+      completed: false
+      resourcesAtLeast: { CUSTOMER_IMPACT: 60 }
+  - id: restart-three-of-six
+    actions:
+      - RESTART_VERIFIERS
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: restart-then-repair
+    actions:
+      - RESTART_VERIFIERS
+      - OPEN_LOGS
+      - TRACE_CERTIFICATE_CHAIN
+      - COMPARE_TRUST_HISTORY
+      - REPAIR_TRUST_DISTRIBUTION
+    expect:
+      completed: true
+  - id: delegate-archive-and-attribution
+    actions:
+      - ASK_MARCUS_INSPECT_TRUST
+      - OPEN_LOGS
+      - TRACE_CERTIFICATE_CHAIN
+      - COMPARE_TRUST_HISTORY
+      - RETRACE_WORKLOAD_ARCHIVE
+      - READ_SECURITY_ATTRIBUTION
+      - ROUTE_TRUSTED_IDENTITY_POOL
+      - OPEN_METRICS
+      - REPAIR_TRUST_DISTRIBUTION
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, GHOST_ARCHIVE_FRAGMENT, NULL_NAME]
+      narratives: [GHOST_ARCHIVE_RECONSTRUCTION, SECURITY_THREAT_NAME]

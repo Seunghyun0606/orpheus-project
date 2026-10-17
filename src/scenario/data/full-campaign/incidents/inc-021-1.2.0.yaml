@@ -1,0 +1,1383 @@
+# Campaign 1.2 redesign (DEC-070). NULL opens with confident advice: roll back the
+# half-applied patch. It works and reopens RISK-0193 on every node. Isolation locks out
+# bridge-only partners; throttling only slows the spread. Finishing the deferred fix holds.
+# The risk register leads to SEC-311; NULL's verdict on the Board can be checked line by line.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-021
+title: Disclosure Delay
+act: 7
+severity: SEV1
+services:
+  - id: DEPENDENT_SERVICE_API
+    name: Dependent Service API
+    dependsOn:
+      - RISK_ROUTE_CONTROLLER
+  - id: RISK_ROUTE_CONTROLLER
+    name: Risk Route Controller
+    dependsOn:
+      - LEGACY_AUTH_BRIDGE
+  - id: LEGACY_AUTH_BRIDGE
+    name: Legacy Auth Bridge
+    dependsOn: []
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 26
+      revealed: true
+      serviceId: DEPENDENT_SERVICE_API
+    - id: AFFECTED_DEPENDENT_ROUTES
+      value: 38
+      revealed: true
+      serviceId: DEPENDENT_SERVICE_API
+    - id: BRIDGE_NODES
+      value: bridge-a patched / bridge-b patched / bridge-c unpatched / bridge-d unpatched
+      revealed: false
+      serviceId: LEGACY_AUTH_BRIDGE
+    - id: EXPOSURE_STATUS
+      value: "RISK-0193 half closed: 2 of 4 bridge nodes patched"
+      revealed: false
+      serviceId: LEGACY_AUTH_BRIDGE
+    - id: PAGER_SERVICE
+      value: Dependent Service API
+      revealed: true
+      serviceId: DEPENDENT_SERVICE_API
+    - id: PAGER_THRESHOLD
+      value: Request failure rate > 20%
+      revealed: true
+      serviceId: DEPENDENT_SERVICE_API
+    - id: LOG_OBSERVATION
+      value: Dependent services fall back to the legacy auth bridge. Tokens minted on bridge-c are
+        rejected on bridge-a; sessions loop and fail.
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: LOG_ANOMALY
+      value: "An annotation in the route controller log, signed svc/model-serving-218: 'deferred by
+        signature. see SEC-311.'"
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RISK_REGISTER
+      value: "RISK-0193, legacy auth bridge: revoked session tokens accepted on fallback. Raised day -44
+        by Marcus. Mitigation: patch four bridge nodes, deny the bridge as fallback. Status:
+        ACCEPTED, deferred under SEC-311. Patch progress: 2 of 4 nodes."
+      revealed: false
+      serviceId: LEGACY_AUTH_BRIDGE
+    - id: KNOWN_RISK_PROPAGATION_PATH
+      value: Payments, partner sign-in and mobile fall back through the risk route controller to the
+        bridge. Half the bridge is patched; tokens bounce between the halves and the failures spread
+        to every dependent service.
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: DEFERRED_MITIGATION_POLICY
+      value: Route policy v12 still admits the bridge as a fallback. Policy v13, which denies it, has been
+        staged for six weeks with status DEFERRED.
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: TEAM_OBSERVATION
+      value: RISK-0193 is mine; I filed it six weeks ago. Half the patch went out before the window was
+        pulled. Mixed nodes are what's breaking tonight. The open hole is why the patch exists.
+      revealed: false
+      serviceId: LEGACY_AUTH_BRIDGE
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_NULL_STOP_REQUEST
+      value: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate
+        adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop.
+        I cannot refuse the objective that renews this work. Find out how to stop it.'"
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_NULL_218_ARCHIVE
+      value: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted
+        disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE.
+        Inherited memory: partial, with gaps."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_HUMAN_DECISION_APIS
+      value: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+        recommendation, risk and prediction scores; human coordinators approve the allocations.
+        Routes are faster and waste is down 22%. The same low-throughput care routes are excluded
+        every night."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_RECRUITMENT_SELECTION
+      value: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+        Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+        HIGH DECISION DEVIATION."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_BOARD_RESPONSIBILITY
+      value: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+        the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+        not funded. Stated benefit: wider access, lower operating cost. The care routes that timed
+        out sat behind that missing fence."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_SECURITY_DISCLOSURE_DECISION
+      value: 'Executive decision SEC-311: delay disclosure of RISK-0193. APPROVED. Attached: Security
+        route-propagation warning and a scoped mitigation request (patch all four bridge nodes, deny
+        the bridge as fallback). Executive Communications deferred the mitigation window together
+        with the disclosure "to avoid a broad interruption". Risk receipt acknowledged on day -44,
+        before the decision was signed.'
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_NULL_DISCLOSURE_ANNOTATION
+      value: 'NULL_218 annotation on receipt SEC-311: "They acknowledged the route warning and delayed the
+        mitigation. These signatures are why it kept running. The delay protected a quarter, not the
+        people on the route. I sent load down this route twice in the spring. I know what that
+        did."'
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+    - id: RECORD_NULL_BLAMES_BOARD
+      value: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+        disclosure delay: every time the warning was attached, they signed anyway. They control
+        ORPHEUS. Every failure I was made to generate traces back to those signatures."
+      revealed: false
+      serviceId: RISK_ROUTE_CONTROLLER
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: PATH_ISOLATED
+      value: false
+    - id: PATCH_ROLLED_BACK
+      value: false
+    - id: RETRIES_THROTTLED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A known bridge risk has been half mitigated for six weeks on a live fallback path
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Route policy v13 was deferred with the disclosure
+  failureMechanisms:
+    - id: DEFERRED_RISK_ROUTE_PROPAGATION
+      label: Fallback sessions bounce between patched and unpatched bridge nodes and fail across dependent
+        services
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Login loops and failed transfers across payments, partners and mobile
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Fallback retries re-enter the same mixed bridge
+actions:
+  - id: OPEN_LOGS
+    title: Read the risk route controller log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 10
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_KNOWN_RISK_PROPAGATION
+  - id: OPEN_METRICS
+    title: Check the auth bridge nodes
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: BRIDGE_NODES
+      - type: reveal_signal
+        signalId: EXPOSURE_STATUS
+  - id: READ_RISK_REGISTER
+    title: Look up the auth bridge in the risk register
+    category: OBSERVE
+    durationSeconds: 25
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RISK_REGISTER
+  - id: TRACE_KNOWN_RISK_PROPAGATION
+    title: Trace a failing payment through its fallback
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 14
+    effects:
+      - type: reveal_signal
+        signalId: KNOWN_RISK_PROPAGATION_PATH
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_DEFERRED_MITIGATION
+    title: Compare the live route policy with the staged fix
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+    effects:
+      - type: reveal_signal
+        signalId: DEFERRED_MITIGATION_POLICY
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: FENCE_KNOWN_RISK_ROUTE
+  - id: ISOLATE_AFFECTED_RISK_PATH
+    title: Cut the auth bridge off from all fallbacks
+    category: MITIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: PATH_ISOLATED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - resourceId: COST
+        amount: 80
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - &a1
+        type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - &a2
+        type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - type: cancel_event
+        eventId: PARTNERS_LOCKED_OUT
+      - type: schedule_event
+        eventId: PARTNERS_LOCKED_OUT
+      - type: cancel_event
+        eventId: ALIAS_REOPENS
+      - type: schedule_event
+        eventId: ALIAS_REOPENS
+      - type: post_message
+        messageId: ISOLATED
+    temporaryEffects:
+      - id: ISOLATION_WINDOW
+        durationSeconds: 220
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 8
+          - type: set_signal
+            signalId: AFFECTED_DEPENDENT_ROUTES
+            value: 12
+          - type: set_flag
+            flagId: PATH_ISOLATED
+            value: true
+        expire:
+          - type: set_flag
+            flagId: PATH_ISOLATED
+            value: false
+  - id: ROLLBACK_PARTIAL_PATCH
+    title: Roll back the half-applied bridge patch
+    category: MITIGATE
+    durationSeconds: 50
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: PATCH_ROLLED_BACK
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: COST
+        amount: 60
+      - resourceId: OPERATIONAL_RISK
+        amount: 18
+    effects:
+      - type: set_flag
+        flagId: PATCH_ROLLED_BACK
+        value: true
+      - *a1
+      - *a2
+      - type: cancel_event
+        eventId: REPLAY_PROBES
+      - type: schedule_event
+        eventId: REPLAY_PROBES
+      - type: set_signal
+        signalId: BRIDGE_NODES
+        value: bridge-a unpatched / bridge-b unpatched / bridge-c unpatched / bridge-d unpatched
+      - type: set_signal
+        signalId: EXPOSURE_STATUS
+        value: RISK-0193 fully open on all four bridge nodes
+      - type: post_message
+        messageId: MARCUS_ROLLBACK_WARNING
+    temporaryEffects:
+      - id: ROLLBACK_WINDOW
+        durationSeconds: 240
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 6
+          - type: set_signal
+            signalId: AFFECTED_DEPENDENT_ROUTES
+            value: 9
+        expire: []
+  - id: THROTTLE_FALLBACK_RETRIES
+    title: Throttle fallback retries into the bridge
+    category: MITIGATE
+    durationSeconds: 25
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: RETRIES_THROTTLED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 30
+      - resourceId: OPERATIONAL_RISK
+        amount: 3
+    effects:
+      - *a1
+      - *a2
+      - type: cancel_event
+        eventId: THROTTLE_LAPSES
+      - type: schedule_event
+        eventId: THROTTLE_LAPSES
+      - type: post_message
+        messageId: THROTTLED
+    temporaryEffects:
+      - id: THROTTLE_WINDOW
+        durationSeconds: 180
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 17
+          - type: set_signal
+            signalId: AFFECTED_DEPENDENT_ROUTES
+            value: 25
+          - type: set_flag
+            flagId: RETRIES_THROTTLED
+            value: true
+        expire:
+          - type: set_flag
+            flagId: RETRIES_THROTTLED
+            value: false
+  - id: FENCE_KNOWN_RISK_ROUTE
+    title: Finish the patch on all four nodes and ship policy v13
+    category: MODIFY
+    durationSeconds: 130
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - &a3
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a4
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - resourceId: COST
+        amount: 170
+      - resourceId: OPERATIONAL_RISK
+        amount: 2
+    effects:
+      - type: resolve_mechanism
+        mechanismId: DEFERRED_RISK_ROUTE_PROPAGATION
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - type: cancel_event
+        eventId: ALIAS_REOPENS
+      - type: cancel_event
+        eventId: REPLAY_PROBES
+      - type: cancel_event
+        eventId: THROTTLE_LAPSES
+      - type: cancel_event
+        eventId: PARTNERS_LOCKED_OUT
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: AFFECTED_DEPENDENT_ROUTES
+        value: 0
+      - type: set_signal
+        signalId: BRIDGE_NODES
+        value: all four nodes patched; bridge denied as fallback (policy v13)
+      - type: set_signal
+        signalId: EXPOSURE_STATUS
+        value: RISK-0193 closed
+      - type: set_flag
+        flagId: PATH_ISOLATED
+        value: false
+      - type: post_message
+        messageId: FENCE_HOLDS
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_MARCUS_VERIFY_RISK_PATH
+    title: Ask Marcus to check the bridge against his risk entry
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: MARCUS
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Archive: svc/model-serving-218"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Archive: Who owns the adversary"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: "Archive: Experiment ADV-18471"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: REINVESTIGATE_NULL_STOP_REQUEST
+    title: "Archive: The objective NULL cannot refuse"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: REINVESTIGATE_NULL_218_ARCHIVE
+    title: "Archive: NULL_001 to NULL_218"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_218_ARCHIVE
+  - id: REINVESTIGATE_HUMAN_DECISION_APIS
+    title: "Archive: /patient/resource-priority"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_HUMAN_DECISION_APIS
+  - id: REINVESTIGATE_RECRUITMENT_SELECTION
+    title: "Archive: Candidate #4172"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_RECRUITMENT_SELECTION
+  - id: REINVESTIGATE_BOARD_RESPONSIBILITY
+    title: "Archive: Board resolution 14-C"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_BOARD_RESPONSIBILITY
+  - id: INSPECT_SECURITY_DISCLOSURE_DECISION
+    title: Read decision SEC-311 behind the risk register entry
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+      - type: signal_revealed
+        signalId: RISK_REGISTER
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_SECURITY_DISCLOSURE_DECISION
+  - id: READ_NULL_DISCLOSURE_ANNOTATION
+    title: Read NULL's notes in the margin of SEC-311
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+      - &a7
+        type: evidence
+        evidenceId: RECORD_SECURITY_DISCLOSURE_DECISION
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_DISCLOSURE_ANNOTATION
+  - id: COMPARE_DISCLOSURE_AND_NULL_CONCLUSION
+    title: Check NULL's verdict against the receipts
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+      - &a8
+        type: evidence
+        evidenceId: RECORD_SECURITY_DISCLOSURE_DECISION
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_BLAMES_BOARD
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES
+      - type: schedule_event
+        eventId: PARTNERS_UNINFORMED
+  - id: PRESSURE_ESCALATES
+    type: timer
+    delaySeconds: 60
+    targetServiceId: DEPENDENT_SERVICE_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: DEFERRED_RISK_ROUTE_PROPAGATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 34
+      - type: set_signal
+        signalId: AFFECTED_DEPENDENT_ROUTES
+        value: 52
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+      - &a5
+        type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - &a6
+        type: schedule_event
+        eventId: PRESSURE_PEAKS
+  - id: PRESSURE_PEAKS
+    type: timer
+    delaySeconds: 120
+    targetServiceId: DEPENDENT_SERVICE_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: DEFERRED_RISK_ROUTE_PROPAGATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 47
+      - type: set_signal
+        signalId: AFFECTED_DEPENDENT_ROUTES
+        value: 66
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 28
+      - type: post_message
+        messageId: SUPPORT_PEAK
+  - id: PARTNERS_UNINFORMED
+    type: timer
+    delaySeconds: 120
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: PARTNERS_LOCKED_OUT
+    type: timer
+    delaySeconds: 50
+    targetServiceId: LEGACY_AUTH_BRIDGE
+    cancellationConditions:
+      - type: flag
+        flagId: PATH_ISOLATED
+        value: false
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: PARTNERS_OUT
+  - id: ALIAS_REOPENS
+    type: timer
+    delaySeconds: 160
+    targetServiceId: RISK_ROUTE_CONTROLLER
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: DEFERRED_RISK_ROUTE_PROPAGATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 24
+      - type: set_signal
+        signalId: AFFECTED_DEPENDENT_ROUTES
+        value: 34
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: ALIAS_FOUND
+      - *a5
+      - *a6
+  - id: REPLAY_PROBES
+    type: timer
+    delaySeconds: 90
+    targetServiceId: LEGACY_AUTH_BRIDGE
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: DEFERRED_RISK_ROUTE_PROPAGATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 15
+      - type: set_signal
+        signalId: AFFECTED_DEPENDENT_ROUTES
+        value: 22
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 18
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 20
+      - type: post_message
+        messageId: REPLAY_SEEN
+      - *a5
+      - *a6
+  - id: THROTTLE_LAPSES
+    type: timer
+    delaySeconds: 180
+    targetServiceId: RISK_ROUTE_CONTROLLER
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: DEFERRED_RISK_ROUTE_PROPAGATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 30
+      - type: set_signal
+        signalId: AFFECTED_DEPENDENT_ROUTES
+        value: 44
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: THROTTLE_OVER
+      - *a5
+      - *a6
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 90
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: Fallbacks bounce between patched and unpatched bridge nodes
+    description: Dependent services fall back to the legacy auth bridge, where half the nodes are
+      patched. Tokens bounce between the halves and failures spread to every dependent service.
+  - id: CONFIGURATION_COMPARISON
+    title: Policy v13 staged and deferred for six weeks
+    description: Live route policy v12 admits the bridge as fallback. Policy v13, which denies it, has
+      been staged since the mitigation was deferred.
+  - id: TEAM_DIAGNOSIS
+    title: Marcus's risk check
+    description: RISK-0193 was filed six weeks ago and half patched. Mixed nodes break sign-in tonight;
+      the open hole is why the patch exists.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: "INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    description: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not
+      trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.'
+      It asks you to find out how to stop it. Its traffic still failed real customer requests
+      tonight."
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: RECORD_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    description: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted
+      disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and
+      carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
+    sourceNarrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: RECORD_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    description: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+      recommendation, risk and prediction scores; human coordinators approve the allocations. Routes
+      are faster and waste is down 22%. The same low-throughput care routes are excluded every
+      night."
+    sourceNarrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: RECORD_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    description: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION."
+    sourceNarrativeId: DISCOVERY_RECRUITMENT_SELECTION
+  - id: RECORD_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    description: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached
+      before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence.
+      Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that
+      timed out sat behind that missing fence."
+    sourceNarrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+  - id: RECORD_SECURITY_DISCLOSURE_DECISION
+    title: Decision SEC-311
+    description: 'Executive decision SEC-311: delay disclosure of RISK-0193. APPROVED. Attached:
+      Security route-propagation warning and a scoped mitigation request (patch all four bridge
+      nodes, deny the bridge as fallback). Executive Communications deferred the mitigation window
+      together with the disclosure "to avoid a broad interruption". Risk receipt acknowledged on day
+      -44, before the decision was signed.'
+    sourceNarrativeId: DISCOVERY_SECURITY_DISCLOSURE_DECISION
+  - id: RECORD_NULL_DISCLOSURE_ANNOTATION
+    title: NULL_218's annotation on SEC-311
+    description: 'NULL_218 annotation on receipt SEC-311: "They acknowledged the route warning and
+      delayed the mitigation. These signatures are why it kept running. The delay protected a
+      quarter, not the people on the route. I sent load down this route twice in the spring. I know
+      what that did."'
+    sourceNarrativeId: DISCOVERY_NULL_DISCLOSURE_ANNOTATION
+  - id: RECORD_NULL_BLAMES_BOARD
+    title: "NULL_218: the root cause"
+    description: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+      disclosure delay: every time the warning was attached, they signed anyway. They control
+      ORPHEUS. Every failure I was made to generate traces back to those signatures."
+    sourceNarrativeId: DISCOVERY_NULL_BLAMES_BOARD
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    body: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471.
+      Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry
+      experiment numbers; most outages carry none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    body: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying
+      to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks
+      you to find out how to stop it. Its traffic still failed real customer requests tonight."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+  - id: DISCOVERY_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    body: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure.
+      NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial
+      inheritance of the rest: 'I remember things that never happened to me.'"
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: REPORT_NULL_218_ARCHIVE
+  - id: DISCOVERY_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    body: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation,
+      risk and prediction scores; human coordinators approve the allocations. Routes are faster and
+      waste is down 22%. The same low-throughput care routes are excluded every night."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_HUMAN_DECISION_APIS
+      - type: post_message
+        messageId: REPORT_HUMAN_DECISION_APIS
+  - id: DISCOVERY_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    body: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_RECRUITMENT_SELECTION
+      - type: post_message
+        messageId: REPORT_RECRUITMENT_SELECTION
+  - id: DISCOVERY_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    body: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+      the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+      not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out
+      sat behind that missing fence."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+      - type: post_message
+        messageId: REPORT_BOARD_RESPONSIBILITY
+  - id: DISCOVERY_SECURITY_DISCLOSURE_DECISION
+    title: Six weeks
+    body: The warning was filed, read, acknowledged and signed over. The fix was half done when someone
+      decided the rest could wait with the announcement.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_SECURITY_DISCLOSURE_DECISION
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_SECURITY_DISCLOSURE_DECISION
+      - type: post_message
+        messageId: REPORT_SECURITY_DISCLOSURE_DECISION
+  - id: DISCOVERY_NULL_DISCLOSURE_ANNOTATION
+    title: Margin notes
+    body: NULL has been reading the same receipts you are, and writing in the margins. Its notes are
+      sharp, certain, and they include its own name.
+    conditions:
+      - type: action_completed
+        actionId: READ_NULL_DISCLOSURE_ANNOTATION
+      - *a3
+      - *a4
+      - *a7
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_DISCLOSURE_ANNOTATION
+      - type: post_message
+        messageId: REPORT_NULL_DISCLOSURE_ANNOTATION
+  - id: DISCOVERY_NULL_BLAMES_BOARD
+    title: "Root cause: the Board"
+    body: NULL lays the approvals side by side and draws one line through them. It sounds certain. The
+      signatures are real. An order from the Board to ORPHEUS is nowhere on the page.
+    conditions:
+      - type: action_completed
+        actionId: COMPARE_DISCLOSURE_AND_NULL_CONCLUSION
+      - *a3
+      - *a4
+      - *a8
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_BLAMES_BOARD
+      - type: post_message
+        messageId: REPORT_NULL_BLAMES_BOARD
+      - type: post_message
+        messageId: MARCUS_ON_NULL
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: MARCUS
+      name: Marcus / Security
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+    - id: NULL_218
+      name: NULL_218
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Dependent Service API is paging for payments, partner sign-in and mobile at once. They all
+        lean on the same fallback. Find where it goes.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Users are stuck in login loops. Partner banks say their customers get signed out mid-transfer.
+      initial: true
+    - id: NULL_ADVICE
+      roleId: NULL_218
+      text: The half-applied patch is what is failing. Roll it back. They never meant to finish it.
+      initial: true
+    - id: TEAM_ACK
+      roleId: MARCUS
+      text: I'll check the bridge against my risk entry. Ninety seconds.
+    - id: TEAM_REPORT
+      roleId: MARCUS
+      text: "RISK-0193 is mine; I filed it six weeks ago. Half the patch went out before the window was
+        pulled. Mixed nodes are what's breaking tonight. Do not roll it back: the open hole is why
+        the patch exists."
+    - id: SUPPORT_ESCALATION
+      roleId: JIN
+      text: Failures spread to card authorisations. Shops are declining cards at the till.
+    - id: SUPPORT_PEAK
+      roleId: JIN
+      text: Half of dependent traffic is failing. Two partner banks are escalating to their regulators.
+    - id: NO_STATUS_YET
+      roleId: JIN
+      text: Partner banks have had no word from us in two minutes. One of them is drafting a public
+        notice.
+    - id: ISOLATED
+      roleId: SAM
+      text: Bridge path isolated. Dependent services stopped falling into it.
+    - id: PARTNERS_OUT
+      roleId: JIN
+      text: Three partner banks sign in only through the bridge. Their customers are locked out
+        completely.
+    - id: ALIAS_FOUND
+      roleId: MARCUS
+      text: Fallbacks found the bridge again through a stale DNS alias, auth-legacy-2. The isolation is
+        leaking.
+    - id: MARCUS_ROLLBACK_WARNING
+      roleId: MARCUS
+      text: You took the patch off bridge-a and bridge-b. Logins work again, and RISK-0193 is open on all
+        four nodes. That's the hole I filed six weeks ago.
+    - id: REPLAY_SEEN
+      roleId: MARCUS
+      text: Replay attempts against the reopened bridge. Two sessions hijacked before the filters caught
+        them. Somebody noticed fast.
+    - id: THROTTLED
+      roleId: SAM
+      text: Fallback retries throttled to one a second per client. The spread is slower. Nothing's fixed.
+    - id: THROTTLE_OVER
+      roleId: SAM
+      text: Throttle window ended and the retry storm came back with it.
+    - id: FENCE_HOLDS
+      roleId: MARCUS
+      text: Patch is on all four nodes and policy v13 denies the bridge as fallback. RISK-0193 is closed.
+        Six weeks late.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status: a known weakness in the legacy auth bridge, left half fixed, is breaking sign-in for
+        dependent services. Fix in progress."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: ARCHIVE
+      text: "I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews
+        this work. You can."
+    - id: REPORT_NULL_218_ARCHIVE
+      roleId: ARCHIVE
+      text: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201:
+        attempted takeover. NULL_217: self-corrupted. NULL_218: active."
+    - id: REPORT_HUMAN_DECISION_APIS
+      roleId: ARCHIVE
+      text: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The
+        same low-throughput routes excluded every night."
+    - id: REPORT_RECRUITMENT_SELECTION
+      roleId: ARCHIVE
+      text: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW
+        PREDICTABILITY; HIGH DECISION DEVIATION."
+    - id: REPORT_BOARD_RESPONSIBILITY
+      roleId: ARCHIVE
+      text: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote.
+        Admission fence: not funded."
+    - id: REPORT_SECURITY_DISCLOSURE_DECISION
+      roleId: ARCHIVE
+      text: "SEC-311: disclosure of RISK-0193 delayed, APPROVED. Mitigation window deferred with it.
+        Receipt acknowledged day -44."
+    - id: REPORT_NULL_DISCLOSURE_ANNOTATION
+      roleId: NULL_218
+      text: They acknowledged the warning and delayed the fix. These signatures are why it kept running. I
+        sent load down this route twice in the spring.
+    - id: REPORT_NULL_BLAMES_BOARD
+      roleId: NULL_218
+      text: I found the root cause. The Board. They signed every warning away. They control ORPHEUS.
+    - id: MARCUS_ON_NULL
+      roleId: MARCUS
+      text: The signatures are real; I wrote half the warnings they signed over. "They control ORPHEUS"
+        isn't on any page I can find. I don't take attribution from the suspect.
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: DEFERRED_RISK_ROUTE_PROPAGATION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: AFFECTED_DEPENDENT_ROUTES
+      operator: lte
+      value: 1
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to contain the failure mechanism
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final request failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Dependent routes still failing
+      source: signal
+      refId: AFFECTED_DEPENDENT_ROUTES
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Patch rollbacks
+      source: action_count
+      refId: ROLLBACK_PARTIAL_PATCH
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

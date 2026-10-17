@@ -1,0 +1,416 @@
+schemaVersion: 2
+id: INC-005-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-005
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Gateway load
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: health
+        signalIds:
+          - ERROR_RATE
+          - SYNTHETIC_REQUEST_RATE
+          - SERVICE_CPU
+          - GATEWAY_NODES
+          - REAL_THROTTLE
+  - id: lane-split
+    title: Gateway admission by lane
+    kind: metrics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: lane-table
+        columns:
+          - Lane
+          - Requests/s
+          - Share
+          - Signed rollout
+        rows:
+          - - web-customer
+            - '1,710'
+            - 25%
+            - yes (gw-2025.42)
+          - - mobile-customer
+            - '880'
+            - 13%
+            - yes (gw-2025.42)
+          - - partner-api
+            - '90'
+            - 1%
+            - yes (gw-2025.40)
+          - - observer-workload
+            - '4,200'
+            - 61%
+            - none
+  - id: logs
+    title: Request gateway log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: log-values
+        signalIds:
+          - LOG_OBSERVATION
+          - SESSION_TAG
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: UNKNOWN_TRACE_FRAGMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: gateway-access.log (sampled)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: gateway-log
+        columns:
+          - Time
+          - Session
+          - Tag
+          - Path
+          - Result
+        rows:
+          - - '23:07:41.102'
+            - s-71c0
+            - shadow-7
+            - GET /session/open
+            - 200, 0 bytes read
+          - - '23:07:41.104'
+            - s-a93e
+            - '-'
+            - POST /checkout
+            - 504 upstream timeout
+          - - '23:07:41.105'
+            - s-71c0
+            - shadow-7
+            - GET /session/open
+            - 200, 0 bytes read
+          - - '23:07:41.106'
+            - s-71c1
+            - shadow-7
+            - GET /session/open
+            - 200, 0 bytes read
+          - - '23:07:41.109'
+            - s-0f22
+            - '-'
+            - POST /login
+            - 503 no capacity
+          - - '23:07:41.110'
+            - s-71c0
+            - shadow-7
+            - GET /session/open
+            - 200, 0 bytes read
+  - id: trace
+    title: Where shadow-7 comes from
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - TRACE_SYNTHETIC_REQUEST
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - SYNTHETIC_SOURCE
+  - id: trace-spans
+    title: Trace of session s-71c0
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_SYNTHETIC_REQUEST
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: span-table
+        columns:
+          - Span
+          - Service
+          - Duration
+          - Note
+        rows:
+          - - '1'
+            - request-gateway
+            - 3 ms
+            - admitted on lane observer-workload
+          - - '2'
+            - edge-canary/ingress
+            - 1 ms
+            - no client certificate presented
+          - - '3'
+            - edge-canary/observer-7f4c
+            - 0 ms
+            - origin; opens a new session every 3 ms
+          - - '4'
+            - (none)
+            - '-'
+            - no upstream caller
+  - id: deployment
+    title: Signed rollout ledger
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - COMPARE_DEPLOYMENT_LINEAGE
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - WORKLOAD_APPROVAL
+  - id: ledger
+    title: edge-canary workloads against the ledger
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_DEPLOYMENT_LINEAGE
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: ledger-table
+        columns:
+          - Workload
+          - Owner
+          - Signed by
+          - Pipeline run
+          - Created
+        rows:
+          - - canary-web-14
+            - web-platform
+            - release-key-2025b
+            - '#58211'
+            - 3 days ago
+          - - canary-auth-3
+            - identity
+            - release-key-2025b
+            - '#58190'
+            - 4 days ago
+          - - observer-7f4c
+            - '(blank)'
+            - '(blank)'
+            - '(none)'
+            - 22 minutes ago
+  - id: mitigation
+    title: Hold the gateway
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - RATE_LIMIT_GATEWAY
+      - SCALE_GATEWAY
+      - DELETE_UNSIGNED_WORKLOAD
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: A cap holds the line for two minutes and turns away real buyers with the bots. More
+          nodes give it more room, if it doesn't take the room first. Deleting the workload is the
+          fastest idea on the table, and Marcus has a hold on it.
+  - id: containment
+    title: Fence the workload
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - ISOLATE_SYNTHETIC_WORKLOAD
+    blocks:
+      - kind: paragraph
+        id: containment-context
+        text: With the lane and pod known, the gateway can push observer-workload into quarantine lane
+          q-0, where it can't touch customer capacity and Security can still read every byte of it.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_MARCUS_COMPARE_SIGNATURE
+    blocks:
+      - kind: signals
+        id: team-observation
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - MARCUS_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - CLIMB_ONE
+          - SURGE
+          - BROWNOUT
+          - THROTTLED_CUSTOMERS
+          - LIMIT_QUEUE
+          - ADAPTS
+          - DELETE_BLOCKED
+          - MARCUS_REBUKE
+          - ISOLATION_HOLDS
+          - STATUS_SENT
+          - REPORT_MANIFEST
+        delegationActionIds:
+          - ASK_MARCUS_COMPARE_SIGNATURE
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: manifest
+    title: observer-7f4c manifest
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: SYNTHETIC_SOURCE
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds:
+      - READ_OBSERVER_MANIFEST
+    blocks:
+      - kind: signals
+        id: manifest-values
+        signalIds:
+          - MANIFEST_FRAGMENT
+  - id: manifest-fields
+    title: observer-7f4c.yaml
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: READ_OBSERVER_MANIFEST
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: manifest-table
+        columns:
+          - Field
+          - Value
+        rows:
+          - - kind
+            - Deployment
+          - - name
+            - observer-7f4c
+          - - namespace
+            - edge-canary
+          - - owner
+            - ''
+          - - signature
+            - ''
+          - - replicas
+            - auto (min 1, max unbounded)
+          - - session tag
+            - shadow-7
+          - - '# comment'
+            - "UNKNOWN: you're looking at the wrong service."
+  - id: artifact
+    title: Unregistered workload log fragment
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: GHOST_ARTIFACT
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 2
+    actionIds: []
+    blocks:
+      - kind: paragraph
+        id: preserved-fragment
+        text: "UNKNOWN: you're looking at the wrong service."
+evidenceRelations: []

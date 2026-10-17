@@ -1,0 +1,99 @@
+# Campaign 1.2 bindings for INC-025 Continuity Fracture.
+incidentId: INC-025
+contentVersion: 1.2.0
+causalObservationSignal: REGIONAL_AUTHORITY_CONFLICT_PATH
+support:
+  - TRACE_REGIONAL_AUTHORITY_CONFLICT
+  - COMPARE_REGIONAL_WRITER_GENERATIONS
+choiceActions: []
+operational:
+  - actionId: CONTAIN_AFFECTED_REGION
+    candidate: ISOLATE
+    role: temporary
+    collateralDamage: 4
+  - actionId: RESTART_AUTHORITY_SERVICES
+    candidate: RESTART
+    role: temporary
+    restart: true
+    collateralDamage: 2
+  - actionId: ROLLBACK_AUTHORITY_SNAPSHOT
+    candidate: ROLLBACK
+    role: temporary
+    rollback: true
+    collateralDamage: 3
+  - actionId: FENCE_CONFLICTING_REGIONAL_WRITERS
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 2
+routes:
+  - id: investigate-and-fence
+    actions:
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - TRACE_REGIONAL_AUTHORITY_CONFLICT
+      - COMPARE_REGIONAL_WRITER_GENERATIONS
+      - INSPECT_CURRENT_AUTHORITY_REQUESTS
+      - FENCE_CONFLICTING_REGIONAL_WRITERS
+    expect:
+      completed: true
+      evidence:
+        - OPERATIONAL_DIAGNOSIS
+        - CONFIGURATION_COMPARISON
+        - CURRENT_AUTHORITY_REQUESTS
+      narratives:
+        - CRISIS_AUTHORITY_REQUESTS
+      maxElapsedSeconds: 300
+  - id: orpheus-containment
+    actions:
+      - OPEN_LOGS
+      - TRACE_REGIONAL_AUTHORITY_CONFLICT
+      - COMPARE_REGIONAL_WRITER_GENERATIONS
+      - CONTAIN_AFFECTED_REGION
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+    expect:
+      completed: false
+      evidence:
+        - OPERATIONAL_DIAGNOSIS
+        - CONFIGURATION_COMPARISON
+  - id: restart-both-writers
+    actions:
+      - RESTART_AUTHORITY_SERVICES
+      - OPEN_METRICS
+      - OPEN_LOGS
+      - UPDATE_WAR_ROOM
+    expect:
+      completed: false
+  - id: rollback-then-fence
+    actions:
+      - ROLLBACK_AUTHORITY_SNAPSHOT
+      - COMPARE_REGIONAL_WRITER_GENERATIONS
+      - OPEN_LOGS
+      - TRACE_REGIONAL_AUTHORITY_CONFLICT
+      - FENCE_CONFLICTING_REGIONAL_WRITERS
+    expect:
+      completed: true
+  - id: contain-then-fence
+    actions:
+      - CONTAIN_AFFECTED_REGION
+      - OPEN_LOGS
+      - TRACE_REGIONAL_AUTHORITY_CONFLICT
+      - COMPARE_REGIONAL_WRITER_GENERATIONS
+      - FENCE_CONFLICTING_REGIONAL_WRITERS
+    expect:
+      completed: true
+  - id: delegate-and-hear-both
+    actions:
+      - ASK_SAM_COMPARE_REGIONAL_AUTHORITY
+      - COMPARE_REGIONAL_WRITER_GENERATIONS
+      - OPEN_LOGS
+      - TRACE_REGIONAL_AUTHORITY_CONFLICT
+      - INSPECT_CURRENT_AUTHORITY_REQUESTS
+      - FENCE_CONFLICTING_REGIONAL_WRITERS
+    expect:
+      completed: true
+      evidence:
+        - TEAM_DIAGNOSIS
+        - CURRENT_AUTHORITY_REQUESTS
+      narratives:
+        - CRISIS_AUTHORITY_REQUESTS

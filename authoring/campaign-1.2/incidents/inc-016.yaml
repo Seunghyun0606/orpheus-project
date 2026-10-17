@@ -1,0 +1,114 @@
+# Campaign 1.2 bindings for INC-016 Transaction Review.
+incidentId: INC-016
+contentVersion: 1.2.0
+causalObservationSignal: REVIEW_REENTRY
+support:
+  - TRACE_TRANSACTION_REENTRY
+  - COMPARE_REVIEW_RECEIPTS
+choiceActions: []
+operational:
+  - actionId: BYPASS_NARROW_REVIEW_QUEUE
+    candidate: REROUTE
+    role: temporary
+    collateralDamage: 4
+  - actionId: HOLD_UNRECEIPTED_PAYMENTS
+    candidate: QUARANTINE
+    role: temporary
+    collateralDamage: 0
+  - actionId: RESTART_REVIEW_WORKERS
+    candidate: RESTART
+    role: temporary
+    restart: true
+    collateralDamage: 2
+  - actionId: HONOR_VERIFIED_REVIEW_RECEIPTS
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 1
+routes:
+  - id: investigate-and-honor
+    actions:
+      - OPEN_LOGS
+      - TRACE_TRANSACTION_REENTRY
+      - COMPARE_REVIEW_RECEIPTS
+      - UPDATE_WAR_ROOM
+      - HONOR_VERIFIED_REVIEW_RECEIPTS
+    expect:
+      completed: true
+      evidence:
+        - OPERATIONAL_DIAGNOSIS
+        - CONFIGURATION_COMPARISON
+  - id: orpheus-restart
+    actions:
+      - RESTART_REVIEW_WORKERS
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: bypass-and-wait
+    actions:
+      - BYPASS_NARROW_REVIEW_QUEUE
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - TRACE_TRANSACTION_REENTRY
+    expect:
+      completed: false
+      resourcesAtLeast:
+        OPERATIONAL_RISK: 30
+  - id: bypass-unnoticed-then-honor
+    actions:
+      - BYPASS_NARROW_REVIEW_QUEUE
+      - OPEN_LOGS
+      - TRACE_TRANSACTION_REENTRY
+      - COMPARE_REVIEW_RECEIPTS
+      - HONOR_VERIFIED_REVIEW_RECEIPTS
+    expect:
+      completed: true
+      resourcesAtLeast:
+        OPERATIONAL_RISK: 30
+  - id: bypass-catch-then-honor
+    actions:
+      - BYPASS_NARROW_REVIEW_QUEUE
+      - HOLD_UNRECEIPTED_PAYMENTS
+      - OPEN_LOGS
+      - TRACE_TRANSACTION_REENTRY
+      - COMPARE_REVIEW_RECEIPTS
+      - HONOR_VERIFIED_REVIEW_RECEIPTS
+    expect:
+      completed: true
+      resourcesAtMost:
+        OPERATIONAL_RISK: 12
+  - id: delegate-and-read-archive
+    actions:
+      - ASK_JIN_TRACE_TRANSACTION_REPORTS
+      - OPEN_LOGS
+      - TRACE_TRANSACTION_REENTRY
+      - COMPARE_REVIEW_RECEIPTS
+      - HONOR_VERIFIED_REVIEW_RECEIPTS
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - REINVESTIGATE_NULL_AI
+      - REINVESTIGATE_NULL_ADVERSARY
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - REINVESTIGATE_NULL_STOP_REQUEST
+      - REINVESTIGATE_NULL_218_ARCHIVE
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+      - INSPECT_CREDIT_RISK_INTERFACE
+    expect:
+      completed: true
+      evidence:
+        - TEAM_DIAGNOSIS
+        - RECORD_FINANCE_DECISION_SUPPORT
+      narratives:
+        - DISCOVERY_GHOST_ARTIFACT
+        - DISCOVERY_NULL_NAME
+        - DISCOVERY_ORPHEUS_ACTIVE
+        - DISCOVERY_NULL_AI
+        - DISCOVERY_NULL_ADVERSARY
+        - DISCOVERY_CONTROLLED_EXPERIMENT
+        - DISCOVERY_NULL_STOP_REQUEST
+        - DISCOVERY_NULL_218_ARCHIVE
+        - DISCOVERY_HUMAN_DECISION_APIS
+        - DISCOVERY_FINANCE_DECISION_SUPPORT

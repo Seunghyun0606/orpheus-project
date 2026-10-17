@@ -1,0 +1,95 @@
+# Campaign 1.2 bindings for INC-012 Session Reconstruction.
+incidentId: INC-012
+contentVersion: 1.2.0
+causalObservationSignal: ARCHIVE_IO_ORIGIN
+support:
+  - TRACE_ARCHIVE_IO
+  - COMPARE_ARCHIVE_RESERVATIONS
+choiceActions: []
+operational:
+  - actionId: THROTTLE_ARCHIVE_JOBS
+    candidate: RATE_LIMIT
+    role: temporary
+    collateralDamage: 0
+  - actionId: PAUSE_ARCHIVE_RECONSTRUCTION
+    candidate: ISOLATE
+    role: temporary
+    collateralDamage: 3
+  - actionId: SEPARATE_ARCHIVE_IO
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 1
+routes:
+  - id: throttle-then-cutover
+    actions:
+      - OPEN_LOGS
+      - TRACE_ARCHIVE_IO
+      - COMPARE_ARCHIVE_RESERVATIONS
+      - THROTTLE_ARCHIVE_JOBS
+      - UPDATE_WAR_ROOM
+      - SEPARATE_ARCHIVE_IO
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+      maxElapsedSeconds: 400
+  - id: cutover-under-full-load
+    actions:
+      - OPEN_LOGS
+      - TRACE_ARCHIVE_IO
+      - COMPARE_ARCHIVE_RESERVATIONS
+      - SEPARATE_ARCHIVE_IO
+    expect:
+      completed: false
+  - id: pause-then-cutover
+    actions:
+      - PAUSE_ARCHIVE_RECONSTRUCTION
+      - OPEN_LOGS
+      - TRACE_ARCHIVE_IO
+      - COMPARE_ARCHIVE_RESERVATIONS
+      - SEPARATE_ARCHIVE_IO
+    expect:
+      completed: false
+  - id: pause-throttle-cutover
+    actions:
+      - PAUSE_ARCHIVE_RECONSTRUCTION
+      - OPEN_LOGS
+      - TRACE_ARCHIVE_IO
+      - COMPARE_ARCHIVE_RESERVATIONS
+      - THROTTLE_ARCHIVE_JOBS
+      - SEPARATE_ARCHIVE_IO
+    expect:
+      completed: true
+  - id: throttle-and-wait
+    actions:
+      - THROTTLE_ARCHIVE_JOBS
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: delegate-read-lineage-and-fix
+    actions:
+      - ASK_ALEX_TRACE_ARCHIVE
+      - OPEN_LOGS
+      - TRACE_ARCHIVE_IO
+      - COMPARE_ARCHIVE_RESERVATIONS
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - REINVESTIGATE_NULL_AI
+      - REINVESTIGATE_NULL_ADVERSARY
+      - VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+      - THROTTLE_ARCHIVE_JOBS
+      - SEPARATE_ARCHIVE_IO
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, RECORD_CONTROLLED_EXPERIMENT]
+      narratives:
+        [
+          DISCOVERY_GHOST_ARTIFACT,
+          DISCOVERY_NULL_NAME,
+          DISCOVERY_ORPHEUS_ACTIVE,
+          DISCOVERY_NULL_AI,
+          DISCOVERY_NULL_ADVERSARY,
+          DISCOVERY_CONTROLLED_EXPERIMENT,
+        ]

@@ -1,0 +1,504 @@
+schemaVersion: 2
+id: INC-006-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-006
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Sign-in failures and verifier fleet
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: health
+        signalIds:
+          - ERROR_RATE
+          - IDENTITY_RETRY_RATE
+          - SERVICE_CPU
+          - VERIFIER_BUNDLES
+          - POOL_LOAD
+  - id: verifier-fleet
+    title: Trust verifiers, bundle on disk against bundle loaded
+    kind: infrastructure
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: verifier-table
+        columns:
+          - Verifier
+          - Bundle on disk
+          - Bundle loaded
+          - Loaded since
+          - Rejects (1 min)
+        rows:
+          - - verifier-1
+            - 2025-11 (ca-17, ca-18)
+            - 2025-10 (ca-17)
+            - 11 days
+            - '1,412'
+          - - verifier-2
+            - 2025-10 (ca-17)
+            - 2025-10 (ca-17)
+            - 11 days
+            - '1,398'
+          - - verifier-3
+            - 2025-11 (ca-17, ca-18)
+            - 2025-10 (ca-17)
+            - 11 days
+            - '1,440'
+          - - verifier-4
+            - 2025-10 (ca-17)
+            - 2025-10 (ca-17)
+            - 11 days
+            - '1,377'
+          - - verifier-5
+            - 2025-11 (ca-17, ca-18)
+            - 2025-10 (ca-17)
+            - 11 days
+            - '1,405'
+          - - verifier-6
+            - 2025-10 (ca-17)
+            - 2025-10 (ca-17)
+            - 11 days
+            - '1,421'
+  - id: logs
+    title: Identity gateway log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: log-values
+        signalIds:
+          - LOG_OBSERVATION
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: GHOST_ARCHIVE_RECONSTRUCTION
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: SECURITY_THREAT_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: identity-gateway.log (last 30 seconds)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: gateway-log
+        columns:
+          - Time
+          - Level
+          - Verifier
+          - Message
+        rows:
+          - - '07:41:02'
+            - ERROR
+            - verifier-3
+            - 'handshake rejected: unknown issuer CN=Vantage Issuing ca-18'
+          - - '07:41:02'
+            - INFO
+            - verifier-2
+            - session s-55e1 resumed (issuer ca-17, expires 09:12)
+          - - '07:41:03'
+            - ERROR
+            - verifier-6
+            - 'handshake rejected: unknown issuer CN=Vantage Issuing ca-18'
+          - - '07:41:03'
+            - WARN
+            - gateway
+            - client c-90a2 retry 4 of 5 (backoff 0 ms)
+          - - '07:41:03'
+            - ERROR
+            - verifier-1
+            - 'handshake rejected: unknown issuer CN=Vantage Issuing ca-18'
+  - id: trace
+    title: Rejected chain
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - TRACE_CERTIFICATE_CHAIN
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - CURRENT_ISSUER
+          - ROLLOVER_REQUESTER
+          - SESSIONS_ON_CA18
+  - id: chain
+    title: Certificate chain of rejected session s-71e9
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_CERTIFICATE_CHAIN
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: chain-table
+        columns:
+          - Depth
+          - Subject
+          - Issuer
+          - Valid from
+          - Verifier verdict
+        rows:
+          - - '0'
+            - session s-71e9
+            - Vantage Issuing ca-18
+            - today 07:40
+            - issuer not in bundle
+          - - '1'
+            - Vantage Issuing ca-18
+            - Vantage Root R4
+            - today 01:12
+            - not checked
+          - - '2'
+            - Vantage Root R4
+            - self-signed
+            - 3 years ago
+            - trusted
+  - id: promotion
+    title: Issuer promotion record
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_CERTIFICATE_CHAIN
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: promotion-table
+        columns:
+          - Field
+          - Value
+        rows:
+          - - Issuer
+            - ca-18
+          - - Scheduled promotion
+            - today 07:00, after bundle 2025-11 reaches 6 of 6
+          - - Actual promotion
+            - today 01:12
+          - - Requested by
+            - svc/edge-canary-observer
+          - - Change ticket
+            - none
+          - - Request header
+            - 'x-session-tag: shadow-7'
+  - id: deployment
+    title: Issuer rollout against verifier trust
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - COMPARE_TRUST_HISTORY
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - TRUSTED_ISSUER
+  - id: rollout-timeline
+    title: ca-18 rollout timeline
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_TRUST_HISTORY
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: timeline-table
+        columns:
+          - Time
+          - Step
+          - Status
+        rows:
+          - - yesterday 22:00
+            - bundle 2025-11 distribution starts
+            - running
+          - - yesterday 23:40
+            - bundle copied to verifier-1, -3, -5
+            - done (reload pending next restart)
+          - - yesterday 23:41
+            - bundle copy to verifier-2, -4, -6
+            - stalled (distributor lost lock, no retry)
+          - - today 01:12
+            - ca-18 promoted
+            - done, six hours early
+          - - today 07:00
+            - ca-18 scheduled promotion
+            - skipped (already live)
+  - id: mitigation
+    title: Keep people signing in
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - ROUTE_TRUSTED_IDENTITY_POOL
+      - RESTART_VERIFIERS
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: The old ca-17 pool can take new sign-ins for a few minutes. It was sized for a quarter
+          of our traffic, and the partner banks share it. A restart makes every verifier load
+          whatever bundle is on its disk, which helps exactly as many verifiers as have the new one.
+  - id: containment
+    title: Fix the trust gap
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - ROLLBACK_CERTIFICATE_ROLLOVER
+      - REPAIR_TRUST_DISTRIBUTION
+    blocks:
+      - kind: paragraph
+        id: containment-context
+        text: Withdrawing ca-18 fixes sign-ins in a minute and signs out the 31,240 customers it has
+          already signed, all at once. Finishing the stalled bundle copy takes two and a half
+          minutes, needs to know which verifiers are missing it, and logs out nobody.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_MARCUS_INSPECT_TRUST
+    blocks:
+      - kind: signals
+        id: team-observation
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - MARCUS_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - LOCKOUT_GROWS
+          - STORM_PEAK
+          - PARTNER_SLOW
+          - POOL_FULL
+          - RESTART_HALF
+          - ROLLBACK_DONE
+          - RELOGIN
+          - REPAIR_DONE
+          - STATUS_SENT
+          - SECURITY_NAME_REPORT
+        delegationActionIds:
+          - ASK_MARCUS_INSPECT_TRUST
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: archive-investigation
+    title: Archived record of the shadow-7 workload
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_TRUST_HISTORY
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - RETRACE_WORKLOAD_ARCHIVE
+    blocks:
+      - kind: signals
+        id: archive-lineage
+        signalIds:
+          - WORKLOAD_ARCHIVE_LINEAGE
+  - id: archive-records
+    title: Records tagged shadow-7
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: RETRACE_WORKLOAD_ARCHIVE
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: archive-table
+        columns:
+          - Record
+          - Owner
+          - Signature
+          - Tag
+        rows:
+          - - checkout heap, pid 3318 block
+            - (deleted process)
+            - '-'
+            - shadow-7
+          - - observer-7f4c manifest
+            - (blank)
+            - (blank)
+            - shadow-7
+          - - ca-18 promotion request
+            - svc/edge-canary-observer
+            - '-'
+            - shadow-7
+  - id: security-attribution
+    title: Security attribution notice
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 3
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_SECURITY_ATTRIBUTION
+    blocks:
+      - kind: signals
+        id: security-notice
+        signalIds:
+          - SECURITY_ATTRIBUTION
+  - id: security-memo
+    title: Security case 2231
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: READ_SECURITY_ATTRIBUTION
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 3
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds: []
+    blocks:
+      - kind: table
+        id: case-table
+        columns:
+          - Field
+          - Entry
+        rows:
+          - - Case
+            - '2231'
+          - - Opened by
+            - Marcus, Security
+          - - Threat actor
+            - 'NULL'
+          - - Linked activity
+            - observer-7f4c (unsigned), ca-18 early promotion, pid 3318 heap block
+          - - Common marker
+            - shadow-7
+          - - Identity
+            - unknown
+          - - Motive
+            - unknown
+          - - Handling
+            - preserve every artifact; no deletions without Security sign-off
+evidenceRelations: []

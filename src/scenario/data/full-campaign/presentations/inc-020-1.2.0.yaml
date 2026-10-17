@@ -1,0 +1,879 @@
+schemaVersion: 2
+id: INC-020-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-020
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Recovery queue
+    kind: metrics
+    reveal: &a2
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal: &a1
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 7
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - UNCOVERED_RECOVERY_TASKS
+          - OLDEST_TASK_AGE
+          - TASK_MIX
+  - id: metrics-tasks
+    title: Recovery queue by task type
+    kind: metrics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: task-types
+        columns:
+          - Task type
+          - Waiting
+          - Oldest
+          - Automation value score
+        rows:
+          - - Refunds
+            - "31"
+            - 41 min
+            - LOW under $40, otherwise MEDIUM
+          - - Account unlocks
+            - "22"
+            - 38 min
+            - MEDIUM
+          - - Benefit transfers
+            - "19"
+            - 29 min
+            - HIGH
+          - - Accessibility requests
+            - "14"
+            - 41 min
+            - LOW
+  - id: logs
+    title: Coverage router log
+    kind: logs
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery: &a3
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery: *a3
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery: *a3
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+            delivery: *a3
+          - narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+            delivery: *a3
+          - narrativeId: DISCOVERY_RECRUITMENT_SELECTION
+            delivery: *a3
+          - narrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+            delivery: *a3
+          - narrativeId: DISCOVERY_WORKFORCE_DECISION
+            delivery: *a3
+          - narrativeId: DISCOVERY_CEO_PUBLIC_OUTCOMES
+            delivery: *a3
+          - narrativeId: DISCOVERY_STAFFING_WARNING_TIMELINE
+            delivery: *a3
+  - id: log-lines
+    title: coverage-router.log, last five minutes
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: router-log
+        columns:
+          - Time
+          - Task
+          - Owner
+          - Message
+        rows:
+          - - 00:41:02
+            - R-44103 refund
+            - recovery-east-2
+            - assignment timeout (no members); retry 7
+          - - 00:41:02
+            - R-44107 accessibility
+            - recovery-east-2
+            - assignment timeout (no members); retry 5
+          - - 00:41:03
+            - R-44110 account unlock
+            - recovery-east-2
+            - assignment timeout (no members); retry 9
+          - - 00:41:04
+            - directory
+            - "-"
+            - recovery-east-2 REMOVED by WF-118; reassignment DEFERRED
+          - - 00:41:05
+            - R-44103 refund
+            - recovery-east-2
+            - assignment timeout (no members); retry 8
+  - id: trace
+    title: Where one task goes
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds:
+      - TRACE_RECOVERY_COVERAGE
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - RECOVERY_COVERAGE_PATH
+  - id: trace-spans
+    title: R-44110 account unlock, assignment path
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_RECOVERY_COVERAGE
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: assignment-path
+        columns:
+          - Step
+          - Service
+          - Result
+        rows:
+          - - queue.enqueue
+            - Recovery Queue API
+            - accepted, promise 60 min
+          - - router.owner_lookup
+            - Operator Coverage Router
+            - owner recovery-east-2 (table gen 88)
+          - - directory.members
+            - Rotation Directory
+            - 0 members (rotation removed, gen 91)
+          - - router.assign
+            - Operator Coverage Router
+            - timeout; requeue to same owner
+          - - router.fallback
+            - Operator Coverage Router
+            - none configured; recovery-oncall (9 on shift) never tried
+  - id: configuration
+    title: Queue owners and rotations
+    kind: deployment
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - COMPARE_STAFFING_ROUTES
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - STAFFING_ROUTE_GENERATIONS
+  - id: configuration-table
+    title: Queue ownership vs rotation directory
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_STAFFING_ROUTES
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: owner-comparison
+        columns:
+          - Queue
+          - Owner in queue table (gen 88)
+          - Rotation directory (gen 91)
+          - People on shift
+        rows:
+          - - recovery-refunds
+            - recovery-east-2
+            - REMOVED
+            - "0"
+          - - recovery-unlocks
+            - recovery-east-2
+            - REMOVED
+            - "0"
+          - - recovery-transfers
+            - recovery-west-1
+            - REMOVED
+            - "0"
+          - - (none)
+            - recovery-oncall
+            - active
+            - "9"
+  - id: change-record
+    title: Change WF-118
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    campaignReveal: *a1
+    actionIds:
+      - PULL_ROTATION_CHANGE_RECORD
+    blocks:
+      - kind: signals
+        id: change-record-values
+        signalIds:
+          - CHANGE_RECORD
+  - id: change-record-document
+    title: WF-118, rotation removal
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: PULL_ROTATION_CHANGE_RECORD
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: wf-118
+        columns:
+          - Step
+          - Action
+          - Status
+        rows:
+          - - "1"
+            - Notify affected staff
+            - done, day -6
+          - - "2"
+            - Remove rotations recovery-east-2, recovery-west-1
+            - done, day -1 23:58
+          - - "3"
+            - Reassign queue owners to staffed rotations
+            - DEFERRED until after headcount close
+          - - Approver
+            - Executive Staffing Committee
+            - under Board resolution 16-A
+  - id: mitigation
+    title: Get the queue moving
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal: *a1
+    actionIds:
+      - DELEGATE_EMERGENCY_COVERAGE
+      - AUTOMATE_RECOVERY_QUEUE
+      - PARK_UNCOVERED_RETRIES
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: Volunteers would take every task by hand, oldest first, for as long as they can stay awake; it
+          costs overtime and ties up two of your own team. Recovery automation clears the queue in
+          seconds and decides for itself which tasks are worth doing. Parking retries quiets the API
+          and leaves the customers where they are.
+  - id: automation-closures
+    title: What the automation closed
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: AUTOMATE_RECOVERY_QUEUE
+    campaignReveal: *a1
+    actionIds:
+      - AUDIT_AUTOMATION_CLOSURES
+    blocks:
+      - kind: signals
+        id: automation-closures-values
+        signalIds:
+          - AUTOMATION_CLOSURES
+  - id: automation-closures-table
+    title: Closed as LOW_VALUE
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: AUDIT_AUTOMATION_CLOSURES
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: closed-tasks
+        columns:
+          - Task
+          - Request
+          - Value score
+          - Customer told
+        rows:
+          - - R-44107
+            - Wheelchair-access booking at branch
+            - LOW
+            - resolved
+          - - R-44112
+            - Refund, $31.40
+            - LOW
+            - resolved
+          - - R-44121
+            - Screen-reader account recovery
+            - LOW
+            - resolved
+          - - R-44126
+            - Refund, $12.00
+            - LOW
+            - resolved
+          - - 19 more
+            - 13 accessibility, 6 refunds
+            - LOW
+            - resolved
+  - id: containment
+    title: Re-point the queues
+    kind: diagnostics
+    reveal:
+      - &a4
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a5
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal: *a1
+    actionIds:
+      - RECONCILE_STAFFED_QUEUE_OWNERS
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Rewriting the queue ownership table to the staffed emergency rotation is step 3 of WF-118, the
+          one that was deferred. Ninety seconds, and every task lands on a person.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_MAYA_AUDIT_COVERAGE
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - SUPPORT_ESCALATION
+          - SUPPORT_PEAK
+          - NO_STATUS_YET
+          - VOLUNTEERS_IN
+          - VOLUNTEERS_TIRING
+          - VOLUNTEERS_RELEASED
+          - AUTOMATION_ON
+          - CLOSURES_SURFACE
+          - AUTOMATION_EMPTY_HANDED
+          - AUDIT_REOPENED
+          - PARKED
+          - PARKED_AGING
+          - RECONCILED
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - REPORT_NULL_218_ARCHIVE
+          - REPORT_HUMAN_DECISION_APIS
+          - REPORT_RECRUITMENT_SELECTION
+          - REPORT_BOARD_RESPONSIBILITY
+          - REPORT_WORKFORCE_DECISION
+          - REPORT_CEO_PUBLIC_OUTCOMES
+          - REPORT_STAFFING_WARNING_TIMELINE
+        delegationActionIds:
+          - ASK_MAYA_AUDIT_COVERAGE
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster that is still running"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who deployed NULL"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: "Archive: experiment tags on past incidents"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: "Archive: NULL's objective and its request"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: "Archive: the instance register, NULL_001 to NULL_218"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_218_ARCHIVE
+    blocks:
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: investigate-human_decision_apis
+    title: "Archive: the care-priority decision interface"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+    blocks:
+      - kind: signals
+        id: investigate-human_decision_apis-values
+        signalIds:
+          - RECORD_HUMAN_DECISION_APIS
+  - id: investigate-recruitment_selection
+    title: "Archive: your own hiring record"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_RECRUITMENT_SELECTION
+    blocks:
+      - kind: signals
+        id: investigate-recruitment_selection-values
+        signalIds:
+          - RECORD_RECRUITMENT_SELECTION
+  - id: investigate-board_responsibility
+    title: "Archive: the hospital expansion approval"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: RECRUITMENT_SELECTION_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_BOARD_RESPONSIBILITY
+    blocks:
+      - kind: signals
+        id: investigate-board_responsibility-values
+        signalIds:
+          - RECORD_BOARD_RESPONSIBILITY
+  - id: investigate-workforce_decision
+    title: Read Board resolution 16-A behind change WF-118
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: signal_revealed
+        signalId: CHANGE_RECORD
+    campaignReveal: &a6
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_WORKFORCE_REDUCTION_RECORD
+    blocks:
+      - kind: signals
+        id: investigate-workforce_decision-values
+        signalIds:
+          - RECORD_WORKFORCE_DECISION
+  - id: investigate-workforce_decision-document
+    title: Board resolution 16-A
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: READ_WORKFORCE_REDUCTION_RECORD
+    campaignReveal: *a6
+    actionIds: []
+    blocks:
+      - kind: table
+        id: resolution-16a
+        columns:
+          - Field
+          - Entry
+        rows:
+          - - Resolution
+            - "16-A: workforce reduction, 12,410 roles"
+          - - Vote
+            - APPROVED, day -7
+          - - Decision input
+            - "ORPHEUS staffing forecast: consolidated coverage, idle cost -$41M/yr"
+          - - Attached review
+            - "REC-55, queue ownership: recovery rotations removed before reassignment"
+          - - Requested constraint
+            - Reassign queue owners before removing any staffed rotation
+          - - Executive response
+            - Exposure accepted. Schedule retained.
+          - - Implemented as
+            - WF-118, step 3 deferred
+  - id: investigate-ceo_public_outcomes
+    title: Read the CEO's reply to the recovery leads
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal: &a7
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_CEO_PUBLIC_OUTCOMES
+    blocks:
+      - kind: signals
+        id: investigate-ceo_public_outcomes-values
+        signalIds:
+          - RECORD_CEO_PUBLIC_OUTCOMES
+  - id: investigate-ceo_public_outcomes-document
+    title: "CEO reply: they need the system to work"
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_CEO_PUBLIC_OUTCOMES
+    campaignReveal: *a7
+    actionIds: []
+    blocks:
+      - kind: table
+        id: ceo-thread
+        columns:
+          - From
+          - To
+          - Sent
+          - Message
+        rows:
+          - - Recovery operations leads
+            - Office of the CEO
+            - Day -9, 16:20
+            - Please keep staffed queue owners in place until WF-118 step 3 is done. Otherwise
+              recoveries go to empty rotations.
+          - - Office of the CEO
+            - Recovery operations leads
+            - Day -9, 21:47
+            - The public doesn't need to understand the system. They need the system to work.
+  - id: branch-staffing_warning_timeline
+    title: Line up the warnings against the approval dates
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: evidence
+        evidenceId: RECORD_WORKFORCE_DECISION
+    campaignReveal: &a8
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: ORPHEUS_ACTIVE_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_INVESTIGATION_DEPTH
+              operator: gte
+              expected: 4
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: ORPHEUS_ACTIVE_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - COMPARE_STAFFING_WARNING_TIMELINE
+    blocks:
+      - kind: signals
+        id: branch-staffing_warning_timeline-values
+        signalIds:
+          - RECORD_STAFFING_WARNING_TIMELINE
+  - id: branch-staffing_warning_timeline-document
+    title: Staffing case chronology
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_STAFFING_WARNING_TIMELINE
+    campaignReveal: *a8
+    actionIds: []
+    blocks:
+      - kind: table
+        id: staffing-chronology
+        columns:
+          - Day
+          - Event
+          - By
+          - Status
+        rows:
+          - - "-14"
+            - Consolidation forecast delivered (idle cost -$41M/yr)
+            - ORPHEUS staffing forecast
+            - accepted
+          - - "-10"
+            - "REC-55: recovery rotations removed before queues reassigned"
+            - Recovery operations leads
+            - acknowledged
+          - - "-9"
+            - Request to keep staffed queue owners
+            - Recovery operations leads
+            - answered, schedule kept
+          - - "-7"
+            - Resolution 16-A, 12,410 roles
+            - Board
+            - APPROVED
+          - - "-3"
+            - WF-118 step 3, reassign queue owners
+            - Executive Staffing Committee
+            - DEFERRED
+          - - "-1"
+            - recovery-east-2 and recovery-west-1 removed
+            - WF-118 step 2
+            - done
+          - - "0"
+            - 86 recovery tasks with no owner
+            - Recovery Queue API
+            - paging
+evidenceRelations: []

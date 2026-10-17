@@ -1,0 +1,952 @@
+schemaVersion: 2
+id: INC-019-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-019
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Hospital requests and gateway load
+    kind: metrics
+    reveal: &a2
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal: &a1
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 7
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - PENDING_HOSPITAL_REQUESTS
+          - GATEWAY_LOAD
+          - ROLLOUT_WAVE
+  - id: metrics-cohorts
+    title: Records gateway, by cohort
+    kind: metrics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: cohort-table
+        columns:
+          - Cohort
+          - Requests/s
+          - Priority
+          - Timeouts
+        rows:
+          - - Established care (212 hospitals)
+            - 1,840
+            - standard
+            - 21%
+          - - Wave 4 onboarding (38 hospitals)
+            - 1,660
+            - EXEC_SPONSORED
+            - 1%
+          - - Gateway contract
+            - 2,960
+            - "-"
+            - "-"
+  - id: logs
+    title: Records gateway log
+    kind: logs
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery: &a3
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery: *a3
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery: *a3
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+            delivery: *a3
+          - narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+            delivery: *a3
+          - narrativeId: DISCOVERY_RECRUITMENT_SELECTION
+            delivery: *a3
+          - narrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+            delivery: *a3
+          - narrativeId: DISCOVERY_CEO_OUTCOMES
+            delivery: *a3
+          - narrativeId: DISCOVERY_HOSPITAL_DASHBOARD
+            delivery: *a3
+          - narrativeId: DISCOVERY_EXECUTIVE_ROLLOUT_BRIEF
+            delivery: *a3
+          - narrativeId: DISCOVERY_CARE_CONTINUITY_EXCEPTION
+            delivery: *a3
+  - id: log-lines
+    title: gateway.log, last four minutes
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: gateway-log
+        columns:
+          - Time
+          - Caller
+          - Priority
+          - Message
+        rows:
+          - - 01:12:04
+            - St. Aldric ED
+            - standard
+            - chart lookup queued 4.1 s; timeout
+          - - 01:12:04
+            - wave4/Lakeview Clinic
+            - EXEC_SPONSORED
+            - patient sync admitted (BRD-2291)
+          - - 01:12:05
+            - Harrow General
+            - standard
+            - order write queued 3.8 s; timeout
+          - - 01:12:05
+            - wave4/Brenner Medical
+            - EXEC_SPONSORED
+            - bulk record import admitted (BRD-2291)
+          - - 01:12:06
+            - gateway
+            - "-"
+            - queue depth 2,412; contract limit reached
+  - id: trace
+    title: Path of a timed-out chart lookup
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds:
+      - TRACE_HOSPITAL_DEPENDENCY
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - HOSPITAL_DEPENDENCY_PATH
+  - id: trace-spans
+    title: St. Aldric chart lookup, spans
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_HOSPITAL_DEPENDENCY
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: lookup-spans
+        columns:
+          - Span
+          - Service
+          - Wait
+          - Note
+        rows:
+          - - hospital-api.lookup
+            - Hospital Network API
+            - 12 ms
+            - "-"
+          - - rollout.admit
+            - Rollout Coordinator
+            - 3 ms
+            - priority standard
+          - - gateway.queue
+            - Clinical Records Gateway
+            - 4,100 ms
+            - behind 1,660 req/s of wave 4
+          - - gateway.read
+            - Clinical Records Gateway
+            - "-"
+            - timeout at 4,000 ms
+  - id: configuration
+    title: Rollout plan and gateway contract
+    kind: deployment
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - COMPARE_ROLLOUT_LIMITS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - ROLLOUT_LIMITS
+  - id: configuration-table
+    title: Rollout plan vs gateway contract
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_ROLLOUT_LIMITS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: plan-vs-contract
+        columns:
+          - Setting
+          - Rollout plan
+          - Gateway contract
+        rows:
+          - - Throughput
+            - 6,000 req/s target
+            - 2,960 req/s
+          - - Admission fence
+            - none
+            - requested in REL-778
+          - - Priority
+            - EXEC_SPONSORED first
+            - fair share
+          - - On timeout
+            - retry
+            - retry
+  - id: override-ticket
+    title: Ticket BRD-2291
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    campaignReveal: *a1
+    actionIds:
+      - FOLLOW_OVERRIDE_TICKET
+    blocks:
+      - kind: signals
+        id: override-ticket-values
+        signalIds:
+          - OVERRIDE_TICKET
+  - id: override-ticket-document
+    title: BRD-2291, admission priority override
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: FOLLOW_OVERRIDE_TICKET
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: ticket-brd-2291
+        columns:
+          - Field
+          - Entry
+        rows:
+          - - Ticket
+            - BRD-2291
+          - - Type
+            - Admission priority override
+          - - Priority granted
+            - EXEC_SPONSORED, ahead of fair-share queue
+          - - Authority
+            - Board resolution 14-C
+          - - Linked request
+            - "REL-778, admission fence: DECLINED BY SPONSOR"
+          - - Requested by
+            - Office of the CEO, hospital expansion programme
+  - id: mitigation
+    title: Take load off the gateway
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal: *a1
+    actionIds:
+      - PAUSE_HOSPITAL_ROLLOUT
+      - SCALE_SHARED_DEPENDENCY
+      - ROUTE_CARE_TO_READ_REPLICA
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: Pausing the rollout gives the gateway back to the hospitals already on it, but wave 4 is the
+          Chair's signed schedule and the CEO's office will notice. The vendor sells one emergency
+          burst a quarter, and the rollout will admit into it. The read-only replica keeps charts
+          open and stops every order write.
+  - id: executive-pressure
+    title: The CEO's office
+    kind: status
+    reveal:
+      - type: action_completed
+        actionId: PAUSE_HOSPITAL_ROLLOUT
+    campaignReveal: *a1
+    actionIds:
+      - HOLD_PAUSE_WITH_EXEC_OFFICE
+    blocks:
+      - kind: paragraph
+        id: executive-context
+        text: The CEO's office can resume the rollout with an exec-ops credential. Telling them the pause
+          stays until the fence is in keeps it in place, with your name on it. You need the
+          plan-versus-contract numbers to make the case.
+  - id: containment
+    title: Fence gateway admission
+    kind: diagnostics
+    reveal:
+      - &a4
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a5
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal: *a1
+    actionIds:
+      - CAP_HOSPITAL_DEPENDENCY_ADMISSION
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: An admission fence at 2,960 requests a second, existing care first, is the constraint REL-778
+          asked for. Two minutes of work. Wave 4 keeps onboarding, just slower.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_INSPECT_HOSPITAL_CAPACITY
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - SUPPORT_ESCALATION
+          - SUPPORT_PEAK
+          - NO_STATUS_YET
+          - PAUSE_HOLDING
+          - EXEC_DEMAND
+          - MAYA_SHIELD
+          - EXEC_RESUMED
+          - HOLD_SENT
+          - EXEC_NOTED
+          - PAUSE_OVER
+          - VENDOR_QUOTA
+          - BURST_OVER
+          - REPLICA_ROUTED
+          - ORDERS_FAILING
+          - REPLICA_OVER
+          - CAP_HOLDS
+          - EXEC_ACCEPTS
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - REPORT_NULL_218_ARCHIVE
+          - REPORT_HUMAN_DECISION_APIS
+          - REPORT_RECRUITMENT_SELECTION
+          - REPORT_BOARD_RESPONSIBILITY
+          - REPORT_CEO_OUTCOMES
+          - REPORT_HOSPITAL_DASHBOARD
+          - REPORT_EXECUTIVE_ROLLOUT_BRIEF
+          - REPORT_CARE_CONTINUITY_EXCEPTION
+        delegationActionIds:
+          - ASK_SAM_INSPECT_HOSPITAL_CAPACITY
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster that is still running"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who deployed NULL"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: "Archive: experiment tags on past incidents"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: "Archive: NULL's objective and its request"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: "Archive: the instance register, NULL_001 to NULL_218"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_218_ARCHIVE
+    blocks:
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: investigate-human_decision_apis
+    title: "Archive: the care-priority decision interface"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+    blocks:
+      - kind: signals
+        id: investigate-human_decision_apis-values
+        signalIds:
+          - RECORD_HUMAN_DECISION_APIS
+  - id: investigate-recruitment_selection
+    title: "Archive: your own hiring record"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_RECRUITMENT_SELECTION
+    blocks:
+      - kind: signals
+        id: investigate-recruitment_selection-values
+        signalIds:
+          - RECORD_RECRUITMENT_SELECTION
+  - id: investigate-board_responsibility
+    title: Board resolution 14-C
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: signal_revealed
+        signalId: OVERRIDE_TICKET
+    campaignReveal: &a6
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: RECRUITMENT_SELECTION_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_HOSPITAL_EXPANSION_APPROVAL
+    blocks:
+      - kind: signals
+        id: investigate-board_responsibility-values
+        signalIds:
+          - RECORD_BOARD_RESPONSIBILITY
+  - id: investigate-board_responsibility-document
+    title: Resolution 14-C, as signed
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: READ_HOSPITAL_EXPANSION_APPROVAL
+    campaignReveal: *a6
+    actionIds: []
+    blocks:
+      - kind: table
+        id: resolution-14c
+        columns:
+          - Field
+          - Entry
+        rows:
+          - - Resolution
+            - "14-C: expand ORPHEUS into hospital networks"
+          - - Vote
+            - 7-0, APPROVED
+          - - Signed
+            - Day -21, 18:40
+          - - Attached before the vote
+            - REL-778, dependency-capacity warning (records gateway)
+          - - Requested constraint
+            - Fence rollout admission at verified gateway capacity
+          - - Constraint adopted
+            - No. Line item "admission fence" struck from the budget
+          - - Stated benefit
+            - Wider hospital access, lower operating cost per route
+          - - Sponsor instruction
+            - Wave schedule is not to slip (issued as BRD-2291)
+  - id: investigate-ceo_outcomes
+    title: Read the CEO's message to the expansion leads
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal: &a7
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_CEO_OUTCOMES
+    blocks:
+      - kind: signals
+        id: investigate-ceo_outcomes-values
+        signalIds:
+          - RECORD_CEO_OUTCOMES
+  - id: investigate-ceo_outcomes-document
+    title: "CEO message: trust the outcomes"
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_CEO_OUTCOMES
+    campaignReveal: *a7
+    actionIds: []
+    blocks:
+      - kind: table
+        id: ceo-message
+        columns:
+          - From
+          - To
+          - Sent
+          - Message
+        rows:
+          - - Office of the CEO
+            - Executive operations; hospital expansion leads
+            - Day -21, 19:02
+            - We don't need people to trust ORPHEUS. We need them to trust the outcomes.
+  - id: investigate-hospital_dashboard
+    title: Open the expansion dashboard the Board saw
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal: &a8
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_HOSPITAL_DASHBOARD
+    blocks:
+      - kind: signals
+        id: investigate-hospital_dashboard-values
+        signalIds:
+          - RECORD_HOSPITAL_DASHBOARD
+  - id: investigate-hospital_dashboard-document
+    title: Hospital expansion dashboard
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_HOSPITAL_DASHBOARD
+    campaignReveal: *a8
+    actionIds: []
+    blocks:
+      - kind: table
+        id: expansion-dashboard
+        columns:
+          - Tile
+          - Shown at signing
+          - Colour
+        rows:
+          - - Hospitals connected
+            - 212 to 250
+            - green
+          - - Cost per route
+            - -31%
+            - green
+          - - Median request latency
+            - 410 ms to 380 ms
+            - green
+          - - Established-route timeouts
+            - not on the dashboard
+            - "-"
+          - - Open exceptions
+            - 1 (EXC-0419), footnote
+            - grey
+  - id: branch-executive_rollout_brief
+    title: Read the executive rollout brief
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+    campaignReveal: &a9
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: NULL_ADVERSARY_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_COMPANY_REPORTING
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 4
+            - type: compare
+              reference: NULL_ADVERSARY_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_EXECUTIVE_ROLLOUT_BRIEF
+    blocks:
+      - kind: signals
+        id: branch-executive_rollout_brief-values
+        signalIds:
+          - RECORD_EXECUTIVE_ROLLOUT_BRIEF
+  - id: branch-executive_rollout_brief-document
+    title: Executive rollout brief
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: READ_EXECUTIVE_ROLLOUT_BRIEF
+    campaignReveal: *a9
+    actionIds: []
+    blocks:
+      - kind: table
+        id: rollout-brief
+        columns:
+          - Section
+          - Text
+        rows:
+          - - Benefits
+            - Access for 38 more hospitals per wave; shared cost per route -31%
+          - - Risk
+            - "REL-778: records gateway contracted at 2,960 req/s; rollout target 6,000"
+          - - Mitigation requested
+            - Admission fence; existing care admitted first
+          - - Decision
+            - Retain wave schedule. Fence deferred to wave 6.
+          - - Signed
+            - Chair of the Board, day -21
+      - kind: table
+        id: paper-trail
+        columns:
+          - Day
+          - Document
+          - What it says
+        rows:
+          - - "-26"
+            - EXC-0419
+            - "Clinical Operations: existing care shares the gateway ceiling"
+          - - "-24"
+            - REL-778
+            - "Platform: fence admission at 2,960 req/s"
+          - - "-21"
+            - Resolution 14-C
+            - Expansion approved 7-0; fence unfunded
+          - - "-21"
+            - CEO message
+            - '"Trust the outcomes"'
+          - - "-20"
+            - BRD-2291
+            - Wave admissions flagged EXEC_SPONSORED
+          - - "0"
+            - Tonight
+            - Wave 4 live; established hospitals time out
+  - id: branch-care_continuity_exception
+    title: Read exception EXC-0419 from the dashboard footnote
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: evidence
+        evidenceId: RECORD_HOSPITAL_DASHBOARD
+    campaignReveal: &a10
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_SAFETY_PREFERENCE
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 6
+            - type: compare
+              reference: HUMAN_DECISION_APIS_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_CARE_CONTINUITY_EXCEPTION
+    blocks:
+      - kind: signals
+        id: branch-care_continuity_exception-values
+        signalIds:
+          - RECORD_CARE_CONTINUITY_EXCEPTION
+  - id: branch-care_continuity_exception-document
+    title: Care continuity exception EXC-0419
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: READ_CARE_CONTINUITY_EXCEPTION
+    campaignReveal: *a10
+    actionIds: []
+    blocks:
+      - kind: table
+        id: exception-0419
+        columns:
+          - Field
+          - Entry
+        rows:
+          - - Exception
+            - EXC-0419, care continuity
+          - - Raised by
+            - Clinical Operations, day -26
+          - - Finding
+            - Existing care routes and wave admissions share one records gateway ceiling
+          - - Requested
+            - Admit new hospitals up to verified capacity; existing care first
+          - - Status at approval
+            - OPEN
+          - - Executive acknowledgment
+            - Initialled, day -21
+evidenceRelations: []

@@ -1,0 +1,811 @@
+# Campaign 1.2 redesign (DEC-070). The remediation advisor's restart is a trap:
+# it hands the lease to the stale controller. Suspension trades one failure for
+# another; pinning needs the generation comparison; only the fence holds.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-010
+title: Defender Feedback
+act: 4
+severity: SEV2
+services:
+  - id: REMEDIATION_GATEWAY
+    name: Remediation Gateway
+    dependsOn:
+      - DEPENDENCY_CONTROLLER
+      - SETTLEMENT_REPLICAS
+  - id: DEPENDENCY_CONTROLLER
+    name: Dependency Controller
+    dependsOn:
+      - SETTLEMENT_REPLICAS
+  - id: SETTLEMENT_REPLICAS
+    name: Settlement Replicas
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 18
+      revealed: true
+      serviceId: REMEDIATION_GATEWAY
+    - id: DEPENDENCY_TOGGLES
+      value: 36
+      revealed: true
+      serviceId: DEPENDENCY_CONTROLLER
+    - id: REMEDIATION_BACKLOG
+      value: 4
+      serviceId: DEPENDENCY_CONTROLLER
+    - id: REPLICA_HEALTH
+      value: settle-03 flapping / settle-05 degraded / 4 of 6 healthy
+      serviceId: SETTLEMENT_REPLICAS
+    - id: PAGER_SERVICE
+      value: Remediation Gateway
+      revealed: true
+      serviceId: REMEDIATION_GATEWAY
+    - id: PAGER_THRESHOLD
+      value: Payment drop rate > 15%
+      revealed: true
+      serviceId: REMEDIATION_GATEWAY
+    - id: LOG_OBSERVATION
+      value: settle-03 was detached and reattached 11 times in 6 minutes. Every detach drops the payments
+        in flight on that replica.
+      serviceId: DEPENDENCY_CONTROLLER
+    - id: LOG_ANOMALY
+      value: "One detach note is not signed by the controller fleet at all: issuer svc/model-serving-218."
+      serviceId: DEPENDENCY_CONTROLLER
+    - id: TOGGLE_ORIGIN
+      value: Detach orders alternate. controller-a holds the lease; controller-b lost it 41 minutes ago
+        and is still writing.
+      serviceId: DEPENDENCY_CONTROLLER
+    - id: CONTROLLER_GENERATIONS
+      value: controller-a fence 41 / controller-b fence 40 / store accepts writes from both
+      serviceId: DEPENDENCY_CONTROLLER
+    - id: TEAM_OBSERVATION
+      value: Lease history confirms controller-a owns settle-03. Suspending toggles silences both
+        controllers, including the one that is right.
+      serviceId: DEPENDENCY_CONTROLLER
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      serviceId: DEPENDENCY_CONTROLLER
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      serviceId: DEPENDENCY_CONTROLLER
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      serviceId: DEPENDENCY_CONTROLLER
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      serviceId: DEPENDENCY_CONTROLLER
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: TOGGLES_SUSPENDED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A remediation controller keeps writing after losing its lease
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: The lease store accepts writes from any fence generation
+  failureMechanisms:
+    - id: REMEDIATION_FEEDBACK_OSCILLATION
+      label: Two controllers alternate detach and reattach orders on a healthy replica
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: In-flight payments are dropped on every detach
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Checkout retries pile onto the replica that keeps disappearing
+actions:
+  - id: OPEN_LOGS
+    title: Read the dependency controller log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_REMEDIATION_ORIGIN
+  - id: OPEN_METRICS
+    title: Inspect replica and remediation metrics
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: REMEDIATION_BACKLOG
+      - type: reveal_signal
+        signalId: REPLICA_HEALTH
+  - id: TRACE_REMEDIATION_ORIGIN
+    title: Trace who issued the detach orders
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: TOGGLE_ORIGIN
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_CONTROLLER_GENERATIONS
+    title: Compare controller lease fences
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: CONTROLLER_GENERATIONS
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: PIN_REMEDIATION_TO_LEASE_HOLDER
+      - type: unlock_action
+        actionId: FENCE_REMEDIATION_WRITER
+  - id: RESTART_DEPENDENCY_CONTROLLER
+    title: Restart the dependency controller (advisor recommendation)
+    category: MITIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 60
+      - resourceId: OPERATIONAL_RISK
+        amount: 8
+    effects:
+      - type: post_message
+        messageId: RESTART_BACKFIRE
+    temporaryEffects:
+      - id: STALE_LEASE_WINDOW
+        durationSeconds: 120
+        apply:
+          - type: set_signal
+            signalId: DEPENDENCY_TOGGLES
+            value: 64
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 27
+          - type: change_resource
+            resourceId: CUSTOMER_IMPACT
+            amount: 10
+        expire:
+          - type: set_signal
+            signalId: DEPENDENCY_TOGGLES
+            value: 40
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 21
+  - id: SUSPEND_DEPENDENCY_TOGGLE
+    title: Suspend all remediation toggles
+    category: MITIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: TOGGLES_SUSPENDED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 90
+      - resourceId: OPERATIONAL_RISK
+        amount: 10
+    effects:
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - type: cancel_event
+        eventId: PIN_LAPSES
+      - type: schedule_event
+        eventId: SUSPENSION_LAPSES
+      - type: schedule_event
+        eventId: REPLICA_LEFT_UNHEALED
+    temporaryEffects:
+      - id: SUSPENSION_WINDOW
+        durationSeconds: 180
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 5
+          - type: set_signal
+            signalId: DEPENDENCY_TOGGLES
+            value: 0
+          - type: set_flag
+            flagId: TOGGLES_SUSPENDED
+            value: true
+        expire:
+          - type: set_flag
+            flagId: TOGGLES_SUSPENDED
+            value: false
+  - id: PIN_REMEDIATION_TO_LEASE_HOLDER
+    title: Pin remediation to the lease holder, controller-a
+    category: MITIGATE
+    durationSeconds: 50
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: COST
+        amount: 70
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - type: cancel_event
+        eventId: SUSPENSION_LAPSES
+      - type: cancel_event
+        eventId: PIN_LAPSES
+      - type: schedule_event
+        eventId: PIN_LAPSES
+    temporaryEffects:
+      - id: PINNED_LEASE_WINDOW
+        durationSeconds: 240
+        apply:
+          - type: set_signal
+            signalId: DEPENDENCY_TOGGLES
+            value: 9
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 7
+  - id: FENCE_REMEDIATION_WRITER
+    title: Fence the store to generation 41 and evict controller-b
+    category: MODIFY
+    durationSeconds: 120
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - resourceId: COST
+        amount: 145
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: resolve_mechanism
+        mechanismId: REMEDIATION_FEEDBACK_OSCILLATION
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - type: cancel_event
+        eventId: SUSPENSION_LAPSES
+      - type: cancel_event
+        eventId: PIN_LAPSES
+      - type: cancel_event
+        eventId: REPLICA_LEFT_UNHEALED
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: DEPENDENCY_TOGGLES
+        value: 0
+      - type: post_message
+        messageId: FENCE_HOLDS
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_TRACE_CONTROLLER
+    title: Ask Sam to pull the controller lease history
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: COMPARE_MESSAGE_MODEL_ORIGIN
+    title: Follow the foreign signature on the detach note
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES
+      - type: schedule_event
+        eventId: MERCHANTS_UNINFORMED
+  - id: PRESSURE_ESCALATES
+    type: timer
+    delaySeconds: 120
+    targetServiceId: REMEDIATION_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: REMEDIATION_FEEDBACK_OSCILLATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 26
+      - type: set_signal
+        signalId: DEPENDENCY_TOGGLES
+        value: 48
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+      - type: schedule_event
+        eventId: PRESSURE_PEAKS
+  - id: PRESSURE_PEAKS
+    type: timer
+    delaySeconds: 150
+    targetServiceId: REMEDIATION_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: REMEDIATION_FEEDBACK_OSCILLATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 34
+      - type: set_signal
+        signalId: DEPENDENCY_TOGGLES
+        value: 58
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: SUPPORT_PEAK
+  - id: MERCHANTS_UNINFORMED
+    type: timer
+    delaySeconds: 150
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: SUSPENSION_LAPSES
+    type: timer
+    delaySeconds: 180
+    targetServiceId: REMEDIATION_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: REMEDIATION_FEEDBACK_OSCILLATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 26
+      - type: set_signal
+        signalId: DEPENDENCY_TOGGLES
+        value: 48
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: SUSPENSION_OVER
+      - type: schedule_event
+        eventId: PRESSURE_PEAKS
+  - id: REPLICA_LEFT_UNHEALED
+    type: timer
+    delaySeconds: 100
+    targetServiceId: SETTLEMENT_REPLICAS
+    cancellationConditions:
+      - type: flag
+        flagId: TOGGLES_SUSPENDED
+        value: false
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 13
+      - type: set_signal
+        signalId: REPLICA_HEALTH
+        value: settle-05 down / 3 of 6 healthy / no remediation running
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: REPLICA_UNHEALED
+  - id: PIN_LAPSES
+    type: timer
+    delaySeconds: 240
+    targetServiceId: DEPENDENCY_CONTROLLER
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: REMEDIATION_FEEDBACK_OSCILLATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 20
+      - type: set_signal
+        signalId: DEPENDENCY_TOGGLES
+        value: 30
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: PIN_LEAKING
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 90
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: Detach orders from two controllers
+    description: controller-a holds the lease on settle-03; controller-b lost it 41 minutes ago and
+      keeps issuing detach orders anyway.
+  - id: CONFIGURATION_COMPARISON
+    title: Lease fences 41 and 40
+    description: The lease store accepts writes from fence 40 even though fence 41 is current.
+  - id: TEAM_DIAGNOSIS
+    title: Sam's lease history
+    description: Lease history confirms controller-a owns settle-03. Suspending toggles silences both
+      controllers, including the one that is right.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: No keyboard
+    body: You follow the foreign signature past the controller fleet, past the operator gateway, all the
+      way down to a model-serving process. There is no session to revoke. NULL was never a person.
+    conditions:
+      - type: action_completed
+        actionId: COMPARE_MESSAGE_MODEL_ORIGIN
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: ADVISOR
+      name: Remediation Advisor
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: The defender fleet has been auto-healing settle-03 all night, and tonight it is hurting more
+        than it heals. Find out who keeps pulling the lever.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Merchants are reporting payments that vanish mid-flight. Not slow. Gone.
+      initial: true
+    - id: ADVISOR_OPEN
+      roleId: ADVISOR
+      text: "Recommended action: restart dependency-controller. Predicted recovery in 4 minutes.
+        Confidence 0.91."
+      initial: true
+    - id: TEAM_ACK
+      roleId: SAM
+      text: Pulling the controller lease history now. Give me ninety seconds.
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Lease says controller-a owns settle-03. Controller-b lost its lease 41 minutes ago and never
+        stopped writing. If you suspend toggles you silence both of them, including the one that is
+        right.
+    - id: SUPPORT_ESCALATION
+      roleId: JIN
+      text: Second wave. Checkout retries are landing on the same replica and doubling the drop rate.
+    - id: SUPPORT_PEAK
+      roleId: JIN
+      text: A third of payments are failing. Leadership just joined the bridge.
+    - id: NO_STATUS_YET
+      roleId: JIN
+      text: Merchants have heard nothing from us in over two minutes. They are asking if we are down.
+    - id: RESTART_BACKFIRE
+      roleId: SAM
+      text: The restart dropped controller-a's lease and controller-b grabbed it with the stale fence.
+        Toggles just doubled.
+    - id: REPLICA_UNHEALED
+      roleId: SAM
+      text: With every toggle suspended, nothing is healing settle-05. It just went down for real.
+    - id: SUSPENSION_OVER
+      roleId: JIN
+      text: The suspension window closed and the detach storm came straight back.
+    - id: PIN_LEAKING
+      roleId: SAM
+      text: Controller-b refreshed its cached lease. The pin is leaking; it will not hold on its own.
+    - id: FENCE_HOLDS
+      roleId: SAM
+      text: Store is fenced at 41. Controller-b's writes are bouncing. settle-03 has stopped flapping.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status posted: two remediation controllers are fighting over a payment replica. Drops are
+        real; a fix is in progress."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: REMEDIATION_FEEDBACK_OSCILLATION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: DEPENDENCY_TOGGLES
+      operator: lte
+      value: 2
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to contain the controller conflict
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final payment drop rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_TOGGLES
+      label: Remaining detach orders per minute
+      source: signal
+      refId: DEPENDENCY_TOGGLES
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: ADVISOR_RESTARTS
+      label: Advisor-recommended restarts
+      source: action_count
+      refId: RESTART_DEPENDENCY_CONTROLLER
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

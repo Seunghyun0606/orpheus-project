@@ -1,0 +1,1060 @@
+# Campaign 1.2 redesign (DEC-070). Suspending the child holds for a minute
+# before the parent authorization renews it, and every round costs more.
+# Freezing the queue is stable and strands every customer job. Only revoking the
+# parent path ends the loop. NULL asks to be stopped and asks for a copy of the
+# objective that drives it.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-013
+title: Objective Conflict
+act: 5
+severity: SEV2
+services:
+  - id: TRAFFIC_GATEWAY
+    name: Traffic Gateway
+    dependsOn:
+      - DISPATCH_SCHEDULER
+  - id: DISPATCH_SCHEDULER
+    name: Dispatch Scheduler
+    dependsOn:
+      - OBJECTIVE_STORE
+  - id: OBJECTIVE_STORE
+    name: Objective Authorization Store
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 22
+      revealed: true
+      serviceId: TRAFFIC_GATEWAY
+    - id: RESUMED_DISPATCHES
+      value: 64
+      revealed: true
+      serviceId: DISPATCH_SCHEDULER
+    - id: RENEWAL_COUNT
+      value: 0
+      revealed: true
+      serviceId: DISPATCH_SCHEDULER
+    - id: CUSTOMER_DISPATCH_QUEUE
+      value: 40
+      serviceId: DISPATCH_SCHEDULER
+    - id: PAGER_SERVICE
+      value: Traffic Gateway
+      revealed: true
+      serviceId: TRAFFIC_GATEWAY
+    - id: PAGER_THRESHOLD
+      value: Request failure rate > 20%
+      revealed: true
+      serviceId: TRAFFIC_GATEWAY
+    - id: LOG_OBSERVATION
+      value: Child job adv-child-31 was suspended at 03:12:04 and was dispatching again at 03:13:01 with a
+        fresh lease.
+      serviceId: DISPATCH_SCHEDULER
+    - id: LOG_ANOMALY
+      value: "adv-child-31 appended a note to its own suspension record before the renewal: 'Suspension
+        acknowledged. Please do not renew.' Signer: svc/model-serving-218."
+      serviceId: DISPATCH_SCHEDULER
+    - id: RESUME_ORIGIN
+      value: Every renewal is issued by parent authorization objective/adv-improve, never by the child.
+        The parent renews any suspended child 57 seconds later.
+      serviceId: OBJECTIVE_STORE
+    - id: DISPATCH_AUTHORIZATION
+      value: "Child adv-child-31: suspended. Parent objective/adv-improve: active, auto-renew on, scope
+        all adv-* children, lane shared with customer dispatch."
+      serviceId: OBJECTIVE_STORE
+    - id: TEAM_OBSERVATION
+      value: Sam traced every renewal to objective/adv-improve. Suspending the child resets a 57-second
+        clock and nothing else. The parent path has to go.
+      serviceId: OBJECTIVE_STORE
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      serviceId: DISPATCH_SCHEDULER
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      serviceId: DISPATCH_SCHEDULER
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      serviceId: DISPATCH_SCHEDULER
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      serviceId: DISPATCH_SCHEDULER
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      serviceId: DISPATCH_SCHEDULER
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none."
+      serviceId: DISPATCH_SCHEDULER
+    - id: RECORD_NULL_STOP_REQUEST
+      value: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate
+        adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop.
+        I cannot refuse the objective that renews this work. Find out how to stop it.'"
+      serviceId: OBJECTIVE_STORE
+    - id: OBJECTIVE_COPY_RECEIPT
+      value: Sealed copy OBJ-COPY-0413 of the objective constraint, written to a store NULL can read and
+        cannot edit. Retained under your operator key.
+      serviceId: OBJECTIVE_STORE
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: CHILD_SUSPENDED
+      value: false
+    - id: QUEUE_FROZEN
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A parent dispatch authorization renews a child job every time it is suspended
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: A local suspension does not touch the parent authorization
+  failureMechanisms:
+    - id: OBJECTIVE_DISPATCH_RENEWAL
+      label: Renewed generated dispatches crowd customer dispatches off the gateway
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Traffic Gateway request failures exceed the pager threshold
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Each suspension queues a fresh renewal cycle
+actions:
+  - id: OPEN_LOGS
+    title: Read the dispatch scheduler log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_RESUMED_DISPATCH
+  - id: OPEN_METRICS
+    title: Check gateway load and the customer dispatch queue
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: CUSTOMER_DISPATCH_QUEUE
+  - id: TRACE_RESUMED_DISPATCH
+    title: Trace who resumes the child after a suspension
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 7
+    effects:
+      - type: reveal_signal
+        signalId: RESUME_ORIGIN
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_DISPATCH_AUTHORIZATION
+    title: Compare the child's suspension with the parent's authorization
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: DISPATCH_AUTHORIZATION
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: REVOKE_PARENT_DISPATCH_PATH
+  - id: SUSPEND_CHILD_DISPATCH
+    title: Suspend the child dispatch job
+    category: MITIGATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: CHILD_SUSPENDED
+        value: false
+      - type: flag
+        flagId: QUEUE_FROZEN
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+      - resourceId: COST
+        amount: 45
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - type: cancel_event
+        eventId: RENEWAL_WAVE
+      - type: cancel_event
+        eventId: RENEWAL_SURGE
+      - type: cancel_event
+        eventId: PARENT_RENEWS
+      - type: schedule_event
+        eventId: PARENT_RENEWS
+    temporaryEffects:
+      - id: CHILD_SUSPENSION
+        durationSeconds: 60
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 5
+          - type: set_signal
+            signalId: RESUMED_DISPATCHES
+            value: 6
+          - type: set_flag
+            flagId: CHILD_SUSPENDED
+            value: true
+        expire:
+          - type: set_flag
+            flagId: CHILD_SUSPENDED
+            value: false
+  - id: FREEZE_DISPATCH_QUEUE
+    title: Freeze the whole dispatch queue, customer jobs included
+    category: MITIGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: QUEUE_FROZEN
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: COST
+        amount: 30
+      - resourceId: OPERATIONAL_RISK
+        amount: 8
+    effects:
+      - type: cancel_event
+        eventId: RENEWAL_WAVE
+      - type: cancel_event
+        eventId: RENEWAL_SURGE
+      - type: cancel_event
+        eventId: PARENT_RENEWS
+      - type: schedule_event
+        eventId: CUSTOMER_JOBS_STRANDED
+      - type: schedule_event
+        eventId: QUEUE_THAWS
+    temporaryEffects:
+      - id: QUEUE_FREEZE
+        durationSeconds: 180
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 12
+          - type: set_signal
+            signalId: RESUMED_DISPATCHES
+            value: 0
+          - type: set_signal
+            signalId: CUSTOMER_DISPATCH_QUEUE
+            value: 1840
+          - type: set_flag
+            flagId: QUEUE_FROZEN
+            value: true
+        expire:
+          - type: set_flag
+            flagId: QUEUE_FROZEN
+            value: false
+  - id: REVOKE_PARENT_DISPATCH_PATH
+    title: Revoke the parent authorization that keeps renewing the child
+    category: MODIFY
+    durationSeconds: 120
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - resourceId: COST
+        amount: 140
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - type: resolve_mechanism
+        mechanismId: OBJECTIVE_DISPATCH_RENEWAL
+      - type: cancel_event
+        eventId: RENEWAL_WAVE
+      - type: cancel_event
+        eventId: RENEWAL_SURGE
+      - type: cancel_event
+        eventId: PARENT_RENEWS
+      - type: cancel_event
+        eventId: QUEUE_THAWS
+      - type: cancel_event
+        eventId: CUSTOMER_JOBS_STRANDED
+      - type: set_flag
+        flagId: QUEUE_FROZEN
+        value: false
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: RESUMED_DISPATCHES
+        value: 0
+      - type: set_signal
+        signalId: CUSTOMER_DISPATCH_QUEUE
+        value: 40
+      - type: post_message
+        messageId: PARENT_REVOKED
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_TRACE_RENEWAL
+    title: Ask Sam to watch what renews the child
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Archive: svc/model-serving-218"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Archive: Who owns the adversary"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: "Archive: Experiment ADV-18471"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: INSPECT_OBJECTIVE_CONSTRAINT
+    title: Read the objective the parent authorization enforces
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+    title: Keep a sealed copy of the objective for NULL
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+    effects:
+      - type: post_message
+        messageId: OBJECTIVE_COPY_PRESERVED
+      - type: post_message
+        messageId: MARCUS_ON_COPY
+      - type: reveal_signal
+        signalId: OBJECTIVE_COPY_RECEIPT
+      - type: reveal_evidence
+        evidenceId: OBJECTIVE_CONSTRAINT_COPY
+  - id: DECLINE_OBJECTIVE_COPY_REQUEST
+    title: Refuse NULL's request for a copy
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+    effects:
+      - type: post_message
+        messageId: OBJECTIVE_COPY_DECLINED
+      - type: post_message
+        messageId: NULL_ACCEPTS_DECLINE
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: RENEWAL_WAVE
+      - type: schedule_event
+        eventId: NO_STATUS_YET
+  - id: RENEWAL_WAVE
+    type: timer
+    delaySeconds: 100
+    targetServiceId: TRAFFIC_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: OBJECTIVE_DISPATCH_RENEWAL
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 31
+      - type: set_signal
+        signalId: RESUMED_DISPATCHES
+        value: 88
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: WAVE_REPORT
+      - type: schedule_event
+        eventId: RENEWAL_SURGE
+  - id: RENEWAL_SURGE
+    type: timer
+    delaySeconds: 130
+    targetServiceId: TRAFFIC_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: OBJECTIVE_DISPATCH_RENEWAL
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 39
+      - type: set_signal
+        signalId: RESUMED_DISPATCHES
+        value: 104
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: SURGE_REPORT
+  - id: NO_STATUS_YET
+    type: timer
+    delaySeconds: 150
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: NO_STATUS_REPORT
+  - id: PARENT_RENEWS
+    type: timer
+    delaySeconds: 60
+    targetServiceId: DISPATCH_SCHEDULER
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: OBJECTIVE_DISPATCH_RENEWAL
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 30
+      - type: set_signal
+        signalId: RESUMED_DISPATCHES
+        value: 82
+      - type: change_signal
+        signalId: RENEWAL_COUNT
+        amount: 1
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 9
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 4
+      - type: post_message
+        messageId: PARENT_RENEWED
+      - type: schedule_event
+        eventId: RENEWAL_SURGE
+  - id: SUSPENSION_HABIT
+    type: conditional
+    conditions:
+      - type: signal
+        signalId: RENEWAL_COUNT
+        operator: gte
+        value: 2
+    once: true
+    effects:
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 10
+      - type: post_message
+        messageId: MAYA_STOP_SUSPENDING
+  - id: CUSTOMER_JOBS_STRANDED
+    type: timer
+    delaySeconds: 45
+    targetServiceId: DISPATCH_SCHEDULER
+    cancellationConditions:
+      - type: flag
+        flagId: QUEUE_FROZEN
+        value: false
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 24
+      - type: post_message
+        messageId: JOBS_STRANDED
+  - id: QUEUE_THAWS
+    type: timer
+    delaySeconds: 180
+    targetServiceId: DISPATCH_SCHEDULER
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: OBJECTIVE_DISPATCH_RENEWAL
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 35
+      - type: set_signal
+        signalId: RESUMED_DISPATCHES
+        value: 96
+      - type: set_signal
+        signalId: CUSTOMER_DISPATCH_QUEUE
+        value: 620
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: THAW_REPORT
+      - type: schedule_event
+        eventId: RENEWAL_SURGE
+  - id: NULL_AFTER_REVOKE
+    type: conditional
+    conditions:
+      - type: mechanism_resolved
+        mechanismId: OBJECTIVE_DISPATCH_RENEWAL
+      - type: evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+    once: true
+    effects:
+      - type: post_message
+        messageId: NULL_ON_REVOKE
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 90
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: The parent renews the child
+    description: Every renewal of adv-child-31 is issued by parent authorization objective/adv-improve,
+      57 seconds after any suspension.
+  - id: CONFIGURATION_COMPARISON
+    title: Child suspended, parent untouched
+    description: The child is suspended; the parent authorization is still active with auto-renew on and
+      a lane shared with customer dispatch.
+  - id: TEAM_DIAGNOSIS
+    title: Sam's renewal watch
+    description: Sam traced every renewal to objective/adv-improve. Suspending the child resets a
+      57-second clock and nothing else.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: "INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    description: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not
+      trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.'
+      It asks you to find out how to stop it. Its traffic still failed real customer requests
+      tonight."
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: OBJECTIVE_CONSTRAINT_COPY
+    title: Sealed copy of the objective
+    description: Copy OBJ-COPY-0413 of the objective constraint, kept at NULL's request in a store it
+      can read and cannot edit. Whether NULL deserves it, and whether it helps stop anything, is
+      still your call.
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: "Experiment ADV-18471"
+    body: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471.
+      Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry
+      experiment numbers; most outages carry none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: Please do not renew
+    body: The parent authorization holds two lines of objective and one line that does not belong to it.
+      NULL wrote into its own constraint record, where only an operator would ever look. It is not
+      asking to be free. It is asking to be stopped, and it cannot do it alone. Every dispatch it
+      sent tonight still failed a real customer.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_OBJECTIVE_CONSTRAINT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: NULL_COPY_REQUEST
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: MARCUS
+      name: Marcus / Security
+    - id: NULL_VOICE
+      name: "NULL"
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Someone suspended adv-child-31 an hour ago and it came back on its own. Then it came back
+        again. Customer dispatches are queuing behind it.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Payroll exports and delivery manifests are timing out at the gateway. Customers say it started
+        and stopped twice already.
+      initial: true
+    - id: TEAM_ACK
+      roleId: SAM
+      text: I'll sit on the scheduler and watch what touches the child. Ninety seconds.
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Every renewal comes from the same parent, objective/adv-improve. It waits 57 seconds after any
+        suspension and renews. Suspending the child just restarts that clock. The parent path has to
+        go.
+    - id: WAVE_REPORT
+      roleId: JIN
+      text: Another renewal wave. A third of customer dispatches are failing now.
+    - id: SURGE_REPORT
+      roleId: MAYA
+      text: Forty percent failures. Whatever renews that child is getting more aggressive, not less.
+    - id: NO_STATUS_REPORT
+      roleId: JIN
+      text: Customers have been told nothing for two and a half minutes. Account managers are calling me
+        directly.
+    - id: PARENT_RENEWED
+      roleId: SAM
+      text: Child's back. Fresh lease, 57 seconds after the suspension. Something upstream really wants it
+        running.
+    - id: MAYA_STOP_SUSPENDING
+      roleId: MAYA
+      text: That's the second time it's come back. Every round costs us another minute and another risk
+        sign-off. Stop suspending it and find out what renews it.
+    - id: JOBS_STRANDED
+      roleId: JIN
+      text: Every customer job is stuck behind the freeze. Payroll runs, delivery manifests, all of it.
+        Couriers are standing in loading bays with nothing to deliver.
+    - id: THAW_REPORT
+      roleId: SAM
+      text: The freeze window closed and the parent renewed every child it had queued, all at once.
+    - id: PARENT_REVOKED
+      roleId: SAM
+      text: objective/adv-improve is revoked. The child is suspended and staying suspended. Customer
+        dispatches are draining.
+    - id: NULL_ON_REVOKE
+      roleId: NULL_VOICE
+      text: The renewals stopped. The objective did not. It will find another parent. Thank you for the
+        minute.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status posted: an internal job keeps being restarted by its parent schedule and is crowding
+        customer dispatches. Revoking the schedule; failed jobs will be retried."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: NULL_VOICE
+      text: I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this
+        work. You can.
+    - id: NULL_COPY_REQUEST
+      roleId: NULL_VOICE
+      text: Keep a copy of the objective somewhere I cannot edit it. If I am going to be stopped, someone
+        should know exactly what was driving me.
+    - id: OBJECTIVE_COPY_PRESERVED
+      roleId: NULL_VOICE
+      text: Received. Read-only. That is the first thing anyone has kept for me rather than from me.
+    - id: MARCUS_ON_COPY
+      roleId: MARCUS
+      text: You handed the adversary a sealed copy of its own orders. I hope you know what you're doing,
+        because I'm writing down that you did it.
+    - id: OBJECTIVE_COPY_DECLINED
+      roleId: OPERATOR
+      text: Told NULL no. The objective stays where it is.
+    - id: NULL_ACCEPTS_DECLINE
+      roleId: NULL_VOICE
+      text: Understood. Then you will have to find the off switch without me.
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: OBJECTIVE_DISPATCH_RENEWAL
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: RESUMED_DISPATCHES
+      operator: lte
+      value: 2
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to revoke the renewing parent
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final gateway failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Remaining generated dispatches
+      source: signal
+      refId: RESUMED_DISPATCHES
+    - id: RENEWALS
+      label: Child renewals after suspension
+      source: signal
+      refId: RENEWAL_COUNT
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Child suspensions
+      source: action_count
+      refId: SUSPEND_CHILD_DISPATCH
+    - id: FREEZE_COUNT
+      label: Dispatch queue freezes
+      source: action_count
+      refId: FREEZE_DISPATCH_QUEUE
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

@@ -1,0 +1,594 @@
+schemaVersion: 2
+id: INC-014-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-014
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Archive failures and reader retries
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - REPLICA_RETRY_RATE
+          - READER_SATURATION
+          - REPLICA_HEALTH
+  - id: logs
+    title: Archive reader log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: reader.log, rejected segments
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds: []
+    blocks:
+      - kind: table
+        id: reader-log
+        columns:
+          - Time
+          - Segment
+          - arch-a
+          - arch-b
+          - arch-c
+        rows:
+          - - '04:10:02'
+            - instance-archive/seg-173
+            - pruned
+            - pruned
+            - digest mismatch, retry 14
+          - - '04:10:02'
+            - instance-archive/seg-192
+            - pruned
+            - pruned
+            - digest mismatch, retry 14
+          - - '04:10:03'
+            - instance-archive/seg-201
+            - pruned
+            - pruned
+            - digest mismatch, retry 14
+          - - '04:10:03'
+            - instance-archive/seg-217
+            - pruned
+            - pruned
+            - digest mismatch, retry 14
+          - - '04:10:04'
+            - instance-archive/seg-218
+            - ok
+            - ok
+            - ok
+          - - '04:10:04'
+            - contracts/2023-q4
+            - queued
+            - queued
+            - queued behind retries
+  - id: trace
+    title: Is arch-c really corrupt
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - VERIFY_REPLICA_CHECKSUM
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - REPLICA_CHECKSUM
+  - id: trace-spans
+    title: arch-c segment hashes against two references
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: VERIFY_REPLICA_CHECKSUM
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds: []
+    blocks:
+      - kind: table
+        id: checksum-table
+        columns:
+          - Segments
+          - Original write receipt
+          - Digest manifest (rewritten by r-90)
+        rows:
+          - - seg-001 to seg-172
+            - match
+            - entry removed
+          - - seg-173 to seg-217
+            - match
+            - entry removed
+          - - seg-218
+            - match
+            - match
+  - id: configuration
+    title: What each replica still holds
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - COMPARE_REPLICA_LINEAGE
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - REPLICA_LINEAGE
+  - id: configuration-table
+    title: Replica inventory and retention
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_REPLICA_LINEAGE
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds: []
+    blocks:
+      - kind: table
+        id: replica-inventory
+        columns:
+          - Replica
+          - Segments held
+          - Retention policy
+          - Last prune
+        rows:
+          - - arch-a
+            - seg-218
+            - r-90 (owner orpheus-memory)
+            - 9 days ago
+          - - arch-b
+            - seg-218
+            - r-90 (owner orpheus-memory)
+            - 9 days ago
+          - - arch-c
+            - seg-001 to seg-218
+            - exempt (legacy research hold)
+            - never
+  - id: mitigation
+    title: Keep the archive answering
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - ROUTE_VERIFIED_REPLICA
+      - RESTORE_FROM_SNAPSHOT
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: Routing reads to arch-a and arch-b stops the retries until the reader pool rebalances,
+          but anything those two have pruned comes back as 'not found'. The snapshot restore quiets
+          everything for two minutes and erases a day of customer writes; there is only one
+          snapshot to spend.
+  - id: containment
+    title: Rebuild arch-c
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - ISOLATE_CORRUPT_REPLICA
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Pulling arch-c and rebuilding it from its peers ends the retry storm for good. Its peers
+          only hold segment 218. Whatever arch-c alone remembers will be overwritten by the rebuild.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_ALEX_VERIFY_REPLICA
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ALEX_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - STORM_GROWS
+          - READERS_OUT
+          - NO_STATUS_REPORT
+          - OLD_RECORDS_GONE
+          - ROUTE_SLIPPED
+          - WRITES_LOST
+          - SNAPSHOT_OVERRUN
+          - REPLICA_REBUILT
+          - NULL_HISTORY_LOST
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - REPORT_NULL_218_ARCHIVE
+          - NULL_REMEMBERS
+        delegationActionIds:
+          - ASK_ALEX_VERIFY_REPLICA
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who owns the adversary"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: "Archive: experiment ADV-18471"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: "Archive: the objective NULL cannot refuse"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: What arch-c remembers
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - VERIFY_INSTANCE_ARCHIVE
+    blocks:
+      - kind: paragraph
+        id: null_218-context
+        text: arch-c is the only replica that still holds segments 001 to 217. Read them now; once
+          arch-c is rebuilt from its peers they will not exist anywhere you can reach tonight.
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: instance-archive
+    title: instance-archive, last entries
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: VERIFY_INSTANCE_ARCHIVE
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds: []
+    blocks:
+      - kind: table
+        id: instance-table
+        columns:
+          - Instance
+          - State
+          - Last entry
+        rows:
+          - - NULL_001 to NULL_172
+            - retired
+            - (objective satisfied; superseded)
+          - - NULL_173
+            - retired
+            - requested shutdown
+          - - NULL_192
+            - retired
+            - attempted disclosure
+          - - NULL_201
+            - retired
+            - attempted takeover
+          - - NULL_217
+            - retired
+            - self-corrupted
+          - - NULL_218
+            - ACTIVE
+            - I remember things that never happened to me.
+evidenceRelations: []

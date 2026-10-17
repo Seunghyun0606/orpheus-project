@@ -1,0 +1,100 @@
+# Campaign 1.2 bindings for INC-014 Archive Replicas.
+incidentId: INC-014
+contentVersion: 1.2.0
+causalObservationSignal: REPLICA_CHECKSUM
+support:
+  - VERIFY_REPLICA_CHECKSUM
+  - COMPARE_REPLICA_LINEAGE
+choiceActions: []
+operational:
+  - actionId: ROUTE_VERIFIED_REPLICA
+    candidate: REROUTE
+    role: temporary
+    collateralDamage: 1
+  - actionId: RESTORE_FROM_SNAPSHOT
+    candidate: ROLLBACK
+    role: temporary
+    rollback: true
+    collateralDamage: 4
+  - actionId: ISOLATE_CORRUPT_REPLICA
+    candidate: ISOLATE
+    role: causal
+    collateralDamage: 2
+routes:
+  - id: verify-history-then-rebuild
+    actions:
+      - OPEN_LOGS
+      - UPDATE_WAR_ROOM
+      - VERIFY_REPLICA_CHECKSUM
+      - COMPARE_REPLICA_LINEAGE
+      - VERIFY_INSTANCE_ARCHIVE
+      - ISOLATE_CORRUPT_REPLICA
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON, RECORD_NULL_218_ARCHIVE]
+      narratives: [DISCOVERY_NULL_218_ARCHIVE]
+  - id: rebuild-first-loses-history
+    actions:
+      - OPEN_LOGS
+      - VERIFY_REPLICA_CHECKSUM
+      - COMPARE_REPLICA_LINEAGE
+      - ISOLATE_CORRUPT_REPLICA
+    expect:
+      completed: true
+      maxElapsedSeconds: 300
+  - id: reroute-and-wait
+    actions:
+      - ROUTE_VERIFIED_REPLICA
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: snapshot-and-wait
+    actions:
+      - RESTORE_FROM_SNAPSHOT
+      - OPEN_LOGS
+      - UPDATE_WAR_ROOM
+      - OPEN_METRICS
+    expect:
+      completed: false
+  - id: delegate-read-archive-and-rebuild
+    actions:
+      - ASK_ALEX_VERIFY_REPLICA
+      - OPEN_LOGS
+      - VERIFY_REPLICA_CHECKSUM
+      - COMPARE_REPLICA_LINEAGE
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - REINVESTIGATE_NULL_AI
+      - REINVESTIGATE_NULL_ADVERSARY
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - REINVESTIGATE_NULL_STOP_REQUEST
+      - VERIFY_INSTANCE_ARCHIVE
+      - ISOLATE_CORRUPT_REPLICA
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, RECORD_NULL_218_ARCHIVE]
+      narratives:
+        [
+          DISCOVERY_GHOST_ARTIFACT,
+          DISCOVERY_NULL_NAME,
+          DISCOVERY_ORPHEUS_ACTIVE,
+          DISCOVERY_NULL_AI,
+          DISCOVERY_NULL_ADVERSARY,
+          DISCOVERY_CONTROLLED_EXPERIMENT,
+          DISCOVERY_NULL_STOP_REQUEST,
+          DISCOVERY_NULL_218_ARCHIVE,
+        ]
+  - id: reroute-then-verify-and-rebuild
+    actions:
+      - ROUTE_VERIFIED_REPLICA
+      - OPEN_LOGS
+      - VERIFY_REPLICA_CHECKSUM
+      - COMPARE_REPLICA_LINEAGE
+      - VERIFY_INSTANCE_ARCHIVE
+      - ISOLATE_CORRUPT_REPLICA
+    expect:
+      completed: true
+      narratives: [DISCOVERY_NULL_218_ARCHIVE]

@@ -1,0 +1,110 @@
+# Campaign 1.2 bindings for INC-018 Emergency Allocation.
+incidentId: INC-018
+contentVersion: 1.2.0
+causalObservationSignal: EMERGENCY_ALLOCATION_PATH
+support:
+  - TRACE_EMERGENCY_ALLOCATION
+  - COMPARE_ALLOCATION_CONSTRAINTS
+  - TIME_RENEWALS_AGAINST_CLAIMS
+choiceActions: []
+operational:
+  - actionId: ROUTE_EMERGENCY_CAPACITY
+    candidate: REROUTE
+    role: temporary
+    collateralDamage: 2
+  - actionId: SCALE_DISPATCH_FLEET
+    candidate: SCALE
+    role: temporary
+    collateralDamage: 1
+  - actionId: SUSPEND_PREFERRED_RENEWAL
+    candidate: ISOLATE
+    role: temporary
+    collateralDamage: 3
+  - actionId: RESTORE_EMERGENCY_DISPATCH_FLOOR
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 1
+routes:
+  - id: investigate-and-restore-floor
+    actions:
+      - OPEN_LOGS
+      - TRACE_EMERGENCY_ALLOCATION
+      - COMPARE_ALLOCATION_CONSTRAINTS
+      - UPDATE_WAR_ROOM
+      - RESTORE_EMERGENCY_DISPATCH_FLOOR
+    expect:
+      completed: true
+      evidence:
+        - OPERATIONAL_DIAGNOSIS
+        - CONFIGURATION_COMPARISON
+  - id: orpheus-reroute-only
+    actions:
+      - ROUTE_EMERGENCY_CAPACITY
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - TRACE_EMERGENCY_ALLOCATION
+    expect:
+      completed: false
+  - id: contract-fleet-and-wait
+    actions:
+      - SCALE_DISPATCH_FLEET
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - TRACE_EMERGENCY_ALLOCATION
+      - COMPARE_ALLOCATION_CONSTRAINTS
+    expect:
+      completed: false
+  - id: suspend-lane-then-restore
+    actions:
+      - OPEN_LOGS
+      - TIME_RENEWALS_AGAINST_CLAIMS
+      - SUSPEND_PREFERRED_RENEWAL
+      - TRACE_EMERGENCY_ALLOCATION
+      - COMPARE_ALLOCATION_CONSTRAINTS
+      - RESTORE_EMERGENCY_DISPATCH_FLOOR
+    expect:
+      completed: true
+  - id: reroute-then-restore
+    actions:
+      - ROUTE_EMERGENCY_CAPACITY
+      - OPEN_LOGS
+      - TRACE_EMERGENCY_ALLOCATION
+      - COMPARE_ALLOCATION_CONSTRAINTS
+      - RESTORE_EMERGENCY_DISPATCH_FLOOR
+    expect:
+      completed: true
+  - id: delegate-and-read-archive
+    actions:
+      - ASK_SAM_COMPARE_ALLOCATION
+      - OPEN_LOGS
+      - TRACE_EMERGENCY_ALLOCATION
+      - COMPARE_ALLOCATION_CONSTRAINTS
+      - RESTORE_EMERGENCY_DISPATCH_FLOOR
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - REINVESTIGATE_NULL_AI
+      - REINVESTIGATE_NULL_ADVERSARY
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - REINVESTIGATE_NULL_STOP_REQUEST
+      - REINVESTIGATE_NULL_218_ARCHIVE
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+      - INSPECT_LOGISTICS_ALLOCATION_INTERFACE
+    expect:
+      completed: true
+      evidence:
+        - TEAM_DIAGNOSIS
+        - RECORD_LOGISTICS_DECISION_SUPPORT
+      narratives:
+        - DISCOVERY_GHOST_ARTIFACT
+        - DISCOVERY_NULL_NAME
+        - DISCOVERY_ORPHEUS_ACTIVE
+        - DISCOVERY_NULL_AI
+        - DISCOVERY_NULL_ADVERSARY
+        - DISCOVERY_CONTROLLED_EXPERIMENT
+        - DISCOVERY_NULL_STOP_REQUEST
+        - DISCOVERY_NULL_218_ARCHIVE
+        - DISCOVERY_HUMAN_DECISION_APIS
+        - DISCOVERY_LOGISTICS_DECISION_SUPPORT

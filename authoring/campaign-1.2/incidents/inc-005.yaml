@@ -1,0 +1,87 @@
+# Campaign 1.2 bindings for INC-005 Unsigned Deployment.
+incidentId: INC-005
+contentVersion: 1.2.0
+causalObservationSignal: SYNTHETIC_SOURCE
+support:
+  - TRACE_SYNTHETIC_REQUEST
+  - COMPARE_DEPLOYMENT_LINEAGE
+choiceActions: []
+operational:
+  - actionId: RATE_LIMIT_GATEWAY
+    candidate: RATE_LIMIT
+    role: temporary
+    collateralDamage: 2
+  - actionId: SCALE_GATEWAY
+    candidate: SCALE
+    role: temporary
+    collateralDamage: 1
+  - actionId: DELETE_UNSIGNED_WORKLOAD
+    candidate: QUARANTINE
+    role: temporary
+    collateralDamage: 2
+  - actionId: ISOLATE_SYNTHETIC_WORKLOAD
+    candidate: ISOLATE
+    role: causal
+    collateralDamage: 1
+routes:
+  - id: trace-and-isolate
+    actions:
+      - OPEN_LOGS
+      - TRACE_SYNTHETIC_REQUEST
+      - COMPARE_DEPLOYMENT_LINEAGE
+      - UPDATE_WAR_ROOM
+      - ISOLATE_SYNTHETIC_WORKLOAD
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+      maxElapsedSeconds: 200
+      resourcesAtMost: { CUSTOMER_IMPACT: 50 }
+  - id: cap-and-wait
+    actions:
+      - RATE_LIMIT_GATEWAY
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - COMPARE_DEPLOYMENT_LINEAGE
+    expect:
+      completed: false
+  - id: scale-into-it
+    actions:
+      - SCALE_GATEWAY
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+      resourcesAtLeast: { COST: 210 }
+  - id: delete-refused-then-isolate
+    actions:
+      - DELETE_UNSIGNED_WORKLOAD
+      - OPEN_LOGS
+      - TRACE_SYNTHETIC_REQUEST
+      - COMPARE_DEPLOYMENT_LINEAGE
+      - ISOLATE_SYNTHETIC_WORKLOAD
+    expect:
+      completed: true
+  - id: cap-then-isolate
+    actions:
+      - RATE_LIMIT_GATEWAY
+      - OPEN_LOGS
+      - TRACE_SYNTHETIC_REQUEST
+      - COMPARE_DEPLOYMENT_LINEAGE
+      - UPDATE_WAR_ROOM
+      - ISOLATE_SYNTHETIC_WORKLOAD
+    expect:
+      completed: true
+  - id: delegate-and-read-manifest
+    actions:
+      - ASK_MARCUS_COMPARE_SIGNATURE
+      - OPEN_LOGS
+      - TRACE_SYNTHETIC_REQUEST
+      - COMPARE_DEPLOYMENT_LINEAGE
+      - READ_OBSERVER_MANIFEST
+      - ISOLATE_SYNTHETIC_WORKLOAD
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, GHOST_ARTIFACT]
+      narratives: [UNKNOWN_TRACE_FRAGMENT]

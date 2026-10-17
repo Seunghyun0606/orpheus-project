@@ -1,0 +1,400 @@
+schemaVersion: 2
+id: INC-008-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-008
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: EU failures and edge load
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - CONFLICTING_ROUTE_COUNT
+          - SERVICE_CPU
+          - US_EAST_LOAD
+          - EU_LATENCY_MS
+  - id: logs
+    title: Regional gateway log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: UNKNOWN_TRACE_FRAGMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: gateway.log (eu-central, last minute)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: gateway-log
+        columns:
+          - Time
+          - Level
+          - Edge
+          - Message
+        rows:
+          - - '02:44:03'
+            - INFO
+            - edge-a
+            - 'req 7c1e checkout.eu → next hop edge-b (route r81)'
+          - - '02:44:03'
+            - INFO
+            - edge-b
+            - 'req 7c1e checkout.eu → next hop edge-a (route r82)'
+          - - '02:44:03'
+            - INFO
+            - edge-a
+            - 'req 7c1e checkout.eu → next hop edge-b (route r81)'
+          - - '02:44:04'
+            - ERROR
+            - edge-b
+            - 'req 7c1e dropped: hop limit 8 exceeded'
+          - - '02:44:04'
+            - INFO
+            - edge-a
+            - 'health probe ok (2 ms)'
+          - - '02:44:04'
+            - INFO
+            - edge-b
+            - 'health probe ok (3 ms)'
+  - id: trace
+    title: One EU request, hop by hop
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - TRACE_REGION_REQUEST
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - REQUEST_ROUTE_PATH
+          - UNLISTED_HOP
+  - id: trace-spans
+    title: Trace 7c1e spans
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_REGION_REQUEST
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: trace-hops
+        columns:
+          - Hop
+          - Edge
+          - Route generation
+          - Time in hop
+          - Owner
+        rows:
+          - - '1'
+            - edge-a
+            - r81
+            - 2.1 ms
+            - platform-edge
+          - - '2'
+            - edge-b
+            - r82
+            - 3.4 ms
+            - platform-edge
+          - - '3'
+            - edge-z
+            - —
+            - 0.0 ms
+            - —
+          - - '4'
+            - edge-a
+            - r81
+            - 2.0 ms
+            - platform-edge
+          - - '5'
+            - edge-b
+            - r82
+            - 3.3 ms
+            - platform-edge
+          - - 6–8
+            - edge-a / edge-b
+            - r81 / r82
+            - 7.9 ms
+            - platform-edge
+          - - '9'
+            - —
+            - —
+            - —
+            - 'dropped: hop limit'
+  - id: inventory
+    title: Edge inventory
+    kind: infrastructure
+    reveal:
+      - type: signal_revealed
+        signalId: UNLISTED_HOP
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - LOOKUP_UNLISTED_EDGE
+    blocks:
+      - kind: signals
+        id: inventory-values
+        signalIds:
+          - UNLISTED_EDGE_RECORD
+  - id: inventory-table
+    title: Registered edges
+    kind: infrastructure
+    reveal:
+      - type: action_completed
+        actionId: LOOKUP_UNLISTED_EDGE
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: edge-inventory
+        columns:
+          - Edge
+          - Region
+          - Owner
+          - Status
+        rows:
+          - - edge-a
+            - eu-central
+            - platform-edge
+            - serving
+          - - edge-b
+            - eu-central
+            - platform-edge
+            - serving
+          - - edge-c
+            - us-east
+            - platform-edge
+            - serving
+          - - edge-d
+            - us-east
+            - platform-edge
+            - serving
+          - - edge-z
+            - (no record)
+            - (no record)
+            - answers on management network
+  - id: configuration
+    title: Route generations
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - COMPARE_ROUTE_GENERATIONS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - ROUTE_GENERATIONS
+  - id: generation-table
+    title: What each publisher is sending
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_ROUTE_GENERATIONS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: route-generations
+        columns:
+          - Source
+          - Generation
+          - Commit record
+          - Last published
+          - EU routes point to
+          - Edges following
+        rows:
+          - - controller-a
+            - r81
+            - 7f3a2c (02:10)
+            - '02:43:58'
+            - edge-b for overflow
+            - edge-a
+          - - controller-b
+            - r82
+            - none (draft)
+            - '02:44:01'
+            - edge-a for overflow
+            - edge-b
+          - - boot cache
+            - r79
+            - 19c0e4 (3 weeks ago)
+            - loaded on restart
+            - us-east
+            - none
+  - id: mitigation
+    title: Buy time
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - RESTART_ROUTE_CONTROLLER
+      - DRAIN_EDGE_B
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: Priya's restart cleared the March flapping in two minutes, and it is ready to go. A
+          restarted controller has to boot from something, though. Draining edge-b breaks the loop
+          for sure, but every EU customer then waits on edge-a alone.
+  - id: containment
+    title: Fence the route generations
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - RECONCILE_ROUTE_GENERATIONS
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Edges stop accepting any generation without a commit record and fall back to r81.
+          Two minutes of careful rollout across the fleet, and controller-b can publish all it
+          likes.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_COMPARE_ROUTES
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ONCALL_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - RETRY_WAVE
+          - BROWNOUT
+          - EXEC_WAITING
+          - RESTART_LOOKS_GOOD
+          - US_EAST_SATURATED
+          - DRAIN_DONE
+          - DRAIN_STRAINING
+          - FENCE_HOLDS
+          - STATUS_SENT
+        delegationActionIds:
+          - ASK_SAM_COMPARE_ROUTES
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: artifact
+    title: Unidentified route trace fragment
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: ROUTE_TRACE_FRAGMENT
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: paragraph
+        id: preserved-fragment
+        text: 'UNKNOWN: compare the generations. not the green lights.'
+evidenceRelations: []

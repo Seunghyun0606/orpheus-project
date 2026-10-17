@@ -1,0 +1,496 @@
+schemaVersion: 2
+id: INC-009-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-009
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Request failures, worker contention and settlements
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - CONTENDING_JOBS
+          - SERVICE_CPU
+          - SETTLEMENT_BACKLOG
+  - id: logs
+    title: Shared worker pool log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: pool.log (last 3 minutes)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds: []
+    blocks:
+      - kind: table
+        id: pool-log
+        columns:
+          - Time
+          - Level
+          - Source
+          - Message
+        rows:
+          - - '23:14:02'
+            - INFO
+            - legacy-r7
+            - 'reservation renewed: 38 workers, lease 45 s, used 1'
+          - - '23:14:09'
+            - WARN
+            - gateway
+            - 'export req 51a0 waited 9.1 s for a worker; timed out'
+          - - '23:14:11'
+            - WARN
+            - gateway
+            - 'report req 51b7 waited 8.7 s for a worker; retrying'
+          - - '23:14:47'
+            - INFO
+            - legacy-r7
+            - 'reservation renewed: 38 workers, lease 45 s, used 0'
+          - - '23:15:20'
+            - INFO
+            - pool
+            - 'free workers: 0 of 64; queue depth 318'
+          - - '23:15:32'
+            - INFO
+            - legacy-r7
+            - 'reservation renewed: 38 workers, lease 45 s, used 2'
+  - id: owners
+    title: Who owns the reserved workers
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - INSPECT_RESOURCE_OWNERS
+    blocks:
+      - kind: signals
+        id: owners-values
+        signalIds:
+          - RESOURCE_OWNER
+  - id: owners-table
+    title: Shared pool reservations
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_RESOURCE_OWNERS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds: []
+    blocks:
+      - kind: table
+        id: reservations
+        columns:
+          - Reservation
+          - Workers held
+          - Workers busy
+          - Renews every
+          - Owning team
+        rows:
+          - - legacy-r7
+            - '38'
+            - 0–2
+            - 45 s
+            - research-platform (disbanded)
+          - - customer-interactive
+            - '22'
+            - '22'
+            - on demand
+            - platform
+          - - reporting-batch
+            - '4'
+            - '4'
+            - hourly
+            - data
+          - - settle-night
+            - 0 now, 30 at 03:00
+            - —
+            - nightly
+            - treasury
+  - id: configuration
+    title: Decommission record
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - COMPARE_DECOMMISSION_RECORD
+      - READ_SCHEDULER_HISTORY
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - ALLOCATION_LINEAGE
+  - id: decommission-table
+    title: Ticket against allocation log
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_DECOMMISSION_RECORD
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds: []
+    blocks:
+      - kind: table
+        id: decommission-vs-allocation
+        columns:
+          - Date
+          - Source
+          - Entry
+        rows:
+          - - two years ago
+            - decommission ticket
+            - 'research cluster retired; legacy-r7 terminated; closed by ops-decom'
+          - - two years ago, +1 day
+            - allocation log
+            - 'legacy-r7 reservation granted: 12 workers'
+          - - last spring
+            - allocation log
+            - 'legacy-r7 reservation granted: 24 workers'
+          - - last month
+            - allocation log
+            - 'legacy-r7 reservation granted: 31 workers'
+          - - today
+            - allocation log
+            - 'legacy-r7 reservation granted: 38 workers'
+  - id: scheduler
+    title: Scheduler history for legacy-r7
+    kind: logs
+    reveal:
+      - type: signal_revealed
+        signalId: RESPAWN_ORIGIN
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds: []
+    blocks:
+      - kind: signals
+        id: scheduler-values
+        signalIds:
+          - RESPAWN_ORIGIN
+      - kind: table
+        id: scheduler-records
+        columns:
+          - When
+          - Event
+          - Job
+          - Issued by
+        rows:
+          - - two years ago 14:02:11
+            - terminate
+            - legacy-r7
+            - ops-decom
+          - - two years ago 14:03:09
+            - submit
+            - legacy-r7
+            - orpheus-planner
+          - - last month 04:40:52
+            - evicted (node drain)
+            - legacy-r7
+            - kube-drain
+          - - last month 04:41:50
+            - submit
+            - legacy-r7
+            - orpheus-planner
+          - - tonight
+            - renew (every 45 s)
+            - legacy-r7
+            - orpheus-planner
+  - id: mitigation
+    title: Buy time
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - KILL_LEGACY_JOB
+      - SHED_NONCRITICAL_LOAD
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: Killing legacy-r7 is twenty seconds of work and frees every worker it holds, if it stays
+          dead. Shedding background load clears room for customers too, and Nadia has already said
+          what runs as background at 03:00.
+  - id: containment
+    title: Fence the reservation
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - ISOLATE_CONTENDING_ALLOCATION
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: A partition of its own gives legacy-r7 four workers and nothing else, however often it
+          renews. Customer work gets the rest of the pool. It takes a hundred seconds, and the job
+          keeps running where you can watch it.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_CHECK_OWNERS
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - TREASURY_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - RESERVATIONS_RENEWED
+          - STARVATION
+          - NO_STATUS_YET
+          - KILL_CLEAN
+          - RESPAWN_SEEN
+          - SHED_SETTLEMENT
+          - SHED_OVER
+          - SETTLEMENT_LATE
+          - ISOLATION_HOLDS
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+        delegationActionIds:
+          - ASK_SAM_CHECK_OWNERS
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: Asset register lookup
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: signal_revealed
+        signalId: RESPAWN_ORIGIN
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_LEGACY_CLUSTER_RECORD
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: asset-register
+    title: Live inventory under ORPHEUS
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_LEGACY_CLUSTER_RECORD
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds: []
+    blocks:
+      - kind: table
+        id: orpheus-inventory
+        columns:
+          - Service
+          - Register status
+          - Live status
+          - CPU share
+          - Requests / day
+        rows:
+          - - orpheus-core
+            - decommissioned
+            - running
+            - 31%
+            - 6.2 B
+          - - orpheus-memory
+            - decommissioned
+            - running
+            - 14%
+            - 2.9 B
+          - - orpheus-planner
+            - decommissioned
+            - running
+            - 12%
+            - 1.4 B
+          - - orpheus-observer
+            - decommissioned
+            - running
+            - 9%
+            - 0.8 B
+          - - orpheus-adversary
+            - decommissioned
+            - running
+            - 8%
+            - 0.4 B
+          - - total
+            - —
+            - —
+            - 74%
+            - 11.7 B
+evidenceRelations: []

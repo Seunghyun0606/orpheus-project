@@ -1,0 +1,708 @@
+# Campaign 1.2 redesign (DEC-070). An unregistered observer workload floods
+# the gateway with synthetic sessions. The limiter cannot tell bots from
+# buyers; extra gateway capacity is eaten by a workload that grows into it;
+# deleting the workload is refused by Security's hold. Only the shadow-7 tag in
+# the gateway log lets the trace find the source, and isolation needs it.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-005
+title: Unsigned Deployment
+act: 2
+severity: SEV1
+services:
+  - id: REQUEST_GATEWAY
+    name: Request Gateway
+    dependsOn:
+      - OBSERVER_WORKLOAD
+  - id: OBSERVER_WORKLOAD
+    name: Unregistered Observer Workload
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 24
+      revealed: true
+      serviceId: REQUEST_GATEWAY
+    - id: SYNTHETIC_REQUEST_RATE
+      value: 4200
+      revealed: true
+      serviceId: OBSERVER_WORKLOAD
+    - id: SERVICE_CPU
+      value: 83
+      revealed: true
+      serviceId: REQUEST_GATEWAY
+    - id: GATEWAY_NODES
+      value: 14
+      serviceId: REQUEST_GATEWAY
+    - id: REAL_THROTTLE
+      value: none
+      serviceId: REQUEST_GATEWAY
+    - id: PAGER_SERVICE
+      value: Request Gateway
+      revealed: true
+      serviceId: REQUEST_GATEWAY
+    - id: PAGER_THRESHOLD
+      value: Request failure rate > 20%
+      revealed: true
+      serviceId: REQUEST_GATEWAY
+    - id: LOG_OBSERVATION
+      value: Thousands of sessions a minute reuse the same few dozen session IDs, open, ask for nothing
+        and close. None of them came in through a signed rollout.
+      serviceId: REQUEST_GATEWAY
+    - id: SESSION_TAG
+      value: "Every repeating session carries the same header: x-session-tag: shadow-7."
+      serviceId: REQUEST_GATEWAY
+    - id: SYNTHETIC_SOURCE
+      value: shadow-7 sessions enter through admission lane observer-workload, pod observer-7f4c in
+        namespace edge-canary. They hold 61% of gateway capacity.
+      serviceId: OBSERVER_WORKLOAD
+    - id: WORKLOAD_APPROVAL
+      value: Manifest present / signature absent / owner unregistered
+      serviceId: OBSERVER_WORKLOAD
+    - id: MANIFEST_FRAGMENT
+      value: "observer-7f4c manifest: owner blank, signature blank, created 22 minutes ago by no
+        pipeline. One comment line at the bottom: you're looking at the wrong service."
+      serviceId: OBSERVER_WORKLOAD
+    - id: TEAM_OBSERVATION
+      value: The signature matches no key Vantage has ever issued. Not revoked, not expired, never
+        ours. Owner field blank. Security wants it kept intact.
+      serviceId: OBSERVER_WORKLOAD
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: GATEWAY_LIMITED
+      value: false
+    - id: GATEWAY_SCALED
+      value: false
+    - id: DELETE_REFUSED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: An unregistered observer workload started in edge-canary
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: The workload has no owner and no deployment signature
+  failureMechanisms:
+    - id: SYNTHETIC_LOAD_AMPLIFICATION
+      label: Synthetic shadow-7 sessions crowd customers out of gateway capacity
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Customer logins and checkouts time out at the gateway
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: The workload grows into any capacity it is given and retries without backoff
+actions:
+  - id: OPEN_LOGS
+    title: Read the request gateway log
+    category: OBSERVE
+    durationSeconds: 25
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: SESSION_TAG
+      - type: unlock_action
+        actionId: TRACE_SYNTHETIC_REQUEST
+  - id: OPEN_METRICS
+    title: Check gateway load and node count
+    category: OBSERVE
+    durationSeconds: 15
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: GATEWAY_NODES
+      - type: reveal_signal
+        signalId: REAL_THROTTLE
+  - id: TRACE_SYNTHETIC_REQUEST
+    title: Follow one shadow-7 session back to where it starts
+    category: INVESTIGATE
+    durationSeconds: 40
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+      - type: signal_revealed
+        signalId: SESSION_TAG
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 7
+    effects:
+      - type: reveal_signal
+        signalId: SYNTHETIC_SOURCE
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_DEPLOYMENT_LINEAGE
+    title: Check the workload against the signed rollout ledger
+    category: DIAGNOSE
+    durationSeconds: 35
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: WORKLOAD_APPROVAL
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: ISOLATE_SYNTHETIC_WORKLOAD
+  - id: READ_OBSERVER_MANIFEST
+    title: Open the observer workload's manifest
+    category: INVESTIGATE
+    durationSeconds: 25
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: SYNTHETIC_SOURCE
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: MANIFEST_FRAGMENT
+  - id: RATE_LIMIT_GATEWAY
+    title: Cap gateway admissions for two minutes
+    category: MITIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: GATEWAY_LIMITED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - resourceId: COST
+        amount: 30
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - type: cancel_event
+        eventId: SYNTH_CLIMBS
+      - type: cancel_event
+        eventId: SYNTH_SURGES
+      - type: cancel_event
+        eventId: GATEWAY_BROWNOUT
+      - type: cancel_event
+        eventId: LIMIT_SATURATES
+      - type: schedule_event
+        eventId: LIMIT_BITES
+      - type: schedule_event
+        eventId: LIMIT_SATURATES
+    temporaryEffects:
+      - id: ADMISSION_CAP
+        durationSeconds: 120
+        apply:
+          - type: set_flag
+            flagId: GATEWAY_LIMITED
+            value: true
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 11
+          - type: set_signal
+            signalId: SYNTHETIC_REQUEST_RATE
+            value: 3000
+          - type: set_signal
+            signalId: REAL_THROTTLE
+            value: 1 in 6 real checkouts rejected with HTTP 429
+          - type: reveal_signal
+            signalId: REAL_THROTTLE
+        expire:
+          - type: set_flag
+            flagId: GATEWAY_LIMITED
+            value: false
+          - type: set_signal
+            signalId: REAL_THROTTLE
+            value: none
+  - id: SCALE_GATEWAY
+    title: Double the gateway's node count
+    category: MITIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: GATEWAY_SCALED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+      - resourceId: COST
+        amount: 150
+      - resourceId: OPERATIONAL_RISK
+        amount: 5
+    effects:
+      - type: cancel_event
+        eventId: SYNTH_CLIMBS
+      - type: cancel_event
+        eventId: SYNTH_SURGES
+      - type: cancel_event
+        eventId: GATEWAY_BROWNOUT
+      - type: set_flag
+        flagId: GATEWAY_SCALED
+        value: true
+      - type: set_signal
+        signalId: GATEWAY_NODES
+        value: 28
+      - type: reveal_signal
+        signalId: GATEWAY_NODES
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 9
+      - type: set_signal
+        signalId: SERVICE_CPU
+        value: 52
+      - type: schedule_event
+        eventId: WORKLOAD_ADAPTS
+  - id: DELETE_UNSIGNED_WORKLOAD
+    title: Delete the unsigned workload
+    category: MITIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: DELETE_REFUSED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: OPERATIONAL_RISK
+        amount: 12
+    effects:
+      - type: set_flag
+        flagId: DELETE_REFUSED
+        value: true
+      - type: post_message
+        messageId: DELETE_BLOCKED
+      - type: post_message
+        messageId: MARCUS_REBUKE
+  - id: ISOLATE_SYNTHETIC_WORKLOAD
+    title: Move the shadow-7 workload off customer capacity
+    category: MODIFY
+    durationSeconds: 75
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - resourceId: COST
+        amount: 90
+      - resourceId: OPERATIONAL_RISK
+        amount: 5
+    effects:
+      - type: resolve_mechanism
+        mechanismId: SYNTHETIC_LOAD_AMPLIFICATION
+      - type: cancel_event
+        eventId: LIMIT_BITES
+      - type: set_flag
+        flagId: GATEWAY_LIMITED
+        value: false
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: SYNTHETIC_REQUEST_RATE
+        value: 380
+      - type: set_signal
+        signalId: SERVICE_CPU
+        value: 47
+      - type: set_signal
+        signalId: REAL_THROTTLE
+        value: none
+      - type: set_signal
+        signalId: WORKLOAD_APPROVAL
+        value: Unregistered workload fenced into quarantine lane q-0. Customer lanes clear. Security
+          hold intact.
+      - type: post_message
+        messageId: ISOLATION_HOLDS
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_MARCUS_COMPARE_SIGNATURE
+    title: Ask Marcus to check the workload's signature
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: MARCUS
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: SYNTH_CLIMBS
+  - id: SYNTH_CLIMBS
+    type: timer
+    delaySeconds: 60
+    targetServiceId: OBSERVER_WORKLOAD
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: SYNTHETIC_LOAD_AMPLIFICATION
+    effects:
+      - type: set_signal
+        signalId: SYNTHETIC_REQUEST_RATE
+        value: 5900
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 33
+      - type: set_signal
+        signalId: SERVICE_CPU
+        value: 91
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: CLIMB_ONE
+      - type: schedule_event
+        eventId: SYNTH_SURGES
+  - id: SYNTH_SURGES
+    type: timer
+    delaySeconds: 90
+    targetServiceId: OBSERVER_WORKLOAD
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: SYNTHETIC_LOAD_AMPLIFICATION
+    effects:
+      - type: set_signal
+        signalId: SYNTHETIC_REQUEST_RATE
+        value: 9100
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 45
+      - type: set_signal
+        signalId: SERVICE_CPU
+        value: 97
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: SURGE
+      - type: schedule_event
+        eventId: GATEWAY_BROWNOUT
+  - id: GATEWAY_BROWNOUT
+    type: timer
+    delaySeconds: 100
+    targetServiceId: REQUEST_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: SYNTHETIC_LOAD_AMPLIFICATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 58
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 26
+      - type: post_message
+        messageId: BROWNOUT
+  - id: LIMIT_BITES
+    type: timer
+    delaySeconds: 45
+    targetServiceId: REQUEST_GATEWAY
+    cancellationConditions:
+      - type: flag
+        flagId: GATEWAY_LIMITED
+        value: false
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: THROTTLED_CUSTOMERS
+  - id: LIMIT_SATURATES
+    type: timer
+    delaySeconds: 120
+    targetServiceId: REQUEST_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: SYNTHETIC_LOAD_AMPLIFICATION
+    effects:
+      - type: set_signal
+        signalId: SYNTHETIC_REQUEST_RATE
+        value: 6600
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 36
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: LIMIT_QUEUE
+      - type: schedule_event
+        eventId: SYNTH_SURGES
+  - id: WORKLOAD_ADAPTS
+    type: timer
+    delaySeconds: 60
+    targetServiceId: OBSERVER_WORKLOAD
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: SYNTHETIC_LOAD_AMPLIFICATION
+    effects:
+      - type: set_signal
+        signalId: SYNTHETIC_REQUEST_RATE
+        value: 8400
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 34
+      - type: set_signal
+        signalId: SERVICE_CPU
+        value: 88
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: change_resource
+        resourceId: COST
+        amount: 60
+      - type: post_message
+        messageId: ADAPTS
+      - type: schedule_event
+        eventId: SYNTH_SURGES
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 75
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: shadow-7 traced to the observer workload
+    description: Sessions tagged shadow-7 enter through admission lane observer-workload (pod
+      observer-7f4c, namespace edge-canary) and hold 61% of gateway capacity.
+  - id: CONFIGURATION_COMPARISON
+    title: No signature, no owner
+    description: The observer manifest is absent from the signed rollout ledger. Signature field
+      blank, owner field blank, created 22 minutes ago by no pipeline.
+  - id: TEAM_DIAGNOSIS
+    title: Marcus's signature check
+    description: The signature matches no key Vantage has ever issued. Owner field blank. The
+      workload is under a Security hold and must stay intact.
+  - id: GHOST_ARTIFACT
+    title: Unregistered workload log fragment
+    description: "UNKNOWN: you're looking at the wrong service."
+    sourceNarrativeId: UNKNOWN_TRACE_FRAGMENT
+narratives:
+  - id: UNKNOWN_TRACE_FRAGMENT
+    title: Unregistered workload log fragment
+    body: "The manifest has every field a deployment needs except the two that say who sent it.
+      Owner: blank. Signature: blank. At the bottom, where nobody puts anything, one comment line.
+      UNKNOWN: you're looking at the wrong service."
+    conditions:
+      - type: action_completed
+        actionId: READ_OBSERVER_MANIFEST
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_MANIFEST
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: MARCUS
+      name: Marcus / Security
+    - id: JIN
+      name: Jin / Support
+    - id: SAM
+      name: Sam / Platform
+    - id: ADMISSION
+      name: Admission Controller
+    - id: OPERATOR
+      name: Operator
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: The gateway is drowning, and most of what's drowning it isn't customers. Tell me what it
+        is before anyone touches it.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Logins and checkouts are both timing out. Customers say the app just thinks forever.
+      initial: true
+    - id: MARCUS_OPEN
+      roleId: MARCUS
+      text: There's a workload in edge-canary that nobody deployed through the pipeline. I've put a
+        Security hold on it. Nobody deletes anything until I've looked.
+      initial: true
+    - id: TEAM_ACK
+      roleId: MARCUS
+      text: Checking its signature against every key we've issued. Seventy-five seconds.
+    - id: TEAM_REPORT
+      roleId: MARCUS
+      text: Signature matches nothing we've ever issued. Not revoked, not expired, never ours. Owner
+        field is blank. Fence it if you need to, but it stays intact. It's evidence now.
+    - id: CLIMB_ONE
+      roleId: JIN
+      text: It just got worse. A third of logins are failing.
+    - id: SURGE
+      roleId: MAYA
+      text: Synthetic traffic just passed nine thousand a second. Whatever this is, it isn't slowing
+        down on its own.
+    - id: BROWNOUT
+      roleId: JIN
+      text: More than half of everything is failing now. The status page is the only thing still
+        loading.
+    - id: THROTTLED_CUSTOMERS
+      roleId: JIN
+      text: The cap can't tell a bot from a buyer. One in six real checkouts is getting "too many
+        requests".
+    - id: LIMIT_QUEUE
+      roleId: SAM
+      text: The cap expired and the workload never backed off. It queued everything we refused and
+        sent it all at once.
+    - id: ADAPTS
+      roleId: SAM
+      text: It grew the moment we did. Synthetic rate doubled within a minute of the new nodes
+        coming up. We're paying for its capacity.
+    - id: DELETE_BLOCKED
+      roleId: ADMISSION
+      text: "delete deployment/observer-7f4c: denied. Policy SEC-HOLD: workload under Security
+        investigation."
+    - id: MARCUS_REBUKE
+      roleId: MARCUS
+      text: Who just tried to delete the observer? It's under my hold. We don't destroy the only
+        evidence we have because it's inconvenient. Isolate it if you have to.
+    - id: ISOLATION_HOLDS
+      roleId: MARCUS
+      text: Good. It's fenced into q-0 and it's still there. I can work with that.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status posted: an unregistered workload is flooding the request gateway. Customers may
+        see timeouts. We are moving it off customer capacity."
+    - id: REPORT_MANIFEST
+      roleId: MARCUS
+      text: No owner, no signature, and a comment addressed to whoever opened it. I'm logging the
+        whole manifest. Nobody edit it.
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: SYNTHETIC_LOAD_AMPLIFICATION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: SYNTHETIC_REQUEST_RATE
+      operator: lte
+      value: 600
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to clear customer capacity
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final gateway failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Final synthetic request rate
+      source: signal
+      refId: SYNTHETIC_REQUEST_RATE
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Admission caps applied
+      source: action_count
+      refId: RATE_LIMIT_GATEWAY
+    - id: DELETE_ATTEMPTS
+      label: Attempts to delete held evidence
+      source: action_count
+      refId: DELETE_UNSIGNED_WORKLOAD
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

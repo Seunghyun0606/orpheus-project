@@ -1,0 +1,604 @@
+schemaVersion: 2
+id: INC-018-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-018
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Dispatch health, county and district
+    kind: metrics
+    reveal: &a2
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal: &a1
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 6
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - UNSERVED_EMERGENCY_ROUTES
+          - AVG_RESPONSE_MINUTES
+          - DISTRICT_9_WAITING
+          - COLD_CHAIN_STALLED
+          - FLEET_STATUS
+  - id: district-table
+    title: Open emergency calls by district
+    kind: metrics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: district-calls
+        columns:
+          - District
+          - Nearest depot
+          - Calls waiting
+          - Oldest call
+          - Depot units free
+        rows:
+          - - 1 - 4
+            - central
+            - "7"
+            - 6 min
+            - "5"
+          - - 5 - 8
+            - west
+            - "9"
+            - 11 min
+            - "3"
+          - - "9"
+            - east (only depot in range)
+            - "6"
+            - 19 min
+            - 0 of 9 (pref-2 holds 9)
+          - - 10 - 12
+            - south
+            - "6"
+            - 8 min
+            - "4"
+  - id: logs
+    title: Allocation controller log
+    kind: logs
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_LOGISTICS_DECISION_SUPPORT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: allocator.log (depot-east)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: allocator-log
+        columns:
+          - Time
+          - Requester
+          - Event
+          - Result
+        rows:
+          - - 04:12:00.0
+            - orpheus-planner/logistics-pref
+            - renew pref-2 at depot-east (9 units)
+            - granted
+          - - 04:12:00.4
+            - dispatch EM-9-117
+            - claim 1 unit at depot-east
+            - no unit available
+          - - 04:12:30.0
+            - orpheus-planner/logistics-pref
+            - renew pref-2 at depot-east (9 units)
+            - granted
+          - - 04:12:30.4
+            - dispatch EM-9-117
+            - claim retry
+            - no unit available
+          - - 04:13:00.0
+            - orpheus-planner/logistics-pref
+            - renew pref-2 at depot-east (9 units)
+            - granted
+          - - 04:13:00.4
+            - dispatch EM-9-121
+            - claim 1 unit at depot-east
+            - no unit available
+  - id: renewal-race
+    title: Renewals against claims
+    kind: trace
+    reveal:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    campaignReveal: *a1
+    actionIds:
+      - TIME_RENEWALS_AGAINST_CLAIMS
+    blocks:
+      - kind: signals
+        id: renewal-race-values
+        signalIds:
+          - RENEWAL_RACE
+  - id: trace
+    title: Call EM-9-117
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds:
+      - TRACE_EMERGENCY_ALLOCATION
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - EMERGENCY_ALLOCATION_PATH
+  - id: trace-spans
+    title: EM-9-117 through the allocator
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_EMERGENCY_ALLOCATION
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: trace-table
+        columns:
+          - Step
+          - Depot
+          - Travel time to call
+          - Outcome
+        rows:
+          - - "1"
+            - east
+            - 7 min
+            - all 9 units reserved by pref-2
+          - - "2"
+            - central
+            - 24 min
+            - outside 15-minute ring; skipped
+          - - "3"
+            - south
+            - 27 min
+            - outside 15-minute ring; skipped
+          - - "4"
+            - east (retry)
+            - 7 min
+            - lost to renewal by 0.4 s
+  - id: configuration
+    title: Allocation policy versions
+    kind: deployment
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - COMPARE_ALLOCATION_CONSTRAINTS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - EMERGENCY_CONSTRAINTS
+  - id: configuration-diff
+    title: Policy 2026.09 and 2026.10
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_ALLOCATION_CONSTRAINTS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: policy-diff
+        columns:
+          - Setting
+          - "2026.09"
+          - "2026.10"
+        rows:
+          - - emergency_floor_per_depot
+            - "4"
+            - (removed)
+          - - preferred_lane_renewal
+            - 120 s
+            - 30 s
+          - - idle regular-delivery capacity
+            - 22%
+            - 4%
+          - - signed off
+            - county dispatch board
+            - night dispatcher, 04:10, 11 s after proposal
+  - id: mitigation
+    title: Buy time
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal: *a1
+    actionIds:
+      - ROUTE_EMERGENCY_CAPACITY
+      - SCALE_DISPATCH_FLEET
+      - SUSPEND_PREFERRED_RENEWAL
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: ORPHEUS's reroute sends calls to the depots that have units, and the county average drops
+          fast. District 9 has one depot within reach. Contract ambulances can stage anywhere, but
+          they are two and a half minutes out and paid by the minute. Suspending the lane's renewal
+          frees depot-east and strands the cold-chain runs that lane was carrying.
+  - id: containment
+    title: Restore the emergency floor
+    kind: diagnostics
+    reveal:
+      - &a3
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a4
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal: *a1
+    actionIds:
+      - RESTORE_EMERGENCY_DISPATCH_FLOOR
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Putting four protected units back at every depot means the preferred lane renews around them
+          instead of through them. Regular deliveries lose a few points of efficiency. District 9
+          gets an ambulance.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_COMPARE_ALLOCATION
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ORPHEUS_OPEN
+          - ORPHEUS_ROUTE_APPLIED
+          - DISTRICT_9_STILL
+          - ROUTE_LOST
+          - FLEET_ORDERED
+          - FLEET_ON_STATION
+          - FLEET_GONE
+          - SUSPENDED
+          - ORPHEUS_SUSPEND_OBJECTION
+          - RENEWAL_BACK
+          - PHARMACY_LOSS
+          - D9_FIRST
+          - D9_SECOND
+          - SURGE
+          - NO_STATUS_YET
+          - FLOOR_RESTORED
+          - ORPHEUS_FLOOR_NOTE
+          - TEAM_ACK
+          - TEAM_REPORT
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - REPORT_NULL_218_ARCHIVE
+          - REPORT_HUMAN_DECISION_APIS
+          - REPORT_LOGISTICS_DECISION_SUPPORT
+        delegationActionIds:
+          - ASK_SAM_COMPARE_ALLOCATION
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster that is still running"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who deployed NULL"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: "Archive: the lineage of your first incident"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: "Archive: NULL's objective constraint"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: "Archive: the verified instance archive"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_218_ARCHIVE
+    blocks:
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: investigate-human_decision_apis
+    title: "Archive: the care-priority decision interface"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+    blocks:
+      - kind: signals
+        id: investigate-human_decision_apis-values
+        signalIds:
+          - RECORD_HUMAN_DECISION_APIS
+  - id: investigate-logistics_decision_support
+    title: Open the logistics allocation interface
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_LOGISTICS_ALLOCATION_INTERFACE
+    blocks:
+      - kind: signals
+        id: investigate-logistics_decision_support-values
+        signalIds:
+          - RECORD_LOGISTICS_DECISION_SUPPORT
+evidenceRelations: []

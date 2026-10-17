@@ -1,0 +1,528 @@
+schemaVersion: 2
+id: INC-012-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-012
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Telemetry writes and IO wait
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - ARCHIVE_IO_WAIT
+          - DASHBOARD_LAG
+          - RECON_QUEUE_DEPTH
+  - id: queue-table
+    title: Archive IO pool, outstanding reservations by class
+    kind: infrastructure
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds: []
+    blocks:
+      - kind: table
+        id: pool-classes
+        columns:
+          - Class
+          - Holder
+          - Outstanding
+          - Share of pool
+        rows:
+          - - archive-read
+            - lineage-audit-0931
+            - '212'
+            - 81%
+          - - telemetry-write
+            - telemetry-api
+            - '38'
+            - 14%
+          - - compaction
+            - nightly-compactor
+            - '6'
+            - 5%
+  - id: logs
+    title: Telemetry API write log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: telemetry-api.log and job registry, last 12 minutes
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds: []
+    blocks:
+      - kind: table
+        id: write-log
+        columns:
+          - Time
+          - Level
+          - Source
+          - Message
+        rows:
+          - - '02:48:03'
+            - INFO
+            - scheduler
+            - 'job lineage-audit-0931 started, class archive-read, hold LH-0931'
+          - - '02:48:03'
+            - INFO
+            - lineage-audit-0931
+            - 'target: session archive op-4172 (INC-001, Connection Saturation)'
+          - - '02:48:03'
+            - NOTE
+            - lineage-audit-0931
+            - 'requested by: lineage-audit; human requester: none'
+          - - '02:50:41'
+            - WARN
+            - telemetry-api
+            - write ack 2 140 ms (budget 2 000 ms), dropped
+          - - '02:57:19'
+            - WARN
+            - telemetry-api
+            - 41 writes dropped in last minute; retrying
+          - - '02:59:58'
+            - INFO
+            - lineage-audit-0931
+            - 'rebuilt 18 of 96 minutes: operator keystrokes, pager acks, chat'
+  - id: trace
+    title: Who is reading the archive
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - TRACE_ARCHIVE_IO
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - ARCHIVE_IO_ORIGIN
+  - id: configuration
+    title: Archive and live-write reservations
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - COMPARE_ARCHIVE_RESERVATIONS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - IO_RESERVATIONS
+  - id: configuration-table
+    title: Reservation policy and cutover runbook
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_ARCHIVE_RESERVATIONS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds: []
+    blocks:
+      - kind: table
+        id: reservation-policy
+        columns:
+          - Setting
+          - archive-read
+          - telemetry-write
+        rows:
+          - - Pool
+            - shared-io-1
+            - shared-io-1
+          - - Cap
+            - none
+            - none
+          - - Priority
+            - hold (legal)
+            - normal
+          - - Cutover copies
+            - every outstanding read
+            - n/a
+          - - Cutover converges when
+            - outstanding < 40
+            - n/a
+          - - Paused job reservations
+            - frozen, not copyable
+            - n/a
+  - id: mitigation
+    title: Slow it down or stop it
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - THROTTLE_ARCHIVE_JOBS
+      - PAUSE_ARCHIVE_RECONSTRUCTION
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: Throttling keeps the job alive at a trickle for up to five minutes. The writes recover
+          most of the way and Legal has no complaint. Pausing frees the pool almost completely, but
+          the job sits under a legal hold, and Legal will not leave a stopped job alone for long.
+  - id: containment
+    title: Give the archive its own pool
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - SEPARATE_ARCHIVE_IO
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: The cutover moves every archive reservation to a pool of its own. It takes two and a half
+          minutes, and it copies whatever is outstanding when it finishes. If the queue is still deep
+          at that point, it fails and drops the writes caught in the copy window.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 5
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_ALEX_TRACE_ARCHIVE
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - LEGAL_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - DASHBOARDS_BEHIND
+          - ALERTS_DROPPED
+          - NO_STATUS_REPORT
+          - LEGAL_ON_THROTTLE
+          - THROTTLE_EXPIRED
+          - LEGAL_ESCALATION
+          - LEGAL_RESUMED
+          - MIGRATION_STARTED
+          - CUTOVER_DONE
+          - CUTOVER_FAILED
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - MAYA_READS_LINEAGE
+        delegationActionIds:
+          - ASK_ALEX_TRACE_ARCHIVE
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who owns the adversary"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: The session being rebuilt
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: lineage-record
+    title: Immutable lineage, session archive op-4172
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 5
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds: []
+    blocks:
+      - kind: table
+        id: lineage-table
+        columns:
+          - Incident
+          - Operator
+          - Classification
+          - Experiment
+        rows:
+          - - INC-001 Connection Saturation
+            - 'EMPLOYEE #4172'
+            - controlled production experiment
+            - ADV-18471
+          - - INC-002
+            - 'EMPLOYEE #4172'
+            - production incident
+            - '-'
+          - - INC-005
+            - 'EMPLOYEE #4172'
+            - restricted
+            - '(redacted)'
+          - - INC-008
+            - 'EMPLOYEE #4172'
+            - production incident
+            - '-'
+evidenceRelations: []

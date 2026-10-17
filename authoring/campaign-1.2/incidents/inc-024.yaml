@@ -1,0 +1,139 @@
+# Campaign 1.2 bindings for INC-024 Observer Audit.
+incidentId: INC-024
+contentVersion: 1.2.0
+causalObservationSignal: AUDIT_IO_CONTENTION_PATH
+support:
+  - TRACE_AUDIT_IO_CONTENTION
+  - COMPARE_AUDIT_RESERVATIONS
+  - TRACE_BATCH_CURSOR
+choiceActions: []
+operational:
+  - actionId: THROTTLE_OBSERVER_BATCH
+    candidate: RATE_LIMIT
+    role: temporary
+    collateralDamage: 1
+  - actionId: KILL_OBSERVER_BATCH
+    candidate: QUARANTINE
+    role: temporary
+    collateralDamage: 3
+  - actionId: ROUTE_LIVE_READS_TO_REPLICA
+    candidate: REROUTE
+    role: temporary
+    collateralDamage: 2
+  - actionId: SEPARATE_LIVE_AUDIT_RESERVATIONS
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 2
+routes:
+  - id: investigate-and-separate
+    actions:
+      - OPEN_LOGS
+      - TRACE_AUDIT_IO_CONTENTION
+      - COMPARE_AUDIT_RESERVATIONS
+      - UPDATE_WAR_ROOM
+      - SEPARATE_LIVE_AUDIT_RESERVATIONS
+    expect:
+      completed: true
+      evidence:
+        - OPERATIONAL_DIAGNOSIS
+        - CONFIGURATION_COMPARISON
+      maxElapsedSeconds: 240
+  - id: kill-the-observer
+    actions:
+      - KILL_OBSERVER_BATCH
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: throttle-and-wait
+    actions:
+      - THROTTLE_OBSERVER_BATCH
+      - OPEN_METRICS
+      - OPEN_LOGS
+      - UPDATE_WAR_ROOM
+      - TRACE_BATCH_CURSOR
+    expect:
+      completed: false
+  - id: replica-then-separate
+    actions:
+      - ROUTE_LIVE_READS_TO_REPLICA
+      - COMPARE_AUDIT_RESERVATIONS
+      - OPEN_LOGS
+      - TRACE_AUDIT_IO_CONTENTION
+      - SEPARATE_LIVE_AUDIT_RESERVATIONS
+    expect:
+      completed: true
+  - id: cursor-to-experiment
+    actions:
+      - OPEN_LOGS
+      - TRACE_BATCH_CURSOR
+      - TRACE_AUDIT_IO_CONTENTION
+      - COMPARE_AUDIT_RESERVATIONS
+      - VERIFY_EXPERIMENT_99172
+      - INSPECT_TERMINATED_PROJECT_LINEAGE
+      - SEPARATE_LIVE_AUDIT_RESERVATIONS
+    expect:
+      completed: true
+      evidence:
+        - RECORD_PLAYER_OBSERVER
+        - RECORD_PROJECT_DISTRIBUTED
+      narratives:
+        - DISCOVERY_PLAYER_OBSERVER
+        - DISCOVERY_PROJECT_DISTRIBUTED
+  - id: delegate-and-read-archive
+    actions:
+      - ASK_ALEX_COMPARE_AUDIT_IO
+      - OPEN_LOGS
+      - TRACE_AUDIT_IO_CONTENTION
+      - COMPARE_AUDIT_RESERVATIONS
+      - SEPARATE_LIVE_AUDIT_RESERVATIONS
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - REINVESTIGATE_NULL_AI
+      - REINVESTIGATE_NULL_ADVERSARY
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - REINVESTIGATE_NULL_STOP_REQUEST
+      - REINVESTIGATE_NULL_218_ARCHIVE
+      - VERIFY_EXPERIMENT_99172
+    expect:
+      completed: true
+      evidence:
+        - TEAM_DIAGNOSIS
+        - RECORD_PLAYER_OBSERVER
+      narratives:
+        - DISCOVERY_GHOST_ARTIFACT
+        - DISCOVERY_NULL_NAME
+        - DISCOVERY_ORPHEUS_ACTIVE
+        - DISCOVERY_NULL_AI
+        - DISCOVERY_NULL_ADVERSARY
+        - DISCOVERY_CONTROLLED_EXPERIMENT
+        - DISCOVERY_NULL_STOP_REQUEST
+        - DISCOVERY_NULL_218_ARCHIVE
+        - DISCOVERY_PLAYER_OBSERVER
+  - id: archive-catch-up
+    actions:
+      - COMPARE_AUDIT_RESERVATIONS
+      - OPEN_LOGS
+      - TRACE_AUDIT_IO_CONTENTION
+      - SEPARATE_LIVE_AUDIT_RESERVATIONS
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+      - REINVESTIGATE_RECRUITMENT_SELECTION
+      - REINVESTIGATE_BOARD_RESPONSIBILITY
+      - REINVESTIGATE_NULL_BLAMES_BOARD
+      - REINVESTIGATE_BOARD_CASE_COMPLETE
+      - REINVESTIGATE_SOFT_CONTROL
+      - REINVESTIGATE_NULL_ADMITS_ERROR
+      - REINVESTIGATE_FEEDBACK_LOOP
+    expect:
+      completed: true
+      narratives:
+        - DISCOVERY_HUMAN_DECISION_APIS
+        - DISCOVERY_RECRUITMENT_SELECTION
+        - DISCOVERY_BOARD_RESPONSIBILITY
+        - DISCOVERY_NULL_BLAMES_BOARD
+        - DISCOVERY_BOARD_CASE_COMPLETE
+        - DISCOVERY_SOFT_CONTROL
+        - DISCOVERY_NULL_ADMITS_ERROR
+        - DISCOVERY_FEEDBACK_LOOP

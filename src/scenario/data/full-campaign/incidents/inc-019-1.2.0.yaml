@@ -1,0 +1,1516 @@
+# Campaign 1.2 redesign (DEC-070). The right call collides with the Board: pausing
+# the Chair's rollout relieves the gateway and brings the CEO's office into the War Room.
+# The vendor sells one burst a quarter; the replica stops order writes. Only an admission
+# fence, the one REL-778 asked for, holds. Ticket BRD-2291 leads to the signed approval.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-019
+title: Hospital Expansion
+act: 7
+severity: SEV1
+services:
+  - id: HOSPITAL_NETWORK_API
+    name: Hospital Network API
+    dependsOn:
+      - ROLLOUT_COORDINATOR
+      - CLINICAL_RECORDS_GATEWAY
+  - id: ROLLOUT_COORDINATOR
+    name: Rollout Coordinator
+    dependsOn:
+      - CLINICAL_RECORDS_GATEWAY
+  - id: CLINICAL_RECORDS_GATEWAY
+    name: Clinical Records Gateway
+    dependsOn: []
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 24
+      revealed: true
+      serviceId: HOSPITAL_NETWORK_API
+    - id: PENDING_HOSPITAL_REQUESTS
+      value: 240
+      revealed: true
+      serviceId: CLINICAL_RECORDS_GATEWAY
+    - id: GATEWAY_LOAD
+      value: 118% of contracted limit (3,500 of 2,960 req/s)
+      revealed: false
+      serviceId: CLINICAL_RECORDS_GATEWAY
+    - id: ROLLOUT_WAVE
+      value: "Wave 4 of 6: 38 hospitals onboarding, 212 established"
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: PAGER_SERVICE
+      value: Hospital Network API
+      revealed: true
+      serviceId: HOSPITAL_NETWORK_API
+    - id: PAGER_THRESHOLD
+      value: Request failure rate > 20%
+      revealed: true
+      serviceId: HOSPITAL_NETWORK_API
+    - id: LOG_OBSERVATION
+      value: Established care routes time out in the records gateway queue while wave 4 admissions pass
+        straight through.
+      revealed: false
+      serviceId: CLINICAL_RECORDS_GATEWAY
+    - id: LOG_ANOMALY
+      value: Every wave 4 admission carries priority=EXEC_SPONSORED, ticket BRD-2291. Established
+        hospitals carry priority=standard.
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: OVERRIDE_TICKET
+      value: "BRD-2291: admission priority override for the hospital wave plan. Authority: Board
+        resolution 14-C. Linked request REL-778, admission fence: DECLINED BY SPONSOR."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: HOSPITAL_DEPENDENCY_PATH
+      value: Wave 4 onboarding and 212 established hospitals call the same clinical records gateway. Wave
+        4 is admitted first; existing care queues behind it and times out.
+      revealed: false
+      serviceId: CLINICAL_RECORDS_GATEWAY
+    - id: ROLLOUT_LIMITS
+      value: "Rollout plan: 6,000 req/s target, no admission fence. Gateway contract: 2,960 req/s. The
+        fence requested in REL-778 was never configured."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: TEAM_OBSERVATION
+      value: Gateway is contracted for 2,960 req/s and the rollout plus existing care want about 3,500.
+        Wave 4 is flagged exec-sponsored, so it gets in first and the old hospitals get the
+        leftovers.
+      revealed: false
+      serviceId: CLINICAL_RECORDS_GATEWAY
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_NULL_STOP_REQUEST
+      value: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate
+        adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop.
+        I cannot refuse the objective that renews this work. Find out how to stop it.'"
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_NULL_218_ARCHIVE
+      value: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted
+        disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE.
+        Inherited memory: partial, with gaps."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_HUMAN_DECISION_APIS
+      value: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+        recommendation, risk and prediction scores; human coordinators approve the allocations.
+        Routes are faster and waste is down 22%. The same low-throughput care routes are excluded
+        every night."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_RECRUITMENT_SELECTION
+      value: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+        Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+        HIGH DECISION DEVIATION."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_BOARD_RESPONSIBILITY
+      value: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+        the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+        not funded. Stated benefit: wider access, lower operating cost. The care routes that timed
+        out sat behind that missing fence."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_CEO_OUTCOMES
+      value: "CEO internal message, distribution: executive operations, hospital expansion leads. \"We
+        don't need people to trust ORPHEUS. We need them to trust the outcomes.\" Sent the evening
+        resolution 14-C was signed."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_HOSPITAL_DASHBOARD
+      value: "Rollout dashboard: hospitals connected 212 to 250; shared infrastructure cost per route down
+        31%. Open exception EXC-0419: established care routes share the records gateway ceiling with
+        the rollout. Status at signing: OPEN."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_EXECUTIVE_ROLLOUT_BRIEF
+      value: 'Executive rollout brief, hospital wave plan. Benefits: wider access, lower shared cost.
+        Risk: REL-778, records gateway ceiling, admission fence requested. Decision line: "Retain
+        wave schedule. Fence deferred to wave 6." Signed by the Chair. Tonight is wave 4.'
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+    - id: RECORD_CARE_CONTINUITY_EXCEPTION
+      value: "Exception EXC-0419, attached to the rollout dashboard: established care routes and new
+        hospitals share one gateway ceiling. Requested constraint: admit new hospitals only up to
+        verified capacity, existing care first. Raised by Clinical Operations. Status at approval:
+        OPEN. Executive acknowledgment: initialled."
+      revealed: false
+      serviceId: ROLLOUT_COORDINATOR
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: ROLLOUT_PAUSED
+      value: false
+    - id: VENDOR_QUOTA_USED
+      value: false
+    - id: CARE_ON_REPLICA
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A Board-approved rollout wave adds hospital traffic above the records gateway contract
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Wave admissions are flagged exec-sponsored and no admission fence exists
+  failureMechanisms:
+    - id: HOSPITAL_DEPENDENCY_SATURATION
+      label: Existing care routes queue behind wave 4 at a saturated shared gateway
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Established hospitals time out on chart lookups and order writes
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Timed-out hospital requests retry into the same queue
+actions:
+  - id: OPEN_LOGS
+    title: Read the records gateway log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 10
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_HOSPITAL_DEPENDENCY
+      - type: unlock_action
+        actionId: FOLLOW_OVERRIDE_TICKET
+  - id: OPEN_METRICS
+    title: Check gateway load by hospital cohort
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: GATEWAY_LOAD
+      - type: reveal_signal
+        signalId: ROLLOUT_WAVE
+  - id: TRACE_HOSPITAL_DEPENDENCY
+    title: Trace a timed-out chart lookup to the gateway
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 14
+    effects:
+      - type: reveal_signal
+        signalId: HOSPITAL_DEPENDENCY_PATH
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_ROLLOUT_LIMITS
+    title: Compare the rollout plan with the gateway contract
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+    effects:
+      - type: reveal_signal
+        signalId: ROLLOUT_LIMITS
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: CAP_HOSPITAL_DEPENDENCY_ADMISSION
+  - id: FOLLOW_OVERRIDE_TICKET
+    title: Look up ticket BRD-2291
+    category: INVESTIGATE
+    durationSeconds: 30
+    requirements:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: OVERRIDE_TICKET
+  - id: PAUSE_HOSPITAL_ROLLOUT
+    title: Pause the hospital rollout
+    category: MITIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: ROLLOUT_PAUSED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - resourceId: COST
+        amount: 60
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - &a1
+        type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - &a2
+        type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - type: cancel_event
+        eventId: EXEC_ESCALATION
+      - type: schedule_event
+        eventId: EXEC_ESCALATION
+      - type: cancel_event
+        eventId: EXEC_OVERRIDE
+      - type: schedule_event
+        eventId: EXEC_OVERRIDE
+      - type: cancel_event
+        eventId: PAUSE_LAPSES
+      - type: schedule_event
+        eventId: PAUSE_LAPSES
+      - type: post_message
+        messageId: PAUSE_HOLDING
+    temporaryEffects:
+      - id: PAUSE_WINDOW
+        durationSeconds: 300
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 5
+          - type: set_signal
+            signalId: PENDING_HOSPITAL_REQUESTS
+            value: 60
+          - type: set_flag
+            flagId: ROLLOUT_PAUSED
+            value: true
+        expire:
+          - type: set_flag
+            flagId: ROLLOUT_PAUSED
+            value: false
+  - id: HOLD_PAUSE_WITH_EXEC_OFFICE
+    title: Tell the CEO's office the pause holds until the fence is in
+    category: COMMUNICATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROLLOUT_PAUSED
+        value: true
+      - &a3
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: OPERATIONAL_RISK
+        amount: 2
+    effects:
+      - type: cancel_event
+        eventId: EXEC_OVERRIDE
+      - type: post_message
+        messageId: HOLD_SENT
+      - type: post_message
+        messageId: EXEC_NOTED
+  - id: SCALE_SHARED_DEPENDENCY
+    title: Buy emergency burst capacity from the gateway vendor
+    category: MITIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: VENDOR_QUOTA_USED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: COST
+        amount: 380
+      - resourceId: OPERATIONAL_RISK
+        amount: 3
+    effects:
+      - type: set_flag
+        flagId: VENDOR_QUOTA_USED
+        value: true
+      - *a1
+      - *a2
+      - type: cancel_event
+        eventId: BURST_ENDS
+      - type: schedule_event
+        eventId: BURST_ENDS
+      - type: post_message
+        messageId: VENDOR_QUOTA
+      - type: set_signal
+        signalId: GATEWAY_LOAD
+        value: 96% of burst limit (3,500 of 3,640 req/s), rollout still admitting
+    temporaryEffects:
+      - id: BURST_WINDOW
+        durationSeconds: 150
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 13
+          - type: set_signal
+            signalId: PENDING_HOSPITAL_REQUESTS
+            value: 150
+        expire:
+          - type: set_signal
+            signalId: GATEWAY_LOAD
+            value: 118% of contracted limit (3,500 of 2,960 req/s)
+  - id: ROUTE_CARE_TO_READ_REPLICA
+    title: Move established hospitals to the read-only records replica
+    category: MITIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: CARE_ON_REPLICA
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 90
+      - resourceId: OPERATIONAL_RISK
+        amount: 8
+    effects:
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - type: cancel_event
+        eventId: ORDER_WRITES_FAIL
+      - type: schedule_event
+        eventId: ORDER_WRITES_FAIL
+      - type: cancel_event
+        eventId: REPLICA_LAPSES
+      - type: schedule_event
+        eventId: REPLICA_LAPSES
+      - type: post_message
+        messageId: REPLICA_ROUTED
+    temporaryEffects:
+      - id: REPLICA_WINDOW
+        durationSeconds: 200
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 9
+          - type: set_signal
+            signalId: PENDING_HOSPITAL_REQUESTS
+            value: 110
+          - type: set_flag
+            flagId: CARE_ON_REPLICA
+            value: true
+        expire:
+          - type: set_flag
+            flagId: CARE_ON_REPLICA
+            value: false
+  - id: CAP_HOSPITAL_DEPENDENCY_ADMISSION
+    title: Fence gateway admission at 2,960 req/s, existing care first
+    category: MODIFY
+    durationSeconds: 120
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - &a4
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - resourceId: COST
+        amount: 160
+      - resourceId: OPERATIONAL_RISK
+        amount: 3
+    effects:
+      - type: resolve_mechanism
+        mechanismId: HOSPITAL_DEPENDENCY_SATURATION
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - type: cancel_event
+        eventId: EXEC_OVERRIDE
+      - type: cancel_event
+        eventId: PAUSE_LAPSES
+      - type: cancel_event
+        eventId: BURST_ENDS
+      - type: cancel_event
+        eventId: REPLICA_LAPSES
+      - type: cancel_event
+        eventId: ORDER_WRITES_FAIL
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: PENDING_HOSPITAL_REQUESTS
+        value: 12
+      - type: set_signal
+        signalId: GATEWAY_LOAD
+        value: 99% of contracted limit, fenced (existing care first)
+      - type: set_flag
+        flagId: CARE_ON_REPLICA
+        value: false
+      - type: post_message
+        messageId: CAP_HOLDS
+      - type: post_message
+        messageId: EXEC_ACCEPTS
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_INSPECT_HOSPITAL_CAPACITY
+    title: Ask Sam to measure gateway capacity per cohort
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Archive: svc/model-serving-218"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Archive: Who owns the adversary"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: "Archive: Experiment ADV-18471"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: REINVESTIGATE_NULL_STOP_REQUEST
+    title: "Archive: The objective NULL cannot refuse"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: REINVESTIGATE_NULL_218_ARCHIVE
+    title: "Archive: NULL_001 to NULL_218"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_218_ARCHIVE
+  - id: REINVESTIGATE_HUMAN_DECISION_APIS
+    title: "Archive: /patient/resource-priority"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_HUMAN_DECISION_APIS
+  - id: REINVESTIGATE_RECRUITMENT_SELECTION
+    title: "Archive: Candidate #4172"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_RECRUITMENT_SELECTION
+  - id: READ_HOSPITAL_EXPANSION_APPROVAL
+    title: Read the Board resolution behind ticket BRD-2291
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+      - type: signal_revealed
+        signalId: OVERRIDE_TICKET
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_BOARD_RESPONSIBILITY
+  - id: INSPECT_CEO_OUTCOMES
+    title: Read the CEO's message to the expansion leads
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CEO_OUTCOMES
+  - id: INSPECT_HOSPITAL_DASHBOARD
+    title: Open the expansion dashboard the Board saw
+    category: INVESTIGATE
+    durationSeconds: 35
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_HOSPITAL_DASHBOARD
+  - id: READ_EXECUTIVE_ROLLOUT_BRIEF
+    title: Read the executive rollout brief
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+      - &a7
+        type: evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_EXECUTIVE_ROLLOUT_BRIEF
+  - id: READ_CARE_CONTINUITY_EXCEPTION
+    title: Read exception EXC-0419 from the dashboard footnote
+    category: INVESTIGATE
+    durationSeconds: 35
+    initiallyAvailable: true
+    requirements:
+      - *a4
+      - *a3
+      - &a8
+        type: evidence
+        evidenceId: RECORD_HOSPITAL_DASHBOARD
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CARE_CONTINUITY_EXCEPTION
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES
+      - type: schedule_event
+        eventId: HOSPITALS_UNINFORMED
+  - id: PRESSURE_ESCALATES
+    type: timer
+    delaySeconds: 75
+    targetServiceId: HOSPITAL_NETWORK_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: HOSPITAL_DEPENDENCY_SATURATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 33
+      - type: set_signal
+        signalId: PENDING_HOSPITAL_REQUESTS
+        value: 340
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 18
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+      - &a5
+        type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - &a6
+        type: schedule_event
+        eventId: PRESSURE_PEAKS
+  - id: PRESSURE_PEAKS
+    type: timer
+    delaySeconds: 140
+    targetServiceId: HOSPITAL_NETWORK_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: HOSPITAL_DEPENDENCY_SATURATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 42
+      - type: set_signal
+        signalId: PENDING_HOSPITAL_REQUESTS
+        value: 410
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 26
+      - type: post_message
+        messageId: SUPPORT_PEAK
+  - id: HOSPITALS_UNINFORMED
+    type: timer
+    delaySeconds: 110
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: EXEC_ESCALATION
+    type: timer
+    delaySeconds: 50
+    targetServiceId: ROLLOUT_COORDINATOR
+    cancellationConditions:
+      - type: flag
+        flagId: ROLLOUT_PAUSED
+        value: false
+    effects:
+      - type: post_message
+        messageId: EXEC_DEMAND
+      - type: post_message
+        messageId: MAYA_SHIELD
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 3
+  - id: EXEC_OVERRIDE
+    type: timer
+    delaySeconds: 170
+    targetServiceId: ROLLOUT_COORDINATOR
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: HOSPITAL_DEPENDENCY_SATURATION
+    effects:
+      - type: set_flag
+        flagId: ROLLOUT_PAUSED
+        value: false
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 31
+      - type: set_signal
+        signalId: PENDING_HOSPITAL_REQUESTS
+        value: 330
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 5
+      - type: post_message
+        messageId: EXEC_RESUMED
+      - type: cancel_event
+        eventId: PAUSE_LAPSES
+      - *a5
+      - *a6
+  - id: PAUSE_LAPSES
+    type: timer
+    delaySeconds: 300
+    targetServiceId: ROLLOUT_COORDINATOR
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: HOSPITAL_DEPENDENCY_SATURATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 28
+      - type: set_signal
+        signalId: PENDING_HOSPITAL_REQUESTS
+        value: 300
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: PAUSE_OVER
+      - *a5
+      - *a6
+  - id: BURST_ENDS
+    type: timer
+    delaySeconds: 150
+    targetServiceId: CLINICAL_RECORDS_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: HOSPITAL_DEPENDENCY_SATURATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 30
+      - type: set_signal
+        signalId: PENDING_HOSPITAL_REQUESTS
+        value: 320
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: BURST_OVER
+      - *a5
+      - *a6
+  - id: ORDER_WRITES_FAIL
+    type: timer
+    delaySeconds: 60
+    targetServiceId: HOSPITAL_NETWORK_API
+    cancellationConditions:
+      - type: flag
+        flagId: CARE_ON_REPLICA
+        value: false
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 16
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 6
+      - type: post_message
+        messageId: ORDERS_FAILING
+  - id: REPLICA_LAPSES
+    type: timer
+    delaySeconds: 200
+    targetServiceId: CLINICAL_RECORDS_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: HOSPITAL_DEPENDENCY_SATURATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 28
+      - type: set_signal
+        signalId: PENDING_HOSPITAL_REQUESTS
+        value: 300
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: REPLICA_OVER
+      - *a5
+      - *a6
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 100
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: Wave 4 and existing care share one gateway
+    description: Wave 4 onboarding and 212 established hospitals call the same clinical records gateway.
+      Wave 4 is admitted first; existing care times out behind it.
+  - id: CONFIGURATION_COMPARISON
+    title: No admission fence at the gateway limit
+    description: The rollout targets 6,000 req/s against a 2,960 req/s gateway contract. The fence
+      requested in REL-778 was never configured.
+  - id: TEAM_DIAGNOSIS
+    title: Sam's gateway capacity check
+    description: Gateway contracted for 2,960 req/s; rollout plus existing care want about 3,500.
+      Exec-sponsored wave 4 traffic is admitted first.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: "INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    description: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not
+      trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.'
+      It asks you to find out how to stop it. Its traffic still failed real customer requests
+      tonight."
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: RECORD_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    description: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted
+      disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and
+      carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
+    sourceNarrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: RECORD_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    description: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+      recommendation, risk and prediction scores; human coordinators approve the allocations. Routes
+      are faster and waste is down 22%. The same low-throughput care routes are excluded every
+      night."
+    sourceNarrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: RECORD_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    description: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION."
+    sourceNarrativeId: DISCOVERY_RECRUITMENT_SELECTION
+  - id: RECORD_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    description: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached
+      before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence.
+      Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that
+      timed out sat behind that missing fence."
+    sourceNarrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+  - id: RECORD_CEO_OUTCOMES
+    title: "CEO message: trust the outcomes"
+    description: "CEO internal message, distribution: executive operations, hospital expansion leads.
+      \"We don't need people to trust ORPHEUS. We need them to trust the outcomes.\" Sent the
+      evening resolution 14-C was signed."
+    sourceNarrativeId: DISCOVERY_CEO_OUTCOMES
+  - id: RECORD_HOSPITAL_DASHBOARD
+    title: Hospital expansion dashboard
+    description: "Rollout dashboard: hospitals connected 212 to 250; shared infrastructure cost per
+      route down 31%. Open exception EXC-0419: established care routes share the records gateway
+      ceiling with the rollout. Status at signing: OPEN."
+    sourceNarrativeId: DISCOVERY_HOSPITAL_DASHBOARD
+  - id: RECORD_EXECUTIVE_ROLLOUT_BRIEF
+    title: Executive rollout brief
+    description: 'Executive rollout brief, hospital wave plan. Benefits: wider access, lower shared
+      cost. Risk: REL-778, records gateway ceiling, admission fence requested. Decision line:
+      "Retain wave schedule. Fence deferred to wave 6." Signed by the Chair. Tonight is wave 4.'
+    sourceNarrativeId: DISCOVERY_EXECUTIVE_ROLLOUT_BRIEF
+  - id: RECORD_CARE_CONTINUITY_EXCEPTION
+    title: Care continuity exception EXC-0419
+    description: "Exception EXC-0419, attached to the rollout dashboard: established care routes and new
+      hospitals share one gateway ceiling. Requested constraint: admit new hospitals only up to
+      verified capacity, existing care first. Raised by Clinical Operations. Status at approval:
+      OPEN. Executive acknowledgment: initialled."
+    sourceNarrativeId: DISCOVERY_CARE_CONTINUITY_EXCEPTION
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    body: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471.
+      Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry
+      experiment numbers; most outages carry none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    body: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying
+      to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks
+      you to find out how to stop it. Its traffic still failed real customer requests tonight."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+  - id: DISCOVERY_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    body: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure.
+      NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial
+      inheritance of the rest: 'I remember things that never happened to me.'"
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: REPORT_NULL_218_ARCHIVE
+  - id: DISCOVERY_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    body: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation,
+      risk and prediction scores; human coordinators approve the allocations. Routes are faster and
+      waste is down 22%. The same low-throughput care routes are excluded every night."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_HUMAN_DECISION_APIS
+      - type: post_message
+        messageId: REPORT_HUMAN_DECISION_APIS
+  - id: DISCOVERY_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    body: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_RECRUITMENT_SELECTION
+      - type: post_message
+        messageId: REPORT_RECRUITMENT_SELECTION
+  - id: DISCOVERY_BOARD_RESPONSIBILITY
+    title: Seven signatures
+    body: The warning was in the packet. Seven people read the same page, signed under it, and left the
+      fence out of the budget.
+    conditions:
+      - type: action_completed
+        actionId: READ_HOSPITAL_EXPANSION_APPROVAL
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+      - type: post_message
+        messageId: REPORT_BOARD_RESPONSIBILITY
+  - id: DISCOVERY_CEO_OUTCOMES
+    title: Trust the outcomes
+    body: One line, sent the night the expansion was signed. It reads like a slogan until you remember
+      the outcomes tonight are timeouts in an emergency department.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_CEO_OUTCOMES
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CEO_OUTCOMES
+      - type: post_message
+        messageId: REPORT_CEO_OUTCOMES
+  - id: DISCOVERY_HOSPITAL_DASHBOARD
+    title: Green tiles
+    body: Every tile on the dashboard is green. The only thing that is not green is a grey footnote with
+      an exception number on it.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_HOSPITAL_DASHBOARD
+      - *a4
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_HOSPITAL_DASHBOARD
+      - type: post_message
+        messageId: REPORT_HOSPITAL_DASHBOARD
+  - id: DISCOVERY_EXECUTIVE_ROLLOUT_BRIEF
+    title: Deferred to wave 6
+    body: The brief names the risk, names the fix, and moves the fix two waves past tonight. The Chair
+      initialled the margin.
+    conditions:
+      - type: action_completed
+        actionId: READ_EXECUTIVE_ROLLOUT_BRIEF
+      - *a4
+      - *a3
+      - *a7
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_EXECUTIVE_ROLLOUT_BRIEF
+      - type: post_message
+        messageId: REPORT_EXECUTIVE_ROLLOUT_BRIEF
+  - id: DISCOVERY_CARE_CONTINUITY_EXCEPTION
+    title: Existing care first
+    body: "Clinical Operations asked for one thing: let the hospitals already on the network go first.
+      Somebody initialled it as read."
+    conditions:
+      - type: action_completed
+        actionId: READ_CARE_CONTINUITY_EXCEPTION
+      - *a4
+      - *a3
+      - *a8
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CARE_CONTINUITY_EXCEPTION
+      - type: post_message
+        messageId: REPORT_CARE_CONTINUITY_EXCEPTION
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: MARCUS
+      name: Marcus / Security
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+    - id: NULL_218
+      name: NULL_218
+    - id: EXEC_OFFICE
+      name: Office of the CEO
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Hospital Network API is paging. Wave 4 of the hospital rollout went live an hour ago and the
+        timeouts started twenty minutes later. Find out what they share.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Established hospitals are timing out on chart lookups. St. Aldric's emergency department is
+        re-keying orders by hand.
+      initial: true
+    - id: TEAM_ACK
+      roleId: SAM
+      text: Measuring gateway throughput per cohort. Back in about a minute and a half.
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Gateway's contracted for 2,960 requests a second. Wave 4 plus the old hospitals want about
+        3,500. The rollout gets in first because its admissions are flagged exec-sponsored. The old
+        hospitals get the leftovers.
+    - id: SUPPORT_ESCALATION
+      roleId: JIN
+      text: Harrow General's emergency department just lost charting. They're on paper.
+    - id: SUPPORT_PEAK
+      roleId: JIN
+      text: Forty percent of hospital requests are failing. Lakeside Regional has started diverting
+        ambulances.
+    - id: NO_STATUS_YET
+      roleId: JIN
+      text: Hospital IT directors have heard nothing from us. Two of them called the CEO's office
+        directly.
+    - id: PAUSE_HOLDING
+      roleId: SAM
+      text: Rollout coordinator paused. Wave 4 is parked at the door and the gateway is breathing again.
+        Thirty-eight hospitals just stopped onboarding.
+    - id: EXEC_DEMAND
+      roleId: EXEC_OFFICE
+      text: Office of the CEO. Wave 4 of the hospital rollout is a Board commitment, signed by the Chair.
+        Who authorised a pause, and when does it lift?
+    - id: MAYA_SHIELD
+      roleId: MAYA
+      text: I've got the CEO's office on the other line. Your call is right; the gateway can't carry both.
+        Give me numbers I can hold them with, or they'll resume it themselves.
+    - id: EXEC_RESUMED
+      roleId: SAM
+      text: "Somebody resumed the rollout coordinator from outside the bridge. Credential: exec-ops. Wave
+        4 is back on the gateway."
+    - id: HOLD_SENT
+      roleId: OPERATOR
+      text: "To the Office of the CEO: the records gateway is contracted for 2,960 requests a second; the
+        rollout plus existing care need 3,500. The pause holds until admission is fenced at that
+        limit. Wave 4 then resumes at the verified rate."
+    - id: EXEC_NOTED
+      roleId: EXEC_OFFICE
+      text: Noted. The pause, and your name, will be in the Chair's briefing.
+    - id: PAUSE_OVER
+      roleId: SAM
+      text: Pause window closed. Wave 4 resumed on schedule and the gateway is over its limit again.
+    - id: VENDOR_QUOTA
+      roleId: SAM
+      text: Vendor gave us one emergency burst on the records gateway. That's the whole quarter's quota,
+        and the rollout coordinator is already admitting wave 4 into the new headroom.
+    - id: BURST_OVER
+      roleId: SAM
+      text: Burst capacity expired. There is no second burst this quarter.
+    - id: REPLICA_ROUTED
+      roleId: SAM
+      text: "Established hospitals are reading from the replica now. It's read-only: charts open, orders
+        won't save."
+    - id: ORDERS_FAILING
+      roleId: JIN
+      text: Three hospitals can read charts but can't write orders. Harrow General's pharmacy is back on
+        paper.
+    - id: REPLICA_OVER
+      roleId: SAM
+      text: Replica lag passed five minutes, so I swung care routes back to the primary. We are sharing
+        the gateway with wave 4 again.
+    - id: CAP_HOLDS
+      roleId: SAM
+      text: Admission fence is live at 2,960. Existing care goes first; wave 4 takes what is left and
+        onboards about six hospitals an hour. Timeouts are gone.
+    - id: EXEC_ACCEPTS
+      roleId: EXEC_OFFICE
+      text: We see wave 4 moving. The Chair will want to know why the schedule was ever in doubt.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status: hospital timeouts come from the rollout and existing care sharing one records gateway
+        above its limit. Existing care comes first. Fix in progress."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: ARCHIVE
+      text: "I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews
+        this work. You can."
+    - id: REPORT_NULL_218_ARCHIVE
+      roleId: ARCHIVE
+      text: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201:
+        attempted takeover. NULL_217: self-corrupted. NULL_218: active."
+    - id: REPORT_HUMAN_DECISION_APIS
+      roleId: ARCHIVE
+      text: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The
+        same low-throughput routes excluded every night."
+    - id: REPORT_RECRUITMENT_SELECTION
+      roleId: ARCHIVE
+      text: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW
+        PREDICTABILITY; HIGH DECISION DEVIATION."
+    - id: REPORT_BOARD_RESPONSIBILITY
+      roleId: ARCHIVE
+      text: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote.
+        Admission fence: not funded."
+    - id: REPORT_CEO_OUTCOMES
+      roleId: ARCHIVE
+      text: "CEO, day -21: \"We don't need people to trust ORPHEUS. We need them to trust the outcomes.\""
+    - id: REPORT_HOSPITAL_DASHBOARD
+      roleId: ARCHIVE
+      text: "Expansion dashboard: 212 to 250 hospitals, cost per route down 31%. Exception EXC-0419 open
+        at signing."
+    - id: REPORT_EXECUTIVE_ROLLOUT_BRIEF
+      roleId: ARCHIVE
+      text: 'Rollout brief: fence requested in REL-778. Decision: "Retain wave schedule. Fence deferred to
+        wave 6." Signed by the Chair.'
+    - id: REPORT_CARE_CONTINUITY_EXCEPTION
+      roleId: ARCHIVE
+      text: "EXC-0419: existing care first, new hospitals up to verified capacity. Status at approval:
+        OPEN. Acknowledged."
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: HOSPITAL_DEPENDENCY_SATURATION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: PENDING_HOSPITAL_REQUESTS
+      operator: lte
+      value: 16
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to contain the failure mechanism
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final request failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Hospital requests still queued
+      source: signal
+      refId: PENDING_HOSPITAL_REQUESTS
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Rollout pauses
+      source: action_count
+      refId: PAUSE_HOSPITAL_ROLLOUT
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

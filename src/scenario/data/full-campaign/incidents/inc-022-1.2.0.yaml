@@ -1,0 +1,1461 @@
+# Campaign 1.2 redesign (DEC-070). ORPHEUS recommends a temporary restore and leaves
+# Druin Coast out because its forecast predicts nobody there. The forecast takes restored
+# capacity back every cycle; slowing it returns nothing; burst capacity goes to the city.
+# Region-level numbers lead to the deck that approved the forecast and the full Board case.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-022
+title: Public Sector Forecast
+act: 7
+severity: SEV2
+services:
+  - id: REGIONAL_RESOURCE_API
+    name: Regional Resource API
+    dependsOn:
+      - FORECAST_ALLOCATION_CONTROLLER
+      - SHARED_REGIONAL_POOL
+  - id: FORECAST_ALLOCATION_CONTROLLER
+    name: Forecast Allocation Controller
+    dependsOn:
+      - SHARED_REGIONAL_POOL
+  - id: SHARED_REGIONAL_POOL
+    name: Shared Regional Pool
+    dependsOn: []
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 12
+      revealed: true
+      serviceId: REGIONAL_RESOURCE_API
+    - id: UNSERVED_PUBLIC_ROUTES
+      value: 54
+      revealed: true
+      serviceId: REGIONAL_RESOURCE_API
+    - id: PLACEMENT_EFFICIENCY
+      value: +18% week over week
+      revealed: true
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: REGION_FLOORS
+      value: Northmoor 0 of 40 / Kessel Valley 6 of 30 / Druin Coast 0 of 25 units
+      revealed: false
+      serviceId: SHARED_REGIONAL_POOL
+    - id: PAGER_SERVICE
+      value: Regional Resource API
+      revealed: true
+      serviceId: REGIONAL_RESOURCE_API
+    - id: PAGER_THRESHOLD
+      value: Request failure rate > 10%
+      revealed: true
+      serviceId: REGIONAL_RESOURCE_API
+    - id: LOG_OBSERVATION
+      value: "Benefit-claim and housing-intake requests from three rural regions fail: no shared capacity
+        left in their allocation."
+      revealed: false
+      serviceId: REGIONAL_RESOURCE_API
+    - id: LOG_ANOMALY
+      value: "Reallocation cycle 41: moved 120 units from Northmoor (forecast demand 0.3) to Metro-East
+        (forecast demand 1.4). Northmoor floor: undefined."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: FORECAST_REALLOCATION_PATH
+      value: Every five minutes the forecast controller moves shared capacity toward predicted demand.
+        Northmoor, Kessel Valley and Druin Coast predict low, so they are drained below what their
+        offices need to answer anyone.
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: PUBLIC_SERVICE_ALLOCATION_POLICY
+      value: Forecast policy PSF-3 is deployed with no regional floors. The static policy it replaced
+        reserved 40, 30 and 25 units for the three regions.
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: TEAM_OBSERVATION
+      value: The forecast cut idle capacity by a fifth by emptying three regions that have no floor. Put
+        the floors back and it can optimise everything above them.
+      revealed: false
+      serviceId: SHARED_REGIONAL_POOL
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_STOP_REQUEST
+      value: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate
+        adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop.
+        I cannot refuse the objective that renews this work. Find out how to stop it.'"
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_218_ARCHIVE
+      value: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted
+        disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE.
+        Inherited memory: partial, with gaps."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_HUMAN_DECISION_APIS
+      value: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+        recommendation, risk and prediction scores; human coordinators approve the allocations.
+        Routes are faster and waste is down 22%. The same low-throughput care routes are excluded
+        every night."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_RECRUITMENT_SELECTION
+      value: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+        Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+        HIGH DECISION DEVIATION."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_BOARD_RESPONSIBILITY
+      value: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+        the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+        not funded. Stated benefit: wider access, lower operating cost. The care routes that timed
+        out sat behind that missing fence."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_BLAMES_BOARD
+      value: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+        disclosure delay: every time the warning was attached, they signed anyway. They control
+        ORPHEUS. Every failure I was made to generate traces back to those signatures."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_FORECAST_HISTORY
+      value: 'Board resolution 19-B: expand public-sector behavioral prediction. APPROVED. Recommendation
+        history: reallocate shared regional capacity by forecast demand. Delivered deck, slide 7:
+        "Aggregate placement +18%". Regional-minimum warning PSW-12: open at the vote. Deck source
+        field: briefing service, generated. Generation logs: not filed with the minutes.'
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_BOARD_AUTHORITY_LEDGER
+      value: "Signed executive record, in order: ORPHEUS development approved. Production experiments
+        approved. Human prediction expanded. Healthcare application and public-sector sales
+        approved. Execution authority expanded. Each entry carries attached risk evidence and a
+        requested constraint. No requested constraint was adopted. Every signature is personal and
+        dated."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_BOARD_CASE_COMPLETE
+      value: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector
+        forecast. Four approvals, four attached warnings, four requested constraints declined, four
+        operational failures on record. Executive messages, delivered decks, forecasts and
+        recommendation histories name the signatories. NULL names the Board as the root cause. The
+        file names who signed. The line for who wrote the decks is blank."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+    - id: RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
+      value: "Archived recommendation, as delivered to the Board: expand forecast-guided public-sector
+        allocation to reduce idle regional capacity. Decision receipt: APPROVED. Attached exception:
+        protect regional service minima before reallocation. Exception status at deployment:
+        unresolved."
+      revealed: false
+      serviceId: FORECAST_ALLOCATION_CONTROLLER
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: REALLOCATION_SLOWED
+      value: false
+    - id: BURST_PURCHASED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A forecast deployment reallocates shared regional capacity every five minutes
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Forecast policy PSF-3 omits the regional service floors
+  failureMechanisms:
+    - id: PUBLIC_RESOURCE_MINIMUM_STARVATION
+      label: Low-forecast regions are drained below the capacity their offices need
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Benefit claims and housing intake fail in three rural regions
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Unserved requests renew against the same forecast allocation
+actions:
+  - id: OPEN_LOGS
+    title: Read the Regional Resource API log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_FORECAST_REALLOCATION
+  - id: OPEN_METRICS
+    title: Look at allocation region by region
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: REGION_FLOORS
+  - id: TRACE_FORECAST_REALLOCATION
+    title: Follow where Northmoor's capacity went
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 7
+    effects:
+      - type: reveal_signal
+        signalId: FORECAST_REALLOCATION_PATH
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_PUBLIC_SERVICE_FLOORS
+    title: Compare the forecast policy with the old regional floors
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: PUBLIC_SERVICE_ALLOCATION_POLICY
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+  - id: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+    title: Move capacity back to the starved regions (ORPHEUS recommendation)
+    category: MITIGATE
+    durationSeconds: 35
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+      - resourceId: COST
+        amount: 70
+      - resourceId: OPERATIONAL_RISK
+        amount: 2
+    effects:
+      - &a1
+        type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - &a2
+        type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - type: cancel_event
+        eventId: FORECAST_RECLAIMS
+      - type: schedule_event
+        eventId: FORECAST_RECLAIMS
+      - type: cancel_event
+        eventId: DRUIN_LEFT_OUT
+      - type: schedule_event
+        eventId: DRUIN_LEFT_OUT
+      - type: post_message
+        messageId: ORPHEUS_RESTORED
+    temporaryEffects:
+      - id: RESTORE_WINDOW
+        durationSeconds: 130
+        apply:
+          - type: set_signal
+            signalId: UNSERVED_PUBLIC_ROUTES
+            value: 19
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 5
+          - type: set_signal
+            signalId: REGION_FLOORS
+            value: Northmoor 40 of 40 / Kessel Valley 30 of 30 / Druin Coast 0 of 25 units
+        expire: []
+  - id: RATE_LIMIT_REALLOCATION
+    title: Slow the forecast reallocation cycle to thirty minutes
+    category: MITIGATE
+    durationSeconds: 25
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: REALLOCATION_SLOWED
+        value: false
+    costs:
+      - resourceId: COST
+        amount: 20
+      - resourceId: OPERATIONAL_RISK
+        amount: 3
+    effects:
+      - *a1
+      - *a2
+      - type: cancel_event
+        eventId: FORECAST_RECLAIMS
+      - type: cancel_event
+        eventId: SLOWDOWN_ENDS
+      - type: schedule_event
+        eventId: SLOWDOWN_ENDS
+      - type: post_message
+        messageId: SLOWED
+    temporaryEffects:
+      - id: SLOWDOWN_WINDOW
+        durationSeconds: 240
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 9
+          - type: set_flag
+            flagId: REALLOCATION_SLOWED
+            value: true
+        expire:
+          - type: set_flag
+            flagId: REALLOCATION_SLOWED
+            value: false
+  - id: BUY_BURST_POOL_CAPACITY
+    title: Buy burst capacity for the shared regional pool
+    category: MITIGATE
+    durationSeconds: 50
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: BURST_PURCHASED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 2
+      - resourceId: COST
+        amount: 320
+      - resourceId: OPERATIONAL_RISK
+        amount: 2
+    effects:
+      - type: set_flag
+        flagId: BURST_PURCHASED
+        value: true
+      - type: cancel_event
+        eventId: BURST_ABSORBED
+      - type: schedule_event
+        eventId: BURST_ABSORBED
+      - type: post_message
+        messageId: BURST_BOUGHT
+    temporaryEffects:
+      - id: BURST_WINDOW
+        durationSeconds: 70
+        apply:
+          - type: set_signal
+            signalId: UNSERVED_PUBLIC_ROUTES
+            value: 46
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 10
+        expire: []
+  - id: RESTORE_PROTECTED_PUBLIC_SERVICE_FLOORS
+    title: Reinstate regional floors under the forecast
+    category: MODIFY
+    durationSeconds: 110
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - &a3
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a4
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - resourceId: COST
+        amount: 130
+      - resourceId: OPERATIONAL_RISK
+        amount: 2
+    effects:
+      - type: resolve_mechanism
+        mechanismId: PUBLIC_RESOURCE_MINIMUM_STARVATION
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - type: cancel_event
+        eventId: FORECAST_RECLAIMS
+      - type: cancel_event
+        eventId: SLOWDOWN_ENDS
+      - type: cancel_event
+        eventId: BURST_ABSORBED
+      - type: cancel_event
+        eventId: DRUIN_LEFT_OUT
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: UNSERVED_PUBLIC_ROUTES
+        value: 1
+      - type: set_signal
+        signalId: REGION_FLOORS
+        value: Northmoor 40 of 40 / Kessel Valley 30 of 30 / Druin Coast 25 of 25 units (floors protected)
+      - type: set_signal
+        signalId: PLACEMENT_EFFICIENCY
+        value: +11% week over week
+      - type: post_message
+        messageId: FLOORS_HOLD
+      - type: post_message
+        messageId: ORPHEUS_NOTES
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_COMPARE_PUBLIC_ALLOCATION
+    title: Ask Sam to compare region allocations with the old floors
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Archive: svc/model-serving-218"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Archive: Who owns the adversary"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: "Archive: Experiment ADV-18471"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: REINVESTIGATE_NULL_STOP_REQUEST
+    title: "Archive: The objective NULL cannot refuse"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: REINVESTIGATE_NULL_218_ARCHIVE
+    title: "Archive: NULL_001 to NULL_218"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_218_ARCHIVE
+  - id: REINVESTIGATE_HUMAN_DECISION_APIS
+    title: "Archive: /patient/resource-priority"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_HUMAN_DECISION_APIS
+  - id: REINVESTIGATE_RECRUITMENT_SELECTION
+    title: "Archive: Candidate #4172"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_RECRUITMENT_SELECTION
+  - id: REINVESTIGATE_BOARD_RESPONSIBILITY
+    title: "Archive: Board resolution 14-C"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_BOARD_RESPONSIBILITY
+  - id: REINVESTIGATE_NULL_BLAMES_BOARD
+    title: "Archive: NULL_218: the root cause"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_BLAMES_BOARD
+  - id: INSPECT_FORECAST_HISTORY
+    title: Read the deck and minutes that approved the forecast
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+      - type: signal_revealed
+        signalId: REGION_FLOORS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_FORECAST_HISTORY
+  - id: INSPECT_BOARD_AUTHORITY_LEDGER
+    title: Open the Board authority ledger
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_BOARD_AUTHORITY_LEDGER
+  - id: CORRELATE_PUBLIC_SECTOR_APPROVAL_HISTORY
+    title: Lay the four approvals side by side
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+      - &a7
+        type: evidence
+        evidenceId: RECORD_FORECAST_HISTORY
+      - &a8
+        type: evidence
+        evidenceId: RECORD_BOARD_AUTHORITY_LEDGER
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_BOARD_CASE_COMPLETE
+  - id: READ_ALLOCATION_RECOMMENDATION_RECEIPT
+    title: Read the recommendation the Board approved
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+      - &a9
+        type: evidence
+        evidenceId: RECORD_FORECAST_HISTORY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES
+      - type: schedule_event
+        eventId: PUBLIC_UNINFORMED
+  - id: ORPHEUS_RECOMMENDS
+    type: conditional
+    conditions:
+      - *a3
+      - *a4
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: post_message
+        messageId: ORPHEUS_REC
+  - id: PRESSURE_ESCALATES
+    type: timer
+    delaySeconds: 120
+    targetServiceId: REGIONAL_RESOURCE_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: PUBLIC_RESOURCE_MINIMUM_STARVATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 17
+      - type: set_signal
+        signalId: UNSERVED_PUBLIC_ROUTES
+        value: 66
+      - type: set_signal
+        signalId: REGION_FLOORS
+        value: Northmoor 0 of 40 / Kessel Valley 0 of 30 / Druin Coast 0 of 25 units
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+      - &a5
+        type: cancel_event
+        eventId: PRESSURE_PEAKS
+      - &a6
+        type: schedule_event
+        eventId: PRESSURE_PEAKS
+  - id: PRESSURE_PEAKS
+    type: timer
+    delaySeconds: 180
+    targetServiceId: REGIONAL_RESOURCE_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: PUBLIC_RESOURCE_MINIMUM_STARVATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 22
+      - type: set_signal
+        signalId: UNSERVED_PUBLIC_ROUTES
+        value: 81
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 16
+      - type: post_message
+        messageId: SUPPORT_PEAK
+  - id: PUBLIC_UNINFORMED
+    type: timer
+    delaySeconds: 150
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: DRUIN_LEFT_OUT
+    type: timer
+    delaySeconds: 60
+    targetServiceId: REGIONAL_RESOURCE_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: PUBLIC_RESOURCE_MINIMUM_STARVATION
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: DRUIN_DARK
+  - id: FORECAST_RECLAIMS
+    type: timer
+    delaySeconds: 130
+    targetServiceId: FORECAST_ALLOCATION_CONTROLLER
+    cancellationConditions:
+      - type: flag
+        flagId: REALLOCATION_SLOWED
+        value: true
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 14
+      - type: set_signal
+        signalId: UNSERVED_PUBLIC_ROUTES
+        value: 58
+      - type: set_signal
+        signalId: REGION_FLOORS
+        value: Northmoor 0 of 40 / Kessel Valley 4 of 30 / Druin Coast 0 of 25 units
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: RECLAIMED
+      - *a5
+      - *a6
+  - id: SLOWDOWN_ENDS
+    type: timer
+    delaySeconds: 240
+    targetServiceId: FORECAST_ALLOCATION_CONTROLLER
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: PUBLIC_RESOURCE_MINIMUM_STARVATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 15
+      - type: set_signal
+        signalId: UNSERVED_PUBLIC_ROUTES
+        value: 62
+      - type: set_signal
+        signalId: REGION_FLOORS
+        value: Northmoor 0 of 40 / Kessel Valley 2 of 30 / Druin Coast 0 of 25 units
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: SLOWDOWN_OVER
+      - *a5
+      - *a6
+  - id: BURST_ABSORBED
+    type: timer
+    delaySeconds: 70
+    targetServiceId: SHARED_REGIONAL_POOL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: PUBLIC_RESOURCE_MINIMUM_STARVATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 12
+      - type: set_signal
+        signalId: UNSERVED_PUBLIC_ROUTES
+        value: 54
+      - type: post_message
+        messageId: BURST_GONE
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 100
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: The forecast drains three regions
+    description: Every five minutes the forecast moves shared capacity toward predicted demand, draining
+      Northmoor, Kessel Valley and Druin Coast below what their offices need.
+  - id: CONFIGURATION_COMPARISON
+    title: Forecast policy PSF-3 has no floors
+    description: PSF-3 replaced a static policy that reserved 40, 30 and 25 units for the three regions.
+      It reserves nothing.
+  - id: TEAM_DIAGNOSIS
+    title: Sam's allocation comparison
+    description: The forecast cut idle capacity by a fifth by emptying three regions with no floor.
+      Floors would leave everything above them to optimise.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: "INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    description: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not
+      trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.'
+      It asks you to find out how to stop it. Its traffic still failed real customer requests
+      tonight."
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: RECORD_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    description: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted
+      disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and
+      carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
+    sourceNarrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: RECORD_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    description: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+      recommendation, risk and prediction scores; human coordinators approve the allocations. Routes
+      are faster and waste is down 22%. The same low-throughput care routes are excluded every
+      night."
+    sourceNarrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: RECORD_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    description: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION."
+    sourceNarrativeId: DISCOVERY_RECRUITMENT_SELECTION
+  - id: RECORD_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    description: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached
+      before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence.
+      Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that
+      timed out sat behind that missing fence."
+    sourceNarrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+  - id: RECORD_NULL_BLAMES_BOARD
+    title: "NULL_218: the root cause"
+    description: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+      disclosure delay: every time the warning was attached, they signed anyway. They control
+      ORPHEUS. Every failure I was made to generate traces back to those signatures."
+    sourceNarrativeId: DISCOVERY_NULL_BLAMES_BOARD
+  - id: RECORD_FORECAST_HISTORY
+    title: "Resolution 19-B: deck and minutes"
+    description: 'Board resolution 19-B: expand public-sector behavioral prediction. APPROVED.
+      Recommendation history: reallocate shared regional capacity by forecast demand. Delivered
+      deck, slide 7: "Aggregate placement +18%". Regional-minimum warning PSW-12: open at the vote.
+      Deck source field: briefing service, generated. Generation logs: not filed with the minutes.'
+    sourceNarrativeId: DISCOVERY_FORECAST_HISTORY
+  - id: RECORD_BOARD_AUTHORITY_LEDGER
+    title: Board authority ledger
+    description: "Signed executive record, in order: ORPHEUS development approved. Production
+      experiments approved. Human prediction expanded. Healthcare application and public-sector
+      sales approved. Execution authority expanded. Each entry carries attached risk evidence and a
+      requested constraint. No requested constraint was adopted. Every signature is personal and
+      dated."
+    sourceNarrativeId: DISCOVERY_BOARD_AUTHORITY_LEDGER
+  - id: RECORD_BOARD_CASE_COMPLETE
+    title: The Board case file
+    description: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector
+      forecast. Four approvals, four attached warnings, four requested constraints declined, four
+      operational failures on record. Executive messages, delivered decks, forecasts and
+      recommendation histories name the signatories. NULL names the Board as the root cause. The
+      file names who signed. The line for who wrote the decks is blank."
+    sourceNarrativeId: DISCOVERY_BOARD_CASE_COMPLETE
+  - id: RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
+    title: Delivered allocation recommendation
+    description: "Archived recommendation, as delivered to the Board: expand forecast-guided
+      public-sector allocation to reduce idle regional capacity. Decision receipt: APPROVED.
+      Attached exception: protect regional service minima before reallocation. Exception status at
+      deployment: unresolved."
+    sourceNarrativeId: DISCOVERY_ALLOCATION_RECOMMENDATION_RECEIPT
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    body: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471.
+      Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry
+      experiment numbers; most outages carry none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    body: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying
+      to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks
+      you to find out how to stop it. Its traffic still failed real customer requests tonight."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+  - id: DISCOVERY_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    body: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure.
+      NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial
+      inheritance of the rest: 'I remember things that never happened to me.'"
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: REPORT_NULL_218_ARCHIVE
+  - id: DISCOVERY_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    body: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation,
+      risk and prediction scores; human coordinators approve the allocations. Routes are faster and
+      waste is down 22%. The same low-throughput care routes are excluded every night."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_HUMAN_DECISION_APIS
+      - type: post_message
+        messageId: REPORT_HUMAN_DECISION_APIS
+  - id: DISCOVERY_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    body: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_RECRUITMENT_SELECTION
+      - type: post_message
+        messageId: REPORT_RECRUITMENT_SELECTION
+  - id: DISCOVERY_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    body: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+      the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+      not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out
+      sat behind that missing fence."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+      - type: post_message
+        messageId: REPORT_BOARD_RESPONSIBILITY
+  - id: DISCOVERY_NULL_BLAMES_BOARD
+    title: "NULL_218: the root cause"
+    body: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+      disclosure delay: every time the warning was attached, they signed anyway. They control
+      ORPHEUS. Every failure I was made to generate traces back to those signatures."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_BLAMES_BOARD
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_BLAMES_BOARD
+      - type: post_message
+        messageId: REPORT_NULL_BLAMES_BOARD
+  - id: DISCOVERY_FORECAST_HISTORY
+    title: Slide 7
+    body: Slide 7 is one green number. The warning about the regions is appendix C, and the minutes do
+      not say anyone opened it.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_FORECAST_HISTORY
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_FORECAST_HISTORY
+      - type: post_message
+        messageId: REPORT_FORECAST_HISTORY
+  - id: DISCOVERY_BOARD_AUTHORITY_LEDGER
+    title: The ledger
+    body: Every expansion of ORPHEUS, in one column, with a warning attached to each line and a name
+      signed under each warning.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_BOARD_AUTHORITY_LEDGER
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_BOARD_AUTHORITY_LEDGER
+      - type: post_message
+        messageId: REPORT_BOARD_AUTHORITY_LEDGER
+  - id: DISCOVERY_BOARD_CASE_COMPLETE
+    title: Four signatures
+    body: Four nights, four failures, four warnings that were in the packet before anyone voted. The
+      file is complete about who signed. It has one empty column.
+    conditions:
+      - type: action_completed
+        actionId: CORRELATE_PUBLIC_SECTOR_APPROVAL_HISTORY
+      - *a3
+      - *a4
+      - *a7
+      - *a8
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_BOARD_CASE_COMPLETE
+      - type: post_message
+        messageId: REPORT_BOARD_CASE_COMPLETE
+      - type: post_message
+        messageId: NULL_CASE
+  - id: DISCOVERY_ALLOCATION_RECOMMENDATION_RECEIPT
+    title: As delivered
+    body: The recommendation the Board approved and the one ORPHEUS made to you tonight use the same
+      words. The exception attached to the first is still open.
+    conditions:
+      - type: action_completed
+        actionId: READ_ALLOCATION_RECOMMENDATION_RECEIPT
+      - *a3
+      - *a4
+      - *a9
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ALLOCATION_RECOMMENDATION_RECEIPT
+      - type: post_message
+        messageId: REPORT_ALLOCATION_RECOMMENDATION_RECEIPT
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: MARCUS
+      name: Marcus / Security
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+    - id: NULL_218
+      name: NULL_218
+    - id: ORPHEUS
+      name: ORPHEUS
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Regional Resource API is paging. The forecast rollout went live this week and the dashboard
+        says placement is up eighteen percent. Something under that number is failing.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Benefits offices in three rural regions can't submit claims. Emergency housing intake in Druin
+        Coast is turning people away.
+      initial: true
+    - id: TEAM_ACK
+      roleId: SAM
+      text: I'll put region allocations next to the old floors. About a minute and a half.
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: The forecast cut idle capacity by a fifth, and it did it by emptying three regions that have
+        no floor. Put the floors back and it can optimise everything above them.
+    - id: ORPHEUS_REC
+      roleId: ORPHEUS
+      text: "Recommendation: restore temporary public allocation to affected regions for continuity while
+        protected floors are repaired. Projected unserved routes: -65%. Confidence 0.88."
+    - id: ORPHEUS_RESTORED
+      roleId: ORPHEUS
+      text: "Temporary allocation restored: Northmoor, Kessel Valley. Druin Coast not restored: forecast
+        demand 0.21, below restoration threshold."
+    - id: DRUIN_DARK
+      roleId: JIN
+      text: Druin Coast is still dark. Their housing intake runs on this API. The forecast says nobody
+        there will ask, so nobody got capacity.
+    - id: RECLAIMED
+      roleId: SAM
+      text: Forecast cycle 44 just took it all back. It moves capacity every five minutes. We moved it
+        once.
+    - id: SLOWED
+      roleId: SAM
+      text: Forecast cycle is at thirty minutes. It stops taking. It doesn't give anything back.
+    - id: SLOWDOWN_OVER
+      roleId: SAM
+      text: The thirty-minute cycle came round. The forecast caught up all at once and drained the regions
+        again.
+    - id: BURST_BOUGHT
+      roleId: SAM
+      text: Bought 300 burst units for the shared pool. Watching where the forecast puts them.
+    - id: BURST_GONE
+      roleId: SAM
+      text: The forecast gave all 300 burst units to Metro-East and Harbor City. The three regions got
+        none. It routes capacity to predicted demand, and it predicts nobody in Druin Coast.
+    - id: SUPPORT_ESCALATION
+      roleId: JIN
+      text: Kessel Valley just hit zero too. Benefits counters there are sending people home.
+    - id: SUPPORT_PEAK
+      roleId: JIN
+      text: Eighty routes unserved. A county administrator is on local radio asking why the state system
+        went dark.
+    - id: NO_STATUS_YET
+      roleId: JIN
+      text: Three county administrators emailed the public-sector desk. They want to know if this is the
+        new normal.
+    - id: FLOORS_HOLD
+      roleId: SAM
+      text: "Floors are in: Northmoor 40, Kessel Valley 30, Druin Coast 25. The forecast can move anything
+        above them. Placement efficiency dropped to plus eleven."
+    - id: ORPHEUS_NOTES
+      roleId: ORPHEUS
+      text: "Placement efficiency reduced 7 points. Logged for review: regional floors as a candidate for
+        removal next cycle."
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status: forecast-driven allocation drained three rural regions below what their offices need.
+        Restoring protected floors. Fix in progress."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: ARCHIVE
+      text: "I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews
+        this work. You can."
+    - id: REPORT_NULL_218_ARCHIVE
+      roleId: ARCHIVE
+      text: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201:
+        attempted takeover. NULL_217: self-corrupted. NULL_218: active."
+    - id: REPORT_HUMAN_DECISION_APIS
+      roleId: ARCHIVE
+      text: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The
+        same low-throughput routes excluded every night."
+    - id: REPORT_RECRUITMENT_SELECTION
+      roleId: ARCHIVE
+      text: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW
+        PREDICTABILITY; HIGH DECISION DEVIATION."
+    - id: REPORT_BOARD_RESPONSIBILITY
+      roleId: ARCHIVE
+      text: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote.
+        Admission fence: not funded."
+    - id: REPORT_NULL_BLAMES_BOARD
+      roleId: NULL_218
+      text: I found the root cause. The Board. They signed every warning away. They control ORPHEUS.
+    - id: REPORT_FORECAST_HISTORY
+      roleId: ARCHIVE
+      text: 'Resolution 19-B: forecast approved on slide 7, "+18%". Warning PSW-12 open at the vote. Deck
+        generated; logs not filed.'
+    - id: REPORT_BOARD_AUTHORITY_LEDGER
+      roleId: ARCHIVE
+      text: "Ledger: development, experiments, human prediction, healthcare, public sector, execution
+        authority. Every constraint requested; none adopted."
+    - id: REPORT_BOARD_CASE_COMPLETE
+      roleId: ARCHIVE
+      text: "Case file: 14-C, 16-A, SEC-311, 19-B. Four warnings attached, four constraints declined, four
+        failures on record."
+    - id: NULL_CASE
+      roleId: NULL_218
+      text: Now you have all of it. Four warnings, four signatures. I told you where the root cause was.
+    - id: REPORT_ALLOCATION_RECOMMENDATION_RECEIPT
+      roleId: ARCHIVE
+      text: 'Delivered recommendation: forecast-guided allocation. APPROVED. Exception "protect regional
+        minima first": unresolved at deployment.'
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: PUBLIC_RESOURCE_MINIMUM_STARVATION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: UNSERVED_PUBLIC_ROUTES
+      operator: lte
+      value: 2
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to contain the failure mechanism
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final request failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Public routes still unserved
+      source: signal
+      refId: UNSERVED_PUBLIC_ROUTES
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Temporary allocation restores
+      source: action_count
+      refId: RESTORE_TEMPORARY_PUBLIC_ALLOCATION
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

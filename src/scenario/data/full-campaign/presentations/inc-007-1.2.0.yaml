@@ -1,0 +1,375 @@
+schemaVersion: 2
+id: INC-007-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-007
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Sign-ins, sessions and database load
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - ACTIVE_SESSIONS
+          - POOL_CAPACITY
+          - SERVICE_CPU
+          - DB_POOL_USAGE
+  - id: logs
+    title: Session API log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: UNKNOWN_TRACE_FRAGMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: session-api.log (last 2 minutes)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: session-log
+        columns:
+          - Time
+          - Level
+          - Source
+          - Message
+        rows:
+          - - '19:02:11'
+            - WARN
+            - session-api
+            - 'sign-in for customer 88•••41 waited 8.0 s for a pool seat; giving up'
+          - - '19:02:12'
+            - INFO
+            - 10.40.2.17
+            - 'session s-5f21 renewed (tag repeat-214)'
+          - - '19:02:12'
+            - INFO
+            - 10.40.2.31
+            - 'session s-5f22 renewed (tag repeat-214)'
+          - - '19:02:13'
+            - WARN
+            - session-api
+            - 'pool full (970/1000 incl. reserved); queue depth 412'
+          - - '19:02:14'
+            - INFO
+            - mobile-app
+            - 'sign-in retry 6 of 10 for device a7c•••'
+          - - '19:02:42'
+            - INFO
+            - 10.40.2.17
+            - 'session s-5f21 renewed (tag repeat-214)'
+  - id: sessions
+    title: Who holds the open sessions
+    kind: diagnostics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - INSPECT_SESSION_TAGS
+      - COUNT_TAG_REPEATS
+    blocks:
+      - kind: signals
+        id: sessions-values
+        signalIds:
+          - SATURATED_SESSION_TAG
+          - TAG_REPEAT_PATTERN
+  - id: session-table
+    title: Open sessions by tag
+    kind: diagnostics
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_SESSION_TAGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: session-tags
+        columns:
+          - Tag
+          - Open
+          - Median idle
+          - Renews every
+          - Origin
+          - Repeats
+        rows:
+          - - repeat-214
+            - '781'
+            - 0 s
+            - 30 s
+            - 10.40.2.0/24 (internal)
+            - '214'
+          - - (customer, untagged)
+            - '164'
+            - 4 m 12 s
+            - on activity
+            - public
+            - '1'
+          - - partner-sso
+            - '25'
+            - 1 m 40 s
+            - 5 m
+            - partner gateway
+            - '1'
+  - id: repeat-table
+    title: repeat-214 creation batches
+    kind: diagnostics
+    reveal:
+      - type: action_completed
+        actionId: COUNT_TAG_REPEATS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: repeat-batches
+        columns:
+          - Batch
+          - Created
+          - Sessions
+          - Gap
+          - Creator field
+        rows:
+          - - '1'
+            - '18:47:26'
+            - '214'
+            - —
+            - repeat
+          - - '2'
+            - '18:51:00'
+            - '214'
+            - 214 s
+            - repeat
+          - - '3'
+            - '18:54:34'
+            - '214'
+            - 214 s
+            - repeat
+          - - '4'
+            - '18:58:08'
+            - '214'
+            - 214 s
+            - repeat
+          - - '5'
+            - '19:01:42'
+            - '214'
+            - 214 s
+            - repeat / (field continues)
+  - id: admission
+    title: Admission rules
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - TRACE_ADMISSION_PATH
+    blocks:
+      - kind: signals
+        id: admission-values
+        signalIds:
+          - ADMISSION_POLICY
+  - id: admission-table
+    title: Which rule each session matched
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: TRACE_ADMISSION_PATH
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: table
+        id: admission-rules
+        columns:
+          - Rule
+          - Matches on
+          - Quota
+          - Priority
+          - Idle timeout
+          - Sessions matched
+        rows:
+          - - synthetic
+            - class=synthetic header
+            - '50'
+            - low
+            - 2 m
+            - '0'
+          - - partner
+            - class=partner header
+            - '200'
+            - normal
+            - 15 m
+            - '25'
+          - - customer-default
+            - anything without a class
+            - none
+            - normal
+            - 4 h
+            - '945'
+  - id: mitigation
+    title: Buy time
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - SCALE_SESSION_CAPACITY
+      - EVICT_IDLE_SESSIONS
+      - RECYCLE_DATABASE_POOL
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: Sam can stand up an overflow pool in under a minute; it is expensive, and Sam has seen
+          workloads that grow into whatever room they get. Evicting idle sessions frees seats now,
+          but whoever is idle loses their cart. Alex swears by recycling the database pool.
+  - id: containment
+    title: Scope the tag's admission
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - LIMIT_SYNTHETIC_ADMISSION
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Matching repeat-214 by tag puts it on its own quota of twenty seats at low priority with
+          a two-minute idle timeout. Customers keep their rule. Eighty seconds to roll out, and the
+          tagged sessions above the quota are shed as it lands.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_ALEX_INSPECT_SESSIONS
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ALEX_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - SUPPORT_ESCALATION
+          - SUPPORT_PEAK
+          - NO_STATUS_YET
+          - OVERFLOW_EATEN
+          - CARTS_DROPPED
+          - SESSIONS_REFILLED
+          - RECYCLE_DONE
+          - DB_REFILLED
+          - LIMIT_HOLDS
+          - STATUS_SENT
+        delegationActionIds:
+          - ASK_ALEX_INSPECT_SESSIONS
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: artifact
+    title: Repeated session marker
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: REPEATED_SESSION_MARKER
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 3
+    actionIds: []
+    blocks:
+      - kind: paragraph
+        id: preserved-fragment
+        text: 'UNKNOWN: follow the tag. I left it where you could see it.'
+evidenceRelations: []

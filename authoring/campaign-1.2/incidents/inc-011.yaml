@@ -1,0 +1,98 @@
+# Campaign 1.2 bindings for INC-011 Adversary Traffic.
+incidentId: INC-011
+contentVersion: 1.2.0
+causalObservationSignal: GENERATOR_SOURCE
+support:
+  - TRACE_GENERATED_TRAFFIC
+  - COMPARE_GENERATOR_BOUNDARY
+# SEND_/WITHHOLD_GENERATOR_OWNERSHIP_REPORT are COMMUNICATE actions, not investigations.
+choiceActions: []
+operational:
+  - actionId: LIMIT_GENERATED_TRAFFIC
+    candidate: RATE_LIMIT
+    role: temporary
+    collateralDamage: 1
+  - actionId: BLACKHOLE_GENERATOR_RANGE
+    candidate: QUARANTINE
+    role: temporary
+    collateralDamage: 4
+  - actionId: ISOLATE_GENERATOR_LANE
+    candidate: ISOLATE
+    role: causal
+    collateralDamage: 1
+routes:
+  - id: investigate-and-fence
+    actions:
+      - OPEN_LOGS
+      - UPDATE_WAR_ROOM
+      - TRACE_GENERATED_TRAFFIC
+      - COMPARE_GENERATOR_BOUNDARY
+      - ISOLATE_GENERATOR_LANE
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+      maxElapsedSeconds: 300
+  - id: limit-and-watch-it-hop
+    actions:
+      - LIMIT_GENERATED_TRAFFIC
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: blackhole-then-wait-to-trace
+    actions:
+      - BLACKHOLE_GENERATOR_RANGE
+      - OPEN_LOGS
+      - COMPARE_GENERATOR_BOUNDARY
+      - UPDATE_WAR_ROOM
+      - OPEN_METRICS
+      - ASK_MARCUS_COMPARE_OWNER
+      - TRACE_GENERATED_TRAFFIC
+      - ISOLATE_GENERATOR_LANE
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS]
+  - id: blackhole-only
+    actions:
+      - BLACKHOLE_GENERATOR_RANGE
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: delegate-read-archive-and-send
+    actions:
+      - ASK_MARCUS_COMPARE_OWNER
+      - OPEN_LOGS
+      - TRACE_GENERATED_TRAFFIC
+      - COMPARE_GENERATOR_BOUNDARY
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - REINVESTIGATE_NULL_AI
+      - INSPECT_GENERATOR_PROVENANCE
+      - SEND_GENERATOR_OWNERSHIP_REPORT
+      - ISOLATE_GENERATOR_LANE
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, RECORD_NULL_ADVERSARY]
+      narratives:
+        [
+          DISCOVERY_GHOST_ARTIFACT,
+          DISCOVERY_NULL_NAME,
+          DISCOVERY_ORPHEUS_ACTIVE,
+          DISCOVERY_NULL_AI,
+          DISCOVERY_NULL_ADVERSARY,
+        ]
+  - id: provenance-and-withhold
+    actions:
+      - OPEN_LOGS
+      - TRACE_GENERATED_TRAFFIC
+      - COMPARE_GENERATOR_BOUNDARY
+      - INSPECT_GENERATOR_PROVENANCE
+      - WITHHOLD_GENERATOR_OWNERSHIP_REPORT
+      - ISOLATE_GENERATOR_LANE
+    expect:
+      completed: true
+      narratives: [DISCOVERY_NULL_ADVERSARY]

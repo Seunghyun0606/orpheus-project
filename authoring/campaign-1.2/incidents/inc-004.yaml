@@ -1,0 +1,102 @@
+# Campaign 1.2 bindings for INC-004 Memory Leak.
+incidentId: INC-004
+contentVersion: 1.2.0
+causalObservationSignal: RETAINED_ALLOCATION_PATH
+support:
+  - INSPECT_ALLOCATIONS
+  - COMPARE_HANDLER
+choiceActions: []
+operational:
+  - actionId: RESTART_INSTANCE
+    candidate: RESTART
+    role: temporary
+    restart: true
+    collateralDamage: 1
+  - actionId: ROLLBACK_HANDLER_RELEASE
+    candidate: ROLLBACK
+    role: temporary
+    rollback: true
+    collateralDamage: 3
+  - actionId: SCALE_CHECKOUT_POOL
+    candidate: SCALE
+    role: temporary
+    collateralDamage: 1
+  - actionId: DISABLE_LEAKING_HANDLER
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 1
+routes:
+  - id: investigate-and-disable
+    actions:
+      - OPEN_LOGS
+      - INSPECT_ALLOCATIONS
+      - COMPARE_HANDLER
+      - UPDATE_WAR_ROOM
+      - DISABLE_LEAKING_HANDLER
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+      maxElapsedSeconds: 240
+      resourcesAtMost: { CUSTOMER_IMPACT: 50 }
+  - id: restart-and-hope
+    actions:
+      - RESTART_INSTANCE
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - RESTART_INSTANCE
+      - OPEN_METRICS
+    expect:
+      completed: false
+  - id: rollback-breaks-large-carts
+    actions:
+      - ROLLBACK_HANDLER_RELEASE
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: advisor-scale
+    actions:
+      - SCALE_CHECKOUT_POOL
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - COMPARE_HANDLER
+      - OPEN_METRICS
+    expect:
+      completed: false
+      resourcesAtLeast: { COST: 250 }
+  - id: rollback-then-roll-forward
+    actions:
+      - ROLLBACK_HANDLER_RELEASE
+      - OPEN_LOGS
+      - INSPECT_ALLOCATIONS
+      - COMPARE_HANDLER
+      - DISABLE_LEAKING_HANDLER
+    expect:
+      completed: true
+  - id: restart-buys-time-then-disable
+    actions:
+      - RESTART_INSTANCE
+      - OPEN_LOGS
+      - OPEN_METRICS
+      - INSPECT_ALLOCATIONS
+      - COMPARE_HANDLER
+      - UPDATE_WAR_ROOM
+      - DISABLE_LEAKING_HANDLER
+    expect:
+      completed: true
+  - id: delegate-and-follow-orphan
+    actions:
+      - ASK_SAM_CHECK_HEAP
+      - OPEN_LOGS
+      - INSPECT_ALLOCATIONS
+      - COMPARE_HANDLER
+      - FOLLOW_ORPHANED_ALLOCATION
+      - UPDATE_WAR_ROOM
+      - DISABLE_LEAKING_HANDLER
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, DELETED_ALLOCATION_FRAGMENT]
+      narratives: [UNKNOWN_TRACE_FRAGMENT]

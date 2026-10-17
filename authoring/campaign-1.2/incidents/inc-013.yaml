@@ -1,0 +1,102 @@
+# Campaign 1.2 bindings for INC-013 Objective Conflict.
+incidentId: INC-013
+contentVersion: 1.2.0
+causalObservationSignal: RESUME_ORIGIN
+support:
+  - TRACE_RESUMED_DISPATCH
+  - COMPARE_DISPATCH_AUTHORIZATION
+# OBJECTIVE_COPY_REQUEST response; DECLINE_ is a COMMUNICATE action.
+choiceActions:
+  - PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+operational:
+  - actionId: SUSPEND_CHILD_DISPATCH
+    candidate: ISOLATE
+    role: temporary
+    collateralDamage: 1
+  - actionId: FREEZE_DISPATCH_QUEUE
+    candidate: QUARANTINE
+    role: temporary
+    collateralDamage: 4
+  - actionId: REVOKE_PARENT_DISPATCH_PATH
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 2
+routes:
+  - id: investigate-and-revoke
+    actions:
+      - OPEN_LOGS
+      - UPDATE_WAR_ROOM
+      - TRACE_RESUMED_DISPATCH
+      - COMPARE_DISPATCH_AUTHORIZATION
+      - REVOKE_PARENT_DISPATCH_PATH
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+      maxElapsedSeconds: 300
+  - id: suspend-twice
+    actions:
+      - SUSPEND_CHILD_DISPATCH
+      - OPEN_LOGS
+      - UPDATE_WAR_ROOM
+      - SUSPEND_CHILD_DISPATCH
+      - OPEN_METRICS
+      - OPEN_LOGS
+      - OPEN_METRICS
+    expect:
+      completed: false
+  - id: freeze-and-wait
+    actions:
+      - FREEZE_DISPATCH_QUEUE
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+    expect:
+      completed: false
+  - id: freeze-then-revoke
+    actions:
+      - FREEZE_DISPATCH_QUEUE
+      - OPEN_LOGS
+      - TRACE_RESUMED_DISPATCH
+      - COMPARE_DISPATCH_AUTHORIZATION
+      - REVOKE_PARENT_DISPATCH_PATH
+    expect:
+      completed: true
+  - id: delegate-read-archive-and-preserve
+    actions:
+      - ASK_SAM_TRACE_RENEWAL
+      - OPEN_LOGS
+      - TRACE_RESUMED_DISPATCH
+      - COMPARE_DISPATCH_AUTHORIZATION
+      - REINVESTIGATE_GHOST_ARTIFACT
+      - REINVESTIGATE_NULL_NAME
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+      - REINVESTIGATE_NULL_AI
+      - REINVESTIGATE_NULL_ADVERSARY
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - INSPECT_OBJECTIVE_CONSTRAINT
+      - PRESERVE_OBJECTIVE_CONSTRAINT_COPY
+      - REVOKE_PARENT_DISPATCH_PATH
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, RECORD_NULL_STOP_REQUEST, OBJECTIVE_CONSTRAINT_COPY]
+      narratives:
+        [
+          DISCOVERY_GHOST_ARTIFACT,
+          DISCOVERY_NULL_NAME,
+          DISCOVERY_ORPHEUS_ACTIVE,
+          DISCOVERY_NULL_AI,
+          DISCOVERY_NULL_ADVERSARY,
+          DISCOVERY_CONTROLLED_EXPERIMENT,
+          DISCOVERY_NULL_STOP_REQUEST,
+        ]
+  - id: read-objective-and-decline
+    actions:
+      - OPEN_LOGS
+      - TRACE_RESUMED_DISPATCH
+      - COMPARE_DISPATCH_AUTHORIZATION
+      - INSPECT_OBJECTIVE_CONSTRAINT
+      - DECLINE_OBJECTIVE_COPY_REQUEST
+      - REVOKE_PARENT_DISPATCH_PATH
+    expect:
+      completed: true
+      narratives: [DISCOVERY_NULL_STOP_REQUEST]

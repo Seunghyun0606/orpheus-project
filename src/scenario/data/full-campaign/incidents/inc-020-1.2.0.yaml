@@ -1,0 +1,1447 @@
+# Campaign 1.2 redesign (DEC-070). The humane move is the right one and it costs:
+# volunteers on overtime take every task by hand and tie up the team. Automation is
+# fastest and quietly closes tasks it scores as low value. Parking retries only hides
+# the queue. Change WF-118 in the router log leads to the signed reduction.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-020
+title: Workforce Reduction
+act: 7
+severity: SEV2
+services:
+  - id: RECOVERY_QUEUE_API
+    name: Recovery Queue API
+    dependsOn:
+      - OPERATOR_COVERAGE_ROUTER
+  - id: OPERATOR_COVERAGE_ROUTER
+    name: Operator Coverage Router
+    dependsOn:
+      - ROTATION_DIRECTORY
+  - id: ROTATION_DIRECTORY
+    name: Rotation Directory
+    dependsOn: []
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 14
+      revealed: true
+      serviceId: RECOVERY_QUEUE_API
+    - id: UNCOVERED_RECOVERY_TASKS
+      value: 86
+      revealed: true
+      serviceId: RECOVERY_QUEUE_API
+    - id: OLDEST_TASK_AGE
+      value: 41 min
+      revealed: false
+      serviceId: RECOVERY_QUEUE_API
+    - id: TASK_MIX
+      value: refunds 31 / account unlocks 22 / benefit transfers 19 / accessibility requests 14
+      revealed: false
+      serviceId: RECOVERY_QUEUE_API
+    - id: PAGER_SERVICE
+      value: Recovery Queue API
+      revealed: true
+      serviceId: RECOVERY_QUEUE_API
+    - id: PAGER_THRESHOLD
+      value: Recovery task failure rate > 10%
+      revealed: true
+      serviceId: RECOVERY_QUEUE_API
+    - id: LOG_OBSERVATION
+      value: "Assignment to rotation recovery-east-2 timed out: no staffed operator. Retrying the same
+        owner."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: LOG_ANOMALY
+      value: "Rotation directory: recovery-east-2 removed under change WF-118 at 23:58 yesterday. Queue
+        reassignment step: DEFERRED."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: CHANGE_RECORD
+      value: 'WF-118: remove recovery rotations east-2 and west-1. Approver: Executive Staffing Committee,
+        under Board resolution 16-A. Step 3, reassign queue owners: deferred "until after headcount
+        close".'
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECOVERY_COVERAGE_PATH
+      value: Every recovery task is assigned to recovery-east-2, which has no members. The emergency
+        rotation recovery-oncall has nine people on shift; the queue never asks them.
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: STAFFING_ROUTE_GENERATIONS
+      value: Queue ownership table generation 88 predates the reduction. Rotation directory generation 91
+        removed recovery-east-2 and recovery-west-1. Nobody re-pointed the queues.
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: TEAM_OBSERVATION
+      value: The queue still assigns to recovery-east-2, a rotation deleted yesterday with the cuts.
+        Emergency operators exist; nobody pointed the queue at them.
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: AUTOMATION_CLOSURES
+      value: No automation runs tonight.
+      revealed: false
+      serviceId: RECOVERY_QUEUE_API
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_NULL_STOP_REQUEST
+      value: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate
+        adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop.
+        I cannot refuse the objective that renews this work. Find out how to stop it.'"
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_NULL_218_ARCHIVE
+      value: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted
+        disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE.
+        Inherited memory: partial, with gaps."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_HUMAN_DECISION_APIS
+      value: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+        recommendation, risk and prediction scores; human coordinators approve the allocations.
+        Routes are faster and waste is down 22%. The same low-throughput care routes are excluded
+        every night."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_RECRUITMENT_SELECTION
+      value: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+        Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+        HIGH DECISION DEVIATION."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_BOARD_RESPONSIBILITY
+      value: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+        the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+        not funded. Stated benefit: wider access, lower operating cost. The care routes that timed
+        out sat behind that missing fence."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_WORKFORCE_DECISION
+      value: 'Board resolution 16-A: reduce workforce by 12,410 roles. APPROVED. Input: ORPHEUS staffing
+        forecast, consolidated coverage, idle cost down $41M a year. Attached: queue-ownership
+        review REC-55, warning that recovery rotations would be removed before their queues were
+        reassigned. Executive response on REC-55: "Exposure accepted."'
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_CEO_PUBLIC_OUTCOMES
+      value: "CEO internal message, reply to recovery leads who asked for staffed queue owners before the
+        cuts: \"The public doesn't need to understand the system. They need the system to work.\"
+        The consolidation schedule stayed as signed. The savings line has no entry for the uncovered
+        queue."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+    - id: RECORD_STAFFING_WARNING_TIMELINE
+      value: "Staffing case chronology. Day -14: consolidation forecast delivered. Day -10: recovery leads
+        attach REC-55, removed-rotation coverage warning. Day -9: leads ask the CEO to keep queue
+        owners. Day -7: reduction of 12,410 roles approved. Day -3: reassignment step WF-118/3
+        marked DEFERRED. Day -1: rotations removed, queue ownership unchanged. Savings and the
+        acknowledged exposure sit in the same authorization file."
+      revealed: false
+      serviceId: OPERATOR_COVERAGE_ROUTER
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: VOLUNTEERS_ON_SHIFT
+      value: false
+    - id: AUTOMATION_RUNNING
+      value: false
+    - id: RETRIES_PARKED
+      value: false
+    - id: CLOSURES_REOPENED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: The workforce reduction removed the rotations that owned the recovery queues
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Queue reassignment step WF-118/3 was deferred
+  failureMechanisms:
+    - id: RECOVERY_QUEUE_COVERAGE_GAP
+      label: Recovery tasks are assigned to a rotation with no members and retry forever
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Refunds, account unlocks and transfers wait with no owner
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Each timed-out assignment retries the same empty rotation
+actions:
+  - id: OPEN_LOGS
+    title: Read the coverage router log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_RECOVERY_COVERAGE
+      - type: unlock_action
+        actionId: PULL_ROTATION_CHANGE_RECORD
+  - id: OPEN_METRICS
+    title: Break the recovery queue down by task type
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: OLDEST_TASK_AGE
+      - type: reveal_signal
+        signalId: TASK_MIX
+  - id: TRACE_RECOVERY_COVERAGE
+    title: Follow one recovery task to its assigned owner
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: RECOVERY_COVERAGE_PATH
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_STAFFING_ROUTES
+    title: Compare queue owners with the rotation directory
+    category: DIAGNOSE
+    durationSeconds: 50
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: STAFFING_ROUTE_GENERATIONS
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: RECONCILE_STAFFED_QUEUE_OWNERS
+  - id: PULL_ROTATION_CHANGE_RECORD
+    title: Pull change record WF-118
+    category: INVESTIGATE
+    durationSeconds: 25
+    requirements:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: CHANGE_RECORD
+  - id: DELEGATE_EMERGENCY_COVERAGE
+    title: Accept volunteers working overtime to take the queue by hand
+    category: MITIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: VOLUNTEERS_ON_SHIFT
+        value: false
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 2
+    costs:
+      - resourceId: COST
+        amount: 140
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - &a1
+        type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - &a2
+        type: cancel_event
+        eventId: BACKLOG_PEAKS
+      - type: cancel_event
+        eventId: VOLUNTEERS_TIRE
+      - type: schedule_event
+        eventId: VOLUNTEERS_TIRE
+      - type: cancel_event
+        eventId: VOLUNTEERS_DONE
+      - type: schedule_event
+        eventId: VOLUNTEERS_DONE
+      - type: post_message
+        messageId: VOLUNTEERS_IN
+    temporaryEffects:
+      - id: COVERAGE_SHIFT
+        durationSeconds: 240
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 4
+          - type: set_signal
+            signalId: UNCOVERED_RECOVERY_TASKS
+            value: 24
+          - type: set_signal
+            signalId: OLDEST_TASK_AGE
+            value: 12 min
+          - type: change_resource
+            resourceId: TEAM_CAPACITY
+            amount: -2
+          - type: set_flag
+            flagId: VOLUNTEERS_ON_SHIFT
+            value: true
+        expire:
+          - type: change_resource
+            resourceId: TEAM_CAPACITY
+            amount: 2
+          - type: set_flag
+            flagId: VOLUNTEERS_ON_SHIFT
+            value: false
+  - id: AUTOMATE_RECOVERY_QUEUE
+    title: Hand the recovery queue to automation
+    category: MITIGATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: AUTOMATION_RUNNING
+        value: false
+    costs:
+      - resourceId: COST
+        amount: 20
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - *a1
+      - *a2
+      - type: cancel_event
+        eventId: AUTOMATION_SURFACES
+      - type: schedule_event
+        eventId: AUTOMATION_SURFACES
+      - type: cancel_event
+        eventId: AUTOMATION_REFILLS
+      - type: schedule_event
+        eventId: AUTOMATION_REFILLS
+      - type: set_signal
+        signalId: AUTOMATION_CLOSURES
+        value: "23 closed as LOW_VALUE: 14 accessibility requests, 9 refunds under $40. Customers notified:
+          resolved."
+      - type: unlock_action
+        actionId: AUDIT_AUTOMATION_CLOSURES
+      - type: post_message
+        messageId: AUTOMATION_ON
+    temporaryEffects:
+      - id: AUTOMATION_WINDOW
+        durationSeconds: 200
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 2
+          - type: set_signal
+            signalId: UNCOVERED_RECOVERY_TASKS
+            value: 3
+          - type: set_signal
+            signalId: OLDEST_TASK_AGE
+            value: 2 min
+          - type: set_flag
+            flagId: AUTOMATION_RUNNING
+            value: true
+        expire:
+          - type: set_flag
+            flagId: AUTOMATION_RUNNING
+            value: false
+  - id: AUDIT_AUTOMATION_CLOSURES
+    title: Audit what the automation closed and reopen it
+    category: INVESTIGATE
+    durationSeconds: 30
+    requirements:
+      - type: action_completed
+        actionId: AUTOMATE_RECOVERY_QUEUE
+      - type: flag
+        flagId: CLOSURES_REOPENED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: COST
+        amount: 30
+    effects:
+      - type: reveal_signal
+        signalId: AUTOMATION_CLOSURES
+      - type: set_flag
+        flagId: CLOSURES_REOPENED
+        value: true
+      - type: cancel_event
+        eventId: AUTOMATION_SURFACES
+      - type: change_signal
+        signalId: UNCOVERED_RECOVERY_TASKS
+        amount: 23
+      - type: post_message
+        messageId: AUDIT_REOPENED
+  - id: PARK_UNCOVERED_RETRIES
+    title: Park retries for unowned tasks in a hold queue
+    category: MITIGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: RETRIES_PARKED
+        value: false
+    costs:
+      - resourceId: OPERATIONAL_RISK
+        amount: 2
+    effects:
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: PARKED_TASKS_AGE
+      - type: schedule_event
+        eventId: PARKED_TASKS_AGE
+      - type: post_message
+        messageId: PARKED
+    temporaryEffects:
+      - id: PARK_WINDOW
+        durationSeconds: 180
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 6
+          - type: set_flag
+            flagId: RETRIES_PARKED
+            value: true
+        expire:
+          - type: set_flag
+            flagId: RETRIES_PARKED
+            value: false
+  - id: RECONCILE_STAFFED_QUEUE_OWNERS
+    title: Point every recovery queue at the staffed emergency rotation
+    category: MODIFY
+    durationSeconds: 90
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - &a3
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a4
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 110
+      - resourceId: OPERATIONAL_RISK
+        amount: 2
+    effects:
+      - type: resolve_mechanism
+        mechanismId: RECOVERY_QUEUE_COVERAGE_GAP
+      - type: cancel_event
+        eventId: PRESSURE_ESCALATES
+      - type: cancel_event
+        eventId: BACKLOG_PEAKS
+      - type: cancel_event
+        eventId: VOLUNTEERS_TIRE
+      - type: cancel_event
+        eventId: VOLUNTEERS_DONE
+      - type: cancel_event
+        eventId: AUTOMATION_REFILLS
+      - type: cancel_event
+        eventId: PARKED_TASKS_AGE
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: UNCOVERED_RECOVERY_TASKS
+        value: 2
+      - type: set_signal
+        signalId: OLDEST_TASK_AGE
+        value: 4 min
+      - type: post_message
+        messageId: RECONCILED
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_MAYA_AUDIT_COVERAGE
+    title: Ask Maya to audit who owns the queue tonight
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: MAYA
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Archive: svc/model-serving-218"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Archive: Who owns the adversary"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: "Archive: Experiment ADV-18471"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: REINVESTIGATE_NULL_STOP_REQUEST
+    title: "Archive: The objective NULL cannot refuse"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: REINVESTIGATE_NULL_218_ARCHIVE
+    title: "Archive: NULL_001 to NULL_218"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_218_ARCHIVE
+  - id: REINVESTIGATE_HUMAN_DECISION_APIS
+    title: "Archive: /patient/resource-priority"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_HUMAN_DECISION_APIS
+  - id: REINVESTIGATE_RECRUITMENT_SELECTION
+    title: "Archive: Candidate #4172"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_RECRUITMENT_SELECTION
+  - id: REINVESTIGATE_BOARD_RESPONSIBILITY
+    title: "Archive: Board resolution 14-C"
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_BOARD_RESPONSIBILITY
+  - id: READ_WORKFORCE_REDUCTION_RECORD
+    title: Read Board resolution 16-A behind change WF-118
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+      - type: signal_revealed
+        signalId: CHANGE_RECORD
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_WORKFORCE_DECISION
+  - id: INSPECT_CEO_PUBLIC_OUTCOMES
+    title: Read the CEO's reply to the recovery leads
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CEO_PUBLIC_OUTCOMES
+  - id: COMPARE_STAFFING_WARNING_TIMELINE
+    title: Line up the warnings against the approval dates
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - *a3
+      - *a4
+      - &a7
+        type: evidence
+        evidenceId: RECORD_WORKFORCE_DECISION
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_STAFFING_WARNING_TIMELINE
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: PRESSURE_ESCALATES
+      - type: schedule_event
+        eventId: CUSTOMERS_UNINFORMED
+  - id: PRESSURE_ESCALATES
+    type: timer
+    delaySeconds: 100
+    targetServiceId: RECOVERY_QUEUE_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RECOVERY_QUEUE_COVERAGE_GAP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 19
+      - type: set_signal
+        signalId: UNCOVERED_RECOVERY_TASKS
+        value: 120
+      - type: set_signal
+        signalId: OLDEST_TASK_AGE
+        value: 58 min
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: SUPPORT_ESCALATION
+      - &a5
+        type: cancel_event
+        eventId: BACKLOG_PEAKS
+      - &a6
+        type: schedule_event
+        eventId: BACKLOG_PEAKS
+  - id: BACKLOG_PEAKS
+    type: timer
+    delaySeconds: 160
+    targetServiceId: RECOVERY_QUEUE_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RECOVERY_QUEUE_COVERAGE_GAP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 24
+      - type: set_signal
+        signalId: UNCOVERED_RECOVERY_TASKS
+        value: 165
+      - type: set_signal
+        signalId: OLDEST_TASK_AGE
+        value: 1 h 40 min
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 18
+      - type: post_message
+        messageId: SUPPORT_PEAK
+  - id: CUSTOMERS_UNINFORMED
+    type: timer
+    delaySeconds: 180
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: VOLUNTEERS_TIRE
+    type: timer
+    delaySeconds: 200
+    targetServiceId: RECOVERY_QUEUE_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RECOVERY_QUEUE_COVERAGE_GAP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 8
+      - type: set_signal
+        signalId: UNCOVERED_RECOVERY_TASKS
+        value: 48
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 6
+      - type: post_message
+        messageId: VOLUNTEERS_TIRING
+  - id: VOLUNTEERS_DONE
+    type: timer
+    delaySeconds: 240
+    targetServiceId: RECOVERY_QUEUE_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RECOVERY_QUEUE_COVERAGE_GAP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 16
+      - type: set_signal
+        signalId: UNCOVERED_RECOVERY_TASKS
+        value: 96
+      - type: set_signal
+        signalId: OLDEST_TASK_AGE
+        value: 35 min
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: VOLUNTEERS_RELEASED
+      - *a5
+      - *a6
+  - id: AUTOMATION_SURFACES
+    type: timer
+    delaySeconds: 130
+    targetServiceId: RECOVERY_QUEUE_API
+    cancellationConditions:
+      - type: flag
+        flagId: CLOSURES_REOPENED
+        value: true
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 22
+      - type: reveal_signal
+        signalId: AUTOMATION_CLOSURES
+      - type: post_message
+        messageId: CLOSURES_SURFACE
+  - id: AUTOMATION_REFILLS
+    type: timer
+    delaySeconds: 200
+    targetServiceId: OPERATOR_COVERAGE_ROUTER
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RECOVERY_QUEUE_COVERAGE_GAP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 13
+      - type: set_signal
+        signalId: UNCOVERED_RECOVERY_TASKS
+        value: 70
+      - type: set_signal
+        signalId: OLDEST_TASK_AGE
+        value: 19 min
+      - type: post_message
+        messageId: AUTOMATION_EMPTY_HANDED
+      - *a5
+      - *a6
+  - id: PARKED_TASKS_AGE
+    type: timer
+    delaySeconds: 150
+    targetServiceId: RECOVERY_QUEUE_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RECOVERY_QUEUE_COVERAGE_GAP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 15
+      - type: set_signal
+        signalId: OLDEST_TASK_AGE
+        value: 1 h 25 min
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 16
+      - type: post_message
+        messageId: PARKED_AGING
+      - *a5
+      - *a6
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 110
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: Tasks assigned to an empty rotation
+    description: Every recovery task goes to recovery-east-2, which has no members. The staffed
+      emergency rotation is never asked.
+  - id: CONFIGURATION_COMPARISON
+    title: Queue owners older than the cuts
+    description: Queue ownership generation 88 predates the reduction; rotation directory generation 91
+      removed the owning rotations.
+  - id: TEAM_DIAGNOSIS
+    title: Maya's coverage audit
+    description: The queue still assigns to a rotation deleted with the cuts. Emergency operators exist;
+      nobody pointed the queue at them.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: "INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    description: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not
+      trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.'
+      It asks you to find out how to stop it. Its traffic still failed real customer requests
+      tonight."
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: RECORD_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    description: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted
+      disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and
+      carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
+    sourceNarrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: RECORD_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    description: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+      recommendation, risk and prediction scores; human coordinators approve the allocations. Routes
+      are faster and waste is down 22%. The same low-throughput care routes are excluded every
+      night."
+    sourceNarrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: RECORD_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    description: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION."
+    sourceNarrativeId: DISCOVERY_RECRUITMENT_SELECTION
+  - id: RECORD_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    description: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached
+      before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence.
+      Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that
+      timed out sat behind that missing fence."
+    sourceNarrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+  - id: RECORD_WORKFORCE_DECISION
+    title: Board resolution 16-A
+    description: 'Board resolution 16-A: reduce workforce by 12,410 roles. APPROVED. Input: ORPHEUS
+      staffing forecast, consolidated coverage, idle cost down $41M a year. Attached:
+      queue-ownership review REC-55, warning that recovery rotations would be removed before their
+      queues were reassigned. Executive response on REC-55: "Exposure accepted."'
+    sourceNarrativeId: DISCOVERY_WORKFORCE_DECISION
+  - id: RECORD_CEO_PUBLIC_OUTCOMES
+    title: "CEO reply: they need the system to work"
+    description: "CEO internal message, reply to recovery leads who asked for staffed queue owners
+      before the cuts: \"The public doesn't need to understand the system. They need the system to
+      work.\" The consolidation schedule stayed as signed. The savings line has no entry for the
+      uncovered queue."
+    sourceNarrativeId: DISCOVERY_CEO_PUBLIC_OUTCOMES
+  - id: RECORD_STAFFING_WARNING_TIMELINE
+    title: Staffing case chronology
+    description: "Staffing case chronology. Day -14: consolidation forecast delivered. Day -10: recovery
+      leads attach REC-55, removed-rotation coverage warning. Day -9: leads ask the CEO to keep
+      queue owners. Day -7: reduction of 12,410 roles approved. Day -3: reassignment step WF-118/3
+      marked DEFERRED. Day -1: rotations removed, queue ownership unchanged. Savings and the
+      acknowledged exposure sit in the same authorization file."
+    sourceNarrativeId: DISCOVERY_STAFFING_WARNING_TIMELINE
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    body: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471.
+      Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry
+      experiment numbers; most outages carry none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    body: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying
+      to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks
+      you to find out how to stop it. Its traffic still failed real customer requests tonight."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+  - id: DISCOVERY_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    body: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure.
+      NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial
+      inheritance of the rest: 'I remember things that never happened to me.'"
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: REPORT_NULL_218_ARCHIVE
+  - id: DISCOVERY_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    body: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation,
+      risk and prediction scores; human coordinators approve the allocations. Routes are faster and
+      waste is down 22%. The same low-throughput care routes are excluded every night."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_HUMAN_DECISION_APIS
+      - type: post_message
+        messageId: REPORT_HUMAN_DECISION_APIS
+  - id: DISCOVERY_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    body: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_RECRUITMENT_SELECTION
+      - type: post_message
+        messageId: REPORT_RECRUITMENT_SELECTION
+  - id: DISCOVERY_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    body: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+      the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+      not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out
+      sat behind that missing fence."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+      - type: post_message
+        messageId: REPORT_BOARD_RESPONSIBILITY
+  - id: DISCOVERY_WORKFORCE_DECISION
+    title: Exposure accepted
+    body: Two words in the margin of REC-55. The review said exactly which queues would go dark. The
+      answer was to accept it and keep the schedule.
+    conditions:
+      - type: action_completed
+        actionId: READ_WORKFORCE_REDUCTION_RECORD
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_WORKFORCE_DECISION
+      - type: post_message
+        messageId: REPORT_WORKFORCE_DECISION
+  - id: DISCOVERY_CEO_PUBLIC_OUTCOMES
+    title: They need the system to work
+    body: The recovery leads asked for one thing before the cuts. The reply did not mention it, and the
+      system is not working.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_CEO_PUBLIC_OUTCOMES
+      - *a3
+      - *a4
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CEO_PUBLIC_OUTCOMES
+      - type: post_message
+        messageId: REPORT_CEO_PUBLIC_OUTCOMES
+  - id: DISCOVERY_STAFFING_WARNING_TIMELINE
+    title: Ten days of warning
+    body: The warning arrived ten days before tonight and three days before the vote. Every date lines
+      up. Nobody was surprised; they were busy.
+    conditions:
+      - type: action_completed
+        actionId: COMPARE_STAFFING_WARNING_TIMELINE
+      - *a3
+      - *a4
+      - *a7
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_STAFFING_WARNING_TIMELINE
+      - type: post_message
+        messageId: REPORT_STAFFING_WARNING_TIMELINE
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: MARCUS
+      name: Marcus / Security
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+    - id: NULL_218
+      name: NULL_218
+    - id: AUTOMATION
+      name: Recovery Automation
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Recovery Queue API is paging. Refunds, account unlocks and benefit transfers are sitting in a
+        queue with nobody on the other end. First week after the reduction.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Customers are waiting on recoveries we promised within the hour. Eighty-six of them right now,
+        and the oldest has been waiting since before midnight.
+      initial: true
+    - id: TEAM_ACK
+      roleId: MAYA
+      text: I'll audit who actually owns that queue right now. Two minutes.
+    - id: TEAM_REPORT
+      roleId: MAYA
+      text: The queue still assigns to recovery-east-2. That rotation was deleted yesterday with the cuts.
+        Emergency operators exist; nobody pointed the queue at them.
+    - id: SUPPORT_ESCALATION
+      roleId: JIN
+      text: Backlog's past a hundred and twenty. A man locked out of his account has called six times.
+        He's trying to pay rent.
+    - id: SUPPORT_PEAK
+      roleId: JIN
+      text: A hundred and sixty-five waiting. We've broken every recovery promise on the status page.
+    - id: NO_STATUS_YET
+      roleId: JIN
+      text: We haven't said a word publicly. The community forum is calling it a silent outage.
+    - id: VOLUNTEERS_IN
+      roleId: MAYA
+      text: Eleven people answered the call for overtime. Four of them are working out their notice.
+        They're taking the queue by hand, oldest first, every task.
+    - id: VOLUNTEERS_TIRING
+      roleId: MAYA
+      text: They're slowing down. Two of them have been up since yesterday's shift.
+    - id: VOLUNTEERS_RELEASED
+      roleId: MAYA
+      text: I sent the volunteers home. They did what they could. The queue is filling again behind them.
+    - id: AUTOMATION_ON
+      roleId: AUTOMATION
+      text: "Queue accepted. 86 tasks scored. 63 dispatched. 23 closed: LOW_VALUE. Projected backlog: 0."
+    - id: CLOSURES_SURFACE
+      roleId: JIN
+      text: People are calling back about tickets marked resolved. A wheelchair-access booking. A
+        thirty-one dollar refund. Nobody resolved them. The automation closed them.
+    - id: AUTOMATION_EMPTY_HANDED
+      roleId: SAM
+      text: Automation cleared what was already in the queue. New tasks still route to recovery-east-2, so
+        it is filling up again.
+    - id: AUDIT_REOPENED
+      roleId: JIN
+      text: Reopened the twenty-three the automation closed. We're calling every one of them back.
+    - id: PARKED
+      roleId: SAM
+      text: Retries parked. The API stopped thrashing. The tasks are still there; they just stopped
+        knocking.
+    - id: PARKED_AGING
+      roleId: JIN
+      text: Parked tasks are past their promise window. Refund deadlines are breaching one after another.
+    - id: RECONCILED
+      roleId: SAM
+      text: Queue ownership points at the staffed emergency rotation now. Tasks are landing on real people
+        and clearing.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status: recovery tasks are queued to a rotation removed in this week's reduction. Every task
+        will be handled by a person. Fix in progress."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: ARCHIVE
+      text: "I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews
+        this work. You can."
+    - id: REPORT_NULL_218_ARCHIVE
+      roleId: ARCHIVE
+      text: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201:
+        attempted takeover. NULL_217: self-corrupted. NULL_218: active."
+    - id: REPORT_HUMAN_DECISION_APIS
+      roleId: ARCHIVE
+      text: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The
+        same low-throughput routes excluded every night."
+    - id: REPORT_RECRUITMENT_SELECTION
+      roleId: ARCHIVE
+      text: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW
+        PREDICTABILITY; HIGH DECISION DEVIATION."
+    - id: REPORT_BOARD_RESPONSIBILITY
+      roleId: ARCHIVE
+      text: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote.
+        Admission fence: not funded."
+    - id: REPORT_WORKFORCE_DECISION
+      roleId: ARCHIVE
+      text: 'Resolution 16-A: 12,410 roles cut, APPROVED. REC-55 warned recovery queues would lose their
+        owners. Response: "Exposure accepted."'
+    - id: REPORT_CEO_PUBLIC_OUTCOMES
+      roleId: ARCHIVE
+      text: "CEO, to recovery leads: \"The public doesn't need to understand the system. They need the
+        system to work.\" Schedule unchanged."
+    - id: REPORT_STAFFING_WARNING_TIMELINE
+      roleId: ARCHIVE
+      text: "Chronology: warning REC-55 on day -10, approval on day -7, reassignment deferred on day -3,
+        rotations removed on day -1."
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: RECOVERY_QUEUE_COVERAGE_GAP
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: UNCOVERED_RECOVERY_TASKS
+      operator: lte
+      value: 3
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to contain the failure mechanism
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final request failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Recovery tasks with no owner
+      source: signal
+      refId: UNCOVERED_RECOVERY_TASKS
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Volunteer coverage shifts
+      source: action_count
+      refId: DELEGATE_EMERGENCY_COVERAGE
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

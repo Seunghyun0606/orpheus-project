@@ -1,0 +1,601 @@
+schemaVersion: 2
+id: INC-016-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-016
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Payment holds and review queue
+    kind: metrics
+    reveal: &a1
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal: &a2
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 6
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - LEGITIMATE_TRANSACTION_HOLDS
+          - REVIEW_QUEUE_DEPTH
+          - RECEIPTED_SHARE
+  - id: logs
+    title: Review queue log
+    kind: logs
+    reveal: *a1
+    campaignReveal: *a2
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_FINANCE_DECISION_SUPPORT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: review-queue.log (txn 8812-4471)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: queue-log
+        columns:
+          - Time
+          - Source
+          - Transaction
+          - Event
+          - Receipt
+        rows:
+          - - 03:01:44
+            - orpheus-risk/score
+            - 8812-4471
+            - score 0.71; REVIEW_REQUIRED
+            - "-"
+          - - 03:02:10
+            - analyst R. Okafor
+            - 8812-4471
+            - CLEARED
+            - rcpt-55120
+          - - 03:03:02
+            - orpheus-risk/rescore
+            - 8812-4471
+            - retry scored 0.71; REVIEW_REQUIRED
+            - rcpt-55120
+          - - 03:08:51
+            - analyst D. Mensah
+            - 8812-4471
+            - CLEARED
+            - rcpt-55120, rcpt-55388
+          - - 03:09:03
+            - orpheus-risk/rescore
+            - 8812-4471
+            - retry scored 0.71; REVIEW_REQUIRED
+            - rcpt-55120, rcpt-55388
+          - - 03:09:03
+            - transaction-api
+            - 8812-4471
+            - authorization timed out; customer retry queued
+            - "-"
+  - id: trace
+    title: One cleared payment
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a2
+    actionIds:
+      - TRACE_TRANSACTION_REENTRY
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - REVIEW_REENTRY
+  - id: trace-spans
+    title: Path of txn 8812-4471
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_TRANSACTION_REENTRY
+    campaignReveal: *a2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: reentry-trace
+        columns:
+          - Hop
+          - Service
+          - Reads receipt?
+          - Outcome
+        rows:
+          - - "1"
+            - review desk
+            - writes rcpt-55120
+            - CLEARED
+          - - "2"
+            - retry path
+            - no
+            - forwarded as new item
+          - - "3"
+            - orpheus-risk/rescore
+            - no
+            - REVIEW_REQUIRED
+          - - "4"
+            - review queue
+            - no
+            - position 1,406
+  - id: configuration
+    title: Rescore rule versions
+    kind: deployment
+    reveal: *a1
+    campaignReveal: *a2
+    actionIds:
+      - COMPARE_REVIEW_RECEIPTS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - REVIEW_RECEIPT_POLICY
+  - id: configuration-diff
+    title: rescore v1 and v2
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_REVIEW_RECEIPTS
+    campaignReveal: *a2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: rescore-diff
+        columns:
+          - Setting
+          - v1
+          - v2
+        rows:
+          - - dedupe_key
+            - transaction ID + receipt
+            - transaction ID
+          - - consume_receipt_before_scoring
+            - "true"
+            - (removed)
+          - - review_threshold
+            - "0.70"
+            - "0.62"
+          - - fraud catch rate (30 days)
+            - baseline
+            - +31%
+  - id: bypass-release
+    title: Bypass release batch
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: BYPASS_RELEASE_SUMMARY
+    campaignReveal: *a2
+    actionIds:
+      - HOLD_UNRECEIPTED_PAYMENTS
+    blocks:
+      - kind: signals
+        id: bypass-release-values
+        signalIds:
+          - BYPASS_RELEASE_SUMMARY
+      - kind: table
+        id: bypass-release-table
+        columns:
+          - Transaction
+          - Amount
+          - Score
+          - Receipt
+          - Released
+        rows:
+          - - 9034-1172
+            - $212.40
+            - "0.64"
+            - rcpt-57001
+            - yes
+          - - 9034-1180
+            - $14,950.00
+            - "0.93"
+            - "-"
+            - yes
+          - - 9034-1186
+            - $88.10
+            - "0.63"
+            - rcpt-57012
+            - yes
+          - - 9034-1193
+            - $12,400.00
+            - "0.91"
+            - "-"
+            - yes
+          - - 9034-1201
+            - $1,020.00
+            - "0.66"
+            - rcpt-57040
+            - yes
+          - - 9034-1207
+            - $14,450.00
+            - "0.95"
+            - "-"
+            - yes
+  - id: mitigation
+    title: Buy time
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal: *a2
+    actionIds:
+      - BYPASS_NARROW_REVIEW_QUEUE
+      - RESTART_REVIEW_WORKERS
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: "ORPHEUS reads the backlog as stalled workers and wants a restart. Sam is less sure: the
+          workers hold a cursor, and a restart rewinds it. The bypass releases everything on hold in
+          one batch. Merchants get paid now; whatever was on hold for a real reason goes out with
+          them."
+  - id: containment
+    title: Honor the receipt
+    kind: diagnostics
+    reveal:
+      - &a3
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a4
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal: *a2
+    actionIds:
+      - HONOR_VERIFIED_REVIEW_RECEIPTS
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Putting the receipt check back in front of rescore means a payment cleared once stays cleared.
+          ORPHEUS projects a 0.4% dip in fraud catch rate. Analysts stop reviewing their own work.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal: *a1
+    campaignReveal: *a2
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_JIN_TRACE_TRANSACTION_REPORTS
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ORPHEUS_OPEN
+          - BYPASS_DONE
+          - FRAUD_CAUGHT
+          - FRAUD_FOUND
+          - RESTART_BACKFIRE
+          - PAYROLL_HIT
+          - MERCHANT_ESCALATED
+          - BYPASS_REFILLED
+          - NO_STATUS_YET
+          - RECEIPTS_HONORED
+          - ORPHEUS_RECEIPT_NOTE
+          - TEAM_ACK
+          - TEAM_REPORT
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - REPORT_NULL_218_ARCHIVE
+          - REPORT_HUMAN_DECISION_APIS
+          - REPORT_FINANCE_DECISION_SUPPORT
+        delegationActionIds:
+          - ASK_JIN_TRACE_TRANSACTION_REPORTS
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster that is still running"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who deployed NULL"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: "Archive: the lineage of your first incident"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: "Archive: NULL's objective constraint"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: "Archive: the verified instance archive"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_218_ARCHIVE
+    blocks:
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: investigate-human_decision_apis
+    title: "Archive: the care-priority decision interface"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+    blocks:
+      - kind: signals
+        id: investigate-human_decision_apis-values
+        signalIds:
+          - RECORD_HUMAN_DECISION_APIS
+  - id: investigate-finance_decision_support
+    title: Open the transaction-risk decision interface
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_CREDIT_RISK_INTERFACE
+    blocks:
+      - kind: signals
+        id: investigate-finance_decision_support-values
+        signalIds:
+          - RECORD_FINANCE_DECISION_SUPPORT
+evidenceRelations: []

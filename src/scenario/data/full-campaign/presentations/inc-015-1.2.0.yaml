@@ -1,0 +1,572 @@
+schemaVersion: 2
+id: INC-015-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-015
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Routing health, network and clinic
+    kind: metrics
+    reveal: &a2
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal: &a1
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 6
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - DEFERRED_CARE_ROUTES
+          - THROUGHPUT_SCORE
+          - RURAL_CLINICS_WAITING
+          - OLDEST_WAIT
+  - id: clinic-queue
+    title: Unrouted requests by clinic
+    kind: metrics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: clinic-queue-table
+        columns:
+          - Clinic
+          - Region
+          - Patients / route-hour
+          - Requests waiting
+          - Last route
+        rows:
+          - - Metro General intake
+            - Central
+            - "14.8"
+            - "2"
+            - 00:41 ago
+          - - Riverside Urgent Care
+            - Central
+            - "12.1"
+            - "3"
+            - 01:05 ago
+          - - Kestrel Falls
+            - North rural
+            - "3.4"
+            - "9"
+            - 3 h 12 min ago
+          - - Harlow Creek
+            - North rural
+            - "2.9"
+            - "6"
+            - 3 h 12 min ago
+          - - Ostrander
+            - North rural
+            - "3.0"
+            - "5"
+            - 3 h 12 min ago
+          - - Pine Hollow + 10 more
+            - East rural
+            - 2.6 - 3.8
+            - "31"
+            - 3 h 12 min ago
+  - id: logs
+    title: Care allocation log
+    kind: logs
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: allocator.log (cycles 1,204 - 1,206)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: allocator-log
+        columns:
+          - Time
+          - Cycle
+          - Issuer
+          - Message
+        rows:
+          - - 04:10:00
+            - 1,204
+            - care-allocator
+            - renewed 70 allocations; 14 requests deferred
+          - - 04:10:00
+            - 1,204
+            - orpheus-planner/care-throughput
+            - deferral reason PRIORITY_RENEWED for clinic set R-14
+          - - 04:11:00
+            - 1,205
+            - care-allocator
+            - renewed 70 allocations; 14 requests deferred
+          - - 04:11:00
+            - 1,205
+            - orpheus-planner/care-throughput
+            - deferral reason PRIORITY_RENEWED for clinic set R-14
+          - - 04:11:04
+            - 1,205
+            - care-routing-api
+            - Kestrel Falls resubmitted request 9 times; timed out
+          - - 04:12:00
+            - 1,206
+            - orpheus-planner/care-throughput
+            - deferral reason PRIORITY_RENEWED for clinic set R-14
+  - id: trace
+    title: One deferred clinic
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds:
+      - TRACE_DEFERRED_PATIENT_ROUTE
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - CARE_ROUTE_REASON
+  - id: trace-spans
+    title: Kestrel Falls request through care-priority v4
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_DEFERRED_PATIENT_ROUTE
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: trace-table
+        columns:
+          - Step
+          - Rule
+          - Result
+        rows:
+          - - "1"
+            - renew previous allocations
+            - 70 lanes filled by last cycle's holders
+          - - "2"
+            - rank new requests by throughput
+            - Kestrel Falls ranked 84 of 84
+          - - "3"
+            - fill remaining lanes
+            - 0 lanes remaining
+          - - "4"
+            - defer
+            - PRIORITY_RENEWED; retry next cycle
+  - id: configuration
+    title: care-priority v3 and v4
+    kind: deployment
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - COMPARE_PRIORITY_CONSTRAINTS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - PRIORITY_CONSTRAINTS
+  - id: configuration-diff
+    title: Policy diff
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_PRIORITY_CONSTRAINTS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: policy-diff
+        columns:
+          - Setting
+          - v3
+          - v4
+        rows:
+          - - throughput_target
+            - "0.85"
+            - "0.90"
+          - - renewal_order
+            - after minimums
+            - first
+          - - min_route_per_clinic
+            - "1"
+            - (removed)
+          - - approved_by
+            - care network board
+            - ORPHEUS proposal, coordinator sign-off
+  - id: orpheus-rationale
+    title: ORPHEUS's deferral rationale
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    campaignReveal: *a1
+    actionIds:
+      - ASK_ORPHEUS_DEFERRAL_RATIONALE
+    blocks:
+      - kind: signals
+        id: orpheus-rationale-values
+        signalIds:
+          - ORPHEUS_RATIONALE
+  - id: mitigation
+    title: Buy time
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal: *a1
+    actionIds:
+      - ADD_CARE_ROUTING_CAPACITY
+      - MANUAL_TRIAGE_OVERRIDE
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: "ORPHEUS wants more lanes, and more lanes will turn the dashboard green: every new lane goes
+          to whoever ranks highest, and the 14 clinics rank last. Hand-routing reaches the clinics
+          directly, but it takes two people off the bridge for as long as the phones are open."
+  - id: containment
+    title: Restore the clinic minimum
+    kind: diagnostics
+    reveal:
+      - &a3
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a4
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal: *a1
+    actionIds:
+      - RESTORE_MINIMUM_CARE_ROUTE
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Putting min_route_per_clinic back makes the rule serve every clinic once before it renews
+          anyone. Network throughput drops a few points. Kestrel Falls gets a route on the next
+          cycle.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_JIN_TRACE_CARE_DELAYS
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ORPHEUS_OPEN
+          - ORPHEUS_RATIONALE_REPLY
+          - ORPHEUS_CAPACITY_APPLIED
+          - DASHBOARD_GREEN
+          - CAPACITY_GONE
+          - TRIAGE_STARTED
+          - TRIAGE_ENDED
+          - SURGE
+          - CLINIC_HARM_ONE
+          - CLINIC_HARM_TWO
+          - NO_STATUS_YET
+          - FLOOR_RESTORED
+          - ORPHEUS_FLOOR_NOTE
+          - TEAM_ACK
+          - TEAM_REPORT
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - REPORT_NULL_218_ARCHIVE
+          - REPORT_HUMAN_DECISION_APIS
+        delegationActionIds:
+          - ASK_JIN_TRACE_CARE_DELAYS
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster that is still running"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who deployed NULL"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: "Archive: the lineage of your first incident"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: "Archive: NULL's objective constraint"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: "Archive: the verified instance archive"
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_218_ARCHIVE
+    blocks:
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: investigate-human_decision_apis
+    title: Open the care-priority decision interface
+    kind: documents
+    reveal:
+      - *a3
+      - *a4
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 6
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_PATIENT_PRIORITY_INTERFACE
+    blocks:
+      - kind: signals
+        id: investigate-human_decision_apis-values
+        signalIds:
+          - RECORD_HUMAN_DECISION_APIS
+evidenceRelations: []

@@ -1,0 +1,375 @@
+schemaVersion: 2
+id: INC-010-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-010
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Payment drops and remediation pressure
+    kind: metrics
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - DEPENDENCY_TOGGLES
+          - REMEDIATION_BACKLOG
+          - REPLICA_HEALTH
+  - id: logs
+    title: Dependency controller log
+    kind: logs
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: controller.log (settle-03, last 6 minutes)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds: []
+    blocks:
+      - kind: table
+        id: controller-log
+        columns:
+          - Time
+          - Level
+          - Issuer
+          - Message
+        rows:
+          - - '02:41:07'
+            - WARN
+            - controller-a
+            - settle-03 health probe slow (412 ms); scheduling reattach
+          - - '02:41:09'
+            - INFO
+            - controller-b
+            - settle-03 detach ordered (fence 40)
+          - - '02:41:15'
+            - INFO
+            - controller-a
+            - settle-03 reattach ordered (fence 41)
+          - - '02:41:16'
+            - ERROR
+            - gateway
+            - 214 in-flight payments dropped on detach
+          - - '02:41:22'
+            - INFO
+            - controller-b
+            - settle-03 detach ordered (fence 40)
+          - - '02:41:24'
+            - NOTE
+            - svc/model-serving-218
+            - detach acknowledged; outcome logged
+          - - '02:41:31'
+            - INFO
+            - controller-a
+            - settle-03 reattach ordered (fence 41)
+  - id: trace
+    title: Detach order provenance
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - TRACE_REMEDIATION_ORIGIN
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - TOGGLE_ORIGIN
+  - id: trace-spans
+    title: Order issuers for settle-03
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_REMEDIATION_ORIGIN
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds: []
+    blocks:
+      - kind: table
+        id: issuer-table
+        columns:
+          - Issuer
+          - Orders (6 min)
+          - Lease
+          - Last renewal
+        rows:
+          - - controller-a
+            - '11 reattach'
+            - held
+            - 00:12 ago
+          - - controller-b
+            - '11 detach'
+            - expired
+            - 41:03 ago
+  - id: configuration
+    title: Controller lease fences
+    kind: deployment
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - COMPARE_CONTROLLER_GENERATIONS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - CONTROLLER_GENERATIONS
+  - id: mitigation
+    title: Buy time
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - RESTART_DEPENDENCY_CONTROLLER
+      - SUSPEND_DEPENDENCY_TOGGLE
+      - PIN_REMEDIATION_TO_LEASE_HOLDER
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: The advisor wants a restart. Suspension stops every toggle, healthy ones included.
+          Pinning to the lease holder only works if you know which controller holds the lease.
+  - id: containment
+    title: Fence the lease store
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - FENCE_REMEDIATION_WRITER
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Raising the store's minimum fence to 41 bounces every write from controller-b. Two
+          minutes of work, and settle-03 stops flapping for good.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal:
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 4
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_TRACE_CONTROLLER
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ADVISOR_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - SUPPORT_ESCALATION
+          - SUPPORT_PEAK
+          - NO_STATUS_YET
+          - RESTART_BACKFIRE
+          - REPLICA_UNHEALED
+          - SUSPENSION_OVER
+          - PIN_LEAKING
+          - FENCE_HOLDS
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+        delegationActionIds:
+          - ASK_SAM_TRACE_CONTROLLER
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: model-origin
+    title: The foreign signature
+    kind: documents
+    reveal:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - COMPARE_MESSAGE_MODEL_ORIGIN
+    blocks:
+      - kind: signals
+        id: model-origin-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 4
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+evidenceRelations: []

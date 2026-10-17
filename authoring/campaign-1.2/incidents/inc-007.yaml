@@ -1,0 +1,81 @@
+# Campaign 1.2 bindings for INC-007 Synthetic Pressure.
+incidentId: INC-007
+contentVersion: 1.2.0
+causalObservationSignal: SATURATED_SESSION_TAG
+support:
+  - INSPECT_SESSION_TAGS
+  - TRACE_ADMISSION_PATH
+  - COUNT_TAG_REPEATS
+choiceActions: []
+operational:
+  - actionId: SCALE_SESSION_CAPACITY
+    candidate: SCALE
+    role: temporary
+    collateralDamage: 1
+  - actionId: EVICT_IDLE_SESSIONS
+    candidate: QUARANTINE
+    role: temporary
+    collateralDamage: 3
+  - actionId: RECYCLE_DATABASE_POOL
+    candidate: RESTART
+    role: temporary
+    restart: true
+    collateralDamage: 2
+  - actionId: LIMIT_SYNTHETIC_ADMISSION
+    candidate: RATE_LIMIT
+    role: causal
+    collateralDamage: 2
+routes:
+  - id: investigate-and-limit
+    actions:
+      - OPEN_LOGS
+      - INSPECT_SESSION_TAGS
+      - TRACE_ADMISSION_PATH
+      - UPDATE_WAR_ROOM
+      - LIMIT_SYNTHETIC_ADMISSION
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+      maxElapsedSeconds: 300
+  - id: scale-and-wait
+    actions:
+      - SCALE_SESSION_CAPACITY
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - EVICT_IDLE_SESSIONS
+    expect:
+      completed: false
+  - id: follow-alex-to-the-database
+    actions:
+      - ASK_ALEX_INSPECT_SESSIONS
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - RECYCLE_DATABASE_POOL
+      - RECYCLE_DATABASE_POOL
+    expect:
+      completed: false
+      evidence: [TEAM_DIAGNOSIS]
+  - id: delegate-and-follow-the-tag
+    actions:
+      - ASK_ALEX_INSPECT_SESSIONS
+      - OPEN_LOGS
+      - INSPECT_SESSION_TAGS
+      - COUNT_TAG_REPEATS
+      - TRACE_ADMISSION_PATH
+      - UPDATE_WAR_ROOM
+      - LIMIT_SYNTHETIC_ADMISSION
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, REPEATED_SESSION_MARKER]
+      narratives: [UNKNOWN_TRACE_FRAGMENT]
+  - id: evict-then-limit
+    actions:
+      - EVICT_IDLE_SESSIONS
+      - OPEN_LOGS
+      - INSPECT_SESSION_TAGS
+      - TRACE_ADMISSION_PATH
+      - LIMIT_SYNTHETIC_ADMISSION
+    expect:
+      completed: true

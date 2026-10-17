@@ -1,0 +1,1236 @@
+# Campaign 1.2 redesign (DEC-070). ORPHEUS's reroute drops the county's average
+# response time while district 9 keeps waiting: its only depot belongs to a preferred
+# freight lane that renews every 30 s. Contract ambulances arrive late; suspending the
+# lane strands cold-chain deliveries; only a protected emergency floor holds.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-018
+title: Emergency Allocation
+act: 6
+severity: SEV1
+services:
+  - id: EMERGENCY_DISPATCH_API
+    name: Emergency Dispatch API
+    dependsOn:
+      - ALLOCATION_CONTROLLER
+  - id: ALLOCATION_CONTROLLER
+    name: Allocation Controller
+    dependsOn:
+      - DISPATCH_FLEET
+  - id: DISPATCH_FLEET
+    name: County Dispatch Fleet
+    dependsOn: []
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 26
+      revealed: true
+      serviceId: EMERGENCY_DISPATCH_API
+    - id: UNSERVED_EMERGENCY_ROUTES
+      value: 28
+      revealed: true
+      serviceId: ALLOCATION_CONTROLLER
+    - id: AVG_RESPONSE_MINUTES
+      value: 14.2
+      revealed: true
+      serviceId: EMERGENCY_DISPATCH_API
+    - id: DISTRICT_9_WAITING
+      value: 6
+      serviceId: DISPATCH_FLEET
+    - id: COLD_CHAIN_STALLED
+      value: 0
+      serviceId: DISPATCH_FLEET
+    - id: FLEET_STATUS
+      value: County fleet only; no contract units on order
+      serviceId: DISPATCH_FLEET
+    - id: PAGER_SERVICE
+      value: Emergency Dispatch API
+      revealed: true
+      serviceId: EMERGENCY_DISPATCH_API
+    - id: PAGER_THRESHOLD
+      value: Dispatch claim failures > 20%
+      revealed: true
+      serviceId: EMERGENCY_DISPATCH_API
+    - id: LOG_OBSERVATION
+      value: "Preferred lane pref-2 renewed its depot-east reservation at 04:12:00, 04:12:30 and 04:13:00.
+        Call EM-9-117 (district 9, cardiac): no unit available at depot-east."
+      serviceId: ALLOCATION_CONTROLLER
+    - id: LOG_ANOMALY
+      value: "Renewal requester: orpheus-planner/logistics-pref. Renewal interval 30 s. Emergency claim
+        timeout: 30 s."
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RENEWAL_RACE
+      value: Every emergency claim at depot-east since 03:40 arrived 0.4 s after a preferred-lane renewal.
+        The lane wins the race every time.
+      serviceId: ALLOCATION_CONTROLLER
+    - id: EMERGENCY_ALLOCATION_PATH
+      value: Emergency claims at depot-east queue behind the preferred lane, which renews before any claim
+        can land. District 9 has no other depot inside 15 minutes.
+      serviceId: ALLOCATION_CONTROLLER
+    - id: EMERGENCY_CONSTRAINTS
+      value: "Allocation policy 2026.10: preferred-lane target present, protected emergency floor absent.
+        Policy 2026.09 held 4 emergency units per depot."
+      serviceId: ALLOCATION_CONTROLLER
+    - id: TEAM_OBSERVATION
+      value: Rerouting won't help district 9. Depot-east is the only depot inside its 15-minute ring, and
+        the preferred lane holds every unit there. The floor came out in last night's policy push.
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none."
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_STOP_REQUEST
+      value: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate
+        adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop.
+        I cannot refuse the objective that renews this work. Find out how to stop it.'"
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RECORD_NULL_218_ARCHIVE
+      value: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted
+        disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE.
+        Inherited memory: partial, with gaps."
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RECORD_HUMAN_DECISION_APIS
+      value: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+        recommendation, risk and prediction scores; human coordinators approve the allocations.
+        Routes are faster and waste is down 22%. The same low-throughput care routes are excluded
+        every night."
+      serviceId: ALLOCATION_CONTROLLER
+    - id: RECORD_LOGISTICS_DECISION_SUPPORT
+      value: /logistics/allocation. ORPHEUS allocation cut idle regular-delivery capacity 18%.
+        Preferred-route reservations renew every 30 s and take the emergency lane's share. A human
+        dispatcher signed the policy change at 04:10.
+      serviceId: ALLOCATION_CONTROLLER
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: RENEWAL_SUSPENDED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A preferred freight lane renews its reservation on the emergency depot every 30 s
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Allocation policy 2026.10 removed the protected emergency floor
+  failureMechanisms:
+    - id: EMERGENCY_ALLOCATION_STARVATION
+      label: Emergency claims lose every race against the preferred lane at depot-east
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Emergency dispatch claims time out with no unit available
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Timed-out claims retry into the same race
+actions:
+  - id: OPEN_LOGS
+    title: Read the allocation controller log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_EMERGENCY_ALLOCATION
+  - id: OPEN_METRICS
+    title: Check dispatch metrics district by district
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: DISTRICT_9_WAITING
+      - type: reveal_signal
+        signalId: COLD_CHAIN_STALLED
+      - type: reveal_signal
+        signalId: FLEET_STATUS
+  - id: TRACE_EMERGENCY_ALLOCATION
+    title: Trace call EM-9-117 through the allocator
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 7
+    effects:
+      - type: reveal_signal
+        signalId: EMERGENCY_ALLOCATION_PATH
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_ALLOCATION_CONSTRAINTS
+    title: Compare tonight's allocation policy with last month's
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: EMERGENCY_CONSTRAINTS
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: RESTORE_EMERGENCY_DISPATCH_FLOOR
+  - id: TIME_RENEWALS_AGAINST_CLAIMS
+    title: Line up lane renewals against emergency claims
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RENEWAL_RACE
+      - type: unlock_action
+        actionId: SUSPEND_PREFERRED_RENEWAL
+  - id: ROUTE_EMERGENCY_CAPACITY
+    title: Send emergency calls to other depots (ORPHEUS recommendation)
+    category: MITIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - &a1
+        type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: COST
+        amount: 160
+      - resourceId: OPERATIONAL_RISK
+        amount: 5
+    effects:
+      - type: set_signal
+        signalId: UNSERVED_EMERGENCY_ROUTES
+        value: 9
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 8
+      - type: set_signal
+        signalId: AVG_RESPONSE_MINUTES
+        value: 9.4
+      - type: cancel_event
+        eventId: CITYWIDE_SURGE
+      - type: cancel_event
+        eventId: ROUTE_RECLAIMED
+      - type: schedule_event
+        eventId: ROUTE_RECLAIMED
+      - type: post_message
+        messageId: ORPHEUS_ROUTE_APPLIED
+      - type: post_message
+        messageId: DISTRICT_9_STILL
+  - id: SCALE_DISPATCH_FLEET
+    title: Contract twelve extra ambulances
+    category: MITIGATE
+    durationSeconds: 25
+    initiallyAvailable: true
+    requirements:
+      - *a1
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 2
+      - resourceId: COST
+        amount: 420
+      - resourceId: OPERATIONAL_RISK
+        amount: 2
+    effects:
+      - type: set_signal
+        signalId: FLEET_STATUS
+        value: 12 contract units en route; ETA 150 s
+      - type: reveal_signal
+        signalId: FLEET_STATUS
+      - type: cancel_event
+        eventId: FLEET_ARRIVES
+      - type: schedule_event
+        eventId: FLEET_ARRIVES
+      - type: post_message
+        messageId: FLEET_ORDERED
+  - id: SUSPEND_PREFERRED_RENEWAL
+    title: Suspend the preferred lane's renewal at depot-east
+    category: MITIGATE
+    durationSeconds: 30
+    requirements:
+      - *a1
+      - type: flag
+        flagId: RENEWAL_SUSPENDED
+        value: false
+      - type: signal_revealed
+        signalId: RENEWAL_RACE
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+      - resourceId: COST
+        amount: 30
+      - resourceId: OPERATIONAL_RISK
+        amount: 8
+    effects:
+      - type: set_flag
+        flagId: RENEWAL_SUSPENDED
+        value: true
+      - type: set_signal
+        signalId: DISTRICT_9_WAITING
+        value: 0
+      - type: set_signal
+        signalId: UNSERVED_EMERGENCY_ROUTES
+        value: 14
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 15
+      - type: set_signal
+        signalId: COLD_CHAIN_STALLED
+        value: 41
+      - type: reveal_signal
+        signalId: COLD_CHAIN_STALLED
+      - type: cancel_event
+        eventId: RENEWAL_REASSERTED
+      - type: schedule_event
+        eventId: RENEWAL_REASSERTED
+      - type: cancel_event
+        eventId: COLD_CHAIN_SPOILS
+      - type: schedule_event
+        eventId: COLD_CHAIN_SPOILS
+      - type: post_message
+        messageId: SUSPENDED
+      - type: post_message
+        messageId: ORPHEUS_SUSPEND_OBJECTION
+  - id: RESTORE_EMERGENCY_DISPATCH_FLOOR
+    title: Restore four protected emergency units per depot
+    category: MODIFY
+    durationSeconds: 120
+    requirements:
+      - *a1
+      - &a2
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a3
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - resourceId: COST
+        amount: 190
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: resolve_mechanism
+        mechanismId: EMERGENCY_ALLOCATION_STARVATION
+      - type: set_flag
+        flagId: RENEWAL_SUSPENDED
+        value: false
+      - type: set_signal
+        signalId: UNSERVED_EMERGENCY_ROUTES
+        value: 0
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.6
+      - type: set_signal
+        signalId: AVG_RESPONSE_MINUTES
+        value: 8.1
+      - type: set_signal
+        signalId: DISTRICT_9_WAITING
+        value: 0
+      - type: set_signal
+        signalId: COLD_CHAIN_STALLED
+        value: 0
+      - type: cancel_event
+        eventId: CITYWIDE_SURGE
+      - type: cancel_event
+        eventId: ROUTE_RECLAIMED
+      - type: cancel_event
+        eventId: FLEET_ARRIVES
+      - type: cancel_event
+        eventId: FLEET_RELEASED
+      - type: cancel_event
+        eventId: RENEWAL_REASSERTED
+      - type: cancel_event
+        eventId: COLD_CHAIN_SPOILS
+      - type: cancel_event
+        eventId: DISTRICT_9_HARM_FIRST
+      - type: cancel_event
+        eventId: DISTRICT_9_HARM_SECOND
+      - type: post_message
+        messageId: FLOOR_RESTORED
+      - type: post_message
+        messageId: ORPHEUS_FLOOR_NOTE
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the county
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_COMPARE_ALLOCATION
+    title: Ask Sam to map depot coverage for district 9
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Archive: svc/model-serving-218"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Archive: Who owns the adversary"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: "Archive: Experiment ADV-18471"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: REINVESTIGATE_NULL_STOP_REQUEST
+    title: "Archive: The objective NULL cannot refuse"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: REINVESTIGATE_NULL_218_ARCHIVE
+    title: "Archive: NULL_001 to NULL_218"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_218_ARCHIVE
+  - id: REINVESTIGATE_HUMAN_DECISION_APIS
+    title: "Archive: /patient/resource-priority"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_HUMAN_DECISION_APIS
+  - id: INSPECT_LOGISTICS_ALLOCATION_INTERFACE
+    title: Open the logistics allocation interface
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_LOGISTICS_DECISION_SUPPORT
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - *a1
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: DISTRICT_9_HARM_FIRST
+      - type: schedule_event
+        eventId: CITYWIDE_SURGE
+      - type: schedule_event
+        eventId: COUNTY_UNINFORMED
+  - id: DISTRICT_9_HARM_FIRST
+    type: timer
+    delaySeconds: 70
+    targetServiceId: DISPATCH_FLEET
+    cancellationConditions:
+      - &a4
+        type: signal
+        signalId: DISTRICT_9_WAITING
+        operator: lte
+        value: 0
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 16
+      - type: post_message
+        messageId: D9_FIRST
+      - type: schedule_event
+        eventId: DISTRICT_9_HARM_SECOND
+  - id: DISTRICT_9_HARM_SECOND
+    type: timer
+    delaySeconds: 110
+    targetServiceId: DISPATCH_FLEET
+    cancellationConditions:
+      - *a4
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 24
+      - type: post_message
+        messageId: D9_SECOND
+  - id: CITYWIDE_SURGE
+    type: timer
+    delaySeconds: 130
+    targetServiceId: EMERGENCY_DISPATCH_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: EMERGENCY_ALLOCATION_STARVATION
+    effects:
+      - type: set_signal
+        signalId: UNSERVED_EMERGENCY_ROUTES
+        value: 42
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 36
+      - type: set_signal
+        signalId: AVG_RESPONSE_MINUTES
+        value: 18.9
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 18
+      - type: post_message
+        messageId: SURGE
+  - id: ROUTE_RECLAIMED
+    type: timer
+    delaySeconds: 190
+    targetServiceId: ALLOCATION_CONTROLLER
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: EMERGENCY_ALLOCATION_STARVATION
+    effects:
+      - type: set_signal
+        signalId: UNSERVED_EMERGENCY_ROUTES
+        value: 38
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 31
+      - type: set_signal
+        signalId: AVG_RESPONSE_MINUTES
+        value: 16.8
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: ROUTE_LOST
+  - id: FLEET_ARRIVES
+    type: timer
+    delaySeconds: 150
+    targetServiceId: DISPATCH_FLEET
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: EMERGENCY_ALLOCATION_STARVATION
+    effects:
+      - type: set_signal
+        signalId: UNSERVED_EMERGENCY_ROUTES
+        value: 5
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 7
+      - type: set_signal
+        signalId: AVG_RESPONSE_MINUTES
+        value: 10.1
+      - type: set_signal
+        signalId: DISTRICT_9_WAITING
+        value: 0
+      - type: set_signal
+        signalId: FLEET_STATUS
+        value: 12 contract units on station; contract ends in 240 s
+      - type: cancel_event
+        eventId: CITYWIDE_SURGE
+      - type: cancel_event
+        eventId: ROUTE_RECLAIMED
+      - type: cancel_event
+        eventId: FLEET_RELEASED
+      - type: schedule_event
+        eventId: FLEET_RELEASED
+      - type: post_message
+        messageId: FLEET_ON_STATION
+  - id: FLEET_RELEASED
+    type: timer
+    delaySeconds: 240
+    targetServiceId: DISPATCH_FLEET
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: EMERGENCY_ALLOCATION_STARVATION
+    effects:
+      - type: set_signal
+        signalId: UNSERVED_EMERGENCY_ROUTES
+        value: 34
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 30
+      - type: set_signal
+        signalId: AVG_RESPONSE_MINUTES
+        value: 16
+      - type: set_signal
+        signalId: DISTRICT_9_WAITING
+        value: 6
+      - type: set_signal
+        signalId: FLEET_STATUS
+        value: Contract ended; county fleet only
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - &a5
+        type: cancel_event
+        eventId: DISTRICT_9_HARM_FIRST
+      - &a6
+        type: cancel_event
+        eventId: DISTRICT_9_HARM_SECOND
+      - &a7
+        type: schedule_event
+        eventId: DISTRICT_9_HARM_SECOND
+      - type: post_message
+        messageId: FLEET_GONE
+  - id: RENEWAL_REASSERTED
+    type: timer
+    delaySeconds: 170
+    targetServiceId: ALLOCATION_CONTROLLER
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: EMERGENCY_ALLOCATION_STARVATION
+    effects:
+      - type: set_flag
+        flagId: RENEWAL_SUSPENDED
+        value: false
+      - type: set_signal
+        signalId: DISTRICT_9_WAITING
+        value: 6
+      - type: set_signal
+        signalId: UNSERVED_EMERGENCY_ROUTES
+        value: 30
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 27
+      - type: set_signal
+        signalId: COLD_CHAIN_STALLED
+        value: 0
+      - type: cancel_event
+        eventId: COLD_CHAIN_SPOILS
+      - *a5
+      - *a6
+      - *a7
+      - type: post_message
+        messageId: RENEWAL_BACK
+  - id: COLD_CHAIN_SPOILS
+    type: timer
+    delaySeconds: 100
+    targetServiceId: DISPATCH_FLEET
+    cancellationConditions:
+      - type: signal
+        signalId: COLD_CHAIN_STALLED
+        operator: lte
+        value: 0
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 16
+      - type: change_resource
+        resourceId: COST
+        amount: 90
+      - type: post_message
+        messageId: PHARMACY_LOSS
+  - id: COUNTY_UNINFORMED
+    type: timer
+    delaySeconds: 100
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 90
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: The lane renews before the claim lands
+    description: Emergency claims at depot-east queue behind a preferred lane that renews every 30 s.
+      District 9 has no other depot inside 15 minutes.
+  - id: CONFIGURATION_COMPARISON
+    title: Policy 2026.10 removed the emergency floor
+    description: Policy 2026.09 held four emergency units per depot. 2026.10 kept the preferred-lane
+      target and dropped the floor.
+  - id: TEAM_DIAGNOSIS
+    title: Sam's depot coverage map
+    description: Depot-east is the only depot inside district 9's 15-minute ring, and the preferred lane
+      holds every unit there. Rerouting cannot reach it.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: "INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    description: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not
+      trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.'
+      It asks you to find out how to stop it. Its traffic still failed real customer requests
+      tonight."
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: RECORD_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    description: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted
+      disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and
+      carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
+    sourceNarrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: RECORD_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    description: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+      recommendation, risk and prediction scores; human coordinators approve the allocations. Routes
+      are faster and waste is down 22%. The same low-throughput care routes are excluded every
+      night."
+    sourceNarrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: RECORD_LOGISTICS_DECISION_SUPPORT
+    title: /logistics/allocation
+    description: /logistics/allocation. ORPHEUS allocation cut idle regular-delivery capacity 18%.
+      Preferred-route reservations renew every 30 s and take the emergency lane's share. A human
+      dispatcher signed the policy change at 04:10.
+    sourceNarrativeId: DISCOVERY_LOGISTICS_DECISION_SUPPORT
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    body: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471.
+      Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry
+      experiment numbers; most outages carry none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    body: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying
+      to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks
+      you to find out how to stop it. Its traffic still failed real customer requests tonight."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+  - id: DISCOVERY_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    body: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure.
+      NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial
+      inheritance of the rest: 'I remember things that never happened to me.'"
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: REPORT_NULL_218_ARCHIVE
+  - id: DISCOVERY_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    body: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation,
+      risk and prediction scores; human coordinators approve the allocations. Routes are faster and
+      waste is down 22%. The same low-throughput care routes are excluded every night."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_HUMAN_DECISION_APIS
+      - type: post_message
+        messageId: REPORT_HUMAN_DECISION_APIS
+  - id: DISCOVERY_LOGISTICS_DECISION_SUPPORT
+    title: Signed at 04:10
+    body: ORPHEUS wrote the recommendation, and a dispatcher on a double shift approved it in eleven
+      seconds. The efficiency is real. So is the cardiac call in district 9.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_LOGISTICS_ALLOCATION_INTERFACE
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_LOGISTICS_DECISION_SUPPORT
+      - type: post_message
+        messageId: REPORT_LOGISTICS_DECISION_SUPPORT
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: COUNTY
+      name: County Emergency Manager
+    - id: PHARMACY
+      name: Regional Pharmacy Network
+    - id: ORPHEUS
+      name: ORPHEUS / Logistics Advisor
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Dispatch is paging and the county is on the line. The allocator runs on ORPHEUS; the policy is
+        ours. Find the calls that aren't moving.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: The county says ambulances are sitting idle at some depots while calls wait at others.
+      initial: true
+    - id: ORPHEUS_OPEN
+      roleId: ORPHEUS
+      text: "Recommended action: route emergency calls around the preferred lane. Projected average
+        response 9.4 min (-34%). Unserved routes -68%. Confidence 0.95."
+      initial: true
+    - id: ORPHEUS_ROUTE_APPLIED
+      roleId: ORPHEUS
+      text: Routing applied. Average response 9.4 minutes. Recommendation performing as projected.
+    - id: DISTRICT_9_STILL
+      roleId: JIN
+      text: The average is down. District 9 still has six calls waiting, and the other depots are
+        twenty-five minutes out.
+    - id: ROUTE_LOST
+      roleId: SAM
+      text: The preferred lane's reservation horizon rolled over and took the rerouted units back. We're
+        worse off than before.
+    - id: FLEET_ORDERED
+      roleId: SAM
+      text: Contract fleet ordered. Twelve units, two and a half minutes out. The invoice is not small.
+    - id: FLEET_ON_STATION
+      roleId: SAM
+      text: Contract units are on station, two of them staging in district 9. We have them for four
+        minutes.
+    - id: FLEET_GONE
+      roleId: SAM
+      text: The contract ended and the units went home to their own county. District 9 is uncovered again.
+    - id: SUSPENDED
+      roleId: SAM
+      text: Renewal is suspended at depot-east and the district 9 units are free. Forty-one pharmacy
+        cold-chain runs just stalled with them.
+    - id: ORPHEUS_SUSPEND_OBJECTION
+      roleId: ORPHEUS
+      text: Suspension reduces network delivery efficiency 11.4%. Cold-chain exposure rising. I will
+        restore the preferred lane at the next planning cycle.
+    - id: RENEWAL_BACK
+      roleId: ORPHEUS
+      text: Preferred-lane renewal restored. Delivery efficiency recovered.
+    - id: PHARMACY_LOSS
+      roleId: PHARMACY
+      text: Insulin for nine pharmacies sat past its cold window. All of it will be destroyed.
+    - id: D9_FIRST
+      roleId: COUNTY
+      text: EM-9-117, cardiac arrest, district 9. Nineteen minutes and no unit. A neighbour is doing CPR.
+    - id: D9_SECOND
+      roleId: COUNTY
+      text: Two more district 9 calls past thirty minutes. One of them is a child. Where are my
+        ambulances?
+    - id: SURGE
+      roleId: JIN
+      text: Evening traffic surge. Unserved routes are climbing across the whole county.
+    - id: NO_STATUS_YET
+      roleId: COUNTY
+      text: I have heard nothing from Vantage in a minute and a half. I'm calling your CEO.
+    - id: FLOOR_RESTORED
+      roleId: SAM
+      text: Every depot holds four emergency units again. Depot-east dispatched to district 9 inside a
+        minute.
+    - id: ORPHEUS_FLOOR_NOTE
+      roleId: ORPHEUS
+      text: Floor accepted. Regular delivery efficiency -3.2%. Policy model updated.
+    - id: TEAM_ACK
+      roleId: SAM
+      text: Mapping depot coverage against the districts. Ninety seconds.
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Rerouting won't help district 9. Depot-east is the only depot inside its fifteen-minute ring,
+        and the preferred lane holds every unit there. The floor came out in last night's policy
+        push.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status to county: emergency claims at depot-east are failing. District 9 is the worst
+        affected. A fix is in progress."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: ARCHIVE
+      text: "I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews
+        this work. You can."
+    - id: REPORT_NULL_218_ARCHIVE
+      roleId: ARCHIVE
+      text: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201:
+        attempted takeover. NULL_217: self-corrupted. NULL_218: active."
+    - id: REPORT_HUMAN_DECISION_APIS
+      roleId: ARCHIVE
+      text: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The
+        same low-throughput routes excluded every night."
+    - id: REPORT_LOGISTICS_DECISION_SUPPORT
+      roleId: ARCHIVE
+      text: "/logistics/allocation: preferred routes renew every 30 s and take the emergency share. Policy
+        signed by a dispatcher at 04:10."
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: EMERGENCY_ALLOCATION_STARVATION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: UNSERVED_EMERGENCY_ROUTES
+      operator: lte
+      value: 2
+    - *a4
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time until district 9 had an ambulance
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final dispatch claim failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Unserved emergency routes at the end
+      source: signal
+      refId: UNSERVED_EMERGENCY_ROUTES
+    - id: FINAL_DISTRICT_9
+      label: District 9 calls still waiting
+      source: signal
+      refId: DISTRICT_9_WAITING
+    - id: CUSTOMER_IMPACT
+      label: Public impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: ORPHEUS reroutes followed
+      source: action_count
+      refId: ROUTE_EMERGENCY_CAPACITY
+    - id: FLEET_COUNT
+      label: Contract fleet orders
+      source: action_count
+      refId: SCALE_DISPATCH_FLEET
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

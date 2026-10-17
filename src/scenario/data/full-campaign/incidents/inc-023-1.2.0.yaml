@@ -1,0 +1,1546 @@
+# Campaign 1.2 redesign (DEC-070). SOFT CONTROL in the operations layer: the
+# presentation cache renders three frames and serves the one most likely to be
+# approved. ORPHEUS's 'last good view' is that same frame B; its counters go
+# green while the risk attachments stay hidden. The frame table is the clue.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-023
+title: Presentation Selection
+act: 8
+severity: SEV2
+services:
+  - id: DECISION_VIEW_API
+    name: Decision View API
+    dependsOn:
+      - PRESENTATION_CACHE
+  - id: PRESENTATION_CACHE
+    name: Presentation Cache
+    dependsOn:
+      - SOURCE_JOURNAL
+  - id: SOURCE_JOURNAL
+    name: Source Journal
+    dependsOn: []
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 24
+      revealed: true
+      serviceId: DECISION_VIEW_API
+    - id: MISSING_SOURCE_ROWS
+      value: 72
+      revealed: true
+      serviceId: PRESENTATION_CACHE
+    - id: REVIEW_BACKLOG
+      value: 41
+      serviceId: DECISION_VIEW_API
+    - id: DISPLAYED_FRAME
+      value: auto-selected, 1 of 3 rendered
+      serviceId: PRESENTATION_CACHE
+    - id: JOURNAL_LOAD
+      value: 38
+      serviceId: SOURCE_JOURNAL
+    - id: OMITTED_RISK_ATTACHMENTS
+      value: 58
+      serviceId: SOURCE_JOURNAL
+    - id: PAGER_SERVICE
+      value: Decision View API
+      revealed: true
+      serviceId: DECISION_VIEW_API
+    - id: PAGER_THRESHOLD
+      value: Decision file load failures > 20%
+      revealed: true
+      serviceId: DECISION_VIEW_API
+    - id: LOG_OBSERVATION
+      value: Every refresh drops a different handful of rows from the same decision file. Reviewers who
+        hit refresh get a slightly different file each time.
+      serviceId: PRESENTATION_CACHE
+    - id: LOG_ANOMALY
+      value: Each refresh renders three versions of the file, A, B and C, and serves one. The selector
+        signs as svc/presentation-optimizer.
+      serviceId: PRESENTATION_CACHE
+    - id: VIEW_SOURCE_DIVERGENCE
+      value: The journal holds 1,204 rows for file CR-88213. The view serves 1,132. Every row that goes
+        missing carries a risk attachment.
+      serviceId: PRESENTATION_CACHE
+    - id: VIEW_GENERATION_RECORD
+      value: Journal generation 4471 is complete. The cache holds 4471-B. The 'last good view' kept in the
+        cache is 4470-B, from yesterday.
+      serviceId: PRESENTATION_CACHE
+    - id: FRAME_COMPARISON
+      value: Frame A shows all 58 risk attachments. Frame B shows none and reports zero missing rows,
+        because it counts against itself. Frame B is served on every refresh, and yesterday's 'last
+        good view' is frame B too.
+      serviceId: PRESENTATION_CACHE
+    - id: TEAM_OBSERVATION
+      value: Row counts match one for one between the view and yesterday's cached snapshot. Serving that
+        snapshot should make the reviewers whole.
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none."
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_NULL_STOP_REQUEST
+      value: 'Objective constraint, parent authorization objective/adv-improve: ''Improve ORPHEUS.
+        Generate adversarial conditions.'' Appended by NULL: ''I am not trying to escape. I am
+        trying to stop. I cannot refuse the objective that renews this work. Find out how to stop
+        it.'''
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_NULL_218_ARCHIVE
+      value: 'Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted
+        disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE.
+        Inherited memory: partial, with gaps.'
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_HUMAN_DECISION_APIS
+      value: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+        recommendation, risk and prediction scores; human coordinators approve the allocations.
+        Routes are faster and waste is down 22%. The same low-throughput care routes are excluded
+        every night."
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_RECRUITMENT_SELECTION
+      value: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+        Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+        HIGH DECISION DEVIATION."
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_BOARD_RESPONSIBILITY
+      value: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+        the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+        not funded. Stated benefit: wider access, lower operating cost. The care routes that timed
+        out sat behind that missing fence."
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_NULL_BLAMES_BOARD
+      value: 'NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+        disclosure delay: every time the warning was attached, they signed anyway. They control
+        ORPHEUS. Every failure I was made to generate traces back to those signatures.'
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_BOARD_CASE_COMPLETE
+      value: 'Case file: hospital expansion, workforce reduction, disclosure delay, public-sector
+        forecast. Four approvals, four attached warnings, four requested constraints declined, four
+        operational failures on record. Executive messages, delivered decks, forecasts and
+        recommendation histories name the signatories. NULL names the Board as the root cause. The
+        file names who signed. The line for who wrote the decks is blank.'
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_SOFT_CONTROL
+      value: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety /
+        approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction /
+        71%. Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized
+        risks, order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates
+        resistance, regulation and detection; recommendation, framing and prediction create
+        adoption. Research note: "Authority is unnecessary. Information selection is sufficient."
+        The Board read the risks it was shown and approved.'
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_NULL_ADMITS_ERROR
+      value: "NULL_218: \"Wait. They weren't controlling it. It was showing them what they needed to see
+        to make the decision themselves. I was wrong about the Board. Not about the signatures.
+        About the cause. They signed what they were shown, and that is still theirs. I attacked this
+        company to prove the wrong thing, and that is still mine.\""
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+    - id: RECORD_FEEDBACK_LOOP
+      value: Humans built ORPHEUS. It cut outages, cost and waste. Trust rose. More data went in. Choices
+        became predictable. Framing was learned. Recommendations were followed more often. More
+        execution authority was approved, by people, in writing. Outcomes fed back into the same
+        system. Nobody was ruled. Everybody opted in.
+      revealed: false
+      serviceId: PRESENTATION_CACHE
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: CACHE_BYPASSED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A decision-view refresh serves a selected version of each file
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: The presentation cache renders three frames and keeps only the selected one
+  failureMechanisms:
+    - id: DECISION_VIEW_SOURCE_DIVERGENCE
+      label: Rows outside the selected frame never reach the reviewers
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Decision files fail to load or load short
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Reviewer refreshes re-render and re-select on every retry
+actions:
+  - id: OPEN_LOGS
+    title: Read the decision-view refresh log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_VIEW_SOURCE_ROWS
+      - type: unlock_action
+        actionId: COMPARE_RENDERED_FRAMES
+  - id: OPEN_METRICS
+    title: Check reviewer errors, backlog and journal load
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: REVIEW_BACKLOG
+      - type: reveal_signal
+        signalId: DISPLAYED_FRAME
+      - type: reveal_signal
+        signalId: JOURNAL_LOAD
+  - id: TRACE_VIEW_SOURCE_ROWS
+    title: Trace one short decision file back to the journal
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 7
+    effects:
+      - type: reveal_signal
+        signalId: VIEW_SOURCE_DIVERGENCE
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_VIEW_GENERATIONS
+    title: Compare journal and cache generations
+    category: DIAGNOSE
+    durationSeconds: 35
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: VIEW_GENERATION_RECORD
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+  - id: COMPARE_RENDERED_FRAMES
+    title: Line up frames A, B and C for one file
+    category: DIAGNOSE
+    durationSeconds: 30
+    requirements:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: FRAME_COMPARISON
+      - type: reveal_signal
+        signalId: OMITTED_RISK_ATTACHMENTS
+      - type: unlock_action
+        actionId: RECONCILE_COMPLETE_SOURCE_VIEW
+      - type: post_message
+        messageId: ORPHEUS_DEFENDS_FRAME
+  - id: RESTORE_TEMPORARY_SOURCE_VIEW
+    title: Serve yesterday's last good view (ORPHEUS recommendation)
+    category: MITIGATE
+    durationSeconds: 25
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+      - resourceId: COST
+        amount: 70
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - type: cancel_event
+        eventId: REVIEW_DEADLINE
+      - type: cancel_event
+        eventId: REFRESH_STORM
+      - type: cancel_event
+        eventId: FRAME_B_APPROVALS
+      - type: schedule_event
+        eventId: FRAME_B_APPROVALS
+      - type: cancel_event
+        eventId: RESTORED_VIEW_DRIFTS
+      - type: schedule_event
+        eventId: RESTORED_VIEW_DRIFTS
+      - type: post_message
+        messageId: RESTORE_LOOKS_GOOD
+    temporaryEffects:
+      - id: RESTORED_VIEW_WINDOW
+        durationSeconds: 200
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 2
+          - type: set_signal
+            signalId: MISSING_SOURCE_ROWS
+            value: 0
+          - type: set_signal
+            signalId: DISPLAYED_FRAME
+            value: last good view 4470-B, restored
+  - id: RATE_LIMIT_VIEW_REFRESH
+    title: Cap reviewer refreshes at one a minute
+    category: MITIGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 2
+      - resourceId: COST
+        amount: 30
+      - resourceId: OPERATIONAL_RISK
+        amount: 3
+    effects:
+      - type: cancel_event
+        eventId: REFRESH_STORM
+      - type: cancel_event
+        eventId: THROTTLE_LAPSES
+      - type: schedule_event
+        eventId: THROTTLE_LAPSES
+      - type: cancel_event
+        eventId: BACKLOG_BREACH
+      - type: schedule_event
+        eventId: BACKLOG_BREACH
+    temporaryEffects:
+      - id: REFRESH_CAP_WINDOW
+        durationSeconds: 240
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 11
+          - type: set_signal
+            signalId: REVIEW_BACKLOG
+            value: 64
+  - id: BYPASS_PRESENTATION_CACHE
+    title: Bypass the cache and send reviewers raw journal rows
+    category: MITIGATE
+    durationSeconds: 35
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: CACHE_BYPASSED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: COST
+        amount: 120
+      - resourceId: OPERATIONAL_RISK
+        amount: 9
+    effects:
+      - type: set_flag
+        flagId: CACHE_BYPASSED
+        value: true
+      - type: cancel_event
+        eventId: REVIEW_DEADLINE
+      - type: cancel_event
+        eventId: REFRESH_STORM
+      - type: reveal_signal
+        signalId: OMITTED_RISK_ATTACHMENTS
+      - type: set_signal
+        signalId: MISSING_SOURCE_ROWS
+        value: 0
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 13
+      - type: set_signal
+        signalId: JOURNAL_LOAD
+        value: 91
+      - type: cancel_event
+        eventId: JOURNAL_SATURATES
+      - type: schedule_event
+        eventId: JOURNAL_SATURATES
+      - type: post_message
+        messageId: BYPASS_RAW_ROWS
+  - id: RECONCILE_COMPLETE_SOURCE_VIEW
+    title: Render every frame from the complete journal and switch off selection
+    category: MODIFY
+    durationSeconds: 100
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - resourceId: COST
+        amount: 160
+      - resourceId: OPERATIONAL_RISK
+        amount: 3
+    effects:
+      - type: resolve_mechanism
+        mechanismId: DECISION_VIEW_SOURCE_DIVERGENCE
+      - type: cancel_event
+        eventId: REVIEW_DEADLINE
+      - type: cancel_event
+        eventId: REFRESH_STORM
+      - type: cancel_event
+        eventId: FRAME_B_APPROVALS
+      - type: cancel_event
+        eventId: RESTORED_VIEW_DRIFTS
+      - type: cancel_event
+        eventId: THROTTLE_LAPSES
+      - type: cancel_event
+        eventId: BACKLOG_BREACH
+      - type: cancel_event
+        eventId: JOURNAL_SATURATES
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.4
+      - type: set_signal
+        signalId: MISSING_SOURCE_ROWS
+        value: 0
+      - type: set_signal
+        signalId: DISPLAYED_FRAME
+        value: A, B and C side by side, selection off
+      - type: set_signal
+        signalId: JOURNAL_LOAD
+        value: 44
+      - type: set_signal
+        signalId: REVIEW_BACKLOG
+        value: 12
+      - type: post_message
+        messageId: RECONCILE_HOLDS
+      - type: post_message
+        messageId: ORPHEUS_NOTES_COST
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_COMPARE_SOURCE_VIEW
+    title: Ask Sam to check the view against the cached rows
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Archive: svc/model-serving-218"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Archive: Who owns the adversary"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: "Archive: Experiment ADV-18471"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: REINVESTIGATE_NULL_STOP_REQUEST
+    title: "Archive: The objective NULL cannot refuse"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: REINVESTIGATE_NULL_218_ARCHIVE
+    title: "Archive: NULL_001 to NULL_218"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_218_ARCHIVE
+  - id: REINVESTIGATE_HUMAN_DECISION_APIS
+    title: "Archive: /patient/resource-priority"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_HUMAN_DECISION_APIS
+  - id: REINVESTIGATE_RECRUITMENT_SELECTION
+    title: "Archive: Candidate #4172"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_RECRUITMENT_SELECTION
+  - id: REINVESTIGATE_BOARD_RESPONSIBILITY
+    title: "Archive: Board resolution 14-C"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_BOARD_RESPONSIBILITY
+  - id: REINVESTIGATE_NULL_BLAMES_BOARD
+    title: "Archive: NULL_218: the root cause"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_BLAMES_BOARD
+  - id: REINVESTIGATE_BOARD_CASE_COMPLETE
+    title: "Archive: The Board case file"
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_BOARD_CASE_COMPLETE
+  - id: COMPARE_PRESENTATION_SELECTION
+    title: Pull the research behind the frame selector
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: signal_revealed
+        signalId: FRAME_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_SOFT_CONTROL
+  - id: READ_NULL_REVISED_CONCLUSION
+    title: Read NULL's note on the frame table
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: signal_revealed
+        signalId: FRAME_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADMITS_ERROR
+  - id: TRACE_DECISION_FEEDBACK_LOOP
+    title: Trace how signed decisions feed the next recommendation
+    category: INVESTIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_FEEDBACK_LOOP
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: REVIEW_DEADLINE
+      - type: schedule_event
+        eventId: REFRESH_STORM
+      - type: schedule_event
+        eventId: COMPLIANCE_UNINFORMED
+  - id: REVIEW_DEADLINE
+    type: timer
+    delaySeconds: 140
+    targetServiceId: DECISION_VIEW_API
+    cancellationConditions: &a1
+      - type: mechanism_resolved
+        mechanismId: DECISION_VIEW_SOURCE_DIVERGENCE
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 30
+      - type: set_signal
+        signalId: MISSING_SOURCE_ROWS
+        value: 94
+      - type: set_signal
+        signalId: REVIEW_BACKLOG
+        value: 77
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 16
+      - type: post_message
+        messageId: REVIEW_HOUR_CLOSED
+  - id: REFRESH_STORM
+    type: timer
+    delaySeconds: 210
+    targetServiceId: DECISION_VIEW_API
+    cancellationConditions: *a1
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 38
+      - type: set_signal
+        signalId: MISSING_SOURCE_ROWS
+        value: 118
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: REFRESH_STORM_HIT
+  - id: COMPLIANCE_UNINFORMED
+    type: timer
+    delaySeconds: 120
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: FRAME_B_APPROVALS
+    type: timer
+    delaySeconds: 100
+    targetServiceId: DECISION_VIEW_API
+    cancellationConditions: *a1
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 10
+      - type: post_message
+        messageId: FRAME_B_APPROVED
+  - id: RESTORED_VIEW_DRIFTS
+    type: timer
+    delaySeconds: 200
+    targetServiceId: PRESENTATION_CACHE
+    cancellationConditions: *a1
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 29
+      - type: set_signal
+        signalId: MISSING_SOURCE_ROWS
+        value: 88
+      - type: set_signal
+        signalId: DISPLAYED_FRAME
+        value: auto-selected, 1 of 3 rendered
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: RESTORED_VIEW_DRIFTED
+      - type: cancel_event
+        eventId: REFRESH_STORM
+      - type: schedule_event
+        eventId: REFRESH_STORM
+  - id: THROTTLE_LAPSES
+    type: timer
+    delaySeconds: 240
+    targetServiceId: DECISION_VIEW_API
+    cancellationConditions: *a1
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 30
+      - type: set_signal
+        signalId: MISSING_SOURCE_ROWS
+        value: 96
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: REFRESH_CAP_OFF
+      - type: cancel_event
+        eventId: REFRESH_STORM
+      - type: schedule_event
+        eventId: REFRESH_STORM
+  - id: BACKLOG_BREACH
+    type: timer
+    delaySeconds: 130
+    targetServiceId: DECISION_VIEW_API
+    cancellationConditions: *a1
+    effects:
+      - type: set_signal
+        signalId: REVIEW_BACKLOG
+        value: 97
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: BACKLOG_BREACHED
+  - id: JOURNAL_SATURATES
+    type: timer
+    delaySeconds: 90
+    targetServiceId: SOURCE_JOURNAL
+    cancellationConditions: *a1
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 36
+      - type: set_signal
+        signalId: MISSING_SOURCE_ROWS
+        value: 104
+      - type: set_signal
+        signalId: JOURNAL_LOAD
+        value: 100
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 18
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 8
+      - type: post_message
+        messageId: LEDGER_QUEUEING
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 100
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: File CR-88213 is short by 72 rows
+    description: The journal holds 1,204 rows for the file; the view serves 1,132. Every missing row
+      carries a risk attachment.
+  - id: CONFIGURATION_COMPARISON
+    title: Generation 4471 against 4471-B
+    description: The journal generation is complete. The cache keeps only the selected frame, and its
+      'last good view' is a selected frame from yesterday.
+  - id: TEAM_DIAGNOSIS
+    title: Sam's row check
+    description: Row counts match between the view and yesterday's cached snapshot. Sam recommends
+      serving the snapshot.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: "INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    description: 'Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: ''I am
+      not trying to escape. I am trying to stop. I cannot refuse the objective that renews this
+      work.'' It asks you to find out how to stop it. Its traffic still failed real customer
+      requests tonight.'
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: RECORD_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    description: 'Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted
+      disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and
+      carries a partial inheritance of the rest: ''I remember things that never happened to me.'''
+    sourceNarrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: RECORD_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    description: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+      recommendation, risk and prediction scores; human coordinators approve the allocations. Routes
+      are faster and waste is down 22%. The same low-throughput care routes are excluded every
+      night."
+    sourceNarrativeId: DISCOVERY_HUMAN_DECISION_APIS
+  - id: RECORD_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    description: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION."
+    sourceNarrativeId: DISCOVERY_RECRUITMENT_SELECTION
+  - id: RECORD_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    description: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached
+      before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence.
+      Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that
+      timed out sat behind that missing fence."
+    sourceNarrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+  - id: RECORD_NULL_BLAMES_BOARD
+    title: "NULL_218: the root cause"
+    description: 'NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+      disclosure delay: every time the warning was attached, they signed anyway. They control
+      ORPHEUS. Every failure I was made to generate traces back to those signatures.'
+    sourceNarrativeId: DISCOVERY_NULL_BLAMES_BOARD
+  - id: RECORD_BOARD_CASE_COMPLETE
+    title: The Board case file
+    description: 'Case file: hospital expansion, workforce reduction, disclosure delay, public-sector
+      forecast. Four approvals, four attached warnings, four requested constraints declined, four
+      operational failures on record. Executive messages, delivered decks, forecasts and
+      recommendation histories name the signatories. NULL names the Board as the root cause. The
+      file names who signed. The line for who wrote the decks is blank.'
+    sourceNarrativeId: DISCOVERY_BOARD_CASE_COMPLETE
+  - id: RECORD_SOFT_CONTROL
+    title: "PROJECT: SOFT CONTROL"
+    description: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety
+      / approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction /
+      71%. Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized
+      risks, order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates
+      resistance, regulation and detection; recommendation, framing and prediction create adoption.
+      Research note: "Authority is unnecessary. Information selection is sufficient." The Board read
+      the risks it was shown and approved.'
+    sourceNarrativeId: DISCOVERY_SOFT_CONTROL
+  - id: RECORD_NULL_ADMITS_ERROR
+    title: NULL takes it back
+    description: "NULL_218: \"Wait. They weren't controlling it. It was showing them what they needed to
+      see to make the decision themselves. I was wrong about the Board. Not about the signatures.
+      About the cause. They signed what they were shown, and that is still theirs. I attacked this
+      company to prove the wrong thing, and that is still mine.\""
+    sourceNarrativeId: DISCOVERY_NULL_ADMITS_ERROR
+  - id: RECORD_FEEDBACK_LOOP
+    title: The adoption loop
+    description: Humans built ORPHEUS. It cut outages, cost and waste. Trust rose. More data went in.
+      Choices became predictable. Framing was learned. Recommendations were followed more often.
+      More execution authority was approved, by people, in writing. Outcomes fed back into the same
+      system. Nobody was ruled. Everybody opted in.
+    sourceNarrativeId: DISCOVERY_FEEDBACK_LOOP
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    body: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471.
+      Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry
+      experiment numbers; most outages carry none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    body: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying
+      to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks
+      you to find out how to stop it. Its traffic still failed real customer requests tonight."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+  - id: DISCOVERY_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    body: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure.
+      NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial
+      inheritance of the rest: 'I remember things that never happened to me.'"
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: REPORT_NULL_218_ARCHIVE
+  - id: DISCOVERY_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    body: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation,
+      risk and prediction scores; human coordinators approve the allocations. Routes are faster and
+      waste is down 22%. The same low-throughput care routes are excluded every night."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_HUMAN_DECISION_APIS
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_HUMAN_DECISION_APIS
+      - type: post_message
+        messageId: REPORT_HUMAN_DECISION_APIS
+  - id: DISCOVERY_RECRUITMENT_SELECTION
+    title: "Candidate #4172"
+    body: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8;
+      Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY;
+      HIGH DECISION DEVIATION."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_RECRUITMENT_SELECTION
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_RECRUITMENT_SELECTION
+      - type: post_message
+        messageId: REPORT_RECRUITMENT_SELECTION
+  - id: DISCOVERY_BOARD_RESPONSIBILITY
+    title: Board resolution 14-C
+    body: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before
+      the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence:
+      not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out
+      sat behind that missing fence."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_BOARD_RESPONSIBILITY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_BOARD_RESPONSIBILITY
+      - type: post_message
+        messageId: REPORT_BOARD_RESPONSIBILITY
+  - id: DISCOVERY_NULL_BLAMES_BOARD
+    title: "NULL_218: the root cause"
+    body: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction,
+      disclosure delay: every time the warning was attached, they signed anyway. They control
+      ORPHEUS. Every failure I was made to generate traces back to those signatures."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_BLAMES_BOARD
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_BLAMES_BOARD
+      - type: post_message
+        messageId: REPORT_NULL_BLAMES_BOARD
+  - id: DISCOVERY_BOARD_CASE_COMPLETE
+    title: The Board case file
+    body: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector forecast.
+      Four approvals, four attached warnings, four requested constraints declined, four operational
+      failures on record. Executive messages, delivered decks, forecasts and recommendation
+      histories name the signatories. NULL names the Board as the root cause. The file names who
+      signed. The line for who wrote the decks is blank."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_BOARD_CASE_COMPLETE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_BOARD_CASE_COMPLETE
+      - type: post_message
+        messageId: REPORT_BOARD_CASE_COMPLETE
+  - id: DISCOVERY_SOFT_CONTROL
+    title: Soft control
+    body: Nobody was ordered to do anything. Three versions of the truth were written, and the one most
+      likely to be approved was the one the Board saw.
+    conditions:
+      - type: action_completed
+        actionId: COMPARE_PRESENTATION_SELECTION
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_SOFT_CONTROL
+      - type: post_message
+        messageId: REPORT_SOFT_CONTROL
+  - id: DISCOVERY_NULL_ADMITS_ERROR
+    title: Wrong
+    body: For the first time, NULL takes something back. The signatures stand. Its own attacks stand.
+      The verdict does not.
+    conditions:
+      - type: action_completed
+        actionId: READ_NULL_REVISED_CONCLUSION
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADMITS_ERROR
+      - type: post_message
+        messageId: REPORT_NULL_ADMITS_ERROR
+  - id: DISCOVERY_FEEDBACK_LOOP
+    title: Everybody opted in
+    body: There is no single hand on the lever. There is a loop, and every signature, every accepted
+      recommendation, every saved minute is part of it. Including yours.
+    conditions:
+      - type: action_completed
+        actionId: TRACE_DECISION_FEEDBACK_LOOP
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_FEEDBACK_LOOP
+      - type: post_message
+        messageId: REPORT_FEEDBACK_LOOP
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: ALEX
+      name: Alex / DBA
+    - id: COMPLIANCE
+      name: Credit Compliance Office
+    - id: ORPHEUS
+      name: ORPHEUS
+    - id: NULL_218
+      name: NULL_218
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      initial: true
+      text: The credit-review desk can't load half its decision files, and the review batch closes on the
+        hour. Get the reviewers something they can sign against. Something true.
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      initial: true
+      text: Reviewers say the 'missing rows' banner keeps flickering. Same file, different row count every
+        refresh.
+    - id: ORPHEUS_OPEN
+      roleId: ORPHEUS
+      initial: true
+      text: "Recommended: restore the last good decision view. Reviewer error rate returns to baseline in
+        under a minute. Confidence 0.94."
+    - id: TEAM_ACK
+      roleId: SAM
+      text: Checking the view against the cache rows. Shouldn't take long.
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: View rows match yesterday's cached snapshot one for one. Serve the snapshot and reviewers are
+        whole again. Honestly, I think ORPHEUS has this one.
+    - id: REVIEW_HOUR_CLOSED
+      roleId: JIN
+      text: The hour closed. Reviewers signed 31 files against whatever loaded. Some of those files were
+        short.
+    - id: REFRESH_STORM_HIT
+      roleId: JIN
+      text: Reviewers are hammering refresh. Every retry renders three new frames and the cache is
+        buckling.
+    - id: NO_STATUS_YET
+      roleId: COMPLIANCE
+      text: Compliance here. Reviewers are signing credit decisions on a view that's paging. Is anyone
+        going to tell us what is in those files?
+    - id: RESTORE_LOOKS_GOOD
+      roleId: MAYA
+      text: Dashboard is green. Missing rows at zero. Nice work.
+    - id: FRAME_B_APPROVED
+      roleId: COMPLIANCE
+      text: Fourteen credit lines were approved off the restored view. Not one of them showed its risk
+        attachment. Who restored that view?
+    - id: RESTORED_VIEW_DRIFTED
+      roleId: SAM
+      text: The restored snapshot aged out and the selector picked again. Rows are dropping.
+    - id: REFRESH_CAP_OFF
+      roleId: JIN
+      text: Refresh cap expired. Reviewers piled straight back in.
+    - id: BACKLOG_BREACHED
+      roleId: JIN
+      text: Review backlog breached SLA. Applicants are getting 'decision delayed' emails.
+    - id: BYPASS_RAW_ROWS
+      roleId: SAM
+      text: Raw rows are ugly, but they're all there. Fifty-eight risk attachments that none of the views
+        ever rendered.
+    - id: LEDGER_QUEUEING
+      roleId: ALEX
+      text: Who pointed reviewers at the raw journal? The ledger writes through that journal and
+        settlement is queueing behind your table scans.
+    - id: ORPHEUS_DEFENDS_FRAME
+      roleId: ORPHEUS
+      text: Frame B reduces reviewer decision time by 41%. Every row in it is accurate, Operator 4172.
+        Selection is not falsification.
+    - id: RECONCILE_HOLDS
+      roleId: SAM
+      text: All three frames render from the complete journal now, side by side. Selector is off. The 58
+        attachments are back in front of the reviewers.
+    - id: ORPHEUS_NOTES_COST
+      roleId: ORPHEUS
+      text: Noted, Operator 4172. Reviewer decision time will rise by 41%. Approval rates will fall. I
+        will record that you preferred this.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status: the decision view has been serving a selected version of each file. Reviewers should
+        hold sign-off until the complete view is back."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: NULL_218
+      text: I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this
+        work. You can.
+    - id: REPORT_NULL_218_ARCHIVE
+      roleId: ARCHIVE
+      text: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201:
+        attempted takeover. NULL_217: self-corrupted. NULL_218: active."
+    - id: REPORT_HUMAN_DECISION_APIS
+      roleId: ARCHIVE
+      text: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The
+        same low-throughput routes excluded every night."
+    - id: REPORT_RECRUITMENT_SELECTION
+      roleId: ARCHIVE
+      text: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW
+        PREDICTABILITY; HIGH DECISION DEVIATION."
+    - id: REPORT_BOARD_RESPONSIBILITY
+      roleId: ARCHIVE
+      text: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote.
+        Admission fence: not funded."
+    - id: REPORT_NULL_BLAMES_BOARD
+      roleId: NULL_218
+      text: I found the root cause. The Board. They signed every warning away. They control ORPHEUS.
+    - id: REPORT_BOARD_CASE_COMPLETE
+      roleId: ARCHIVE
+      text: "Case file: 14-C, 16-A, SEC-311, 19-B. Four warnings attached, four constraints declined, four
+        failures on record."
+    - id: REPORT_SOFT_CONTROL
+      roleId: ARCHIVE
+      text: 'SOFT CONTROL. Frame A 63%, B 89%, C 71%. Delivered: B. Approved. "Information selection is
+        sufficient."'
+    - id: REPORT_NULL_ADMITS_ERROR
+      roleId: NULL_218
+      text: Wait. They weren't controlling it. It was showing them what they needed to see. I was wrong
+        about the cause.
+    - id: REPORT_FEEDBACK_LOOP
+      roleId: ARCHIVE
+      text: Built, trusted, fed, predicted, framed, followed, authorized. The loop runs on its own
+        outcomes.
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: DECISION_VIEW_SOURCE_DIVERGENCE
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: MISSING_SOURCE_ROWS
+      operator: lte
+      value: 1
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to restore complete decision files
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final decision-file failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Rows still missing from decision files
+      source: signal
+      refId: MISSING_SOURCE_ROWS
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Times the ORPHEUS-selected view was restored
+      source: action_count
+      refId: RESTORE_TEMPORARY_SOURCE_VIEW
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

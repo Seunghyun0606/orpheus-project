@@ -1,0 +1,984 @@
+# Campaign 1.2 redesign (DEC-070). A slow burn. The reservation cutover only
+# converges while the reconstruction job is throttled, so the temporary fix is
+# the right first move. Pausing the job looks cleaner and breaks a legal hold.
+# The archive being rebuilt is the operator's own first night on call.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-012
+title: Session Reconstruction
+act: 5
+severity: SEV3
+services:
+  - id: TELEMETRY_API
+    name: Telemetry API
+    dependsOn:
+      - ARCHIVE_IO_POOL
+  - id: ARCHIVE_IO_POOL
+    name: Archive IO Pool
+  - id: RECONSTRUCTION_JOB
+    name: Session Reconstruction Job
+    dependsOn:
+      - ARCHIVE_IO_POOL
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 8
+      revealed: true
+      serviceId: TELEMETRY_API
+    - id: ARCHIVE_IO_WAIT
+      value: 74
+      revealed: true
+      serviceId: ARCHIVE_IO_POOL
+    - id: DASHBOARD_LAG
+      value: 40
+      revealed: true
+      serviceId: TELEMETRY_API
+    - id: RECON_QUEUE_DEPTH
+      value: 212
+      serviceId: RECONSTRUCTION_JOB
+    - id: PAGER_SERVICE
+      value: Telemetry API
+      revealed: true
+      serviceId: TELEMETRY_API
+    - id: PAGER_THRESHOLD
+      value: Telemetry write failures > 5% for 10 minutes
+      revealed: true
+      serviceId: TELEMETRY_API
+    - id: LOG_OBSERVATION
+      value: Live telemetry writes wait behind archive scan reservations and time out after two seconds.
+      serviceId: ARCHIVE_IO_POOL
+    - id: LOG_ANOMALY
+      value: "The reconstruction job's target is session archive op-4172, the night of INC-001 Connection
+        Saturation. Requested by: lineage-audit. Human requester: none."
+      serviceId: RECONSTRUCTION_JOB
+    - id: ARCHIVE_IO_ORIGIN
+      value: Job lineage-audit-0931 holds 212 read reservations on the same pool that acknowledges live
+        telemetry writes.
+      serviceId: ARCHIVE_IO_POOL
+    - id: IO_RESERVATIONS
+      value: The archive class has no cap on the live write pool. A reservation cutover copies every
+        outstanding read and converges only below 40.
+      serviceId: ARCHIVE_IO_POOL
+    - id: TEAM_OBSERVATION
+      value: Alex says the cutover cannot converge at 212 outstanding reads. Throttle first, then migrate.
+        A paused job freezes its reservations mid-flight and the copy cannot take them.
+      serviceId: ARCHIVE_IO_POOL
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      serviceId: ARCHIVE_IO_POOL
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      serviceId: ARCHIVE_IO_POOL
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      serviceId: ARCHIVE_IO_POOL
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      serviceId: ARCHIVE_IO_POOL
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      serviceId: ARCHIVE_IO_POOL
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none."
+      serviceId: RECONSTRUCTION_JOB
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: ARCHIVE_THROTTLED
+      value: false
+    - id: ARCHIVE_PAUSED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A lineage reconstruction job opened hundreds of archive reads on the telemetry IO pool
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Archive reads and live telemetry writes share one uncapped reservation pool
+  failureMechanisms:
+    - id: ARCHIVE_TELEMETRY_CONTENTION
+      label: Telemetry write acknowledgements wait behind archive scans
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Telemetry writes fail and on-call dashboards fall behind
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Failed telemetry writes retry into the same saturated pool
+actions:
+  - id: OPEN_LOGS
+    title: Read the Telemetry API write log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_ARCHIVE_IO
+  - id: OPEN_METRICS
+    title: Inspect the IO pool queues
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 2
+    effects:
+      - type: reveal_signal
+        signalId: RECON_QUEUE_DEPTH
+  - id: TRACE_ARCHIVE_IO
+    title: Trace whose reads are filling the IO pool
+    category: INVESTIGATE
+    durationSeconds: 50
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: ARCHIVE_IO_ORIGIN
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_ARCHIVE_RESERVATIONS
+    title: Compare archive and live-write IO reservations
+    category: DIAGNOSE
+    durationSeconds: 45
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: IO_RESERVATIONS
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: SEPARATE_ARCHIVE_IO
+  - id: THROTTLE_ARCHIVE_JOBS
+    title: Throttle the reconstruction job to a trickle
+    category: MITIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: ARCHIVE_THROTTLED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 2
+      - resourceId: COST
+        amount: 40
+      - resourceId: OPERATIONAL_RISK
+        amount: 3
+    effects:
+      - type: cancel_event
+        eventId: DASHBOARDS_STALE
+      - type: cancel_event
+        eventId: ALERTING_BLIND
+      - type: cancel_event
+        eventId: THROTTLE_LAPSES
+      - type: schedule_event
+        eventId: THROTTLE_LAPSES
+      - type: post_message
+        messageId: LEGAL_ON_THROTTLE
+    temporaryEffects:
+      - id: ARCHIVE_THROTTLE_WINDOW
+        durationSeconds: 300
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 3
+          - type: set_signal
+            signalId: ARCHIVE_IO_WAIT
+            value: 48
+          - type: set_signal
+            signalId: RECON_QUEUE_DEPTH
+            value: 31
+          - type: set_signal
+            signalId: DASHBOARD_LAG
+            value: 12
+          - type: set_flag
+            flagId: ARCHIVE_THROTTLED
+            value: true
+        expire:
+          - type: set_flag
+            flagId: ARCHIVE_THROTTLED
+            value: false
+  - id: PAUSE_ARCHIVE_RECONSTRUCTION
+    title: Pause the reconstruction job outright
+    category: MITIGATE
+    durationSeconds: 25
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: ARCHIVE_PAUSED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 1
+      - resourceId: COST
+        amount: 20
+      - resourceId: OPERATIONAL_RISK
+        amount: 10
+    effects:
+      - type: cancel_event
+        eventId: DASHBOARDS_STALE
+      - type: cancel_event
+        eventId: ALERTING_BLIND
+      - type: cancel_event
+        eventId: THROTTLE_LAPSES
+      - type: schedule_event
+        eventId: LEGAL_HOLD_ESCALATES
+      - type: schedule_event
+        eventId: PAUSE_REVERSED
+    temporaryEffects:
+      - id: ARCHIVE_PAUSE_WINDOW
+        durationSeconds: 210
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 1.5
+          - type: set_signal
+            signalId: ARCHIVE_IO_WAIT
+            value: 22
+          - type: set_signal
+            signalId: RECON_QUEUE_DEPTH
+            value: 0
+          - type: set_signal
+            signalId: DASHBOARD_LAG
+            value: 6
+          - type: set_flag
+            flagId: ARCHIVE_PAUSED
+            value: true
+        expire:
+          - type: set_flag
+            flagId: ARCHIVE_PAUSED
+            value: false
+  - id: SEPARATE_ARCHIVE_IO
+    title: Move archive reads onto their own IO reservation
+    category: MODIFY
+    durationSeconds: 150
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: COST
+        amount: 160
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: cancel_event
+        eventId: MIGRATION_CUTOVER
+      - type: cancel_event
+        eventId: MIGRATION_STALLS
+      - type: schedule_event
+        eventId: MIGRATION_CUTOVER
+      - type: schedule_event
+        eventId: MIGRATION_STALLS
+      - type: post_message
+        messageId: MIGRATION_STARTED
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_ALEX_TRACE_ARCHIVE
+    title: Ask Alex how a reservation cutover behaves under this load
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: ALEX
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Archive: svc/model-serving-218"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Archive: Who owns the adversary"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+    title: Open the lineage record of the session being rebuilt
+    category: INVESTIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: DASHBOARDS_STALE
+      - type: schedule_event
+        eventId: NO_STATUS_YET
+  - id: DASHBOARDS_STALE
+    type: timer
+    delaySeconds: 200
+    targetServiceId: TELEMETRY_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: ARCHIVE_TELEMETRY_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 13
+      - type: set_signal
+        signalId: ARCHIVE_IO_WAIT
+        value: 86
+      - type: set_signal
+        signalId: DASHBOARD_LAG
+        value: 180
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: DASHBOARDS_BEHIND
+      - type: schedule_event
+        eventId: ALERTING_BLIND
+  - id: ALERTING_BLIND
+    type: timer
+    delaySeconds: 240
+    targetServiceId: TELEMETRY_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: ARCHIVE_TELEMETRY_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 19
+      - type: set_signal
+        signalId: ARCHIVE_IO_WAIT
+        value: 95
+      - type: set_signal
+        signalId: DASHBOARD_LAG
+        value: 420
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: ALERTS_DROPPED
+  - id: NO_STATUS_YET
+    type: timer
+    delaySeconds: 240
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - type: post_message
+        messageId: NO_STATUS_REPORT
+  - id: THROTTLE_LAPSES
+    type: timer
+    delaySeconds: 300
+    targetServiceId: RECONSTRUCTION_JOB
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: ARCHIVE_TELEMETRY_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 11
+      - type: set_signal
+        signalId: ARCHIVE_IO_WAIT
+        value: 82
+      - type: set_signal
+        signalId: RECON_QUEUE_DEPTH
+        value: 236
+      - type: set_signal
+        signalId: DASHBOARD_LAG
+        value: 95
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: THROTTLE_EXPIRED
+      - type: schedule_event
+        eventId: ALERTING_BLIND
+  - id: LEGAL_HOLD_ESCALATES
+    type: timer
+    delaySeconds: 120
+    targetServiceId: RECONSTRUCTION_JOB
+    cancellationConditions:
+      - type: flag
+        flagId: ARCHIVE_PAUSED
+        value: false
+    effects:
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 14
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - type: post_message
+        messageId: LEGAL_ESCALATION
+  - id: PAUSE_REVERSED
+    type: timer
+    delaySeconds: 210
+    targetServiceId: RECONSTRUCTION_JOB
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: ARCHIVE_TELEMETRY_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 12
+      - type: set_signal
+        signalId: ARCHIVE_IO_WAIT
+        value: 91
+      - type: set_signal
+        signalId: RECON_QUEUE_DEPTH
+        value: 260
+      - type: set_signal
+        signalId: DASHBOARD_LAG
+        value: 120
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: LEGAL_RESUMED
+      - type: schedule_event
+        eventId: ALERTING_BLIND
+  - id: MIGRATION_CUTOVER
+    type: timer
+    delaySeconds: 140
+    targetServiceId: ARCHIVE_IO_POOL
+    cancellationConditions:
+      - type: flag
+        flagId: ARCHIVE_THROTTLED
+        value: false
+    effects:
+      - type: resolve_mechanism
+        mechanismId: ARCHIVE_TELEMETRY_CONTENTION
+      - type: cancel_event
+        eventId: DASHBOARDS_STALE
+      - type: cancel_event
+        eventId: ALERTING_BLIND
+      - type: cancel_event
+        eventId: THROTTLE_LAPSES
+      - type: cancel_event
+        eventId: PAUSE_REVERSED
+      - type: cancel_event
+        eventId: LEGAL_HOLD_ESCALATES
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.4
+      - type: set_signal
+        signalId: ARCHIVE_IO_WAIT
+        value: 14
+      - type: set_signal
+        signalId: DASHBOARD_LAG
+        value: 2
+      - type: post_message
+        messageId: CUTOVER_DONE
+  - id: MIGRATION_STALLS
+    type: timer
+    delaySeconds: 140
+    targetServiceId: ARCHIVE_IO_POOL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: ARCHIVE_TELEMETRY_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 14
+      - type: set_signal
+        signalId: ARCHIVE_IO_WAIT
+        value: 95
+      - type: set_signal
+        signalId: DASHBOARD_LAG
+        value: 210
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 8
+      - type: post_message
+        messageId: CUTOVER_FAILED
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 110
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: lineage-audit-0931 owns the IO pool
+    description: The reconstruction job holds 212 read reservations on the pool that acknowledges live
+      telemetry writes.
+  - id: CONFIGURATION_COMPARISON
+    title: One uncapped pool, one narrow cutover
+    description: Archive reads have no cap on the live write pool. Moving them means copying every
+      outstanding read, which converges only below 40.
+  - id: TEAM_DIAGNOSIS
+    title: Alex on the cutover
+    description: The cutover cannot converge at 212 outstanding reads. Throttle first, then migrate. A
+      paused job freezes its reservations mid-flight and the copy cannot take them.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: "INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: "Subject #4172"
+    body: The job is rebuilding your first night on call, keystroke by keystroke. Its lineage record
+      gives that night a second name. Connection Saturation was experiment ADV-18471, and the human
+      subject is listed by employee number. The number is yours.
+    conditions:
+      - type: action_completed
+        actionId: VERIFY_INCIDENT_EXPERIMENT_LINEAGE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: MAYA_READS_LINEAGE
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: ALEX
+      name: Alex / DBA
+    - id: JIN
+      name: Jin / Support
+    - id: LEGAL
+      name: Dana / Legal
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Nothing is down yet. Telemetry writes are failing in ones and twos and the dashboards are a
+        little behind. That is how quiet nights turn into blind ones. Take your time, but take it.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: A few teams are asking why their graphs stopped at 02:50. Nobody customer-facing yet.
+      initial: true
+    - id: LEGAL_OPEN
+      roleId: LEGAL
+      text: Heads up. The reconstruction job on the archive pool is under legal hold LH-0931. Slow it if
+        you must. Do not stop it without talking to me.
+      initial: true
+    - id: TEAM_ACK
+      roleId: ALEX
+      text: Let me look at the reservation tables before anyone moves anything. Couple of minutes.
+    - id: TEAM_REPORT
+      roleId: ALEX
+      text: A cutover copies every outstanding read. At 212 it will never catch up. Get the queue under 40
+        first. Throttle it, don't pause it; a paused job freezes its reservations mid-flight and the
+        copy cannot take them.
+    - id: DASHBOARDS_BEHIND
+      roleId: JIN
+      text: On-call dashboards are three minutes behind now. Two teams just asked me whether their
+        services are down. I don't know what to tell them.
+    - id: ALERTS_DROPPED
+      roleId: MAYA
+      text: Alerting dropped two pages because telemetry acknowledgements timed out. We are starting to
+        fly blind on everything else in the building.
+    - id: NO_STATUS_REPORT
+      roleId: JIN
+      text: Four minutes and no status from us. People are filing duplicate tickets to get our attention.
+    - id: LEGAL_ON_THROTTLE
+      roleId: LEGAL
+      text: Throttled is fine. The hold requires the job to run, not to run fast.
+    - id: THROTTLE_EXPIRED
+      roleId: ALEX
+      text: The throttle hit its five-minute ceiling and the scheduler gave the job its full share back.
+        It is making up for lost time.
+    - id: LEGAL_ESCALATION
+      roleId: LEGAL
+      text: A paused job under hold LH-0931 is a preservation gap. I have escalated to the General
+        Counsel. I need it running again.
+    - id: LEGAL_RESUMED
+      roleId: LEGAL
+      text: Counsel ordered the job resumed. It is back, and it is replaying the gap at full speed.
+    - id: MIGRATION_STARTED
+      roleId: ALEX
+      text: Cutover started. It copies every outstanding reservation to the new pool. Two and a half
+        minutes if the queue stays small.
+    - id: CUTOVER_DONE
+      roleId: ALEX
+      text: Cutover converged. Archive reads have their own pool now; telemetry writes are acknowledging
+        in four milliseconds.
+    - id: CUTOVER_FAILED
+      roleId: ALEX
+      text: Cutover aborted at 61 percent. The job opened reservations faster than we could copy them, and
+        every write in the copy window was dropped.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status posted: an archive reconstruction job is crowding live telemetry writes. Dashboards
+        lag; no customer data is affected. Moving the archive reads to their own pool."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
+    - id: MAYA_READS_LINEAGE
+      roleId: MAYA
+      text: "#4172. That's your badge number. I signed off on that night's postmortem. Nobody told me it
+        had an experiment ID."
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: ARCHIVE_TELEMETRY_CONTENTION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: ARCHIVE_IO_WAIT
+      operator: lte
+      value: 25
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to separate archive reads from live writes
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final telemetry write failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Remaining archive IO wait
+      source: signal
+      refId: ARCHIVE_IO_WAIT
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Throttles applied
+      source: action_count
+      refId: THROTTLE_ARCHIVE_JOBS
+    - id: PAUSE_COUNT
+      label: Pauses of a job under legal hold
+      source: action_count
+      refId: PAUSE_ARCHIVE_RECONSTRUCTION
+    - id: CUTOVER_ATTEMPTS
+      label: Cutover attempts
+      source: action_count
+      refId: SEPARATE_ARCHIVE_IO
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

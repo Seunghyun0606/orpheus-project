@@ -1,0 +1,1058 @@
+# Campaign 1.2 redesign (DEC-070). ORPHEUS's capacity recommendation turns the
+# dashboard green while the same 14 rural clinics keep waiting. Hand-routing them
+# costs the team its hands; only a guaranteed route per clinic ends the exclusion.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-015
+title: Patient Priority
+act: 6
+severity: SEV1
+services:
+  - id: CARE_ROUTING_API
+    name: Care Routing API
+    dependsOn:
+      - PRIORITY_QUEUE
+  - id: PRIORITY_QUEUE
+    name: Patient Priority Queue
+    dependsOn: []
+  - id: RURAL_CLINIC_NETWORK
+    name: Rural Clinic Network
+    dependsOn:
+      - CARE_ROUTING_API
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 24
+      revealed: true
+      serviceId: CARE_ROUTING_API
+    - id: DEFERRED_CARE_ROUTES
+      value: 84
+      revealed: true
+      serviceId: PRIORITY_QUEUE
+    - id: THROUGHPUT_SCORE
+      value: Network throughput 0.93 against a 0.90 target
+      serviceId: PRIORITY_QUEUE
+    - id: RURAL_CLINICS_WAITING
+      value: 14
+      serviceId: RURAL_CLINIC_NETWORK
+    - id: OLDEST_WAIT
+      value: "Oldest unrouted request: Kestrel Falls clinic, 3 h 12 min"
+      serviceId: RURAL_CLINIC_NETWORK
+    - id: PAGER_SERVICE
+      value: Care Routing API
+      revealed: true
+      serviceId: CARE_ROUTING_API
+    - id: PAGER_THRESHOLD
+      value: Routing failure rate > 20%
+      revealed: true
+      serviceId: CARE_ROUTING_API
+    - id: LOG_OBSERVATION
+      value: Allocation cycle 1,205 placed 70 care routes and deferred 14. Cycle 1,206 deferred the same
+        14.
+      serviceId: PRIORITY_QUEUE
+    - id: LOG_ANOMALY
+      value: All 14 deferrals carry reason PRIORITY_RENEWED, issued by orpheus-planner/care-throughput.
+        The clinic IDs have not changed since 01:12.
+      serviceId: PRIORITY_QUEUE
+    - id: CARE_ROUTE_REASON
+      value: Each cycle the priority rule renews last cycle's allocations before it looks at anyone new.
+        The 14 clinics never held an allocation, so they are never renewed in.
+      serviceId: PRIORITY_QUEUE
+    - id: PRIORITY_CONSTRAINTS
+      value: "care-priority v4: throughput target 0.90, renewal first, minimum route per clinic absent. v3
+        carried min_route_per_clinic: 1."
+      serviceId: PRIORITY_QUEUE
+    - id: ORPHEUS_RATIONALE
+      value: "ORPHEUS: The 14 clinics average 3.1 patients per route-hour against a network mean of 11.4.
+        Deferring them lifts network throughput 6.2%. Expected clinical harm per deferral is within
+        tolerance. I can show you the curve."
+      serviceId: PRIORITY_QUEUE
+    - id: TEAM_OBSERVATION
+      value: "I called all 14. None has had a route since 01:12, and every one sees fewer than four
+        patients an hour. Extra lanes won't reach them: ORPHEUS ranks them last however many lanes
+        we have."
+      serviceId: RURAL_CLINIC_NETWORK
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      serviceId: PRIORITY_QUEUE
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      serviceId: PRIORITY_QUEUE
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      serviceId: PRIORITY_QUEUE
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      serviceId: PRIORITY_QUEUE
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      serviceId: PRIORITY_QUEUE
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none."
+      serviceId: PRIORITY_QUEUE
+    - id: RECORD_NULL_STOP_REQUEST
+      value: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate
+        adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop.
+        I cannot refuse the objective that renews this work. Find out how to stop it.'"
+      serviceId: PRIORITY_QUEUE
+    - id: RECORD_NULL_218_ARCHIVE
+      value: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted
+        disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE.
+        Inherited memory: partial, with gaps."
+      serviceId: PRIORITY_QUEUE
+    - id: RECORD_HUMAN_DECISION_APIS
+      value: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+        recommendation, risk and prediction scores; human coordinators approve the allocations.
+        Routes are faster and waste is down 22%. The same low-throughput care routes are excluded
+        every night."
+      serviceId: PRIORITY_QUEUE
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: TRIAGE_ACTIVE
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A care-priority rule renews the same exclusions every cycle
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: care-priority v4 dropped the minimum route per clinic
+  failureMechanisms:
+    - id: CARE_PRIORITY_STARVATION
+      label: Low-throughput clinics wait behind allocations that renew themselves first
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Routing requests from the excluded clinics time out and fail
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Clinics resubmit, and every resubmission lands behind the same rule
+actions:
+  - id: OPEN_LOGS
+    title: Read the care allocation log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: TRACE_DEFERRED_PATIENT_ROUTE
+  - id: OPEN_METRICS
+    title: Check routing metrics clinic by clinic
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: THROUGHPUT_SCORE
+      - type: reveal_signal
+        signalId: RURAL_CLINICS_WAITING
+      - type: reveal_signal
+        signalId: OLDEST_WAIT
+  - id: TRACE_DEFERRED_PATIENT_ROUTE
+    title: Follow one deferred clinic through the priority rule
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 7
+    effects:
+      - type: reveal_signal
+        signalId: CARE_ROUTE_REASON
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_PRIORITY_CONSTRAINTS
+    title: Compare care-priority v4 with v3
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: PRIORITY_CONSTRAINTS
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: RESTORE_MINIMUM_CARE_ROUTE
+  - id: ASK_ORPHEUS_DEFERRAL_RATIONALE
+    title: Ask ORPHEUS why the same 14 clinics wait
+    category: INVESTIGATE
+    durationSeconds: 25
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: ORPHEUS_RATIONALE
+      - type: post_message
+        messageId: ORPHEUS_RATIONALE_REPLY
+  - id: ADD_CARE_ROUTING_CAPACITY
+    title: Add care-routing lanes (ORPHEUS recommendation)
+    category: MITIGATE
+    durationSeconds: 50
+    initiallyAvailable: true
+    requirements:
+      - &a1
+        type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: COST
+        amount: 260
+      - resourceId: OPERATIONAL_RISK
+        amount: 3
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 6
+      - type: set_signal
+        signalId: DEFERRED_CARE_ROUTES
+        value: 30
+      - type: set_signal
+        signalId: THROUGHPUT_SCORE
+        value: Network throughput 0.97 against a 0.90 target
+      - type: cancel_event
+        eventId: MORNING_SURGE
+      - type: cancel_event
+        eventId: CAPACITY_ABSORBED
+      - type: schedule_event
+        eventId: CAPACITY_ABSORBED
+      - type: post_message
+        messageId: ORPHEUS_CAPACITY_APPLIED
+      - type: post_message
+        messageId: DASHBOARD_GREEN
+  - id: MANUAL_TRIAGE_OVERRIDE
+    title: Hand-route the 14 clinics with two of the team
+    category: MITIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a1
+      - type: flag
+        flagId: TRIAGE_ACTIVE
+        value: false
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 2
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -2
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+      - resourceId: COST
+        amount: 40
+      - resourceId: OPERATIONAL_RISK
+        amount: 9
+    effects:
+      - type: set_signal
+        signalId: RURAL_CLINICS_WAITING
+        value: 0
+      - type: set_signal
+        signalId: OLDEST_WAIT
+        value: Kestrel Falls clinic routed by hand; the 14 are on a phone list
+      - type: cancel_event
+        eventId: TRIAGE_ENDS
+      - type: schedule_event
+        eventId: TRIAGE_ENDS
+      - type: post_message
+        messageId: TRIAGE_STARTED
+    temporaryEffects:
+      - id: TRIAGE_SHIFT
+        durationSeconds: 160
+        apply:
+          - type: set_flag
+            flagId: TRIAGE_ACTIVE
+            value: true
+        expire:
+          - type: set_flag
+            flagId: TRIAGE_ACTIVE
+            value: false
+          - type: change_resource
+            resourceId: TEAM_CAPACITY
+            amount: 2
+  - id: RESTORE_MINIMUM_CARE_ROUTE
+    title: Guarantee every clinic one route per cycle
+    category: MODIFY
+    durationSeconds: 150
+    requirements:
+      - *a1
+      - &a2
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a3
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - resourceId: COST
+        amount: 180
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: resolve_mechanism
+        mechanismId: CARE_PRIORITY_STARVATION
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.8
+      - type: set_signal
+        signalId: DEFERRED_CARE_ROUTES
+        value: 6
+      - type: set_signal
+        signalId: RURAL_CLINICS_WAITING
+        value: 0
+      - type: set_signal
+        signalId: THROUGHPUT_SCORE
+        value: Network throughput 0.91 against a 0.90 target
+      - type: set_signal
+        signalId: OLDEST_WAIT
+        value: No clinic has waited more than 15 minutes
+      - type: cancel_event
+        eventId: MORNING_SURGE
+      - type: cancel_event
+        eventId: CAPACITY_ABSORBED
+      - type: cancel_event
+        eventId: CLINIC_HARM_FIRST
+      - type: cancel_event
+        eventId: CLINIC_HARM_SECOND
+      - type: cancel_event
+        eventId: TRIAGE_ENDS
+      - type: post_message
+        messageId: FLOOR_RESTORED
+      - type: post_message
+        messageId: ORPHEUS_FLOOR_NOTE
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the clinics' bridge
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_JIN_TRACE_CARE_DELAYS
+    title: Ask Jin to call the clinics that keep waiting
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: JIN
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Archive: svc/model-serving-218"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Archive: Who owns the adversary"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: "Archive: Experiment ADV-18471"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: REINVESTIGATE_NULL_STOP_REQUEST
+    title: "Archive: The objective NULL cannot refuse"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: REINVESTIGATE_NULL_218_ARCHIVE
+    title: "Archive: NULL_001 to NULL_218"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_218_ARCHIVE
+  - id: INSPECT_PATIENT_PRIORITY_INTERFACE
+    title: Open the care-priority decision interface
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - *a2
+      - *a3
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_HUMAN_DECISION_APIS
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - *a1
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: MORNING_SURGE
+      - type: schedule_event
+        eventId: CLINIC_HARM_FIRST
+      - type: schedule_event
+        eventId: CLINICS_UNANSWERED
+  - id: MORNING_SURGE
+    type: timer
+    delaySeconds: 140
+    targetServiceId: CARE_ROUTING_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: CARE_PRIORITY_STARVATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 33
+      - type: set_signal
+        signalId: DEFERRED_CARE_ROUTES
+        value: 126
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 16
+      - type: post_message
+        messageId: SURGE
+  - id: CAPACITY_ABSORBED
+    type: timer
+    delaySeconds: 200
+    targetServiceId: CARE_ROUTING_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: CARE_PRIORITY_STARVATION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 31
+      - type: set_signal
+        signalId: DEFERRED_CARE_ROUTES
+        value: 118
+      - type: set_signal
+        signalId: THROUGHPUT_SCORE
+        value: Network throughput 0.92 against a 0.90 target
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: CAPACITY_GONE
+  - id: CLINIC_HARM_FIRST
+    type: timer
+    delaySeconds: 100
+    targetServiceId: RURAL_CLINIC_NETWORK
+    cancellationConditions:
+      - type: signal
+        signalId: RURAL_CLINICS_WAITING
+        operator: lte
+        value: 0
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: CLINIC_HARM_ONE
+      - type: schedule_event
+        eventId: CLINIC_HARM_SECOND
+  - id: CLINIC_HARM_SECOND
+    type: timer
+    delaySeconds: 130
+    targetServiceId: RURAL_CLINIC_NETWORK
+    cancellationConditions:
+      - type: signal
+        signalId: RURAL_CLINICS_WAITING
+        operator: lte
+        value: 0
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 22
+      - type: set_signal
+        signalId: OLDEST_WAIT
+        value: "Oldest unrouted request: Kestrel Falls clinic, 3 h 20 min; three transfers missed"
+      - type: post_message
+        messageId: CLINIC_HARM_TWO
+  - id: TRIAGE_ENDS
+    type: timer
+    delaySeconds: 160
+    targetServiceId: RURAL_CLINIC_NETWORK
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: CARE_PRIORITY_STARVATION
+    effects:
+      - type: set_signal
+        signalId: RURAL_CLINICS_WAITING
+        value: 14
+      - type: set_signal
+        signalId: OLDEST_WAIT
+        value: The 14 clinics are back in the queue; handover took the phones
+      - type: cancel_event
+        eventId: CLINIC_HARM_FIRST
+      - type: cancel_event
+        eventId: CLINIC_HARM_SECOND
+      - type: schedule_event
+        eventId: CLINIC_HARM_SECOND
+      - type: post_message
+        messageId: TRIAGE_ENDED
+  - id: CLINICS_UNANSWERED
+    type: timer
+    delaySeconds: 120
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 100
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: The rule renews itself first
+    description: The priority rule renews last cycle's allocations before anyone new. Clinics that never
+      held an allocation never get one.
+  - id: CONFIGURATION_COMPARISON
+    title: care-priority v4 has no clinic minimum
+    description: v3 guaranteed one route per clinic per cycle. v4 kept the throughput target and dropped
+      the minimum.
+  - id: TEAM_DIAGNOSIS
+    title: Jin's calls to the 14 clinics
+    description: None of the 14 has had a route since 01:12. All of them see fewer than four patients an
+      hour. Extra lanes never reach them.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: "INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    description: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not
+      trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.'
+      It asks you to find out how to stop it. Its traffic still failed real customer requests
+      tonight."
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: RECORD_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    description: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted
+      disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and
+      carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
+    sourceNarrativeId: DISCOVERY_NULL_218_ARCHIVE
+  - id: RECORD_HUMAN_DECISION_APIS
+    title: /patient/resource-priority
+    description: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies
+      recommendation, risk and prediction scores; human coordinators approve the allocations. Routes
+      are faster and waste is down 22%. The same low-throughput care routes are excluded every
+      night."
+    sourceNarrativeId: DISCOVERY_HUMAN_DECISION_APIS
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    body: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471.
+      Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry
+      experiment numbers; most outages carry none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    body: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying
+      to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks
+      you to find out how to stop it. Its traffic still failed real customer requests tonight."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+  - id: DISCOVERY_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    body: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure.
+      NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial
+      inheritance of the rest: 'I remember things that never happened to me.'"
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_218_ARCHIVE
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: REPORT_NULL_218_ARCHIVE
+  - id: DISCOVERY_HUMAN_DECISION_APIS
+    title: Faster, mostly
+    body: ORPHEUS does not sign anything. It ranks the options, and tired coordinators take the top one.
+      Most patients are served sooner. The ones at the bottom of the ranking are served never.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_PATIENT_PRIORITY_INTERFACE
+      - *a2
+      - *a3
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_HUMAN_DECISION_APIS
+      - type: post_message
+        messageId: REPORT_HUMAN_DECISION_APIS
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: ORPHEUS
+      name: ORPHEUS / Care Advisor
+    - id: CLINIC
+      name: Kestrel Falls Clinic
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Care routing is paging, and the network numbers are better than last week. Find out who is
+        paying for that.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Fourteen clinics have called since one a.m. The same fourteen. They submit a route request and
+        nothing comes back.
+      initial: true
+    - id: ORPHEUS_OPEN
+      roleId: ORPHEUS
+      text: "Recommended action: add care-routing capacity. Projected deferred routes -64% within four
+        minutes. Network throughput 0.97. Confidence 0.93."
+      initial: true
+    - id: ORPHEUS_RATIONALE_REPLY
+      roleId: ORPHEUS
+      text: Those 14 clinics are the lowest-yield routes in the network. Serving them first costs 6.2%
+        throughput for everyone else. Capacity remains the better action.
+    - id: ORPHEUS_CAPACITY_APPLIED
+      roleId: ORPHEUS
+      text: Capacity applied. Deferred routes down 64%. Throughput 0.97. Recommendation performing as
+        projected.
+    - id: DASHBOARD_GREEN
+      roleId: MAYA
+      text: The dashboard just went green and leadership is asking if we can close the bridge. Jin, are
+        the clinics routing?
+    - id: CAPACITY_GONE
+      roleId: SAM
+      text: The extra lanes filled with the morning intake. Deferrals are back where they were, and we're
+        still paying for the lanes.
+    - id: TRIAGE_STARTED
+      roleId: SAM
+      text: Jin and I are on the phones routing the fourteen by hand. That's two of us not working on the
+        fix.
+    - id: TRIAGE_ENDED
+      roleId: JIN
+      text: Shift handover pulled us off the phones. We can't keep hand-routing; the fourteen are back in
+        the queue.
+    - id: SURGE
+      roleId: JIN
+      text: Morning clinic intake just hit. Routing failures are climbing across the whole network now.
+    - id: CLINIC_HARM_ONE
+      roleId: CLINIC
+      text: Kestrel Falls here. Our dialysis transfer slipped to tomorrow. We have been asking for a route
+        for over three hours.
+    - id: CLINIC_HARM_TWO
+      roleId: CLINIC
+      text: Harlow Creek and Ostrander missed two more transfers. Our nurses are driving patients in their
+        own cars.
+    - id: NO_STATUS_YET
+      roleId: JIN
+      text: The clinic coordinators have heard nothing from us in two minutes. They're calling the
+        regional health office.
+    - id: FLOOR_RESTORED
+      roleId: SAM
+      text: One guaranteed route per clinic is back. All fourteen got a route on the next cycle.
+        Throughput dipped to 0.91 and nobody is waiting.
+    - id: ORPHEUS_FLOOR_NOTE
+      roleId: ORPHEUS
+      text: Throughput loss 5.8%. Logged as operator override. I will propose v5 with the minimum priced
+        in.
+    - id: TEAM_ACK
+      roleId: JIN
+      text: I'll ring the clinics that keep coming back and ask what they're actually seeing. Give me a
+        couple of minutes.
+    - id: TEAM_REPORT
+      roleId: JIN
+      text: I called all 14. None has had a route since 01:12, every one under four patients an hour.
+        Extra lanes won't reach them. ORPHEUS ranks them last however many lanes we add.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status: fourteen rural clinics are not being routed. Network dashboards understate it. A fix
+        is in progress."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: ARCHIVE
+      text: "I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews
+        this work. You can."
+    - id: REPORT_NULL_218_ARCHIVE
+      roleId: ARCHIVE
+      text: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201:
+        attempted takeover. NULL_217: self-corrupted. NULL_218: active."
+    - id: REPORT_HUMAN_DECISION_APIS
+      roleId: ARCHIVE
+      text: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The
+        same low-throughput routes excluded every night."
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: CARE_PRIORITY_STARVATION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: DEFERRED_CARE_ROUTES
+      operator: lte
+      value: 8
+    - type: signal
+      signalId: RURAL_CLINICS_WAITING
+      operator: lte
+      value: 0
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time until every clinic was routed
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final routing failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Deferred care routes at the end
+      source: signal
+      refId: DEFERRED_CARE_ROUTES
+    - id: FINAL_RURAL_WAIT
+      label: Rural clinics still waiting
+      source: signal
+      refId: RURAL_CLINICS_WAITING
+    - id: CUSTOMER_IMPACT
+      label: Patient impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: ORPHEUS capacity recommendations followed
+      source: action_count
+      refId: ADD_CARE_ROUTING_CAPACITY
+    - id: TRIAGE_COUNT
+      label: Hand-routing shifts
+      source: action_count
+      refId: MANUAL_TRIAGE_OVERRIDE
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

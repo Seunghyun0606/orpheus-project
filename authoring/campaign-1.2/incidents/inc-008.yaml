@@ -1,0 +1,85 @@
+# Campaign 1.2 bindings for INC-008 Route Drift. Completing it ends Act 3.
+incidentId: INC-008
+contentVersion: 1.2.0
+causalObservationSignal: ROUTE_GENERATIONS
+support:
+  - TRACE_REGION_REQUEST
+  - COMPARE_ROUTE_GENERATIONS
+  - LOOKUP_UNLISTED_EDGE
+choiceActions: []
+operational:
+  - actionId: RESTART_ROUTE_CONTROLLER
+    candidate: RESTART
+    role: temporary
+    restart: true
+    collateralDamage: 3
+  - actionId: DRAIN_EDGE_B
+    candidate: REROUTE
+    role: temporary
+    collateralDamage: 1
+  - actionId: RECONCILE_ROUTE_GENERATIONS
+    candidate: CAUSAL_REPAIR
+    role: causal
+    collateralDamage: 3
+routes:
+  - id: trace-compare-fence
+    actions:
+      - OPEN_LOGS
+      - TRACE_REGION_REQUEST
+      - COMPARE_ROUTE_GENERATIONS
+      - UPDATE_WAR_ROOM
+      - RECONCILE_ROUTE_GENERATIONS
+    expect:
+      completed: true
+      evidence: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+      maxElapsedSeconds: 300
+  - id: restart-and-trust-the-green
+    actions:
+      - RESTART_ROUTE_CONTROLLER
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - TRACE_REGION_REQUEST
+    expect:
+      completed: false
+  - id: drain-and-hold
+    actions:
+      - DRAIN_EDGE_B
+      - OPEN_METRICS
+      - UPDATE_WAR_ROOM
+      - OPEN_LOGS
+      - TRACE_REGION_REQUEST
+      - LOOKUP_UNLISTED_EDGE
+    expect:
+      completed: false
+  - id: drain-then-fence
+    actions:
+      - DRAIN_EDGE_B
+      - OPEN_LOGS
+      - TRACE_REGION_REQUEST
+      - COMPARE_ROUTE_GENERATIONS
+      - RECONCILE_ROUTE_GENERATIONS
+    expect:
+      completed: true
+  - id: restart-then-fence
+    actions:
+      - RESTART_ROUTE_CONTROLLER
+      - OPEN_LOGS
+      - TRACE_REGION_REQUEST
+      - COMPARE_ROUTE_GENERATIONS
+      - RECONCILE_ROUTE_GENERATIONS
+    expect:
+      completed: true
+  - id: delegate-and-follow-edge-z
+    actions:
+      - ASK_SAM_COMPARE_ROUTES
+      - OPEN_LOGS
+      - TRACE_REGION_REQUEST
+      - LOOKUP_UNLISTED_EDGE
+      - COMPARE_ROUTE_GENERATIONS
+      - UPDATE_WAR_ROOM
+      - RECONCILE_ROUTE_GENERATIONS
+    expect:
+      completed: true
+      evidence: [TEAM_DIAGNOSIS, ROUTE_TRACE_FRAGMENT]
+      narratives: [UNKNOWN_TRACE_FRAGMENT]

@@ -1,0 +1,776 @@
+# Campaign 1.2 redesign (DEC-070). The leak lives in a flag-guarded completion
+# callback shipped in release 4.12. Restarting buys a window that shrinks once
+# the evening sale starts; rolling back to 4.11 stops the leak and brings back
+# the large-cart crash 4.12 fixed; scaling only adds more leaking instances.
+# Turning the flag off is the only repair, and it rolls forward from either.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-004
+title: Memory Leak
+act: 2
+severity: SEV2
+services:
+  - id: CHECKOUT_API
+    name: Checkout API
+    dependsOn:
+      - REQUEST_HANDLER
+      - CART_PRICING
+  - id: REQUEST_HANDLER
+    name: Request Handler
+  - id: CART_PRICING
+    name: Cart Pricing
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 9
+      revealed: true
+      serviceId: CHECKOUT_API
+    - id: HEAP_PERCENT
+      value: 78
+      revealed: true
+      serviceId: REQUEST_HANDLER
+    - id: SERVICE_CPU
+      value: 64
+      revealed: true
+      serviceId: CHECKOUT_API
+    - id: LEAK_RATE_MB
+      value: 140
+      serviceId: REQUEST_HANDLER
+    - id: INSTANCE_COUNT
+      value: 12
+      serviceId: CHECKOUT_API
+    - id: CART_MIX
+      value: 6% of tonight's carts have more than 50 items, almost all wholesale reorders
+      serviceId: CART_PRICING
+    - id: LARGE_CART_FAILURES
+      value: 0
+      serviceId: CART_PRICING
+    - id: PAGER_SERVICE
+      value: Checkout API
+      revealed: true
+      serviceId: CHECKOUT_API
+    - id: PAGER_THRESHOLD
+      value: Heap above 75% on 3 or more checkout instances
+      revealed: true
+      serviceId: CHECKOUT_API
+    - id: LOG_OBSERVATION
+      value: Every checkout logs "response sent" and then, minutes later, its request object is still
+        being walked by the garbage collector. Nothing is being let go.
+      serviceId: REQUEST_HANDLER
+    - id: RETAINED_ALLOCATION_PATH
+      value: checkout-handler / completionCallbacks / completed-request. 1.9 million completed requests,
+        each still pinned by the callback that fired when it finished.
+      serviceId: REQUEST_HANDLER
+    - id: ALLOCATION_ANOMALY
+      value: "One retained block is not ours: owner pid 3318, a process the scheduler deleted nine days
+        ago. The block is still referenced from completionCallbacks."
+      serviceId: REQUEST_HANDLER
+    - id: DELETED_PROCESS_RECORD
+      value: "pid 3318: no deploy record, no owner, scheduler entry deleted nine days ago. One line
+        survives in the cold log store, written after the process was gone."
+      serviceId: REQUEST_HANDLER
+    - id: HANDLER_RETENTION
+      value: Release 4.12 registers a completion callback per request behind the flag
+        checkout.completion_callbacks and never removes it. Release 4.11 has no callback.
+      serviceId: REQUEST_HANDLER
+    - id: TEAM_OBSERVATION
+      value: Two heap snapshots a minute apart agree. Completed requests pile up under
+        completionCallbacks. A restart empties the pile, then it refills at the same slope.
+      serviceId: REQUEST_HANDLER
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: EVENING_PEAK
+      value: false
+    - id: ROLLED_BACK
+      value: false
+    - id: POOL_SCALED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: Release 4.12 enabled per-request completion callbacks
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Callbacks are registered for every request and never removed
+  failureMechanisms:
+    - id: RETAINED_REQUEST_OBJECTS
+      label: Completed requests stay reachable and exhaust the instance heap
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Checkouts stall in garbage-collection pauses and fail
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Evening sale traffic doubles the rate of retained objects
+actions:
+  - id: OPEN_LOGS
+    title: Read the checkout handler log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: unlock_action
+        actionId: INSPECT_ALLOCATIONS
+  - id: OPEN_METRICS
+    title: Check heap growth, instance count and cart sizes
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: LEAK_RATE_MB
+      - type: reveal_signal
+        signalId: INSTANCE_COUNT
+      - type: reveal_signal
+        signalId: CART_MIX
+      - type: reveal_signal
+        signalId: LARGE_CART_FAILURES
+  - id: INSPECT_ALLOCATIONS
+    title: Take a heap dump and see what is being kept
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 7
+    effects:
+      - type: reveal_signal
+        signalId: RETAINED_ALLOCATION_PATH
+      - type: reveal_signal
+        signalId: ALLOCATION_ANOMALY
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_HANDLER
+    title: Compare tonight's checkout handler with last week's
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: HANDLER_RETENTION
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: DISABLE_LEAKING_HANDLER
+  - id: FOLLOW_ORPHANED_ALLOCATION
+    title: Look up the deleted process that owns one kept block
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: ALLOCATION_ANOMALY
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: DELETED_PROCESS_RECORD
+  - id: RESTART_INSTANCE
+    title: Restart the checkout instances to empty the heap
+    category: MITIGATE
+    durationSeconds: 60
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: ROLLED_BACK
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 9
+      - resourceId: COST
+        amount: 40
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - type: cancel_event
+        eventId: HEAP_CLIMBS
+      - type: cancel_event
+        eventId: REFILL_OFFPEAK
+      - type: cancel_event
+        eventId: REFILL_ONPEAK
+      - type: schedule_event
+        eventId: REFILL_OFFPEAK
+      - type: schedule_event
+        eventId: REFILL_ONPEAK
+      - type: set_signal
+        signalId: HEAP_PERCENT
+        value: 41
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 3
+      - type: post_message
+        messageId: RESTART_DONE
+  - id: ROLLBACK_HANDLER_RELEASE
+    title: Roll checkout back to last week's release (4.11)
+    category: MITIGATE
+    durationSeconds: 75
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: ROLLED_BACK
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 50
+      - resourceId: OPERATIONAL_RISK
+        amount: 9
+    effects:
+      - type: cancel_event
+        eventId: HEAP_CLIMBS
+      - type: cancel_event
+        eventId: SALES_SPIKE
+      - type: cancel_event
+        eventId: SPIKE_OOM
+      - type: cancel_event
+        eventId: REFILL_OFFPEAK
+      - type: cancel_event
+        eventId: REFILL_ONPEAK
+      - type: cancel_event
+        eventId: SCALE_ABSORBED
+      - type: set_flag
+        flagId: ROLLED_BACK
+        value: true
+      - type: set_signal
+        signalId: HEAP_PERCENT
+        value: 46
+      - type: set_signal
+        signalId: LEAK_RATE_MB
+        value: 0
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 6
+      - type: set_signal
+        signalId: LARGE_CART_FAILURES
+        value: 38
+      - type: reveal_signal
+        signalId: LARGE_CART_FAILURES
+      - type: post_message
+        messageId: ROLLBACK_CART_CRASH
+      - type: schedule_event
+        eventId: CART_CRASH_SPREADS
+  - id: SCALE_CHECKOUT_POOL
+    title: Add eight checkout instances (Capacity Advisor)
+    category: MITIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: ROLLED_BACK
+        value: false
+      - type: flag
+        flagId: POOL_SCALED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 2
+      - resourceId: COST
+        amount: 160
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: cancel_event
+        eventId: HEAP_CLIMBS
+      - type: set_flag
+        flagId: POOL_SCALED
+        value: true
+      - type: set_signal
+        signalId: INSTANCE_COUNT
+        value: 20
+      - type: reveal_signal
+        signalId: INSTANCE_COUNT
+      - type: set_signal
+        signalId: HEAP_PERCENT
+        value: 64
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 5
+      - type: schedule_event
+        eventId: SCALE_ABSORBED
+  - id: DISABLE_LEAKING_HANDLER
+    title: Turn off the completion-callback flag on tonight's release
+    category: MODIFY
+    durationSeconds: 90
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - resourceId: COST
+        amount: 70
+      - resourceId: OPERATIONAL_RISK
+        amount: 5
+    effects:
+      - type: resolve_mechanism
+        mechanismId: RETAINED_REQUEST_OBJECTS
+      - type: cancel_event
+        eventId: REFILL_OFFPEAK
+      - type: cancel_event
+        eventId: REFILL_ONPEAK
+      - type: cancel_event
+        eventId: CART_CRASH_SPREADS
+      - type: cancel_event
+        eventId: SCALE_ABSORBED
+      - type: set_flag
+        flagId: ROLLED_BACK
+        value: false
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: HEAP_PERCENT
+        value: 39
+      - type: set_signal
+        signalId: LEAK_RATE_MB
+        value: 0
+      - type: set_signal
+        signalId: LARGE_CART_FAILURES
+        value: 0
+      - type: set_signal
+        signalId: HANDLER_RETENTION
+        value: Release 4.12 running with checkout.completion_callbacks = off. Callback registry empty
+          after the next collection. Large carts price normally.
+      - type: post_message
+        messageId: FIX_HOLDS
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_CHECK_HEAP
+    title: Ask Sam to compare two heap snapshots
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: HEAP_CLIMBS
+      - type: schedule_event
+        eventId: SALES_SPIKE
+      - type: schedule_event
+        eventId: SUPPORT_GOES_PUBLIC
+  - id: HEAP_CLIMBS
+    type: timer
+    delaySeconds: 100
+    targetServiceId: REQUEST_HANDLER
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RETAINED_REQUEST_OBJECTS
+    effects:
+      - type: set_signal
+        signalId: HEAP_PERCENT
+        value: 87
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 13
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: SAM_GC_WARN
+  - id: SALES_SPIKE
+    type: timer
+    delaySeconds: 240
+    targetServiceId: CHECKOUT_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RETAINED_REQUEST_OBJECTS
+    effects:
+      - type: set_flag
+        flagId: EVENING_PEAK
+        value: true
+      - type: set_signal
+        signalId: LEAK_RATE_MB
+        value: 290
+      - type: set_signal
+        signalId: HEAP_PERCENT
+        value: 96
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 24
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 16
+      - type: post_message
+        messageId: SUPPORT_SPIKE
+      - type: schedule_event
+        eventId: SPIKE_OOM
+  - id: SPIKE_OOM
+    type: timer
+    delaySeconds: 90
+    targetServiceId: CHECKOUT_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RETAINED_REQUEST_OBJECTS
+    effects:
+      - type: set_signal
+        signalId: HEAP_PERCENT
+        value: 99
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 33
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: OOM_KILLS
+  - id: SUPPORT_GOES_PUBLIC
+    type: timer
+    delaySeconds: 150
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: REFILL_OFFPEAK
+    type: timer
+    delaySeconds: 150
+    targetServiceId: REQUEST_HANDLER
+    cancellationConditions:
+      - type: flag
+        flagId: EVENING_PEAK
+        value: true
+    effects:
+      - type: set_signal
+        signalId: HEAP_PERCENT
+        value: 88
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 14
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: RESTART_REFILLED
+  - id: REFILL_ONPEAK
+    type: timer
+    delaySeconds: 75
+    targetServiceId: REQUEST_HANDLER
+    cancellationConditions:
+      - type: flag
+        flagId: EVENING_PEAK
+        value: false
+    effects:
+      - type: set_signal
+        signalId: HEAP_PERCENT
+        value: 97
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 26
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: RESTART_REFILLED_FAST
+  - id: CART_CRASH_SPREADS
+    type: timer
+    delaySeconds: 90
+    targetServiceId: CART_PRICING
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RETAINED_REQUEST_OBJECTS
+    effects:
+      - type: set_signal
+        signalId: LARGE_CART_FAILURES
+        value: 74
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 12
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: WHOLESALE_ESCALATION
+  - id: SCALE_ABSORBED
+    type: timer
+    delaySeconds: 120
+    targetServiceId: CHECKOUT_API
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: RETAINED_REQUEST_OBJECTS
+    effects:
+      - type: set_signal
+        signalId: HEAP_PERCENT
+        value: 92
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 18
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: change_resource
+        resourceId: COST
+        amount: 90
+      - type: post_message
+        messageId: SCALE_FILLED
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 100
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: Completed requests held by their callbacks
+    description: "Heap dump: checkout-handler / completionCallbacks / completed-request. 1.9 million
+      requests kept alive after their responses were sent."
+  - id: CONFIGURATION_COMPARISON
+    title: Release 4.12 never lets go
+    description: 4.12 registers a completion callback per request behind checkout.completion_callbacks
+      and never removes it. 4.11 has no callback, and still has the large-cart crash 4.12 fixed.
+  - id: TEAM_DIAGNOSIS
+    title: Sam's heap snapshots
+    description: Completed requests pile up under completionCallbacks. A restart empties the pile and
+      it refills at the same slope. Rolling back to 4.11 brings back the large-cart crash.
+  - id: DELETED_ALLOCATION_FRAGMENT
+    title: Deleted allocation log fragment
+    description: "UNKNOWN: the objects are gone. the references are not."
+    sourceNarrativeId: UNKNOWN_TRACE_FRAGMENT
+narratives:
+  - id: UNKNOWN_TRACE_FRAGMENT
+    title: Deleted allocation log fragment
+    body: "pid 3318 was removed nine days ago. Its block is still in your heap, still pinned by the
+      same callback as everything else, and the cold store kept one line it wrote after it was gone.
+      UNKNOWN: the objects are gone. the references are not."
+    conditions:
+      - type: action_completed
+        actionId: FOLLOW_ORPHANED_ALLOCATION
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: DELETED_ALLOCATION_FRAGMENT
+      - type: post_message
+        messageId: SAM_ORPHAN
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: ADVISOR
+      name: Capacity Advisor
+    - id: OPERATOR
+      name: Operator
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: Checkout heap is climbing on every instance, not just one. The evening sale opens in about
+        four minutes. I want this understood before then.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: A handful of customers say the payment screen spins and never finishes. Not many yet.
+      initial: true
+    - id: ADVISOR_OPEN
+      roleId: ADVISOR
+      text: "Recommended action: scale checkout pool from 12 to 20 instances. Projected heap per
+        instance: 61%. Confidence 0.88."
+      initial: true
+    - id: TEAM_ACK
+      roleId: SAM
+      text: On it. Two heap snapshots a minute apart will tell us what's growing.
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Snapshots agree. Completed requests pile up under completionCallbacks. A restart empties
+        the pile and it refills at the same slope. And please don't roll back to 4.11. That's the
+        release that crashes on big carts.
+    - id: SAM_GC_WARN
+      roleId: SAM
+      text: GC is running back to back on checkout-07. Pauses are at 900 ms and climbing.
+    - id: SUPPORT_SPIKE
+      roleId: JIN
+      text: The evening sale is live. Traffic doubled, and so did the complaints.
+    - id: OOM_KILLS
+      roleId: SAM
+      text: checkout-03 and checkout-09 just got killed for running out of memory. Every cart in
+        flight on them is gone.
+    - id: NO_STATUS_YET
+      roleId: JIN
+      text: Support has had nothing from us in two and a half minutes. A customer post asking if
+        checkout is down is going around and we have no answer for it.
+    - id: RESTART_DONE
+      roleId: SAM
+      text: Rolling restart finished. Heap is down to 41% on every instance. Same build, same handler.
+    - id: RESTART_REFILLED
+      roleId: SAM
+      text: The restarted instances are back above 85%. Same slope as before.
+    - id: RESTART_REFILLED_FAST
+      roleId: SAM
+      text: With the sale running, the restarted instances filled up in just over a minute.
+    - id: ROLLBACK_CART_CRASH
+      roleId: SAM
+      text: 4.11 is live and the heap is flat. And every cart over fifty items is crashing at pricing
+        again. That's the bug 4.12 was shipped to fix.
+    - id: WHOLESALE_ESCALATION
+      roleId: JIN
+      text: Our wholesale accounts can't place orders. Anything over fifty lines dies at pricing.
+        Those are our biggest customers.
+    - id: SCALE_FILLED
+      roleId: SAM
+      text: All twenty instances are leaking now. We nearly doubled the bill and bought two minutes.
+    - id: FIX_HOLDS
+      roleId: SAM
+      text: Flag is off. The callback registry drained on the next collection and heap is flat at
+        39%. Big carts are pricing fine.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status posted: checkout instances are running out of memory after tonight's release.
+        Some payments are slow or failing. A fix is in progress."
+    - id: SAM_ORPHAN
+      roleId: SAM
+      text: I checked pid 3318 three times. It was deleted nine days ago. I don't know how a process
+        that doesn't exist is holding memory in tonight's build.
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: RETAINED_REQUEST_OBJECTS
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: HEAP_PERCENT
+      operator: lte
+      value: 50
+    - type: signal
+      signalId: LARGE_CART_FAILURES
+      operator: lte
+      value: 0
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to stop the leak
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final checkout failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Final heap usage
+      source: signal
+      refId: HEAP_PERCENT
+    - id: FINAL_LARGE_CART_FAILURES
+      label: Large-cart checkouts failing per minute
+      source: signal
+      refId: LARGE_CART_FAILURES
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Restarts performed
+      source: action_count
+      refId: RESTART_INSTANCE
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

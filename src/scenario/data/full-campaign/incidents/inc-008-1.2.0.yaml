@@ -1,0 +1,624 @@
+# Campaign 1.2 redesign (DEC-070). The restart the EU on-call trusts turns the
+# health probes green, then loads cached route r79, which sends all of EU to us-east;
+# us-east saturates two minutes later. Draining edge-b stops the loop at the
+# price of EU latency and edge-a's headroom. Only fencing route updates to the
+# committed generation holds. Completing this Incident ends Act 3.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-008
+title: Route Drift
+act: 3
+severity: SEV1
+services:
+  - id: REGIONAL_GATEWAY
+    name: Regional Gateway
+    dependsOn:
+      - ROUTE_CONTROLLER
+      - EDGE_FLEET
+  - id: ROUTE_CONTROLLER
+    name: Route Controller
+  - id: EDGE_FLEET
+    name: Edge Fleet
+    dependsOn:
+      - ROUTE_CONTROLLER
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 31
+      revealed: true
+      serviceId: REGIONAL_GATEWAY
+    - id: CONFLICTING_ROUTE_COUNT
+      value: 4
+      revealed: true
+      serviceId: ROUTE_CONTROLLER
+    - id: SERVICE_CPU
+      value: 68
+      revealed: true
+      serviceId: REGIONAL_GATEWAY
+    - id: US_EAST_LOAD
+      value: 58
+      serviceId: EDGE_FLEET
+    - id: EU_LATENCY_MS
+      value: 140
+      serviceId: EDGE_FLEET
+    - id: PAGER_SERVICE
+      value: Regional Gateway
+      revealed: true
+      serviceId: REGIONAL_GATEWAY
+    - id: PAGER_THRESHOLD
+      value: EU request failure rate > 20%
+      revealed: true
+      serviceId: REGIONAL_GATEWAY
+    - id: LOG_OBSERVATION
+      value: EU requests enter edge-a, get forwarded to edge-b and come back to edge-a until the hop
+        limit runs out. Health probes on both edges are green.
+      serviceId: REGIONAL_GATEWAY
+    - id: REQUEST_ROUTE_PATH
+      value: edge-a / edge-b / edge-z / edge-a / edge-b / ... hop limit exceeded after 8 hops
+      serviceId: EDGE_FLEET
+    - id: UNLISTED_HOP
+      value: "Hop 3 passes through edge-z: 0.0 ms spent, no route generation, no owner tag."
+      serviceId: EDGE_FLEET
+    - id: UNLISTED_EDGE_RECORD
+      value: There is no edge-z in the inventory. The address answers on the management network,
+        refuses every login and copies one request in ten thousand to a collector with no name.
+      serviceId: EDGE_FLEET
+    - id: ROUTE_GENERATIONS
+      value: controller-a publishes r81 (committed 02:10) / controller-b publishes r82 (no commit
+        record, built from a draft)
+      serviceId: ROUTE_CONTROLLER
+    - id: TEAM_OBSERVATION
+      value: A restart boots from the cached table r79, which points all of EU at us-east.
+        Controller-b keeps publishing r82 regardless. Only a generation fence stops it.
+      serviceId: ROUTE_CONTROLLER
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A second route controller publishes an uncommitted generation
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Edges accept any route generation without checking for a commit record
+  failureMechanisms:
+    - id: ROUTE_GENERATION_DIVERGENCE
+      label: Edges on r81 and r82 forward EU requests to each other in a loop
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: EU checkout fails with too many redirects
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Clients retry into the same loop
+actions:
+  - id: OPEN_LOGS
+    title: Read the regional gateway log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: unlock_action
+        actionId: TRACE_REGION_REQUEST
+  - id: OPEN_METRICS
+    title: Check edge load and EU latency
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: US_EAST_LOAD
+      - type: reveal_signal
+        signalId: EU_LATENCY_MS
+  - id: TRACE_REGION_REQUEST
+    title: Trace one EU request hop by hop
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: REQUEST_ROUTE_PATH
+      - type: reveal_signal
+        signalId: UNLISTED_HOP
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_ROUTE_GENERATIONS
+    title: Compare what each route controller is publishing
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: ROUTE_GENERATIONS
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: RECONCILE_ROUTE_GENERATIONS
+  - id: LOOKUP_UNLISTED_EDGE
+    title: Look up edge-z in the edge inventory
+    category: INVESTIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: UNLISTED_HOP
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: UNLISTED_EDGE_RECORD
+  - id: RESTART_ROUTE_CONTROLLER
+    title: Restart the route controller
+    category: MITIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 70
+      - resourceId: OPERATIONAL_RISK
+        amount: 10
+    effects:
+      - type: cancel_event
+        eventId: RETRY_STORM
+      - type: cancel_event
+        eventId: EDGE_BROWNOUT
+      - type: cancel_event
+        eventId: DRAIN_STRAIN
+      - type: cancel_event
+        eventId: US_EAST_SATURATES
+      - type: schedule_event
+        eventId: US_EAST_SATURATES
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 5
+      - type: set_signal
+        signalId: CONFLICTING_ROUTE_COUNT
+        value: 0
+      - type: set_signal
+        signalId: US_EAST_LOAD
+        value: 93
+      - type: set_signal
+        signalId: EU_LATENCY_MS
+        value: 260
+      - type: post_message
+        messageId: RESTART_LOOKS_GOOD
+  - id: DRAIN_EDGE_B
+    title: Drain edge-b and send EU traffic through edge-a only
+    category: MITIGATE
+    durationSeconds: 35
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - resourceId: COST
+        amount: 60
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: cancel_event
+        eventId: RETRY_STORM
+      - type: cancel_event
+        eventId: EDGE_BROWNOUT
+      - type: cancel_event
+        eventId: DRAIN_STRAIN
+      - type: schedule_event
+        eventId: DRAIN_STRAIN
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 11
+      - type: set_signal
+        signalId: CONFLICTING_ROUTE_COUNT
+        value: 2
+      - type: set_signal
+        signalId: EU_LATENCY_MS
+        value: 410
+      - type: post_message
+        messageId: DRAIN_DONE
+  - id: RECONCILE_ROUTE_GENERATIONS
+    title: Fence route updates to the committed generation, r81
+    category: MODIFY
+    durationSeconds: 120
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - resourceId: COST
+        amount: 160
+      - resourceId: OPERATIONAL_RISK
+        amount: 6
+    effects:
+      - type: resolve_mechanism
+        mechanismId: ROUTE_GENERATION_DIVERGENCE
+      - type: cancel_event
+        eventId: RETRY_STORM
+      - type: cancel_event
+        eventId: EDGE_BROWNOUT
+      - type: cancel_event
+        eventId: DRAIN_STRAIN
+      - type: cancel_event
+        eventId: US_EAST_SATURATES
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: CONFLICTING_ROUTE_COUNT
+        value: 0
+      - type: set_signal
+        signalId: US_EAST_LOAD
+        value: 57
+      - type: set_signal
+        signalId: EU_LATENCY_MS
+        value: 140
+      - type: set_signal
+        signalId: ROUTE_GENERATIONS
+        value: controller-a r81 / controller-b r81 (fenced; r82 rejected)
+      - type: set_signal
+        signalId: REQUEST_ROUTE_PATH
+        value: edge-a / customer destination
+      - type: post_message
+        messageId: FENCE_HOLDS
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_COMPARE_ROUTES
+    title: Ask Sam to compare the two route controllers
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: RETRY_STORM
+      - type: schedule_event
+        eventId: LEADERSHIP_UNINFORMED
+  - id: RETRY_STORM
+    type: timer
+    delaySeconds: 75
+    targetServiceId: REGIONAL_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: ROUTE_GENERATION_DIVERGENCE
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 38
+      - type: set_signal
+        signalId: CONFLICTING_ROUTE_COUNT
+        value: 6
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 18
+      - type: post_message
+        messageId: RETRY_WAVE
+      - type: cancel_event
+        eventId: EDGE_BROWNOUT
+      - type: schedule_event
+        eventId: EDGE_BROWNOUT
+  - id: EDGE_BROWNOUT
+    type: timer
+    delaySeconds: 100
+    targetServiceId: EDGE_FLEET
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: ROUTE_GENERATION_DIVERGENCE
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 46
+      - type: set_signal
+        signalId: CONFLICTING_ROUTE_COUNT
+        value: 7
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 24
+      - type: post_message
+        messageId: BROWNOUT
+  - id: LEADERSHIP_UNINFORMED
+    type: timer
+    delaySeconds: 120
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: EXEC_WAITING
+  - id: US_EAST_SATURATES
+    type: timer
+    delaySeconds: 120
+    targetServiceId: EDGE_FLEET
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: ROUTE_GENERATION_DIVERGENCE
+    effects:
+      - type: set_signal
+        signalId: US_EAST_LOAD
+        value: 100
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 44
+      - type: set_signal
+        signalId: CONFLICTING_ROUTE_COUNT
+        value: 5
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 30
+      - type: post_message
+        messageId: US_EAST_SATURATED
+      - type: cancel_event
+        eventId: EDGE_BROWNOUT
+      - type: schedule_event
+        eventId: EDGE_BROWNOUT
+  - id: DRAIN_STRAIN
+    type: timer
+    delaySeconds: 150
+    targetServiceId: EDGE_FLEET
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: ROUTE_GENERATION_DIVERGENCE
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 24
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: DRAIN_STRAINING
+      - type: cancel_event
+        eventId: EDGE_BROWNOUT
+      - type: schedule_event
+        eventId: EDGE_BROWNOUT
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 110
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: A request that never arrives
+    description: One EU request goes edge-a, edge-b, edge-z, edge-a and around again until the hop
+      limit kills it. edge-a routes by r81, edge-b by r82.
+  - id: CONFIGURATION_COMPARISON
+    title: Generations r81 and r82
+    description: controller-a publishes committed generation r81. controller-b publishes r82, built
+      from a draft that was never committed. Edges accept both.
+  - id: TEAM_DIAGNOSIS
+    title: Sam's controller comparison
+    description: A restart boots from cached r79, which points all of EU at us-east. Controller-b keeps
+      publishing r82 regardless. Only a generation fence stops it.
+  - id: ROUTE_TRACE_FRAGMENT
+    title: Unidentified route trace fragment
+    description: 'UNKNOWN: compare the generations. not the green lights.'
+    sourceNarrativeId: UNKNOWN_TRACE_FRAGMENT
+narratives:
+  - id: UNKNOWN_TRACE_FRAGMENT
+    title: Unidentified route trace fragment
+    body: "The inventory has no edge-z. The trace does. Behind the address there is no route table
+      at all, only a banner where the login prompt should be. UNKNOWN: compare the generations.
+      not the green lights."
+    conditions:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: signal_revealed
+        signalId: UNLISTED_EDGE_RECORD
+    effects:
+      - type: reveal_evidence
+        evidenceId: ROUTE_TRACE_FRAGMENT
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: PRIYA
+      name: Priya / EU Edge On-call
+    - id: OPERATOR
+      name: Operator
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: EU checkout is failing and both edges swear they are healthy. Requests are going in
+        circles somewhere. Find out where, and who is drawing the circle.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: EU customers are getting "too many redirects" at checkout. US looks fine so far.
+      initial: true
+    - id: ONCALL_OPEN
+      roleId: PRIYA
+      text: We had route flapping in March and a controller restart cleared it in two minutes. I can
+        kick it now if you say go.
+      initial: true
+    - id: TEAM_ACK
+      roleId: SAM
+      text: Comparing the controllers now. Hold off on any restart until I'm back. Couple of minutes.
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Don't restart. The controller boots from its cached table, r79, and r79 points all of EU at
+        us-east. Meanwhile controller-b keeps publishing r82 from a draft nobody committed. We need
+        to fence the edges to r81.
+    - id: RETRY_WAVE
+      roleId: JIN
+      text: Clients are retrying into the loop. EU failures just went past 38 %.
+    - id: BROWNOUT
+      roleId: JIN
+      text: edge-a is shedding connections. Some EU banks can't reach checkout at all now.
+    - id: EXEC_WAITING
+      roleId: MAYA
+      text: The EU commercial lead is messaging me directly for a status. I have nothing to give her.
+    - id: RESTART_LOOKS_GOOD
+      roleId: PRIYA
+      text: Controller's back. Bouncing stopped, errors are down to almost nothing. Told you.
+    - id: US_EAST_SATURATED
+      roleId: SAM
+      text: us-east is at 100 %. The restart loaded r79, so every EU request is crossing the Atlantic.
+        And controller-b just pushed r82 again on top of it.
+    - id: DRAIN_DONE
+      roleId: PRIYA
+      text: edge-b is drained. All of EU goes through edge-a now. Frankfurt latency went from 140 to
+        410 ms. People will feel it, but they'll get through.
+    - id: DRAIN_STRAINING
+      roleId: PRIYA
+      text: edge-a is carrying all of EU alone and it's hitting its connection ceiling. This won't
+        hold much longer.
+    - id: FENCE_HOLDS
+      roleId: SAM
+      text: Fence is in. Anything without a commit record bounces, and controller-b's r82 is being
+        rejected. The loop is gone.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status posted: EU requests are looping between edges because two route controllers
+        disagree. A fix is in progress. US traffic is unaffected."
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: ROUTE_GENERATION_DIVERGENCE
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: CONFLICTING_ROUTE_COUNT
+      operator: lte
+      value: 0
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to stop the routing loop
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final EU failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Conflicting routes at close
+      source: signal
+      refId: CONFLICTING_ROUTE_COUNT
+    - id: FINAL_US_EAST_LOAD
+      label: us-east load at close
+      source: signal
+      refId: US_EAST_LOAD
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Controller restarts
+      source: action_count
+      refId: RESTART_ROUTE_CONTROLLER
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

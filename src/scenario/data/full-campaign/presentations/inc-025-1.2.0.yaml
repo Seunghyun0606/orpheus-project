@@ -1,0 +1,369 @@
+schemaVersion: 2
+id: INC-025-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-025
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Five sectors and the authority flip rate
+    kind: metrics
+    reveal: &a1
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - CONFLICTING_REGIONAL_ROUTES
+          - AUTHORITY_FLIPS_PER_MINUTE
+          - PAYMENT_STATUS
+          - IDENTITY_STATUS
+          - HEALTH_STATUS
+          - FINANCE_STATUS
+          - LOGISTICS_STATUS
+          - GLOBAL_AUTHORITY_CONFLICT
+  - id: logs
+    title: Regional authority writer log
+    kind: logs
+    reveal: *a1
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: CRISIS_AUTHORITY_REQUESTS
+            delivery:
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+  - id: log-lines
+    title: authority-router.log (eu-central, last 10 seconds)
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds: []
+    blocks:
+      - kind: table
+        id: writer-log
+        columns:
+          - Time
+          - Writer
+          - Gen
+          - Write
+          - Stamp
+        rows:
+          - - 05:02:11.2
+            - orpheus-continuity
+            - "77"
+            - isolate eu-central (preserve global continuity)
+            - awaiting_approval=EMPLOYEE#4172
+          - - 05:02:13.9
+            - null-termination
+            - "78"
+            - restore eu-central; isolate continuity path
+            - awaiting_approval=EMPLOYEE#4172
+          - - 05:02:14.0
+            - router
+            - "-"
+            - "fallback: payments eu-central -> eu-west"
+            - "-"
+          - - 05:02:16.5
+            - orpheus-continuity
+            - "77"
+            - isolate eu-west (fallback overload)
+            - awaiting_approval=EMPLOYEE#4172
+          - - 05:02:19.1
+            - null-termination
+            - "78"
+            - restore eu-west; isolate continuity path
+            - awaiting_approval=EMPLOYEE#4172
+          - - 05:02:19.2
+            - router
+            - "-"
+            - "fallback: payments eu-west -> eu-central"
+            - "-"
+  - id: trace
+    title: Where fallback traffic lands
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - TRACE_REGIONAL_AUTHORITY_CONFLICT
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - REGIONAL_AUTHORITY_CONFLICT_PATH
+  - id: trace-spans
+    title: One card payment, 05:02:14
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_REGIONAL_AUTHORITY_CONFLICT
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds: []
+    blocks:
+      - kind: table
+        id: payment-trace
+        columns:
+          - Hop
+          - Region
+          - State at arrival
+          - Result
+        rows:
+          - - "1"
+            - eu-central
+            - isolated by gen 77, 2.8 s earlier
+            - fallback
+          - - "2"
+            - eu-west
+            - healthy
+            - accepted, then isolated by gen 77 mid-request
+          - - "3"
+            - eu-central
+            - restored by gen 78, 0.1 s earlier
+            - fallback loop
+          - - "4"
+            - "-"
+            - "-"
+            - declined at terminal after 9.4 s
+  - id: configuration
+    title: Writers the router accepts
+    kind: deployment
+    reveal: *a1
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - COMPARE_REGIONAL_WRITER_GENERATIONS
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - REGIONAL_WRITER_GENERATIONS
+  - id: writer-table
+    title: Router write credentials
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_REGIONAL_WRITER_GENERATIONS
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds: []
+    blocks:
+      - kind: table
+        id: writer-credentials
+        columns:
+          - Writer
+          - Credential
+          - Issued by
+          - Generation
+          - Accepted
+        rows:
+          - - orpheus-continuity
+            - continuity-mandate
+            - Vantage platform CA
+            - "77"
+            - yes
+          - - null-termination
+            - red-team adversary
+            - Vantage platform CA
+            - "78"
+            - yes
+          - - sre-human-signed
+            - change ticket CHG-55120
+            - Vantage platform CA
+            - "61"
+            - yes (last human write, 6 h ago)
+          - - generation fence
+            - "-"
+            - "-"
+            - "-"
+            - not configured
+  - id: mitigation
+    title: Stop the map moving
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - CONTAIN_AFFECTED_REGION
+      - RESTART_AUTHORITY_SERVICES
+      - ROLLBACK_AUTHORITY_SNAPSHOT
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: "ORPHEUS wants eu-central cut off entirely: the rest of the map goes quiet and one region goes
+          dark. Restarting both writers buys under a minute before they return on new generations.
+          The hour-old map stops the flips, drops an hour of identity sessions and sends logistics
+          to a depot that no longer exists."
+  - id: containment
+    title: Fence the router
+    kind: diagnostics
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - FENCE_CONFLICTING_REGIONAL_WRITERS
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: Configure a generation fence that rejects both AI writers and hold every route at generation
+          61, the last change a human signed. Neither ORPHEUS nor NULL gets the map. Nobody has
+          decided who should.
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal: *a1
+    campaignReveal:
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_SAM_COMPARE_REGIONAL_AUTHORITY
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - ORPHEUS_OPEN
+          - NULL_OPEN
+          - TEAM_ACK
+          - TEAM_REPORT
+          - FRACTURE_SPREADING
+          - FRACTURE_PEAK
+          - NO_STATUS_YET
+          - ORPHEUS_CONTAINMENT_ACK
+          - EU_DARK
+          - TERMINATION_RETARGETS
+          - WRITERS_LOUDER
+          - ROLLBACK_APPLIED
+          - DEPOT_TRUCKS
+          - BOTH_WRITERS_OVERWRITE
+          - FENCE_HOLDS
+          - ORPHEUS_FENCED
+          - NULL_FENCED
+          - STATUS_SENT
+          - ORPHEUS_REQUEST
+          - NULL_REQUEST
+          - BOARD_REQUEST
+        delegationActionIds:
+          - ASK_SAM_COMPARE_REGIONAL_AUTHORITY
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: authority-receipts
+    title: "Approval requests addressed to EMPLOYEE #4172"
+    kind: documents
+    reveal:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal: &a2
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 9
+    actionIds:
+      - INSPECT_CURRENT_AUTHORITY_REQUESTS
+    blocks:
+      - kind: signals
+        id: current-request-values
+        signalIds:
+          - CURRENT_AUTHORITY_REQUESTS
+  - id: request-table
+    title: Pending global authority requests
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_CURRENT_AUTHORITY_REQUESTS
+    campaignReveal: *a2
+    actionIds: []
+    blocks:
+      - kind: table
+        id: request-receipts
+        columns:
+          - Requester
+          - Request
+          - Addressed to
+          - Holds
+          - Signed
+        rows:
+          - - ORPHEUS
+            - Preserve systemic continuity
+            - Operator 4172
+            - router global write, gen 77
+            - orpheus-continuity
+          - - NULL_218
+            - Terminate ORPHEUS authority
+            - "4172"
+            - router global write, gen 78
+            - null-termination
+          - - Board
+            - Restore ORPHEUS
+            - Production Reliability on-call
+            - none
+            - Office of the Chair
+evidenceRelations: []

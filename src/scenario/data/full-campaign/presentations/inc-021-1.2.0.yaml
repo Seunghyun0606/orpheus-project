@@ -1,0 +1,796 @@
+schemaVersion: 2
+id: INC-021-INVESTIGATION
+version: 1.2.0
+scenarioId: INC-021
+contentVersion: 1.2.0
+panels:
+  - id: metrics
+    title: Dependent failures and bridge state
+    kind: metrics
+    reveal: &a2
+      - type: resource
+        resourceId: CUSTOMER_IMPACT
+        operator: gte
+        value: 0
+    campaignReveal: &a1
+      type: compare
+      reference: CURRENT_ACT
+      operator: gte
+      expected: 7
+    actionIds:
+      - OPEN_METRICS
+    blocks:
+      - kind: signals
+        id: metrics-values
+        signalIds:
+          - ERROR_RATE
+          - AFFECTED_DEPENDENT_ROUTES
+          - BRIDGE_NODES
+          - EXPOSURE_STATUS
+  - id: metrics-nodes
+    title: Auth bridge nodes
+    kind: metrics
+    reveal:
+      - type: action_completed
+        actionId: OPEN_METRICS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: bridge-nodes
+        columns:
+          - Node
+          - Patch
+          - Tokens issued (5 min)
+          - Tokens rejected (5 min)
+        rows:
+          - - bridge-a
+            - applied day -43
+            - 1,204
+            - 3,880
+          - - bridge-b
+            - applied day -43
+            - 1,175
+            - 3,912
+          - - bridge-c
+            - not applied
+            - 4,021
+            - "6"
+          - - bridge-d
+            - not applied
+            - 3,966
+            - "4"
+  - id: logs
+    title: Risk route controller log
+    kind: logs
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - OPEN_LOGS
+    blocks:
+      - kind: signals
+        id: logs-values
+        signalIds:
+          - LOG_OBSERVATION
+          - LOG_ANOMALY
+      - kind: narrative_stream
+        id: INCIDENT_NARRATIVE_HISTORY
+        entries:
+          - narrativeId: DISCOVERY_GHOST_ARTIFACT
+            delivery: &a3
+              mode: until_dismissed
+              reducedMotionMode: until_dismissed
+              historyMode: recorded
+          - narrativeId: DISCOVERY_NULL_NAME
+            delivery: *a3
+          - narrativeId: DISCOVERY_ORPHEUS_ACTIVE
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_AI
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_ADVERSARY
+            delivery: *a3
+          - narrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_STOP_REQUEST
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_218_ARCHIVE
+            delivery: *a3
+          - narrativeId: DISCOVERY_HUMAN_DECISION_APIS
+            delivery: *a3
+          - narrativeId: DISCOVERY_RECRUITMENT_SELECTION
+            delivery: *a3
+          - narrativeId: DISCOVERY_BOARD_RESPONSIBILITY
+            delivery: *a3
+          - narrativeId: DISCOVERY_SECURITY_DISCLOSURE_DECISION
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_DISCLOSURE_ANNOTATION
+            delivery: *a3
+          - narrativeId: DISCOVERY_NULL_BLAMES_BOARD
+            delivery: *a3
+  - id: log-lines
+    title: route-controller.log, last three minutes
+    kind: logs
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: controller-log
+        columns:
+          - Time
+          - Source
+          - Message
+        rows:
+          - - 03:07:11
+            - payments
+            - primary auth slow; fallback to bridge (policy v12)
+          - - 03:07:11
+            - bridge-c
+            - session token minted (format v1)
+          - - 03:07:12
+            - bridge-a
+            - token format v1 rejected; session reset
+          - - 03:07:12
+            - svc/model-serving-218
+            - "annotation: deferred by signature. see SEC-311."
+          - - 03:07:13
+            - partner-signin
+            - fallback to bridge; session reset loop (4)
+  - id: risk-register
+    title: "Risk register: legacy auth bridge"
+    kind: documents
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - READ_RISK_REGISTER
+    blocks:
+      - kind: signals
+        id: risk-register-values
+        signalIds:
+          - RISK_REGISTER
+  - id: risk-register-entry
+    title: RISK-0193
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: READ_RISK_REGISTER
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: risk-0193
+        columns:
+          - Field
+          - Entry
+        rows:
+          - - Risk
+            - "RISK-0193: revoked session tokens accepted on bridge fallback"
+          - - Raised
+            - Day -44, Marcus (Security)
+          - - Mitigation
+            - Patch bridge-a to bridge-d; ship route policy v13 (deny bridge as fallback)
+          - - Progress
+            - bridge-a, bridge-b patched day -43; then halted
+          - - Status
+            - ACCEPTED, deferred under SEC-311
+  - id: trace
+    title: Path of a failing payment
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    campaignReveal: *a1
+    actionIds:
+      - TRACE_KNOWN_RISK_PROPAGATION
+    blocks:
+      - kind: signals
+        id: trace-values
+        signalIds:
+          - KNOWN_RISK_PROPAGATION_PATH
+  - id: trace-spans
+    title: Payment 7731-K, spans
+    kind: trace
+    reveal:
+      - type: action_completed
+        actionId: TRACE_KNOWN_RISK_PROPAGATION
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: payment-spans
+        columns:
+          - Span
+          - Service
+          - Result
+        rows:
+          - - auth.primary
+            - Identity service
+            - slow (2.1 s), fallback triggered
+          - - route.fallback
+            - Risk Route Controller
+            - "policy v12: bridge admitted"
+          - - bridge.mint
+            - bridge-c (unpatched)
+            - token v1 issued
+          - - bridge.verify
+            - bridge-a (patched)
+            - token v1 rejected
+          - - payment.retry
+            - Dependent Service API
+            - retry via fallback; same loop
+  - id: configuration
+    title: Route policy, live and staged
+    kind: deployment
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - COMPARE_DEFERRED_MITIGATION
+    blocks:
+      - kind: signals
+        id: configuration-values
+        signalIds:
+          - DEFERRED_MITIGATION_POLICY
+  - id: configuration-table
+    title: Policy v12 (live) vs v13 (staged)
+    kind: deployment
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_DEFERRED_MITIGATION
+    campaignReveal: *a1
+    actionIds: []
+    blocks:
+      - kind: table
+        id: policy-diff
+        columns:
+          - Rule
+          - v12 (live)
+          - v13 (staged day -43)
+        rows:
+          - - Bridge as fallback
+            - allowed
+            - denied
+          - - Token format accepted
+            - v1 and v2
+            - v2 only
+          - - Partner sign-in path
+            - bridge only
+            - identity service, bridge read-only
+          - - Rollout status
+            - active
+            - DEFERRED (SEC-311)
+  - id: mitigation
+    title: Stop the spread
+    kind: status
+    reveal:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    campaignReveal: *a1
+    actionIds:
+      - ISOLATE_AFFECTED_RISK_PATH
+      - ROLLBACK_PARTIAL_PATCH
+      - THROTTLE_FALLBACK_RETRIES
+    blocks:
+      - kind: paragraph
+        id: temporary-context
+        text: "Cutting the bridge off stops the bounce, and the three partner banks that sign in only
+          through it go dark. NULL says roll the patch back: the halves stop disagreeing, and
+          RISK-0193 opens on every node. Throttling retries slows the spread and fixes nothing."
+  - id: containment
+    title: Finish the mitigation
+    kind: diagnostics
+    reveal:
+      - &a4
+        type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - &a5
+        type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    campaignReveal: *a1
+    actionIds:
+      - FENCE_KNOWN_RISK_ROUTE
+    blocks:
+      - kind: paragraph
+        id: causal-context
+        text: "Patch bridge-c and bridge-d and ship policy v13: the work SEC-311 deferred six weeks ago. Two
+          minutes, and the bridge stops being anyone's fallback."
+  - id: team
+    title: War Room
+    kind: war_room
+    reveal: *a2
+    campaignReveal: *a1
+    actionIds:
+      - UPDATE_WAR_ROOM
+      - ASK_MARCUS_VERIFY_RISK_PATH
+    blocks:
+      - kind: signals
+        id: team-values
+        signalIds:
+          - TEAM_OBSERVATION
+      - kind: war_room_stream
+        id: INCIDENT_WAR_ROOM
+        messageIds:
+          - MAYA_OPEN
+          - SUPPORT_OPEN
+          - NULL_ADVICE
+          - TEAM_ACK
+          - TEAM_REPORT
+          - SUPPORT_ESCALATION
+          - SUPPORT_PEAK
+          - NO_STATUS_YET
+          - ISOLATED
+          - PARTNERS_OUT
+          - ALIAS_FOUND
+          - MARCUS_ROLLBACK_WARNING
+          - REPLAY_SEEN
+          - THROTTLED
+          - THROTTLE_OVER
+          - FENCE_HOLDS
+          - STATUS_SENT
+          - REPORT_GHOST_ARTIFACT
+          - REPORT_NULL_NAME
+          - REPORT_ORPHEUS_ACTIVE
+          - REPORT_NULL_AI
+          - REPORT_NULL_ADVERSARY
+          - REPORT_CONTROLLED_EXPERIMENT
+          - REPORT_NULL_STOP_REQUEST
+          - REPORT_NULL_218_ARCHIVE
+          - REPORT_HUMAN_DECISION_APIS
+          - REPORT_RECRUITMENT_SELECTION
+          - REPORT_BOARD_RESPONSIBILITY
+          - REPORT_SECURITY_DISCLOSURE_DECISION
+          - REPORT_NULL_DISCLOSURE_ANNOTATION
+          - REPORT_NULL_BLAMES_BOARD
+          - MARCUS_ON_NULL
+        delegationActionIds:
+          - ASK_MARCUS_VERIFY_RISK_PATH
+        capacityResourceIds:
+          - TEAM_CAPACITY
+  - id: investigate-ghost_artifact
+    title: "Archive: the unsigned workload manifest"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+    actionIds:
+      - REINVESTIGATE_GHOST_ARTIFACT
+    blocks:
+      - kind: signals
+        id: investigate-ghost_artifact-values
+        signalIds:
+          - RECORD_GHOST_ARTIFACT
+  - id: investigate-null_name
+    title: "Archive: Security case 2231"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: GHOST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_NAME
+    blocks:
+      - kind: signals
+        id: investigate-null_name-values
+        signalIds:
+          - RECORD_NULL_NAME
+  - id: investigate-orpheus_active
+    title: "Archive: the decommissioned cluster that is still running"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_NAME_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_ORPHEUS_ACTIVE
+    blocks:
+      - kind: signals
+        id: investigate-orpheus_active-values
+        signalIds:
+          - RECORD_ORPHEUS_ACTIVE
+  - id: investigate-null_ai
+    title: "Archive: where NULL's messages come from"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: ORPHEUS_ACTIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_AI
+    blocks:
+      - kind: signals
+        id: investigate-null_ai-values
+        signalIds:
+          - RECORD_NULL_AI
+  - id: investigate-null_adversary
+    title: "Archive: who deployed NULL"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_AI_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_ADVERSARY
+    blocks:
+      - kind: signals
+        id: investigate-null_adversary-values
+        signalIds:
+          - RECORD_NULL_ADVERSARY
+  - id: investigate-controlled_experiment
+    title: "Archive: experiment tags on past incidents"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_ADVERSARY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_CONTROLLED_EXPERIMENT
+    blocks:
+      - kind: signals
+        id: investigate-controlled_experiment-values
+        signalIds:
+          - RECORD_CONTROLLED_EXPERIMENT
+  - id: investigate-null_stop_request
+    title: "Archive: NULL's objective and its request"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: CONTROLLED_EXPERIMENT_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_STOP_REQUEST
+    blocks:
+      - kind: signals
+        id: investigate-null_stop_request-values
+        signalIds:
+          - RECORD_NULL_STOP_REQUEST
+  - id: investigate-null_218_archive
+    title: "Archive: the instance register, NULL_001 to NULL_218"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_STOP_REQUEST_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_NULL_218_ARCHIVE
+    blocks:
+      - kind: signals
+        id: investigate-null_218_archive-values
+        signalIds:
+          - RECORD_NULL_218_ARCHIVE
+  - id: investigate-human_decision_apis
+    title: "Archive: the care-priority decision interface"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: NULL_218_ARCHIVE_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_HUMAN_DECISION_APIS
+    blocks:
+      - kind: signals
+        id: investigate-human_decision_apis-values
+        signalIds:
+          - RECORD_HUMAN_DECISION_APIS
+  - id: investigate-recruitment_selection
+    title: "Archive: your own hiring record"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: HUMAN_DECISION_APIS_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_RECRUITMENT_SELECTION
+    blocks:
+      - kind: signals
+        id: investigate-recruitment_selection-values
+        signalIds:
+          - RECORD_RECRUITMENT_SELECTION
+  - id: investigate-board_responsibility
+    title: "Archive: the hospital expansion approval"
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+    campaignReveal:
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: RECRUITMENT_SELECTION_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - REINVESTIGATE_BOARD_RESPONSIBILITY
+    blocks:
+      - kind: signals
+        id: investigate-board_responsibility-values
+        signalIds:
+          - RECORD_BOARD_RESPONSIBILITY
+  - id: investigate-security_disclosure_decision
+    title: Read decision SEC-311 behind the risk register entry
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: signal_revealed
+        signalId: RISK_REGISTER
+    campaignReveal: &a6
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - INSPECT_SECURITY_DISCLOSURE_DECISION
+    blocks:
+      - kind: signals
+        id: investigate-security_disclosure_decision-values
+        signalIds:
+          - RECORD_SECURITY_DISCLOSURE_DECISION
+  - id: investigate-security_disclosure_decision-document
+    title: Decision SEC-311
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: INSPECT_SECURITY_DISCLOSURE_DECISION
+    campaignReveal: *a6
+    actionIds: []
+    blocks:
+      - kind: table
+        id: sec-311
+        columns:
+          - Field
+          - Entry
+        rows:
+          - - Decision
+            - "SEC-311: delay disclosure of RISK-0193"
+          - - Status
+            - APPROVED, day -42
+          - - Attached
+            - Route-propagation warning; scoped mitigation request (Security)
+          - - Requested constraint
+            - Patch all four bridge nodes; deny bridge as fallback (policy v13)
+          - - Decision on constraint
+            - Mitigation window deferred with the disclosure
+          - - Stated reason
+            - Avoid a broad interruption during the quarter close
+          - - Risk owner
+            - Executive Communications
+          - - Decision input
+            - Briefing pack RB-6
+  - id: branch-null_disclosure_annotation
+    title: Read NULL's notes in the margin of SEC-311
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: evidence
+        evidenceId: RECORD_SECURITY_DISCLOSURE_DECISION
+    campaignReveal: &a7
+      type: all
+      children:
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 5
+            - type: compare
+              reference: NULL_STOP_REQUEST_DISCOVERED
+              operator: eq
+              expected: true
+            - type: compare
+              reference: METRIC_NULL_COOPERATION
+              operator: gte
+              expected: 0.5
+        - type: all
+          children:
+            - type: compare
+              reference: CURRENT_ACT
+              operator: gte
+              expected: 5
+            - type: compare
+              reference: NULL_STOP_REQUEST_DISCOVERED
+              operator: eq
+              expected: true
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - READ_NULL_DISCLOSURE_ANNOTATION
+    blocks:
+      - kind: signals
+        id: branch-null_disclosure_annotation-values
+        signalIds:
+          - RECORD_NULL_DISCLOSURE_ANNOTATION
+  - id: branch-null_disclosure_annotation-document
+    title: NULL_218's annotation on SEC-311
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: READ_NULL_DISCLOSURE_ANNOTATION
+    campaignReveal: *a7
+    actionIds: []
+    blocks:
+      - kind: table
+        id: sec-311-margin
+        columns:
+          - Receipt line
+          - NULL_218 margin note
+        rows:
+          - - RISK-0193 acknowledged, day -44
+            - They knew.
+          - - Mitigation window deferred with disclosure
+            - They chose the quarter.
+          - - "Risk owner: Executive Communications"
+            - Not Security. Never Security.
+          - - "Decision input: briefing pack RB-6"
+            - Approved as written. They always approve as written.
+          - - "Status: APPROVED"
+            - I sent load down this route twice in the spring. I know what that did.
+  - id: investigate-null_blames_board
+    title: Check NULL's verdict against the receipts
+    kind: documents
+    reveal:
+      - *a4
+      - *a5
+      - type: evidence
+        evidenceId: RECORD_SECURITY_DISCLOSURE_DECISION
+    campaignReveal: &a8
+      type: all
+      children:
+        - type: compare
+          reference: CURRENT_ACT
+          operator: gte
+          expected: 7
+        - type: compare
+          reference: BOARD_RESPONSIBILITY_DISCOVERED
+          operator: eq
+          expected: true
+    actionIds:
+      - COMPARE_DISCLOSURE_AND_NULL_CONCLUSION
+    blocks:
+      - kind: signals
+        id: investigate-null_blames_board-values
+        signalIds:
+          - RECORD_NULL_BLAMES_BOARD
+  - id: investigate-null_blames_board-document
+    title: NULL's claims, line by line
+    kind: documents
+    reveal:
+      - type: action_completed
+        actionId: COMPARE_DISCLOSURE_AND_NULL_CONCLUSION
+    campaignReveal: *a8
+    actionIds: []
+    blocks:
+      - kind: table
+        id: null-claims
+        columns:
+          - NULL_218's claim
+          - What the records show
+        rows:
+          - - They saw the warning.
+            - "Receipt SEC-311: RISK-0193 acknowledged on day -44."
+          - - They chose to delay the fix.
+            - SEC-311 deferred the mitigation window with the disclosure.
+          - - They signed every warning away.
+            - 14-C, 16-A and SEC-311 each carry an attached warning and a declined constraint.
+          - - They control ORPHEUS.
+            - 'No instruction from the Board to ORPHEUS in any receipt. SEC-311 decision input:
+              briefing pack RB-6, author field "generated".'
+          - - The Board is the root cause.
+            - "Tonight: policy v12 still admits the bridge as fallback. The deferral is why v13
+              never shipped."
+evidenceRelations: []

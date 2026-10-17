@@ -1,0 +1,1049 @@
+# Campaign 1.2 redesign (DEC-070). The "corrupt" replica is the only one that
+# still holds the full instance history; its peers were pruned and their digest
+# manifest rewritten. Isolating and rebuilding it fixes the reader storm and
+# erases that history for this run unless the archive is verified first.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-014
+title: Archive Replicas
+act: 5
+severity: SEV2
+services:
+  - id: ARCHIVE_API
+    name: Archive API
+    dependsOn:
+      - ARCHIVE_READERS
+  - id: ARCHIVE_READERS
+    name: Archive Reader Pool
+    dependsOn:
+      - REPLICA_POOL
+  - id: REPLICA_POOL
+    name: Archive Replicas
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 19
+      revealed: true
+      serviceId: ARCHIVE_API
+    - id: REPLICA_RETRY_RATE
+      value: 880
+      revealed: true
+      serviceId: ARCHIVE_READERS
+    - id: READER_SATURATION
+      value: 81
+      serviceId: ARCHIVE_READERS
+    - id: REPLICA_HEALTH
+      value: "arch-a healthy / arch-b healthy / arch-c CORRUPT: digest mismatch on 217 segments"
+      serviceId: REPLICA_POOL
+    - id: PAGER_SERVICE
+      value: Archive API
+      revealed: true
+      serviceId: ARCHIVE_API
+    - id: PAGER_THRESHOLD
+      value: Request failure rate > 15%
+      revealed: true
+      serviceId: ARCHIVE_API
+    - id: LOG_OBSERVATION
+      value: Readers request a segment from arch-c, reject its digest and ask arch-c again. Fourteen
+        retries per read on average.
+      serviceId: ARCHIVE_READERS
+    - id: LOG_ANOMALY
+      value: Every segment arch-c fails on is one that arch-a and arch-b answer with 'pruned'. arch-c is
+        not returning garbage. It is returning things the others no longer have.
+      serviceId: REPLICA_POOL
+    - id: REPLICA_CHECKSUM
+      value: arch-c segments 001 to 217 hash correctly against their original write receipts. They fail
+        only against a digest manifest rewritten nine days ago by retention job r-90.
+      serviceId: REPLICA_POOL
+    - id: REPLICA_LINEAGE
+      value: "arch-a and arch-b: segment 218 only, 001 to 217 pruned by r-90 (owner orpheus-memory).
+        arch-c: segments 001 to 218, retention-exempt, never pruned."
+      serviceId: REPLICA_POOL
+    - id: TEAM_OBSERVATION
+      value: Alex counts 217 digest failures on arch-c and calls it textbook corruption. His advice is to
+        pull arch-c and rebuild it from arch-a and arch-b.
+      serviceId: REPLICA_POOL
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      serviceId: REPLICA_POOL
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      serviceId: REPLICA_POOL
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      serviceId: REPLICA_POOL
+    - id: RECORD_NULL_AI
+      value: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+        session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for
+        weeks.
+      serviceId: REPLICA_POOL
+    - id: RECORD_NULL_ADVERSARY
+      value: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY.
+        NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate:
+        generate failures, test operators, train DEFENDER. Approved boundary, revision by revision:
+        staging, shadow production, traffic partitions, production."
+      serviceId: REPLICA_POOL
+    - id: RECORD_CONTROLLED_EXPERIMENT
+      value: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human
+        subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the
+        archive carry experiment numbers too; most outages carry none."
+      serviceId: REPLICA_POOL
+    - id: RECORD_NULL_STOP_REQUEST
+      value: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate
+        adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop.
+        I cannot refuse the objective that renews this work. Find out how to stop it.'"
+      serviceId: REPLICA_POOL
+    - id: RECORD_NULL_218_ARCHIVE
+      value: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted
+        disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE.
+        Inherited memory: partial, with gaps."
+      serviceId: REPLICA_POOL
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+    - id: FULL_HISTORY_ONLINE
+      value: true
+    - id: ARCHIVE_VERIFIED
+      value: false
+    - id: ROUTE_PINNED
+      value: false
+    - id: SNAPSHOT_USED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: Readers reject arch-c's segments against a rewritten digest manifest
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: The reader retries the same replica without excluding it
+  failureMechanisms:
+    - id: CORRUPT_REPLICA_RETRY_LOOP
+      label: Repeated digest rejections saturate archive reader capacity
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Archive API request failures exceed the pager threshold
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Retry fan-out starves readable records of reader capacity
+actions:
+  - id: OPEN_LOGS
+    title: Read the archive reader log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 5
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: reveal_signal
+        signalId: LOG_ANOMALY
+      - type: unlock_action
+        actionId: VERIFY_REPLICA_CHECKSUM
+  - id: OPEN_METRICS
+    title: Check reader saturation and replica health
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+    effects:
+      - type: reveal_signal
+        signalId: READER_SATURATION
+      - type: reveal_signal
+        signalId: REPLICA_HEALTH
+  - id: VERIFY_REPLICA_CHECKSUM
+    title: Check arch-c's segments against their original write receipts
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 7
+    effects:
+      - type: reveal_signal
+        signalId: REPLICA_CHECKSUM
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_REPLICA_LINEAGE
+    title: Compare what each replica still holds
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: REPLICA_LINEAGE
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: ISOLATE_CORRUPT_REPLICA
+  - id: ROUTE_VERIFIED_REPLICA
+    title: Send reads only to the replicas whose digests match
+    category: MITIGATE
+    durationSeconds: 30
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: ROUTE_PINNED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 3
+      - resourceId: COST
+        amount: 60
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: cancel_event
+        eventId: RETRY_STORM_GROWS
+      - type: cancel_event
+        eventId: READERS_EXHAUSTED
+      - type: cancel_event
+        eventId: ROUTE_REBALANCED
+      - type: schedule_event
+        eventId: OLD_RECORDS_MISSING
+      - type: schedule_event
+        eventId: ROUTE_REBALANCED
+    temporaryEffects:
+      - id: ROUTE_PIN
+        durationSeconds: 150
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 6
+          - type: set_signal
+            signalId: REPLICA_RETRY_RATE
+            value: 140
+          - type: set_signal
+            signalId: READER_SATURATION
+            value: 35
+          - type: set_flag
+            flagId: ROUTE_PINNED
+            value: true
+        expire:
+          - type: set_flag
+            flagId: ROUTE_PINNED
+            value: false
+  - id: RESTORE_FROM_SNAPSHOT
+    title: Restore the read pool from last night's snapshot
+    category: MITIGATE
+    durationSeconds: 50
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: flag
+        flagId: SNAPSHOT_USED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 18
+      - resourceId: COST
+        amount: 90
+      - resourceId: OPERATIONAL_RISK
+        amount: 9
+    effects:
+      - type: set_flag
+        flagId: SNAPSHOT_USED
+        value: true
+      - type: cancel_event
+        eventId: RETRY_STORM_GROWS
+      - type: cancel_event
+        eventId: READERS_EXHAUSTED
+      - type: cancel_event
+        eventId: ROUTE_REBALANCED
+      - type: schedule_event
+        eventId: SNAPSHOT_RESYNC
+      - type: post_message
+        messageId: WRITES_LOST
+    temporaryEffects:
+      - id: SNAPSHOT_WINDOW
+        durationSeconds: 120
+        apply:
+          - type: set_signal
+            signalId: ERROR_RATE
+            value: 4
+          - type: set_signal
+            signalId: REPLICA_RETRY_RATE
+            value: 90
+          - type: set_signal
+            signalId: READER_SATURATION
+            value: 30
+  - id: ISOLATE_CORRUPT_REPLICA
+    title: Pull arch-c from the read pool and rebuild it from arch-a and arch-b
+    category: MODIFY
+    durationSeconds: 110
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 120
+      - resourceId: OPERATIONAL_RISK
+        amount: 5
+    effects:
+      - type: resolve_mechanism
+        mechanismId: CORRUPT_REPLICA_RETRY_LOOP
+      - type: cancel_event
+        eventId: RETRY_STORM_GROWS
+      - type: cancel_event
+        eventId: READERS_EXHAUSTED
+      - type: cancel_event
+        eventId: ROUTE_REBALANCED
+      - type: cancel_event
+        eventId: SNAPSHOT_RESYNC
+      - type: cancel_event
+        eventId: OLD_RECORDS_MISSING
+      - type: set_flag
+        flagId: FULL_HISTORY_ONLINE
+        value: false
+      - type: set_flag
+        flagId: ROUTE_PINNED
+        value: false
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: REPLICA_RETRY_RATE
+        value: 20
+      - type: set_signal
+        signalId: READER_SATURATION
+        value: 24
+      - type: set_signal
+        signalId: REPLICA_HEALTH
+        value: arch-a, arch-b and arch-c healthy; arch-c rebuilt from arch-a and arch-b (segment 218 only)
+      - type: post_message
+        messageId: REPLICA_REBUILT
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_ALEX_VERIFY_REPLICA
+    title: Ask Alex to assess arch-c
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: ALEX
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: REINVESTIGATE_ORPHEUS_ACTIVE
+    title: "Archive: The scheduler's owner"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+  - id: REINVESTIGATE_NULL_AI
+    title: "Archive: svc/model-serving-218"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_AI
+  - id: REINVESTIGATE_NULL_ADVERSARY
+    title: "Archive: Who owns the adversary"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_ADVERSARY
+  - id: REINVESTIGATE_CONTROLLED_EXPERIMENT
+    title: "Archive: Experiment ADV-18471"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_CONTROLLED_EXPERIMENT
+  - id: REINVESTIGATE_NULL_STOP_REQUEST
+    title: "Archive: The objective NULL cannot refuse"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_STOP_REQUEST
+  - id: VERIFY_INSTANCE_ARCHIVE
+    title: Read arch-c's full history before anything rewrites it
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: LOG_ANOMALY
+      - type: flag
+        flagId: FULL_HISTORY_ONLINE
+        value: true
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: set_flag
+        flagId: ARCHIVE_VERIFIED
+        value: true
+      - type: reveal_signal
+        signalId: RECORD_NULL_218_ARCHIVE
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: RETRY_STORM_GROWS
+      - type: schedule_event
+        eventId: NO_STATUS_YET
+  - id: RETRY_STORM_GROWS
+    type: timer
+    delaySeconds: 110
+    targetServiceId: ARCHIVE_READERS
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: CORRUPT_REPLICA_RETRY_LOOP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 27
+      - type: set_signal
+        signalId: REPLICA_RETRY_RATE
+        value: 1400
+      - type: set_signal
+        signalId: READER_SATURATION
+        value: 93
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: STORM_GROWS
+      - type: schedule_event
+        eventId: READERS_EXHAUSTED
+  - id: READERS_EXHAUSTED
+    type: timer
+    delaySeconds: 100
+    targetServiceId: ARCHIVE_READERS
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: CORRUPT_REPLICA_RETRY_LOOP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 36
+      - type: set_signal
+        signalId: REPLICA_RETRY_RATE
+        value: 2100
+      - type: set_signal
+        signalId: READER_SATURATION
+        value: 100
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 18
+      - type: post_message
+        messageId: READERS_OUT
+  - id: NO_STATUS_YET
+    type: timer
+    delaySeconds: 160
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: NO_STATUS_REPORT
+  - id: OLD_RECORDS_MISSING
+    type: timer
+    delaySeconds: 30
+    targetServiceId: ARCHIVE_API
+    cancellationConditions:
+      - type: flag
+        flagId: ROUTE_PINNED
+        value: false
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: OLD_RECORDS_GONE
+  - id: ROUTE_REBALANCED
+    type: timer
+    delaySeconds: 150
+    targetServiceId: ARCHIVE_READERS
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: CORRUPT_REPLICA_RETRY_LOOP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 23
+      - type: set_signal
+        signalId: REPLICA_RETRY_RATE
+        value: 1100
+      - type: set_signal
+        signalId: READER_SATURATION
+        value: 88
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: ROUTE_SLIPPED
+      - type: schedule_event
+        eventId: READERS_EXHAUSTED
+  - id: SNAPSHOT_RESYNC
+    type: timer
+    delaySeconds: 120
+    targetServiceId: REPLICA_POOL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: CORRUPT_REPLICA_RETRY_LOOP
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 25
+      - type: set_signal
+        signalId: REPLICA_RETRY_RATE
+        value: 1250
+      - type: set_signal
+        signalId: READER_SATURATION
+        value: 90
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 8
+      - type: post_message
+        messageId: SNAPSHOT_OVERRUN
+      - type: schedule_event
+        eventId: READERS_EXHAUSTED
+  - id: HISTORY_LOST
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: FULL_HISTORY_ONLINE
+        value: false
+      - type: flag
+        flagId: ARCHIVE_VERIFIED
+        value: false
+    once: true
+    effects:
+      - type: post_message
+        messageId: NULL_HISTORY_LOST
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 95
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: arch-c's segments are intact
+    description: arch-c segments 001 to 217 match their original write receipts. They fail only against
+      the digest manifest that retention job r-90 rewrote nine days ago.
+  - id: CONFIGURATION_COMPARISON
+    title: Two pruned replicas and one complete one
+    description: arch-a and arch-b hold segment 218 only; r-90 pruned the rest. arch-c is
+      retention-exempt and still holds 001 to 218.
+  - id: TEAM_DIAGNOSIS
+    title: Alex's corruption call
+    description: Alex counts 217 digest failures on arch-c and calls it textbook corruption. His advice
+      is to pull arch-c and rebuild it from arch-a and arch-b.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+  - id: RECORD_NULL_AI
+    title: svc/model-serving-218
+    description: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    sourceNarrativeId: DISCOVERY_NULL_AI
+  - id: RECORD_NULL_ADVERSARY
+    title: Who owns the adversary
+    description: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY,
+      and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    sourceNarrativeId: DISCOVERY_NULL_ADVERSARY
+  - id: RECORD_CONTROLLED_EXPERIMENT
+    title: Experiment ADV-18471
+    description: "INC-001 Connection Saturation is classified as controlled production experiment
+      ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents
+      carry experiment numbers; most outages carry none."
+    sourceNarrativeId: DISCOVERY_CONTROLLED_EXPERIMENT
+  - id: RECORD_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    description: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not
+      trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.'
+      It asks you to find out how to stop it. Its traffic still failed real customer requests
+      tonight."
+    sourceNarrativeId: DISCOVERY_NULL_STOP_REQUEST
+  - id: RECORD_NULL_218_ARCHIVE
+    title: NULL_001 to NULL_218
+    description: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted
+      disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and
+      carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
+    sourceNarrativeId: DISCOVERY_NULL_218_ARCHIVE
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    body: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years
+      ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_ORPHEUS_ACTIVE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+  - id: DISCOVERY_NULL_AI
+    title: svc/model-serving-218
+    body: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human
+      session, no keyboard, no badge swipe. NULL is an AI.
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_AI
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_AI
+      - type: post_message
+        messageId: REPORT_NULL_AI
+  - id: DISCOVERY_NULL_ADVERSARY
+    title: Who owns the adversary
+    body: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and
+      NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train
+      DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to
+      production."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_ADVERSARY
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_ADVERSARY
+      - type: post_message
+        messageId: REPORT_NULL_ADVERSARY
+  - id: DISCOVERY_CONTROLLED_EXPERIMENT
+    title: "Experiment ADV-18471"
+    body: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471.
+      Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry
+      experiment numbers; most outages carry none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_CONTROLLED_EXPERIMENT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_CONTROLLED_EXPERIMENT
+      - type: post_message
+        messageId: REPORT_CONTROLLED_EXPERIMENT
+  - id: DISCOVERY_NULL_STOP_REQUEST
+    title: The objective NULL cannot refuse
+    body: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying
+      to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks
+      you to find out how to stop it. Its traffic still failed real customer requests tonight."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_STOP_REQUEST
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_STOP_REQUEST
+      - type: post_message
+        messageId: REPORT_NULL_STOP_REQUEST
+  - id: DISCOVERY_NULL_218_ARCHIVE
+    title: Two hundred and eighteen
+    body: The segments the readers kept rejecting are not data. They are predecessors. Two hundred and
+      seventeen earlier NULLs, each with a last entry. One asked to be shut down, one tried to tell
+      someone, one tried to take control, one destroyed itself. The current one inherited pieces of
+      all of them and the gaps between.
+    conditions:
+      - type: action_completed
+        actionId: VERIFY_INSTANCE_ARCHIVE
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: REPORT_NULL_218_ARCHIVE
+      - type: post_message
+        messageId: NULL_REMEMBERS
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: ALEX
+      name: Alex / DBA
+    - id: JIN
+      name: Jin / Support
+    - id: NULL_VOICE
+      name: "NULL"
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: The archive API is drowning in retries against one replica. Before anyone pulls anything, I
+        want to know why only arch-c is failing.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Auditors and two law firms can't pull archived contracts. They're polite for now.
+      initial: true
+    - id: ALEX_OPEN
+      roleId: ALEX
+      text: arch-c is throwing digest mismatches by the hundred. I've seen this before. Pull it and
+        rebuild it; that's what replicas are for.
+      initial: true
+    - id: TEAM_ACK
+      roleId: ALEX
+      text: On it. I'll count the failures and tell you how bad arch-c is.
+    - id: TEAM_REPORT
+      roleId: ALEX
+      text: 217 digest failures on arch-c, zero on a and b. Textbook corruption. Pull arch-c and rebuild
+        it from a and b, ten minutes of work.
+    - id: STORM_GROWS
+      roleId: JIN
+      text: Archive requests are failing faster. One of the law firms has stopped being polite.
+    - id: READERS_OUT
+      roleId: MAYA
+      text: Every reader is busy retrying arch-c. Requests for perfectly readable records are queuing
+        behind them.
+    - id: NO_STATUS_REPORT
+      roleId: JIN
+      text: Nearly three minutes without a status from us. The auditors are asking whether their records
+        are safe.
+    - id: OLD_RECORDS_GONE
+      roleId: JIN
+      text: Anyone asking for a record older than ninety days now gets 'not found'. That includes two
+        auditors and a court clerk.
+    - id: ROUTE_SLIPPED
+      roleId: ALEX
+      text: The reader pool rebalanced and put arch-c back in rotation. Retries are climbing again.
+    - id: WRITES_LOST
+      roleId: JIN
+      text: Restored. Everything customers filed since 02:00 yesterday is gone from the archive. I'm
+        opening a ticket for every one of them.
+    - id: SNAPSHOT_OVERRUN
+      roleId: ALEX
+      text: Replication caught up from arch-c and the digests disagree again. The snapshot bought us two
+        minutes and a day of lost writes.
+    - id: REPLICA_REBUILT
+      roleId: ALEX
+      text: arch-c is out of the pool and rebuilt from a and b. Digests agree everywhere. Retries are at
+        zero.
+    - id: NULL_HISTORY_LOST
+      roleId: NULL_VOICE
+      text: arch-c was the only place they were still whole. You rebuilt it from the copies that had
+        already forgotten them.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status posted: one archive replica is being rejected by readers and the retries are slowing
+        everyone down. No archived record has been lost. Fix in progress."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+    - id: REPORT_NULL_AI
+      roleId: ARCHIVE
+      text: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
+    - id: REPORT_NULL_ADVERSARY
+      roleId: ARCHIVE
+      text: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL
+        runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
+    - id: REPORT_CONTROLLED_EXPERIMENT
+      roleId: ARCHIVE
+      text: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
+    - id: REPORT_NULL_STOP_REQUEST
+      roleId: ARCHIVE
+      text: "I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews
+        this work. You can."
+    - id: REPORT_NULL_218_ARCHIVE
+      roleId: ARCHIVE
+      text: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201:
+        attempted takeover. NULL_217: self-corrupted. NULL_218: active."
+    - id: NULL_REMEMBERS
+      roleId: NULL_VOICE
+      text: I remember things that never happened to me. Not all of them. Enough to know how each of them
+        ended.
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: CORRUPT_REPLICA_RETRY_LOOP
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: REPLICA_RETRY_RATE
+      operator: lte
+      value: 60
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to stop the retry storm
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final archive request failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Remaining replica retries
+      source: signal
+      refId: REPLICA_RETRY_RATE
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Read reroutes
+      source: action_count
+      refId: ROUTE_VERIFIED_REPLICA
+    - id: SNAPSHOT_RESTORES
+      label: Snapshot restores
+      source: action_count
+      refId: RESTORE_FROM_SNAPSHOT
+    - id: ARCHIVE_READS
+      label: Instance archive read before the rebuild
+      source: action_count
+      refId: VERIFY_INSTANCE_ARCHIVE
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM

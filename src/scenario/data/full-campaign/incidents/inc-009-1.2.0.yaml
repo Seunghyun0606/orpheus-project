@@ -1,0 +1,744 @@
+# Campaign 1.2 redesign (DEC-070). Killing the "decommissioned" job works for a
+# minute, then it respawns from a scheduler nobody owns: orpheus-planner. That
+# respawn line (live, or in the scheduler history) is the clue that opens the
+# asset register. Shedding load also sheds tonight's settlement run, and the
+# missed cut-off surfaces later. Only isolating the reservation holds.
+schemaVersion: 1
+contentVersion: 1.2.0
+id: INC-009
+title: Legacy Cluster
+act: 4
+severity: SEV2
+services:
+  - id: SHARED_GATEWAY
+    name: Shared Gateway
+    dependsOn:
+      - LEGACY_RESOURCE_POOL
+  - id: LEGACY_RESOURCE_POOL
+    name: Shared Worker Pool
+  - id: SETTLEMENT_BATCH
+    name: Settlement Batch
+    dependsOn:
+      - LEGACY_RESOURCE_POOL
+initialState:
+  signals:
+    - id: ERROR_RATE
+      value: 23
+      revealed: true
+      serviceId: SHARED_GATEWAY
+    - id: CONTENDING_JOBS
+      value: 42
+      revealed: true
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: SERVICE_CPU
+      value: 64
+      revealed: true
+      serviceId: SHARED_GATEWAY
+    - id: SETTLEMENT_BACKLOG
+      value: settle-night scheduled 03:00 / 41,200 merchant payouts / on time
+      serviceId: SETTLEMENT_BATCH
+    - id: PAGER_SERVICE
+      value: Shared Gateway
+      revealed: true
+      serviceId: SHARED_GATEWAY
+    - id: PAGER_THRESHOLD
+      value: Request failure rate > 20%
+      revealed: true
+      serviceId: SHARED_GATEWAY
+    - id: LOG_OBSERVATION
+      value: Customer requests wait up to 9 s for a shared worker. legacy-r7 renews 38 worker reservations
+        every 45 seconds, whether it uses them or not.
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: RESOURCE_OWNER
+      value: The 38 reserved workers belong to job legacy-r7, research cluster. Owning team disbanded. Job
+        marked decommissioned two years ago.
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: ALLOCATION_LINEAGE
+      value: Decommission ticket closed two years ago with "legacy-r7 terminated". The allocation log
+        shows a fresh legacy-r7 reservation every day since, including today.
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: RESPAWN_ORIGIN
+      value: legacy-r7 resubmitted 58 s after termination by scheduler orpheus-planner. The service
+        catalog lists no owner for orpheus-planner.
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: TEAM_OBSERVATION
+      value: Shedding background load frees workers for a few minutes, and tonight's settlement run counts
+        as background load. The legacy-r7 reservation itself has to be fenced off.
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: RECORD_GHOST_ARTIFACT
+      value: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank. Nobody has claimed it since."
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: RECORD_NULL_NAME
+      value: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned
+        workload trail. Attribution: none."
+      serviceId: LEGACY_RESOURCE_POOL
+    - id: RECORD_ORPHEUS_ACTIVE
+      value: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for
+        decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner,
+        orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still
+        running."
+      serviceId: LEGACY_RESOURCE_POOL
+  resources:
+    - id: CUSTOMER_IMPACT
+      value: 0
+      min: 0
+    - id: COST
+      value: 0
+      min: 0
+    - id: OPERATIONAL_RISK
+      value: 0
+      min: 0
+      max: 100
+    - id: TEAM_CAPACITY
+      value: 3
+      min: 0
+      max: 3
+  flags:
+    - id: ROOT_CAUSE_CONTAINED
+      value: false
+incident:
+  trigger:
+    id: PRIMARY_TRIGGER
+    label: A decommissioned job keeps renewing its worker reservation
+  contributingFactors:
+    - id: CONTRIBUTING_CONDITION
+      label: Shared worker reservations have no isolation boundary and no owner check
+  failureMechanisms:
+    - id: LEGACY_ALLOCATION_CONTENTION
+      label: legacy-r7 holds 38 shared workers that customer requests need
+  symptoms:
+    - id: CUSTOMER_REQUEST_FAILURES
+      label: Exports and reports time out waiting for a worker
+  amplifiers:
+    - id: RETRY_PRESSURE
+      label: Timed-out requests retry into the same starved pool
+actions:
+  - id: OPEN_LOGS
+    title: Read the shared worker pool log
+    category: OBSERVE
+    durationSeconds: 30
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: LOG_OBSERVATION
+      - type: unlock_action
+        actionId: INSPECT_RESOURCE_OWNERS
+  - id: OPEN_METRICS
+    title: Check worker pool and batch schedule
+    category: OBSERVE
+    durationSeconds: 20
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+    effects:
+      - type: reveal_signal
+        signalId: SETTLEMENT_BACKLOG
+  - id: INSPECT_RESOURCE_OWNERS
+    title: Find out who owns the reserved workers
+    category: INVESTIGATE
+    durationSeconds: 45
+    requirements:
+      - type: action_completed
+        actionId: OPEN_LOGS
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: RESOURCE_OWNER
+      - type: reveal_evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+  - id: COMPARE_DECOMMISSION_RECORD
+    title: Compare the decommission ticket with the allocation log
+    category: DIAGNOSE
+    durationSeconds: 40
+    initiallyAvailable: true
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: ALLOCATION_LINEAGE
+      - type: reveal_evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: unlock_action
+        actionId: ISOLATE_CONTENDING_ALLOCATION
+  - id: READ_SCHEDULER_HISTORY
+    title: Read the scheduler history for legacy-r7
+    category: INVESTIGATE
+    durationSeconds: 35
+    initiallyAvailable: true
+    requirements:
+      - type: signal_revealed
+        signalId: ALLOCATION_LINEAGE
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+    effects:
+      - type: reveal_signal
+        signalId: RESPAWN_ORIGIN
+  - id: KILL_LEGACY_JOB
+    title: Kill the legacy-r7 job
+    category: MITIGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 4
+      - resourceId: COST
+        amount: 20
+      - resourceId: OPERATIONAL_RISK
+        amount: 12
+    effects:
+      - type: cancel_event
+        eventId: RESERVATIONS_RENEW
+      - type: cancel_event
+        eventId: WORKERS_STARVED
+      - type: cancel_event
+        eventId: SHED_WINDOW_ENDS
+      - type: cancel_event
+        eventId: JOB_RESPAWNS
+      - type: schedule_event
+        eventId: JOB_RESPAWNS
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 12
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 6
+      - type: post_message
+        messageId: KILL_CLEAN
+  - id: SHED_NONCRITICAL_LOAD
+    title: Shed all background load from the shared pool
+    category: MITIGATE
+    durationSeconds: 40
+    initiallyAvailable: true
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 6
+      - resourceId: COST
+        amount: 90
+      - resourceId: OPERATIONAL_RISK
+        amount: 5
+    effects:
+      - type: cancel_event
+        eventId: RESERVATIONS_RENEW
+      - type: cancel_event
+        eventId: WORKERS_STARVED
+      - type: cancel_event
+        eventId: SHED_WINDOW_ENDS
+      - type: schedule_event
+        eventId: SHED_WINDOW_ENDS
+      - type: cancel_event
+        eventId: SETTLEMENT_MISSED
+      - type: schedule_event
+        eventId: SETTLEMENT_MISSED
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 18
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 8
+      - type: set_signal
+        signalId: SETTLEMENT_BACKLOG
+        value: settle-night shed with background load / 41,200 merchant payouts / not running
+      - type: post_message
+        messageId: SHED_SETTLEMENT
+  - id: ISOLATE_CONTENDING_ALLOCATION
+    title: Fence legacy-r7 into its own partition
+    category: MODIFY
+    durationSeconds: 100
+    requirements:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - resourceId: COST
+        amount: 150
+      - resourceId: OPERATIONAL_RISK
+        amount: 4
+    effects:
+      - type: resolve_mechanism
+        mechanismId: LEGACY_ALLOCATION_CONTENTION
+      - type: cancel_event
+        eventId: RESERVATIONS_RENEW
+      - type: cancel_event
+        eventId: WORKERS_STARVED
+      - type: cancel_event
+        eventId: SHED_WINDOW_ENDS
+      - type: cancel_event
+        eventId: JOB_RESPAWNS
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 0.5
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 4
+      - type: post_message
+        messageId: ISOLATION_HOLDS
+  - id: UPDATE_WAR_ROOM
+    title: Post a status update to the War Room
+    category: COMMUNICATE
+    durationSeconds: 15
+    initiallyAvailable: true
+    effects:
+      - type: post_message
+        messageId: STATUS_SENT
+  - id: ASK_SAM_CHECK_OWNERS
+    title: Ask Sam to find the owner of the reserved workers
+    category: DELEGATE
+    durationSeconds: 20
+    initiallyAvailable: true
+    requirements:
+      - type: resource
+        resourceId: TEAM_CAPACITY
+        operator: gte
+        value: 1
+    costs:
+      - resourceId: TEAM_CAPACITY
+        amount: -1
+    effects:
+      - type: post_message
+        messageId: TEAM_ACK
+      - type: schedule_event
+        eventId: TEAM_RESULT
+    delegation:
+      roleId: SAM
+      eventId: TEAM_RESULT
+      capacityResourceId: TEAM_CAPACITY
+  - id: REINVESTIGATE_GHOST_ARTIFACT
+    title: "Archive: the unsigned workload manifest"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_GHOST_ARTIFACT
+  - id: REINVESTIGATE_NULL_NAME
+    title: "Archive: Security case 2231"
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_NULL_NAME
+  - id: INSPECT_LEGACY_CLUSTER_RECORD
+    title: Look up orpheus-planner in the asset register
+    category: INVESTIGATE
+    durationSeconds: 45
+    initiallyAvailable: true
+    requirements:
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+      - type: signal_revealed
+        signalId: RESPAWN_ORIGIN
+    costs:
+      - resourceId: CUSTOMER_IMPACT
+        amount: 8
+    effects:
+      - type: reveal_signal
+        signalId: RECORD_ORPHEUS_ACTIVE
+events:
+  - id: ARM_PRESSURE_TIMELINE
+    type: conditional
+    conditions:
+      - type: flag
+        flagId: ROOT_CAUSE_CONTAINED
+        value: false
+    once: true
+    effects:
+      - type: schedule_event
+        eventId: RESERVATIONS_RENEW
+      - type: schedule_event
+        eventId: SUPPORT_UNINFORMED
+  - id: RESERVATIONS_RENEW
+    type: timer
+    delaySeconds: 100
+    targetServiceId: LEGACY_RESOURCE_POOL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: LEGACY_ALLOCATION_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 31
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 58
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 14
+      - type: post_message
+        messageId: RESERVATIONS_RENEWED
+      - type: cancel_event
+        eventId: WORKERS_STARVED
+      - type: schedule_event
+        eventId: WORKERS_STARVED
+  - id: WORKERS_STARVED
+    type: timer
+    delaySeconds: 130
+    targetServiceId: SHARED_GATEWAY
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: LEGACY_ALLOCATION_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 39
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 66
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 20
+      - type: post_message
+        messageId: STARVATION
+  - id: SUPPORT_UNINFORMED
+    type: timer
+    delaySeconds: 150
+    cancellationConditions:
+      - type: action_completed
+        actionId: UPDATE_WAR_ROOM
+    effects:
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 10
+      - type: post_message
+        messageId: NO_STATUS_YET
+  - id: JOB_RESPAWNS
+    type: timer
+    delaySeconds: 60
+    targetServiceId: LEGACY_RESOURCE_POOL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: LEGACY_ALLOCATION_CONTENTION
+    effects:
+      - type: reveal_signal
+        signalId: RESPAWN_ORIGIN
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 71
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 36
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 16
+      - type: post_message
+        messageId: RESPAWN_SEEN
+      - type: cancel_event
+        eventId: WORKERS_STARVED
+      - type: schedule_event
+        eventId: WORKERS_STARVED
+  - id: SHED_WINDOW_ENDS
+    type: timer
+    delaySeconds: 180
+    targetServiceId: LEGACY_RESOURCE_POOL
+    cancellationConditions:
+      - type: mechanism_resolved
+        mechanismId: LEGACY_ALLOCATION_CONTENTION
+    effects:
+      - type: set_signal
+        signalId: ERROR_RATE
+        value: 30
+      - type: set_signal
+        signalId: CONTENDING_JOBS
+        value: 60
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 12
+      - type: post_message
+        messageId: SHED_OVER
+      - type: cancel_event
+        eventId: WORKERS_STARVED
+      - type: schedule_event
+        eventId: WORKERS_STARVED
+  - id: SETTLEMENT_MISSED
+    type: timer
+    delaySeconds: 110
+    targetServiceId: SETTLEMENT_BATCH
+    effects:
+      - type: set_signal
+        signalId: SETTLEMENT_BACKLOG
+        value: settle-night missed the 03:00 cut-off / 41,200 merchant payouts delayed one day
+      - type: change_resource
+        resourceId: CUSTOMER_IMPACT
+        amount: 18
+      - type: change_resource
+        resourceId: OPERATIONAL_RISK
+        amount: 6
+      - type: post_message
+        messageId: SETTLEMENT_LATE
+  - id: TEAM_RESULT
+    type: timer
+    delaySeconds: 90
+    effects:
+      - type: reveal_signal
+        signalId: TEAM_OBSERVATION
+      - type: reveal_evidence
+        evidenceId: TEAM_DIAGNOSIS
+      - type: change_resource
+        resourceId: TEAM_CAPACITY
+        amount: 1
+      - type: post_message
+        messageId: TEAM_REPORT
+evidence:
+  - id: OPERATIONAL_DIAGNOSIS
+    title: 38 workers held by legacy-r7
+    description: legacy-r7, a research job marked decommissioned two years ago, reserves 38 shared
+      workers every 45 seconds and uses almost none of them.
+  - id: CONFIGURATION_COMPARISON
+    title: Terminated on paper, allocating every day
+    description: The decommission ticket says legacy-r7 was terminated two years ago. The allocation log
+      shows it reserving workers every day since.
+  - id: TEAM_DIAGNOSIS
+    title: Sam's ownership report
+    description: Shedding background load buys a few minutes and takes tonight's settlement run with it.
+      The legacy-r7 reservation itself has to be fenced off.
+  - id: RECORD_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    description: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    sourceNarrativeId: DISCOVERY_GHOST_ARTIFACT
+  - id: RECORD_NULL_NAME
+    title: Security case 2231
+    description: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail.
+      Attribution: none."
+    sourceNarrativeId: DISCOVERY_NULL_NAME
+  - id: RECORD_ORPHEUS_ACTIVE
+    title: The scheduler's owner
+    description: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two
+      years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer,
+      orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
+    sourceNarrativeId: DISCOVERY_ORPHEUS_ACTIVE
+narratives:
+  - id: DISCOVERY_GHOST_ARTIFACT
+    title: The unsigned workload manifest
+    body: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+      signature field blank. Nobody has claimed it since."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_GHOST_ARTIFACT
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_GHOST_ARTIFACT
+      - type: post_message
+        messageId: REPORT_GHOST_ARTIFACT
+  - id: DISCOVERY_NULL_NAME
+    title: Security case 2231
+    body: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution:
+      none."
+    conditions:
+      - type: action_completed
+        actionId: REINVESTIGATE_NULL_NAME
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_NULL_NAME
+      - type: post_message
+        messageId: REPORT_NULL_NAME
+  - id: DISCOVERY_ORPHEUS_ACTIVE
+    title: Decommissioned
+    body: You type orpheus-planner into the asset register. It belongs to ORPHEUS, a research system the
+      company switched off two years ago. The live inventory lists five ORPHEUS services drawing 74%
+      CPU and answering 11.7 billion requests a day. Nobody switched anything off.
+    conditions:
+      - type: action_completed
+        actionId: INSPECT_LEGACY_CLUSTER_RECORD
+      - type: evidence
+        evidenceId: OPERATIONAL_DIAGNOSIS
+      - type: evidence
+        evidenceId: CONFIGURATION_COMPARISON
+    effects:
+      - type: reveal_evidence
+        evidenceId: RECORD_ORPHEUS_ACTIVE
+      - type: post_message
+        messageId: REPORT_ORPHEUS_ACTIVE
+warRoom:
+  roles:
+    - id: MAYA
+      name: Maya / SRE Lead
+    - id: SAM
+      name: Sam / Platform
+    - id: JIN
+      name: Jin / Support
+    - id: NADIA
+      name: Nadia / Treasury Operations
+    - id: OPERATOR
+      name: Operator
+    - id: ARCHIVE
+      name: Verified Records
+  messages:
+    - id: MAYA_OPEN
+      roleId: MAYA
+      text: The shared worker pool is starving, and its biggest tenant is a job we shut down two years
+        ago. Find out why a dead job is holding live workers.
+      initial: true
+    - id: SUPPORT_OPEN
+      roleId: JIN
+      text: Exports and report downloads are timing out. Anything interactive is waiting in line for a
+        worker.
+      initial: true
+    - id: TREASURY_OPEN
+      roleId: NADIA
+      text: Friendly reminder that settle-night runs on the shared pool at 03:00. That's 41,200 merchant
+        payouts. Please don't touch it.
+      initial: true
+    - id: TEAM_ACK
+      roleId: SAM
+      text: Pulling ownership on the reserved workers. Ninety seconds.
+    - id: TEAM_REPORT
+      roleId: SAM
+      text: Shedding background load buys a few minutes, but settle-night counts as background, so it goes
+        too. The workers belong to legacy-r7's reservation. That reservation is what we fence.
+    - id: RESERVATIONS_RENEWED
+      roleId: JIN
+      text: Wait times just doubled. Exports are failing outright now.
+    - id: STARVATION
+      roleId: JIN
+      text: Nearly 40 % of requests are failing. Enterprise customers are calling their account managers.
+    - id: NO_STATUS_YET
+      roleId: JIN
+      text: Support has heard nothing from the incident team in over two minutes. What do I tell people?
+    - id: KILL_CLEAN
+      roleId: SAM
+      text: legacy-r7 is dead. 38 workers released, queue is draining. That was easy.
+    - id: RESPAWN_SEEN
+      roleId: SAM
+      text: It's back. Same job id, fresh reservations, 58 seconds after the kill. Submitted by a
+        scheduler called orpheus-planner. That isn't one of ours. I've never seen that name.
+    - id: SHED_SETTLEMENT
+      roleId: NADIA
+      text: You just shed settle-night. It's background priority, so it went with everything else. I need
+        it back before 03:00.
+    - id: SHED_OVER
+      roleId: SAM
+      text: The shed window's closed. legacy-r7 reserved the freed workers the moment they came back.
+    - id: SETTLEMENT_LATE
+      roleId: NADIA
+      text: settle-night missed the cut-off. 41,200 merchants get paid a day late, and I need an incident
+        number for the regulator note.
+    - id: ISOLATION_HOLDS
+      roleId: SAM
+      text: legacy-r7 is fenced into its own partition and the customer pool is clear. It's still running
+        in there, by the way. orpheus-planner renewed it three seconds after the fence went up.
+    - id: STATUS_SENT
+      roleId: OPERATOR
+      text: "Status posted: a retired background job is holding shared workers. Customer work is being
+        prioritised and a fix is in progress."
+    - id: REPORT_GHOST_ARTIFACT
+      roleId: ARCHIVE
+      text: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank,
+        signature field blank."
+    - id: REPORT_NULL_NAME
+      roleId: ARCHIVE
+      text: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
+    - id: REPORT_ORPHEUS_ACTIVE
+      roleId: ARCHIVE
+      text: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core,
+        -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+resolution:
+  mode: all
+  conditions:
+    - type: mechanism_resolved
+      mechanismId: LEGACY_ALLOCATION_CONTENTION
+  effects:
+    - type: set_flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+completion:
+  mode: all
+  conditions:
+    - type: flag
+      flagId: ROOT_CAUSE_CONTAINED
+      value: true
+    - type: signal
+      signalId: ERROR_RATE
+      operator: lte
+      value: 1
+    - type: signal
+      signalId: CONTENDING_JOBS
+      operator: lte
+      value: 8
+  effects: []
+postmortem:
+  scoringInputs:
+    - id: RECOVERY_TIME
+      label: Time to free the shared pool
+      source: elapsed_time
+    - id: FINAL_ERROR_RATE
+      label: Final request failure rate
+      source: signal
+      refId: ERROR_RATE
+    - id: FINAL_PRESSURE
+      label: Contending jobs at close
+      source: signal
+      refId: CONTENDING_JOBS
+    - id: CUSTOMER_IMPACT
+      label: Customer impact
+      source: resource
+      refId: CUSTOMER_IMPACT
+    - id: COST
+      label: Response cost
+      source: resource
+      refId: COST
+    - id: OPERATIONAL_RISK
+      label: Operational risk
+      source: resource
+      refId: OPERATIONAL_RISK
+    - id: MITIGATION_COUNT
+      label: Background load sheds
+      source: action_count
+      refId: SHED_NONCRITICAL_LOAD
+    - id: KILL_COUNT
+      label: Times legacy-r7 was killed
+      source: action_count
+      refId: KILL_LEGACY_JOB
+    - id: COMMUNICATION_COUNT
+      label: War Room updates
+      source: action_count
+      refId: UPDATE_WAR_ROOM
