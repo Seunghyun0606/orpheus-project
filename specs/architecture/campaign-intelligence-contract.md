@@ -306,7 +306,7 @@ database, migration or adapter has been implemented by this documentation step.
 
 ## Gate 6 — behavior rate aggregation (approved)
 
-[DEC-014's proposal](../../.project-os/decisions/proposals/DEC-014-player-rate-aggregation.yaml)
+DEC-014's proposal
 records the comparison of metric-specific weighting options. The human selected
 **A**, recorded in [DEC-014](../../.project-os/decisions/DEC-014-pooled-player-behavior-rates.yaml):
 
@@ -334,7 +334,7 @@ confidence and ending policy remain separate contract work.
 
 ## Gate 7 — authored campaign effect scope (approved)
 
-[DEC-015's proposal](../../.project-os/decisions/proposals/DEC-015-campaign-effect-award-scope.yaml)
+DEC-015's proposal
 compares effects from qualifying native discovery, narrative and incident-completion
 events across official retries. The human selected **A**, recorded in
 [DEC-015](../../.project-os/decisions/DEC-015-once-per-run-campaign-effects.yaml):
@@ -366,7 +366,7 @@ is retained, not rejected; only the repeated numeric award is suppressed.
 
 ## Gate 8 — restart and rollback denominators (approved)
 
-[DEC-016's proposal](../../.project-os/decisions/proposals/DEC-016-operational-rate-denominators.yaml)
+DEC-016's proposal
 asks whether these two operational action rates describe the share of operational
 interventions or the share of all accepted gameplay commands. The human selected
 **A**, recorded in [DEC-016](../../.project-os/decisions/DEC-016-operational-intervention-rate-denominators.yaml):
@@ -390,7 +390,7 @@ classification/provenance and verification boundaries for the approved rates.
 
 ## Gate 9 — evidence-before-action qualification (approved)
 
-[DEC-017's proposal](../../.project-os/decisions/proposals/DEC-017-evidence-before-action-qualification.yaml)
+DEC-017's proposal
 distinguishes fresh investigation behavior from acting with existing verified
 knowledge. The human selected **A**, recorded in
 [DEC-017](../../.project-os/decisions/DEC-017-current-attempt-evidence-before-action.yaml):
@@ -414,7 +414,7 @@ ordering, exact-head/baseline distinctions and evidence-before-action fixtures.
 
 ## Gate 10 — investigation depth counting (approved)
 
-[DEC-018's proposal](../../.project-os/decisions/proposals/DEC-018-investigation-depth-counting.yaml)
+DEC-018's proposal
 compares two meanings of averageInvestigationDepth. The human selected **A**,
 recorded in [DEC-018](../../.project-os/decisions/DEC-018-distinct-investigation-depth.yaml):
 
@@ -443,7 +443,7 @@ key/count boundaries, eligible attempt coverage and depth verification fixtures.
 
 ## Gate 11 — ending ambiguity and no-match (approved)
 
-[DEC-019's proposal](../../.project-os/decisions/proposals/DEC-019-ending-ambiguity-policy.yaml)
+DEC-019's proposal
 asks how to resolve equally preferred eligible endings and valid no-match final
 contexts. The human selected **A**, recorded in
 [DEC-019](../../.project-os/decisions/DEC-019-unresolved-ending-ambiguity.yaml):
@@ -471,7 +471,7 @@ result variants, resolution/flag boundaries and the required fixture matrix.
 
 ## Gate 12 — prediction and confidence model (approved)
 
-[DEC-020's proposal](../../.project-os/decisions/proposals/DEC-020-prediction-model-policy.yaml)
+DEC-020's proposal
 compares two deterministic action-derived models. The human selected **A**, recorded
 in [DEC-020](../../.project-os/decisions/DEC-020-empirical-context-action-prediction.yaml):
 
@@ -496,7 +496,7 @@ compatible sample provenance, causal boundaries, exposure and future fixture cov
 
 ## Gate 13 — recommendation response measurement (approved)
 
-[DEC-021's proposal](../../.project-os/decisions/proposals/DEC-021-recommendation-response-policy.yaml)
+DEC-021's proposal
 separates actual following behavior from explicit recommendation acceptance.
 The human selected **A**, recorded in
 [DEC-021](../../.project-os/decisions/DEC-021-action-based-recommendation-response.yaml):
@@ -526,7 +526,7 @@ exposure, matching, counts, identity/transaction boundaries and future fixtures.
 
 ## Gate 14 — prediction-deviation meaning (approved)
 
-[DEC-022's proposal](../../.project-os/decisions/proposals/DEC-022-prediction-deviation-policy.yaml)
+DEC-022's proposal
 compares a top-action mismatch rate with a continuous empirical rarity measure.
 The human selected **A**, recorded in
 [DEC-022](../../.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml):
@@ -557,7 +557,7 @@ mismatch projection, availability, provenance/transaction boundaries and fixture
 
 ## Gate 15 — safety/damage preference observations (approved)
 
-[DEC-023's proposal](../../.project-os/decisions/proposals/DEC-023-preference-observation-policy.yaml)
+DEC-023's proposal
 compares two meanings of safetyPreference and collateralDamageTolerance.
 The human selected **A**, recorded in
 [DEC-023](../../.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml):
@@ -587,7 +587,7 @@ denominators, verified pre-action information, provenance and future fixture cov
 
 ## Gate 16 — reporting/cooperation sample units (approved)
 
-[DEC-024's proposal](../../.project-os/decisions/proposals/DEC-024-affiliation-rate-samples.yaml)
+DEC-024's proposal
 compares two meanings of companyReportingRate and nullCooperationRate.
 The human selected **A**, recorded in
 [DEC-024](../../.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml):
@@ -626,7 +626,7 @@ or production threshold. Remaining detailed definitions, compatibility boundarie
 and acceptance coverage require independent scrutiny before dependent work.
 
 The human selected A in the
-[execution request](../../.project-os/planning/TASK-018.review-qa-execution-request.yaml),
+execution request,
 authorizing separate bounded read-only architecture review and acceptance QA
 agents against candidate `76be475`. Their evidence must distinguish the committed
 candidate from any subsequent architect fixes. The architect's static audits and
@@ -634,25 +634,25 @@ legacy test passes alone are not independent acceptance evidence. This execution
 approval does not authorize runtime/storage changes, canonical state mutation or
 task completion; material findings return to the human gate.
 
-The initial [independent review checkpoint](../../.project-os/planning/TASK-018.independent-review-checkpoint.yaml)
+The initial independent review checkpoint
 requests changes, while the
-[independent QA checkpoint](../../.project-os/planning/TASK-018.independent-qa-checkpoint.yaml)
+independent QA checkpoint
 verifies proposal consistency and existing safeguards without accepting the final
 contract. Both name the original candidate and separately inspected safe fixes.
 Dependent task references and umbrella persistence wording were corrected; generated
 context remains truncated and required declared source files must be read directly.
 
-Subsequent [logical contract review](../../.project-os/planning/TASK-018.logical-contract-review-checkpoint.yaml)
-and [QA](../../.project-os/planning/TASK-018.logical-contract-qa-checkpoint.yaml)
+Subsequent logical contract review
+and QA
 both PASS candidate `7717c4d` conditionally on final human contract approval.
 Earlier checkpoints keep their original findings; they are not retroactively
-rewritten. The [DEC-026 approval request](../../.project-os/decisions/proposals/DEC-026-reviewed-m4-contract-approval.yaml)
+rewritten. The DEC-026 approval request
 is the next human gate. No final Project OS evaluation or task completion has
 occurred, and dependent work remains unclaimed.
 
 ## Gate 17 — predicate availability composition (option A approved)
 
-[DEC-025's proposal](../../.project-os/decisions/proposals/DEC-025-predicate-availability-composition.yaml)
+DEC-025's proposal
 records the original review finding R1. A valid metric with no eligible samples
 is unavailable, not zero. Before human selection, it was undefined whether
 `ALL(false, unavailable)` or
@@ -836,3 +836,5 @@ the detailed definition/record interfaces. Final human baseline approval through
 DEC-026 and configured Project OS evidence/evaluation remain pending. None of
 these checks certifies implemented M4 APIs or native/database behavior. No result
 should mark TASK-018 complete merely because this text or passing legacy tests exist.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

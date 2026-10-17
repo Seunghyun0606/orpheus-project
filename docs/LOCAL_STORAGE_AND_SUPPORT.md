@@ -80,5 +80,7 @@ and exit stop output. Full gameplay does not require sound.
 
 No Windows installer, cross-platform certification, signed release, automatic
 updater, cloud synchronization or public support service is established here.
-The [delivery proposal](TASK-034_DELIVERY_PROPOSAL.md) is unapproved and must not be
+The delivery proposal is unapproved and must not be
 used as an installation instruction. Final M4/M5 evidence and release gates remain.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

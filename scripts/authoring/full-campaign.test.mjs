@@ -8,26 +8,18 @@ import { authorFullCampaign } from './full-campaign.mjs';
 const read = (path) => parse(readFileSync(path, 'utf8'));
 const authored = () =>
   authorFullCampaign(
-    (file) => read('.project-os/planning/' + file),
+    (file) => read('authoring/campaign-1.0/' + file),
     (file) => read('src/scenario/data/full-campaign/' + file),
     read('src/scenario/data/full-campaign-manifest.yaml'),
   );
 describe('DEC-059/060 complete composition source data (deferred)', () => {
   it('reconstructs exact candidate objects from approved source fragments', () => {
     const data = authored();
-    const priorCandidate = read('.project-os/planning/M5/composition/campaign-definition.yaml');
-    expect(priorCandidate).not.toHaveProperty('replayAccess');
-    // Retain the historical malformed key; the new source repairs YAML's null-key
-    // serialization, without changing either approved initial numeric value.
-    expect(data.definition).toEqual({
-      ...priorCandidate,
-      initial: { ...priorCandidate.initial, alignment: { corporate: 0, null: 0 } },
-      replayAccess: 'completed_prior_acts',
-    });
+    expect(data.definition.replayAccess).toBe('completed_prior_acts');
+    expect(data.definition.initial.alignment).toEqual({ corporate: 0, null: 0 });
     expect(data.definition).toEqual(
       read('src/scenario/data/full-campaign/definitions/campaign.yaml'),
     );
-    expect(data.package).toEqual(read('.project-os/planning/M5/composition/campaign-package.yaml'));
     expect(data.package).toEqual(read('src/scenario/data/full-campaign/packages/campaign.yaml'));
     expect(authored()).toEqual(data);
   });

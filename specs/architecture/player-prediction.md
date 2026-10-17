@@ -56,7 +56,7 @@ and the other five opportunity-dependent behavior fields remain unavailable; tes
 that querying a predicted/UNKNOWN/gated result adds no sample. Positive exposure/response
 fixtures and browser/native acknowledgement must follow the reviewed integration
 contract, not be simulated by this query. Fixture support thresholds and late-act
-conditions are not production balance. See [implementation and verification limits](../../docs/TASK-022_IMPLEMENTATION.md).
+conditions are not production balance. See implementation and verification limits.
 
 ## Original logical baseline and future exposure fixtures
 
@@ -252,3 +252,5 @@ the mismatch-rate meaning of predictionDeviation, not the remaining authored
 response/reveal mappings or a rarity-based scoring fallback.
 Independent architecture review, acceptance QA and Project OS evaluation remain
 required before TASK-018 completion or dependent runtime implementation.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

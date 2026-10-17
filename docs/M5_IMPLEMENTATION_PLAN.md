@@ -16,45 +16,45 @@ pending. DEC-041 now permits TASK-028 implementation before TASK-027 native acce
 at the human's latest instruction. Other dependencies and final verification stay intact.
 TASK-028–035 are not completed implementations.
 DEC-042 approves initial content/sidecar/package version identities. TASK-028 now
-has [partial operational authoring](TASK-028_IMPLEMENTATION.md), not verified
+has partial operational authoring, not verified
 campaign/reveal acceptance. DEC-043 now approves the
 [protected action contract](../specs/architecture/campaign-action-gates.md); its
 implementation, model decisions and full integration are still unverified/incomplete.
 DEC-044 now approves the fresh production model identities and initial state;
-the [model checkpoint](TASK-028_MODEL_BASELINE_IMPLEMENTATION.md) authors explicit
+the model checkpoint authors explicit
 eight-Incident mappings and definition fragments without a partial official run.
 Later opportunities/effects/endings, full composition and acceptance remain pending.
 DEC-045 permits TASK-029 implementation before TASK-028 acceptance only. Its
-[checkpoint](TASK-029_IMPLEMENTATION.md) authors INC-009–018 operations and protected
+checkpoint authors INC-009–018 operations and protected
 record investigations while production opportunity choices and QA remain pending.
 DEC-046 resolves those seven specific opportunity choices; the
-[connection checkpoint](TASK-029_OPPORTUNITIES_IMPLEMENTATION.md) includes eighteen-
+connection checkpoint includes eighteen-
 Incident model mappings and guarded explicit responses. Numeric branch criteria,
 full campaign composition and all acceptance checks remain outstanding.
 DEC-047 now resolves the five specific branch criteria through
-[read-only declarations](TASK-029_BRANCH_IMPLEMENTATION.md); full integration,
+read-only declarations; full integration,
 reward/campaign/ending balance and all deferred acceptance remain pending.
 QA remains deferred at the latest instruction.
 DEC-048 permits TASK-030 implementation before TASK-029 acceptance only. The
-[Board checkpoint](TASK-030_IMPLEMENTATION.md) adds four operational authorities,
+Board checkpoint adds four operational authorities,
 sidecars and protected investigation fragments, not an official campaign or PASS.
 DEC-049 now approves five optional Board branch investigations. The
-[connection checkpoint](TASK-030_BRANCH_IMPLEMENTATION.md) records their authoring,
+connection checkpoint records their authoring,
 four-row model extension and bounded behavior draft repair. No QA or task completion
 is claimed. DEC-050 now permits TASK-031 implementation readiness before TASK-030
-acceptance only. The [Observer checkpoint](TASK-031_OBSERVER_IMPLEMENTATION.md)
+acceptance only. The Observer checkpoint
 authors INC-023/024 with verified Board-completion guards, not final BLACKOUT
 completion/actions, official campaign acceptance or an automatic ending.
 DEC-051 approves explicit final-decision completion without a healthy-service
-requirement. The [crisis checkpoint](TASK-031_CRISIS_IMPLEMENTATION.md) authors
+requirement. The crisis checkpoint authors
 INC-025 and the completion fragment, not concrete INC-026 plans or ending balance.
 DEC-052 now approves concrete INC-026 plans and consequences. The
-[BLACKOUT checkpoint](TASK-031_BLACKOUT_IMPLEMENTATION.md) authors them using
+BLACKOUT checkpoint authors them using
 mandatory action-completed narratives to retain due-event impact, plus explicit
 model/final-context fragments. No ending balance/authority or accepted full run
 is supplied. DEC-053 now permits TASK-032 implementation readiness before TASK-031
 acceptance only, retaining accepted TASK-026. The
-[ending input checkpoint](TASK-032_ENDING_INPUT_CHECKPOINT.md) records ten narrative
+ending input checkpoint records ten narrative
 drafts and the required-input decision without selecting production balance or
 conditional epilogue gates. TASK-031 remains incomplete; QA stays deferred.
 DEC-054 now selects accumulated values/discoveries and supported operational
@@ -62,15 +62,15 @@ behavior, excluding optional-opportunity rates as required ending inputs. The
 [choice-effect source proposal](../specs/architecture/campaign-choice-effect-source-proposal.md)
 identifies how actual accepted actions/acknowledged responses could support
 numeric effects without inferring missing observations. DEC-055 now approves that
-bounded extension; the [source candidate](TASK-032_CHOICE_EFFECT_IMPLEMENTATION.md)
+bounded extension; the source candidate
 implements action-completed/verified-response matching and authors synthetic
 tests without running QA or registering production awards. Three additional
 recommendations are proposed separately to address sustained-dependency coverage;
 DEC-056 now approves the three recommendations. The
-[recommendation checkpoint](TASK-032_RECOMMENDATION_IMPLEMENTATION.md) authors an
+recommendation checkpoint authors an
 exact extension to the unchanged seven-rule source, with unexecuted lifecycle
 tests and no partial official campaign. The
-[initial numeric proposal](TASK-032_NUMERIC_BALANCE_PROPOSAL.md) records weights,
+initial numeric proposal records weights,
 ten ending conditions and equal priorities for approval; none are applied.
 Numeric balance and conditional epilogues remain unapproved.
 Milestone registration follows the explicit human-approved metadata transition;
@@ -84,7 +84,7 @@ content blueprint; TASK-026 independent document-scope acceptance has now passed
 
 ## M4 debt that must remain visible
 
-The [partial native evaluation](../.project-os/planning/TASK-024.native-resume-evaluation.yaml)
+The partial native evaluation
 distinguishes automated candidate acceptance from actual desktop acceptance:
 
 - TASK-024: verify the corrected QA binary restoring the already committed ACK,
@@ -171,18 +171,18 @@ DEC-062 permits TASK-034 documentation and concrete budget/packaging proposals
 before TASK-032/033 acceptance, with accepted TASK-026 as readiness prerequisite.
 It does not approve budgets, measurement execution or package implementation/builds.
 
-| Task                                                 | Role      | Deliverable                                                                | Dependencies                                     |
-| ---------------------------------------------------- | --------- | -------------------------------------------------------------------------- | ------------------------------------------------ |
-| [TASK-026](../.project-os/tasks/ready/TASK-026.yaml) | architect | Reviewed campaign manifest, reveal graph, coverage and approval checklist  | None (DEC-037)                                   |
-| [TASK-027](../.project-os/tasks/ready/TASK-027.yaml) | developer | Explicitly approved production campaign composition and version binding    | TASK-026                                         |
-| [TASK-028](../.project-os/tasks/ready/TASK-028.yaml) | developer | Approved Acts 1–3 data and replay fixtures                                 | TASK-026 (DEC-041)                               |
-| [TASK-029](../.project-os/tasks/ready/TASK-029.yaml) | developer | Approved Acts 4–6 data and reveal/branch fixtures                          | TASK-026 (DEC-045)                               |
-| [TASK-030](../.project-os/tasks/ready/TASK-030.yaml) | developer | Extended Board investigation and deferred framing reveal                   | TASK-026 (DEC-048)                               |
-| [TASK-031](../.project-os/tasks/ready/TASK-031.yaml) | developer | Observer and Blackout data, final-context fixtures                         | TASK-026 (DEC-050)                               |
-| [TASK-032](../.project-os/tasks/ready/TASK-032.yaml) | developer | Approved production ending rules and epilogue data                         | TASK-026 (DEC-053)                               |
-| [TASK-033](../.project-os/tasks/ready/TASK-033.yaml) | developer | Campaign-wide accessibility and scoped audio presentation                  | TASK-026 (DEC-061)                               |
-| [TASK-034](../.project-os/tasks/ready/TASK-034.yaml) | developer | Measured performance, approved packaging and release/authoring docs        | TASK-026 (DEC-062; documentation/proposals only) |
-| [TASK-035](../.project-os/tasks/ready/TASK-035.yaml) | developer | Preparatory gap audit now; full acceptance/release decision still deferred | TASK-026 (DEC-065; preparation only)             |
+| Task     | Role      | Deliverable                                                                | Dependencies                                     |
+| -------- | --------- | -------------------------------------------------------------------------- | ------------------------------------------------ |
+| TASK-026 | architect | Reviewed campaign manifest, reveal graph, coverage and approval checklist  | None (DEC-037)                                   |
+| TASK-027 | developer | Explicitly approved production campaign composition and version binding    | TASK-026                                         |
+| TASK-028 | developer | Approved Acts 1–3 data and replay fixtures                                 | TASK-026 (DEC-041)                               |
+| TASK-029 | developer | Approved Acts 4–6 data and reveal/branch fixtures                          | TASK-026 (DEC-045)                               |
+| TASK-030 | developer | Extended Board investigation and deferred framing reveal                   | TASK-026 (DEC-048)                               |
+| TASK-031 | developer | Observer and Blackout data, final-context fixtures                         | TASK-026 (DEC-050)                               |
+| TASK-032 | developer | Approved production ending rules and epilogue data                         | TASK-026 (DEC-053)                               |
+| TASK-033 | developer | Campaign-wide accessibility and scoped audio presentation                  | TASK-026 (DEC-061)                               |
+| TASK-034 | developer | Measured performance, approved packaging and release/authoring docs        | TASK-026 (DEC-062; documentation/proposals only) |
+| TASK-035 | developer | Preparatory gap audit now; full acceptance/release decision still deferred | TASK-026 (DEC-065; preparation only)             |
 
 Prior work is reused, not recreated. Missing document/trace/decision views or
 simulation mechanisms must first be listed against real authoring needs in
@@ -234,7 +234,7 @@ TASK-026 is complete after independent review, document QA and distinct evaluati
 TASK-027 is active; its
 [composition proposal](../specs/architecture/full-campaign-composition-proposal.md)
 was approved through DEC-040. The
-[candidate](TASK-027_IMPLEMENTATION.md) implements package/catalog/entry/presentation
+candidate implements package/catalog/entry/presentation
 boundaries without complete production content or native certification.
 Keep the original draft/result records unchanged. M4 native verification resumes
 when requested, then TASK-025; both remain final M5 acceptance/release blockers.
@@ -246,28 +246,28 @@ it does not complete TASK-027 or waive native/independent final verification.
 ## Latest authoring checkpoint — 2026-10-14
 
 DEC-057 approves the exact TASK-032 initial numeric/ending proposal at `875d410`.
-The [implementation checkpoint](TASK-032_NUMERIC_BALANCE_IMPLEMENTATION.md) adds
+The implementation checkpoint adds
 guarded discovery/ordinary score data, ten equal-priority ending conditions and
 unexecuted tests. It does not register a partial official package or prove ten-ending
 reachability. Conditional ending presentation/epilogue decisions and complete
 definition/progression integration remain pending. All QA remains deferred, not
 waived; M4, TASK-031/032, and final M5 acceptance/release obligations are unchanged.
 
-DEC-058 subsequently approves the [ending-presentation checkpoint](TASK-032_ENDING_PRESENTATION_IMPLEMENTATION.md):
+DEC-058 subsequently approves the ending-presentation checkpoint:
 ten typed prose entries, exact package binding, read-only verified projection and
 conditional title/PROMETHEUS rendering. No ending grant or old-store migration is
 introduced. Exact main progression/complete package integration is the next decision;
 the whole campaign is still unavailable, and all acceptance/QA debt remains.
 
 DEC-059 approves the sequential completion/Act progression proposal. The
-[full-composition checkpoint](TASK-027_FULL_COMPOSITION_CHECKPOINT.md) preserves
+full-composition checkpoint preserves
 complete generated data outside runtime while the existing current-Act-only engine
 gate awaits an explicit new-definition prior-Act retry contract. No implicit global
 relaxation, old-authority rewrite or partial official run is introduced. QA and all
 readiness/acceptance dependencies remain unchanged.
 
 DEC-060 subsequently approves the explicit prior-Act replay-access contract. The
-[connection checkpoint](TASK-027_REPLAY_ACCESS_IMPLEMENTATION.md) adds the optional
+connection checkpoint adds the optional
 new-only policy and complete runtime definition/package sources while preserving
 legacy equality and strict admission. QA remains entirely deferred; registration
 does not certify startup or reachable endings. TASK-033 readiness, Windows/audio
@@ -275,7 +275,7 @@ scope and preferences require the next explicit decision; preceding tasks remain
 incomplete and no dependency is bypassed merely because implementation exists.
 
 DEC-061 approves the TASK-033 early Windows accessibility/local synthesis scope.
-The [implementation checkpoint](TASK-033_IMPLEMENTATION.md) adds separate strict
+The implementation checkpoint adds separate strict
 audio preferences, lazy explicit activation, confirmed-live-event cues and scoped
 keyboard/text/table presentation. Tests are authored but **not run**; no native
 WebView2/Narrator/audio/layout coverage or completion is claimed. TASK-034/035
@@ -283,7 +283,7 @@ dependencies and all M4/M5 final verification remain unchanged. A distinct deliv
 readiness/budget/packaging decision is required before TASK-034 implementation.
 
 DEC-062 resolves the early documentation-readiness decision. The
-[TASK-034 checkpoint](TASK-034_DOCUMENTATION_CHECKPOINT.md) supplies authoring,
+TASK-034 checkpoint supplies authoring,
 storage/support and preliminary asset-rights guidance plus an unapproved exact
 performance/local-packaging proposal. No benchmark, config, binary or installer
 was produced, and no QA or acceptance was claimed. Concrete budget/Windows review
@@ -291,7 +291,7 @@ package approval precedes implementation and bounded execution; native/install
 QA, TASK-035, M4/M5 closure and release remain separately gated.
 
 DEC-063 subsequently approves the concrete TASK-034 delivery proposal. The
-[implementation checkpoint](TASK-034_IMPLEMENTATION.md) adds measurement tooling
+implementation checkpoint adds measurement tooling
 and isolated review configuration. Scoped typecheck/source validation and four
 harness checks pass after retained initial failures; the isolated web output builds
 with a large-chunk warning. NSIS generation is blocked before downloads because
@@ -299,7 +299,7 @@ tools are unresolved. Measurement is incomplete/interrupted, not a budget PASS;
 native/install/general QA and all earlier acceptance obligations remain pending.
 
 DEC-064 subsequently approves only the exact official missing NSIS tools. The
-[local package checkpoint](TASK-034_LOCAL_PACKAGE_CHECKPOINT.md) records verified
+local package checkpoint records verified
 cache inventory and a generated unsigned Windows x64 review installer, not an
 installation or release. Twenty ordinary Node replay samples yield p95 3077.916 ms;
 all long-run and native budget criteria remain pending. TASK-034 is incomplete.
@@ -314,7 +314,7 @@ TASK-035 without completing any predecessor. The original readiness statements
 above describe their historical checkpoints; final acceptance still requires
 all M4 and preceding M5 obligations.
 
-The [source-based audit](TASK-035_PREPARATORY_AUDIT.md) and
+The source-based audit and
 [execution plan](M5_VERIFICATION_PLAN.md) map every exit criterion, nineteen
 reveal nodes and ten endings to actual evidence gaps. A structured checkpoint
 is retained outside immutable accepted results. No general/native QA, build,
@@ -326,7 +326,7 @@ and install execution remain separately authorized. M4/M5 remain active/incomple
 
 DEC-066 subsequently resumes automated checks and independently attributed review/
 QA, not native/app/installer execution. The
-[new checkpoint](TASK-035_AUTOMATED_VERIFICATION_CHECKPOINT.md) retains clean
+new checkpoint retains clean
 candidate `0268071` failures, safe narrow corrections at `a6e509b`, and independent
 rerun FAIL (690/694, four 5-second timeouts unchanged). Lint/typecheck and separate
 authoring/MVP replay checks pass; 37-file data formatting remains unresolved.
@@ -343,6 +343,8 @@ at `3f3b8b7` specifies new 1.1.0/schema-2 views, preserved 1.0.0 authorities,
 operation-owned verified events, explicit 800ms/reduced-motion/readable-history rules
 and final-incident panels. Independent document review addressed its branch-version,
 INC-026 gate and observer-ownership defects. The
-[checkpoint](TASK-035_RUNTIME_PRESENTATION_CONTRACT_CHECKPOINT.md) distinguishes
+checkpoint distinguishes
 document feasibility from implementation. Exact contract approval precedes runtime
 changes; four timeouts, 37 formatting failures and all M4/M5 obligations remain.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

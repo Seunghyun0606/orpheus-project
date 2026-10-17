@@ -3,7 +3,7 @@
 ## TASK-023 developer implementation checkpoint
 
 DEC-032 approves optional ending rules in new immutable campaign definitions only.
-The [developer candidate](../../docs/TASK-023_IMPLEMENTATION.md) implements strict
+The developer candidate implements strict
 `endings` data and the pure `resolveCampaignEnding` query. Existing definitions
 without ending rules retain exact authority/record shapes; no old-run attachment,
 storage migration or latest-version substitution is implemented.
@@ -128,3 +128,5 @@ with another. Do not expose final-act content in the three UNKNOWN-only incident
 
 Independent review and acceptance QA remain pending. Existing compatibility tests
 do not verify this proposed ending API or its unimplemented predicate schema.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

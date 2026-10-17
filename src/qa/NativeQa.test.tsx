@@ -22,7 +22,7 @@ it('does not open storage on mount and creates/restores only explicit fresh fixt
   expect(
     screen.queryByRole('button', { name: 'Prepare guidance: prediction' }),
   ).not.toBeInTheDocument();
-  const pointer = localStorage.getItem('orpheus.qa.task024.selected-run.v1');
+  const pointer = localStorage.getItem('orpheus.qa.native.selected-run.v1');
   expect(pointer).toMatch(/^qa024-/);
   expect(localStorage.getItem('orpheus.incident.v1')).toBe('legacy-sentinel');
   await user.click(screen.getByRole('button', { name: 'Open Payment API logs (+30s)' }));
@@ -37,6 +37,6 @@ it('does not open storage on mount and creates/restores only explicit fresh fixt
   await user.click(screen.getByRole('button', { name: 'Restore isolated fixture' }));
   expect(await screen.findByText('Fixture deviation samples: 0/1')).toBeVisible();
   expect(screen.getByText('ACKs: 1 / Responses: 1')).toBeVisible();
-  expect(localStorage.getItem('orpheus.qa.task024.selected-run.v1')).toBe(pointer);
+  expect(localStorage.getItem('orpheus.qa.native.selected-run.v1')).toBe(pointer);
   expect(localStorage.getItem('orpheus.incident.v1')).toBe('legacy-sentinel');
 });

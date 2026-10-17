@@ -15,7 +15,7 @@ describe a historical, unregistered candidate.
 | Campaign definition               | `src/scenario/data/full-campaign/definitions/campaign.yaml`                                       | Exact Scenario bindings, progression, models, opportunities, action gates, effects, branches and ending conditions |
 | Package                           | `src/scenario/data/full-campaign/packages/campaign.yaml`                                          | Exact definition, Scenario, investigation and ending-prose version binding                                         |
 | Ending presentation               | `src/scenario/data/full-campaign/ending-presentations/endings.yaml`                               | Typed prose and conditional title/epilogue sections, not ending selection                                          |
-| Historical fragments              | `.project-os/planning/`                                                                           | Approved authoring inputs and frozen proposals, not automatically registered runtime authorities                   |
+| Historical fragments              | `authoring/campaign-1.0/`                                                                         | Approved authoring inputs and frozen proposals, not automatically registered runtime authorities                   |
 
 The explicit Full campaign route lazy-loads all registered sources through
 `src/scenario/full-campaign.ts`; `production-catalog.ts` admits only the complete
@@ -86,7 +86,7 @@ readContent, manifest)`. It accepts caller-provided parsed data and performs no
 file I/O or validation. It is **not** a runnable generator CLI. Its associated
 tests document approved composition reproducibility; do not invent an npm command
 or regenerate the giant definition to repair unrelated formatting. Preserve the
-earlier `.project-os/planning/M5/composition/` checkpoint as historical evidence.
+earlier composition checkpoint (archived) as historical evidence.
 
 ## Progression, behavior and ending constraints
 
@@ -123,7 +123,7 @@ npm run lint
 npm run format:check
 npm test
 npm run test:replays
-npm test -- scripts/authoring/full-campaign.test.mjs scripts/authoring/task032-balance.test.mjs scripts/authoring/task032-presentations.test.mjs
+npm test -- scripts/authoring/full-campaign.test.mjs scripts/authoring/ending-balance.test.mjs scripts/authoring/ending-presentations.test.mjs
 npm run build
 npm run build:desktop
 ```
@@ -135,4 +135,6 @@ covers INC-001 only; retain the full suite and full-campaign runtime/balance/rev
 coverage. `build:desktop` produces a no-bundle binary, not an installer. Successful
 commands alone do not certify native accessibility/audio, all ending routes or
 release readiness. See [support](LOCAL_STORAGE_AND_SUPPORT.md) and the
-[delivery proposal](TASK-034_DELIVERY_PROPOSAL.md).
+delivery proposal.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

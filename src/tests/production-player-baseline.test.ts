@@ -24,14 +24,14 @@ import {
 import type { Scenario } from '../scenario/schema.ts';
 import type { BehaviorMetricKey } from '../scenario/behavior.ts';
 
-const root = '.project-os/planning/M5/models/';
+const root = 'authoring/campaign-1.0/models/';
 const productionBehavior = behaviorDefinitionSchema.parse(
   parse(readFileSync(root + 'orpheus-player-behavior.yaml', 'utf8')),
 );
 const productionPrediction = predictionDefinitionSchema.parse(
   parse(readFileSync(root + 'orpheus-player-prediction.yaml', 'utf8')),
 );
-const bindings = parse(readFileSync('.project-os/planning/TASK-028.model-bindings.yaml', 'utf8'));
+const bindings = parse(readFileSync('authoring/campaign-1.0/TASK-028.model-bindings.yaml', 'utf8'));
 // Preserve this suite's original eight-Incident scope. The new opportunity suite
 // separately validates complete current authoring coverage, not this projection.
 const earlyIds = new Set(Array.from({ length: 8 }, (_, i) => 'INC-00' + (i + 1)));

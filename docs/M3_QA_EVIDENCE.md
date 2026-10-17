@@ -5,12 +5,12 @@ by the human on 2026-10-09. [DEC-008](../.project-os/decisions/DEC-008-m3-comple
 records the separate completion decision. The original TASK-017 handoffs remain
 unchanged and describe verification before that approval.
 
-| M3 exit criterion                                                                 | Repeatable evidence                                                                                                                                                                                                                                                                                                                            | Current result                              |
-| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| INC-001, INC-002, and INC-003 are fully playable                                  | `src/app/AppShell.test.tsx` starts each scenario, follows its authored investigation path, observes UNKNOWN, reaches postmortem, and revisits the archive after remount. `src/tests/vertical-slice.test.tsx` covers keyboard-driven INC-001. [Native inspection](TASK-017_NATIVE_QA.md) records all three desktop routes and restored records. | Automated and native paths pass.            |
-| Shared engine and UI contain no scenario-specific React logic                     | `src/app/AppShell.tsx` enumerates the scenario catalog; `src/app/App.tsx` renders state and authored action data. `npm run lint` checks the headless engine boundary. Search production React for `INC-001`, `INC-002`, or `INC-003` to audit branching.                                                                                       | Static inspection and automated tests pass. |
-| Evidence, narrative, War Room communication, and delegation work across incidents | `src/tests/m3-narrative.test.ts` verifies persistent UNKNOWN discoveries. `src/tests/war-room.test.tsx` covers delegated jobs, exact ETA, capacity, save/restore, and replay. Native inspection observes delegation, results, communication, and cross-incident evidence.                                                                      | Automated and native checks pass.           |
-| MVP reveals UNKNOWN without ORPHEUS identity                                      | `npm run validate:scenarios` validates current and frozen scenario YAML. `src/tests/m3-narrative.test.ts` checks the UNKNOWN-only discovery routes and rejects premature identity disclosure in scenario fields.                                                                                                                               | Automated content boundary pass.            |
+| M3 exit criterion                                                                 | Repeatable evidence                                                                                                                                                                                                                                                                                                   | Current result                              |
+| --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| INC-001, INC-002, and INC-003 are fully playable                                  | `src/app/AppShell.test.tsx` starts each scenario, follows its authored investigation path, observes UNKNOWN, reaches postmortem, and revisits the archive after remount. `src/tests/vertical-slice.test.tsx` covers keyboard-driven INC-001. Native inspection records all three desktop routes and restored records. | Automated and native paths pass.            |
+| Shared engine and UI contain no scenario-specific React logic                     | `src/app/AppShell.tsx` enumerates the scenario catalog; `src/app/App.tsx` renders state and authored action data. `npm run lint` checks the headless engine boundary. Search production React for `INC-001`, `INC-002`, or `INC-003` to audit branching.                                                              | Static inspection and automated tests pass. |
+| Evidence, narrative, War Room communication, and delegation work across incidents | `src/tests/m3-narrative.test.ts` verifies persistent UNKNOWN discoveries. `src/tests/war-room.test.tsx` covers delegated jobs, exact ETA, capacity, save/restore, and replay. Native inspection observes delegation, results, communication, and cross-incident evidence.                                             | Automated and native checks pass.           |
+| MVP reveals UNKNOWN without ORPHEUS identity                                      | `npm run validate:scenarios` validates current and frozen scenario YAML. `src/tests/m3-narrative.test.ts` checks the UNKNOWN-only discovery routes and rejects premature identity disclosure in scenario fields.                                                                                                      | Automated content boundary pass.            |
 
 ## Quality command set
 
@@ -42,7 +42,7 @@ chunk-size warning is non-blocking.
 
 ## Native evidence boundary and remaining decision
 
-The [native log](TASK-017_NATIVE_QA.md) distinguishes desktop observations from
+The native log distinguishes desktop observations from
 automated coverage and identifies the inspected executable by SHA-256. The
 earlier pipe connection failure was a blocked attempt, superseded by actual
 native interactions. Independent agents audit this evidence but must not claim
@@ -57,3 +57,5 @@ TASK-017 established verified readiness, not automatic milestone closure. The
 later human approval closes M3 and authorizes M4 task definition, recorded in
 DEC-008 and the [M4 plan](M4_IMPLEMENTATION_PLAN.md). It does not authorize a new
 save migration, later-campaign production content, or release.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

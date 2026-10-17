@@ -38,9 +38,9 @@ const binding = z
     ),
   })
   .passthrough()
-  .parse(read('.project-os/planning/TASK-032.numeric-bindings.yaml'));
+  .parse(read('authoring/campaign-1.0/TASK-032.numeric-bindings.yaml'));
 const endings = endingDefinitionSchema.parse(
-  read('.project-os/planning/M5/models/orpheus-full-campaign-endings.yaml'),
+  read('authoring/campaign-1.0/models/orpheus-full-campaign-endings.yaml'),
 );
 const final = endings.finals[0]!;
 const registry = endingReferences(final);
@@ -190,7 +190,7 @@ describe('DEC-057 explicit balance data (deferred)', () => {
         z
           .object({ logical_effects_fragment: campaignDefinitionSchema.shape.effects })
           .passthrough()
-          .parse(read('.project-os/planning/' + file)).logical_effects_fragment,
+          .parse(read('authoring/campaign-1.0/' + file)).logical_effects_fragment,
     );
     expect(binding.logical_effects_replacement).toHaveLength(original.length);
     const nodes = new Set<string>();

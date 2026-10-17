@@ -4,7 +4,7 @@ TASK-024 was subsequently claimed through Project OS after TASK-023 completion.
 Its preflight found no authored opportunity, prepared-result/presentation operation
 or durable response provenance in the existing v1 runtime. DEC-031 explicitly does
 not approve concrete recording/schema/lifecycle changes. The
-[record-version gate](../.project-os/planning/TASK-024.presentation-record-gate.yaml)
+record-version gate
 proposes new-campaign-only v2 records while preserving v1, or a separately reviewed
 v1-compatible extension. At that pre-approval checkpoint, no TASK-024
 runtime/storage/UI change had been implemented. DEC-033 subsequently approved
@@ -15,7 +15,7 @@ unclaimed and M4 remains active.
 
 TASK-023 was claimed through Project OS on 2026-10-11. The human approved DEC-032:
 ending rules are pinned only in new immutable campaign definitions; existing records
-remain unchanged. Its [developer candidate](TASK-023_IMPLEMENTATION.md) implements
+remain unchanged. Its developer candidate implements
 validated data-driven resolution and all ten non-production ending fixture families.
 Developer verification passed 70 ending tests and 380 full-suite tests with one
 worker and unchanged timeouts; the report retains a default parallel UI timeout.
@@ -31,14 +31,14 @@ evaluation and Project OS. DEC-028 approves TASK-020's physical layout; its
 bounded adapter acceptance does not certify native integration. TASK-021 completed
 through Project OS on 2026-10-11. DEC-029 records the human-approved new-definition-only
 model binding; older model-less records remain unchanged. The
-[TASK-021 candidate](TASK-021_IMPLEMENTATION.md) implements four supported behavior
+TASK-021 candidate implements four supported behavior
 metrics and explicit unavailability for six opportunity-dependent fields.
 Independent review/QA passed final candidate `895a05b` after correcting the
 milestone source-ID collision found in `5913304`. Independent QA passed 264 tests;
 distinct evaluator `codex-task021-evaluator` accepted all four criteria and Project OS
 recorded PASS. TASK-022 subsequently completed under DEC-031. No storage migration or native
 integration is performed. Attributed evidence follows the separately approved
-[TASK-021 review/QA gate](../.project-os/planning/TASK-021.review-qa-execution-request.yaml).
+TASK-021 review/QA gate.
 The human approved M3 closure and M4 definition
 on 2026-10-09; [DEC-008](../.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml)
 records that approval. M4 remains active; TASK-019 completion is not M4 closure.
@@ -48,7 +48,7 @@ TASK-022 was claimed through Project OS on 2026-10-11. Its kickoff verified eigh
 scenario files and twelve current MVP replay tests. The human subsequently approved
 [DEC-030](../.project-os/decisions/DEC-030-branch-prediction-binding.yaml): branch and
 prediction rules are pinned in new campaign definition versions only; old authorities
-and records remain unchanged. The [TASK-022 developer candidate](TASK-022_IMPLEMENTATION.md)
+and records remain unchanged. The TASK-022 developer candidate
 adds strict authored rules and pure branch/prediction queries. Developer verification
 passed 310 tests, including 46 new cases and the twelve current MVP replay tests.
 Prediction calculation is not an actual exposure and creates no deviation sample.
@@ -56,7 +56,7 @@ No production content, UI, operation variants or storage migration were added.
 At the original candidate checkpoint TASK-022 remained active, not accepted.
 The human separately authorized read-only
 review/QA and a distinct evaluator. Original independent reports recommended
-[HUMAN_GATE](../.project-os/planning/TASK-022.deviation-sequencing-gate.yaml): positive
+HUMAN_GATE: positive
 exposure/response/deviation fixtures remain required but unimplemented, without explicit
 reassignment to a later task. Four numbered criteria pass for the pure queries and
 independent QA passed all 310 tests. That did not establish overall completion.
@@ -222,7 +222,7 @@ DEC-024 approves explicit reporting/cooperation response units, specified in the
 [affiliation review draft](../specs/architecture/affiliation-rates.md).
 Basic formula families are approved; detailed logical contracts now have independent
 review/QA evidence, with final human approval still pending. Read-only execution was human-authorized,
-recorded in the [request](../.project-os/planning/TASK-018.review-qa-execution-request.yaml).
+recorded in the request.
 Existing-save checks do not constitute acceptance of the proposed new campaign
 system; new runtime/storage/native verification remains required in later tasks.
 
@@ -232,14 +232,14 @@ runtime code, save content, hidden scores, formula
 versions or ending behavior. Immutable M3 records retain their original
 pre-approval observations; this plan and DEC-008 record the later human decision.
 
-The initial [independent review](../.project-os/planning/TASK-018.independent-review-checkpoint.yaml)
-requests changes, and [independent QA](../.project-os/planning/TASK-018.independent-qa-checkpoint.yaml)
+The initial independent review
+requests changes, and independent QA
 verifies proposal consistency and legacy safeguards, not final acceptance.
 The human now approved strict
 [predicate availability](../.project-os/decisions/DEC-025-strict-predicate-availability.yaml);
 the detailed truth-table contract has also passed independent recheck.
-The subsequent [logical review](../.project-os/planning/TASK-018.logical-contract-review-checkpoint.yaml)
-and [QA](../.project-os/planning/TASK-018.logical-contract-qa-checkpoint.yaml)
+The subsequent logical review
+and QA
 both PASS candidate `7717c4d`, conditional on final human approval.
 The human approved [DEC-026 baseline v1](../.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml).
 Attributed final evidence and independent evaluation have now been submitted;
@@ -249,16 +249,16 @@ The [definition](../specs/architecture/campaign-definition-contract.md) and
 now specify the reviewed typed/association/priority/freshness representations.
 These are logical contracts, not implemented runtime/storage or native test passes.
 
-TASK-019 subsequently added a [pure implementation](TASK-019_IMPLEMENTATION.md).
+TASK-019 subsequently added a pure implementation.
 Independent review/QA identified four safe defects, repaired in `d3e54f9`.
 The human approved DEC-027 compatible-content/shared-effect representation;
 implementation `7cb0a83` passed independent review and QA with 186 full-suite tests.
 Attributed handoffs at `5e5883b` and independent configured evaluation accepted
 TASK-019. TASK-020 was claimed through Project OS; its
-[physical-layout gate](../.project-os/planning/TASK-020.physical-layout-gate.yaml)
+physical-layout gate
 preserved the distinction between approved IndexedDB use and the then-proposed
 database/store names. The human subsequently approved DEC-028. The
-[TASK-020 candidate](TASK-020_IMPLEMENTATION.md) now provides transactional storage
+TASK-020 candidate now provides transactional storage
 and explicit legacy ports with isolated in-memory tests. No actual user database
 was opened or migrated, no UI integration occurred, and independent acceptance
 was pending at that implementation checkpoint. Subsequent separately authorized
@@ -275,7 +275,7 @@ Do not invent pending authoring rules or approve
 material findings silently. Approved formula/storage decisions are not acceptance
 of the entire contract or authorization to infer missing history.
 
-TASK-024 has a [new-only v2 candidate](TASK-024_IMPLEMENTATION.md) under DEC-033:
+TASK-024 has a new-only v2 candidate under DEC-033:
 strict authored presentations/responses, six pooled opportunity metrics and an
 opt-in transactional adapter/fixture screen. Developer verification passed 409
 tests plus quality/web/native build checks. Native gated presentation/storage and
@@ -284,14 +284,14 @@ completion remain pending, with no production campaign activation or release.
 Independent candidate review and QA of `6b1a8fce` passed, including QA's direct
 409-test full suite. Distinct bounded evaluation agrees that native portions of
 AC1/AC3 and native AC5 remain pending. The proposed
-[isolated native QA entry/profile](../.project-os/planning/TASK-024.native-fixture-gate.yaml)
+isolated native QA entry/profile
 requires a human decision before implementation or launch.
 
 The human subsequently approved DEC-034 and the separate
-[native QA entry candidate](TASK-024_NATIVE_QA.md) is built, unlaunched. Its
+native QA entry candidate is built, unlaunched. Its
 automated regression increases the full suite to 410 tests / 29 files. Local
 Tauri source inspection disproved the originally described identifier-relative
-profile resolution; the [actual-path gate](../.project-os/planning/TASK-024.native-path-resolution-gate.yaml)
+profile resolution; the actual-path gate
 must be resolved before any launch or profile creation. No native acceptance,
 TASK-025 claim or M4 closure is implied.
 
@@ -327,6 +327,8 @@ blocked by missing M4 acceptance. The earlier planning-only checkpoint is histor
 DEC-065 subsequently replaces TASK-035's claim prerequisites with accepted
 TASK-026 for **preparation only**. It does not waive TASK-024/025 acceptance or
 M4 completion before final M5 acceptance/release. The
-[gap audit](TASK-035_PREPARATORY_AUDIT.md) preserves all four M4 exit criteria and
+gap audit preserves all four M4 exit criteria and
 the missing corrected-ACK restore/response/reload/archive/native observations.
 No M4 QA/evaluation or milestone transition is executed in this preparatory step.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

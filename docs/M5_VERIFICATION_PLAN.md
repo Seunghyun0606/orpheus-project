@@ -2,7 +2,7 @@
 
 Planning under DEC-065 only, 2026-10-14. **None of the following commands or
 checks is executed by TASK-035's preparatory step.** General/native QA remains
-deferred. Read with [evidence gaps](TASK-035_PREPARATORY_AUDIT.md).
+deferred. Read with evidence gaps.
 
 ## 1. Candidate freeze and safe attribution
 
@@ -33,7 +33,7 @@ npx vitest run src/tests/inc-002-replay.test.ts src/tests/inc-003-replay.test.ts
 npm run validate:scenarios
 npm run build
 npm run build:desktop
-npm run test:task034:harness
+npm run test:release-harness
 git diff --check
 projectctl doctor
 ```
@@ -79,7 +79,7 @@ change needs human approval; do not tune thresholds silently.
 ## 4. Performance and persistence measurements
 
 Use the unchanged DEC-063 proposal and recorded budgets in the audit. The existing
-`benchmark:task034` harness supplies **development-only** measurements; preserve
+`benchmark` harness supplies **development-only** measurements; preserve
 unfinished checkpoint recovery rather than restart as if earlier work never ran.
 Native measurement requires separate authorization and actual target capabilities.
 
@@ -109,13 +109,13 @@ Do not promise control when native APIs/pipe are unavailable, the desktop is loc
 or tool permissions prohibit native APIs; report the exact limitation and retain
 pending checks. Browser/headless results cannot substitute for native evidence.
 
-M4 restoration: preserve `%LOCALAPPDATA%\qa024\task024-fixtures-v1` and the existing
+M4 restoration: preserve `%LOCALAPPDATA%\qa024\qa-fixtures-v1` and the existing
 committed ACK. Verify corrected binary identity, actual restored revision/ACK,
 eligible response, process/WebView reload and durable archive; a fresh run is not
 restoration evidence. TASK-025 remains dependent on TASK-024 acceptance.
 
 Full production review: use only the approved isolated TASK-034 review app/profile,
-`%LOCALAPPDATA%\qa034\task034-release-v1`, unchanged main config/user stores. Static
+`%LOCALAPPDATA%\qa034\review-v1`, unchanged main config/user stores. Static
 Tauri path analysis matches it but must be confirmed in the actual authorized
 runtime. Any path mismatch or unexpected existing state requires its own decision;
 do not reset profiles or treat an identifier alone as isolation proof.
@@ -158,3 +158,5 @@ again before final evaluation. The preparatory claim cannot satisfy missing evid
 Use configured Project OS submission/evaluation transitions, not direct status edits.
 Keep M5 closure and production release as separate human gates. No push or public
 distribution follows automatically from passing QA, producing packages or closing M5.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

@@ -2,7 +2,7 @@
 
 The human approved new-only v2 recording. This extends the runtime representation,
 not existing pinned v1 histories. TASK-024 acceptance, native evidence and TASK-025
-audit remain outstanding. See [implementation evidence](../../docs/TASK-024_IMPLEMENTATION.md).
+audit remain outstanding. See implementation evidence.
 
 ## Authoring
 
@@ -81,3 +81,5 @@ no late-game model/content in MVP. Read-only framework queries grant no ending/e
 Production thresholds/gates/content and isolated native test profile setup remain
 separate decisions. No user save mutation, M4 closure, release or TASK-025 waiver is
 authorized here.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

@@ -10,14 +10,14 @@ import {
 import { validateVersionedScenarioCatalog } from '../scenario/catalog.ts';
 
 const read = (path: string) => parse(readFileSync(path, 'utf8'));
-const modelRoot = '.project-os/planning/M5/models/';
+const modelRoot = 'authoring/campaign-1.0/models/';
 describe('TASK-030 bounded model repair and Board rows — deferred QA', () => {
   it('restores complete INC-010/011/012 rows without output artifacts or missing action classifications', () => {
     const raw = readFileSync(modelRoot + 'orpheus-player-behavior.yaml', 'utf8');
     expect(raw).not.toContain('Warning: truncated output');
     expect(raw).not.toContain('tokens truncated');
     const behavior = behaviorDefinitionSchema.parse(parse(raw));
-    const repair = read('.project-os/planning/TASK-030.behavior-repair.yaml');
+    const repair = read('authoring/campaign-1.0/TASK-030.behavior-repair.yaml');
     expect(behavior.scenarios).toHaveLength(18);
     for (const row of repair.scenarios)
       expect(behavior.scenarios.find((m) => m.scenarioId === row.scenarioId)).toEqual(row);
@@ -35,7 +35,7 @@ describe('TASK-030 bounded model repair and Board rows — deferred QA', () => {
       });
   });
   it('composes explicit 22-Incident rows against authored sources without publishing an official campaign', () => {
-    const fragment = read('.project-os/planning/TASK-030.model-bindings.yaml');
+    const fragment = read('authoring/campaign-1.0/TASK-030.model-bindings.yaml');
     const behavior = read(modelRoot + 'orpheus-player-behavior.yaml');
     const prediction = read(modelRoot + 'orpheus-player-prediction.yaml');
     const files = Array.from(
@@ -63,10 +63,10 @@ describe('TASK-030 bounded model repair and Board rows — deferred QA', () => {
       scenarios: [...prediction.scenarios, ...fragment.prediction_scenarios],
     });
     const references = [
-      ...read('.project-os/planning/TASK-028.action-bindings.yaml').references,
-      ...read('.project-os/planning/TASK-029.action-bindings.yaml').references,
-      ...read('.project-os/planning/TASK-030.action-bindings.yaml').references,
-      ...read('.project-os/planning/TASK-029.branch-bindings.yaml').references,
+      ...read('authoring/campaign-1.0/TASK-028.action-bindings.yaml').references,
+      ...read('authoring/campaign-1.0/TASK-029.action-bindings.yaml').references,
+      ...read('authoring/campaign-1.0/TASK-030.action-bindings.yaml').references,
+      ...read('authoring/campaign-1.0/TASK-029.branch-bindings.yaml').references,
     ];
     expect(validateBehaviorDefinition(b, allowed, result.scenarios)).toEqual([]);
     expect(validatePredictionDefinition(p, allowed, result.scenarios, references)).toEqual([]);
@@ -83,8 +83,8 @@ describe('TASK-030 bounded model repair and Board rows — deferred QA', () => {
         });
   });
   it('counts only distinct direct optional investigations, never operational or causal-support samples', () => {
-    const fragment = read('.project-os/planning/TASK-030.model-bindings.yaml');
-    const consumers = read('.project-os/planning/TASK-030.branch-consumer-bindings.yaml');
+    const fragment = read('authoring/campaign-1.0/TASK-030.model-bindings.yaml');
+    const consumers = read('authoring/campaign-1.0/TASK-030.branch-consumer-bindings.yaml');
     for (const c of consumers.consumers) {
       const mapping = fragment.behavior_scenarios.find(
         (m: { scenarioId: string }) => m.scenarioId === c.incidentId,

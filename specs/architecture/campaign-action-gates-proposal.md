@@ -3,7 +3,7 @@
 Status: Option A approved through DEC-043; implementation candidate is unverified.
 The proposal at `1383be0` is the approval checkpoint. See the
 [concrete contract](campaign-action-gates.md) and
-[implementation](../../docs/TASK-028_ACTION_GATES_IMPLEMENTATION.md).
+implementation.
 
 Historical pre-approval context:
 No guard schema, condition context, command transition or import policy is changed
@@ -82,3 +82,5 @@ guard validation, rejected-command no mutation/time/response, deterministic repl
 save/retry, genuine re-investigation, protected source import, unchanged old
 definitions and both GUI/programmatic command paths. No such checks were executed
 in this user-requested implementation-only step.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

@@ -21,7 +21,7 @@ import { endingDefinitionSchema, endingReferences } from '../scenario/ending.ts'
 import { evaluateCampaignCondition } from '../engine/campaign/conditions.ts';
 
 const read = (path: string) => parse(readFileSync(path, 'utf8'));
-const planned = read('.project-os/planning/TASK-031.approved-final-plans.yaml') as {
+const planned = read('authoring/campaign-1.0/TASK-031.approved-final-plans.yaml') as {
   assessmentActions: string[];
   serviceOrder: string[];
   initialErrors: number[];
@@ -39,15 +39,15 @@ const planned = read('.project-os/planning/TASK-031.approved-final-plans.yaml') 
     evidence: string[];
   }[];
 };
-const bindings = read('.project-os/planning/TASK-031.blackout-action-bindings.yaml');
+const bindings = read('authoring/campaign-1.0/TASK-031.blackout-action-bindings.yaml');
 function fixture() {
   const file = 'src/scenario/data/full-campaign/incidents/inc-026.yaml';
   const result = validateVersionedScenarioCatalog([{ file, source: readFileSync(file, 'utf8') }]);
   if (!result.success) throw new Error(JSON.stringify(result.diagnostics));
   const s = result.scenarios.get('INC-026@1.0.0')!;
-  const baseline = read('.project-os/planning/TASK-028.model-bindings.yaml');
+  const baseline = read('authoring/campaign-1.0/TASK-028.model-bindings.yaml');
   const fragments = [28, 29, 30, 31].map((n) =>
-    read('.project-os/planning/TASK-0' + n + '.action-bindings.yaml'),
+    read('authoring/campaign-1.0/TASK-0' + n + '.action-bindings.yaml'),
   );
   // Structural/predicate unit authority only. No complete models/Acts/package/run.
   const d = {
@@ -99,7 +99,7 @@ const commands = (path: string[]) =>
 const rating = (rate: number) => (rate <= 1 ? 'OPERATIONAL' : rate <= 20 ? 'DEGRADED' : 'CRITICAL');
 describe('DEC-052 BLACKOUT final plans — deferred QA', () => {
   it('composes all 26 exact Scenario/model rows without a production package or ending authority', () => {
-    const root = '.project-os/planning/M5/models/';
+    const root = 'authoring/campaign-1.0/models/';
     const sources = Array.from({ length: 26 }, (_, i) => {
       const file =
         'src/scenario/data/full-campaign/incidents/inc-' + String(i + 1).padStart(3, '0') + '.yaml';
@@ -108,10 +108,10 @@ describe('DEC-052 BLACKOUT final plans — deferred QA', () => {
     const checked = validateVersionedScenarioCatalog(sources);
     if (!checked.success) throw new Error(JSON.stringify(checked.diagnostics));
     const fragments = [
-      read('.project-os/planning/TASK-030.model-bindings.yaml'),
-      read('.project-os/planning/TASK-031.model-bindings.yaml'),
-      read('.project-os/planning/TASK-031.crisis-model-bindings.yaml'),
-      read('.project-os/planning/TASK-031.blackout-model-bindings.yaml'),
+      read('authoring/campaign-1.0/TASK-030.model-bindings.yaml'),
+      read('authoring/campaign-1.0/TASK-031.model-bindings.yaml'),
+      read('authoring/campaign-1.0/TASK-031.crisis-model-bindings.yaml'),
+      read('authoring/campaign-1.0/TASK-031.blackout-model-bindings.yaml'),
     ];
     const baseBehavior = read(root + 'orpheus-player-behavior.yaml');
     const basePrediction = read(root + 'orpheus-player-prediction.yaml');
@@ -128,7 +128,7 @@ describe('DEC-052 BLACKOUT final plans — deferred QA', () => {
       contentVersion: s.contentVersion,
     }));
     const refs = [28, 29, 30, 31].flatMap(
-      (n) => read('.project-os/planning/TASK-0' + n + '.action-bindings.yaml').references,
+      (n) => read('authoring/campaign-1.0/TASK-0' + n + '.action-bindings.yaml').references,
     );
     expect(validateBehaviorDefinition(b, allowed, checked.scenarios)).toEqual([]);
     expect(validatePredictionDefinition(p, allowed, checked.scenarios, refs)).toEqual([]);
@@ -277,8 +277,8 @@ describe('DEC-052 BLACKOUT final plans — deferred QA', () => {
   });
   it('declares operational behavior and explicitly unsupported final prediction, not guessed confidence', () => {
     const { s, catalog } = fixture(),
-      rows = read('.project-os/planning/TASK-031.blackout-model-bindings.yaml');
-    const root = '.project-os/planning/M5/models/';
+      rows = read('authoring/campaign-1.0/TASK-031.blackout-model-bindings.yaml');
+    const root = 'authoring/campaign-1.0/models/';
     const b = behaviorDefinitionSchema.parse({
       ...read(root + 'orpheus-player-behavior.yaml'),
       scenarios: rows.behavior_scenarios,
@@ -303,7 +303,7 @@ describe('DEC-052 BLACKOUT final plans — deferred QA', () => {
       ]);
   });
   it('authors exact final context without ending entries, thresholds, priority or a grant', () => {
-    const data = read('.project-os/planning/TASK-031.final-context-bindings.yaml');
+    const data = read('authoring/campaign-1.0/TASK-031.final-context-bindings.yaml');
     const mapping = endingDefinitionSchema.shape.finals.element.parse(data.final_mapping_fragment);
     expect(data.entries).toBeUndefined();
     const observations = Object.fromEntries(

@@ -12,11 +12,11 @@ import { validateVersionedScenarioCatalog } from '../scenario/catalog.ts';
 const read = (path: string) => parse(readFileSync(path, 'utf8'));
 describe('TASK-031 Observer model authoring — deferred QA', () => {
   it('composes explicit 24-Incident coverage without adding production admission or exposure', () => {
-    const root = '.project-os/planning/M5/models/';
+    const root = 'authoring/campaign-1.0/models/';
     const behavior = read(root + 'orpheus-player-behavior.yaml');
     const prediction = read(root + 'orpheus-player-prediction.yaml');
-    const board = read('.project-os/planning/TASK-030.model-bindings.yaml');
-    const observer = read('.project-os/planning/TASK-031.model-bindings.yaml');
+    const board = read('authoring/campaign-1.0/TASK-030.model-bindings.yaml');
+    const observer = read('authoring/campaign-1.0/TASK-031.model-bindings.yaml');
     const files = Array.from(
       { length: 24 },
       (_, i) =>
@@ -50,7 +50,7 @@ describe('TASK-031 Observer model authoring — deferred QA', () => {
       contentVersion: s.contentVersion,
     }));
     const references = [28, 29, 30, 31].flatMap(
-      (n) => read('.project-os/planning/TASK-0' + n + '.action-bindings.yaml').references,
+      (n) => read('authoring/campaign-1.0/TASK-0' + n + '.action-bindings.yaml').references,
     );
     expect(validateBehaviorDefinition(b, allowed, result.scenarios)).toEqual([]);
     expect(validatePredictionDefinition(p, allowed, result.scenarios, references)).toEqual([]);
@@ -67,8 +67,8 @@ describe('TASK-031 Observer model authoring — deferred QA', () => {
     expect(read(root + 'orpheus-player-opportunities.yaml').rules).toHaveLength(7);
   });
   it('keeps record investigations distinct from service interventions and causal support', () => {
-    const models = read('.project-os/planning/TASK-031.model-bindings.yaml');
-    const records = read('.project-os/planning/TASK-031.action-bindings.yaml');
+    const models = read('authoring/campaign-1.0/TASK-031.model-bindings.yaml');
+    const records = read('authoring/campaign-1.0/TASK-031.action-bindings.yaml');
     for (const gate of records.actionGates) {
       const row = models.behavior_scenarios.find(
         (r: { scenarioId: string }) => r.scenarioId === gate.incidentId,

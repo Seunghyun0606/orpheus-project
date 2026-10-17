@@ -6,10 +6,10 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: '.qa/task024/web',
+    outDir: '.qa/native/web',
     emptyOutDir: false,
     rolldownOptions: {
-      input: fileURLToPath(new URL('./qa/task024/index.html', import.meta.url)),
+      input: fileURLToPath(new URL('./qa/native/index.html', import.meta.url)),
     },
   },
 });

@@ -1,0 +1,85 @@
+id: TASK-018
+title: 'Define campaign intelligence contracts and compatibility decisions'
+role: architect
+milestone: M4
+priority: P0
+status: done
+
+objective: 'Produce a reviewed M4 domain, data, replay, and compatibility contract before implementing new persisted fields.'
+why: 'M3 discovery snapshots retain alternate runs but do not define campaign history, hidden values, or player behavior; deriving those implicitly would change save and gameplay semantics.'
+
+scope:
+  include:
+    - 'Inventory current incident saves, campaign discovery records, replay authorities, and accepted action/event inputs.'
+    - 'Specify campaign transition, replay identity, restart/alternate-run treatment, hidden-value, behavior, prediction, and ending interfaces as proposals.'
+    - 'Compare versioned persistence options and document legacy import, malformed/unknown-version handling, rollback, and verification fixtures.'
+    - 'Obtain explicit human decisions for material architecture or schema/migration choices before declaring the final contract approved.'
+  exclude:
+    - 'Implementing new runtime schemas, writes, migrations, or changing existing save keys.'
+    - 'Treating the M3 closure approval as approval of a new persistence architecture.'
+    - 'Changing bundled incident content or revealing later acts.'
+
+depends_on:
+  - 'TASK-017'
+specs:
+  - 'specs/architecture/campaign-definition-contract.md'
+  - 'specs/architecture/campaign-record-contract.md'
+  - 'specs/architecture/condition-evaluation.md'
+  - 'specs/architecture/campaign-intelligence-contract.md'
+  - 'specs/architecture/campaign-ledger-persistence.md'
+  - 'specs/architecture/campaign-effect-application.md'
+  - 'specs/architecture/player-behavior-rates.md'
+  - 'specs/architecture/ending-resolution.md'
+  - 'specs/architecture/player-prediction.md'
+  - 'specs/architecture/recommendation-responses.md'
+  - 'specs/architecture/preference-rates.md'
+  - 'specs/architecture/affiliation-rates.md'
+  - 'specs/feature/campaign-and-player-model.md'
+  - 'specs/architecture/system-architecture.md'
+  - 'specs/product/01-game-and-narrative-direction.md'
+  - 'docs/M4_IMPLEMENTATION_PLAN.md'
+relevant_files:
+  - 'src/engine/'
+  - 'src/persistence/'
+  - 'src/store/incident-session.ts'
+  - 'specs/architecture/'
+  - 'specs/feature/campaign-and-player-model.md'
+  - '.project-os/decisions/'
+active_decisions:
+  - '.project-os/decisions/DEC-001-data-driven-headless-domain.yaml'
+  - '.project-os/decisions/DEC-003-deterministic-local-first.yaml'
+  - '.project-os/decisions/DEC-005-versioned-incident-save-migration.yaml'
+  - '.project-os/decisions/DEC-006-separate-m3-campaign-progress.yaml'
+  - '.project-os/decisions/DEC-007-single-incident-slot-confirmation.yaml'
+  - '.project-os/decisions/DEC-008-m3-completion-m4-planning.yaml'
+  - '.project-os/decisions/DEC-009-separate-m4-campaign-ledger.yaml'
+  - '.project-os/decisions/DEC-010-append-official-campaign-attempts.yaml'
+  - '.project-os/decisions/DEC-011-explicit-legacy-discovery-adoption.yaml'
+  - '.project-os/decisions/DEC-012-confirmed-checkpoint-attempts.yaml'
+  - '.project-os/decisions/DEC-013-transactional-indexeddb-campaign-ledger.yaml'
+  - '.project-os/decisions/DEC-014-pooled-player-behavior-rates.yaml'
+  - '.project-os/decisions/DEC-015-once-per-run-campaign-effects.yaml'
+  - '.project-os/decisions/DEC-016-operational-intervention-rate-denominators.yaml'
+  - '.project-os/decisions/DEC-017-current-attempt-evidence-before-action.yaml'
+  - '.project-os/decisions/DEC-018-distinct-investigation-depth.yaml'
+  - '.project-os/decisions/DEC-019-unresolved-ending-ambiguity.yaml'
+  - '.project-os/decisions/DEC-020-empirical-context-action-prediction.yaml'
+  - '.project-os/decisions/DEC-021-action-based-recommendation-response.yaml'
+  - '.project-os/decisions/DEC-022-pooled-prediction-mismatch-rate.yaml'
+  - '.project-os/decisions/DEC-023-pooled-authored-preference-rates.yaml'
+  - '.project-os/decisions/DEC-024-explicit-affiliation-response-rates.yaml'
+  - '.project-os/decisions/DEC-025-strict-predicate-availability.yaml'
+  - '.project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml'
+
+acceptance:
+  - 'The contract maps all four M4 exit criteria to later tasks and defines input provenance and determinism boundaries.'
+  - 'Campaign history and alternate investigation snapshots are distinguished; repeated projection/import cannot silently count the same action multiple times.'
+  - 'Player-model denominators, unsupported behavior, prediction inputs, and ending ties/no-match behavior are explicitly specified or marked pending human decision.'
+  - 'Any material architecture or migration choice has a separate approved decision record; unresolved choices prevent dependent implementation.'
+  - 'Independent architecture review and acceptance QA check the proposal against active decisions and legacy fixtures.'
+verification:
+  - 'Review the contract and references against source, active decisions, and M4 acceptance; run projectctl doctor.'
+  - 'Request independent review and QA; stop at the human gate before material decisions.'
+
+human_gate: false
+risk: high

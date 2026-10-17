@@ -7,7 +7,7 @@ import { scenarioSchema } from '../scenario/schema.ts';
 import { createIncidentState, executeCommand, replayCommands } from '../engine/index.ts';
 
 const contract = parse(
-  readFileSync('.project-os/planning/TASK-031.final-completion-bindings.yaml', 'utf8'),
+  readFileSync('authoring/campaign-1.0/TASK-031.final-completion-bindings.yaml', 'utf8'),
 );
 function fixture() {
   const s = structuredClone(inc001Scenario);

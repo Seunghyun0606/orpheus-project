@@ -8,7 +8,7 @@ explicit eligibility, model versions and ending entries/conditions/ranks. The
 pure resolver derives verified final state and newly accepted final-attempt actions
 from whole-record replay. It grants no flag and adds no operation or storage field.
 Old authorities are not rewritten or automatically connected. The
-[ending checkpoint](ending-resolution.md) and [developer report](../../docs/TASK-023_IMPLEMENTATION.md)
+[ending checkpoint](ending-resolution.md) and developer report
 describe the representation and original development tests. Final independent
 review/QA passed candidate `8f406b4`; distinct evidence evaluation accepted
 `f954a8f` and Project OS completed bounded TASK-023 on 2026-10-11.
@@ -38,7 +38,7 @@ result header and retain their individual pre-command context and source identit
 No opportunity, actual exposure acknowledgement or response variant is implemented by
 this checkpoint. Querying results cannot provide recommendation acceptance or prediction
 deviation observations. No production mappings, UI, old-save rewrite or native verification
-were introduced. [TASK-022](../../docs/TASK-022_IMPLEMENTATION.md) remains a developer
+were introduced. TASK-022 remains a developer
 implementation with final independent review/QA and distinct evaluation PASS under
 DEC-031. Project OS completed the bounded task on 2026-10-11.
 
@@ -57,7 +57,7 @@ records unchanged. Schema/formula version 1 supports explicit action classificat
 immediate/uniquely attributable timer observations, required relevance/freshness
 conditions and strict registered pre-action context. No opportunity/exposure variants,
 production mappings, automatic model attachment or storage migration are introduced.
-See [candidate and limitations](../../docs/TASK-021_IMPLEMENTATION.md). Independent
+See candidate and limitations. Independent
 TASK-021 review/QA passed final candidate `895a05b`; a distinct evaluator accepted
 the evidence and Project OS completed TASK-021 on 2026-10-11.
 
@@ -254,3 +254,5 @@ in new immutable authorities. Existing v1 definitions retain their exact shape.
 The concrete [v2 candidate](campaign-presentation-v2.md) implements required
 authoring rather than lifecycle defaults; its isolated native evidence and final
 TASK-024/025 acceptance remain outstanding.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

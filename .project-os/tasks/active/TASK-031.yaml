@@ -1,0 +1,59 @@
+id: TASK-031
+title: 'Author OBSERVER and BLACKOUT with verified final context'
+role: developer
+milestone: M5
+priority: P1
+status: active
+
+objective: 'Implement approved Acts 8–9 discoveries and the multi-service final Incident without selecting an ending implicitly.'
+why: 'The final decision must reflect accumulated evidence, dependency and damage, not a scripted correct action.'
+
+scope:
+  include:
+    - 'Author framing/feedback-loop evidence and NULL admitting error after the required Board investigation.'
+    - 'Reveal experiment #99172, subject #4172 and investigation-path prediction while preserving empirical actual player feedback.'
+    - 'Author the final payment/identity/health/finance/logistics crisis and competing continuity/authority/restore goals.'
+    - 'Supply verified final Incident state/actions and reveal-gated context to the existing resolver.'
+  exclude:
+    - 'Bypass future material-choice gates, independent acceptance, or mandatory M4 verification before final M5 acceptance/release.'
+    - 'Force scripted confidence percentages or prediction deviation without actual ACK/response.'
+    - 'Grant a fallback/true ending or treat REWRITE as a real system/security reconfiguration.'
+
+depends_on:
+  - TASK-026
+specs:
+  - specs/product/02-full-campaign-blueprint.md
+  - specs/product/01-game-and-narrative-direction.md
+  - specs/architecture/player-prediction.md
+  - specs/architecture/campaign-presentation-v2.md
+  - specs/architecture/ending-resolution.md
+  - docs/M5_IMPLEMENTATION_PLAN.md
+relevant_files:
+  - src/scenario/
+  - src/tests/
+active_decisions:
+  - .project-os/decisions/DEC-052-blackout-final-plans.yaml
+  - .project-os/decisions/DEC-051-blackout-final-decision-completion.yaml
+  - .project-os/decisions/DEC-050-task031-implementation-before-task030-acceptance.yaml
+  - .project-os/decisions/DEC-042-full-campaign-content-version-baseline.yaml
+  - .project-os/decisions/DEC-043-campaign-action-prerequisites.yaml
+  - .project-os/decisions/DEC-039-m5-independent-verification-delegation.yaml
+  - .project-os/decisions/DEC-038-approved-full-campaign-blueprint.yaml
+  - .project-os/decisions/DEC-001-data-driven-headless-domain.yaml
+  - .project-os/decisions/DEC-003-deterministic-local-first.yaml
+  - .project-os/decisions/DEC-004-m3-incident-identity.yaml
+  - .project-os/decisions/DEC-026-reviewed-m4-contract-baseline.yaml
+  - .project-os/decisions/DEC-033-v2-presentation-response-records.yaml
+  - .project-os/decisions/DEC-037-m5-implementation-before-m4-verification.yaml
+
+acceptance:
+  - 'Observer reveals depend on approved Board/framing evidence and never silently discard responsibility.'
+  - 'Prediction feedback is deterministic with UNKNOWN/unavailable support handled explicitly.'
+  - 'The final Incident models actual tradeoffs and verified final context from accepted actions.'
+  - 'Absent gates, unavailable observations or ambiguous resolution cannot grant an ending.'
+verification:
+  - 'Replay final crisis alternatives and gated/absent-context failures.'
+  - 'Verify save/reload across presentation ACK, final response and unresolved resolution states.'
+
+human_gate: false
+risk: high

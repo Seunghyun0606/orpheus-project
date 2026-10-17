@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 import { authorRuntimePresentationV2 } from './runtime-presentation-v2.mjs';
-import { sourceInventory } from '../task034-support.mjs';
+import { sourceInventory } from '../release-support.mjs';
 import { inspectProductionCampaignSources } from '../../src/scenario/production-catalog.ts';
 import { fixtureOperation } from '../../src/tests/fixtures/opportunities.ts';
 import {
@@ -27,7 +27,7 @@ describe('approved additive production runtime authorities', () => {
   });
   it('preserves all 60 protected old byte hashes and authoring is exactly the permitted transformation', () => {
     const baseline = JSON.parse(
-      readFileSync('.project-os/planning/TASK-035.protected-content-baseline.json', 'utf8'),
+      readFileSync('authoring/campaign-1.0/TASK-035.protected-content-baseline.json', 'utf8'),
     );
     expect(baseline.files).toHaveLength(60);
     for (const entry of baseline.files) {

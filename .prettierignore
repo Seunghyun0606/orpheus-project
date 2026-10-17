@@ -10,3 +10,5 @@ PROJECT.md
 package-lock.json
 # Hash-pinned content authorities: byte-exact, never reformatted (DEC-042/070).
 src/scenario/data/full-campaign/
+# Frozen inputs that produced the pinned 1.0/1.1 campaign authorities.
+authoring/campaign-1.0/

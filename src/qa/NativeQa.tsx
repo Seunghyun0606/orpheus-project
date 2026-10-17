@@ -11,7 +11,7 @@ import '../ui/base.css';
 // This module is reachable only from the explicit, separately built QA HTML entry.
 // No legacy port, normal-app initialization, global fake IDB or production ending.
 const definition = opportunityCampaignFixture();
-definition.version = 'task024-native-fixture-v1';
+definition.version = 'native-qa-fixture-v1';
 for (const reference of definition.references) reference.version = definition.version;
 for (const branch of definition.branches!) branch.version = definition.version;
 definition.opportunities!.rules[0]!.reveal = {
@@ -24,7 +24,7 @@ const ledger = createCampaignLedger({
   definitions: new Map([[campaignDefinitionKey(definition.id, definition.version), definition]]),
   scenarios: campaignCatalog,
 });
-const pointerKey = 'orpheus.qa.task024.selected-run.v1';
+const pointerKey = 'orpheus.qa.native.selected-run.v1';
 type Session = ReturnType<typeof createCampaignSessionStore>;
 function session(runId: string) {
   return createCampaignSessionStore({ definition, catalog: campaignCatalog, ledger, runId });

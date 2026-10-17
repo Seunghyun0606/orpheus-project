@@ -1,9 +1,14 @@
+# Every gate below is an executable command; `npm run check` runs them all and
+# CI (.github/workflows/ci.yml) enforces them on every push and pull request.
 required:
-  build: false
-  lint: false
-  typecheck: false
-  unit_test: false
-  integration_test: false
+  build: true # npm run build
+  lint: true # npm run lint
+  format: true # npm run format:check
+  typecheck: true # npm run typecheck
+  unit_test: true # npm test
+  integration_test: true # npm test (replay, ledger and UI integration suites)
+  scenario_validation: true # npm run validate:scenarios
+  release_harness: true # npm run test:release-harness
   independent_review: true
 
 thresholds:

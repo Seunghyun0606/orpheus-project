@@ -106,4 +106,6 @@ These cover future APIs, not newly implemented tests in the current legacy suite
 Current MVP content, both legacy stores and production thresholds remain unchanged.
 Independent architecture review, acceptance QA and Project OS evaluation are
 required before TASK-018 completion. See the
-[review/QA execution request](../../.project-os/planning/TASK-018.review-qa-execution-request.yaml).
+review/QA execution request.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

@@ -41,13 +41,15 @@ interface Plan {
 const plans = parse(readFileSync('src/tests/fixtures/observer-campaign-replays.yaml', 'utf8')) as {
   cases: Plan[];
 };
-const bindings = parse(readFileSync('.project-os/planning/TASK-031.action-bindings.yaml', 'utf8'));
-const middle = parse(readFileSync('.project-os/planning/TASK-029.action-bindings.yaml', 'utf8'));
-const board = parse(readFileSync('.project-os/planning/TASK-030.action-bindings.yaml', 'utf8'));
-const earlier = parse(readFileSync('.project-os/planning/TASK-028.action-bindings.yaml', 'utf8'));
-const baseline = parse(readFileSync('.project-os/planning/TASK-028.model-bindings.yaml', 'utf8'));
+const bindings = parse(
+  readFileSync('authoring/campaign-1.0/TASK-031.action-bindings.yaml', 'utf8'),
+);
+const middle = parse(readFileSync('authoring/campaign-1.0/TASK-029.action-bindings.yaml', 'utf8'));
+const board = parse(readFileSync('authoring/campaign-1.0/TASK-030.action-bindings.yaml', 'utf8'));
+const earlier = parse(readFileSync('authoring/campaign-1.0/TASK-028.action-bindings.yaml', 'utf8'));
+const baseline = parse(readFileSync('authoring/campaign-1.0/TASK-028.model-bindings.yaml', 'utf8'));
 const blueprint = parse(
-  readFileSync('.project-os/planning/TASK-026.campaign-blueprint.yaml', 'utf8'),
+  readFileSync('authoring/campaign-1.0/TASK-026.campaign-blueprint.yaml', 'utf8'),
 );
 function catalog() {
   const result = validateVersionedScenarioCatalog(

@@ -7,9 +7,9 @@ export default defineConfig({
     // Bound CPU contention while keeping independent test files in parallel.
     maxWorkers: 2,
     // Generated native QA Cargo/assets are not source test inputs.
-    // Node's native test runner owns this harness; npm run test:task034:harness
+    // Node's native test runner owns this harness; npm run test:release-harness
     // remains mandatory and independently logged, not silently omitted coverage.
-    exclude: [...configDefaults.exclude, '.qa/**', 'scripts/task034-harness.test.mjs'],
+    exclude: [...configDefaults.exclude, '.qa/**', 'scripts/release-harness.test.mjs'],
     environment: 'jsdom',
     setupFiles: ['./src/tests/setup.ts'],
   },

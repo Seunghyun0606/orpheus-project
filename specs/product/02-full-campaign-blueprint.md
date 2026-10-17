@@ -7,10 +7,10 @@ production schema/version selection, task acceptance or release approval.
 
 The exact approved Incident identities, causal sketches, contrasting paths,
 investigation surfaces and reveal graph are the
-[frozen candidate](../../.project-os/planning/TASK-026.campaign-blueprint.yaml)
+[frozen candidate](../../authoring/campaign-1.0/TASK-026.campaign-blueprint.yaml)
 at commit `cbdeba0`. Retain its bytes and historical pending-status strings;
 DEC-038 records their subsequent approval rather than rewriting that checkpoint.
-The [inventory and rationale](../../docs/TASK-026_CAMPAIGN_BLUEPRINT.md) distinguishes
+The [inventory and rationale](../../docs/CAMPAIGN_BLUEPRINT.md) distinguishes
 approved content from unimplemented architecture, balance and release choices.
 
 ## Approved allocation
@@ -61,3 +61,5 @@ initial values, numeric effects, ending balance and verification remain outstand
   PASS source candidate `66a019f`, with committed evidence `10ccb59`. TASK-027 has
   been claimed but requires its own concrete composition approval. M4/TASK-024/025
   verification remains mandatory before final M5 acceptance/release under DEC-037.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

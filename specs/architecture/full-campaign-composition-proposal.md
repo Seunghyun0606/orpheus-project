@@ -4,7 +4,7 @@ Status: **Option A approved through DEC-040; implementation candidate under revi
 The proposal at `4760bfc` is the immutable approval checkpoint. The following
 opening describes its pre-approval state, not a current prohibition on the approved
 implementation. Native verification and production balance/content decisions remain
-outstanding. See [implementation](../../docs/TASK-027_IMPLEMENTATION.md).
+outstanding. See implementation.
 
 Historical proposal context:
 TASK-026 passed distinct independent evaluation and is complete through Project OS.
@@ -157,3 +157,5 @@ store. It does not approve actual production initial values/classifications, ver
 numbers, ending balance, narrative text or release. Subsequent material findings
 still stop at their own gates. Option B retains the current code and requests a
 revised representation/entry proposal before implementation.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

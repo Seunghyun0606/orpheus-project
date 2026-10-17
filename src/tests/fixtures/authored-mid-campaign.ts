@@ -25,11 +25,11 @@ export function authoredMidFixture() {
   );
   if (!checked.success) throw new Error(JSON.stringify(checked.diagnostics));
   const catalog = checked.scenarios;
-  const earlier = read('.project-os/planning/TASK-028.action-bindings.yaml');
-  const mid = read('.project-os/planning/TASK-029.action-bindings.yaml');
-  const baseline = read('.project-os/planning/TASK-028.model-bindings.yaml');
-  const route = read('.project-os/planning/TASK-029.branch-bindings.yaml');
-  const modelRoot = '.project-os/planning/M5/models/';
+  const earlier = read('authoring/campaign-1.0/TASK-028.action-bindings.yaml');
+  const mid = read('authoring/campaign-1.0/TASK-029.action-bindings.yaml');
+  const baseline = read('authoring/campaign-1.0/TASK-028.model-bindings.yaml');
+  const route = read('authoring/campaign-1.0/TASK-029.branch-bindings.yaml');
+  const modelRoot = 'authoring/campaign-1.0/models/';
   const definition: CampaignDefinition = {
     schemaVersion: 1,
     id: 'TEST-ONLY-MID-AUTHORING',

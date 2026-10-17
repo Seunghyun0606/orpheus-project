@@ -14,7 +14,7 @@ Independent review and acceptance QA passed the isolated adapter, and Project OS
 accepted TASK-020 using an independently attributed evaluation. Only injected
 memory databases were exercised; actual browser/Tauri storage and UI publication
 remain unverified. See
-[implementation and limitations](../../docs/TASK-020_IMPLEMENTATION.md).
+implementation and limitations.
 
 The sections below retain the original TASK-018 review-draft wording for historical
 context. References there to pending review/physical names are superseded by
@@ -149,3 +149,5 @@ only after commit; injected tests alone do not prove WebView support.
 The detailed schema must be reviewed alongside the effect draft and pending model/ending
 contracts before dependent implementation. Do not evaluate TASK-018 as complete
 from this draft or from tests of the unchanged legacy adapters.
+
+_Links to process artifacts removed under DEC-070 were dropped; the originals remain at git tag `archive/pre-process-consolidation`._

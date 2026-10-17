@@ -18,7 +18,7 @@ import { validateCampaignDefinition, type CampaignDefinition } from '../scenario
 import { validateVersionedScenarioCatalog, scenarioVersionKey } from '../scenario/catalog.ts';
 import { fixtureOperation } from './fixtures/opportunities.ts';
 
-const root = '.project-os/planning/M5/models/';
+const root = 'authoring/campaign-1.0/models/';
 const read = (path: string): unknown => parse(readFileSync(path, 'utf8'));
 const cases = [
   {
@@ -54,7 +54,7 @@ function authored() {
   const extension = z
     .object({ rules_extension: opportunityDefinitionSchema.shape.rules })
     .passthrough()
-    .parse(read('.project-os/planning/TASK-032.recommendation-bindings.yaml'));
+    .parse(read('authoring/campaign-1.0/TASK-032.recommendation-bindings.yaml'));
   return { base, rules: extension.rules_extension };
 }
 
@@ -77,11 +77,11 @@ function fixture(options: { act?: number; known?: boolean } = {}) {
   const board = z
     .object({ behavior_scenarios: behaviorDefinitionSchema.shape.scenarios })
     .passthrough()
-    .parse(read('.project-os/planning/TASK-030.model-bindings.yaml'));
+    .parse(read('authoring/campaign-1.0/TASK-030.model-bindings.yaml'));
   const crisis = z
     .object({ behavior_scenarios: behaviorDefinitionSchema.shape.scenarios })
     .passthrough()
-    .parse(read('.project-os/planning/TASK-031.crisis-model-bindings.yaml'));
+    .parse(read('authoring/campaign-1.0/TASK-031.crisis-model-bindings.yaml'));
   const behavior = behaviorDefinitionSchema.parse({
     ...baseBehavior,
     id: 'TEST-ONLY-RECOMMENDATION-BEHAVIOR',

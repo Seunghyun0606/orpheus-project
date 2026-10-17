@@ -145,13 +145,11 @@ export function authorFullCampaign(readPlanning, readContent, manifest) {
       contentVersion: view.contentVersion,
     });
   }
-  const behavior = structuredClone(readPlanning('M5/models/orpheus-player-behavior.yaml'));
+  const behavior = structuredClone(readPlanning('models/orpheus-player-behavior.yaml'));
   behavior.scenarios.push(...extensions.flatMap((e) => e.behavior_scenarios ?? []));
-  const prediction = structuredClone(readPlanning('M5/models/orpheus-player-prediction.yaml'));
+  const prediction = structuredClone(readPlanning('models/orpheus-player-prediction.yaml'));
   prediction.scenarios.push(...extensions.flatMap((e) => e.prediction_scenarios ?? []));
-  const opportunities = structuredClone(
-    readPlanning('M5/models/orpheus-player-opportunities.yaml'),
-  );
+  const opportunities = structuredClone(readPlanning('models/orpheus-player-opportunities.yaml'));
   opportunities.rules.push(
     ...readPlanning('TASK-032.recommendation-bindings.yaml').rules_extension,
   );
@@ -180,7 +178,7 @@ export function authorFullCampaign(readPlanning, readContent, manifest) {
     behavior,
     prediction,
     opportunities,
-    endings: structuredClone(readPlanning('M5/models/orpheus-full-campaign-endings.yaml')),
+    endings: structuredClone(readPlanning('models/orpheus-full-campaign-endings.yaml')),
   };
   return {
     definition,

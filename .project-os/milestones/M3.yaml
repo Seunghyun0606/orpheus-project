@@ -22,7 +22,7 @@ completion_evidence:
   - .project-os/tasks/results/TASK-017.review.yaml
   - .project-os/tasks/results/TASK-017.qa.yaml
   - docs/M3_QA_EVIDENCE.md
-  - docs/TASK-017_NATIVE_QA.md
+  - archive/pre-process-consolidation:docs/TASK-017_NATIVE_QA.md  # git tag
 completion_approved_at: '2026-10-09'
 completion_decision: .project-os/decisions/DEC-008-m3-completion-m4-planning.yaml
 human_gate:

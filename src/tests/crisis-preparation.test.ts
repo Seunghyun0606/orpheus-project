@@ -19,7 +19,7 @@ import {
 
 const read = (path: string) => parse(readFileSync(path, 'utf8'));
 const plan = read('src/tests/fixtures/crisis-preparation-replays.yaml');
-const bindings = read('.project-os/planning/TASK-031.crisis-preparation-bindings.yaml');
+const bindings = read('authoring/campaign-1.0/TASK-031.crisis-preparation-bindings.yaml');
 function fixture() {
   const file = 'src/scenario/data/full-campaign/incidents/inc-025.yaml';
   const result = validateVersionedScenarioCatalog([{ file, source: readFileSync(file, 'utf8') }]);
@@ -27,9 +27,9 @@ function fixture() {
   const scenario = result.scenarios.get('INC-025@1.0.0')!;
   // Isolated structural guard authority only, not a complete v2 campaign.
   const d = {
-    ...read('.project-os/planning/TASK-028.model-bindings.yaml').definition_header_fragment,
-    references: [read('.project-os/planning/TASK-028.action-bindings.yaml').references[0]],
-    initial: read('.project-os/planning/TASK-028.model-bindings.yaml').initial_fragment,
+    ...read('authoring/campaign-1.0/TASK-028.model-bindings.yaml').definition_header_fragment,
+    references: [read('authoring/campaign-1.0/TASK-028.action-bindings.yaml').references[0]],
+    initial: read('authoring/campaign-1.0/TASK-028.model-bindings.yaml').initial_fragment,
     acts: [],
     incidents: [
       { id: scenario.id, scenarioId: scenario.id, contentVersion: scenario.contentVersion, act: 9 },
@@ -44,8 +44,8 @@ function fixture() {
 describe('TASK-031 crisis preparation — deferred QA', () => {
   it('declares explicit regional model rows without guidance or authority-receipt support', () => {
     const { scenario: s, catalog } = fixture();
-    const rows = read('.project-os/planning/TASK-031.crisis-model-bindings.yaml');
-    const root = '.project-os/planning/M5/models/';
+    const rows = read('authoring/campaign-1.0/TASK-031.crisis-model-bindings.yaml');
+    const root = 'authoring/campaign-1.0/models/';
     const behavior = behaviorDefinitionSchema.parse({
       ...read(root + 'orpheus-player-behavior.yaml'),
       scenarios: rows.behavior_scenarios,

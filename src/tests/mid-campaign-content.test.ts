@@ -41,11 +41,13 @@ interface Plan {
 const plans = parse(readFileSync('src/tests/fixtures/mid-campaign-replays.yaml', 'utf8')) as {
   cases: Plan[];
 };
-const bindings = parse(readFileSync('.project-os/planning/TASK-029.action-bindings.yaml', 'utf8'));
-const earlier = parse(readFileSync('.project-os/planning/TASK-028.action-bindings.yaml', 'utf8'));
-const baseline = parse(readFileSync('.project-os/planning/TASK-028.model-bindings.yaml', 'utf8'));
+const bindings = parse(
+  readFileSync('authoring/campaign-1.0/TASK-029.action-bindings.yaml', 'utf8'),
+);
+const earlier = parse(readFileSync('authoring/campaign-1.0/TASK-028.action-bindings.yaml', 'utf8'));
+const baseline = parse(readFileSync('authoring/campaign-1.0/TASK-028.model-bindings.yaml', 'utf8'));
 const blueprint = parse(
-  readFileSync('.project-os/planning/TASK-026.campaign-blueprint.yaml', 'utf8'),
+  readFileSync('authoring/campaign-1.0/TASK-026.campaign-blueprint.yaml', 'utf8'),
 );
 function catalog() {
   const result = validateVersionedScenarioCatalog(
