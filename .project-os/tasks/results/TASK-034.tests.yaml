@@ -1,0 +1,23 @@
+task: TASK-034
+date: '2026-10-18'
+commit: 2c0cb413bb2c5a4fd55956ce4494bfdea25811d4
+files_changed: []
+critical_issues: 0
+blocking_issues: 0
+recorded_by: claude-dec070
+status: pass
+role: qa
+actor: claude-dec070
+summary: npm run benchmark (Node 24, fake IndexedDB, development only) p95 within
+  all five measured budgets - replay_ordinary 738/5000 ms, commit_ordinary 105/500
+  ms, replay_long 10704/15000 ms, load_long 181/20000 ms, commit_long 534/2500 ms.
+verification:
+  development_budgets: pass_5_of_5_measured
+  native_budgets: not_measured
+evidence:
+- scripts/benchmark.mjs
+limitations:
+- Development host measurements only; native memory, storage, cold start and installer
+  budgets remain pending.
+- Long ledger seeded with one stored record because fake-indexeddb retains every put.
+kind: test

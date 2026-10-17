@@ -1,0 +1,32 @@
+task: TASK-035
+date: '2026-10-18'
+commit: 2c0cb413bb2c5a4fd55956ce4494bfdea25811d4
+files_changed: []
+critical_issues: 0
+blocking_issues: 0
+recorded_by: claude-dec070
+status: pass
+role: qa
+actor: claude-dec070
+summary: DEC-070 automated gates on the review-fixes branch head. npm run check passes
+  (format, lint, typecheck, scenario validation 142 files, 63 test files / 755 tests,
+  release harness 5/5, web build). Includes whole-campaign 1.2.0 play through the
+  engine for a careful and a reckless profile with every offered final plan resolving
+  its ending.
+verification:
+  format: pass
+  lint: pass
+  typecheck: pass
+  scenario_validation: pass
+  application_tests: pass_755_of_755
+  release_harness: pass
+  web_build: pass
+  native_QA: not_run
+evidence:
+- scripts/authoring/campaign-1.2.test.mjs
+- .github/workflows/ci.yml
+limitations:
+- Automated self-run, not an independent reviewer or QA handoff.
+- No native desktop, installer, screen-reader or audio-device verification.
+- UI changes not inspected visually in a browser or WebView2.
+kind: test
