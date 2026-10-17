@@ -47,6 +47,8 @@ describe('INC-001 complete vertical slice', () => {
     await activate('Open Payment API logs');
     expect(screen.getByRole('heading', { name: 'Incident logs' })).toBeInTheDocument();
     expect(screen.getByText('CRITICAL')).toBeInTheDocument();
+    // Keyboard focus lands on the announced result instead of falling to <body>.
+    expect(screen.getByRole('region', { name: 'Observable results' })).toHaveFocus();
 
     await activate('Inspect PostgreSQL');
     await activate('Inspect database sessions');
@@ -85,6 +87,12 @@ describe('INC-001 complete vertical slice', () => {
       'Session saved locally.',
     );
     await activate('Restart incident session');
+    const confirm = screen.getByRole('alertdialog', { name: 'Restart this incident?' });
+    expect(within(confirm).getByRole('button', { name: 'Keep current response' })).toHaveFocus();
+    await user.keyboard('{Tab}');
+    expect(within(confirm).getByRole('button', { name: 'Restart from the pager' })).toHaveFocus();
+    await user.keyboard('{Enter}');
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
     expect(screen.getByTestId('elapsed-time')).toHaveTextContent('00:00');
     await activate('Load saved session');
     expect(screen.getByRole('heading', { name: 'Incident postmortem' })).toHaveFocus();

@@ -226,16 +226,6 @@ describe('explicit storage discovery and desktop boundary', () => {
     await f.store.getState().load();
     await f.store.getState().create();
     const before = canonicalJson(f.store.getState().run);
-    const original = IDBObjectStore.prototype.get;
-    let checks = 0;
-    // First read observes absence; the second sees the concurrent writer's run.
-    const get = vi.spyOn(IDBObjectStore.prototype, 'get').mockImplementation(function (
-      this: IDBObjectStore,
-      query,
-    ) {
-      if (query === 'fixture-run' && checks++ === 0) return original.call(this, 'not-yet-created');
-      return original.call(this, query);
-    });
     render(
       <FullCampaignEntry
         onBack={vi.fn()}
@@ -244,12 +234,30 @@ describe('explicit storage discovery and desktop boundary', () => {
         identity={() => 'fixture-run'}
       />,
     );
-    await user.click(
-      screen.getByRole('button', { name: 'Inspect campaign packages and saved runs' }),
-    );
-    await user.click(await screen.findByRole('button', { name: /Create campaign/ }));
+    await user.click(screen.getByRole('button', { name: 'Open campaign files' }));
+    const create = await screen.findByRole('button', { name: 'New campaign' });
+    // Saved runs are summarised by an explicit read-only discovery pass.
+    const resume = await screen.findByRole('button', { name: 'Continue' });
+    expect(resume).toHaveAccessibleDescription(/Act 6 — HUMAN SYSTEM · 0 incidents closed/);
+    expect(resume).not.toHaveTextContent('fixture-run');
+    await waitFor(() => expect(create).toBeEnabled());
+    // Discovery itself reads saved runs (read-only) to describe them, so the race
+    // is armed only afterwards: the first creation read observes absence and the
+    // second sees the concurrent writer's run.
+    const original = IDBObjectStore.prototype.get;
+    let checks = 0;
+    const get = vi.spyOn(IDBObjectStore.prototype, 'get').mockImplementation(function (
+      this: IDBObjectStore,
+      query,
+    ) {
+      if (query === 'fixture-run' && checks++ === 0) return original.call(this, 'not-yet-created');
+      return original.call(this, query);
+    });
+    await user.click(create);
     expect(await screen.findByRole('alert')).toHaveTextContent('New run identity already exists');
-    expect(screen.queryByText('Campaign desk')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('main', { name: 'Campaign operations desktop' }),
+    ).not.toBeInTheDocument();
     get.mockRestore();
     const saved = await f.ledger.read('fixture-run');
     expect(saved.ok && canonicalJson(saved.run)).toBe(before);
@@ -327,7 +335,7 @@ describe('explicit storage discovery and desktop boundary', () => {
     const restart = screen.getByRole('button', { name: /^Restart Payment API/ });
     expect(restart).toBeDisabled();
     expect(f.store.getState().run!.opportunities!.acknowledgements).toHaveLength(0);
-    await user.click(screen.getByRole('button', { name: 'Confirm displayed guidance' }));
+    await user.click(screen.getByRole('button', { name: "I've read this" }));
     await waitFor(() => expect(restart).toBeEnabled());
     expect(f.store.getState().run!.opportunities!.acknowledgements).toHaveLength(1);
     await user.click(restart);
@@ -376,12 +384,11 @@ describe('explicit storage discovery and desktop boundary', () => {
     expect(loader).not.toHaveBeenCalled();
     expect(screen.getByRole('button', { name: 'Start INC-001' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Full campaign' }));
+    const files = await screen.findByRole('button', { name: 'Open campaign files' });
     expect(loader).not.toHaveBeenCalled();
-    await user.click(
-      screen.getByRole('button', { name: 'Inspect campaign packages and saved runs' }),
-    );
-    expect(await screen.findByText(/Full campaign content unavailable/)).toBeInTheDocument();
-    expect(screen.queryByText(/Create campaign/)).not.toBeInTheDocument();
+    await user.click(files);
+    expect(await screen.findByText(/The full campaign is not available/)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'New campaign' })).not.toBeInTheDocument();
   });
   it('renders escaped typed tools, gated bodies, postmortem and read-only archives', async () => {
     const user = userEvent.setup(),
@@ -392,10 +399,10 @@ describe('explicit storage discovery and desktop boundary', () => {
     render(<CampaignDesk store={f.store} composition={f.composition} seed={1} onBack={vi.fn()} />);
     expect(screen.queryByText('Hidden fixture document')).not.toBeInTheDocument();
     const initial = f.store.getState().run!.revision;
-    await user.click(screen.getByRole('button', { name: /^Review attempt:/ }));
+    await user.click(screen.getByRole('button', { name: /^Review record:/ }));
     expect(screen.queryByRole('button', { name: /Restart Payment API/ })).not.toBeInTheDocument();
     expect(f.store.getState().run!.revision).toBe(initial);
-    await user.click(screen.getByRole('button', { name: 'Return to live attempt' }));
+    await user.click(screen.getByRole('button', { name: 'Back to current incident' }));
     for (const name of [
       'Open Payment API logs',
       'Inspect PostgreSQL',
@@ -441,18 +448,14 @@ describe('explicit storage discovery and desktop boundary', () => {
         identity={() => 'id-' + n++}
       />,
     );
-    await user.click(
-      screen.getByRole('button', { name: 'Inspect campaign packages and saved runs' }),
-    );
-    await user.click(await screen.findByRole('button', { name: /Create campaign/ }));
-    expect(
-      await screen.findByRole('button', { name: 'Retry pending operation' }),
-    ).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Open campaign files' }));
+    await user.click(await screen.findByRole('button', { name: 'New campaign' }));
+    expect(await screen.findByRole('button', { name: 'Retry save' })).toBeInTheDocument();
     const assigned = n;
     expect(screen.getByRole('button', { name: 'Back to incident desk' })).toBeDisabled();
     put.mockRestore();
-    await user.click(screen.getByRole('button', { name: 'Retry pending operation' }));
+    await user.click(screen.getByRole('button', { name: 'Retry save' }));
     expect(n).toBe(assigned);
-    expect(await screen.findByText('No pending operation')).toBeInTheDocument();
+    expect(await screen.findByText('All progress saved.')).toBeInTheDocument();
   });
 });

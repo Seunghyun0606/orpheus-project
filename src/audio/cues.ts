@@ -1,4 +1,5 @@
 import type { CampaignCommittedUpdate } from '../store/campaign-session.ts';
+import type { EngineEvent, RuntimeSignal } from '../engine/types.ts';
 export type AudioCue =
   'pager' | 'keyboard' | 'server_hum' | 'notification' | 'relay' | 'critical_alarm';
 export const cueText: Record<AudioCue, string> = {
@@ -40,27 +41,35 @@ export const tones: Record<AudioCue, readonly Tone[]> = {
     { frequency: 330, offset: 0.22, duration: 0.18, gain: 0.1, type: 'sine' },
   ],
 };
-export function committedCues(update: CampaignCommittedUpdate): AudioCue[] {
-  if (update.operation.kind === 'start') return ['pager'];
-  if (update.operation.kind !== 'command') return [];
+// Shared mapping from accepted engine events to presentation cues. Used by the
+// campaign ledger callback and the MVP incident flow alike; never a domain input.
+export function eventCues(
+  events: readonly EngineEvent[],
+  signals: Readonly<Record<string, RuntimeSignal>>,
+): AudioCue[] {
   const cues: AudioCue[] = [];
-  if (update.events.some((e) => e.type === 'action_completed')) cues.push('relay');
+  if (events.some((e) => e.type === 'action_completed')) cues.push('relay');
   if (
-    update.events.some((e) =>
+    events.some((e) =>
       ['evidence_revealed', 'narrative_triggered', 'war_room_message'].includes(e.type),
     )
   )
     cues.push('notification');
   if (
-    update.events.some(
+    events.some(
       (e) =>
         e.type === 'signal_changed' &&
         e.targetId &&
-        update.signals[e.targetId]?.revealed &&
+        signals[e.targetId]?.revealed &&
         e.value === 'CRITICAL' &&
         e.previousValue !== 'CRITICAL',
     )
   )
     cues.push('critical_alarm');
   return cues;
+}
+export function committedCues(update: CampaignCommittedUpdate): AudioCue[] {
+  if (update.operation.kind === 'start') return ['pager'];
+  if (update.operation.kind !== 'command') return [];
+  return eventCues(update.events, update.signals);
 }

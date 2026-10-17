@@ -20,17 +20,19 @@ it('does not open storage on mount and creates/restores only explicit fresh fixt
   await user.click(screen.getByRole('button', { name: 'Create fresh isolated fixture' }));
   expect(await screen.findByText('Fixture deviation samples: 0/0')).toBeVisible();
   expect(
-    screen.queryByRole('button', { name: 'Prepare guidance: prediction' }),
+    screen.queryByRole('button', { name: 'ORPHEUS has something for you — show it' }),
   ).not.toBeInTheDocument();
   const pointer = localStorage.getItem('orpheus.qa.native.selected-run.v1');
   expect(pointer).toMatch(/^qa024-/);
   expect(localStorage.getItem('orpheus.incident.v1')).toBe('legacy-sentinel');
-  await user.click(screen.getByRole('button', { name: 'Open Payment API logs (+30s)' }));
-  await user.click(await screen.findByRole('button', { name: 'Prepare guidance: prediction' }));
+  await user.click(screen.getByRole('button', { name: 'Open Payment API logs' }));
+  await user.click(
+    await screen.findByRole('button', { name: 'ORPHEUS has something for you — show it' }),
+  );
   expect(await screen.findByText('TEST CONTENT — empirical prediction')).toBeVisible();
-  await user.click(screen.getByRole('button', { name: 'Confirm displayed guidance' }));
-  expect(await screen.findByText('Display acknowledgement durably committed')).toBeVisible();
-  await user.click(screen.getByRole('button', { name: 'Restart Payment API (+60s)' }));
+  await user.click(screen.getByRole('button', { name: "I've read this" }));
+  expect(await screen.findByText(/Logged: you have read this message/)).toBeVisible();
+  await user.click(screen.getByRole('button', { name: 'Restart Payment API' }));
   expect(await screen.findByText('Fixture deviation samples: 0/1')).toBeVisible();
   first.unmount();
   render(<NativeQa />);

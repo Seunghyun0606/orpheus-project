@@ -52,7 +52,15 @@ test('review overlay keeps real entry, isolated profile, runtime skip and unsign
     readFileSync(new URL('../src-tauri/tauri.conf.json', import.meta.url), 'utf8'),
   );
   assert.equal(production.identifier, 'com.vantage.orpheus');
-  assert.equal(production.bundle.active, false);
+  // Production bundling is enabled with the repository icons and is never signed here.
+  assert.equal(production.bundle.active, true);
+  assert.equal(production.bundle.windows?.signCommand, undefined);
+  assert.equal(production.bundle.windows?.certificateThumbprint, undefined);
+  // A strict CSP is inherited by the review overlay (which declares no security block).
+  assert.equal(production.app.security.csp['default-src'], "'self'");
+  assert.equal(production.app.security.csp['script-src'], "'self'");
+  assert.equal(production.app.security.csp['style-src'], "'self'");
+  assert.doesNotMatch(JSON.stringify(production.app.security.csp), /https?:\/\/(?!ipc\.localhost)/);
   assert.equal(review.identifier, 'com.vantage.orpheus.review');
   assert.equal(review.app.windows[0].label, 'qa034');
   assert.equal(review.app.windows[0].dataDirectory, 'review-v1');

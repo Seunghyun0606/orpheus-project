@@ -1,6 +1,16 @@
 import { useEffect, useRef } from 'react';
 
-import type { PostmortemMetric, PostmortemReport, ScalarValue } from '../engine/index.ts';
+import type { PostmortemMetric, PostmortemReport } from '../engine/index.ts';
+import {
+  formatElapsed,
+  formatScalar,
+  formatSignalValue,
+  humanize,
+  signalDirectory,
+  signalLabel,
+  type SignalDirectory,
+  type SignalPresentation,
+} from './format.ts';
 
 export interface PostmortemProps {
   readonly report: PostmortemReport;
@@ -9,37 +19,16 @@ export interface PostmortemProps {
   readonly onSave: (trigger: HTMLButtonElement) => void;
   readonly onLoad: () => void;
   readonly onReturn: () => void;
-  readonly onRestart: () => void;
+  readonly onRestart: (trigger: HTMLButtonElement) => void;
   readonly onBackToDesk?: () => void;
   readonly reviewOnly?: boolean;
+  readonly signals?: readonly SignalPresentation[];
 }
 
-function formatElapsed(totalSeconds: number): string {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-}
-
-function humanize(id: string): string {
-  return id
-    .toLowerCase()
-    .split(/[_-]/)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
-}
-
-function formatValue(value: ScalarValue, refId?: string): string {
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-  if (typeof value === 'number' && (refId?.includes('RATE') || refId?.endsWith('_CPU'))) {
-    return `${value}%`;
-  }
-  return typeof value === 'number' ? value.toLocaleString('en-US') : value;
-}
-
-function formatMetric(metric: PostmortemMetric): string {
+function formatMetric(metric: PostmortemMetric, directory: SignalDirectory): string {
   return metric.source === 'elapsed_time'
     ? formatElapsed(Number(metric.value))
-    : formatValue(metric.value, metric.refId);
+    : formatSignalValue(metric.refId ?? '', metric.value, directory);
 }
 
 export function Postmortem({
@@ -52,8 +41,10 @@ export function Postmortem({
   onRestart,
   onBackToDesk,
   reviewOnly = false,
+  signals,
 }: PostmortemProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const directory = signalDirectory(signals);
 
   useEffect(() => {
     headingRef.current?.focus();
@@ -82,7 +73,7 @@ export function Postmortem({
             Return to incident record
           </button>
           {!reviewOnly && (
-            <button onClick={onRestart} type="button">
+            <button onClick={(event) => onRestart(event.currentTarget)} type="button">
               Restart incident
             </button>
           )}
@@ -102,7 +93,7 @@ export function Postmortem({
           {report.metrics.map((metric) => (
             <article key={metric.id}>
               <span>{metric.label}</span>
-              <strong>{formatMetric(metric)}</strong>
+              <strong>{formatMetric(metric, directory)}</strong>
               <small>{metric.source.replace('_', ' ')}</small>
             </article>
           ))}
@@ -175,14 +166,18 @@ export function Postmortem({
                   <ul>
                     {action.signalChanges.map((change, index) => (
                       <li key={`${change.signalId}-${index}`}>
-                        {humanize(change.signalId)}:{' '}
+                        {signalLabel(change.signalId, directory)}:{' '}
                         {change.previousValue === undefined
                           ? '—'
-                          : formatValue(change.previousValue, change.signalId)}{' '}
+                          : formatSignalValue(
+                              change.signalId,
+                              change.previousValue,
+                              directory,
+                            )}{' '}
                         →{' '}
                         {change.value === undefined
                           ? '—'
-                          : formatValue(change.value, change.signalId)}
+                          : formatSignalValue(change.signalId, change.value, directory)}
                       </li>
                     ))}
                   </ul>
@@ -194,8 +189,8 @@ export function Postmortem({
                         {humanize(change.resourceId)}:{' '}
                         {change.previousValue === undefined
                           ? '—'
-                          : formatValue(change.previousValue)}{' '}
-                        → {change.value === undefined ? '—' : formatValue(change.value)}
+                          : formatScalar(change.previousValue)}{' '}
+                        → {change.value === undefined ? '—' : formatScalar(change.value)}
                       </li>
                     ))}
                   </ul>

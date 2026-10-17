@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { useStore } from 'zustand';
 import type { StoreApi } from 'zustand/vanilla';
 
-import { computePostmortem, type EngineEvent, type ScalarValue } from '../engine/index.ts';
+import { computePostmortem } from '../engine/index.ts';
+import { eventCues, type AudioCue } from '../audio/cues.ts';
 import { CAMPAIGN_PROGRESS_KEY, createLocalSaveStorage } from '../persistence/index.ts';
 import { inc001Scenario, scenarioCatalog } from '../scenario/index.ts';
 import {
@@ -15,11 +16,19 @@ import {
   type IncidentSessionState,
 } from '../store/incident-session.ts';
 import { Postmortem } from './Postmortem.tsx';
-import { PresentationSettings } from './PresentationSettings.tsx';
+import { PresentationProvider, PresentationSettings } from './PresentationSettings.tsx';
+import { AudioControls, type CueSubscription } from './AudioControls.tsx';
+import { ModalDialog } from './ModalDialog.tsx';
+import { restoreFocus } from './focus.ts';
+import { buildIncidentLog } from './incident-log.ts';
 import {
-  readPresentationPreferences,
-  savePresentationPreferences,
-} from './presentation-settings.ts';
+  formatElapsed,
+  formatSignalValue,
+  humanize,
+  signalDirectory,
+  signalLabel,
+  type SignalDirectory,
+} from './format.ts';
 
 type ToolId = 'logs' | 'metrics' | 'database' | 'status' | 'evidence' | 'war-room';
 
@@ -43,88 +52,46 @@ export interface AppProps {
   reviewOnly?: boolean;
 }
 
-function humanize(id: string): string {
-  return id
-    .toLowerCase()
-    .split(/[_-]/)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
-}
-
-function formatElapsed(totalSeconds: number): string {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-}
-
-function formatSignalValue(id: string, value: ScalarValue): string {
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-  if (typeof value === 'number' && (id.includes('RATE') || id.endsWith('_CPU'))) {
-    return `${value}%`;
-  }
-  return typeof value === 'number' ? value.toLocaleString('en-US') : value;
-}
-
 function formatCondition(
   condition: IncidentSessionState['scenario']['actions'][number]['requirements'][number],
+  scenario: IncidentSessionState['scenario'],
+  directory: SignalDirectory,
 ): string {
   switch (condition.type) {
     case 'action_completed':
-      return `${humanize(condition.actionId)} completed`;
+      return `${scenario.actions.find(({ id }) => id === condition.actionId)?.title ?? humanize(condition.actionId)} completed`;
     case 'signal_revealed':
-      return `${humanize(condition.signalId)} observed`;
+      return `${signalLabel(condition.signalId, directory)} observed`;
     case 'evidence':
-      return `${humanize(condition.evidenceId)} collected`;
+      return `${scenario.evidence.find(({ id }) => id === condition.evidenceId)?.title ?? humanize(condition.evidenceId)} collected`;
     case 'mechanism_resolved':
-      return `${humanize(condition.mechanismId)} contained`;
+      return `${scenario.incident.failureMechanisms.find(({ id }) => id === condition.mechanismId)?.label ?? humanize(condition.mechanismId)} contained`;
     case 'flag':
       return `${humanize(condition.flagId)} is ${String(condition.value)}`;
     case 'resource':
       return `${humanize(condition.resourceId)} ${condition.operator} ${condition.value}`;
     case 'signal':
-      return `${humanize(condition.signalId)} ${condition.operator} ${String(condition.value)}`;
+      return `${signalLabel(condition.signalId, directory)} ${condition.operator} ${formatSignalValue(condition.signalId, condition.value, directory)}`;
   }
 }
 
-function describeEvent(event: EngineEvent): string {
-  switch (event.type) {
-    case 'action_completed':
-      return `Action completed: ${humanize(event.sourceId ?? 'action')}`;
-    case 'signal_changed':
-      return `${humanize(event.targetId ?? 'signal')} changed from ${String(event.previousValue)} to ${String(event.value)}`;
-    case 'signal_revealed':
-      return `New observation: ${humanize(event.targetId ?? 'signal')}`;
-    case 'action_unlocked':
-      return `Action available: ${humanize(event.targetId ?? 'action')}`;
-    case 'event_fired':
-      return `Scheduled condition fired: ${humanize(event.sourceId ?? 'event')}`;
-    case 'event_scheduled':
-      return `Condition scheduled: ${humanize(event.sourceId ?? 'event')}`;
-    case 'mechanism_resolved':
-      return `Underlying mechanism contained: ${humanize(event.targetId ?? 'mechanism')}`;
-    case 'resolution_reached':
-      return 'Root-cause resolution reached';
-    case 'completion_reached':
-      return 'Incident recovery state reached';
-    case 'narrative_triggered':
-      return `Log anomaly detected: ${humanize(event.sourceId ?? 'narrative')}`;
-    case 'war_room_message':
-      return `War Room message: ${humanize(event.targetId ?? 'message')}`;
-    default:
-      return humanize(event.type);
-  }
-}
-
+// Route the operator to the view where an action's result is observable. The
+// authored category decides; OBSERVE is the only category that spans two views
+// (logs vs telemetry), so it alone falls back to the authored title.
 function chooseTool(action: IncidentSessionState['scenario']['actions'][number]): ToolId {
-  if (action.category === 'DELEGATE' || action.category === 'COMMUNICATE') return 'war-room';
-  const text = `${action.id} ${action.title}`.toLowerCase();
-  if (text.includes('log')) return 'logs';
-  if (text.includes('metric')) return 'metrics';
-  if (action.category === 'DIAGNOSE' || action.category === 'INVESTIGATE') return 'database';
-  if (text.includes('database') || text.includes('postgres') || text.includes('session')) {
-    return 'database';
+  switch (action.category) {
+    case 'DELEGATE':
+    case 'COMMUNICATE':
+      return 'war-room';
+    case 'DIAGNOSE':
+    case 'INVESTIGATE':
+      return 'database';
+    case 'MITIGATE':
+    case 'MODIFY':
+      return 'status';
+    case 'OBSERVE':
+      return /\blogs?\b/i.test(action.title) ? 'logs' : 'metrics';
   }
-  return 'status';
 }
 
 function recoveryCopy(state: IncidentSessionState['incident']): {
@@ -163,17 +130,26 @@ function recoveryCopy(state: IncidentSessionState['incident']): {
   };
 }
 
-export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = false }: AppProps) {
-  const session = useStore(store);
-  const [presentationPreferences, setPresentationPreferences] = useState(
-    readPresentationPreferences,
+export function App(props: AppProps) {
+  return (
+    <PresentationProvider>
+      <IncidentScreen {...props} />
+    </PresentationProvider>
   );
+}
+
+type PendingDialog =
+  { kind: 'overwrite'; scenarioId: string; message: string } | { kind: 'restart' } | null;
+
+function IncidentScreen({
+  store = defaultSessionStore,
+  onBackToDesk,
+  reviewOnly = false,
+}: AppProps) {
+  const session = useStore(store);
   const [activeTool, setActiveTool] = useState<ToolId>('metrics');
   const [activeNarrativeId, setActiveNarrativeId] = useState<string | null>(null);
-  const [overwritePrompt, setOverwritePrompt] = useState<{
-    scenarioId: string;
-    message: string;
-  } | null>(null);
+  const [dialog, setDialog] = useState<PendingDialog>(null);
   const [viewMode, setViewMode] = useState<'incident' | 'postmortem'>(
     store.getState().incident.completionReached ? 'postmortem' : 'incident',
   );
@@ -181,9 +157,30 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
   const postmortemReturnRef = useRef<HTMLButtonElement>(null);
   const warRoomTabRef = useRef<HTMLButtonElement>(null);
   const confirmOverwriteRef = useRef<HTMLButtonElement>(null);
-  const saveTriggerRef = useRef<HTMLButtonElement>(null);
-  const hadOverwriteDialog = useRef(false);
+  const keepSessionRef = useRef<HTMLButtonElement>(null);
+  const resultRegionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  // Element to return to once a dialog/narrative closes, and a focus request
+  // that runs after the next commit (when `inert` has already been lifted).
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  const pendingFocus = useRef<(() => void) | null>(null);
+  const keyboardAudio = useRef<(() => void) | null>(null);
+  const cueListeners = useRef(new Set<(cues: readonly AudioCue[]) => void>());
+  const subscribeCues = useCallback<CueSubscription>((listener) => {
+    const listeners = cueListeners.current;
+    listeners.add(listener);
+    return () => {
+      listeners.delete(listener);
+    };
+  }, []);
+  const emitCues = (cues: readonly AudioCue[]) => {
+    if (cues.length > 0) for (const listener of cueListeners.current) listener(cues);
+  };
+
   const activeNarrative = session.scenario.narratives.find(({ id }) => id === activeNarrativeId);
+  const directory = signalDirectory(session.scenario.initialState.signals);
+  const serviceName = (id: string) =>
+    session.scenario.services.find((service) => service.id === id)?.name ?? humanize(id);
   const availableActions = selectAvailableActions(session);
   const revealedSignals = selectRevealedSignals(session);
   const recovery = recoveryCopy(session.incident);
@@ -193,38 +190,27 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
     const initial = session.scenario.initialState.signals.find((signal) => signal.id === id);
     return initial?.revealed === false;
   });
-  const recentEvents = session.incident.eventLog.slice(-8).reverse();
   const warRoom = selectWarRoom(session);
+  const logLines = buildIncidentLog(
+    session.scenario,
+    session.incident,
+    directory,
+    warRoom.messages,
+  );
+  const recentEvents = logLines
+    .filter(({ fromEvent }) => fromEvent)
+    .slice(-8)
+    .reverse();
   const campaignEvidence = selectCampaignEvidence(session);
   const campaignNarratives = selectCampaignNarratives(session);
   const latestWarRoomMessage = warRoom.messages.at(-1);
+  const blocking = activeNarrative !== undefined || dialog !== null;
 
   useEffect(() => {
-    const root = document.documentElement;
-    root.dataset.crtEffects = presentationPreferences.crtEffects ? 'on' : 'off';
-    root.dataset.motion = presentationPreferences.reducedAnimation ? 'reduce' : 'standard';
-    root.dataset.textScale = presentationPreferences.textScale;
-    savePresentationPreferences(presentationPreferences);
-    return () => {
-      delete root.dataset.crtEffects;
-      delete root.dataset.motion;
-      delete root.dataset.textScale;
-    };
-  }, [presentationPreferences]);
-
-  useEffect(() => {
-    if (activeNarrative !== undefined) narrativeContinueRef.current?.focus();
-  }, [activeNarrative]);
-
-  useEffect(() => {
-    if (overwritePrompt !== null) {
-      hadOverwriteDialog.current = true;
-      confirmOverwriteRef.current?.focus();
-    } else if (hadOverwriteDialog.current) {
-      saveTriggerRef.current?.focus();
-      hadOverwriteDialog.current = false;
-    }
-  }, [overwritePrompt]);
+    const request = pendingFocus.current;
+    pendingFocus.current = null;
+    request?.();
+  });
 
   useEffect(() => {
     if (
@@ -236,12 +222,18 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
     }
   }, [viewMode, session.incident.completionReached, activeNarrative]);
 
-  const performAction = (actionId: string) => {
+  const focusLater = (request: () => void) => {
+    pendingFocus.current = request;
+  };
+
+  const performAction = (actionId: string, trigger: HTMLButtonElement) => {
     const action = session.scenario.actions.find(({ id }) => id === actionId);
     const result = session.performAction(actionId);
     if (!result.ok) return;
+    emitCues(eventCues(result.events, result.state.signals));
     const narrativeEvent = result.events.find(({ type }) => type === 'narrative_triggered');
     if (narrativeEvent?.sourceId !== undefined) {
+      returnFocusRef.current = trigger;
       setActiveNarrativeId(narrativeEvent.sourceId);
       setActiveTool('logs');
     } else if (result.state.completionReached) {
@@ -249,8 +241,23 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
     } else if (action !== undefined) {
       const nextTool = chooseTool(action);
       setActiveTool(nextTool);
-      if (nextTool === 'war-room') warRoomTabRef.current?.focus();
+      // Delegation results arrive in the War Room; everything else is announced
+      // in the observable results region, so focus never falls back to <body>.
+      focusLater(() =>
+        nextTool === 'war-room' ? warRoomTabRef.current?.focus() : resultRegionRef.current?.focus(),
+      );
     }
+  };
+
+  const closeNarrative = () => {
+    setActiveNarrativeId(null);
+    if (session.incident.completionReached) {
+      setViewMode('postmortem');
+      return;
+    }
+    const trigger = returnFocusRef.current;
+    returnFocusRef.current = null;
+    focusLater(() => restoreFocus(trigger, resultRegionRef.current));
   };
 
   const loadSession = () => {
@@ -263,73 +270,97 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
 
   const restartSession = () => {
     session.restart();
+    emitCues(['pager']);
     setActiveNarrativeId(null);
     setActiveTool('metrics');
     setViewMode('incident');
   };
 
+  const closeDialog = () => {
+    setDialog(null);
+    const trigger = returnFocusRef.current;
+    returnFocusRef.current = null;
+    focusLater(() => restoreFocus(trigger, titleRef.current));
+  };
+
+  const requestRestart = (trigger: HTMLButtonElement) => {
+    returnFocusRef.current = trigger;
+    setDialog({ kind: 'restart' });
+  };
+
+  const confirmRestart = () => {
+    restartSession();
+    closeDialog();
+  };
+
   const requestSave = (trigger?: HTMLButtonElement) => {
-    if (trigger !== undefined) saveTriggerRef.current = trigger;
     const result = session.save();
     if (!result.ok && result.code === 'OVERWRITE_CONFIRMATION_REQUIRED') {
-      setOverwritePrompt(
-        result.existingScenarioId === undefined
-          ? null
-          : { scenarioId: result.existingScenarioId, message: result.message },
-      );
+      if (result.existingScenarioId === undefined) return;
+      if (trigger !== undefined) returnFocusRef.current = trigger;
+      setDialog({
+        kind: 'overwrite',
+        scenarioId: result.existingScenarioId,
+        message: result.message,
+      });
     }
   };
 
   const confirmOverwrite = () => {
-    if (overwritePrompt === null) return;
-    const result = session.save(overwritePrompt.scenarioId);
-    setOverwritePrompt(
+    if (dialog?.kind !== 'overwrite') return;
+    const result = session.save(dialog.scenarioId);
+    if (
       !result.ok &&
-        result.code === 'OVERWRITE_CONFIRMATION_REQUIRED' &&
-        result.existingScenarioId !== undefined
-        ? { scenarioId: result.existingScenarioId, message: result.message }
-        : null,
-    );
+      result.code === 'OVERWRITE_CONFIRMATION_REQUIRED' &&
+      result.existingScenarioId !== undefined
+    ) {
+      setDialog({
+        kind: 'overwrite',
+        scenarioId: result.existingScenarioId,
+        message: result.message,
+      });
+      return;
+    }
+    closeDialog();
   };
 
-  const overwriteDialog =
-    overwritePrompt === null ? null : (
-      <div className="narrative-overlay">
-        <section
-          aria-describedby="overwrite-description"
-          aria-labelledby="overwrite-title"
-          aria-modal="true"
-          className="narrative-dialog"
-          onKeyDown={(event) => {
-            if (event.key === 'Escape') setOverwritePrompt(null);
-            if (event.key === 'Tab') {
-              const buttons = event.currentTarget.querySelectorAll<HTMLButtonElement>('button');
-              const first = buttons[0];
-              const last = buttons[buttons.length - 1];
-              if (event.shiftKey && document.activeElement === first) {
-                event.preventDefault();
-                last?.focus();
-              } else if (!event.shiftKey && document.activeElement === last) {
-                event.preventDefault();
-                first?.focus();
-              }
-            }
-          }}
-          role="alertdialog"
-        >
-          <span className="narrative-channel">Single local save slot</span>
-          <h2 id="overwrite-title">Replace the local save?</h2>
-          <p id="overwrite-description">
-            {overwritePrompt.message} Recovered campaign evidence remains separate.
-          </p>
-          <button onClick={() => setOverwritePrompt(null)} type="button">
-            Keep existing save
-          </button>
-          <button ref={confirmOverwriteRef} onClick={confirmOverwrite} type="button">
-            Confirm replacement
-          </button>
-        </section>
-      </div>
+  const dialogView =
+    dialog === null ? null : dialog.kind === 'overwrite' ? (
+      <ModalDialog
+        channel="Single local save slot"
+        description={`${dialog.message} Recovered campaign evidence remains separate.`}
+        descriptionId="overwrite-description"
+        initialFocusRef={confirmOverwriteRef}
+        onEscape={closeDialog}
+        role="alertdialog"
+        title="Replace the local save?"
+        titleId="overwrite-title"
+      >
+        <button onClick={closeDialog} type="button">
+          Keep existing save
+        </button>
+        <button ref={confirmOverwriteRef} onClick={confirmOverwrite} type="button">
+          Confirm replacement
+        </button>
+      </ModalDialog>
+    ) : (
+      <ModalDialog
+        channel="Destructive action"
+        description="This response will be cleared and the incident will begin again from the pager. Your saved session and any evidence already recovered stay as they are."
+        descriptionId="restart-description"
+        initialFocusRef={keepSessionRef}
+        onEscape={closeDialog}
+        role="alertdialog"
+        title="Restart this incident?"
+        titleId="restart-title"
+      >
+        <button ref={keepSessionRef} onClick={closeDialog} type="button">
+          Keep current response
+        </button>
+        <button className="danger-button" onClick={confirmRestart} type="button">
+          Restart from the pager
+        </button>
+      </ModalDialog>
     );
 
   const handleToolKeyDown = (event: KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
@@ -359,14 +390,39 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
     tabs?.[nextIndex]?.focus();
   };
 
+  const onKeyDownCapture = (event: KeyboardEvent<HTMLElement>) => {
+    if (
+      reviewOnly ||
+      event.repeat ||
+      event.nativeEvent.isComposing ||
+      event.ctrlKey ||
+      event.altKey ||
+      event.metaKey ||
+      (event.target instanceof Element && event.target.closest('[data-audio-controls]'))
+    )
+      return;
+    if (event.key.length === 1 || event.key === 'Enter' || event.key === 'Backspace')
+      keyboardAudio.current?.();
+  };
+
+  const toolbar = (
+    <div className="screen-toolbar" role="group" aria-label="Screen settings">
+      <PresentationSettings />
+      <AudioControls
+        ambience={!session.incident.completionReached}
+        keyboard={keyboardAudio}
+        live={!reviewOnly}
+        subscribe={subscribeCues}
+        variant="compact"
+      />
+    </div>
+  );
+
   if (viewMode === 'postmortem' && session.incident.completionReached) {
     return (
       <>
-        <div inert={overwritePrompt !== null}>
-          <PresentationSettings
-            onChange={setPresentationPreferences}
-            preferences={presentationPreferences}
-          />
+        <div inert={dialog !== null}>
+          {toolbar}
           <Postmortem
             report={computePostmortem(session.scenario, session.incident)}
             persistenceNotice={session.persistenceNotice}
@@ -374,26 +430,21 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
             onSave={requestSave}
             onLoad={loadSession}
             onReturn={() => setViewMode('incident')}
-            onRestart={restartSession}
+            onRestart={requestRestart}
             onBackToDesk={onBackToDesk}
             reviewOnly={reviewOnly}
+            signals={session.scenario.initialState.signals}
           />
         </div>
-        {overwriteDialog}
+        {dialogView}
       </>
     );
   }
 
   return (
     <>
-      <main
-        className="operations-shell"
-        inert={activeNarrative !== undefined || overwritePrompt !== null}
-      >
-        <PresentationSettings
-          onChange={setPresentationPreferences}
-          preferences={presentationPreferences}
-        />
+      <main className="operations-shell" inert={blocking} onKeyDownCapture={onKeyDownCapture}>
+        {toolbar}
         <header className="incident-header">
           <div className="brand-lockup">
             <p className="eyebrow">VANTAGE SYSTEMS // PRODUCTION RELIABILITY</p>
@@ -408,7 +459,9 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
             <span className="severity-badge">{session.scenario.severity}</span>
             <div>
               <p className="incident-code">{session.scenario.id}</p>
-              <h1>{session.scenario.title}</h1>
+              <h1 ref={titleRef} tabIndex={-1}>
+                {session.scenario.title}
+              </h1>
             </div>
           </div>
           <dl className="header-stats">
@@ -532,19 +585,16 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
                       <span>Incident event stream</span>
                       <h2>Incident logs</h2>
                     </div>
-                    <span className="stream-state">● LIVE BUFFER</span>
+                    <span className="stream-state">● {logLines.length} ENTRIES</span>
                   </div>
-                  <div className="log-lines" aria-label="Incident log entries">
-                    <p>
-                      <time>00:00:00</time>
-                      <span className="log-level log-level--critical">CRITICAL</span>
-                      {session.scenario.incident.trigger.label}
-                    </p>
-                    {session.scenario.incident.symptoms.map((symptom) => (
-                      <p key={symptom.id}>
-                        <time>{formatElapsed(session.incident.elapsedSeconds)}</time>
-                        <span className="log-level">OBSERVE</span>
-                        {symptom.label}
+                  <div className="log-lines" role="log" aria-label="Incident log entries">
+                    {logLines.map((line) => (
+                      <p key={line.key}>
+                        <time>{formatElapsed(line.atSeconds)}</time>
+                        <span className={`log-level log-level--${line.level.toLowerCase()}`}>
+                          {line.level}
+                        </span>
+                        {line.text}
                       </p>
                     ))}
                   </div>
@@ -568,10 +618,10 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
                           <span>
                             {signal.serviceId === undefined
                               ? 'INCIDENT'
-                              : humanize(signal.serviceId)}
+                              : serviceName(signal.serviceId)}
                           </span>
-                          <strong>{formatSignalValue(signal.id, signal.value)}</strong>
-                          <p>{humanize(signal.id)}</p>
+                          <strong>{formatSignalValue(signal.id, signal.value, directory)}</strong>
+                          <p>{signalLabel(signal.id, directory)}</p>
                         </article>
                       ))}
                   </div>
@@ -608,12 +658,14 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
                       <tbody>
                         {newDiscoveries.map((signal) => (
                           <tr key={signal.id}>
-                            <th scope="row">{humanize(signal.id)}</th>
-                            <td data-label="Value">{formatSignalValue(signal.id, signal.value)}</td>
+                            <th scope="row">{signalLabel(signal.id, directory)}</th>
+                            <td data-label="Value">
+                              {formatSignalValue(signal.id, signal.value, directory)}
+                            </td>
                             <td data-label="Source">
                               {signal.serviceId === undefined
                                 ? 'Incident'
-                                : humanize(signal.serviceId)}
+                                : serviceName(signal.serviceId)}
                             </td>
                           </tr>
                         ))}
@@ -757,10 +809,15 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
               </p>
             )}
 
-            <section className="activity-strip" aria-labelledby="activity-title">
+            <section
+              aria-labelledby="activity-title"
+              className="activity-strip"
+              ref={resultRegionRef}
+              tabIndex={-1}
+            >
               <div className="activity-heading">
                 <div>
-                  <span>Engine event stream</span>
+                  <span>What just happened</span>
                   <h2 id="activity-title">Observable results</h2>
                 </div>
                 <span>{session.incident.eventLog.length} EVENTS</span>
@@ -768,11 +825,11 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
               {recentEvents.length === 0 ? (
                 <p className="activity-empty">Awaiting operator action.</p>
               ) : (
-                <ol className="activity-list" tabIndex={0} aria-label="Recent incident events">
-                  {recentEvents.map((event) => (
-                    <li key={event.sequence}>
-                      <time>{formatElapsed(event.atSeconds)}</time>
-                      <span>{describeEvent(event)}</span>
+                <ol className="activity-list" aria-label="Recent incident events">
+                  {recentEvents.map((line) => (
+                    <li key={line.key}>
+                      <time>{formatElapsed(line.atSeconds)}</time>
+                      <span>{line.text}</span>
                     </li>
                   ))}
                 </ol>
@@ -791,7 +848,7 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
             <p className="action-intro">
               {session.incident.completionReached
                 ? 'This completed incident record is read-only.'
-                : 'Only actions available in the current incident state are shown.'}
+                : 'Only actions available in the current incident state are shown. Each one moves the clock forward by its duration.'}
             </p>
 
             <div className="action-list">
@@ -803,7 +860,7 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
                   </div>
                   <button
                     disabled={session.incident.completionReached}
-                    onClick={() => performAction(action.id)}
+                    onClick={(event) => performAction(action.id, event.currentTarget)}
                     type="button"
                   >
                     {action.title}
@@ -811,7 +868,11 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
                   <p>
                     {action.requirements.length === 0
                       ? 'Available now'
-                      : action.requirements.map(formatCondition).join(' · ')}
+                      : action.requirements
+                          .map((condition) =>
+                            formatCondition(condition, session.scenario, directory),
+                          )
+                          .join(' · ')}
                   </p>
                 </article>
               ))}
@@ -851,7 +912,11 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
             )}
 
             {!reviewOnly && (
-              <button className="restart-button" onClick={restartSession} type="button">
+              <button
+                className="restart-button"
+                onClick={(event) => requestRestart(event.currentTarget)}
+                type="button"
+              >
                 Restart incident session
               </button>
             )}
@@ -859,31 +924,21 @@ export function App({ store = defaultSessionStore, onBackToDesk, reviewOnly = fa
         </div>
       </main>
       {activeNarrative !== undefined && (
-        <div className="narrative-overlay">
-          <section
-            aria-describedby="narrative-body"
-            aria-labelledby="narrative-title"
-            aria-modal="true"
-            className="narrative-dialog"
-            role="dialog"
-          >
-            <span className="narrative-channel">Incident log buffer // transient signal</span>
-            <h2 id="narrative-title">{activeNarrative.title}</h2>
-            <p id="narrative-body">{activeNarrative.body}</p>
-            <button
-              ref={narrativeContinueRef}
-              onClick={() => {
-                setActiveNarrativeId(null);
-                if (session.incident.completionReached) setViewMode('postmortem');
-              }}
-              type="button"
-            >
-              Continue incident
-            </button>
-          </section>
-        </div>
+        <ModalDialog
+          channel="Incident log buffer // transient signal"
+          description={activeNarrative.body}
+          descriptionId="narrative-body"
+          initialFocusRef={narrativeContinueRef}
+          role="dialog"
+          title={activeNarrative.title}
+          titleId="narrative-title"
+        >
+          <button ref={narrativeContinueRef} onClick={closeNarrative} type="button">
+            Continue incident
+          </button>
+        </ModalDialog>
       )}
-      {overwriteDialog}
+      {dialogView}
     </>
   );
 }

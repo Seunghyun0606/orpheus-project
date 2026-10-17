@@ -99,14 +99,17 @@ export function CampaignRuntimeNotices({
   }, [notice, queue, live]);
   if (!notice || !live) return null;
   return (
-    <section className="panel" aria-label="New recorded narrative" aria-live="polite">
+    <section
+      className="panel runtime-notice"
+      aria-label="New recorded narrative"
+      aria-live="polite"
+    >
       <h2>{notice.title}</h2>
       <p className="campaign-document-text">{notice.body}</p>
-      <p>
-        This notification changes no campaign state. The recorded text remains in investigation
-        history.
+      <p className="console-hint">
+        Filed in this incident&apos;s message history. Dismissing it changes nothing.
       </p>
-      <a href="#campaign-tools">Read recorded narrative history</a>{' '}
+      <a href="#campaign-tools">Go to the message history</a>{' '}
       <button type="button" onClick={() => queue.dismiss()}>
         Dismiss notification
       </button>

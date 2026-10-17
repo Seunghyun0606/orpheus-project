@@ -6,6 +6,7 @@ import type { SaveStorage } from '../persistence/index.ts';
 import { getScenario, inc001Scenario, scenarioCatalog } from '../scenario/index.ts';
 import { createIncidentSessionStore } from '../store/incident-session.ts';
 import { App } from './App.tsx';
+import { formatElapsed } from './format.ts';
 import { presentationStorageKey } from './presentation-settings.ts';
 
 afterEach(() => {
@@ -74,19 +75,28 @@ describe('INC-001 operations desktop', () => {
     expect(document.documentElement).toHaveAttribute('data-crt-effects', 'off');
     expect(document.documentElement).toHaveAttribute('data-motion', 'reduce');
     expect(document.documentElement).toHaveAttribute('data-text-scale', 'extra-large');
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Colour theme' }),
+      'high-contrast',
+    );
+    expect(document.documentElement).toHaveAttribute('data-theme', 'high-contrast');
     expect(JSON.parse(window.localStorage.getItem(presentationStorageKey) ?? '{}')).toEqual({
       crtEffects: false,
       reducedAnimation: true,
       textScale: 'extra-large',
+      colorTheme: 'high-contrast',
     });
 
+    // Settings are global: leaving a screen must not reset the document.
     unmount();
-    expect(document.documentElement).not.toHaveAttribute('data-text-scale');
+    expect(document.documentElement).toHaveAttribute('data-text-scale', 'extra-large');
+    expect(document.documentElement).toHaveAttribute('data-theme', 'high-contrast');
     renderIncident();
     await user.click(screen.getByText('Display settings'));
     expect(screen.getByRole('checkbox', { name: 'CRT effects' })).not.toBeChecked();
     expect(screen.getByRole('checkbox', { name: 'Reduce animation' })).toBeChecked();
     expect(screen.getByRole('combobox', { name: 'Text scale' })).toHaveValue('extra-large');
+    expect(screen.getByRole('combobox', { name: 'Colour theme' })).toHaveValue('high-contrast');
     expect(screen.getByRole('heading', { name: 'Connection Saturation' })).toBeInTheDocument();
   });
 
@@ -259,6 +269,8 @@ describe('INC-001 operations desktop', () => {
       'Session saved locally.',
     );
     await user.click(screen.getByRole('button', { name: 'Restart incident session' }));
+    const confirm = screen.getByRole('alertdialog', { name: 'Restart this incident?' });
+    await user.click(within(confirm).getByRole('button', { name: 'Restart from the pager' }));
     expect(screen.getByTestId('elapsed-time')).toHaveTextContent('00:00');
     await user.click(screen.getByRole('tab', { name: /Evidence/ }));
     expect(screen.getByText('No evidence recovered')).toBeInTheDocument();
@@ -332,5 +344,92 @@ describe('INC-001 operations desktop', () => {
 
     expect(screen.getByRole('alert')).toHaveTextContent('No saved session was found.');
     expect(screen.getByTestId('elapsed-time')).toHaveTextContent('01:00');
+  });
+
+  it('stamps every log line with its own event time and streams anomaly and War Room entries', async () => {
+    const scenario = getScenario('INC-002');
+    if (scenario === undefined) throw new Error('Missing INC-002');
+    const store = createIncidentSessionStore(scenario, 731, { read: () => null, write: () => {} });
+    const user = userEvent.setup();
+    render(<App store={store} />);
+
+    // Sam's delegated result (due at 120s) lands during the deployment comparison
+    // and completes the evidence set that surfaces the anomaly.
+    await perform(user, 'Ask Sam to inspect the verifier key set');
+    await perform(user, 'Open Identity API and verifier logs');
+    await perform(user, 'Trace a failed payment authorization');
+    await perform(user, 'Compare build 1847 with the stable deployment');
+    const hint = screen.getByRole('dialog', { name: 'Unattributed deployment annotation' });
+    await user.click(within(hint).getByRole('button', { name: 'Continue incident' }));
+
+    await user.click(screen.getByRole('tab', { name: /Logs/ }));
+    const log = screen.getByRole('log', { name: 'Incident log entries' });
+    const firstAction = store
+      .getState()
+      .incident.eventLog.find(
+        (event) => event.type === 'action_completed' && event.sourceId === 'OPEN_LOGS',
+      );
+    if (firstAction === undefined) throw new Error('Missing first action event');
+    const firstLine = within(log)
+      .getByText(/Completed: Open Identity API and verifier logs/)
+      .closest('p');
+    expect(firstLine).toHaveTextContent(formatElapsed(firstAction.atSeconds));
+    expect(store.getState().incident.elapsedSeconds).toBeGreaterThan(firstAction.atSeconds);
+    expect(firstLine).not.toHaveTextContent(
+      formatElapsed(store.getState().incident.elapsedSeconds),
+    );
+    expect(
+      within(log).getByText(/Log anomaly flagged: Unattributed deployment annotation/),
+    ).toBeInTheDocument();
+    expect(within(log).getAllByText('TEAM').length).toBeGreaterThan(0);
+  });
+
+  it('moves focus to the observable results after an action and back to the trigger after a narrative', async () => {
+    const { user } = renderIncident(733);
+    await perform(user, 'Open Payment API logs');
+    expect(screen.getByRole('region', { name: 'Observable results' })).toHaveFocus();
+    cleanup();
+
+    const scenario = getScenario('INC-002');
+    if (scenario === undefined) throw new Error('Missing INC-002');
+    const store = createIncidentSessionStore(scenario, 735, { read: () => null, write: () => {} });
+    render(<App store={store} />);
+    await perform(user, 'Ask Sam to inspect the verifier key set');
+    await perform(user, 'Open Identity API and verifier logs');
+    await perform(user, 'Trace a failed payment authorization');
+    const trigger = screen.getByRole('button', {
+      name: 'Compare build 1847 with the stable deployment',
+    });
+    await user.click(trigger);
+    const hint = screen.getByRole('dialog', { name: 'Unattributed deployment annotation' });
+    await user.click(within(hint).getByRole('button', { name: 'Continue incident' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    if (trigger.isConnected) expect(trigger).toHaveFocus();
+    else expect(screen.getByRole('region', { name: 'Observable results' })).toHaveFocus();
+  });
+
+  it('asks before restarting, and declining keeps the response and returns focus', async () => {
+    const { user } = renderIncident(737);
+    await perform(user, 'Inspect PostgreSQL');
+    const restart = screen.getByRole('button', { name: 'Restart incident session' });
+    await user.click(restart);
+    const dialog = screen.getByRole('alertdialog', { name: 'Restart this incident?' });
+    expect(within(dialog).getByRole('button', { name: 'Keep current response' })).toHaveFocus();
+    await user.keyboard('{Tab}');
+    expect(within(dialog).getByRole('button', { name: 'Restart from the pager' })).toHaveFocus();
+    await user.keyboard('{Tab}');
+    expect(within(dialog).getByRole('button', { name: 'Keep current response' })).toHaveFocus();
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+    expect(restart).toHaveFocus();
+    expect(screen.getByTestId('elapsed-time')).toHaveTextContent('01:00');
+  });
+
+  it('announces existing synthetic audio cues for actions while staying muted by default', async () => {
+    const { user } = renderIncident(739);
+    expect(screen.getByText(/Sound settings \(muted\)/)).toBeInTheDocument();
+    await perform(user, 'Open Payment API logs');
+    expect(screen.getByText(/Action completed and committed\./)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Enable / resume audio' })).toBeInTheDocument();
   });
 });

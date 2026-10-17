@@ -1,12 +1,13 @@
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { encodeSave, type SaveStorage } from '../persistence/index.ts';
 import { getScenario } from '../scenario/index.ts';
 import { createIncidentState } from '../engine/index.ts';
 import { AppShell } from './AppShell.tsx';
 import { presentationStorageKey } from './presentation-settings.ts';
+import { briefingStorageKey } from './briefing.ts';
 
 function memoryStorage(initial: string | null = null) {
   let value = initial;
@@ -33,7 +34,9 @@ function savedIncident(id: string, seed = 1234): string {
 
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
   window.localStorage.removeItem(presentationStorageKey);
+  window.localStorage.removeItem(briefingStorageKey);
 });
 
 const routes = [
@@ -278,5 +281,105 @@ describe('three-incident desktop', () => {
       scenarioId: 'INC-002',
       seed: 1002,
     });
+  });
+});
+
+describe('desk onboarding, global settings and destructive restarts', () => {
+  it('shows a first-run briefing that is remembered once dismissed', async () => {
+    const user = userEvent.setup();
+    const view = render(
+      <AppShell
+        incidentStorage={memoryStorage().storage}
+        progressStorage={memoryStorage().storage}
+      />,
+    );
+    const briefing = screen.getByRole('region', { name: 'How a shift works' });
+    expect(briefing).toHaveTextContent(/pager/i);
+    expect(briefing).toHaveTextContent(/Nothing is graded/);
+    expect(briefing).toHaveTextContent(/Training rotation/);
+    expect(briefing).toHaveTextContent(/Full campaign/);
+    await user.click(within(briefing).getByRole('button', { name: 'Got it — hide this briefing' }));
+    expect(screen.queryByRole('region', { name: 'How a shift works' })).not.toBeInTheDocument();
+    expect(window.localStorage.getItem(briefingStorageKey)).toBe('dismissed');
+    view.unmount();
+    render(
+      <AppShell
+        incidentStorage={memoryStorage().storage}
+        progressStorage={memoryStorage().storage}
+      />,
+    );
+    expect(screen.queryByRole('region', { name: 'How a shift works' })).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Show shift briefing' }));
+    expect(screen.getByRole('region', { name: 'How a shift works' })).toBeInTheDocument();
+  });
+
+  it('keeps the desk usable when local storage throws', async () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('blocked');
+    });
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('blocked');
+    });
+    const user = userEvent.setup();
+    render(
+      <AppShell
+        incidentStorage={memoryStorage().storage}
+        progressStorage={memoryStorage().storage}
+      />,
+    );
+    await user.click(screen.getByRole('button', { name: 'Got it — hide this briefing' }));
+    expect(screen.queryByRole('region', { name: 'How a shift works' })).not.toBeInTheDocument();
+  });
+
+  it('offers one display setting on the desk that carries into every incident screen', async () => {
+    const user = userEvent.setup();
+    render(
+      <AppShell
+        incidentStorage={memoryStorage().storage}
+        progressStorage={memoryStorage().storage}
+      />,
+    );
+    await user.click(screen.getByText('Display settings'));
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Text scale' }), 'large');
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Colour theme' }),
+      'high-contrast',
+    );
+    expect(document.documentElement).toHaveAttribute('data-text-scale', 'large');
+    await user.click(screen.getByRole('button', { name: 'Start INC-001' }));
+    expect(document.documentElement).toHaveAttribute('data-text-scale', 'large');
+    expect(document.documentElement).toHaveAttribute('data-theme', 'high-contrast');
+    await user.click(screen.getByText('Display settings'));
+    expect(screen.getByRole('combobox', { name: 'Text scale' })).toHaveValue('large');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Text scale' }), 'standard');
+    await user.click(screen.getByRole('button', { name: 'Incident desk' }));
+    expect(document.documentElement).toHaveAttribute('data-text-scale', 'standard');
+  });
+
+  it('asks before discarding an unfinished response from the desk', async () => {
+    const user = userEvent.setup();
+    render(
+      <AppShell
+        incidentStorage={memoryStorage().storage}
+        progressStorage={memoryStorage().storage}
+      />,
+    );
+    await user.click(screen.getByRole('button', { name: 'Start INC-001' }));
+    await user.click(screen.getByRole('button', { name: 'Open Payment API logs' }));
+    const elapsed = screen.getByTestId('elapsed-time').textContent;
+    await user.click(screen.getByRole('button', { name: 'Incident desk' }));
+    const restart = screen.getByRole('button', { name: 'Restart INC-001' });
+    await user.click(restart);
+    const dialog = screen.getByRole('alertdialog', { name: 'Restart Connection Saturation?' });
+    expect(within(dialog).getByRole('button', { name: 'Keep my progress' })).toHaveFocus();
+    await user.click(within(dialog).getByRole('button', { name: 'Keep my progress' }));
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+    expect(restart).toHaveFocus();
+    await user.click(screen.getByRole('button', { name: 'Continue INC-001' }));
+    expect(screen.getByTestId('elapsed-time')).toHaveTextContent(elapsed ?? '');
+    await user.click(screen.getByRole('button', { name: 'Incident desk' }));
+    await user.click(screen.getByRole('button', { name: 'Restart INC-001' }));
+    await user.click(screen.getByRole('button', { name: 'Restart from the pager' }));
+    expect(screen.getByTestId('elapsed-time')).toHaveTextContent('00:00');
   });
 });

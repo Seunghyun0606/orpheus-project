@@ -152,6 +152,9 @@ const signalSchema = z
     value: scalarSchema,
     revealed: z.boolean().default(false),
     serviceId: idSchema.optional(),
+    // Optional player-facing presentation. Absent fields keep older content valid.
+    label: z.string().min(1).optional(),
+    unit: z.string().min(1).max(16).optional(),
   })
   .strict();
 

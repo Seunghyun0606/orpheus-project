@@ -48,32 +48,34 @@ describe('opt-in campaign framework presentation, not native certification', () 
     const { store, ledger } = await setup();
     const user = userEvent.setup();
     const mounted = render(<CampaignDesk store={store} seed={1002} onBack={() => {}} />);
-    await user.click(screen.getByRole('button', { name: 'Prepare guidance: prediction' }));
+    await user.click(
+      screen.getByRole('button', { name: 'ORPHEUS has something for you — show it' }),
+    );
     expect(await screen.findByText('TEST CONTENT — empirical prediction')).toBeVisible();
-    expect(screen.getByText(/Predicted action: RESTART_API/)).toBeVisible();
+    expect(screen.getByText(/ORPHEUS forecast: Restart Payment API — \d+%/)).toBeVisible();
     expect(store.getState().run!.opportunities!.acknowledgements).toHaveLength(0);
-    expect(screen.getByRole('button', { name: 'Restart Payment API (+60s)' })).toBeDisabled();
-    await user.click(screen.getByRole('button', { name: 'Confirm displayed guidance' }));
+    expect(screen.getByRole('button', { name: 'Restart Payment API' })).toBeDisabled();
+    await user.click(screen.getByRole('button', { name: "I've read this" }));
     await waitFor(() =>
-      expect(screen.getByText('Display acknowledgement durably committed')).toBeVisible(),
+      expect(screen.getByText(/Logged: you have read this message/)).toBeVisible(),
     );
     expect(store.getState().run!.opportunities!.acknowledgements).toHaveLength(1);
     const persisted = await ledger.read(store.getState().run!.runId);
     expect(persisted).toMatchObject({ ok: true, run: store.getState().run });
     const beforeReview = canonicalJson(store.getState().run);
     for (let i = 0; i < 2; i++) {
-      await user.click(screen.getByRole('button', { name: 'Review attempt: training' }));
-      expect(
-        screen.queryByRole('button', { name: 'Confirm displayed guidance' }),
-      ).not.toBeInTheDocument();
-      expect(screen.getByText(/Read-only archive/)).toBeVisible();
-      await user.click(screen.getByRole('button', { name: 'Return to live attempt' }));
+      await user.click(
+        screen.getByRole('button', { name: 'Review record: Stage One (attempt 1)' }),
+      );
+      expect(screen.queryByRole('button', { name: "I've read this" })).not.toBeInTheDocument();
+      expect(screen.getByText(/You are reading an archived record/)).toBeVisible();
+      await user.click(screen.getByRole('button', { name: 'Back to current incident' }));
     }
     expect(canonicalJson(store.getState().run)).toBe(beforeReview);
     mounted.unmount();
     render(<CampaignDesk store={store} seed={1002} onBack={() => {}} />);
     expect(canonicalJson(store.getState().run)).toBe(beforeReview);
-    await user.click(screen.getByRole('button', { name: 'Restart Payment API (+60s)' }));
+    await user.click(screen.getByRole('button', { name: 'Restart Payment API' }));
     await waitFor(() =>
       expect(store.getState().run!.behavior!.metrics.predictionDeviation).toMatchObject({
         numerator: 0,
@@ -87,11 +89,13 @@ describe('opt-in campaign framework presentation, not native certification', () 
     const { store } = await setup();
     const user = userEvent.setup();
     render(<CampaignDesk store={store} seed={1002} onBack={() => {}} />);
-    await user.click(screen.getByRole('button', { name: 'Prepare guidance: prediction' }));
+    await user.click(
+      screen.getByRole('button', { name: 'ORPHEUS has something for you — show it' }),
+    );
     await screen.findByText('TEST CONTENT — empirical prediction');
     const revision = store.getState().run!.revision;
     const hidden = vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden');
-    await user.click(screen.getByRole('button', { name: 'Confirm displayed guidance' }));
+    await user.click(screen.getByRole('button', { name: "I've read this" }));
     expect(store.getState().run!.revision).toBe(revision);
     expect(store.getState().run!.opportunities!.acknowledgements).toHaveLength(0);
     hidden.mockRestore();
@@ -110,7 +114,7 @@ describe('opt-in campaign framework presentation, not native certification', () 
     render(<CampaignDesk store={gated} seed={1002} onBack={() => {}} />);
     expect(screen.queryByText('TEST CONTENT — empirical prediction')).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: 'Prepare guidance: prediction' }),
+      screen.queryByRole('button', { name: 'ORPHEUS has something for you — show it' }),
     ).not.toBeInTheDocument();
     expect(gated.getState().run!.opportunities!.preparations).toHaveLength(0);
   });
@@ -134,14 +138,16 @@ describe('opt-in campaign framework presentation, not native certification', () 
     await store.getState().load();
     const user = userEvent.setup();
     render(<CampaignDesk store={store} seed={1002} onBack={() => {}} />);
-    await user.click(screen.getByRole('button', { name: 'Prepare guidance: prediction' }));
+    await user.click(
+      screen.getByRole('button', { name: 'ORPHEUS has something for you — show it' }),
+    );
     await screen.findByText('TEST CONTENT — empirical prediction');
-    await user.click(screen.getByRole('button', { name: 'Confirm displayed guidance' }));
+    await user.click(screen.getByRole('button', { name: "I've read this" }));
     expect(store.getState().run!.opportunities!.acknowledgements).toHaveLength(0);
-    expect(screen.getByRole('button', { name: 'Restart Payment API (+60s)' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Restart Payment API' })).toBeDisabled();
     release();
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Restart Payment API (+60s)' })).toBeEnabled(),
+      expect(screen.getByRole('button', { name: 'Restart Payment API' })).toBeEnabled(),
     );
     expect(store.getState().run!.behavior!.metrics.predictionDeviation.denominator).toBe(0);
   });
@@ -155,10 +161,12 @@ describe('opt-in campaign framework presentation, not native certification', () 
     await user.selectOptions(screen.getByLabelText('Text scale'), 'extra-large');
     await user.click(screen.getByLabelText('Reduce animation'));
     await user.click(screen.getByLabelText('CRT effects'));
-    expect(screen.getByRole('main').style.fontSize).toBe('150%');
-    expect(screen.getByRole('main')).toHaveAttribute('data-reduced-animation', 'true');
-    expect(screen.getByRole('main')).toHaveAttribute('data-crt-effects', 'false');
-    expect(screen.getByText('No pending operation')).toBeVisible();
+    // One global setting: applied to the document, not a per-screen inline style.
+    expect(document.documentElement).toHaveAttribute('data-text-scale', 'extra-large');
+    expect(document.documentElement).toHaveAttribute('data-motion', 'reduce');
+    expect(document.documentElement).toHaveAttribute('data-crt-effects', 'off');
+    expect(screen.getByRole('main').style.fontSize).toBe('');
+    expect(screen.getByText('All progress saved.')).toBeVisible();
     expect(
       screen.queryByText(/AI_DEPENDENCY|CORPORATE_ALIGNMENT|story completion/i),
     ).not.toBeInTheDocument();
@@ -187,7 +195,7 @@ describe('opt-in campaign framework presentation, not native certification', () 
       />,
     );
     await user.click(screen.getByRole('button', { name: 'Open opt-in campaign framework' }));
-    await user.click(screen.getByRole('button', { name: 'Back to incident desk' }));
+    await user.click(await screen.findByRole('button', { name: 'Back to incident desk' }));
     expect(screen.getByRole('heading', { name: 'The Orpheus Project' })).toBeVisible();
     expect(legacyIncident.write).not.toHaveBeenCalled();
     expect(legacyProgress.write).not.toHaveBeenCalled();
@@ -224,10 +232,8 @@ describe('opt-in campaign framework presentation, not native certification', () 
     await store.getState().load();
     const before = canonicalJson(store.getState().run);
     render(<CampaignDesk store={store} seed={1002} onBack={() => {}} />);
-    await userEvent
-      .setup()
-      .click(screen.getByRole('button', { name: 'Query authored final context' }));
-    expect(screen.getByText('Resolved framework result: CONTINUITY')).toBeVisible();
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Read the ending' }));
+    expect(screen.getByText('Ending reached: CONTINUITY')).toBeVisible();
     expect(canonicalJson(store.getState().run)).toBe(before);
   });
 });

@@ -178,11 +178,11 @@ describe('campaign audio controls and accessible sections (deferred)', () => {
     ).toBeInTheDocument();
     await user.click(screen.getByText('Display settings', { selector: 'summary' }));
     await user.selectOptions(screen.getByRole('combobox', { name: 'Text scale' }), 'extra-large');
-    // Assert the actual React-authored percentage rather than jsdom's computed
-    // style normalization. This remains a presentation test, not native layout.
-    expect((container.querySelector('main') as HTMLElement).style.fontSize).toBe('150%');
+    // Text scale and motion are one global document setting (CSS scales the
+    // root font size). This remains a presentation test, not native layout.
+    expect(document.documentElement).toHaveAttribute('data-text-scale', 'extra-large');
     await user.click(screen.getByRole('checkbox', { name: 'Reduce animation' }));
-    expect(container.querySelector('main')).toHaveAttribute('data-reduced-animation', 'true');
+    expect(document.documentElement).toHaveAttribute('data-motion', 'reduce');
     expect(container.querySelector('#campaign-evidence')).toHaveAttribute('tabindex', '-1');
     expect(store.getState().run).toBe(before);
     expect(screen.getByRole('slider', { name: /Master volume/ })).toBeInTheDocument();
