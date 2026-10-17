@@ -16,7 +16,7 @@
     "build:review:web": "vite build --config vite.review.config.ts",
     "build:review": "node scripts/build-review-installer.mjs",
     "tools:nsis": "node scripts/acquire-nsis.mjs",
-    "benchmark": "node scripts/benchmark.mjs",
+    "benchmark": "node --max-old-space-size=16000 scripts/benchmark.mjs",
     "test:release-harness": "node --test scripts/release-harness.test.mjs",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",

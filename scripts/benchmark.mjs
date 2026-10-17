@@ -12,7 +12,13 @@ import {
   campaignAttemptHead,
   replayCampaign,
 } from '../src/engine/campaign/transitions.ts';
-import { createCampaignLedger, campaignDefinitionKey } from '../src/persistence/campaign-ledger.ts';
+import {
+  createCampaignLedger,
+  campaignDefinitionKey,
+  CAMPAIGN_DATABASE,
+  CAMPAIGN_DATABASE_VERSION,
+  CAMPAIGN_RUN_STORE,
+} from '../src/persistence/campaign-ledger.ts';
 import { createCampaignSessionStore } from '../src/store/campaign-session.ts';
 import { IDBFactory } from 'fake-indexeddb';
 import {
@@ -184,7 +190,7 @@ function routes() {
   result.set(crisis.scenarioId, crisis.recovery);
   return result;
 }
-async function seedLedger(p, run) {
+async function seedLedger(p, run, direct = false) {
   const factory = new IDBFactory();
   const ledger = createCampaignLedger(
     {
@@ -195,8 +201,28 @@ async function seedLedger(p, run) {
     },
     () => factory,
   );
+  if (direct) {
+    // fake-indexeddb retains a heap copy of every put, so committing a
+    // 1,000-operation history one transaction at a time exhausts Node's heap.
+    // Setup instead stores the finished record once; every measured read
+    // still verifies it by whole-history replay.
+    if (!(await ledger.read(run.runId)).ok) throw new Error('LEDGER_OPEN_FAILED');
+    await new Promise((resolve, reject) => {
+      const open = factory.open(CAMPAIGN_DATABASE, CAMPAIGN_DATABASE_VERSION);
+      open.onerror = () => reject(open.error);
+      open.onsuccess = () => {
+        const tx = open.result.transaction(CAMPAIGN_RUN_STORE, 'readwrite');
+        tx.objectStore(CAMPAIGN_RUN_STORE).put(run);
+        tx.oncomplete = () => {
+          open.result.close();
+          resolve();
+        };
+        tx.onabort = () => reject(tx.error);
+      };
+    });
+  }
   let prior = null;
-  for (const operation of run.operations) {
+  for (const operation of direct ? [] : run.operations) {
     const candidate = checked(prepareCampaignOperation(p.definition, p.catalog, prior, operation));
     checked(
       await ledger.commit({
@@ -290,7 +316,7 @@ try {
   await measure('replay_long', 15000, () =>
     checked(replayCampaign(p.definition, p.catalog, long.operations)),
   );
-  const longPort = await seedLedger(p, long);
+  const longPort = await seedLedger(p, long, true);
   await measure('load_long', 20000, async () => {
     if (!(await longPort.store.getState().load())) throw new Error(longPort.store.getState().error);
   });

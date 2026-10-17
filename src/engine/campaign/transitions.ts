@@ -601,7 +601,7 @@ function projectEvents(
         } else matched = true;
       }
       if (!matched) continue;
-      const semantics = canonicalJson(effect);
+      const semantics = canonicalJsonOf(effect);
       const receipt = next.effectReceipts.find((item) => item.effectId === effect.id);
       if (receipt) {
         if (receipt.semantics !== semantics) return failure('CONFLICTING_EFFECT', effect.id);
@@ -649,6 +649,32 @@ function projectEvents(
   return undefined;
 }
 
+// Copy-on-write successor of a verified run. Operations, receipts, associations
+// and every attempt the operation does not address are never mutated by apply,
+// so they are shared; everything apply may mutate is cloned.
+function cloneForApply(prior: CampaignRun, op: CampaignOperation): CampaignRun {
+  const touched = 'attemptId' in op ? op.attemptId : null;
+  const next: CampaignRun = {
+    ...prior,
+    operations: [...prior.operations],
+    attempts: prior.attempts.map((a) => (a.id === touched ? cloneCanonical(a) : a)),
+    projection: cloneCanonical(prior.projection),
+    effectReceipts: [...prior.effectReceipts],
+  };
+  // Behavior helpers mutate only the addressed attempt and replace metric entries.
+  if (prior.behavior)
+    next.behavior = {
+      ...prior.behavior,
+      attempts: prior.behavior.attempts.map((a) =>
+        a.attemptId === touched ? cloneCanonical(a) : a,
+      ),
+      metrics: cloneCanonical(prior.behavior.metrics),
+    };
+  if (prior.opportunities) next.opportunities = cloneCanonical(prior.opportunities);
+  if (prior.checkpointAssociations) next.checkpointAssociations = [...prior.checkpointAssociations];
+  return next;
+}
+
 function apply(
   definition: CampaignDefinition,
   catalog: ScenarioCatalog,
@@ -688,7 +714,7 @@ function apply(
       : failure('CONFLICTING_OPERATION');
   if (op.sequence !== prior.revision + 1 || op.kind === 'create')
     return failure('OUT_OF_ORDER_OPERATION');
-  const next = cloneCanonical(prior);
+  const next = cloneForApply(prior, op);
   next.revision = op.sequence;
   if (op.kind === 'prepare_opportunity' || op.kind === 'acknowledge_presentation') {
     const result = applyOpportunityOperation(definition, catalog, prior, next, op, (length) => {
