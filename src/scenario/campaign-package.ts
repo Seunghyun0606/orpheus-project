@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { parseDocument } from 'yaml';
-import { canonicalJson } from '../engine/campaign/canonical.ts';
+import { canonicalJsonOf, deepFreeze } from '../engine/campaign/canonical.ts';
 import {
   validateCampaignDefinition,
   campaignContentVersions,
@@ -51,13 +51,7 @@ export interface CampaignPackageRegistry {
 export type PackageResult =
   { ok: true; registry: CampaignPackageRegistry } | { ok: false; diagnostics: string[] };
 const key = (id: string, v: string) => JSON.stringify([id, v]);
-function freeze<T>(v: T): T {
-  if (v && typeof v === 'object') {
-    for (const child of Object.values(v)) freeze(child);
-    Object.freeze(v);
-  }
-  return v;
-}
+const freeze = deepFreeze;
 function copy(p: ResolvedCampaignPackage): ResolvedCampaignPackage {
   return {
     package: freeze(structuredClone(p.package)),
@@ -69,10 +63,22 @@ function copy(p: ResolvedCampaignPackage): ResolvedCampaignPackage {
       : {}),
   };
 }
-export function parsePackageYaml(source: string): unknown {
+const packageYamlCacheLimit = 128;
+const packageYamlCache = new Map<string, unknown>();
+// Shared, deeply frozen parse for read-only loaders; identical source text is
+// parsed once. Callers that may edit the value use parsePackageYaml instead.
+export function parseFrozenPackageYaml(source: string): unknown {
+  if (packageYamlCache.has(source)) return packageYamlCache.get(source);
   const doc = parseDocument(source, { uniqueKeys: true });
   if (doc.errors.length) throw new Error('INVALID_PACKAGE_YAML');
-  return doc.toJS();
+  const value = deepFreeze(doc.toJS() as unknown);
+  packageYamlCache.set(source, value);
+  if (packageYamlCache.size > packageYamlCacheLimit)
+    packageYamlCache.delete(packageYamlCache.keys().next().value!);
+  return value;
+}
+export function parsePackageYaml(source: string): unknown {
+  return structuredClone(parseFrozenPackageYaml(source));
 }
 export function createCampaignPackageRegistry(inputs: {
   packages: readonly unknown[];
@@ -83,13 +89,16 @@ export function createCampaignPackageRegistry(inputs: {
 }): PackageResult {
   const issues: string[] = [];
   try {
-    canonicalJson([
+    // Reject non-JSON inputs; frozen authorities reuse their memoized bytes.
+    for (const group of [
       inputs.packages,
       inputs.definitions,
-      [...inputs.scenarios],
+      [...inputs.scenarios.values()],
       inputs.presentations,
       inputs.endingPresentations ?? [],
-    ]);
+    ])
+      for (const item of group) canonicalJsonOf(item);
+    for (const key of inputs.scenarios.keys()) canonicalJsonOf(key);
     const definitions = new Map<string, CampaignDefinition>();
     for (const raw of inputs.definitions) {
       const result = validateCampaignDefinition(raw, inputs.scenarios);

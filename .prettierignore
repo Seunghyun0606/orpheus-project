@@ -8,3 +8,5 @@ src-tauri/gen/
 AGENTS.md
 PROJECT.md
 package-lock.json
+# Hash-pinned content authorities: byte-exact, never reformatted (DEC-042/070).
+src/scenario/data/full-campaign/

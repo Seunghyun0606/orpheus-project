@@ -1,4 +1,8 @@
+import { parse } from 'yaml';
+import { z } from 'zod';
+
 import { scenarioVersionKey, validateVersionedScenarioCatalog } from './catalog.ts';
+import migrationSource from './legacy-migrations.yaml?raw';
 import type { Scenario } from './schema.ts';
 
 // Frozen scenario versions are replay authorities for saves written before a
@@ -21,11 +25,9 @@ if (!result.success) {
 }
 const legacyScenarios = result.scenarios;
 
-const migrationTargets: Readonly<Record<string, readonly string[]>> = {
-  'INC-001': ['1.1.0'],
-  'INC-002': ['1.1.0', '1.2.0'],
-  'INC-003': ['1.1.0', '1.2.0'],
-};
+const migrationTargets: Readonly<Record<string, readonly string[]>> = z
+  .record(z.string().min(1), z.array(z.string().min(1)).min(1))
+  .parse(parse(migrationSource));
 
 export function getLegacyScenarioForMigration(
   scenarioId: string,

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import {
   createCampaignPackageRegistry,
   campaignPackageSchema,
-  parsePackageYaml,
+  parseFrozenPackageYaml,
   type PackageResult,
 } from './campaign-package.ts';
 import { validateVersionedScenarioCatalog } from './catalog.ts';
@@ -55,7 +55,7 @@ export function inspectProductionCampaignSources(
     const byFolder = (folder: string) =>
       Object.entries(sources)
         .filter(([p]) => p.includes('/' + folder + '/'))
-        .map(([, source]) => parsePackageYaml(source));
+        .map(([, source]) => parseFrozenPackageYaml(source));
     const packages = byFolder('packages'),
       definitions = byFolder('definitions'),
       presentations = byFolder('presentations'),

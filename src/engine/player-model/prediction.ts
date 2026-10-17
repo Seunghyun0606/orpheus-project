@@ -9,11 +9,14 @@ import {
 } from '../../scenario/prediction.ts';
 import { selectCampaignActionIds } from '../campaign/action-gates.ts';
 import { canonicalJson } from '../campaign/canonical.ts';
+import { observeIncident } from '../campaign/incident-observation.ts';
 import {
   campaignObservations,
   campaignActionContext,
   campaignAttemptHead,
   replayCampaign,
+  verifyCampaignRun,
+  campaignPrefixReader,
   type CampaignResult,
   type CampaignRun,
   type CampaignAttempt,
@@ -108,27 +111,8 @@ function observationsFor(
   return Object.fromEntries(
     mapping.references.map((ref) => {
       if (ref.source === 'campaign') return [ref.id, campaign[ref.key]!];
-      let value: number | boolean | string;
-      switch (ref.source) {
-        case 'elapsedSeconds':
-          value = pre.elapsedSeconds;
-          break;
-        case 'signal':
-          value = pre.signals[ref.key]!.value;
-          break;
-        case 'resource':
-          value = pre.resources[ref.key]!.value;
-          break;
-        case 'flag':
-          value = pre.flags[ref.key]!;
-          break;
-        case 'signal_revealed':
-          value = pre.signals[ref.key]!.revealed;
-          break;
-        case 'evidence':
-          value = pre.revealedEvidenceIds.includes(ref.key);
-          break;
-      }
+      const value = observeIncident(pre, ref);
+      if (value === undefined) throw new Error('Unsupported observation source');
       return [ref.id, { status: 'available', value }];
     }),
   );
@@ -164,12 +148,17 @@ export function getCampaignPrediction(
     const checked = validateCampaignDefinition(definition, catalog);
     if (!checked.ok) return checked;
     const d = checked.definition;
-    const verified = replayCampaign(d, catalog, run.operations);
-    if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
-      return fail('INVALID_PRIOR_RECORD');
-    // Work only with replay-owned values, never a caller's mutable projection.
-    run = verified.run;
-    return calculateVerifiedPrediction(d, catalog, run, parsed.data);
+    const verified = verifyCampaignRun(d, catalog, run);
+    if (!verified) return fail('INVALID_PRIOR_RECORD');
+    run = verified;
+    // Historical prefixes come from one lazy replay rather than one per sample.
+    return calculateVerifiedPrediction(
+      d,
+      catalog,
+      run,
+      parsed.data,
+      campaignPrefixReader(d, catalog, run),
+    );
   } catch {
     return fail('INVALID_JSON_OR_RECORD');
   }

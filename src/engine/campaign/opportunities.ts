@@ -1,5 +1,4 @@
 import { validateCampaignDefinition, type CampaignDefinition } from '../../scenario/campaign.ts';
-import { canonicalJson } from './canonical.ts';
 import {
   opportunityMetrics,
   opportunityReferences,
@@ -8,6 +7,7 @@ import {
 import type { Scenario } from '../../scenario/schema.ts';
 import { scenarioVersionKey } from '../../scenario/catalog.ts';
 import { selectCampaignActionIds, evaluateActionGate } from './action-gates.ts';
+import { observeIncident } from './incident-observation.ts';
 import {
   calculateVerifiedPrediction,
   verifiedPredictionContext,
@@ -26,7 +26,7 @@ import {
   campaignObservations,
   campaignActionContext,
   campaignAttemptHead,
-  replayCampaign,
+  verifyCampaignRun,
   type CampaignRun,
   type CampaignOperation,
   type CampaignResult,
@@ -67,9 +67,10 @@ export function getCampaignPresentation(
     const checked = validateCampaignDefinition(definition, catalog);
     if (!checked.ok) return checked;
     const d = checked.definition;
-    const verified = replayCampaign(d, catalog, run.operations);
-    if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
+    const verifiedRun = verifyCampaignRun(d, catalog, run);
+    if (!verifiedRun)
       return { ok: false, diagnostics: [{ code: 'INVALID_PRIOR_RECORD', path: '$' }] };
+    const verified = { run: verifiedRun };
     const p = verified.run.opportunities?.preparations.find((p) => p.id === preparationId);
     if (
       !p ||
@@ -194,26 +195,14 @@ function context(
   return Object.fromEntries(
     rule.references.map((ref) => {
       if (ref.source === 'campaign') return [ref.id, campaign[ref.key]!];
-      let value: number | string | boolean;
-      switch (ref.source) {
-        case 'elapsedSeconds':
-          value = pre.elapsedSeconds;
-          break;
-        case 'ageSeconds':
-          value = pre.elapsedSeconds - preparedAt;
-          break;
-        case 'signal':
-          value = pre.signals[ref.key]!.value;
-          break;
-        case 'resource':
-          value = pre.resources[ref.key]!.value;
-          break;
-        case 'flag':
-          value = pre.flags[ref.key]!;
-          break;
-        case 'evidence':
-          value = pre.revealedEvidenceIds.includes(ref.key);
-          break;
+      const value = observeIncident(pre, ref) ?? specific();
+      function specific(): number | string | boolean {
+        switch (ref.source) {
+          case 'ageSeconds':
+            return pre.elapsedSeconds - preparedAt;
+          default:
+            throw new Error('Unsupported observation source');
+        }
       }
       return [ref.id, { status: 'available', value }];
     }),

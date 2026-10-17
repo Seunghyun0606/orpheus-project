@@ -3,10 +3,11 @@ import { validateCampaignDefinition } from '../../scenario/campaign.ts';
 import { endingReferences } from '../../scenario/ending.ts';
 import type { Scenario } from '../../scenario/schema.ts';
 import { canonicalJson } from './canonical.ts';
+import { observeIncident } from './incident-observation.ts';
 import {
   campaignAttemptHead,
   campaignObservations,
-  replayCampaign,
+  verifyCampaignRun,
   type CampaignRun,
 } from './transitions.ts';
 import {
@@ -75,9 +76,9 @@ export function resolveCampaignEnding(
     const checked = validateCampaignDefinition(definition, catalog);
     if (!checked.ok) return checked;
     const d = checked.definition;
-    const verified = replayCampaign(d, catalog, run.operations);
-    if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
-      return fail('INVALID_PRIOR_RECORD');
+    const verifiedRun = verifyCampaignRun(d, catalog, run);
+    if (!verifiedRun) return fail('INVALID_PRIOR_RECORD');
+    const verified = { run: verifiedRun };
     const model = d.endings;
     if (!model) return fail('MISSING_ENDING_DEFINITION');
     const attempt = verified.run.attempts.find((a) => a.id === parsed.data.attemptId);
@@ -114,32 +115,14 @@ export function resolveCampaignEnding(
     const observations = Object.fromEntries(
       mapping.references.map((ref): [string, Observation] => {
         if (ref.source === 'campaign') return [ref.id, campaign[ref.key]!];
-        let value: string | number | boolean;
-        switch (ref.source) {
-          case 'elapsedSeconds':
-            value = incident.elapsedSeconds;
-            break;
-          case 'signal':
-            value = incident.signals[ref.key]!.value;
-            break;
-          case 'resource':
-            value = incident.resources[ref.key]!.value;
-            break;
-          case 'flag':
-            value = incident.flags[ref.key]!;
-            break;
-          case 'evidence':
-            value = incident.revealedEvidenceIds.includes(ref.key);
-            break;
-          case 'action':
-            value = finalActions.some((a) => a.actionId === ref.key);
-            break;
-          case 'completion':
-            value = incident.completionReached;
-            break;
-          case 'resolution':
-            value = incident.resolutionReached;
-            break;
+        const value = observeIncident(incident, ref) ?? specific();
+        function specific(): number | string | boolean {
+          switch (ref.source) {
+            case 'action':
+              return finalActions.some((a) => a.actionId === ref.key);
+            default:
+              throw new Error('Unsupported observation source');
+          }
         }
         return [ref.id, { status: 'available', value }];
       }),

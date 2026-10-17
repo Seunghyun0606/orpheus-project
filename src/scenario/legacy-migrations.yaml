@@ -1,0 +1,5 @@
+# Content versions that a save written against a frozen legacy version of the
+# same incident may migrate to. Authored data: adding a migration needs no code.
+INC-001: ['1.1.0']
+INC-002: ['1.1.0', '1.2.0']
+INC-003: ['1.1.0', '1.2.0']

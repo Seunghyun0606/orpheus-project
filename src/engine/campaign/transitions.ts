@@ -4,7 +4,10 @@ import {
   validateCampaignDefinition,
   campaignContentVersions,
   campaignEffectTriggers,
+  catalogFingerprint,
+  sameFingerprint,
   type CampaignDefinition,
+  type CatalogFingerprint,
 } from '../../scenario/campaign.ts';
 import { scenarioVersionKey } from '../../scenario/catalog.ts';
 import type { Scenario } from '../../scenario/schema.ts';
@@ -22,7 +25,12 @@ import {
   type BehaviorSource,
 } from '../player-model/behavior.ts';
 import type { BehaviorMetricKey } from '../../scenario/behavior.ts';
-import { canonicalJson } from './canonical.ts';
+import {
+  canonicalJson,
+  canonicalJsonOf,
+  cloneCanonical,
+  deepFreezeWithCanonical,
+} from './canonical.ts';
 import {
   applyOpportunityOperation,
   associateOpportunityResponses,
@@ -239,7 +247,7 @@ export function campaignObservations(
               ? { status: 'available', value: metric.value }
               : {
                   status: 'unavailable',
-                  reason: metric?.reason ?? 'No supported behavior projection in TASK-019',
+                  reason: metric?.reason ?? 'No supported behavior projection for this metric',
                 };
         }
         continue;
@@ -417,9 +425,9 @@ export function checkCampaignSourceAdmission(
   try {
     const checked = validateCampaignDefinition(definition, catalog);
     if (!checked.ok) return checked;
-    const replay = replayCampaign(checked.definition, catalog, run.operations);
-    if (!replay.ok || canonicalJson(replay.run) !== canonicalJson(run))
-      return failure('INVALID_PRIOR_RECORD');
+    const verified = verifyCampaignRun(checked.definition, catalog, run);
+    if (!verified) return failure('INVALID_PRIOR_RECORD');
+    const replay = { run: verified };
     const source = sourceSnapshot(bytes, catalog);
     if (!source) return failure('INVALID_ADOPTION_SOURCE');
     if (
@@ -646,7 +654,7 @@ function apply(
   catalog: ScenarioCatalog,
   prior: CampaignRun | null,
   op: CampaignOperation,
-  prefixes: ReadonlyMap<number, CampaignRun> = new Map(),
+  prefixAt: (revision: number) => CampaignRun | undefined = () => undefined,
 ): CampaignResult {
   if (op.replayVersion !== definition.replayVersion) return failure('INCOMPATIBLE_REPLAY_VERSION');
   if (op.definitionId !== definition.id || op.definitionVersion !== definition.version)
@@ -657,11 +665,11 @@ function apply(
       schemaVersion: definition.recordVersion ?? 1,
       runId: op.runId,
       revision: 0,
-      definitionAuthority: canonicalJson(definition),
+      definitionAuthority: canonicalJsonOf(definition),
       operations: [op],
       attempts: [],
       activeAttemptId: null,
-      projection: JSON.parse(canonicalJson(definition.initial)) as CampaignProjection,
+      projection: cloneCanonical(definition.initial) as CampaignProjection,
       effectReceipts: [],
       ...(definition.behavior ? { behavior: createBehaviorState(definition.behavior) } : {}),
       ...(definition.recordVersion === 2
@@ -671,7 +679,7 @@ function apply(
     projectOpportunityMetrics(definition, run);
     return { ok: true, disposition: 'candidate', run };
   }
-  if (op.runId !== prior.runId || prior.definitionAuthority !== canonicalJson(definition))
+  if (op.runId !== prior.runId || prior.definitionAuthority !== canonicalJsonOf(definition))
     return failure('INCOMPATIBLE_AUTHORITY');
   const duplicate = prior.operations.find((item) => item.operationId === op.operationId);
   if (duplicate)
@@ -680,11 +688,11 @@ function apply(
       : failure('CONFLICTING_OPERATION');
   if (op.sequence !== prior.revision + 1 || op.kind === 'create')
     return failure('OUT_OF_ORDER_OPERATION');
-  const next = JSON.parse(canonicalJson(prior)) as CampaignRun;
+  const next = cloneCanonical(prior);
   next.revision = op.sequence;
   if (op.kind === 'prepare_opportunity' || op.kind === 'acknowledge_presentation') {
     const result = applyOpportunityOperation(definition, catalog, prior, next, op, (length) => {
-      const run = prefixes.get(length - 1);
+      const run = prefixAt(length - 1);
       return run
         ? { ok: true, disposition: 'candidate', run }
         : failure('MISSING_PREDICTION_PREFIX');
@@ -714,11 +722,9 @@ function apply(
     if (!availability.ok) return { ok: false, diagnostics: availability.diagnostics };
     if (!availability.value) return failure('INELIGIBLE_INCIDENT');
     if (
-      op.kind === 'checkpoint' &&
-      (!snapshot ||
-        snapshot.scenario.id !== scenario.id ||
-        snapshot.scenario.contentVersion !== scenario.contentVersion ||
-        snapshot.state.completionReached)
+      snapshot &&
+      (snapshot.scenario.id !== scenario.id ||
+        snapshot.scenario.contentVersion !== scenario.contentVersion)
     )
       return failure('INVALID_CHECKPOINT');
     const seed = op.kind === 'start' ? op.seed : snapshot!.seed;
@@ -727,7 +733,7 @@ function apply(
       id: op.attemptId,
       incidentId: op.incidentId,
       seed,
-      scenarioAuthority: canonicalJson(scenario),
+      scenarioAuthority: canonicalJsonOf(scenario),
       incident,
       baselineCommandCount: incident.replayLog.length,
       baselineEventCount: incident.eventLog.length,
@@ -747,7 +753,7 @@ function apply(
       attempt.incidentId,
       attempt.incident.contentVersion,
     )!;
-    if (canonicalJson(scenario) !== attempt.scenarioAuthority)
+    if (canonicalJsonOf(scenario) !== attempt.scenarioAuthority)
       return failure('INCOMPATIBLE_SCENARIO');
     if (attempt.acceptedInputIds.includes(op.inputId)) return failure('CONFLICTING_INPUT');
     if (
@@ -877,7 +883,9 @@ function replayCampaignUnchecked(
     }
     const parsed = campaignOperationSchema.safeParse(operation);
     if (!parsed.success) return failure('INVALID_OPERATION');
-    const result = apply(validated.definition, catalog, run, parsed.data, prefixes);
+    const result = apply(validated.definition, catalog, run, parsed.data, (revision) =>
+      prefixes.get(revision),
+    );
     if (!result.ok) return result;
     // Stored chronology must not contain duplicate delivery as a new operation.
     if (result.disposition === 'duplicate') return failure('DUPLICATE_HISTORY_ENTRY');
@@ -899,28 +907,109 @@ export function replayCampaign(
   }
 }
 
+// Canonical run bytes whose whole history already replayed to exactly those bytes
+// against the same catalog authorities. Replay is a pure function of definition,
+// catalog and operations, and the bytes embed the definition authority, so a
+// match proves the same result without replaying again. Bounded LRU.
+const verifiedRunLimit = 16;
+const verifiedRuns = new Map<string, CatalogFingerprint>();
+function rememberVerified(bytes: string, fingerprint: CatalogFingerprint) {
+  verifiedRuns.delete(bytes);
+  verifiedRuns.set(bytes, fingerprint);
+  if (verifiedRuns.size > verifiedRunLimit) verifiedRuns.delete(verifiedRuns.keys().next().value!);
+}
+
+/**
+ * Equivalent to replaying `run.operations` and requiring canonical equality with
+ * `run`. Returns the verified run (the input itself when previously verified),
+ * or undefined. Throws only for non-JSON input, like the replay it replaces.
+ */
+export function verifyCampaignRun(
+  definition: unknown,
+  catalog: ScenarioCatalog,
+  run: CampaignRun,
+): CampaignRun | undefined {
+  const bytes = canonicalJsonOf(run);
+  const fingerprint = catalogFingerprint(catalog);
+  const known = verifiedRuns.get(bytes);
+  if (known && sameFingerprint(known, fingerprint)) {
+    const checked = validateCampaignDefinition(definition, catalog);
+    if (checked.ok && run.definitionAuthority === canonicalJsonOf(checked.definition)) {
+      rememberVerified(bytes, known);
+      return run;
+    }
+  }
+  const replay = replayCampaign(definition, catalog, run.operations);
+  if (!replay.ok || canonicalJson(replay.run) !== bytes) return undefined;
+  rememberVerified(bytes, fingerprint);
+  return replay.run;
+}
+
+// One replay of `operations`, performed only if a historical prefix is requested.
+function lazyPrefixes(
+  definition: unknown,
+  catalog: ScenarioCatalog,
+  operations: readonly unknown[],
+): (revision: number) => CampaignRun | undefined {
+  let prefixes: Map<number, CampaignRun> | undefined;
+  return (revision) => {
+    if (!prefixes) {
+      prefixes = new Map();
+      replayCampaignUnchecked(definition, catalog, operations, prefixes);
+    }
+    return prefixes.get(revision);
+  };
+}
+
+/** Replay result of `run.operations.slice(0, length)`, served from one lazy replay. */
+export function campaignPrefixReader(
+  definition: unknown,
+  catalog: ScenarioCatalog,
+  run: CampaignRun,
+): (length: number) => CampaignResult {
+  const prefixAt = lazyPrefixes(definition, catalog, run.operations);
+  return (length) => {
+    const prefix =
+      Number.isSafeInteger(length) && length > 0 && length <= run.operations.length
+        ? prefixAt(length - 1)
+        : undefined;
+    return prefix
+      ? { ok: true, disposition: 'candidate', run: prefix }
+      : replayCampaign(definition, catalog, run.operations.slice(0, length));
+  };
+}
+
 // Pure preparation is not a committed write; no official publication occurs here.
 export function prepareCampaignOperation(
   definition: unknown,
   catalog: ScenarioCatalog,
   prior: CampaignRun | null,
   input: unknown,
+  options: { readonly preview?: boolean; readonly freeze?: boolean } = {},
 ): CampaignResult {
   try {
     canonicalJson(input);
-    const prefixes = new Map<number, CampaignRun>();
+    let prefixAt: (revision: number) => CampaignRun | undefined = () => undefined;
     if (prior !== null) {
-      canonicalJson(prior);
-      const verified = replayCampaignUnchecked(definition, catalog, prior.operations, prefixes);
-      if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(prior))
-        return failure('INVALID_PRIOR_RECORD');
-      prior = verified.run;
+      const verified = verifyCampaignRun(definition, catalog, prior);
+      if (!verified) return failure('INVALID_PRIOR_RECORD');
+      prior = verified;
+      prefixAt = lazyPrefixes(definition, catalog, verified.operations);
     }
     const validated = validateCampaignDefinition(definition, catalog);
     if (!validated.ok) return validated;
     const parsed = campaignOperationSchema.safeParse(input);
     if (!parsed.success) return failure('INVALID_OPERATION');
-    return apply(validated.definition, catalog, prior, parsed.data, prefixes);
+    const result = apply(validated.definition, catalog, prior, parsed.data, prefixAt);
+    // A candidate is exactly the replay of its verified prior plus this operation.
+    // Discarded previews are not remembered. Callers that never mutate the
+    // candidate may ask for it frozen, so its bytes are reused downstream.
+    if (result.ok && result.disposition === 'candidate' && !options.preview) {
+      const bytes = canonicalJson(result.run);
+      rememberVerified(bytes, catalogFingerprint(catalog));
+      if (options.freeze) deepFreezeWithCanonical(result.run, bytes);
+    }
+    return result;
   } catch {
     return failure('INVALID_JSON_OR_RECORD');
   }
@@ -931,9 +1020,8 @@ function getCampaignProgressionUnchecked(
   catalog: ScenarioCatalog,
   run: CampaignRun,
 ) {
-  const verified = replayCampaign(definition, catalog, run.operations);
-  if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
-    return failure('INVALID_PRIOR_RECORD');
+  const verified = verifyCampaignRun(definition, catalog, run);
+  if (!verified) return failure('INVALID_PRIOR_RECORD');
   const validated = validateCampaignDefinition(definition, catalog);
   if (!validated.ok) return validated;
   return {
@@ -967,9 +1055,9 @@ export function getCampaignActionAvailability(
   try {
     const checked = validateCampaignDefinition(definition, catalog);
     if (!checked.ok) return checked;
-    const replay = replayCampaign(checked.definition, catalog, run.operations);
-    if (!replay.ok || canonicalJson(replay.run) !== canonicalJson(run))
-      return failure('INVALID_PRIOR_RECORD');
+    const verified = verifyCampaignRun(checked.definition, catalog, run);
+    if (!verified) return failure('INVALID_PRIOR_RECORD');
+    const replay = { run: verified };
     const attempt = replay.run.attempts.find((a) => a.id === replay.run.activeAttemptId);
     if (!attempt)
       return {
@@ -1005,9 +1093,9 @@ export function getCampaignBehavior(
   run: CampaignRun,
 ) {
   try {
-    const verified = replayCampaign(definition, catalog, run.operations);
-    if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
-      return failure('INVALID_PRIOR_RECORD');
+    const checkedRun = verifyCampaignRun(definition, catalog, run);
+    if (!checkedRun) return failure('INVALID_PRIOR_RECORD');
+    const verified = { run: checkedRun };
     return { ok: true as const, behavior: verified.run.behavior ?? null };
   } catch {
     return failure('INVALID_JSON_OR_RECORD');
@@ -1021,9 +1109,9 @@ export function getCampaignBranches(
   run: CampaignRun,
 ) {
   try {
-    const verified = replayCampaign(definition, catalog, run.operations);
-    if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
-      return failure('INVALID_PRIOR_RECORD');
+    const checkedRun = verifyCampaignRun(definition, catalog, run);
+    if (!checkedRun) return failure('INVALID_PRIOR_RECORD');
+    const verified = { run: checkedRun };
     const validated = validateCampaignDefinition(definition, catalog);
     if (!validated.ok) return validated;
     return {
@@ -1054,9 +1142,9 @@ export function resumeCampaignAssociation(
 ) {
   try {
     canonicalJson(run);
-    const verified = replayCampaign(definition, catalog, run.operations);
-    if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
-      return failure('INVALID_PRIOR_RECORD');
+    const checkedRun = verifyCampaignRun(definition, catalog, run);
+    if (!checkedRun) return failure('INVALID_PRIOR_RECORD');
+    const verified = { run: checkedRun };
     const association = run.checkpointAssociations?.find(
       (item) => item.operationId === associationId,
     );

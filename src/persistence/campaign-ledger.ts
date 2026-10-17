@@ -1,8 +1,15 @@
-import { canonicalJson } from '../engine/campaign/canonical.ts';
+import {
+  canonicalJson,
+  canonicalJsonOf,
+  cloneCanonical,
+  deepFreeze,
+  isDeepFrozen,
+} from '../engine/campaign/canonical.ts';
 import {
   campaignOperationSchema,
   prepareCampaignOperation,
   replayCampaign,
+  verifyCampaignRun,
   type CampaignRun,
 } from '../engine/campaign/transitions.ts';
 import type { CampaignDefinition } from '../scenario/campaign.ts';
@@ -38,7 +45,7 @@ export function verifyCampaignRecord(
   authorities: CampaignAuthorities,
 ): LedgerFailure | { ok: true; run: CampaignRun; definition: CampaignDefinition } {
   try {
-    canonicalJson(value);
+    canonicalJsonOf(value);
     if (
       !value ||
       typeof value !== 'object' ||
@@ -58,10 +65,9 @@ export function verifyCampaignRecord(
       definition.version !== creation.data.definitionVersion
     )
       return fail('UNSUPPORTED_DEFINITION');
-    const replay = replayCampaign(definition, authorities.scenarios, value.operations);
-    if (!replay.ok || canonicalJson(replay.run) !== canonicalJson(value))
-      return fail('INVALID_LEDGER_RECORD');
-    return { ok: true, run: replay.run, definition };
+    const run = verifyCampaignRun(definition, authorities.scenarios, value as CampaignRun);
+    if (!run) return fail('INVALID_LEDGER_RECORD');
+    return { ok: true, run, definition };
   } catch {
     return fail('INVALID_LEDGER_RECORD');
   }
@@ -191,7 +197,9 @@ export function createCampaignLedger(
             if (request.result === undefined)
               outcome = { ok: true, disposition: 'not_found', run: null };
             else {
-              const verified = verifyCampaignRecord(request.result, runId, authorities);
+              // The database hands over a fresh copy; freezing it lets every later
+              // verification reuse its canonical bytes.
+              const verified = verifyCampaignRecord(deepFreeze(request.result), runId, authorities);
               outcome = verified.ok
                 ? { ok: true, disposition: 'found', run: verified.run }
                 : verified;
@@ -207,7 +215,8 @@ export function createCampaignLedger(
       // Snapshot caller-owned data before awaiting a DB open, not after it.
       let snapshot: LedgerCommitRequest;
       try {
-        snapshot = JSON.parse(canonicalJson(input)) as LedgerCommitRequest;
+        // A deeply frozen request cannot change while awaiting the database.
+        snapshot = isDeepFrozen(input) ? input : cloneCanonical(input);
       } catch {
         return fail('INVALID_COMMIT_REQUEST');
       }
@@ -256,7 +265,11 @@ export function createCampaignLedger(
             try {
               let prior: CampaignRun | null = null;
               if (request.result !== undefined) {
-                const verified = verifyCampaignRecord(request.result, runId, authorities);
+                const verified = verifyCampaignRecord(
+                  deepFreeze(request.result),
+                  runId,
+                  authorities,
+                );
                 if (!verified.ok) {
                   reject(verified);
                   return;
@@ -280,7 +293,7 @@ export function createCampaignLedger(
                 );
                 if (
                   !prefix.ok ||
-                  canonicalJson(prefix.run) !== canonicalJson(candidateRecord.run)
+                  canonicalJson(prefix.run) !== canonicalJsonOf(candidateRecord.run)
                 ) {
                   reject(fail('INVALID_CANDIDATE'));
                   return;
@@ -297,10 +310,11 @@ export function createCampaignLedger(
                 authorities.scenarios,
                 prior,
                 parsed.data,
+                { freeze: true },
               );
               if (
                 !prepared.ok ||
-                canonicalJson(prepared.run) !== canonicalJson(candidateRecord.run)
+                canonicalJsonOf(prepared.run) !== canonicalJsonOf(candidateRecord.run)
               ) {
                 reject(fail('INVALID_CANDIDATE'));
                 return;

@@ -1,5 +1,5 @@
 import { createStore, type StoreApi } from 'zustand/vanilla';
-import { canonicalJson } from '../engine/campaign/canonical.ts';
+import { canonicalJson, cloneCanonical, deepFreeze } from '../engine/campaign/canonical.ts';
 import {
   campaignAttemptHead,
   prepareCampaignOperation,
@@ -82,13 +82,18 @@ export interface CampaignCommittedUpdate {
   readonly events: readonly EngineEvent[];
   readonly signals: Readonly<Record<string, RuntimeSignal>>;
 }
-function freeze<T>(value: T): T {
-  if (value && typeof value === 'object') {
-    for (const child of Object.values(value)) freeze(child);
-    Object.freeze(value);
-  }
-  return value;
-}
+const freeze = deepFreeze;
+// Rejections that the exact same request can never overcome. Like a conflict,
+// they let an explicit reload discard the pending request instead of stranding it.
+const deterministicRejections = new Set([
+  'REVISION_CONFLICT',
+  'CONFLICTING_OPERATION',
+  'INVALID_CANDIDATE',
+  'INVALID_OPERATION',
+  'INVALID_COMMIT_REQUEST',
+  'INVALID_RUN_ID',
+  'UNSUPPORTED_DEFINITION',
+]);
 
 // Opt-in authority/ledger injection only. No import opens IndexedDB, no old slot
 // is used, and this adapter never chooses a production campaign definition.
@@ -99,7 +104,7 @@ export function createCampaignSessionStore(options: {
   ledger: Ledger;
   identity?: () => string;
 }): StoreApi<CampaignSessionState> {
-  const d = freeze(JSON.parse(canonicalJson(options.definition)) as CampaignDefinition);
+  const d = freeze(cloneCanonical(options.definition));
   const catalog = new Map(
     [...options.catalog].map(([key, value]) => [key, freeze(structuredClone(value))]),
   );
@@ -161,6 +166,7 @@ export function createCampaignSessionStore(options: {
                   },
                   'preview-' + rule.id,
                 ),
+                { preview: true },
               );
               return (
                 preview.ok ||
@@ -214,8 +220,7 @@ export function createCampaignSessionStore(options: {
       // create a new input or optimistically publish a successful request.put.
       const result = await options.ledger.commit(pending);
       if (!result.ok) {
-        knownConflict =
-          result.code === 'REVISION_CONFLICT' || result.code === 'CONFLICTING_OPERATION';
+        knownConflict = deterministicRejections.has(result.code);
         store.setState({ error: result.code });
         return false;
       }
@@ -280,7 +285,7 @@ export function createCampaignSessionStore(options: {
       store.setState({ error: 'IDENTITY_UNAVAILABLE' });
       return false;
     }
-    const result = prepareCampaignOperation(d, catalog, run, op);
+    const result = prepareCampaignOperation(d, catalog, run, op, { freeze: true });
     if (!result.ok) {
       store.setState({ error: result.diagnostics.map((x) => x.code).join(', ') });
       return false;
@@ -341,14 +346,13 @@ export function createCampaignSessionStore(options: {
           store.setState({ error: result.code });
           return false;
         }
-        if (result.run) {
-          publish(result.run);
-          if (knownConflict) {
-            pending = null;
-            knownConflict = false;
-            store.setState({ pendingOperationId: null });
-          }
-        } else store.setState({ run: null, view: null, readState: 'not_found' });
+        if (result.run) publish(result.run);
+        else store.setState({ run: null, view: null, readState: 'not_found' });
+        if (knownConflict) {
+          pending = null;
+          knownConflict = false;
+          store.setState({ pendingOperationId: null });
+        }
         for (const listener of readListeners) {
           try {
             listener();

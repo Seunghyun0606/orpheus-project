@@ -1,0 +1,28 @@
+id: DEC-070
+title: Execute the review-driven remediation plan in priority order
+status: active
+date: '2026-10-18'
+applies_to: [M4, M5, TASK-024, TASK-025, TASK-027, TASK-028, TASK-029, TASK-030, TASK-031, TASK-032, TASK-033, TASK-034, TASK-035]
+human_decision:
+  instruction: 우선순위 별로 모두 처리해줘.
+  selected_options:
+    governance: 새 결정 기록 후 진행 — supersede DEC-069; content changes ship as a new pinned version.
+    content_scope: 메커니즘까지 전면 재설계 — redesign INC-004..025 mechanics, not only text.
+    process_scope: 산출물 통합·삭제까지 — consolidate and delete redundant process artifacts.
+    delivery: 새 브랜치에 단계별 커밋 — branch review-fixes, one commit per priority, no push.
+supersedes:
+  - DEC-069 (performance improvements deferred) — performance work resumes under this decision.
+decision: >-
+  Remediate the whole-project review in priority order: (1) campaign verification
+  performance and engine correctness, (2) executable quality gates and process
+  consolidation, (3) mechanic-level redesign of mid/late incidents as a new pinned
+  content version, (4) a visible ORPHEUS prediction loop and behavior-shaped endings,
+  (5) player-facing UI, accessibility and release hygiene.
+constraints:
+  - Existing pinned content bytes, package/definition authorities and saved records stay valid (DEC-042 compatibility); new content is additive under a new version.
+  - Hash-pinned content is excluded from formatting instead of being rewritten.
+  - Automated gates (format, lint, typecheck, tests, scenario validation) must pass at every commit.
+  - Native installation, signing, push and public release remain separately authorized.
+consequences:
+  - Verification results are cached by canonical bytes; whole-history replay remains the authority for any unseen record.
+  - Process records are consolidated; git history remains the archive of removed files.

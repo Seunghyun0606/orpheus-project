@@ -168,6 +168,25 @@ describe('opt-in campaign adapter commit publication', () => {
     );
     expect(store.getState().run!.behavior!.metrics.predictionDeviation.denominator).toBe(0);
   });
+  it('a deterministic ledger rejection can be discarded by an explicit reload', async () => {
+    const { store, options } = await loaded();
+    const rejecting = {
+      read: options.ledger.read,
+      commit: () => Promise.resolve({ ok: false as const, code: 'INVALID_CANDIDATE' as const }),
+    };
+    const stranded = createCampaignSessionStore({ ...options, ledger: rejecting });
+    expect(await stranded.getState().load()).toBe(true);
+    const before = stranded.getState().run;
+    expect(await stranded.getState().performAction('ROLLBACK')).toBe(false);
+    expect(stranded.getState().error).toBe('INVALID_CANDIDATE');
+    expect(stranded.getState().pendingOperationId).not.toBeNull();
+    expect(await stranded.getState().retryPending()).toBe(false);
+    // The identical request cannot succeed; reload reconciles instead of locking up.
+    expect(await stranded.getState().load()).toBe(true);
+    expect(stranded.getState().pendingOperationId).toBeNull();
+    expect(stranded.getState().run).toEqual(before);
+    expect(store.getState().run).toEqual(before);
+  });
   it('a competing writer requires explicit reload rather than rebasing or replaying a failed action', async () => {
     const { store, options } = await loaded(true);
     const other = createCampaignSessionStore({ ...options, identity: fixtureIdentity('other') });

@@ -54,7 +54,7 @@ function cloneCommand(command: EngineCommand): EngineCommand {
       ? {}
       : {
           input: Object.fromEntries(
-            Object.entries(command.input).sort(([a], [b]) => a.localeCompare(b)),
+            Object.entries(command.input).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)),
           ),
         }),
   };
@@ -320,6 +320,15 @@ function updateMilestones(state: IncidentState, scenario: Scenario): void {
   }
 }
 
+// Conditional rules that keep re-triggering each other. The validator rejects
+// scenarios that can loop; this remains a typed failure, not an engine crash.
+export class UnstableReactiveRulesError extends Error {
+  constructor() {
+    super('Reactive scenario rules did not reach a stable state.');
+    this.name = 'UnstableReactiveRulesError';
+  }
+}
+
 function settleReactiveRules(state: IncidentState, scenario: Scenario): void {
   let firedRule = true;
   let passes = 0;
@@ -327,7 +336,7 @@ function settleReactiveRules(state: IncidentState, scenario: Scenario): void {
 
   while (firedRule) {
     if (passes++ > maximumPasses) {
-      throw new Error('Reactive scenario rules did not reach a stable state.');
+      throw new UnstableReactiveRulesError();
     }
     firedRule = false;
 
@@ -408,6 +417,13 @@ function runScheduledWork(state: IncidentState, scenario: Scenario, endSeconds: 
   }
 }
 
+// Settling can schedule zero-delay work that is already due. Run it now, in
+// causal order, instead of deferring it behind the next action's costs.
+function settleAndRunDueWork(state: IncidentState, scenario: Scenario): void {
+  settleReactiveRules(state, scenario);
+  runScheduledWork(state, scenario, state.elapsedSeconds);
+}
+
 function advanceTime(
   state: IncidentState,
   scenario: Scenario,
@@ -419,7 +435,7 @@ function advanceTime(
   runScheduledWork(state, scenario, end);
   state.elapsedSeconds = end;
   emit(state, 'time_advanced', { previousValue: start, value: end });
-  settleReactiveRules(state, scenario);
+  settleAndRunDueWork(state, scenario);
 }
 
 export function createIncidentState(
@@ -460,7 +476,7 @@ export function createIncidentState(
     nextEventSequence: 0,
     nextScheduleSequence: 0,
   };
-  settleReactiveRules(state, scenario);
+  settleAndRunDueWork(state, scenario);
   return state;
 }
 
@@ -528,6 +544,22 @@ export function executeCommand(
 
   const next = cloneIncidentState(state);
   const firstEventIndex = next.eventLog.length;
+  try {
+    performAction(next, scenario, action, command, dependencies);
+  } catch (error) {
+    if (!(error instanceof UnstableReactiveRulesError)) throw error;
+    return failure(state, 'UNSTABLE_REACTIVE_RULES', error.message);
+  }
+  return { ok: true, state: next, events: next.eventLog.slice(firstEventIndex) };
+}
+
+function performAction(
+  next: IncidentState,
+  scenario: Scenario,
+  action: Scenario['actions'][number],
+  command: EngineCommand,
+  dependencies: EngineDependencies,
+): void {
   emit(next, 'action_started', { sourceId: action.id, targetId: command.targetId });
 
   for (const cost of action.costs) {
@@ -563,10 +595,8 @@ export function executeCommand(
   next.actionHistory.push(action.id);
   addUnique(next.completedActionIds, action.id);
   emit(next, 'action_completed', { sourceId: action.id, targetId: command.targetId });
-  settleReactiveRules(next, scenario);
+  settleAndRunDueWork(next, scenario);
   next.replayLog.push({ sequence: next.replayLog.length, command: cloneCommand(command) });
-
-  return { ok: true, state: next, events: next.eventLog.slice(firstEventIndex) };
 }
 
 export function replayCommands(

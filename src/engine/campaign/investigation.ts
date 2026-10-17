@@ -1,8 +1,7 @@
 import { evaluateCondition } from '../simulation.ts';
 import { computePostmortem } from '../postmortem.ts';
 import { evaluateCampaignCondition } from './conditions.ts';
-import { campaignObservations, replayCampaign, type CampaignRun } from './transitions.ts';
-import { canonicalJson } from './canonical.ts';
+import { campaignObservations, verifyCampaignRun, type CampaignRun } from './transitions.ts';
 import type { ResolvedCampaignPackage } from '../../scenario/campaign-package.ts';
 import { scenarioVersionKey } from '../../scenario/catalog.ts';
 import { projectNarrativeStream, projectWarRoomStream } from './runtime-streams.ts';
@@ -24,9 +23,9 @@ function projectVerifiedInvestigation(
   run: CampaignRun,
   attemptId: string,
 ) {
-  const verified = replayCampaign(p.definition, p.catalog, run.operations);
-  if (!verified.ok || canonicalJson(verified.run) !== canonicalJson(run))
-    return { ok: false as const, diagnostics: ['INVALID_INVESTIGATION_RECORD'] };
+  const verifiedRun = verifyCampaignRun(p.definition, p.catalog, run);
+  if (!verifiedRun) return { ok: false as const, diagnostics: ['INVALID_INVESTIGATION_RECORD'] };
+  const verified = { run: verifiedRun };
   const attempt = verified.run.attempts.find((a) => a.id === attemptId);
   if (!attempt) return { ok: false as const, diagnostics: ['UNKNOWN_ATTEMPT'] };
   const s = p.catalog.get(

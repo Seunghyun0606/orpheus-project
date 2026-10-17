@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { replayCommands, type IncidentState } from '../engine/index.ts';
+import { canonicalJson } from '../engine/campaign/canonical.ts';
 import { getLegacyScenarioForMigration } from '../scenario/legacy-catalog.ts';
 import { effectSchema, idSchema, type Scenario } from '../scenario/schema.ts';
 
@@ -152,17 +153,6 @@ function fail<T>(code: SaveErrorCode, message: string): SaveResult<T> {
   return { ok: false, code, message };
 }
 
-function canonical(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
-  if (value !== null && typeof value === 'object') {
-    return `{${Object.entries(value)
-      .sort(([left], [right]) => left.localeCompare(right))
-      .map(([key, nested]) => `${JSON.stringify(key)}:${canonical(nested)}`)
-      .join(',')}}`;
-  }
-  return JSON.stringify(value);
-}
-
 export function encodeSave(scenario: Scenario, seed: number, incident: IncidentState): string {
   return JSON.stringify({
     schemaVersion: SAVE_SCHEMA_VERSION,
@@ -224,7 +214,10 @@ export function decodeSave(raw: string, scenario: Scenario): SaveResult<Restored
     { seed },
     incident.replayLog.map(({ command }) => command),
   );
-  if (!replay.ok || canonical(JSON.parse(JSON.stringify(replay.state))) !== canonical(incident)) {
+  if (
+    !replay.ok ||
+    canonicalJson(JSON.parse(JSON.stringify(replay.state))) !== canonicalJson(incident)
+  ) {
     return fail('REPLAY_MISMATCH', 'The saved state cannot be reproduced from its action log.');
   }
 

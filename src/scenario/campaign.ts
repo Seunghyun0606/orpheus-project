@@ -8,7 +8,12 @@ import {
   orderedDiagnostics,
   type CampaignDiagnostic,
 } from '../engine/campaign/conditions.ts';
-import { canonicalJson } from '../engine/campaign/canonical.ts';
+import {
+  canonicalJson,
+  canonicalJsonOf,
+  deepFreeze,
+  isDeepFrozen,
+} from '../engine/campaign/canonical.ts';
 import { scenarioVersionKey } from './catalog.ts';
 import { scenarioSchema, type Scenario } from './schema.ts';
 import { validateScenarioObject } from './validator.ts';
@@ -158,7 +163,65 @@ export function campaignEffectTriggers(
 export type CampaignDefinitionResult =
   { ok: true; definition: CampaignDefinition } | { ok: false; diagnostics: CampaignDiagnostic[] };
 
+// Validation is a pure function of the canonical definition bytes and the exact
+// catalog authorities, so a verified result is reused while both are unchanged.
+// The cached definition is deeply frozen and therefore safe to share.
+const validationCacheLimit = 8;
+const validationCache = new Map<
+  string,
+  { catalog: CatalogFingerprint; result: CampaignDefinitionResult }
+>();
+export type CatalogFingerprint = readonly (readonly [string, string])[];
+export function catalogFingerprint(catalog: ReadonlyMap<string, Scenario>): CatalogFingerprint {
+  return [...catalog]
+    .map(([key, scenario]) => [key, canonicalJsonOf(scenario)] as const)
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+}
+export function sameFingerprint(left: CatalogFingerprint, right: CatalogFingerprint): boolean {
+  return (
+    left.length === right.length &&
+    left.every(([key, bytes], i) => key === right[i]![0] && bytes === right[i]![1])
+  );
+}
+
 export function validateCampaignDefinition(
+  input: unknown,
+  catalog: ReadonlyMap<string, Scenario>,
+): CampaignDefinitionResult {
+  let bytes: string;
+  let fingerprint: CatalogFingerprint;
+  try {
+    bytes = canonicalJsonOf(input);
+    fingerprint = catalogFingerprint(catalog);
+  } catch {
+    return validateCampaignDefinitionUncached(input, catalog);
+  }
+  const cached = validationCache.get(bytes);
+  if (cached && sameFingerprint(cached.catalog, fingerprint)) {
+    validationCache.delete(bytes);
+    validationCache.set(bytes, cached);
+    return cached.result;
+  }
+  const result = validateCampaignDefinitionUncached(input, catalog);
+  deepFreeze(result);
+  validationCache.set(bytes, { catalog: fingerprint, result });
+  if (validationCache.size > validationCacheLimit)
+    validationCache.delete(validationCache.keys().next().value!);
+  return result;
+}
+
+// Frozen catalog authorities cannot change, so their schema parse is reused.
+const parsedScenarios = new WeakMap<object, Scenario | undefined>();
+function parsedScenario(value: unknown): Scenario | undefined {
+  if (isDeepFrozen(value) && parsedScenarios.has(value as object))
+    return parsedScenarios.get(value as object);
+  const checked = scenarioSchema.safeParse(value);
+  const result = checked.success ? checked.data : undefined;
+  if (isDeepFrozen(value)) parsedScenarios.set(value as object, result);
+  return result;
+}
+
+function validateCampaignDefinitionUncached(
   input: unknown,
   catalog: ReadonlyMap<string, Scenario>,
 ): CampaignDefinitionResult {
@@ -181,12 +244,8 @@ export function validateCampaignDefinition(
   const d = parsed.data;
   // Validate catalog entries before traversing reference arrays. Bad authorities
   // are diagnostics, not an exception during prediction/branch authoring.
-  const scenarioFor = (scenarioId: string, contentVersion: string) => {
-    const checked = scenarioSchema.safeParse(
-      catalog.get(scenarioVersionKey(scenarioId, contentVersion)),
-    );
-    return checked.success ? checked.data : undefined;
-  };
+  const scenarioFor = (scenarioId: string, contentVersion: string) =>
+    parsedScenario(catalog.get(scenarioVersionKey(scenarioId, contentVersion)));
   const issues: CampaignDiagnostic[] = [];
   if (d.replayAccess !== undefined && (d.replayVersion !== 2 || d.recordVersion !== 2))
     issues.push({ code: 'INVALID_REPLAY_ACCESS_VERSION', path: 'replayAccess' });

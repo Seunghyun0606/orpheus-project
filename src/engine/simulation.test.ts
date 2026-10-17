@@ -3,7 +3,8 @@ import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import { parseScenarioYaml, type Scenario } from '../scenario/index.ts';
+import { parseScenarioYaml, validateScenarioObject, type Scenario } from '../scenario/index.ts';
+import { scenarioSchema } from '../scenario/schema.ts';
 import {
   createIncidentState,
   createSeededRngState,
@@ -201,5 +202,99 @@ describe('headless incident simulation', () => {
     expect(firstNext.state.draws).toBe(2);
     expect(firstNext.value).toBeGreaterThanOrEqual(0);
     expect(firstNext.value).toBeLessThan(1);
+  });
+});
+
+describe('reactive rule stability and due work', () => {
+  // Schema defaults only; deliberately skips semantic validation.
+  function withEvents(events: unknown[], flags: { id: string; value: boolean }[] = []): Scenario {
+    const raw = structuredClone(loadScenario()) as unknown as {
+      initialState: { flags?: unknown[] };
+      events: unknown[];
+    };
+    raw.initialState.flags = [...(raw.initialState.flags ?? []), ...flags];
+    raw.events = [...raw.events, ...events];
+    return scenarioSchema.parse(raw);
+  }
+  const rule = (id: string, when: [string, boolean], set: [string, boolean][]) => ({
+    id,
+    type: 'conditional',
+    once: false,
+    conditions: [
+      { type: 'action_completed', actionId: 'OPEN_METRICS' },
+      { type: 'flag', flagId: when[0], value: when[1] },
+    ],
+    effects: set.map(([flagId, value]) => ({ type: 'set_flag', flagId, value })),
+  });
+  // Evaluated in this order, the three rules oscillate with period two forever.
+  const oscillator = () =>
+    withEvents(
+      [
+        rule('ARM', ['X', false], [['X', true]]),
+        rule(
+          'RESET',
+          ['Y', true],
+          [
+            ['X', false],
+            ['Y', false],
+          ],
+        ),
+        rule('RAISE', ['X', true], [['Y', true]]),
+      ],
+      [
+        { id: 'X', value: false },
+        { id: 'Y', value: false },
+      ],
+    );
+
+  it('rejects repeatable conditional events that can re-trigger each other', () => {
+    const result = validateScenarioObject(oscillator(), 'loop.yaml');
+    expect(result.success).toBe(false);
+    if (result.success) throw new Error('Expected a reactive cycle diagnostic.');
+    expect(result.diagnostics.map((d) => d.code)).toContain('UNSTABLE_REACTIVE_RULES');
+    // A lone repeatable rule that switches itself off stays stable and is allowed.
+    const lone = withEvents(
+      [rule('ARM', ['X', false], [['X', true]])],
+      [{ id: 'X', value: false }],
+    );
+    expect(validateScenarioObject(lone, 'lone.yaml').success).toBe(true);
+  });
+
+  it('returns a typed failure instead of throwing when unvalidated rules never settle', () => {
+    const looping = oscillator();
+    const initial = createIncidentState(looping, { seed: 1 });
+    const before = JSON.stringify(initial);
+    const result = executeCommand(initial, looping, perform('OPEN_METRICS'));
+    expect(result).toMatchObject({ ok: false, code: 'UNSTABLE_REACTIVE_RULES' });
+    expect(JSON.stringify(initial)).toBe(before);
+  });
+
+  it('runs zero-delay work scheduled while settling before the next action begins', () => {
+    const scenario = withEvents([
+      {
+        id: 'ARM_NOW',
+        type: 'conditional',
+        conditions: [{ type: 'action_completed', actionId: 'OPEN_METRICS' }],
+        effects: [{ type: 'schedule_event', eventId: 'IMMEDIATE' }],
+      },
+      {
+        id: 'IMMEDIATE',
+        type: 'timer',
+        delaySeconds: 0,
+        effects: [{ type: 'set_signal', signalId: 'API_ERROR_RATE', value: 77 }],
+      },
+    ]);
+    expect(validateScenarioObject(scenario, 'zero.yaml').success).toBe(true);
+    const result = executeSuccessfully(
+      createIncidentState(scenario, { seed: 3 }),
+      scenario,
+      'OPEN_METRICS',
+    );
+    expect(result.state.signals.API_ERROR_RATE?.value).toBe(77);
+    expect(result.state.scheduledWork).toHaveLength(0);
+    const fired = result.events.find(
+      (event) => event.type === 'event_fired' && event.sourceId === 'IMMEDIATE',
+    );
+    expect(fired?.atSeconds).toBe(30);
   });
 });

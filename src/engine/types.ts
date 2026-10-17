@@ -131,7 +131,11 @@ export interface CreateIncidentOptions {
 }
 
 export type CommandFailureCode =
-  'SCENARIO_MISMATCH' | 'ACTION_NOT_FOUND' | 'ACTION_LOCKED' | 'ACTION_REQUIREMENTS_UNMET';
+  | 'SCENARIO_MISMATCH'
+  | 'ACTION_NOT_FOUND'
+  | 'ACTION_LOCKED'
+  | 'ACTION_REQUIREMENTS_UNMET'
+  | 'UNSTABLE_REACTIVE_RULES';
 
 export interface CommandSuccess {
   readonly ok: true;

@@ -6,6 +6,7 @@ import {
   type BehaviorMetricKey,
 } from '../../scenario/behavior.ts';
 import { canonicalJson } from '../campaign/canonical.ts';
+import { observeIncident } from '../campaign/incident-observation.ts';
 import {
   evaluateCampaignCondition,
   type Observation,
@@ -127,35 +128,18 @@ function supportContext(
 ): Record<string, Observation> {
   return Object.fromEntries(
     mapping.references.map((ref) => {
-      let value: number | string | boolean;
-      switch (ref.source) {
-        case 'elapsedSeconds':
-          value = pre.elapsedSeconds;
-          break;
-        case 'ageSeconds':
-          value = pre.elapsedSeconds - observation.atSeconds;
-          break;
-        case 'supportKey':
-          value = observation.key;
-          break;
-        case 'actionId':
-          value = source.actionId;
-          break;
-        case 'signal':
-          value = pre.signals[ref.key]!.value;
-          break;
-        case 'resource':
-          value = pre.resources[ref.key]!.value;
-          break;
-        case 'flag':
-          value = pre.flags[ref.key]!;
-          break;
-        case 'signal_revealed':
-          value = pre.signals[ref.key]!.revealed;
-          break;
-        case 'evidence':
-          value = pre.revealedEvidenceIds.includes(ref.key);
-          break;
+      const value = observeIncident(pre, ref) ?? specific();
+      function specific(): number | string | boolean {
+        switch (ref.source) {
+          case 'ageSeconds':
+            return pre.elapsedSeconds - observation.atSeconds;
+          case 'supportKey':
+            return observation.key;
+          case 'actionId':
+            return source.actionId;
+          default:
+            throw new Error('Unsupported observation source');
+        }
       }
       return [ref.id, { status: 'available', value }];
     }),

@@ -20,6 +20,7 @@ export const diagnosticCodes = {
   invalidNarrativeSource: 'INVALID_NARRATIVE_SOURCE',
   invalidNarrativeOrder: 'INVALID_NARRATIVE_ORDER',
   prohibitedMvpReveal: 'PROHIBITED_MVP_REVEAL',
+  unstableReactiveRules: 'UNSTABLE_REACTIVE_RULES',
 } as const;
 
 export type DiagnosticCode = (typeof diagnosticCodes)[keyof typeof diagnosticCodes];
@@ -436,6 +437,85 @@ function semanticDiagnostics(scenario: Scenario, file: string): ScenarioDiagnost
     visitedNarratives.add(id);
   };
   scenario.narratives.forEach(({ id }) => checkNarrativeOrder(id));
+
+  // Repeatable conditional events re-fire whenever their conditions turn true
+  // again. A lone event latches or unlatches itself and stays stable, but two or
+  // more whose effects feed each other's conditions can toggle forever while
+  // settling, so such a cycle is rejected.
+  const conditionKey = (condition: ScenarioCondition): string | undefined => {
+    switch (condition.type) {
+      case 'signal':
+        return 'signal:' + condition.signalId;
+      case 'signal_revealed':
+        return 'revealed:' + condition.signalId;
+      case 'resource':
+        return 'resource:' + condition.resourceId;
+      case 'flag':
+        return 'flag:' + condition.flagId;
+      case 'evidence':
+        return 'evidence:' + condition.evidenceId;
+      case 'mechanism_resolved':
+        return 'mechanism:' + condition.mechanismId;
+      default:
+        return undefined;
+    }
+  };
+  const effectKey = (effect: ScenarioEffect): string | undefined => {
+    switch (effect.type) {
+      case 'set_signal':
+      case 'change_signal':
+        return 'signal:' + effect.signalId;
+      case 'reveal_signal':
+        return 'revealed:' + effect.signalId;
+      case 'change_resource':
+        return 'resource:' + effect.resourceId;
+      case 'set_flag':
+        return 'flag:' + effect.flagId;
+      case 'reveal_evidence':
+        return 'evidence:' + effect.evidenceId;
+      case 'resolve_mechanism':
+        return 'mechanism:' + effect.mechanismId;
+      default:
+        return undefined;
+    }
+  };
+  const repeatable = scenario.events.flatMap((event, index) =>
+    event.type === 'conditional' && !event.once
+      ? [
+          {
+            id: event.id,
+            index,
+            reads: new Set(event.conditions.map(conditionKey).filter((key) => key !== undefined)),
+            writes: new Set(event.effects.map(effectKey).filter((key) => key !== undefined)),
+          },
+        ]
+      : [],
+  );
+  const feeds = (from: (typeof repeatable)[number], to: (typeof repeatable)[number]) =>
+    [...from.writes].some((key) => to.reads.has(key));
+  const reported = new Set<string>();
+  const reachesSelf = (start: (typeof repeatable)[number]): boolean => {
+    const seen = new Set<string>();
+    const queue = repeatable.filter((next) => next.id !== start.id && feeds(start, next));
+    while (queue.length) {
+      const current = queue.shift()!;
+      if (current.id === start.id) return true;
+      if (seen.has(current.id)) continue;
+      seen.add(current.id);
+      queue.push(...repeatable.filter((next) => feeds(current, next)));
+    }
+    return false;
+  };
+  for (const event of repeatable)
+    if (!reported.has(event.id) && reachesSelf(event)) {
+      reported.add(event.id);
+      diagnostics.push({
+        file,
+        path: `$.events[${event.index}]`,
+        code: diagnosticCodes.unstableReactiveRules,
+        message: `Repeatable conditional event ${JSON.stringify(event.id)} can re-trigger itself through other repeatable events; mark one once or break the cycle.`,
+      });
+    }
 
   if (scenario.act === 1) {
     const prohibited =
