@@ -1,6 +1,6 @@
 extends RefCounted
 ## Retro enterprise terminal look, built in code so sizes follow the text-size
-## setting. Korean falls back to installed system fonts (no bundled CJK font yet).
+## setting. Fonts are bundled (see font()).
 
 const BG := Color("0b0e0c")
 const PANEL := Color("111713")
@@ -15,14 +15,16 @@ const RED := Color("ff7066")
 const SIZES := [15, 18, 21]
 
 
-static func font(weight := 400, italic := false) -> SystemFont:
-	var korean := SystemFont.new()
-	korean.font_names = PackedStringArray(["Malgun Gothic", "Noto Sans KR", "Apple SD Gothic Neo", "NanumGothic"])
-	korean.font_weight = weight
-	var latin := SystemFont.new()
-	latin.font_names = PackedStringArray(["D2Coding", "Cascadia Mono", "Consolas", "DejaVu Sans Mono"])
-	latin.font_weight = weight
-	latin.font_italic = italic
+## IBM Plex Mono for Latin text (as in the web client) over Nanum Gothic
+## Coding for Hangul; both are bundled under the SIL Open Font License
+## (godot/fonts/*-OFL.txt). Anything else falls back to system fonts.
+static func font(weight := 400, italic := false) -> Font:
+	var korean: FontFile = load("res://fonts/NanumGothicCoding-Bold.ttf" if weight >= 700 else "res://fonts/NanumGothicCoding-Regular.ttf")
+	var path := "res://fonts/ibm-plex-mono-latin-700-normal.woff2" if weight >= 700 else (
+		"res://fonts/ibm-plex-mono-latin-400-italic.woff2" if italic else "res://fonts/ibm-plex-mono-latin-400-normal.woff2"
+	)
+	var latin := FontVariation.new()
+	latin.base_font = load(path)
 	latin.fallbacks = [korean]
 	return latin
 

@@ -4,3 +4,7 @@
 # Hash-pinned content authorities must stay byte-exact (LF) on every checkout.
 src/scenario/data/** text eol=lf
 src/scenario/legacy/** text eol=lf
+# Godot assets are binary.
+*.wav binary
+*.ttf binary
+*.woff2 binary

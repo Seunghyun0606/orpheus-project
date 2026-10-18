@@ -30,3 +30,12 @@ Future evidence should record source paths, exact lockfile hashes, shipped files
 license texts/notice locations, unresolved obligations and the responsible human
 approval. Any incompatible or unknown distribution obligation blocks release;
 do not delete the dependency or substitute a license silently to obtain PASS.
+
+## Godot build assets (DEC-072)
+
+| Asset                                      | Shipped files                             | Source and terms                                                                                                                                       | Open items                                                            |
+| ------------------------------------------ | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| IBM Plex Mono (Latin 400, 400 italic, 700) | `godot/fonts/ibm-plex-mono-latin-*.woff2` | Copied from the locked `@fontsource/ibm-plex-mono` package; SIL Open Font License 1.1, text in `godot/fonts/IBMPlexMono-OFL.txt`                       | Include the license text with any distributed build                   |
+| Nanum Gothic Coding (Regular, Bold)        | `godot/fonts/NanumGothicCoding-*.ttf`     | `google/fonts` repository, `ofl/nanumgothiccoding` (downloaded 2026-10-19); SIL Open Font License 1.1, text in `godot/fonts/NanumGothicCoding-OFL.txt` | Same as above; Reserved Font Name rules apply if the font is modified |
+| Sound cues and loops                       | `godot/audio/*.wav`                       | Synthesised by `scripts/story/synth-audio.mjs` (deterministic, no sampled or third-party audio)                                                        | None known                                                            |
+| Icon                                       | `godot/icon.svg`                          | Drawn for this project                                                                                                                                 | Store artwork remains a separate choice                               |

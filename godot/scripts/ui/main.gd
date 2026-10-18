@@ -14,7 +14,7 @@ extends Control
 ## Review automation (user args after `--`):
 ##   --episode=INC-001  --play=c,SESSIONS,d:POOL_AT_LIMIT+IDLE_TRANSACTIONS
 ##   --lang=ko|en  --flags=FLAG+FLAG  --select=ID+ID  --settings  --wait=<seconds>
-##   --reenter  --shot=<png path>
+##   --reenter  --act-card  --credits  --shot=<png path>
 ## `c` continues, `t` lets the timer run out, `d:A+B` deduces, anything else
 ## chooses that option. --flags enters the episode with those campaign flags set
 ## (saved progress is never touched while capturing). --wait lets the reveal run in real time before the
@@ -27,7 +27,9 @@ const Settings := preload("res://scripts/ui/settings.gd")
 const UiText := preload("res://scripts/ui/ui_text.gd")
 const ThemeBuilder := preload("res://scripts/ui/theme_builder.gd")
 const Progress := preload("res://scripts/story/progress.gd")
+const Sound := preload("res://scripts/ui/sound.gd")
 const CRT_SHADER := preload("res://shaders/crt.gdshader")
+const WORD_JOINER := "⁠"
 
 ## Pause after each entry has finished typing.
 const REVEAL_DELAY := {
@@ -62,6 +64,12 @@ var typing_end := 0
 ## Showing a finished incident's record: nothing can be chosen.
 var viewing_record := false
 var restart_armed := false
+var sound: Node
+var top_bar: PanelContainer
+## Full-screen Act title shown when an Act begins; the reveal waits for it.
+var act_card: Control
+var last_tick_char := 0
+var last_timer_second := -1
 
 # Episode screen widgets.
 var feed: RichTextLabel
@@ -110,6 +118,9 @@ func _ready() -> void:
 	crt.z_index = 100
 	add_child(crt)
 	crt.visible = Settings.crt
+	sound = Sound.new()
+	add_child(sound)
+	_apply_window_mode()
 	if args.has("episode") or args.has("play"):
 		_start_episode(args.get("episode", "INC-001"))
 	else:
@@ -126,6 +137,9 @@ func _replace_screen(next: Control) -> void:
 	screen = next
 	add_child(screen)
 	move_child(screen, 0)
+	if not Settings.reduce_motion:
+		screen.modulate.a = 0.0
+		create_tween().tween_property(screen, "modulate:a", 1.0, 0.3)
 
 
 ## Left: the title and the next incident to play. Right: every incident,
@@ -148,6 +162,10 @@ func _show_title() -> void:
 	columns.add_child(left)
 	left.add_child(_label(UiText.t("title"), "TitleLabel"))
 	left.add_child(_label(UiText.t("subtitle"), "DimLabel"))
+	var seen := Progress.endings_seen()
+	if not seen.is_empty():
+		left.add_child(_label(UiText.t("endings_seen") % [seen.size(), UiText.t("endings").size()], "PromptLabel", false))
+	sound.loop("title")
 	left.add_child(_spacer(32))
 	var next_id := ""
 	for entry in Library.episode_index():
@@ -157,7 +175,7 @@ func _show_title() -> void:
 	var first: Button
 	if next_id != "":
 		var label: String = UiText.t("begin") if progress["after"].is_empty() else UiText.t("resume")
-		var play := _button("▸  %s   %s · %s" % [label, next_id, tr(Library.load_episode(next_id)["title"])])
+		var play := _button("▸  %s   %s · %s" % [label, next_id, _t(Library.load_episode(next_id)["title"])])
 		play.pressed.connect(_start_episode.bind(next_id))
 		left.add_child(play)
 		first = play
@@ -206,7 +224,7 @@ func _show_title() -> void:
 			list.add_child(_spacer(6))
 			list.add_child(_label("%s  %s" % [UiText.t("act") % act, act_name], "DimLabel", false))
 		var mark: String = "✓" if Progress.is_finished(progress, id) else ("▸" if unlocked else "·")
-		var title: String = tr(entry["title"]) if unlocked else UiText.t("locked")
+		var title: String = _t(entry["title"]) if unlocked else UiText.t("locked")
 		if Progress.is_finished(progress, id):
 			title += "   · " + UiText.t("record")
 		elif Progress.in_progress(progress, id):
@@ -236,8 +254,11 @@ func _start_episode(id: String) -> void:
 	_save_progress()
 	state = Progress.replay(episode, run)
 	_build_episode_screen()
+	sound.loop("ambient")
 	if run["inputs"].is_empty():
 		_queue_new_entries()
+		if _opens_act(id) and (not reviewing or OS.get_cmdline_user_args().has("--act-card")):
+			_show_act_card()
 	else:
 		# Resumed mid-incident: what already happened is shown at once.
 		_show_all_entries()
@@ -248,6 +269,7 @@ func _start_episode(id: String) -> void:
 ## nothing to choose.
 func _show_record(id: String) -> void:
 	viewing_record = true
+	sound.loop("ambient")
 	var record: Variant = progress["records"].get(id)
 	if record is Dictionary:
 		state = Progress.replay(episode, record)
@@ -282,11 +304,12 @@ func _build_episode_screen() -> void:
 
 	var top_panel := PanelContainer.new()
 	top_panel.theme_type_variation = "TopBar"
+	top_bar = top_panel
 	var top := HBoxContainer.new()
 	top.add_theme_constant_override("separation", 18)
 	top_panel.add_child(top)
 	top.add_child(_label("VANTAGE // INCIDENT DESK", "DimLabel", false))
-	top.add_child(_label("%s · %s" % [episode["id"], tr(episode["title"])], "HeaderLabel", false))
+	top.add_child(_label("%s · %s" % [episode["id"], _t(episode["title"])], "HeaderLabel", false))
 	var gap := Control.new()
 	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top.add_child(gap)
@@ -390,14 +413,21 @@ func _queue_new_entries() -> void:
 
 
 func _process(delta: float) -> void:
-	if settings_layer != null:
+	if settings_layer != null or act_card != null:
 		return
 	if typing_label != null:
-		typing_pos += delta * Settings.TYPING_CPS[Settings.text_speed]
+		# Korean text carries a word joiner between letters (see _t), so it types
+		# about twice as many characters for the same words.
+		var rate: float = Settings.TYPING_CPS[Settings.text_speed] * (1.9 if Settings.language == "ko" else 1.0)
+		typing_pos += delta * rate
 		if typing_pos >= typing_end:
 			_finish_typing()
 		else:
 			typing_label.visible_characters = int(typing_pos)
+			# A soft key tick every few letters; the log console ticks brighter.
+			if int(typing_pos) - last_tick_char >= 4:
+				last_tick_char = int(typing_pos)
+				sound.play("log" if typing_label == logs else "type", -10.0, randf_range(0.85, 1.15))
 		return
 	if not pending.is_empty():
 		reveal_wait -= delta
@@ -447,6 +477,7 @@ func _type(label: RichTextLabel, start: int, animate: bool) -> void:
 		return
 	typing_label = label
 	typing_pos = start
+	last_tick_char = start
 	typing_end = label.get_total_character_count()
 	label.visible_characters = start
 
@@ -491,6 +522,16 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey and event.pressed and not event.echo):
 		return
 	var key: Key = event.keycode
+	if key == KEY_F11:
+		Settings.fullscreen = not Settings.fullscreen
+		Settings.save_settings()
+		_apply_window_mode()
+		get_viewport().set_input_as_handled()
+		return
+	if act_card != null:
+		_close_act_card()
+		get_viewport().set_input_as_handled()
+		return
 	if key == KEY_ESCAPE:
 		if settings_layer != null:
 			_close_settings()
@@ -521,23 +562,26 @@ func _render_entry(index: int, animate: bool) -> void:
 		"scene":
 			var scene := StoryRunner.find_scene(episode, entry["sceneId"])
 			if scene.has("title"):
-				scene_label.text = tr(scene["title"])
-				feed.append_text("\n[center][color=#%s]—  %s  —[/color][/center]\n" % [dim, _esc(tr(scene["title"]))])
+				scene_label.text = _t(scene["title"])
+				feed.append_text("\n[center][color=#%s]—  %s  —[/color][/center]\n" % [dim, _esc(_t(scene["title"]))])
 		"narrate":
 			feed.append_text(stamp)
 			start = feed.get_total_character_count()
-			feed.append_text("[color=#%s][i]%s[/i][/color]\n\n" % [dim, _esc(tr(entry["text"]))])
+			feed.append_text("[color=#%s][i]%s[/i][/color]\n\n" % [dim, _esc(_t(entry["text"]))])
 			_type(feed, start, animate)
 		"line":
 			var voice := _voice_color(entry["speaker"], cyan)
+			if animate and entry["speaker"] == "PAGER":
+				sound.play("pager", -4.0)
+				_flash(top_bar, Color(1.8, 0.7, 0.6))
 			feed.append_text(stamp + "[color=#%s][b]%s[/b][/color] — " % [voice, _esc(_speaker(entry["speaker"]).to_upper())])
 			start = feed.get_total_character_count()
-			feed.append_text("%s\n\n" % _esc(tr(entry["text"])))
+			feed.append_text("%s\n\n" % _esc(_t(entry["text"])))
 			_type(feed, start, animate)
 		"log":
 			logs.append_text(stamp)
 			start = logs.get_total_character_count()
-			logs.append_text("[color=#%s]$ %s[/color]\n" % [green, _esc(tr(entry["text"]))])
+			logs.append_text("[color=#%s]$ %s[/color]\n" % [green, _esc(_t(entry["text"]))])
 			_type(logs, start, animate)
 		"metric":
 			_set_metric(entry)
@@ -545,20 +589,24 @@ func _render_entry(index: int, animate: bool) -> void:
 			var item := _evidence(entry["id"])
 			feed.append_text(stamp)
 			start = feed.get_total_character_count()
-			feed.append_text("[color=#%s]■ %s — %s[/color]\n\n" % [amber, UiText.t("evidence_added"), _esc(tr(item["title"]))])
+			feed.append_text("[color=#%s]■ %s — %s[/color]\n\n" % [amber, UiText.t("evidence_added"), _esc(_t(item["title"]))])
 			_type(feed, start, animate)
 			_add_card(item)
+			if animate:
+				sound.play("evidence", -6.0)
 		"choice":
 			var scene := StoryRunner.find_scene(episode, entry["sceneId"])
 			var option := StoryRunner._option(scene, entry["optionId"])
 			var late: String = "  [color=#%s](%s)[/color]" % [dim, UiText.t("timed_out")] if entry["timedOut"] else ""
 			feed.append_text(stamp)
-			feed.append_text("[color=#%s]▸ %s[/color]%s\n\n" % [amber, _esc(tr(option["text"])), late])
+			feed.append_text("[color=#%s]▸ %s[/color]%s\n\n" % [amber, _esc(_t(option["text"])), late])
 		"deduction":
 			var titles := []
 			for id in entry["picks"]:
-				titles.append(tr(_evidence(id)["title"]))
+				titles.append(_t(_evidence(id)["title"]))
 			var verdict: String = UiText.t("deduce_right") if entry["correct"] else UiText.t("deduce_wrong")
+			if animate:
+				sound.play("solved" if entry["correct"] else "missed", -6.0)
 			var color := green if entry["correct"] else ThemeBuilder.RED.to_html(false)
 			feed.append_text(stamp)
 			start = feed.get_total_character_count()
@@ -610,17 +658,17 @@ func _show_controls() -> void:
 				row.add_child(timer_label)
 				controls.add_child(row)
 				_update_timer()
-			controls.add_child(_label(tr(scene["prompt"]), "PromptLabel"))
+			controls.add_child(_label(_t(scene["prompt"]), "PromptLabel"))
 			var options := StoryRunner.available_options(scene, state)
 			for i in options.size():
 				var option: Dictionary = options[i]
-				var text := "[color=#%s]%d.[/color] %s" % [amber, i + 1, _esc(tr(option["text"]))]
+				var text := "[color=#%s]%d.[/color] %s" % [amber, i + 1, _esc(_t(option["text"]))]
 				if option.has("consequence"):
-					text += "\n    [color=#%s]%s[/color]" % [dim, _esc(tr(option["consequence"]))]
+					text += "\n    [color=#%s]%s[/color]" % [dim, _esc(_t(option["consequence"]))]
 				_add_choice(text, _submit.bind({"type": "choose", "optionId": option["id"]}))
 		"deduction":
 			picks.clear()
-			controls.add_child(_label(tr(scene["prompt"]), "PromptLabel"))
+			controls.add_child(_label(_t(scene["prompt"]), "PromptLabel"))
 			deduce_label = _label("", "DimLabel")
 			controls.add_child(deduce_label)
 			connect_slot = VBoxContainer.new()
@@ -689,6 +737,7 @@ func _submit(input: Dictionary) -> void:
 		return
 	Progress.log_input(progress, input)
 	_save_progress()
+	sound.play("choice", -8.0)
 	state = result["state"]
 	_queue_new_entries()
 
@@ -699,6 +748,10 @@ func _update_timer() -> void:
 	timer_bar.value = maxf(timer_left, 0.0)
 	timer_label.text = UiText.t("seconds") % ceili(maxf(timer_left, 0.0))
 	var urgent := timer_left <= 10.0
+	var second := ceili(maxf(timer_left, 0.0))
+	if urgent and second != last_timer_second and timer_left > 0.0:
+		sound.play("tick", -6.0, 1.0 + (10 - second) * 0.03)
+	last_timer_second = second
 	timer_label.add_theme_color_override("font_color", ThemeBuilder.RED if urgent else ThemeBuilder.AMBER)
 	var fill: StyleBoxFlat = timer_bar.get_theme_stylebox("fill").duplicate()
 	fill.bg_color = ThemeBuilder.RED if urgent else ThemeBuilder.AMBER
@@ -736,6 +789,8 @@ func _show_summary() -> void:
 		_save_progress()
 	scene_label.text = UiText.t("record_title") if viewing_record else ""
 	var ending := _ending()
+	if ending != "" and not reviewing:
+		Progress.add_ending(ending)
 	if ending != "":
 		controls.add_child(_label("%s — %s" % [UiText.t("ending"), UiText.t("endings").get(ending, ending)], "TitleLabel", false))
 	else:
@@ -747,7 +802,7 @@ func _show_summary() -> void:
 		var scene := StoryRunner.find_scene(episode, entry["sceneId"])
 		var option := StoryRunner._option(scene, entry["optionId"])
 		var late: String = " (%s)" % UiText.t("timed_out") if entry["timedOut"] else ""
-		lines.append("· %s%s" % [tr(option["text"]), late])
+		lines.append("· %s%s" % [_t(option["text"]), late])
 	controls.add_child(_label("%s\n%s" % [UiText.t("end_choices"), "\n".join(lines)]))
 	var changes := []
 	for group in ["values", "alignment"]:
@@ -761,8 +816,11 @@ func _show_summary() -> void:
 	var number := 1
 	var next := Progress.next_episode(episode["id"])
 	if next != "" and Progress.is_unlocked(progress, next) and not Progress.is_finished(progress, next):
-		var next_title: String = tr(Library.load_episode(next)["title"])
+		var next_title: String = _t(Library.load_episode(next)["title"])
 		_add_choice("[color=#%s]%d.[/color] %s — %s %s" % [amber, number, UiText.t("next"), next, next_title], _start_episode.bind(next))
+		number += 1
+	if ending != "":
+		_add_choice("[color=#%s]%d.[/color] %s" % [amber, number, UiText.t("credits")], _show_credits.bind(ending))
 		number += 1
 	_add_choice("[color=#%s]%d.[/color] %s" % [amber, number, UiText.t("back")], _show_title)
 	_focus_first_choice.call_deferred()
@@ -777,7 +835,7 @@ func _set_metric(entry: Dictionary) -> void:
 		tile.theme_type_variation = "Tile"
 		tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var column := VBoxContainer.new()
-		column.add_child(_label(tr(label), "TileLabel"))
+		column.add_child(_label(_t(label), "TileLabel"))
 		var value := _label("", "TileValue", false)
 		column.add_child(value)
 		tile.add_child(column)
@@ -786,7 +844,7 @@ func _set_metric(entry: Dictionary) -> void:
 		tile.modulate = Color(1.5, 1.4, 1.0)
 		create_tween().tween_property(tile, "modulate", Color.WHITE, 0.6)
 	var value_label: Label = metric_tiles[label]
-	value_label.text = "%s %s" % [tr(entry["value"]), _arrow(entry)]
+	value_label.text = "%s %s" % [_t(entry["value"]), _arrow(entry)]
 	var trend: String = entry.get("trend", "")
 	var color := ThemeBuilder.RED if trend == "up" else (ThemeBuilder.GREEN if trend == "down" else ThemeBuilder.TEXT)
 	value_label.add_theme_color_override("font_color", color)
@@ -803,9 +861,9 @@ func _add_card(item: Dictionary) -> void:
 	card.mouse_filter = Control.MOUSE_FILTER_STOP
 	var column := VBoxContainer.new()
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var title := _label(tr(item["title"]), "PromptLabel")
+	var title := _label(_t(item["title"]), "PromptLabel")
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var body := _label(tr(item["body"]), "CardBody")
+	var body := _label(_t(item["body"]), "CardBody")
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(title)
 	column.add_child(body)
@@ -915,6 +973,22 @@ func _open_settings() -> void:
 	speeds.selected = Settings.text_speed
 	speeds.item_selected.connect(func(index: int) -> void: _change_setting("text_speed", index))
 	grid.add_child(speeds)
+	for row in [["music", Settings.music_volume], ["sfx", Settings.sfx_volume]]:
+		grid.add_child(_label(UiText.t(row[0]), "", false))
+		var slider := HSlider.new()
+		slider.min_value = 0.0
+		slider.max_value = 1.0
+		slider.step = 0.05
+		slider.value = row[1]
+		slider.custom_minimum_size = Vector2(180, 24)
+		slider.value_changed.connect(func(v: float) -> void: _change_setting(row[0], v))
+		grid.add_child(slider)
+	for row in [["fullscreen", Settings.fullscreen], ["reduce_motion", Settings.reduce_motion]]:
+		grid.add_child(_label(UiText.t(row[0]), "", false))
+		var toggle := CheckButton.new()
+		toggle.button_pressed = row[1]
+		toggle.toggled.connect(func(on: bool) -> void: _change_setting(row[0], on))
+		grid.add_child(toggle)
 	grid.add_child(Control.new())
 	var close := _button(UiText.t("close"))
 	close.pressed.connect(_close_settings)
@@ -951,7 +1025,18 @@ func _change_setting(key: String, value: Variant) -> void:
 			Settings.timer = value
 		"text_speed":
 			Settings.text_speed = value
+		"music":
+			Settings.music_volume = value
+		"sfx":
+			Settings.sfx_volume = value
+		"fullscreen":
+			Settings.fullscreen = value
+		"reduce_motion":
+			Settings.reduce_motion = value
 	Settings.save_settings()
+	sound.apply_volumes()
+	if key == "fullscreen":
+		_apply_window_mode()
 	_apply_settings()
 	crt.visible = Settings.crt
 	if key == "timer" and not Settings.timer:
@@ -962,6 +1047,130 @@ func _change_setting(key: String, value: Variant) -> void:
 		_close_settings()
 		_rebuild()
 		_open_settings()
+
+
+func _apply_window_mode() -> void:
+	var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if Settings.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED
+	if DisplayServer.window_get_mode() != mode:
+		DisplayServer.window_set_mode(mode)
+
+
+func _flash(node: CanvasItem, color: Color) -> void:
+	if node == null or Settings.reduce_motion:
+		return
+	node.modulate = color
+	create_tween().tween_property(node, "modulate", Color.WHITE, 0.7)
+
+
+## True when `id` is the first incident of its Act.
+func _opens_act(id: String) -> bool:
+	var previous_act := 0
+	for entry in Library.episode_index():
+		if entry["id"] == id:
+			return entry["act"] != previous_act
+		previous_act = entry["act"]
+	return false
+
+
+func _show_act_card() -> void:
+	var act: int = episode["act"]
+	act_card = Control.new()
+	act_card.set_anchors_preset(Control.PRESET_FULL_RECT)
+	act_card.mouse_filter = Control.MOUSE_FILTER_STOP
+	var shade := ColorRect.new()
+	shade.color = ThemeBuilder.BG
+	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	act_card.add_child(shade)
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	act_card.add_child(center)
+	var column := VBoxContainer.new()
+	column.alignment = BoxContainer.ALIGNMENT_CENTER
+	column.add_theme_constant_override("separation", 12)
+	center.add_child(column)
+	for line in [
+		[UiText.t("act") % act, "HeaderLabel"],
+		[UiText.t("act_names")[act - 1], "TitleLabel"],
+		["%s · %s" % [episode["id"], _t(episode["title"])], "DimLabel"],
+	]:
+		var label := _label(line[0], line[1], false)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		column.add_child(label)
+	act_card.gui_input.connect(func(event: InputEvent) -> void:
+		if event is InputEventMouseButton and event.pressed:
+			_close_act_card()
+	)
+	add_child(act_card)
+	move_child(act_card, crt.get_index())
+	sound.play("pager", -14.0, 0.5)
+	if Settings.reduce_motion:
+		get_tree().create_timer(2.6).timeout.connect(_close_act_card)
+		return
+	act_card.modulate.a = 0.0
+	var tween := create_tween()
+	tween.tween_property(act_card, "modulate:a", 1.0, 0.6)
+	tween.tween_interval(2.0)
+	tween.tween_callback(_close_act_card)
+
+
+func _close_act_card() -> void:
+	if act_card == null:
+		return
+	var card := act_card
+	act_card = null
+	if Settings.reduce_motion:
+		card.queue_free()
+		return
+	var tween := create_tween()
+	tween.tween_property(card, "modulate:a", 0.0, 0.5)
+	tween.tween_callback(card.queue_free)
+
+
+## After an ending: its name, the closing question, the run in numbers, the
+## endings seen so far and the credits.
+func _show_credits(ending: String) -> void:
+	episode = {}
+	sound.loop("title")
+	var decisions := 0
+	var timeouts := 0
+	for id in progress["records"]:
+		for input in progress["records"][id]["inputs"]:
+			if input["type"] == "choose" or input["type"] == "timeout":
+				decisions += 1
+			if input["type"] == "timeout":
+				timeouts += 1
+	var root := _margin(64)
+	var center := CenterContainer.new()
+	root.add_child(center)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 16)
+	column.custom_minimum_size.x = 760
+	center.add_child(column)
+	var lines := [
+		[UiText.t("title"), "DimLabel"],
+		["%s — %s" % [UiText.t("ending"), UiText.t("endings").get(ending, ending)], "TitleLabel"],
+		[UiText.t("closing"), "PromptLabel"],
+		[UiText.t("stats") % [progress["records"].size(), decisions, timeouts], "DimLabel"],
+	]
+	var seen := Progress.endings_seen()
+	var names := []
+	for key in UiText.t("endings"):
+		names.append(UiText.t("endings")[key] if seen.has(key) else "· · ·")
+	lines.append([UiText.t("endings_seen") % [seen.size(), names.size()], "HeaderLabel"])
+	lines.append(["   ".join(names), "DimLabel"])
+	for credit in UiText.t("credit_lines"):
+		lines.append([credit, "DimLabel"])
+	for line in lines:
+		var label := _label(line[0], line[1])
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		column.add_child(label)
+	column.add_child(_spacer(12))
+	var back := _button(UiText.t("to_title"))
+	back.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	back.pressed.connect(_show_title)
+	column.add_child(back)
+	_replace_screen(root)
+	back.grab_focus.call_deferred()
 
 
 func _apply_settings() -> void:
@@ -1050,7 +1259,7 @@ func _spacer(height: int) -> Control:
 func _speaker(id: String) -> String:
 	for member in episode["cast"]:
 		if member["id"] == id:
-			return tr(member["name"])
+			return _t(member["name"])
 	return id
 
 
@@ -1083,6 +1292,33 @@ func _ending() -> String:
 
 func _arrow(entry: Dictionary) -> String:
 	return {"up": "▲", "down": "▼", "flat": "─"}.get(entry.get("trend", ""), "")
+
+
+## Story text in the current language. Korean gets word joiners between the
+## letters of each word, so lines only break at spaces (CSS keep-all); ICU
+## would otherwise break between any two Hangul syllables.
+func _t(text: String) -> String:
+	var translated := tr(text)
+	return _keep_all(translated) if Settings.language == "ko" else translated
+
+
+static func _keep_all(text: String) -> String:
+	var out := PackedStringArray()
+	for i in text.length():
+		out.append(text[i])
+		if i + 1 < text.length() and _joins(text.unicode_at(i), text.unicode_at(i + 1)):
+			out.append(WORD_JOINER)
+	return "".join(out)
+
+
+static func _joins(a: int, b: int) -> bool:
+	if a <= 32 or b <= 32 or a == 0x2014 or b == 0x2014:
+		return false
+	return _hangul(a) or _hangul(b)
+
+
+static func _hangul(c: int) -> bool:
+	return (c >= 0xAC00 and c <= 0xD7A3) or (c >= 0x3131 and c <= 0x318E)
 
 
 func _esc(text: String) -> String:
@@ -1127,6 +1363,8 @@ func _review(args: Dictionary) -> void:
 		_toggle_pick(id)
 	if args.has("settings"):
 		_open_settings()
+	if args.has("credits") and _ending() != "":
+		_show_credits(_ending())
 	for i in 4:
 		await get_tree().process_frame
 	await RenderingServer.frame_post_draw

@@ -12,6 +12,8 @@ extends RefCounted
 const StoryRunner := preload("res://scripts/story/story_runner.gd")
 const Library := preload("res://scripts/story/episode_library.gd")
 const PATH := "user://campaign.json"
+## Endings seen survive "start over".
+const ENDINGS_PATH := "user://endings.json"
 
 
 static func empty() -> Dictionary:
@@ -97,6 +99,22 @@ static func finish(progress: Dictionary, id: String, state: Dictionary) -> void:
 	if in_progress(progress, id):
 		progress["records"][id] = progress["current"]
 		progress["current"] = null
+
+
+static func endings_seen() -> Array:
+	if not FileAccess.file_exists(ENDINGS_PATH):
+		return []
+	var seen: Variant = JSON.parse_string(FileAccess.get_file_as_string(ENDINGS_PATH))
+	return seen if seen is Array else []
+
+
+static func add_ending(ending: String) -> void:
+	var seen := endings_seen()
+	if not seen.has(ending):
+		seen.append(ending)
+		var file := FileAccess.open(ENDINGS_PATH, FileAccess.WRITE)
+		if file != null:
+			file.store_string(JSON.stringify(seen))
 
 
 ## Replays a run (entry carry + inputs) to its current state.
