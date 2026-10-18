@@ -85,6 +85,7 @@ describe('INC-001 operations desktop', () => {
       reducedAnimation: true,
       textScale: 'extra-large',
       colorTheme: 'high-contrast',
+      language: 'en',
     });
 
     // Settings are global: leaving a screen must not reset the document.

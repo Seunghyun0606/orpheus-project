@@ -1,5 +1,7 @@
 import { createContext, useContext } from 'react';
 
+import { detectLocale, isLocale, type Locale } from '../i18n/locale.ts';
+
 export type TextScale = 'standard' | 'large' | 'extra-large';
 export type ColorTheme = 'standard' | 'high-contrast';
 
@@ -8,6 +10,7 @@ export interface PresentationPreferences {
   reducedAnimation: boolean;
   textScale: TextScale;
   colorTheme: ColorTheme;
+  language: Locale;
 }
 
 export const presentationStorageKey = 'orpheus.presentation.v1';
@@ -17,17 +20,20 @@ export const defaultPresentationPreferences: PresentationPreferences = {
   reducedAnimation: false,
   textScale: 'standard',
   colorTheme: 'standard',
+  language: 'en',
 };
 
-// Older stored values (without colorTheme) remain readable; unknown values fall back.
+// Older stored values (without colorTheme/language) remain readable; unknown values
+// fall back. A first run without a stored language follows the system language.
 export function readPresentationPreferences(): PresentationPreferences {
   if (typeof window === 'undefined') return defaultPresentationPreferences;
+  const firstRun = { ...defaultPresentationPreferences, language: detectLocale() };
 
   try {
     const stored: unknown = JSON.parse(
       window.localStorage.getItem(presentationStorageKey) ?? 'null',
     );
-    if (stored === null || typeof stored !== 'object') return defaultPresentationPreferences;
+    if (stored === null || typeof stored !== 'object') return firstRun;
     const value = stored as Record<string, unknown>;
     return {
       crtEffects:
@@ -46,9 +52,10 @@ export function readPresentationPreferences(): PresentationPreferences {
         value.colorTheme === 'high-contrast'
           ? 'high-contrast'
           : defaultPresentationPreferences.colorTheme,
+      language: isLocale(value.language) ? value.language : firstRun.language,
     };
   } catch {
-    return defaultPresentationPreferences;
+    return firstRun;
   }
 }
 
@@ -71,6 +78,7 @@ export function applyPresentationPreferences(
   root.dataset.motion = preferences.reducedAnimation ? 'reduce' : 'standard';
   root.dataset.textScale = preferences.textScale;
   root.dataset.theme = preferences.colorTheme;
+  root.lang = preferences.language;
 }
 
 export interface PresentationContextValue {

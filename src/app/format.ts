@@ -1,4 +1,5 @@
 import type { ScalarValue } from '../engine/index.ts';
+import { numberLocale, type Locale } from '../i18n/locale.ts';
 
 // Shared presentation formatting. Authored labels/units always win; the ID
 // heuristics below are only a fallback for content written before `label`/`unit`.
@@ -40,10 +41,12 @@ function legacyUnit(id: string): string | undefined {
   return id.includes('RATE') || id.endsWith('_CPU') ? '%' : undefined;
 }
 
-export function formatScalar(value: ScalarValue, unit?: string): string {
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+// Strings pass through unchanged; callers translate authored text with ct().
+export function formatScalar(value: ScalarValue, unit?: string, locale: Locale = 'en'): string {
+  if (typeof value === 'boolean')
+    return locale === 'ko' ? (value ? '예' : '아니요') : value ? 'Yes' : 'No';
   if (typeof value !== 'number') return value;
-  const number = value.toLocaleString('en-US');
+  const number = value.toLocaleString(numberLocale(locale));
   if (unit === undefined) return number;
   return unit === '%' ? `${number}%` : `${number} ${unit}`;
 }
@@ -52,6 +55,7 @@ export function formatSignalValue(
   id: string,
   value: ScalarValue,
   directory?: SignalDirectory,
+  locale: Locale = 'en',
 ): string {
-  return formatScalar(value, directory?.get(id)?.unit ?? legacyUnit(id));
+  return formatScalar(value, directory?.get(id)?.unit ?? legacyUnit(id), locale);
 }

@@ -5,6 +5,19 @@
   font-family: 'IBM Plex Mono', 'Cascadia Mono', 'SFMono-Regular', Consolas, monospace;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+}
+
+/* Hangul is not in IBM Plex Mono: Latin glyphs keep the terminal face and Korean
+   falls through to installed system fonts (no web font is fetched under the CSP). */
+:root:lang(ko) {
+  font-family:
+    'IBM Plex Mono', D2Coding, 'Cascadia Mono', 'Malgun Gothic', 'Apple SD Gothic Neo',
+    'Noto Sans KR', 'Noto Sans CJK KR', monospace;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+:root {
   --bg: #050808;
   --surface: #08100f;
   --surface-raised: #0b1513;

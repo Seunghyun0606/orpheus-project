@@ -19,7 +19,7 @@ afterEach(() => {
 });
 
 describe('global presentation settings', () => {
-  it('reads older stored preferences without a colour theme', () => {
+  it('reads older stored preferences without a colour theme or language', () => {
     window.localStorage.setItem(
       presentationStorageKey,
       JSON.stringify({ crtEffects: false, reducedAnimation: true, textScale: 'large' }),
@@ -29,6 +29,7 @@ describe('global presentation settings', () => {
       reducedAnimation: true,
       textScale: 'large',
       colorTheme: 'standard',
+      language: 'en',
     });
     window.localStorage.setItem(presentationStorageKey, '{not json');
     expect(readPresentationPreferences()).toEqual(defaultPresentationPreferences);
