@@ -1,0 +1,14 @@
+task: TASK-036
+date: '2026-10-18'
+commit: a44c7a921f2713e1e3ac107f31e8604aee22fc92
+status: pass
+role: qa
+summary: npm run check exit 0 (format, lint, typecheck, scenario validation, locale
+  catalogs, story validation, 790 vitest tests, release harness, web build). Scripted
+  terminal runs of INC-001 in Korean completed a full path, a deduction miss and a
+  30-second timer expiry.
+evidence:
+- src/story/story.test.ts
+- scripts/story/story.mjs
+kind: test
+actor: claude

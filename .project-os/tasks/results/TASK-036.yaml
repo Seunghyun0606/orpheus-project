@@ -1,0 +1,32 @@
+task: TASK-036
+status: pass
+summary: Story episode schema, deterministic reference runner with a render feed,
+  validator that enumerates every path, catalog groups for episodes and a terminal
+  player/script/check CLI. INC-001 is the first episode (part of TASK-037).
+files_changed:
+- src/story/schema.ts
+- src/story/runner.ts
+- src/story/validate.ts
+- src/story/story.test.ts
+- src/story/data/inc-001.yaml
+- src/i18n/content/ko/story-inc-001.yaml
+- scripts/story/story.mjs
+- scripts/i18n/content-catalog.mjs
+- specs/architecture/story-episode-format.md
+- package.json
+- .gitattributes
+verification:
+  npm_run_check: pass (67 files, 790 tests; catalogs complete; INC-001 ok)
+  inc_001_paths: 117 enumerated, all end
+  malformed_episode_rejection: dangling scene, unknown speaker, cycle, uncollectable
+    deduction answer, non-guaranteed timer default, missable guaranteed evidence,
+    never-available option
+review: null
+followups:
+- TASK-037 INC-002 and INC-003 episodes.
+- Validator treats options gated on campaign flags as never available under an empty
+  carry; add sample carries when later episodes read earlier flags.
+commit: a44c7a921f2713e1e3ac107f31e8604aee22fc92
+kind: implementation
+role: developer
+actor: claude
