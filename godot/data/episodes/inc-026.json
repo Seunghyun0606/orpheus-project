@@ -115,7 +115,7 @@
         },
         {
           "metric": {
-            "label": "Identity",
+            "label": "Identity (sign-in)",
             "value": "26%",
             "trend": "up"
           }

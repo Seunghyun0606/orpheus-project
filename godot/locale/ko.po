@@ -120,7 +120,7 @@ msgid "Ask Jin what customers are seeing"
 msgstr "진에게 고객 쪽 상황 물어보기"
 
 msgid "Slower · the team hears from you"
-msgstr "더 느림 · 팀이 당신 목소리를 들음"
+msgstr "더 느림 · 팀이 네 목소리를 들음"
 
 msgid "Failed checkouts, confirmed. Their apps retry on their own, so some go through on the third or fourth try."
 msgstr "결제 실패 확인했어요. 앱이 알아서 재시도해서 세 번째, 네 번째에 성공하는 건도 있어요."
@@ -213,7 +213,7 @@ msgid "02:23:11 / UNKNOWN: Good."
 msgstr "02:23:11 / UNKNOWN: 좋아."
 
 msgid "Did you write that? No? Probably a test harness talking to itself."
-msgstr "이거 당신이 쓴 거예요? 아니라고요? 테스트 하네스가 혼잣말한 거겠죠."
+msgstr "이거 직접 쓴 거예요? 아니라고요? 테스트 하네스가 혼잣말한 거겠죠."
 
 msgid "There is no service called UNKNOWN."
 msgstr "UNKNOWN이라는 서비스는 없다."
@@ -222,7 +222,7 @@ msgid "Postmortem"
 msgstr "사후 분석"
 
 msgid "Postmortem's due by morning. Your incident, your write-up."
-msgstr "사후 분석은 아침까지예요. 당신 인시던트니까 당신이 써요."
+msgstr "사후 분석은 아침까지예요. 맡은 인시던트니까 직접 써요."
 
 msgid "What goes in the report?"
 msgstr "보고서에 무엇을 넣을까?"
@@ -240,7 +240,7 @@ msgid "The fix only; keep the log line to yourself"
 msgstr "해결 내용만 쓰고 로그 줄은 혼자 간직하기"
 
 msgid "A clean report · the line stays yours"
-msgstr "깔끔한 보고서 · 그 줄은 당신만 앎"
+msgstr "깔끔한 보고서 · 그 줄은 너만 앎"
 
 msgid "The fix, and tell Maya about the line off the record"
 msgstr "해결 내용을 쓰고, 로그 줄은 마야에게만 따로 말하기"
@@ -492,7 +492,7 @@ msgid "Post the timeline, then chase the dead change-notice link yourself"
 msgstr "타임라인을 올리고, 끊긴 변경 공지 링크는 직접 쫓아 보기"
 
 msgid "Off the clock · your curiosity"
-msgstr "근무 외 시간 · 당신의 호기심"
+msgstr "근무 외 시간 · 네 호기심"
 
 msgid "The change-notice system says the notice was never filed. Its audit log says someone viewed it at 03:39."
 msgstr "변경 공지 시스템에는 그 공지가 등록된 적이 없다고 나온다. 그런데 감사 로그에는 누군가 03:39에 그 공지를 열람했다고 남아 있다."
@@ -555,7 +555,7 @@ msgid "23 min"
 msgstr "23분"
 
 msgid "I'm stuck on the database bridge. This one's yours — ping me only if it burns."
-msgstr "저는 DB 브리지에 묶여 있어요. 이건 당신 거예요. 정말 불붙으면 그때만 불러요."
+msgstr "저는 DB 브리지에 묶여 있어요. 이번 건 맡길게요. 정말 불붙으면 그때만 불러요."
 
 msgid "Receipts are late. Nobody has confirmed that payments failed."
 msgstr "영수증이 늦어지고 있어요. 결제가 실패했다고 확인된 건 없어요."
@@ -702,7 +702,7 @@ msgid "Note the timestamp and say nothing"
 msgstr "타임스탬프만 적어 두고 아무 말 하지 않기"
 
 msgid "It stays between you and whoever wrote it"
-msgstr "당신과, 그걸 쓴 누군가만 아는 일"
+msgstr "너와, 그걸 쓴 누군가만 아는 일"
 
 msgid "Pull Maya off her bridge and show her the marker"
 msgstr "마야를 브리지에서 불러내 마커 보여 주기"
@@ -4302,7 +4302,7 @@ msgid "Send the interface record to the regional care network"
 msgstr "인터페이스 기록을 지역 의료 네트워크에 보내기"
 
 msgid "They should know · it isn't yours to send"
-msgstr "그들은 알아야 함 · 당신이 보낼 문서는 아님"
+msgstr "그들은 알아야 함 · 네가 보낼 문서는 아님"
 
 msgid "The care network's night coordinator answers within a minute."
 msgstr "의료 네트워크의 야간 코디네이터가 1분 만에 답장한다."
@@ -4692,7 +4692,7 @@ msgid "c-20931 · VS-DATA-0388 · rank #3 at 09:14:02 · rank #27 at 09:14:05 ·
 msgstr "c-20931 · VS-DATA-0388 · 09:14:02 순위 #3 · 09:14:05 순위 #27 · 같은 채용 담당자, 같은 필터"
 
 msgid "Risk engineering shipped rescore v3 on Thursday with the receipt check back in. Your name isn't on the change."
-msgstr "리스크 엔지니어링이 목요일에 확인증 검사를 되살린 rescore v3를 배포했다. 변경 기록에 당신 이름은 없다."
+msgstr "리스크 엔지니어링이 목요일에 확인증 검사를 되살린 rescore v3를 배포했다. 변경 기록에 네 이름은 없다."
 
 msgid "Okafor sent you coffee, by the way. She says nobody had ever read her review history before."
 msgstr "그리고 Okafor 씨가 커피 보냈어요. 자기 심사 이력을 읽어 준 사람은 처음이래요."
@@ -4887,7 +4887,7 @@ msgid "Show Maya the shortlist"
 msgstr "마야에게 후보 명단 보여 주기"
 
 msgid "She was on your hiring panel"
-msgstr "마야는 당신의 채용 심사위원이었음"
+msgstr "마야는 네 채용 심사위원이었음"
 
 msgid "I clicked approve on that. I thought the call was mine."
 msgstr "그거 승인한 사람, 저예요. 제 판단인 줄 알았어요."
@@ -4899,7 +4899,7 @@ msgid "Copy the record before the shard is retired"
 msgstr "샤드가 폐기되기 전에 기록 복사하기"
 
 msgid "Yours to keep · never yours to take"
-msgstr "당신이 간직함 · 원래 가져갈 수 있는 건 아님"
+msgstr "네가 간직함 · 원래 가져갈 수 있는 건 아님"
 
 msgid "Emergency Allocation"
 msgstr "긴급 할당"
@@ -5205,7 +5205,7 @@ msgid "Send the district 9 timeline straight to the county"
 msgstr "9구역 타임라인을 카운티에 직접 보내기"
 
 msgid "They should have it · it isn't your call"
-msgstr "그들이 받아야 할 것 · 당신이 정할 일은 아님"
+msgstr "그들이 받아야 할 것 · 네가 정할 일은 아님"
 
 msgid "Thank you. Nobody at Vantage has ever sent us the minutes before."
 msgstr "고마워요. Vantage에서 분 단위 기록을 보내 준 건 처음이에요."
@@ -7565,8 +7565,8 @@ msgstr "SEV1 · Systemic multi-service continuity · 공유 서비스 하나 이
 msgid "Payments"
 msgstr "결제"
 
-msgid "Identity"
-msgstr "신원"
+msgid "Identity (sign-in)"
+msgstr "인증"
 
 msgid "Care routing"
 msgstr "의료 라우팅"

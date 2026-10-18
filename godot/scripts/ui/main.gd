@@ -14,7 +14,7 @@ extends Control
 ## Review automation (user args after `--`):
 ##   --episode=INC-001  --play=c,SESSIONS,d:POOL_AT_LIMIT+IDLE_TRANSACTIONS
 ##   --lang=ko|en  --flags=FLAG+FLAG  --select=ID+ID  --settings  --wait=<seconds>
-##   --reenter  --act-card  --credits  --shot=<png path>
+##   --until=timer|deduction|<scene id>  --reenter  --act-card  --credits  --shot=<png path>
 ## `c` continues, `t` lets the timer run out, `d:A+B` deduces, anything else
 ## chooses that option. --flags enters the episode with those campaign flags set
 ## (saved progress is never touched while capturing). --wait lets the reveal run in real time before the
@@ -360,7 +360,9 @@ func _build_episode_screen() -> void:
 	tray_column.add_child(tray_header)
 	tray_scroll = ScrollContainer.new()
 	tray_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	tray_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	# The tray keeps its height; a long card scrolls inside it rather than
+	# pushing the log console up.
+	tray_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	cards_box = HBoxContainer.new()
 	cards_box.add_theme_constant_override("separation", 8)
 	cards_box.add_child(_label(UiText.t("board_empty"), "DimLabel", false))
@@ -410,6 +412,10 @@ func _queue_new_entries() -> void:
 	_clear_controls()
 	if not pending.is_empty():
 		controls.add_child(_label(UiText.t("skip"), "DimLabel"))
+	elif typing_label == null:
+		# Nothing new to reveal (e.g. continuing past a final scene with no
+		# beats): go straight to the next controls or the summary.
+		_show_controls()
 
 
 func _process(delta: float) -> void:
@@ -836,7 +842,9 @@ func _set_metric(entry: Dictionary) -> void:
 		tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var column := VBoxContainer.new()
 		column.add_child(_label(_t(label), "TileLabel"))
-		var value := _label("", "TileValue", false)
+		# Long values ("Kestrel Falls · 3h 12m") wrap inside the tile instead of
+		# widening the desk and squeezing the dialogue column.
+		var value := _label("", "TileValue")
 		column.add_child(value)
 		tile.add_child(column)
 		metrics_grid.add_child(tile)
@@ -1352,6 +1360,20 @@ func _review(args: Dictionary) -> void:
 		_submit(input)
 	if not args.has("wait"):
 		_skip_reveal()
+	if args.has("until"):
+		# Plays first options / deduction answers until the named kind of scene:
+		# "timer" (a timed decision), "deduction", or a scene id.
+		for i in 60:
+			_skip_reveal()
+			var scene := StoryRunner.current_scene(episode, state)
+			if scene.is_empty() or scene["id"] == args["until"] or scene["type"] == args["until"] or (args["until"] == "timer" and scene.has("timer")):
+				break
+			if scene["type"] == "briefing":
+				_submit({"type": "continue"})
+			elif scene["type"] == "deduction":
+				_submit({"type": "deduce", "picks": scene["solution"]})
+			else:
+				_submit({"type": "choose", "optionId": StoryRunner.available_options(scene, state)[0]["id"]})
 	if args.has("reenter"):
 		# Leave and choose the incident again: a finished one opens its record,
 		# an unfinished one resumes where it was left.

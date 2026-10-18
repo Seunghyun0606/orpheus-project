@@ -2,6 +2,7 @@
 //
 //   node scripts/story/godot.mjs play      export story data, then open the game window
 //   node scripts/story/godot.mjs parity    GDScript runner vs reference runner on every path
+//   node scripts/story/godot.mjs smoke     the whole campaign through the real UI, three ways
 //   node scripts/story/godot.mjs editor    open the project in the Godot editor
 //
 // The Godot binary comes from GODOT_BIN, then `godot` on PATH, then a Godot 4
@@ -55,6 +56,11 @@ switch (process.argv[2]) {
     run(['--headless', '--path', PROJECT, '--import']);
     run(['--headless', '--path', PROJECT, '--script', 'res://tests/parity.gd']);
     break;
+  case 'smoke':
+    exportData();
+    run(['--headless', '--path', PROJECT, '--import']);
+    run(['--headless', '--path', PROJECT, '--script', 'res://tests/ui_smoke.gd']);
+    break;
   case 'play':
     exportData();
     run(['--headless', '--path', PROJECT, '--import']);
@@ -68,5 +74,5 @@ switch (process.argv[2]) {
     spawn(godot, ['--editor', '--path', PROJECT], { detached: true, stdio: 'ignore' }).unref();
     break;
   default:
-    console.log('Usage: node scripts/story/godot.mjs play|parity|editor');
+    console.log('Usage: node scripts/story/godot.mjs play|parity|smoke|editor');
 }

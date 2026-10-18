@@ -105,7 +105,7 @@ const STRINGS := {
 		"timed_out": "시간 초과",
 		"pressure": "압박",
 		"end_title": "인시던트 종료",
-		"end_choices": "당신의 결정",
+		"end_choices": "내 결정",
 		"end_changes": "달라진 것",
 		"no_change": "눈에 띄는 변화 없음.",
 		"replay": "다시 하기",

@@ -80,7 +80,7 @@ entries:
   - en: Ask Jin what customers are seeing
     ko: 진에게 고객 쪽 상황 물어보기
   - en: Slower · the team hears from you
-    ko: 더 느림 · 팀이 당신 목소리를 들음
+    ko: 더 느림 · 팀이 네 목소리를 들음
   - en: Failed checkouts, confirmed. Their apps retry on their own, so some go through on the third or fourth try.
     ko: 결제 실패 확인했어요. 앱이 알아서 재시도해서 세 번째, 네 번째에 성공하는 건도 있어요.
   - en: Every retry asks for another connection. Meanwhile I checked the sessions — 164 of them idle in transaction.
@@ -142,13 +142,13 @@ entries:
   - en: "02:23:11 / UNKNOWN: Good."
     ko: "02:23:11 / UNKNOWN: 좋아."
   - en: Did you write that? No? Probably a test harness talking to itself.
-    ko: 이거 당신이 쓴 거예요? 아니라고요? 테스트 하네스가 혼잣말한 거겠죠.
+    ko: 이거 직접 쓴 거예요? 아니라고요? 테스트 하네스가 혼잣말한 거겠죠.
   - en: There is no service called UNKNOWN.
     ko: UNKNOWN이라는 서비스는 없다.
   - en: Postmortem
     ko: 사후 분석
   - en: Postmortem's due by morning. Your incident, your write-up.
-    ko: 사후 분석은 아침까지예요. 당신 인시던트니까 당신이 써요.
+    ko: 사후 분석은 아침까지예요. 맡은 인시던트니까 직접 써요.
   - en: What goes in the report?
     ko: 보고서에 무엇을 넣을까?
   - en: The fix, and the strange log line as an attachment
@@ -160,7 +160,7 @@ entries:
   - en: The fix only; keep the log line to yourself
     ko: 해결 내용만 쓰고 로그 줄은 혼자 간직하기
   - en: A clean report · the line stays yours
-    ko: 깔끔한 보고서 · 그 줄은 당신만 앎
+    ko: 깔끔한 보고서 · 그 줄은 너만 앎
   - en: The fix, and tell Maya about the line off the record
     ko: 해결 내용을 쓰고, 로그 줄은 마야에게만 따로 말하기
   - en: Off the record · Maya will remember

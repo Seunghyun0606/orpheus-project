@@ -55,8 +55,8 @@ entries:
     ko: SEV1 · Systemic multi-service continuity · 공유 서비스 하나 이상 오류율 20% 초과
   - en: Payments
     ko: 결제
-  - en: Identity
-    ko: 신원
+  - en: Identity (sign-in)
+    ko: 인증
   - en: Care routing
     ko: 의료 라우팅
   - en: Finance
