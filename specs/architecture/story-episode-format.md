@@ -92,3 +92,14 @@ scenes: [...]
 - `npm run godot:parity`: 일치 검사. Godot 바이너리는 `GODOT_BIN` → PATH의 `godot` → `../_basic_tool` 순으로 찾는다.
 - `npm run check`는 내보낸 데이터가 최신인지 확인한다(Godot 없이도 실행 가능).
 - 화면 검수용 인자: `godot --path godot -- --episode=INC-001 --play=c,SESSIONS --shot=out.png` (자세한 형식은 `main.gd` 머리말).
+
+### Play rules in the Godot build
+
+- Dialogue and log lines are typed out (Settings → text speed: normal / fast / instant) and
+  stamped with an in-world clock. The clock starts at the episode's first time-of-day scene
+  title (e.g. `02:14`), jumps forward to later ones and otherwise advances by entry kind; it
+  is derived from the feed alone, so a record shows the same times.
+- `user://campaign.json` keeps `after` (carry per finished episode), `records` (entry carry
+  + inputs per finished episode) and `current` (the episode in progress). A finished episode
+  cannot be played again; choosing it replays its record read-only. Leaving mid-incident
+  resumes at the same point. "Start over" on the title erases everything after a second press.

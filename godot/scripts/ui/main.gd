@@ -1,9 +1,10 @@
 extends Control
 ## Title screen, episode screen and settings (DEC-072, TASK-038).
 ##
-## The episode screen only renders the runner's feed: entries are revealed one
-## at a time, then the controls for the current scene appear. All story logic
-## lives in story_runner.gd.
+## The episode screen only renders the runner's feed: entries are typed out one
+## at a time with an in-world clock, then the controls for the current scene
+## appear. All story logic lives in story_runner.gd. A finished incident is
+## never played again: choosing it opens its record, read-only.
 ##
 ## Layout references: the dialogue column with numbered choices inline at its
 ## foot (Disco Elysium), the evidence tray of cards picked for a deduction
@@ -13,11 +14,12 @@ extends Control
 ## Review automation (user args after `--`):
 ##   --episode=INC-001  --play=c,SESSIONS,d:POOL_AT_LIMIT+IDLE_TRANSACTIONS
 ##   --lang=ko|en  --flags=FLAG+FLAG  --select=ID+ID  --settings  --wait=<seconds>
-##   --shot=<png path>
+##   --reenter  --shot=<png path>
 ## `c` continues, `t` lets the timer run out, `d:A+B` deduces, anything else
 ## chooses that option. --flags enters the episode with those campaign flags set
 ## (saved progress is never touched while capturing). --wait lets the reveal run in real time before the
-## capture. With --shot the screen is captured and the game quits.
+## capture. --reenter leaves and picks the incident again (record or resume).
+## With --shot the screen is captured and the game quits.
 
 const StoryRunner := preload("res://scripts/story/story_runner.gd")
 const Library := preload("res://scripts/story/episode_library.gd")
@@ -27,9 +29,16 @@ const ThemeBuilder := preload("res://scripts/ui/theme_builder.gd")
 const Progress := preload("res://scripts/story/progress.gd")
 const CRT_SHADER := preload("res://shaders/crt.gdshader")
 
+## Pause after each entry has finished typing.
 const REVEAL_DELAY := {
-	"scene": 0.5, "narrate": 0.9, "line": 0.8, "log": 0.35, "metric": 0.3,
-	"evidence": 0.6, "choice": 0.4, "deduction": 0.6,
+	"scene": 0.35, "narrate": 0.45, "line": 0.4, "log": 0.15, "metric": 0.25,
+	"evidence": 0.35, "choice": 0.3, "deduction": 0.4,
+}
+## In-world seconds each kind of entry takes; scene titles that read as a time
+## of day (e.g. "02:14") set the clock.
+const CLOCK_ADVANCE := {
+	"scene": 0, "narrate": 14, "line": 19, "log": 3, "metric": 2,
+	"evidence": 5, "choice": 24, "deduction": 31,
 }
 
 var screen: Control
@@ -44,6 +53,15 @@ var timer_left := -1.0
 var timer_total := 0.0
 var picks: Array = []
 var shown_entries := 0
+## Clock stamp ("02:14:09") of each feed entry.
+var entry_times := PackedStringArray()
+## The label being typed into, and how far.
+var typing_label: RichTextLabel
+var typing_pos := 0.0
+var typing_end := 0
+## Showing a finished incident's record: nothing can be chosen.
+var viewing_record := false
+var restart_armed := false
 
 # Episode screen widgets.
 var feed: RichTextLabel
@@ -79,7 +97,7 @@ func _ready() -> void:
 		review_flags[flag] = true
 	reviewing = args.has("shot")
 	if reviewing:
-		progress = {"after": {}}
+		progress = Progress.empty()
 	if args.has("lang"):
 		Settings.language = args["lang"]
 	_apply_settings()
@@ -117,6 +135,8 @@ func _show_title() -> void:
 	state = {}
 	pending.clear()
 	timer_left = -1.0
+	restart_armed = false
+	viewing_record = false
 	var root := _margin(56)
 	var columns := HBoxContainer.new()
 	columns.add_theme_constant_override("separation", 48)
@@ -144,7 +164,13 @@ func _show_title() -> void:
 	if not progress["after"].is_empty():
 		var restart := _button(UiText.t("restart"))
 		restart.pressed.connect(func() -> void:
-			progress = Progress.reset()
+			if not restart_armed:
+				restart_armed = true
+				restart.text = UiText.t("confirm_restart")
+				return
+			restart_armed = false
+			progress = Progress.empty()
+			_save_progress()
 			_show_title()
 		)
 		left.add_child(restart)
@@ -181,6 +207,10 @@ func _show_title() -> void:
 			list.add_child(_label("%s  %s" % [UiText.t("act") % act, act_name], "DimLabel", false))
 		var mark: String = "✓" if Progress.is_finished(progress, id) else ("▸" if unlocked else "·")
 		var title: String = tr(entry["title"]) if unlocked else UiText.t("locked")
+		if Progress.is_finished(progress, id):
+			title += "   · " + UiText.t("record")
+		elif Progress.in_progress(progress, id):
+			title += "   · " + UiText.t("in_progress")
 		var button := _button("%s  %s   %s" % [mark, id, title])
 		button.disabled = not unlocked
 		button.pressed.connect(_start_episode.bind(id))
@@ -196,11 +226,46 @@ func _start_episode(id: String) -> void:
 		push_error("Episode %s is missing; run npm run godot:export." % id)
 		_show_title()
 		return
+	if Progress.is_finished(progress, id):
+		_show_record(id)
+		return
+	viewing_record = false
 	var carry: Dictionary = Progress.carry_for(progress, id).duplicate(true)
 	carry["flags"].merge(review_flags, true)
-	state = StoryRunner.start_episode(episode, carry)
+	var run := Progress.begin(progress, id, carry)
+	_save_progress()
+	state = Progress.replay(episode, run)
 	_build_episode_screen()
-	_queue_new_entries()
+	if run["inputs"].is_empty():
+		_queue_new_entries()
+	else:
+		# Resumed mid-incident: what already happened is shown at once.
+		_show_all_entries()
+		_show_controls()
+
+
+## A finished incident, replayed from its record: every message and choice,
+## nothing to choose.
+func _show_record(id: String) -> void:
+	viewing_record = true
+	var record: Variant = progress["records"].get(id)
+	if record is Dictionary:
+		state = Progress.replay(episode, record)
+	else:
+		state = StoryRunner.start_episode(episode, Progress.carry_for(progress, id))
+		state["sceneId"] = null
+		state["feed"] = []
+	_build_episode_screen()
+	_show_all_entries()
+	_show_controls()
+	if not record is Dictionary:
+		controls.add_child(_label(UiText.t("no_record"), "DimLabel"))
+		controls.move_child(controls.get_child(controls.get_child_count() - 1), 1)
+
+
+func _save_progress() -> void:
+	if not reviewing:
+		Progress.save_progress(progress)
 
 
 ## Top bar over two columns: the ops desk (metric tiles, log console and the
@@ -314,7 +379,9 @@ func _build_episode_screen() -> void:
 
 func _queue_new_entries() -> void:
 	var entries: Array = state["feed"]
-	pending.append_array(entries.slice(shown_entries))
+	entry_times = _clock_times(entries)
+	for i in range(shown_entries, entries.size()):
+		pending.append(i)
 	shown_entries = entries.size()
 	reveal_wait = 0.15
 	_clear_controls()
@@ -325,13 +392,20 @@ func _queue_new_entries() -> void:
 func _process(delta: float) -> void:
 	if settings_layer != null:
 		return
+	if typing_label != null:
+		typing_pos += delta * Settings.TYPING_CPS[Settings.text_speed]
+		if typing_pos >= typing_end:
+			_finish_typing()
+		else:
+			typing_label.visible_characters = int(typing_pos)
+		return
 	if not pending.is_empty():
 		reveal_wait -= delta
-		while reveal_wait <= 0.0 and not pending.is_empty():
-			var entry: Dictionary = pending.pop_front()
-			_render_entry(entry)
-			reveal_wait += REVEAL_DELAY.get(entry["kind"], 0.5)
-		if pending.is_empty():
+		while reveal_wait <= 0.0 and not pending.is_empty() and typing_label == null:
+			var index: int = pending.pop_front()
+			_render_entry(index, true)
+			reveal_wait = REVEAL_DELAY.get(state["feed"][index]["kind"], 0.4)
+		if pending.is_empty() and typing_label == null:
 			_show_controls()
 	elif timer_left > 0.0:
 		timer_left -= delta
@@ -342,12 +416,70 @@ func _process(delta: float) -> void:
 
 
 func _skip_reveal() -> void:
-	if pending.is_empty():
+	if pending.is_empty() and typing_label == null:
 		return
-	for entry in pending:
-		_render_entry(entry)
+	_finish_typing()
+	for index in pending:
+		_render_entry(index, false)
 	pending.clear()
 	_show_controls()
+
+
+func _finish_typing() -> void:
+	if typing_label != null:
+		typing_label.visible_characters = -1
+	typing_label = null
+
+
+## Renders the whole feed at once (resume, record, language change).
+func _show_all_entries() -> void:
+	var entries: Array = state["feed"]
+	entry_times = _clock_times(entries)
+	for i in entries.size():
+		_render_entry(i, false)
+	shown_entries = entries.size()
+	pending.clear()
+
+
+## Starts typing what was just appended to `label` from character `start`.
+func _type(label: RichTextLabel, start: int, animate: bool) -> void:
+	if not animate or Settings.TYPING_CPS[Settings.text_speed] <= 0.0:
+		return
+	typing_label = label
+	typing_pos = start
+	typing_end = label.get_total_character_count()
+	label.visible_characters = start
+
+
+## The in-world time of every feed entry: starts at the episode's first
+## time-of-day scene title and moves on by what each entry takes.
+func _clock_times(entries: Array) -> PackedStringArray:
+	var clock := -1
+	for scene in episode["scenes"]:
+		clock = _time_of_day(scene.get("title", ""))
+		if clock >= 0:
+			break
+	if clock < 0:
+		clock = 2 * 3600
+	var times := PackedStringArray()
+	for entry in entries:
+		if entry["kind"] == "scene":
+			var at := _time_of_day(StoryRunner.find_scene(episode, entry["sceneId"]).get("title", ""))
+			if at >= 0:
+				if at < clock and clock - at > 6 * 3600:
+					at += 24 * 3600
+				clock = maxi(clock, at)
+		var seconds := clock % (24 * 3600)
+		times.append("%02d:%02d:%02d" % [seconds / 3600, (seconds / 60) % 60, seconds % 60])
+		clock += CLOCK_ADVANCE.get(entry["kind"], 5)
+	return times
+
+
+func _time_of_day(text: String) -> int:
+	var parts := text.split(":")
+	if parts.size() != 2 or not parts[0].is_valid_int() or not parts[1].is_valid_int():
+		return -1
+	return int(parts[0]) * 3600 + int(parts[1]) * 60
 
 
 func _on_feed_input(event: InputEvent) -> void:
@@ -366,7 +498,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_open_settings()
 	elif settings_layer != null or episode.is_empty():
 		return
-	elif key == KEY_SPACE and not pending.is_empty():
+	elif key == KEY_SPACE and (not pending.is_empty() or typing_label != null):
 		_skip_reveal()
 	elif key >= KEY_1 and key <= KEY_9 and pending.is_empty():
 		var index := key - KEY_1
@@ -377,8 +509,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 
-func _render_entry(entry: Dictionary) -> void:
+func _render_entry(index: int, animate: bool) -> void:
+	var entry: Dictionary = state["feed"][index]
 	var dim := ThemeBuilder.DIM.to_html(false)
+	var stamp := "[color=#%s]%s[/color]  " % [ThemeBuilder.DIM.darkened(0.25).to_html(false), entry_times[index]]
+	var start := 0
 	var amber := ThemeBuilder.AMBER.to_html(false)
 	var green := ThemeBuilder.GREEN.to_html(false)
 	var cyan := ThemeBuilder.CYAN.to_html(false)
@@ -389,22 +524,35 @@ func _render_entry(entry: Dictionary) -> void:
 				scene_label.text = tr(scene["title"])
 				feed.append_text("\n[center][color=#%s]—  %s  —[/color][/center]\n" % [dim, _esc(tr(scene["title"]))])
 		"narrate":
+			feed.append_text(stamp)
+			start = feed.get_total_character_count()
 			feed.append_text("[color=#%s][i]%s[/i][/color]\n\n" % [dim, _esc(tr(entry["text"]))])
+			_type(feed, start, animate)
 		"line":
 			var voice := _voice_color(entry["speaker"], cyan)
-			feed.append_text("[color=#%s][b]%s[/b][/color] — %s\n\n" % [voice, _esc(_speaker(entry["speaker"]).to_upper()), _esc(tr(entry["text"]))])
+			feed.append_text(stamp + "[color=#%s][b]%s[/b][/color] — " % [voice, _esc(_speaker(entry["speaker"]).to_upper())])
+			start = feed.get_total_character_count()
+			feed.append_text("%s\n\n" % _esc(tr(entry["text"])))
+			_type(feed, start, animate)
 		"log":
+			logs.append_text(stamp)
+			start = logs.get_total_character_count()
 			logs.append_text("[color=#%s]$ %s[/color]\n" % [green, _esc(tr(entry["text"]))])
+			_type(logs, start, animate)
 		"metric":
 			_set_metric(entry)
 		"evidence":
 			var item := _evidence(entry["id"])
+			feed.append_text(stamp)
+			start = feed.get_total_character_count()
 			feed.append_text("[color=#%s]■ %s — %s[/color]\n\n" % [amber, UiText.t("evidence_added"), _esc(tr(item["title"]))])
+			_type(feed, start, animate)
 			_add_card(item)
 		"choice":
 			var scene := StoryRunner.find_scene(episode, entry["sceneId"])
 			var option := StoryRunner._option(scene, entry["optionId"])
 			var late: String = "  [color=#%s](%s)[/color]" % [dim, UiText.t("timed_out")] if entry["timedOut"] else ""
+			feed.append_text(stamp)
 			feed.append_text("[color=#%s]▸ %s[/color]%s\n\n" % [amber, _esc(tr(option["text"])), late])
 		"deduction":
 			var titles := []
@@ -412,7 +560,10 @@ func _render_entry(entry: Dictionary) -> void:
 				titles.append(tr(_evidence(id)["title"]))
 			var verdict: String = UiText.t("deduce_right") if entry["correct"] else UiText.t("deduce_wrong")
 			var color := green if entry["correct"] else ThemeBuilder.RED.to_html(false)
+			feed.append_text(stamp)
+			start = feed.get_total_character_count()
 			feed.append_text("[color=#%s]▸ %s\n   %s[/color]\n\n" % [color, _esc(" + ".join(titles)), verdict])
+			_type(feed, start, animate)
 	_update_pressure()
 
 
@@ -434,7 +585,7 @@ func _show_controls() -> void:
 	_clear_controls()
 	var scene := StoryRunner.current_scene(episode, state)
 	_set_tray_selectable(not scene.is_empty() and scene["type"] == "deduction")
-	if scene.is_empty():
+	if scene.is_empty() or viewing_record:
 		_show_summary()
 		return
 	var amber := ThemeBuilder.AMBER.to_html(false)
@@ -529,11 +680,15 @@ func _add_choice(bbcode: String, action: Callable, enabled := true, parent: Cont
 
 
 func _submit(input: Dictionary) -> void:
+	if viewing_record:
+		return
 	timer_left = -1.0
 	var result := StoryRunner.apply_input(episode, state, input)
 	if result["error"] != "":
 		push_warning(result["error"])
 		return
+	Progress.log_input(progress, input)
+	_save_progress()
 	state = result["state"]
 	_queue_new_entries()
 
@@ -576,9 +731,10 @@ func _update_pressure() -> void:
 
 
 func _show_summary() -> void:
-	if not reviewing:
+	if not viewing_record and not Progress.is_finished(progress, episode["id"]):
 		Progress.finish(progress, episode["id"], state)
-	scene_label.text = ""
+		_save_progress()
+	scene_label.text = UiText.t("record_title") if viewing_record else ""
 	var ending := _ending()
 	if ending != "":
 		controls.add_child(_label("%s — %s" % [UiText.t("ending"), UiText.t("endings").get(ending, ending)], "TitleLabel", false))
@@ -604,12 +760,11 @@ func _show_summary() -> void:
 	var amber := ThemeBuilder.AMBER.to_html(false)
 	var number := 1
 	var next := Progress.next_episode(episode["id"])
-	if next != "":
+	if next != "" and Progress.is_unlocked(progress, next) and not Progress.is_finished(progress, next):
 		var next_title: String = tr(Library.load_episode(next)["title"])
 		_add_choice("[color=#%s]%d.[/color] %s — %s %s" % [amber, number, UiText.t("next"), next, next_title], _start_episode.bind(next))
 		number += 1
-	_add_choice("[color=#%s]%d.[/color] %s" % [amber, number, UiText.t("replay")], _start_episode.bind(episode["id"]))
-	_add_choice("[color=#%s]%d.[/color] %s" % [amber, number + 1, UiText.t("back")], _show_title)
+	_add_choice("[color=#%s]%d.[/color] %s" % [amber, number, UiText.t("back")], _show_title)
 	_focus_first_choice.call_deferred()
 
 
@@ -753,6 +908,13 @@ func _open_settings() -> void:
 	timer_toggle.button_pressed = Settings.timer
 	timer_toggle.toggled.connect(func(on: bool) -> void: _change_setting("timer", on))
 	grid.add_child(timer_toggle)
+	grid.add_child(_label(UiText.t("text_speed"), "", false))
+	var speeds := OptionButton.new()
+	for name in UiText.t("speeds"):
+		speeds.add_item(name)
+	speeds.selected = Settings.text_speed
+	speeds.item_selected.connect(func(index: int) -> void: _change_setting("text_speed", index))
+	grid.add_child(speeds)
 	grid.add_child(Control.new())
 	var close := _button(UiText.t("close"))
 	close.pressed.connect(_close_settings)
@@ -787,6 +949,8 @@ func _change_setting(key: String, value: Variant) -> void:
 			Settings.crt = value
 		"timer":
 			Settings.timer = value
+		"text_speed":
+			Settings.text_speed = value
 	Settings.save_settings()
 	_apply_settings()
 	crt.visible = Settings.crt
@@ -814,11 +978,13 @@ func _rebuild() -> void:
 	var remaining := timer_left
 	var selected := picks.duplicate()
 	var rest := pending.duplicate()
+	_finish_typing()
 	_build_episode_screen()
 	var entries: Array = state["feed"]
+	entry_times = _clock_times(entries)
 	var visible_count := entries.size() - rest.size()
 	for i in visible_count:
-		_render_entry(entries[i])
+		_render_entry(i, false)
 	shown_entries = entries.size()
 	pending = rest
 	if pending.is_empty():
@@ -870,6 +1036,8 @@ func _rich() -> RichTextLabel:
 	rich.selection_enabled = false
 	rich.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	rich.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	# Lay the whole line out first so typed words don't jump between lines.
+	rich.visible_characters_behavior = TextServer.VC_CHARS_AFTER_SHAPING
 	return rich
 
 
@@ -947,6 +1115,13 @@ func _review(args: Dictionary) -> void:
 			input = {"type": "choose", "optionId": step}
 		_submit(input)
 	if not args.has("wait"):
+		_skip_reveal()
+	if args.has("reenter"):
+		# Leave and choose the incident again: a finished one opens its record,
+		# an unfinished one resumes where it was left.
+		var id: String = episode["id"]
+		_show_title()
+		_start_episode(id)
 		_skip_reveal()
 	for id in args.get("select", "").split("+", false):
 		_toggle_pick(id)
