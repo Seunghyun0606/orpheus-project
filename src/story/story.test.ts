@@ -7,6 +7,7 @@ import {
   applyStoryInput,
   availableOptions,
   currentScene,
+  emptyCarry,
   startEpisode,
   StoryInputError,
   type EpisodeState,
@@ -19,7 +20,7 @@ import {
   type DeductionScene,
   type Episode,
 } from './schema.ts';
-import { enumeratePaths, validateEpisode } from './validate.ts';
+import { campaignCarries, enumeratePaths, validateEpisode } from './validate.ts';
 
 const dataDir = 'src/story/data/';
 const episodes = readdirSync(dataDir)
@@ -47,8 +48,11 @@ function mutate(change: (raw: Episode) => void): Episode {
 
 describe('story episodes', () => {
   it.each(episodes.map((e) => [e.id, e]))('%s has no dead ends', (_, episode) => {
-    expect(validateEpisode(episode)).toEqual([]);
-    for (const { state } of enumeratePaths(episode).paths) expect(state.sceneId).toBeNull();
+    const carries = campaignCarries(episodes).get(episode.id)!;
+    expect(validateEpisode(episode, carries)).toEqual([]);
+    for (const carry of carries)
+      for (const { state } of enumeratePaths(episode, carry).paths)
+        expect(state.sceneId).toBeNull();
   });
 });
 
@@ -149,6 +153,52 @@ describe('INC-001 episode', () => {
   it('is deterministic', () => {
     const inputs = [go, choose('CUSTOMERS'), deduce('ERROR_SPIKE', 'CLIENT_RETRIES')];
     expect(play(inc001, inputs)).toEqual(play(inc001, inputs));
+  });
+});
+
+describe('Act 1 as a campaign', () => {
+  const byId = (id: string) => episodes.find((e) => e.id === id)!;
+  const carryWith = (flags: Record<string, boolean>) => ({ ...emptyCarry, flags });
+  const lines = (state: EpisodeState) =>
+    state.feed.flatMap((e) => (e.kind === 'line' || e.kind === 'narrate' ? [e.text] : []));
+
+  it('opens INC-002 with what the player did with the first UNKNOWN line', () => {
+    const inc002 = byId('INC-002');
+    const opening = (flag: string) => lines(startEpisode(inc002, carryWith({ [flag]: true })));
+    expect(opening('UNKNOWN_SHARED_WITH_MAYA').join(' ')).toMatch(/grepped every test harness/);
+    expect(opening('UNKNOWN_REPORTED').join(' ')).toMatch(/No owner found/);
+    expect(opening('UNKNOWN_KEPT').join(' ')).toMatch(/text file on your desktop/);
+  });
+
+  it('lets only a player who confided in Maya bring her the third message', () => {
+    const inc003 = byId('INC-003');
+    const report = inc003.scenes.find((s) => s.id === 'report') as ChoiceScene;
+    const reach = (flags: Record<string, boolean>) =>
+      availableOptions(
+        report,
+        [go, choose('LOGS'), go, choose('QUARANTINE'), go].reduce(
+          (state, input) => applyStoryInput(inc003, state, input),
+          startEpisode(inc003, carryWith(flags)),
+        ),
+      ).map((o) => o.id);
+    expect(reach({})).toEqual(['TICKET', 'KEEP']);
+    expect(reach({ UNKNOWN_SHARED_WITH_MAYA: true })).toEqual(['TICKET', 'KEEP', 'MAYA']);
+  });
+
+  it('hands an unanswered INC-003 decision to automation', () => {
+    const inc003 = byId('INC-003');
+    const state = play(inc003, [go, choose('LOGS'), go, { type: 'timeout' }]);
+    expect(state.choices.decide).toBe('DROP');
+    expect(state.feed).toContainEqual(
+      expect.objectContaining({ kind: 'line', speaker: 'PLATFORM' }),
+    );
+  });
+
+  it('reaches every Act 1 episode from every earlier ending', () => {
+    const carries = campaignCarries(episodes);
+    expect(carries.get('INC-001')).toHaveLength(1);
+    expect(carries.get('INC-002')!.length).toBe(3);
+    expect(carries.get('INC-003')!.length).toBeGreaterThan(3);
   });
 });
 

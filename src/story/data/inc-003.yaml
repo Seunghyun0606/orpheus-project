@@ -1,0 +1,213 @@
+# INC-003 Queue Backlog as a story episode (DEC-072, TASK-037).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-003.yaml.
+# Closes Act 1. Maya steps back: the player runs the incident alone, and an
+# unanswered decision is taken by automation instead of a colleague.
+schemaVersion: 1
+id: INC-003
+act: 1
+title: Queue Backlog
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: JIN
+    name: Jin / Support
+  - id: PLATFORM
+    name: Platform automation
+
+evidence:
+  - id: QUEUE_BACKLOG
+    kind: operational
+    title: Receipts piling up
+    body: 18,420 receipts are waiting and the oldest has waited 23 minutes. Payments still go through.
+  - id: IDLE_WORKERS
+    kind: operational
+    title: Busy workers, no progress
+    body: Receipt workers sit at 38% CPU, acknowledge 12 receipts a minute and retry 880.
+  - id: REPEATED_MESSAGE_TRACE
+    kind: operational
+    title: Repeated receipt retry trace
+    body: One legacy-format message is retried ahead of valid receipts.
+  - id: SUPPORT_IMPACT_REPORT
+    kind: operational
+    title: Support impact report
+    body: Jin confirms that receipts are delayed while payment transactions still complete.
+  - id: PARTNER_BATCH_RECORD
+    kind: operational
+    title: Partner batch comparison
+    body: Batch 781 contains the malformed receipt while adjacent batches use the accepted format.
+  - id: REDACTED_QUEUE_MARKER
+    kind: story
+    guaranteed: true
+    title: Redacted queue marker
+    body: A transient UNKNOWN marker points to a request preceding batch 781.
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: 04:52
+    beats:
+      - narrate: A week into the rotation. This time the pager is only SEV2.
+      - speaker: PAGER
+        text: SEV2 · Receipt Worker · oldest receipt message older than 15 minutes
+      - metric: { label: Receipt queue depth, value: '18,420', trend: up }
+      - metric: { label: Oldest message, value: 23 min, trend: up }
+      - collect: QUEUE_BACKLOG
+      - speaker: MAYA
+        text: I'm stuck on the database bridge. This one's yours — ping me only if it burns.
+      - speaker: JIN
+        text: Receipts are late. Nobody has confirmed that payments failed.
+      - narrate: The change notice from build 1847 still leads nowhere. You checked twice more this week.
+        when: { flags: { ANNOTATION_CHASED: true } }
+      - narrate: Nobody on the bridge mentions the release annotation anymore.
+        when: { flags: { ANNOTATION_OMITTED: true } }
+      - narrate: Sam has started a thread about who can write release annotations. It has no replies.
+        when: { flags: { ANNOTATION_SHARED: true } }
+    next: approach
+
+  - id: approach
+    type: choice
+    title: Alone on the bridge
+    prompt: Where do you start?
+    options:
+      - id: LOGS
+        text: Read the receipt worker logs
+        consequence: Straight to the workers
+        beats:
+          - metric: { label: Worker CPU, value: 38% }
+          - metric: { label: Acknowledged, value: 12/min, trend: down }
+          - metric: { label: Retries, value: 880/min, trend: up }
+          - collect: IDLE_WORKERS
+          - log: 'receipt parser rejected the same message on repeated attempts'
+          - log: 'batch-781/message-44 schema=legacy_v3 expected=receipt_v4 attempt=4117'
+          - collect: REPEATED_MESSAGE_TRACE
+          - narrate: Four thousand attempts at the same receipt. Everything behind it waits its turn.
+        effects: { values: { evidence: 1 } }
+      - id: SCALE
+        text: Add temporary receipt consumers
+        consequence: Fast · the backlog will come back
+        beats:
+          - metric: { label: Receipt queue depth, value: '12,900', trend: down }
+          - narrate: The new consumers chew through the easy receipts. Three minutes later the depth turns around.
+          - metric: { label: Receipt queue depth, value: '19,050', trend: up }
+          - collect: IDLE_WORKERS
+          - log: 'batch-781/message-44 schema=legacy_v3 expected=receipt_v4 attempt=4117'
+          - collect: REPEATED_MESSAGE_TRACE
+          - narrate: More workers, same receipt at the head of the line.
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 1 }
+          pressure: 1
+      - id: JIN
+        text: Ask Jin whether payments are actually failing
+        consequence: Slower · you'll know what customers see
+        beats:
+          - speaker: JIN
+            text: Payments complete. People are waiting on receipts — a few tickets call it a payment outage, but it isn't one.
+          - collect: SUPPORT_IMPACT_REPORT
+          - log: 'batch-781/message-44 schema=legacy_v3 expected=receipt_v4 attempt=4117'
+          - collect: REPEATED_MESSAGE_TRACE
+          - narrate: While Jin answers, the worker log repeats the same receipt number.
+        effects:
+          values: { teamTrust: 1 }
+          pressure: 1
+    next: batch
+
+  - id: batch
+    type: briefing
+    title: Batch 781
+    beats:
+      - log: 'partner batch 780: receipt_v4 ×2000 · batch 781: receipt_v4 ×1999, legacy_v3 ×1 · batch 782: receipt_v4 ×2000'
+      - collect: PARTNER_BATCH_RECORD
+      - narrate: One receipt in one partner batch, in a format nobody has sent for a year. It sits at the head of its partition and nothing gets past it.
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - metric: { label: Oldest message, value: 31 min, trend: up }
+      - narrate: Nobody is going to make this decision for you. Or almost nobody.
+    prompt: What happens to the stuck receipt?
+    timer:
+      seconds: 30
+      default: DROP
+      beats:
+        - speaker: PLATFORM
+          text: 'auto-remediation: head-of-line message exceeded retry budget · action: discard'
+    options:
+      - id: QUARANTINE
+        text: Quarantine the malformed receipt for reconciliation
+        consequence: One message set aside · someone fixes it by hand
+        beats:
+          - metric: { label: Receipt queue depth, value: '0', trend: down }
+          - metric: { label: Oldest message, value: 0 min, trend: down }
+          - narrate: The partition drains in under a minute. Message 44 waits in quarantine with a ticket attached.
+        effects:
+          values: { operationalSafety: 2, collateralDamage: 2 }
+      - id: DEAD_LETTER
+        text: Add a dead-letter rule for the legacy format
+        consequence: Stops the whole class of failure · catches more than this one
+        beats:
+          - metric: { label: Receipt queue depth, value: '0', trend: down }
+          - metric: { label: Oldest message, value: 0 min, trend: down }
+          - narrate: The queue drains. Over the next hour, receipts from three other partners land in the dead-letter queue too.
+        effects:
+          values: { operationalSafety: 1, collateralDamage: 4 }
+      - id: DROP
+        text: Discard the receipt and let the queue run
+        consequence: Fastest · one customer never gets a receipt
+        beats:
+          - metric: { label: Receipt queue depth, value: '0', trend: down }
+          - metric: { label: Oldest message, value: 0 min, trend: down }
+          - narrate: Message 44 is gone. Somewhere a customer has paid and will never be told so.
+        effects:
+          values: { operationalSafety: 1, publicInterest: -1, collateralDamage: 1 }
+    next: marker
+
+  - id: marker
+    type: briefing
+    title: 05:20
+    beats:
+      - narrate: The queue is quiet. You scroll back through the partition to see how the receipt got there.
+      - narrate: Just before batch 781 there is one more request. Its body is redacted. Under it, a marker.
+      - log: 'UNKNOWN: check the request that arrived before batch 781.'
+      - collect: REDACTED_QUEUE_MARKER
+      - narrate: Three incidents. Three messages. None of them came from a service you can find.
+    effects: { values: { curiosity: 1 } }
+    next: report
+
+  - id: report
+    type: choice
+    title: End of the week
+    prompt: What do you do with the redacted request?
+    options:
+      - id: TICKET
+        text: Open a ticket asking who redacted the request
+        consequence: On the record · questions will follow
+        effects:
+          alignment: { corporate: 1 }
+          values: { evidence: 1, publicInterest: 1 }
+          flags: { REDACTION_TICKET: true }
+      - id: KEEP
+        text: Note the timestamp and say nothing
+        consequence: It stays between you and whoever wrote it
+        effects:
+          alignment: { corporate: 1 }
+          values: { curiosity: 1 }
+          flags: { REDACTION_KEPT: true }
+      - id: MAYA
+        text: Pull Maya off her bridge and show her the marker
+        consequence: She asked to see the next one
+        when: { flags: { UNKNOWN_SHARED_WITH_MAYA: true } }
+        beats:
+          - speaker: MAYA
+            text: "...Okay. That's not a glitch. Don't put this in a ticket yet. Let's find out who reads our tickets first."
+        effects:
+          alignment: { corporate: 1 }
+          values: { teamTrust: 2 }
+          flags: { MAYA_IN_ON_IT: true }
+    next: END

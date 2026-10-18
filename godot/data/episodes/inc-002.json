@@ -1,0 +1,530 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-002",
+  "act": 1,
+  "title": "Bad Deployment",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "AUTH_ERRORS",
+      "title": "Authorization errors over the line",
+      "body": "27% of payment authorizations fail. The pager fires at 20%.",
+      "kind": "operational"
+    },
+    {
+      "id": "RETRY_PRESSURE",
+      "title": "Retries pile on",
+      "body": "Rejected sessions retry on their own — 140 retries a second hit the gateway.",
+      "kind": "operational"
+    },
+    {
+      "id": "REJECTION_LOG",
+      "title": "The verifier rejects new sessions",
+      "body": "token verifier: unknown key identifier on newly issued sessions",
+      "kind": "operational"
+    },
+    {
+      "id": "KEYSET_MISMATCH_TRACE",
+      "title": "Failed authorization trace",
+      "body": "The issuer emits K72 while the verifier still accepts K71.",
+      "kind": "operational"
+    },
+    {
+      "id": "SAM_KEYSET_COMPARISON",
+      "title": "Platform key-set comparison",
+      "body": "Sam's War Room report confirms that the verifier still accepts K71.",
+      "kind": "operational"
+    },
+    {
+      "id": "DEPLOYMENT_ORDER_RECORD",
+      "title": "Deployment comparison",
+      "body": "Build 1847 switched issuer keys before the verifier key set was ready.",
+      "kind": "operational"
+    },
+    {
+      "id": "UNATTRIBUTED_DEPLOYMENT_NOTE",
+      "title": "Unattributed deployment annotation",
+      "body": "A transient UNKNOWN annotation links build 1847 to an unexplained change notice.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "03:07",
+      "beats": [
+        {
+          "narrate": "Two nights later. The pager is louder than you remember."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV1 · Payment Gateway · authorization errors above 20%"
+        },
+        {
+          "metric": {
+            "label": "Authorization error rate",
+            "value": "27%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Identity API CPU",
+            "value": "72%",
+            "trend": "up"
+          }
+        },
+        {
+          "collect": "AUTH_ERRORS"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "The checkout alert is real. We still need to separate issuer failures from gateway load."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "By the way — your 02:23 line. I grepped every test harness we own. None of them writes \"Good.\"",
+          "when": {
+            "flags": {
+              "UNKNOWN_SHARED_WITH_MAYA": true
+            }
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Security closed your log-line ticket, by the way. \"No owner found.\" That was the whole reply.",
+          "when": {
+            "flags": {
+              "UNKNOWN_REPORTED": true
+            }
+          }
+        },
+        {
+          "narrate": "The 02:23 line is still in a text file on your desktop. You haven't told anyone.",
+          "when": {
+            "flags": {
+              "UNKNOWN_KEPT": true
+            }
+          }
+        },
+        {
+          "speaker": "JIN",
+          "text": "Customers report failed payments. We can't tell yet whether retries also succeed."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Identity build 1847 went out an hour ago. Everyone will want to roll it back. Let's know why first."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Sam from Platform is on the bridge tonight. You can hand him work."
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "First move",
+      "type": "choice",
+      "prompt": "How do you start?",
+      "options": [
+        {
+          "id": "TRACE",
+          "text": "Trace one failed authorization end to end",
+          "consequence": "Slow · you see it yourself",
+          "beats": [
+            {
+              "log": "token verifier: unknown key identifier on newly issued sessions"
+            },
+            {
+              "collect": "REJECTION_LOG"
+            },
+            {
+              "log": "trace auth-7731: issuer kid=K72 → verifier accepts [K71] → reject"
+            },
+            {
+              "metric": {
+                "label": "Issuer key",
+                "value": "K72"
+              }
+            },
+            {
+              "metric": {
+                "label": "Verifier key",
+                "value": "K71"
+              }
+            },
+            {
+              "collect": "KEYSET_MISMATCH_TRACE"
+            },
+            {
+              "speaker": "MAYA",
+              "text": "The issuer and the verifier disagree about the key. That's not load."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            }
+          }
+        },
+        {
+          "id": "SAM",
+          "text": "Ask Sam to check the verifier's key set while you watch the metrics",
+          "consequence": "Shares the load · Sam owns that part",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "On it. I'll compare the verifier key set with the active issuer. Two minutes."
+            },
+            {
+              "metric": {
+                "label": "Authorization retries",
+                "value": "140/s",
+                "trend": "up"
+              }
+            },
+            {
+              "collect": "RETRY_PRESSURE"
+            },
+            {
+              "narrate": "Two minutes of watching a retry graph climb."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Verifier still accepts K71. The issuer is already signing with K72."
+            },
+            {
+              "collect": "SAM_KEYSET_COMPARISON"
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Good hand-off. That's two people's worth of work in one."
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            }
+          }
+        },
+        {
+          "id": "ROUTE",
+          "text": "Route new authorizations to the stable region first",
+          "consequence": "Buys about three minutes · not a fix",
+          "beats": [
+            {
+              "metric": {
+                "label": "Authorization error rate",
+                "value": "9%",
+                "trend": "down"
+              }
+            },
+            {
+              "narrate": "The stable region takes the traffic. For three minutes the graph looks almost normal."
+            },
+            {
+              "metric": {
+                "label": "Authorization error rate",
+                "value": "26%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "MAYA",
+              "text": "The window's closing and we still don't know why. Sam?"
+            },
+            {
+              "speaker": "SAM",
+              "text": "Already looking. Verifier still accepts K71. The issuer is signing with K72."
+            },
+            {
+              "collect": "SAM_KEYSET_COMPARISON"
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "compare"
+    },
+    {
+      "id": "compare",
+      "title": "Build 1847",
+      "beats": [
+        {
+          "narrate": "The deployment diff loads. Build 1846 on the left, 1847 on the right."
+        },
+        {
+          "log": "1847: issuer.signing_key K71 → K72 · verifier.keyset unchanged (rollout pending)"
+        },
+        {
+          "collect": "DEPLOYMENT_ORDER_RECORD"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "There it is. 1847 switched the issuer to the new key before the verifier had it. Wrong order, not a bad build."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Two ways out. Undo the release, or finish what it started."
+        }
+      ],
+      "type": "briefing",
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "speaker": "JIN",
+          "text": "Support queue just doubled. People are retrying their cards over and over."
+        }
+      ],
+      "type": "choice",
+      "prompt": "How do you fix it?",
+      "timer": {
+        "seconds": 30,
+        "default": "ROLLBACK",
+        "beats": [
+          {
+            "speaker": "MAYA",
+            "text": "Out of time. I'm rolling 1847 back."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "ROLLBACK",
+          "text": "Roll back Identity build 1847",
+          "consequence": "Familiar · tonight's release is undone",
+          "beats": [
+            {
+              "metric": {
+                "label": "Authorization error rate",
+                "value": "0.4%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Issuer's back on K71. The release team will have questions in the morning, but checkout works."
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 2
+            }
+          }
+        },
+        {
+          "id": "KEYSET",
+          "text": "Have Sam push key K72 to every verifier",
+          "consequence": "Keeps the release · touches every verifier at once",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Pushing the new key set. Verifiers are picking it up… all green."
+            },
+            {
+              "metric": {
+                "label": "Authorization error rate",
+                "value": "0.6%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Release survives. If one verifier had missed that push, we'd be chasing ghosts till sunrise."
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 1,
+              "collateralDamage": 3,
+              "teamTrust": 1
+            }
+          }
+        },
+        {
+          "id": "WAIT",
+          "text": "Page the release owner and wait for their call",
+          "consequence": "By the book · slow",
+          "beats": [
+            {
+              "narrate": "The release owner's phone rings out. Twice."
+            },
+            {
+              "metric": {
+                "label": "Authorization error rate",
+                "value": "29%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Nobody's coming. I'm rolling it back."
+            },
+            {
+              "metric": {
+                "label": "Authorization error rate",
+                "value": "0.4%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 1,
+              "collateralDamage": 3
+            },
+            "pressure": 2
+          }
+        }
+      ],
+      "next": "annotation"
+    },
+    {
+      "id": "annotation",
+      "title": "03:40",
+      "beats": [
+        {
+          "narrate": "You open the deployment record to write up the timeline. Under build 1847 there is an annotation nobody on the bridge wrote."
+        },
+        {
+          "log": "UNKNOWN: deployment 1847 isn't what they told you."
+        },
+        {
+          "collect": "UNATTRIBUTED_DEPLOYMENT_NOTE"
+        },
+        {
+          "narrate": "It links to a change notice. The link goes nowhere."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "That's twice now. Next time it happens, show me while it's still on screen.",
+          "when": {
+            "flags": {
+              "UNKNOWN_SHARED_WITH_MAYA": true
+            }
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Release tooling leaves junk like that sometimes. File it with the rest.",
+          "when": {
+            "flags": {
+              "UNKNOWN_SHARED_WITH_MAYA": false
+            }
+          }
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Write-up",
+      "beats": [
+        {
+          "speaker": "MAYA",
+          "text": "The War Room wants a summary before handover."
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you send?",
+      "options": [
+        {
+          "id": "WAR_ROOM",
+          "text": "Post the full timeline to the War Room, annotation included",
+          "consequence": "Everyone on the bridge sees it",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Huh. Who has write access to release annotations at three in the morning?"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1,
+              "evidence": 1
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "ANNOTATION_SHARED": true
+            }
+          }
+        },
+        {
+          "id": "RELEASE_TEAM",
+          "text": "Send the deploy-order finding to the release team and leave the annotation out",
+          "consequence": "Clean and useful · the annotation stays unexplained",
+          "effects": {
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "ANNOTATION_OMITTED": true
+            }
+          }
+        },
+        {
+          "id": "CHASE",
+          "text": "Post the timeline, then chase the dead change-notice link yourself",
+          "consequence": "Off the clock · your curiosity",
+          "beats": [
+            {
+              "narrate": "The change-notice system says the notice was never filed. Its audit log says someone viewed it at 03:39."
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "ANNOTATION_CHASED": true
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

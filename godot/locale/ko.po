@@ -250,3 +250,465 @@ msgstr "비공식 · 마야가 기억함"
 
 msgid "Noted. Let me know if it shows up again."
 msgstr "알겠어요. 또 나타나면 알려 줘요."
+
+msgid "Bad Deployment"
+msgstr "잘못된 배포"
+
+msgid "Sam / Platform"
+msgstr "샘 / 플랫폼"
+
+msgid "Authorization errors over the line"
+msgstr "호출 기준을 넘은 승인 오류"
+
+msgid "27% of payment authorizations fail. The pager fires at 20%."
+msgstr "결제 승인의 27%가 실패한다. 호출 기준은 20%다."
+
+msgid "Retries pile on"
+msgstr "쌓여 가는 재시도"
+
+msgid "Rejected sessions retry on their own — 140 retries a second hit the gateway."
+msgstr "거부된 세션이 알아서 재시도한다. 초당 140건의 재시도가 게이트웨이를 두드린다."
+
+msgid "The verifier rejects new sessions"
+msgstr "새 세션을 거부하는 검증기"
+
+msgid "token verifier: unknown key identifier on newly issued sessions"
+msgstr "token verifier: 신규 발급 세션의 키 식별자를 알 수 없음"
+
+msgid "Failed authorization trace"
+msgstr "실패한 승인 추적"
+
+msgid "The issuer emits K72 while the verifier still accepts K71."
+msgstr "발급자는 K72를 내보내는데 검증기는 아직 K71만 받는다."
+
+msgid "Platform key-set comparison"
+msgstr "플랫폼 키 세트 비교"
+
+msgid "Sam's War Room report confirms that the verifier still accepts K71."
+msgstr "샘의 워룸 보고로 검증기가 아직 K71을 받는다는 것이 확인됐다."
+
+msgid "Deployment comparison"
+msgstr "배포 비교"
+
+msgid "Build 1847 switched issuer keys before the verifier key set was ready."
+msgstr "빌드 1847은 검증기 키 세트가 준비되기 전에 발급자 키를 바꿨다."
+
+msgid "Unattributed deployment annotation"
+msgstr "출처 불명의 배포 주석"
+
+msgid "A transient UNKNOWN annotation links build 1847 to an unexplained change notice."
+msgstr "일시적인 UNKNOWN 주석이 빌드 1847을 설명되지 않은 변경 공지와 연결한다."
+
+msgid "Two nights later. The pager is louder than you remember."
+msgstr "이틀 뒤. 호출기 소리가 기억보다 크다."
+
+msgid "SEV1 · Payment Gateway · authorization errors above 20%"
+msgstr "SEV1 · Payment Gateway · 승인 오류 20% 초과"
+
+msgid "Authorization error rate"
+msgstr "승인 오류율"
+
+msgid "Identity API CPU"
+msgstr "Identity API CPU"
+
+msgid "The checkout alert is real. We still need to separate issuer failures from gateway load."
+msgstr "체크아웃 경보는 진짜예요. 발급자 장애랑 게이트웨이 부하는 아직 구분해 봐야 해요."
+
+msgid "By the way — your 02:23 line. I grepped every test harness we own. None of them writes \"Good.\""
+msgstr "참, 그 02:23 로그 줄요. 우리 테스트 하네스를 전부 grep해 봤는데, \"좋아\"라고 쓰는 건 하나도 없어요."
+
+msgid "Security closed your log-line ticket, by the way. \"No owner found.\" That was the whole reply."
+msgstr "참, 보안팀이 그 로그 줄 티켓을 닫았어요. \"소유자 없음.\" 답장은 그게 전부예요."
+
+msgid "The 02:23 line is still in a text file on your desktop. You haven't told anyone."
+msgstr "02:23 로그 줄은 아직 바탕화면 텍스트 파일에 있다. 아무에게도 말하지 않았다."
+
+msgid "Customers report failed payments. We can't tell yet whether retries also succeed."
+msgstr "고객들이 결제 실패를 신고하고 있어요. 재시도가 성공하는지는 아직 몰라요."
+
+msgid "Identity build 1847 went out an hour ago. Everyone will want to roll it back. Let's know why first."
+msgstr "Identity 빌드 1847이 한 시간 전에 나갔어요. 다들 롤백하자고 할 거예요. 이유부터 알고 가요."
+
+msgid "Sam from Platform is on the bridge tonight. You can hand him work."
+msgstr "오늘 밤엔 플랫폼팀 샘도 브리지에 있어요. 일을 넘겨도 돼요."
+
+msgid "First move"
+msgstr "첫 수"
+
+msgid "How do you start?"
+msgstr "어떻게 시작할까요?"
+
+msgid "Trace one failed authorization end to end"
+msgstr "실패한 승인 하나를 처음부터 끝까지 추적하기"
+
+msgid "Slow · you see it yourself"
+msgstr "느림 · 직접 확인함"
+
+msgid "trace auth-7731: issuer kid=K72 → verifier accepts [K71] → reject"
+msgstr "trace auth-7731: issuer kid=K72 → verifier accepts [K71] → reject"
+
+msgid "Issuer key"
+msgstr "발급자 키"
+
+msgid "Verifier key"
+msgstr "검증기 키"
+
+msgid "The issuer and the verifier disagree about the key. That's not load."
+msgstr "발급자랑 검증기가 키를 두고 엇갈려요. 부하 문제가 아니에요."
+
+msgid "Ask Sam to check the verifier's key set while you watch the metrics"
+msgstr "지표를 보는 동안 샘에게 검증기 키 세트 확인 맡기기"
+
+msgid "Shares the load · Sam owns that part"
+msgstr "일을 나눔 · 그 부분은 샘이 맡음"
+
+msgid "On it. I'll compare the verifier key set with the active issuer. Two minutes."
+msgstr "맡을게요. 검증기 키 세트를 현재 발급자랑 비교해 볼게요. 2분이요."
+
+msgid "Authorization retries"
+msgstr "승인 재시도"
+
+msgid "Two minutes of watching a retry graph climb."
+msgstr "재시도 그래프가 오르는 걸 2분 동안 지켜본다."
+
+msgid "Verifier still accepts K71. The issuer is already signing with K72."
+msgstr "검증기는 아직 K71만 받아요. 발급자는 벌써 K72로 서명하고 있고요."
+
+msgid "Good hand-off. That's two people's worth of work in one."
+msgstr "잘 넘겼어요. 두 사람 몫의 일을 한 번에 한 거예요."
+
+msgid "Route new authorizations to the stable region first"
+msgstr "새 승인 요청부터 안정 리전으로 돌리기"
+
+msgid "Buys about three minutes · not a fix"
+msgstr "3분쯤 벎 · 해결은 아님"
+
+msgid "The stable region takes the traffic. For three minutes the graph looks almost normal."
+msgstr "안정 리전이 트래픽을 받는다. 3분 동안 그래프는 거의 정상처럼 보인다."
+
+msgid "The window's closing and we still don't know why. Sam?"
+msgstr "시간이 줄어드는데 아직 이유를 몰라요. 샘?"
+
+msgid "Already looking. Verifier still accepts K71. The issuer is signing with K72."
+msgstr "이미 보고 있어요. 검증기는 아직 K71만 받아요. 발급자는 K72로 서명하고요."
+
+msgid "Build 1847"
+msgstr "빌드 1847"
+
+msgid "The deployment diff loads. Build 1846 on the left, 1847 on the right."
+msgstr "배포 비교 화면이 열린다. 왼쪽은 빌드 1846, 오른쪽은 1847."
+
+msgid "1847: issuer.signing_key K71 → K72 · verifier.keyset unchanged (rollout pending)"
+msgstr "1847: issuer.signing_key K71 → K72 · verifier.keyset 변경 없음 (배포 대기 중)"
+
+msgid "There it is. 1847 switched the issuer to the new key before the verifier had it. Wrong order, not a bad build."
+msgstr "여기 있네요. 1847이 검증기가 새 키를 받기도 전에 발급자를 새 키로 바꿨어요. 빌드가 나쁜 게 아니라 순서가 틀린 거예요."
+
+msgid "Two ways out. Undo the release, or finish what it started."
+msgstr "빠져나갈 길은 두 개예요. 릴리스를 되돌리거나, 하다 만 걸 마저 끝내거나."
+
+msgid "Support queue just doubled. People are retrying their cards over and over."
+msgstr "고객지원 대기열이 방금 두 배가 됐어요. 사람들이 카드 결제를 몇 번이고 다시 시도하고 있어요."
+
+msgid "How do you fix it?"
+msgstr "어떻게 고칠까요?"
+
+msgid "Out of time. I'm rolling 1847 back."
+msgstr "시간 다 됐어요. 1847 롤백할게요."
+
+msgid "Roll back Identity build 1847"
+msgstr "Identity 빌드 1847 롤백하기"
+
+msgid "Familiar · tonight's release is undone"
+msgstr "익숙한 방법 · 오늘 밤 릴리스가 취소됨"
+
+msgid "Issuer's back on K71. The release team will have questions in the morning, but checkout works."
+msgstr "발급자가 K71로 돌아왔어요. 아침에 릴리스팀이 따지러 오겠지만, 결제는 돼요."
+
+msgid "Have Sam push key K72 to every verifier"
+msgstr "샘에게 모든 검증기에 K72 키 배포를 맡기기"
+
+msgid "Keeps the release · touches every verifier at once"
+msgstr "릴리스 유지 · 모든 검증기를 한 번에 건드림"
+
+msgid "Pushing the new key set. Verifiers are picking it up… all green."
+msgstr "새 키 세트 배포 중이에요. 검증기들이 받아 가고 있어요… 전부 정상."
+
+msgid "Release survives. If one verifier had missed that push, we'd be chasing ghosts till sunrise."
+msgstr "릴리스는 살았네요. 검증기 하나라도 그 배포를 놓쳤으면 해 뜰 때까지 유령을 쫓고 있었을 거예요."
+
+msgid "Page the release owner and wait for their call"
+msgstr "릴리스 담당자를 호출하고 답을 기다리기"
+
+msgid "By the book · slow"
+msgstr "절차대로 · 느림"
+
+msgid "The release owner's phone rings out. Twice."
+msgstr "릴리스 담당자의 전화는 받지 않는다. 두 번."
+
+msgid "Nobody's coming. I'm rolling it back."
+msgstr "아무도 안 와요. 롤백할게요."
+
+msgid "You open the deployment record to write up the timeline. Under build 1847 there is an annotation nobody on the bridge wrote."
+msgstr "타임라인을 정리하려고 배포 기록을 연다. 빌드 1847 아래에 브리지의 누구도 쓰지 않은 주석이 있다."
+
+msgid "UNKNOWN: deployment 1847 isn't what they told you."
+msgstr "UNKNOWN: 1847 배포는 너한테 말한 그런 게 아니야."
+
+msgid "It links to a change notice. The link goes nowhere."
+msgstr "주석은 변경 공지 하나로 연결된다. 링크를 누르면 아무것도 없다."
+
+msgid "That's twice now. Next time it happens, show me while it's still on screen."
+msgstr "이걸로 두 번째예요. 다음에 또 나오면 화면에 떠 있을 때 바로 보여 줘요."
+
+msgid "Release tooling leaves junk like that sometimes. File it with the rest."
+msgstr "릴리스 도구가 가끔 그런 찌꺼기를 남겨요. 다른 것들이랑 같이 정리해 둬요."
+
+msgid "Write-up"
+msgstr "정리"
+
+msgid "The War Room wants a summary before handover."
+msgstr "인계 전에 워룸이 요약을 원해요."
+
+msgid "What do you send?"
+msgstr "무엇을 보낼까?"
+
+msgid "Post the full timeline to the War Room, annotation included"
+msgstr "주석까지 포함한 전체 타임라인을 워룸에 올리기"
+
+msgid "Everyone on the bridge sees it"
+msgstr "브리지의 모두가 보게 됨"
+
+msgid "Huh. Who has write access to release annotations at three in the morning?"
+msgstr "어? 새벽 3시에 릴리스 주석 쓰기 권한이 있는 사람이 누구죠?"
+
+msgid "Send the deploy-order finding to the release team and leave the annotation out"
+msgstr "배포 순서 문제만 릴리스팀에 보내고 주석은 빼기"
+
+msgid "Clean and useful · the annotation stays unexplained"
+msgstr "깔끔하고 쓸모 있음 · 주석은 설명되지 않은 채 남음"
+
+msgid "Post the timeline, then chase the dead change-notice link yourself"
+msgstr "타임라인을 올리고, 끊긴 변경 공지 링크는 직접 쫓아 보기"
+
+msgid "Off the clock · your curiosity"
+msgstr "근무 외 시간 · 당신의 호기심"
+
+msgid "The change-notice system says the notice was never filed. Its audit log says someone viewed it at 03:39."
+msgstr "변경 공지 시스템에는 그 공지가 등록된 적이 없다고 나온다. 그런데 감사 로그에는 누군가 03:39에 그 공지를 열람했다고 남아 있다."
+
+msgid "Queue Backlog"
+msgstr "큐 적체"
+
+msgid "Platform automation"
+msgstr "플랫폼 자동화"
+
+msgid "Receipts piling up"
+msgstr "쌓여 가는 영수증"
+
+msgid "18,420 receipts are waiting and the oldest has waited 23 minutes. Payments still go through."
+msgstr "영수증 18,420건이 대기 중이고 가장 오래된 건은 23분째 기다리고 있다. 결제는 여전히 된다."
+
+msgid "Busy workers, no progress"
+msgstr "바쁘지만 진척 없는 워커"
+
+msgid "Receipt workers sit at 38% CPU, acknowledge 12 receipts a minute and retry 880."
+msgstr "영수증 워커들은 CPU 38%로 돌면서 1분에 영수증 12건을 확인하고 880번을 재시도한다."
+
+msgid "Repeated receipt retry trace"
+msgstr "영수증 반복 재시도 추적"
+
+msgid "One legacy-format message is retried ahead of valid receipts."
+msgstr "레거시 형식 메시지 하나가 정상 영수증들 앞에서 계속 재시도된다."
+
+msgid "Support impact report"
+msgstr "고객지원 피해 보고"
+
+msgid "Jin confirms that receipts are delayed while payment transactions still complete."
+msgstr "진의 확인 결과, 결제 거래는 완료되지만 영수증은 지연되고 있다."
+
+msgid "Partner batch comparison"
+msgstr "파트너 배치 비교"
+
+msgid "Batch 781 contains the malformed receipt while adjacent batches use the accepted format."
+msgstr "배치 781에는 형식이 잘못된 영수증이 들어 있고, 인접 배치들은 허용된 형식을 쓴다."
+
+msgid "Redacted queue marker"
+msgstr "가려진 큐 마커"
+
+msgid "A transient UNKNOWN marker points to a request preceding batch 781."
+msgstr "일시적인 UNKNOWN 마커가 배치 781 직전의 요청을 가리킨다."
+
+msgid "A week into the rotation. This time the pager is only SEV2."
+msgstr "로테이션 일주일째. 이번 호출은 SEV2일 뿐이다."
+
+msgid "SEV2 · Receipt Worker · oldest receipt message older than 15 minutes"
+msgstr "SEV2 · Receipt Worker · 가장 오래된 영수증 메시지 15분 초과"
+
+msgid "Receipt queue depth"
+msgstr "영수증 큐 깊이"
+
+msgid "Oldest message"
+msgstr "가장 오래된 메시지"
+
+msgid "23 min"
+msgstr "23분"
+
+msgid "I'm stuck on the database bridge. This one's yours — ping me only if it burns."
+msgstr "저는 DB 브리지에 묶여 있어요. 이건 당신 거예요. 정말 불붙으면 그때만 불러요."
+
+msgid "Receipts are late. Nobody has confirmed that payments failed."
+msgstr "영수증이 늦어지고 있어요. 결제가 실패했다고 확인된 건 없어요."
+
+msgid "The change notice from build 1847 still leads nowhere. You checked twice more this week."
+msgstr "빌드 1847의 변경 공지는 여전히 아무 데로도 이어지지 않는다. 이번 주에 두 번 더 확인했다."
+
+msgid "Nobody on the bridge mentions the release annotation anymore."
+msgstr "브리지에서 그 릴리스 주석을 입에 올리는 사람은 이제 없다."
+
+msgid "Sam has started a thread about who can write release annotations. It has no replies."
+msgstr "샘이 릴리스 주석 쓰기 권한이 누구에게 있는지 묻는 스레드를 열었다. 답글은 없다."
+
+msgid "Alone on the bridge"
+msgstr "혼자 남은 브리지"
+
+msgid "Where do you start?"
+msgstr "어디서부터 시작할까?"
+
+msgid "Read the receipt worker logs"
+msgstr "영수증 워커 로그 읽기"
+
+msgid "Straight to the workers"
+msgstr "곧장 워커로"
+
+msgid "Worker CPU"
+msgstr "워커 CPU"
+
+msgid "Acknowledged"
+msgstr "확인 처리"
+
+msgid "Retries"
+msgstr "재시도"
+
+msgid "receipt parser rejected the same message on repeated attempts"
+msgstr "영수증 파서가 같은 메시지를 반복해서 거부함"
+
+msgid "batch-781/message-44 schema=legacy_v3 expected=receipt_v4 attempt=4117"
+msgstr "batch-781/message-44 schema=legacy_v3 expected=receipt_v4 attempt=4117"
+
+msgid "Four thousand attempts at the same receipt. Everything behind it waits its turn."
+msgstr "같은 영수증에 4천 번째 시도. 그 뒤의 모든 것이 차례를 기다린다."
+
+msgid "Add temporary receipt consumers"
+msgstr "임시 영수증 컨슈머 추가하기"
+
+msgid "Fast · the backlog will come back"
+msgstr "빠름 · 적체는 다시 돌아옴"
+
+msgid "The new consumers chew through the easy receipts. Three minutes later the depth turns around."
+msgstr "새 컨슈머들이 쉬운 영수증부터 먹어 치운다. 3분 뒤 깊이 그래프가 다시 꺾여 오른다."
+
+msgid "More workers, same receipt at the head of the line."
+msgstr "워커는 늘었는데, 줄 맨 앞의 영수증은 그대로다."
+
+msgid "Ask Jin whether payments are actually failing"
+msgstr "진에게 결제가 정말 실패하는지 물어보기"
+
+msgid "Slower · you'll know what customers see"
+msgstr "더 느림 · 고객이 무엇을 겪는지 알게 됨"
+
+msgid "Payments complete. People are waiting on receipts — a few tickets call it a payment outage, but it isn't one."
+msgstr "결제는 돼요. 다들 영수증을 기다리는 거예요. 결제 장애라고 적은 티켓도 몇 개 있는데, 결제 장애는 아니에요."
+
+msgid "While Jin answers, the worker log repeats the same receipt number."
+msgstr "진이 답하는 동안 워커 로그에는 같은 영수증 번호가 되풀이된다."
+
+msgid "Batch 781"
+msgstr "배치 781"
+
+msgid "partner batch 780: receipt_v4 ×2000 · batch 781: receipt_v4 ×1999, legacy_v3 ×1 · batch 782: receipt_v4 ×2000"
+msgstr "partner batch 780: receipt_v4 ×2000 · batch 781: receipt_v4 ×1999, legacy_v3 ×1 · batch 782: receipt_v4 ×2000"
+
+msgid "One receipt in one partner batch, in a format nobody has sent for a year. It sits at the head of its partition and nothing gets past it."
+msgstr "파트너 배치 하나에 든 영수증 한 건. 1년째 아무도 보내지 않던 형식이다. 그 영수증이 파티션 맨 앞에 버티고 있어 아무것도 지나가지 못한다."
+
+msgid "31 min"
+msgstr "31분"
+
+msgid "Nobody is going to make this decision for you. Or almost nobody."
+msgstr "이 결정은 아무도 대신 내려 주지 않는다. 아니, 거의 아무도."
+
+msgid "What happens to the stuck receipt?"
+msgstr "막힌 영수증을 어떻게 할까?"
+
+msgid "auto-remediation: head-of-line message exceeded retry budget · action: discard"
+msgstr "auto-remediation: 선두 메시지가 재시도 한도를 초과함 · 조치: 폐기"
+
+msgid "Quarantine the malformed receipt for reconciliation"
+msgstr "불량 영수증을 대사용으로 격리하기"
+
+msgid "One message set aside · someone fixes it by hand"
+msgstr "메시지 하나를 옆으로 빼 둠 · 누군가 손으로 고쳐야 함"
+
+msgid "0 min"
+msgstr "0분"
+
+msgid "The partition drains in under a minute. Message 44 waits in quarantine with a ticket attached."
+msgstr "파티션이 1분도 안 돼 비워진다. 44번 메시지는 티켓이 붙은 채 격리 구역에서 기다린다."
+
+msgid "Add a dead-letter rule for the legacy format"
+msgstr "레거시 형식에 데드레터 규칙 추가하기"
+
+msgid "Stops the whole class of failure · catches more than this one"
+msgstr "같은 종류의 장애를 통째로 막음 · 이번 것 말고도 걸려듦"
+
+msgid "The queue drains. Over the next hour, receipts from three other partners land in the dead-letter queue too."
+msgstr "큐가 비워진다. 그 뒤 한 시간 동안 다른 파트너 세 곳의 영수증도 데드레터 큐에 떨어진다."
+
+msgid "Discard the receipt and let the queue run"
+msgstr "영수증을 폐기하고 큐를 흘려보내기"
+
+msgid "Fastest · one customer never gets a receipt"
+msgstr "가장 빠름 · 한 고객은 영수증을 끝내 못 받음"
+
+msgid "Message 44 is gone. Somewhere a customer has paid and will never be told so."
+msgstr "44번 메시지는 사라졌다. 어딘가의 한 고객은 돈을 냈지만 그 사실을 영영 통보받지 못한다."
+
+msgid "The queue is quiet. You scroll back through the partition to see how the receipt got there."
+msgstr "큐가 조용해졌다. 그 영수증이 어떻게 들어왔는지 보려고 파티션을 거슬러 올라간다."
+
+msgid "Just before batch 781 there is one more request. Its body is redacted. Under it, a marker."
+msgstr "배치 781 바로 앞에 요청이 하나 더 있다. 본문은 가려져 있다. 그 아래에 마커가 하나."
+
+msgid "UNKNOWN: check the request that arrived before batch 781."
+msgstr "UNKNOWN: 배치 781 전에 들어온 요청을 확인해 봐."
+
+msgid "Three incidents. Three messages. None of them came from a service you can find."
+msgstr "인시던트 셋. 메시지 셋. 어느 것도 찾을 수 있는 서비스에서 오지 않았다."
+
+msgid "End of the week"
+msgstr "한 주의 끝"
+
+msgid "What do you do with the redacted request?"
+msgstr "가려진 요청을 어떻게 할까?"
+
+msgid "Open a ticket asking who redacted the request"
+msgstr "누가 요청을 가렸는지 묻는 티켓 열기"
+
+msgid "On the record · questions will follow"
+msgstr "공식 기록 · 질문이 뒤따름"
+
+msgid "Note the timestamp and say nothing"
+msgstr "타임스탬프만 적어 두고 아무 말 하지 않기"
+
+msgid "It stays between you and whoever wrote it"
+msgstr "당신과, 그걸 쓴 누군가만 아는 일"
+
+msgid "Pull Maya off her bridge and show her the marker"
+msgstr "마야를 브리지에서 불러내 마커 보여 주기"
+
+msgid "She asked to see the next one"
+msgstr "다음 걸 보여 달라고 했었음"
+
+msgid "...Okay. That's not a glitch. Don't put this in a ticket yet. Let's find out who reads our tickets first."
+msgstr "...알았어요. 이건 오류가 아니에요. 아직 티켓은 열지 마요. 우리 티켓을 누가 읽는지부터 알아봐요."

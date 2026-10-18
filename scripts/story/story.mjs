@@ -18,7 +18,7 @@ import {
   StoryInputError,
 } from '../../src/story/runner.ts';
 import { parseEpisode } from '../../src/story/schema.ts';
-import { validateEpisode } from '../../src/story/validate.ts';
+import { campaignCarries, validateEpisode } from '../../src/story/validate.ts';
 
 const DATA = 'src/story/data/';
 const TIMEOUT = Symbol('timeout');
@@ -215,7 +215,9 @@ async function play(episode) {
     return answer;
   }
 
-  let state = startEpisode(episode);
+  // Entered as on the first campaign path that reaches this episode.
+  const carry = campaignCarries(loadEpisodes()).get(episode.id)[0];
+  let state = startEpisode(episode, carry);
   console.log(bold(`\n${episode.id} · ${t(episode.title)}\n`));
   let shown = 0;
   for (;;) {
@@ -378,8 +380,10 @@ if (command === 'play') await play(episodeById(id));
 else if (command === 'script') script(episodeById(id));
 else if (command === 'check') {
   let failed = false;
-  for (const episode of loadEpisodes()) {
-    const problems = validateEpisode(episode);
+  const episodes = loadEpisodes();
+  const carries = campaignCarries(episodes);
+  for (const episode of episodes) {
+    const problems = validateEpisode(episode, carries.get(episode.id));
     console.log(`${episode.id}: ${problems.length === 0 ? 'ok' : problems.length + ' problems'}`);
     for (const p of problems) console.log(`  ${p}`);
     failed ||= problems.length > 0;

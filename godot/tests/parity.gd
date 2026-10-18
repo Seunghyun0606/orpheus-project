@@ -19,13 +19,14 @@ func _initialize() -> void:
 			continue
 		var fixture: Dictionary = Library.read_json(FIXTURES + file)
 		var episode := Library.load_episode(fixture["episode"])
-		for path in fixture["paths"]:
-			total += 1
-			var problem := _play(episode, fixture["carry"], path)
-			if problem != "":
-				failures += 1
-				if failures <= 5:
-					printerr("%s path %d: %s" % [fixture["episode"], total, problem])
+		for run in fixture["runs"]:
+			for path in run["paths"]:
+				total += 1
+				var problem := _play(episode, run["carry"], path)
+				if problem != "":
+					failures += 1
+					if failures <= 5:
+						printerr("%s path %d: %s" % [fixture["episode"], total, problem])
 	print("parity: %d/%d paths match the reference runner" % [total - failures, total])
 	quit(1 if failures > 0 or total == 0 else 0)
 

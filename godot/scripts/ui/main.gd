@@ -12,9 +12,11 @@ extends Control
 ##
 ## Review automation (user args after `--`):
 ##   --episode=INC-001  --play=c,SESSIONS,d:POOL_AT_LIMIT+IDLE_TRANSACTIONS
-##   --lang=ko|en  --select=ID+ID  --settings  --wait=<seconds>  --shot=<png path>
+##   --lang=ko|en  --flags=FLAG+FLAG  --select=ID+ID  --settings  --wait=<seconds>
+##   --shot=<png path>
 ## `c` continues, `t` lets the timer run out, `d:A+B` deduces, anything else
-## chooses that option. --wait lets the reveal run in real time before the
+## chooses that option. --flags enters the episode with those campaign flags set
+## (saved progress is never touched while capturing). --wait lets the reveal run in real time before the
 ## capture. With --shot the screen is captured and the game quits.
 
 const StoryRunner := preload("res://scripts/story/story_runner.gd")
@@ -22,6 +24,7 @@ const Library := preload("res://scripts/story/episode_library.gd")
 const Settings := preload("res://scripts/ui/settings.gd")
 const UiText := preload("res://scripts/ui/ui_text.gd")
 const ThemeBuilder := preload("res://scripts/ui/theme_builder.gd")
+const Progress := preload("res://scripts/story/progress.gd")
 const CRT_SHADER := preload("res://shaders/crt.gdshader")
 
 const REVEAL_DELAY := {
@@ -60,11 +63,21 @@ var timer_label: Label
 var deduce_label: Label
 var connect_slot: VBoxContainer
 var option_actions: Array = []
+var progress := {}
+var review_flags := {}
+## True while capturing review screenshots: saved progress is neither read nor written.
+var reviewing := false
 
 
 func _ready() -> void:
 	Settings.load_settings()
+	progress = Progress.load_progress()
 	var args := _user_args()
+	for flag in args.get("flags", "").split("+", false):
+		review_flags[flag] = true
+	reviewing = args.has("shot")
+	if reviewing:
+		progress = {"after": {}}
 	if args.has("lang"):
 		Settings.language = args["lang"]
 	_apply_settings()
@@ -110,15 +123,27 @@ func _show_title() -> void:
 	column.add_child(_label(UiText.t("incidents"), "HeaderLabel"))
 	var first: Button
 	for entry in Library.episode_index():
-		var button := _button("%s   %s   ·   %s" % [entry["id"], tr(entry["title"]), UiText.t("act") % entry["act"]])
+		var id: String = entry["id"]
+		var unlocked := Progress.is_unlocked(progress, id)
+		var mark: String = "✓" if Progress.is_finished(progress, id) else ("▸" if unlocked else "·")
+		var title: String = tr(entry["title"]) if unlocked else UiText.t("locked")
+		var button := _button("%s  %s   %s   ·   %s" % [mark, id, title, UiText.t("act") % entry["act"]])
 		button.custom_minimum_size.x = 560
-		button.pressed.connect(_start_episode.bind(entry["id"]))
+		button.disabled = not unlocked
+		button.pressed.connect(_start_episode.bind(id))
 		column.add_child(button)
-		if first == null:
+		if unlocked and (first == null or not Progress.is_finished(progress, id)):
 			first = button
 	column.add_child(_spacer(24))
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
+	if not progress["after"].is_empty():
+		var restart := _button(UiText.t("restart"))
+		restart.pressed.connect(func() -> void:
+			progress = Progress.reset()
+			_show_title()
+		)
+		row.add_child(restart)
 	var settings_button := _button(UiText.t("settings"))
 	settings_button.pressed.connect(_open_settings)
 	row.add_child(settings_button)
@@ -137,7 +162,9 @@ func _start_episode(id: String) -> void:
 		push_error("Episode %s is missing; run npm run godot:export." % id)
 		_show_title()
 		return
-	state = StoryRunner.start_episode(episode)
+	var carry: Dictionary = Progress.carry_for(progress, id).duplicate(true)
+	carry["flags"].merge(review_flags, true)
+	state = StoryRunner.start_episode(episode, carry)
 	_build_episode_screen()
 	_queue_new_entries()
 
@@ -499,6 +526,8 @@ func _update_pressure() -> void:
 
 
 func _show_summary() -> void:
+	if not reviewing:
+		Progress.finish(progress, episode["id"], state)
 	scene_label.text = ""
 	controls.add_child(_label(UiText.t("end_title"), "PromptLabel"))
 	var lines := []
@@ -519,8 +548,14 @@ func _show_summary() -> void:
 	var changed: String = "   ".join(changes) if not changes.is_empty() else UiText.t("no_change")
 	controls.add_child(_label("%s: %s" % [UiText.t("end_changes"), changed], "DimLabel"))
 	var amber := ThemeBuilder.AMBER.to_html(false)
-	_add_choice("[color=#%s]1.[/color] %s" % [amber, UiText.t("replay")], _start_episode.bind(episode["id"]))
-	_add_choice("[color=#%s]2.[/color] %s" % [amber, UiText.t("back")], _show_title)
+	var number := 1
+	var next := Progress.next_episode(episode["id"])
+	if next != "":
+		var next_title: String = tr(Library.load_episode(next)["title"])
+		_add_choice("[color=#%s]%d.[/color] %s — %s %s" % [amber, number, UiText.t("next"), next, next_title], _start_episode.bind(next))
+		number += 1
+	_add_choice("[color=#%s]%d.[/color] %s" % [amber, number, UiText.t("replay")], _start_episode.bind(episode["id"]))
+	_add_choice("[color=#%s]%d.[/color] %s" % [amber, number + 1, UiText.t("back")], _show_title)
 	_focus_first_choice.call_deferred()
 
 

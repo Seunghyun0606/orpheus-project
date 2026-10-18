@@ -10,9 +10,8 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { parse } from 'yaml';
 
-import { emptyCarry } from '../../src/story/runner.ts';
 import { parseEpisode } from '../../src/story/schema.ts';
-import { enumeratePaths } from '../../src/story/validate.ts';
+import { campaignCarries, enumeratePaths } from '../../src/story/validate.ts';
 
 const DATA = 'src/story/data/';
 const OUT = 'godot/data/episodes/';
@@ -74,11 +73,14 @@ if (process.argv.includes('--check')) {
   for (const [file, content] of outputs) writeFileSync(file, content);
   if (process.argv.includes('--fixtures')) {
     mkdirSync(FIXTURES, { recursive: true });
+    const carries = campaignCarries(episodes);
     for (const episode of episodes) {
-      const { paths } = enumeratePaths(episode);
+      const runs = carries
+        .get(episode.id)
+        .map((carry) => ({ carry, paths: enumeratePaths(episode, carry).paths }));
       writeFileSync(
         `${FIXTURES}${episode.id.toLowerCase()}.paths.json`,
-        JSON.stringify({ episode: episode.id, carry: emptyCarry, paths }),
+        JSON.stringify({ episode: episode.id, runs }),
       );
     }
   }

@@ -3,6 +3,7 @@ import {
   availableOptions,
   currentScene,
   emptyCarry,
+  episodeCarry,
   startEpisode,
   type CampaignCarry,
   type EpisodeState,
@@ -202,11 +203,39 @@ export function enumeratePaths(
   return { paths, problems: [...problems] };
 }
 
-export function validateEpisode(episode: Episode, carry: CampaignCarry = emptyCarry): string[] {
+// The distinct states each episode can be entered with when the episodes are
+// played in campaign order. Conditions only read flags, so carries are
+// distinct by flags; the first carry seen for a flag set stands for it.
+export function campaignCarries(episodes: readonly Episode[]): Map<string, CampaignCarry[]> {
+  const carries = new Map<string, CampaignCarry[]>();
+  let entering: CampaignCarry[] = [emptyCarry];
+  for (const episode of [...episodes].sort((a, b) => a.id.localeCompare(b.id))) {
+    carries.set(episode.id, entering);
+    const next = new Map<string, CampaignCarry>();
+    for (const carry of entering)
+      for (const { state } of enumeratePaths(episode, carry).paths) {
+        const key = JSON.stringify(Object.entries(state.flags).sort());
+        if (!next.has(key)) next.set(key, episodeCarry(state));
+      }
+    entering = [...next.values()];
+  }
+  return carries;
+}
+
+// Checks an episode under every carry it can be entered with: options and
+// evidence count as reachable when some carry reaches them.
+export function validateEpisode(
+  episode: Episode,
+  carries: readonly CampaignCarry[] = [emptyCarry],
+): string[] {
   const problems = checkReferences(episode);
   if (problems.length > 0) return problems;
-  const { paths, problems: pathProblems } = enumeratePaths(episode, carry);
-  problems.push(...pathProblems);
+  const paths: EpisodePath[] = [];
+  for (const carry of carries) {
+    const result = enumeratePaths(episode, carry);
+    paths.push(...result.paths);
+    problems.push(...result.problems);
+  }
 
   const visited = new Set<string>();
   const chosen = new Set<string>();
