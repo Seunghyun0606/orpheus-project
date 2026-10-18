@@ -428,6 +428,9 @@ func _process(delta: float) -> void:
 		typing_pos += delta * rate
 		if typing_pos >= typing_end:
 			_finish_typing()
+			# The last entry finished typing on its own: show what comes next.
+			if pending.is_empty():
+				_show_controls()
 		else:
 			typing_label.visible_characters = int(typing_pos)
 			# A soft key tick every few letters; the log console ticks brighter.

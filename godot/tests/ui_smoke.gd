@@ -90,6 +90,47 @@ func _initialize() -> void:
 			print("final %s -> %s" % [option["id"], ending])
 		steps += 1
 	main.review_flags.clear()
+	# Real time: no skipping, the reveal and typing run frame by frame (as when
+	# a player just waits); every scene must offer its controls on its own.
+	main.progress = Progress.empty()
+	for entry in Library.episode_index():
+		var id: String = entry["id"]
+		main._start_episode(id)
+		main._close_act_card()
+		var missed_once := false
+		for step in 200:
+			var ready := false
+			for frame in 4000:
+				main._process(0.25)
+				if main.pending.is_empty() and main.typing_label == null and (not main.option_actions.is_empty() or main.deduce_label != null):
+					ready = true
+					break
+			var scene: Dictionary = StoryRunner.current_scene(main.episode, main.state)
+			if scene.is_empty():
+				break
+			if not ready:
+				failures += 1
+				printerr("%s stuck in real time at %s" % [id, scene["id"]])
+				break
+			var input := _input(scene, main.state, "first", step)
+			if scene["type"] == "deduction" and not missed_once:
+				# Miss once so the hint plays and the retry must come back.
+				var wrong := []
+				for evidence in main.state["collected"]:
+					if not scene["solution"].has(evidence) and wrong.size() < scene["solution"].size():
+						wrong.append(evidence)
+				if wrong.size() == scene["solution"].size():
+					input = {"type": "deduce", "picks": wrong}
+					missed_once = true
+			main._submit(input)
+			steps += 1
+		for frame in 4000:
+			main._process(0.25)
+			if Progress.is_finished(main.progress, id):
+				break
+		if not Progress.is_finished(main.progress, id):
+			failures += 1
+			printerr("%s did not finish in real time" % id)
 	main._show_title()
 	await process_frame
 	print("ui smoke: %d inputs, %d failures" % [steps, failures])
