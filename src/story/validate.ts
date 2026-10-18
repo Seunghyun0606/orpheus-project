@@ -37,6 +37,25 @@ function* beatsOf(scene: Scene): Generator<{ beat: Beat; where: string }> {
       for (const beat of beats ?? []) yield { beat, where: `${scene.id} ${part}` };
 }
 
+// Every player-facing string of an episode (for keyword checks).
+export function episodeTexts(episode: Episode): string[] {
+  const out: string[] = [episode.title];
+  for (const item of episode.evidence) out.push(item.title, item.body);
+  for (const scene of episode.scenes) {
+    if (scene.title) out.push(scene.title);
+    if (scene.type !== 'briefing') out.push(scene.prompt);
+    for (const { beat } of beatsOf(scene)) {
+      if ('narrate' in beat) out.push(beat.narrate);
+      else if ('text' in beat) out.push(beat.text);
+      else if ('log' in beat) out.push(beat.log);
+      else if ('metric' in beat) out.push(beat.metric.label, beat.metric.value);
+    }
+    if (scene.type === 'choice')
+      for (const option of scene.options) out.push(option.text, option.consequence ?? '');
+  }
+  return out;
+}
+
 function targetsOf(scene: Scene): string[] {
   if (scene.type !== 'choice') return [scene.next];
   return scene.options.map((option) => option.next ?? scene.next ?? '');
@@ -68,6 +87,10 @@ export function checkReferences(episode: Episode): string[] {
   const evidence = new Set(episode.evidence.map((e) => e.id));
   const cast = new Set(episode.cast.map((c) => c.id));
   if (!scenes.has(episode.start)) problems.push(`Start scene "${episode.start}" does not exist.`);
+  const allText = episodeTexts(episode).join('\n');
+  for (const keyword of episode.keywords ?? [])
+    if (!allText.includes(keyword))
+      problems.push(`Keyword "${keyword}" does not appear in the episode.`);
 
   const checkCondition = (condition: Condition | undefined, where: string) => {
     for (const ref of [...(condition?.chose ?? []), ...(condition?.notChose ?? [])]) {

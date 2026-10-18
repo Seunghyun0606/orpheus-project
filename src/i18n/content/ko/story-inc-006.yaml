@@ -5,6 +5,12 @@
 entries:
   - en: Certificate Storm
     ko: 인증서 폭풍
+  - en: trust bundle
+    ko: 신뢰 번들
+  - en: change ticket
+    ko: 변경 티켓
+  - en: case 2231
+    ko: 사건 2231
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

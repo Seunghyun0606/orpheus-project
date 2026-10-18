@@ -124,6 +124,10 @@ static func build(size_index: int) -> Theme:
 	theme.set_type_variation("TileValue", "Label")
 	theme.set_font("font", "TileValue", font(700))
 	theme.set_font_size("font_size", "TileValue", int(base * 1.6))
+	theme.set_type_variation("CardRich", "RichTextLabel")
+	theme.set_color("default_color", "CardRich", DIM)
+	for item in ["normal_font_size", "bold_font_size", "italics_font_size", "mono_font_size"]:
+		theme.set_font_size(item, "CardRich", base - 3)
 	theme.set_type_variation("CardBody", "Label")
 	theme.set_color("font_color", "CardBody", DIM)
 	theme.set_font_size("font_size", "CardBody", base - 3)

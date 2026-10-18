@@ -86,6 +86,14 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "SEC-311",
+    "RISK-0193",
+    "auth bridge",
+    "policy v13",
+    "risk register",
+    "root cause"
+  ],
   "start": "page",
   "scenes": [
     {

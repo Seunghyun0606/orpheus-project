@@ -5,6 +5,10 @@
 entries:
   - en: Unsigned Deployment
     ko: 서명 없는 배포
+  - en: signed rollout ledger
+    ko: 서명된 배포 원장
+  - en: Security hold
+    ko: 보안 보류
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

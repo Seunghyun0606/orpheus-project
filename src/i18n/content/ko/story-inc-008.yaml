@@ -5,6 +5,10 @@
 entries:
   - en: Route Drift
     ko: 경로 표류
+  - en: committed generation
+    ko: 커밋된 세대
+  - en: management network
+    ko: 관리망
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

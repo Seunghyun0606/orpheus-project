@@ -72,6 +72,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "r81",
+    "r82",
+    "r79",
+    "controller-b",
+    "committed generation",
+    "edge-z",
+    "management network"
+  ],
   "start": "page",
   "scenes": [
     {

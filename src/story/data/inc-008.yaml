@@ -8,6 +8,14 @@ schemaVersion: 1
 id: INC-008
 act: 3
 title: Route Drift
+keywords:
+  - r81
+  - r82
+  - r79
+  - controller-b
+  - committed generation
+  - edge-z
+  - management network
 
 cast:
   - id: PAGER

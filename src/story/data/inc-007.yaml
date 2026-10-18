@@ -8,6 +8,13 @@ schemaVersion: 1
 id: INC-007
 act: 3
 title: Synthetic Pressure
+keywords:
+  - repeat-214
+  - customer rule
+  - admission rule
+  - class header
+  - idle timeout
+  - creator field
 
 cast:
   - id: PAGER

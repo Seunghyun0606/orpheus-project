@@ -9,6 +9,14 @@ schemaVersion: 1
 id: INC-018
 act: 6
 title: Emergency Allocation
+keywords:
+  - depot-east
+  - preferred lane
+  - EM-9-117
+  - district 9
+  - emergency floor
+  - Policy 2026.10
+  - /logistics/allocation
 
 cast:
   - id: PAGER

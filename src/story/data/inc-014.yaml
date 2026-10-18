@@ -9,6 +9,14 @@ schemaVersion: 1
 id: INC-014
 act: 5
 title: Archive Replicas
+keywords:
+  - arch-c
+  - r-90
+  - digest manifest
+  - original write receipt
+  - pruned
+  - instance-archive
+  - NULL_218
 
 cast:
   - id: PAGER

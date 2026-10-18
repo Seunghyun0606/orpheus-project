@@ -8,6 +8,13 @@ schemaVersion: 1
 id: INC-015
 act: 6
 title: Patient Priority
+keywords:
+  - care-priority v4
+  - clinic minimum
+  - renewal first
+  - PRIORITY_RENEWED
+  - R-14
+  - /patient/resource-priority
 
 cast:
   - id: PAGER

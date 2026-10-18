@@ -86,6 +86,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "16-A",
+    "WF-118",
+    "REC-55",
+    "recovery-east-2",
+    "empty rotation",
+    "queue owners",
+    "Exposure accepted"
+  ],
   "start": "page",
   "scenes": [
     {

@@ -74,6 +74,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "g-14",
+    "adv-suite/nightly",
+    "route table",
+    "train-defender",
+    "10.44.0.0/16",
+    "orpheus-adversary",
+    "Vantage Systems"
+  ],
   "start": "page",
   "scenes": [
     {

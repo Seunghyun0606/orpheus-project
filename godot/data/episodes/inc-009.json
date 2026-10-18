@@ -78,6 +78,14 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "legacy-r7",
+    "orpheus-planner",
+    "settle-night",
+    "decommission ticket",
+    "allocation log",
+    "ORPHEUS"
+  ],
   "start": "page",
   "scenes": [
     {

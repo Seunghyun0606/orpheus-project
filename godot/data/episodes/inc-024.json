@@ -88,6 +88,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "observer-batch",
+    "orpheus-observer",
+    "EMPLOYEE#4172",
+    "read cursor",
+    "99172",
+    "PROJECT ORPHEUS",
+    "adoption loop"
+  ],
   "start": "page",
   "scenes": [
     {

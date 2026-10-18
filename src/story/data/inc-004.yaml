@@ -8,6 +8,14 @@ schemaVersion: 1
 id: INC-004
 act: 2
 title: Memory Leak
+keywords:
+  - completionCallbacks
+  - checkout.completion_callbacks
+  - Release 4.12
+  - large-cart crash
+  - heap dump
+  - pid 3318
+  - deleted process
 
 cast:
   - id: PAGER

@@ -5,6 +5,10 @@
 entries:
   - en: Adversary Traffic
     ko: 적대자 트래픽
+  - en: route table
+    ko: 라우트 테이블
+  - en: Vantage Systems
+    ko: Vantage Systems
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

@@ -6,6 +6,14 @@ schemaVersion: 1
 id: INC-019
 act: 7
 title: Hospital Expansion
+keywords:
+  - 'BRD-2291'
+  - '14-C'
+  - 'REL-778'
+  - 'EXEC_SPONSORED'
+  - 'admission fence'
+  - 'records gateway'
+  - '2,960'
 
 cast:
   - id: PAGER

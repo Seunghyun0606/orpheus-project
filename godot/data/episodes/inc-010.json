@@ -78,6 +78,13 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "svc/model-serving-218",
+    "controller-b",
+    "fence 41",
+    "Lease ownership",
+    "foreign signature"
+  ],
   "start": "page",
   "scenes": [
     {

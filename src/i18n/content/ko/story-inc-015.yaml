@@ -5,6 +5,14 @@
 entries:
   - en: Patient Priority
     ko: 환자 우선순위
+  - en: care-priority v4
+    ko: care-priority v4
+  - en: clinic minimum
+    ko: 진료소 최소치
+  - en: renewal first
+    ko: 갱신 우선
+  - en: /patient/resource-priority
+    ko: /patient/resource-priority
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead
@@ -41,8 +49,6 @@ entries:
     ko: care-priority v4에는 진료소 최소치가 없다
   - en: v3 guaranteed one route per clinic per cycle. v4 kept the throughput target and dropped the minimum.
     ko: v3는 주기마다 진료소당 경로 하나를 보장했다. v4는 처리량 목표는 남기고 최소치는 뺐다.
-  - en: /patient/resource-priority
-    ko: /patient/resource-priority
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
     ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
   - en: The pager goes off on a hospital night. Not a hospital — the network that tells hospitals where to send people.
@@ -105,8 +111,6 @@ entries:
     ko: 곡선은 깔끔하다. 점 열네 개가 맨 왼쪽, '허용 범위'라고 적힌 선 아래에 모여 있다.
   - en: The rule renews last cycle's allocations first. The fourteen never held one, so they are never renewed in.
     ko: 규칙은 지난 주기의 할당부터 갱신한다. 열네 곳은 할당을 가져 본 적이 없으니 갱신될 일도 없다.
-  - en: care-priority v4
-    ko: care-priority v4
   - en: The rule's history loads. v3 on the left, v4 on the right.
     ko: 규칙의 변경 이력이 열린다. 왼쪽에 v3, 오른쪽에 v4.
   - en: "care-priority v4: throughput target 0.90, renewal first, minimum route per clinic absent. v3 carried min_route_per_clinic: 1."

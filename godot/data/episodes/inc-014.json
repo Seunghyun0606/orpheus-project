@@ -74,6 +74,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "arch-c",
+    "r-90",
+    "digest manifest",
+    "original write receipt",
+    "pruned",
+    "instance-archive",
+    "NULL_218"
+  ],
   "start": "page",
   "scenes": [
     {

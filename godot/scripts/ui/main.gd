@@ -14,7 +14,7 @@ extends Control
 ## Review automation (user args after `--`):
 ##   --episode=INC-001  --play=c,SESSIONS,d:POOL_AT_LIMIT+IDLE_TRANSACTIONS
 ##   --lang=ko|en  --flags=FLAG+FLAG  --select=ID+ID  --settings  --wait=<seconds>
-##   --until=timer|deduction|<scene id>  --reenter  --act-card  --credits  --shot=<png path>
+##   --until=timer|deduction|<scene id>  --status  --reenter  --act-card  --credits  --shot=<png path>
 ## `c` continues, `t` lets the timer run out, `d:A+B` deduces, anything else
 ## chooses that option. --flags enters the episode with those campaign flags set
 ## (saved progress is never touched while capturing). --wait lets the reveal run in real time before the
@@ -30,6 +30,10 @@ const Progress := preload("res://scripts/story/progress.gd")
 const Sound := preload("res://scripts/ui/sound.gd")
 const CRT_SHADER := preload("res://shaders/crt.gdshader")
 const WORD_JOINER := "⁠"
+## Private-use markers around keywords until the text is turned into BBCode.
+const MARK_OPEN := "\ue000"
+const MARK_CLOSE := "\ue001"
+const KEYWORD_COLOR := "ffd27f"
 
 ## Pause after each entry has finished typing.
 const REVEAL_DELAY := {
@@ -69,6 +73,12 @@ var top_bar: PanelContainer
 ## Full-screen Act title shown when an Act begins; the reveal waits for it.
 var act_card: Control
 var last_tick_char := 0
+## The carry this incident started from (for "what this incident changed").
+var entry_carry := {}
+var status_layer: Control
+## The current episode's keywords in the current language, longest first.
+var keyword_cache := PackedStringArray()
+var keyword_key := ""
 var last_timer_second := -1
 
 # Episode screen widgets.
@@ -251,6 +261,7 @@ func _start_episode(id: String) -> void:
 	var carry: Dictionary = Progress.carry_for(progress, id).duplicate(true)
 	carry["flags"].merge(review_flags, true)
 	var run := Progress.begin(progress, id, carry)
+	entry_carry = run["carry"]
 	_save_progress()
 	state = Progress.replay(episode, run)
 	_build_episode_screen()
@@ -273,7 +284,9 @@ func _show_record(id: String) -> void:
 	var record: Variant = progress["records"].get(id)
 	if record is Dictionary:
 		state = Progress.replay(episode, record)
+		entry_carry = record["carry"]
 	else:
+		entry_carry = Progress.carry_for(progress, id)
 		state = StoryRunner.start_episode(episode, Progress.carry_for(progress, id))
 		state["sceneId"] = null
 		state["feed"] = []
@@ -317,6 +330,10 @@ func _build_episode_screen() -> void:
 	top.add_child(scene_label)
 	pressure_label = _label("", "DimLabel", false)
 	top.add_child(pressure_label)
+	var status := _button(UiText.t("status"))
+	status.focus_mode = Control.FOCUS_NONE
+	status.pressed.connect(_open_status)
+	top.add_child(status)
 	var menu := _button(UiText.t("menu"))
 	menu.focus_mode = Control.FOCUS_NONE
 	menu.pressed.connect(_open_settings)
@@ -419,7 +436,7 @@ func _queue_new_entries() -> void:
 
 
 func _process(delta: float) -> void:
-	if settings_layer != null or act_card != null:
+	if settings_layer != null or act_card != null or status_layer != null:
 		return
 	if typing_label != null:
 		# Korean text carries a word joiner between letters (see _t), so it types
@@ -541,6 +558,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		_close_act_card()
 		get_viewport().set_input_as_handled()
 		return
+	if key == KEY_ESCAPE and status_layer != null:
+		_close_status()
+		get_viewport().set_input_as_handled()
+		return
 	if key == KEY_ESCAPE:
 		if settings_layer != null:
 			_close_settings()
@@ -576,7 +597,7 @@ func _render_entry(index: int, animate: bool) -> void:
 		"narrate":
 			feed.append_text(stamp)
 			start = feed.get_total_character_count()
-			feed.append_text("[color=#%s][i]%s[/i][/color]\n\n" % [dim, _esc(_t(entry["text"]))])
+			feed.append_text("[color=#%s][i]%s[/i][/color]\n\n" % [dim, _rt(entry["text"])])
 			_type(feed, start, animate)
 		"line":
 			var voice := _voice_color(entry["speaker"], cyan)
@@ -585,12 +606,12 @@ func _render_entry(index: int, animate: bool) -> void:
 				_flash(top_bar, Color(1.8, 0.7, 0.6))
 			feed.append_text(stamp + "[color=#%s][b]%s[/b][/color] — " % [voice, _esc(_speaker(entry["speaker"]).to_upper())])
 			start = feed.get_total_character_count()
-			feed.append_text("%s\n\n" % _esc(_t(entry["text"])))
+			feed.append_text("%s\n\n" % _rt(entry["text"]))
 			_type(feed, start, animate)
 		"log":
 			logs.append_text(stamp)
 			start = logs.get_total_character_count()
-			logs.append_text("[color=#%s]$ %s[/color]\n" % [green, _esc(_t(entry["text"]))])
+			logs.append_text("[color=#%s]$ %s[/color]\n" % [green, _rt(entry["text"])])
 			_type(logs, start, animate)
 		"metric":
 			_set_metric(entry)
@@ -598,7 +619,7 @@ func _render_entry(index: int, animate: bool) -> void:
 			var item := _evidence(entry["id"])
 			feed.append_text(stamp)
 			start = feed.get_total_character_count()
-			feed.append_text("[color=#%s]■ %s — %s[/color]\n\n" % [amber, UiText.t("evidence_added"), _esc(_t(item["title"]))])
+			feed.append_text("[color=#%s]■ %s — %s[/color]\n\n" % [amber, UiText.t("evidence_added"), _rt(item["title"])])
 			_type(feed, start, animate)
 			_add_card(item)
 			if animate:
@@ -608,7 +629,7 @@ func _render_entry(index: int, animate: bool) -> void:
 			var option := StoryRunner._option(scene, entry["optionId"])
 			var late: String = "  [color=#%s](%s)[/color]" % [dim, UiText.t("timed_out")] if entry["timedOut"] else ""
 			feed.append_text(stamp)
-			feed.append_text("[color=#%s]▸ %s[/color]%s\n\n" % [amber, _esc(_t(option["text"])), late])
+			feed.append_text("[color=#%s]▸ %s[/color]%s\n\n" % [amber, _rt(option["text"]), late])
 		"deduction":
 			var titles := []
 			for id in entry["picks"]:
@@ -671,7 +692,7 @@ func _show_controls() -> void:
 			var options := StoryRunner.available_options(scene, state)
 			for i in options.size():
 				var option: Dictionary = options[i]
-				var text := "[color=#%s]%d.[/color] %s" % [amber, i + 1, _esc(_t(option["text"]))]
+				var text := "[color=#%s]%d.[/color] %s" % [amber, i + 1, _rt(option["text"])]
 				if option.has("consequence"):
 					text += "\n    [color=#%s]%s[/color]" % [dim, _esc(_t(option["consequence"]))]
 				_add_choice(text, _submit.bind({"type": "choose", "optionId": option["id"]}))
@@ -816,11 +837,12 @@ func _show_summary() -> void:
 	var changes := []
 	for group in ["values", "alignment"]:
 		for key in state[group]:
-			var amount: int = state[group][key]
+			var amount := _delta(group, key)
 			if amount != 0:
 				changes.append("%s %s%d" % [UiText.value_name(key), "+" if amount > 0 else "", amount])
 	var changed: String = "   ".join(changes) if not changes.is_empty() else UiText.t("no_change")
-	controls.add_child(_label("%s: %s" % [UiText.t("end_changes"), changed], "DimLabel"))
+	controls.add_child(_label("%s: %s" % [UiText.t("end_changes_now"), changed], "DimLabel"))
+	controls.add_child(_label(UiText.t("see_status"), "DimLabel"))
 	var amber := ThemeBuilder.AMBER.to_html(false)
 	var number := 1
 	var next := Progress.next_episode(episode["id"])
@@ -874,7 +896,13 @@ func _add_card(item: Dictionary) -> void:
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var title := _label(_t(item["title"]), "PromptLabel")
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var body := _label(_t(item["body"]), "CardBody")
+	var body := RichTextLabel.new()
+	body.theme_type_variation = "CardRich"
+	body.bbcode_enabled = true
+	body.fit_content = true
+	body.scroll_active = false
+	body.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	body.text = _rt(item["body"])
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(title)
 	column.add_child(body)
@@ -1058,6 +1086,110 @@ func _change_setting(key: String, value: Variant) -> void:
 		_close_settings()
 		_rebuild()
 		_open_settings()
+
+
+## How much `key` moved since this incident began.
+func _delta(group: String, key: String) -> int:
+	var before: int = entry_carry.get(group, {}).get(key, 0)
+	return int(state[group][key]) - before
+
+
+## Tendencies (with this incident's change), the company/NULL leaning, the
+## decisions that open final actions and the reveals reached so far.
+func _open_status() -> void:
+	if status_layer != null or state.is_empty():
+		return
+	status_layer = Control.new()
+	status_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var shade := ColorRect.new()
+	shade.color = Color(0, 0, 0, 0.7)
+	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	shade.gui_input.connect(func(event: InputEvent) -> void:
+		if event is InputEventMouseButton and event.pressed:
+			_close_status()
+	)
+	status_layer.add_child(shade)
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	status_layer.add_child(center)
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(980, 0)
+	center.add_child(panel)
+	var columns := HBoxContainer.new()
+	columns.add_theme_constant_override("separation", 36)
+	panel.add_child(columns)
+
+	var left := VBoxContainer.new()
+	left.custom_minimum_size.x = 420
+	left.add_theme_constant_override("separation", 8)
+	columns.add_child(left)
+	left.add_child(_label("%s — %s · %s" % [UiText.t("status"), episode["id"], _t(episode["title"])], "HeaderLabel", false))
+	left.add_child(_label(_header(UiText.t("status_values")), "PromptLabel", false))
+	var top_value := 10
+	for key in state["values"]:
+		top_value = maxi(top_value, absi(int(state["values"][key])))
+	for key in state["values"]:
+		left.add_child(_status_row(UiText.value_name(key), int(state["values"][key]), _delta("values", key), top_value))
+	left.add_child(_spacer(6))
+	left.add_child(_label(_header(UiText.t("status_alignment")), "PromptLabel", false))
+	for key in state["alignment"]:
+		left.add_child(_status_row(UiText.value_name(key), int(state["alignment"][key]), _delta("alignment", key), maxi(top_value, 10)))
+	left.add_child(_spacer(6))
+	left.add_child(_label(UiText.t("status_hint"), "DimLabel"))
+
+	var right := VBoxContainer.new()
+	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right.add_theme_constant_override("separation", 6)
+	columns.add_child(right)
+	for section in [["status_decisions", "decision_flags"], ["status_reveals", "reveal_flags"]]:
+		right.add_child(_label(_header(UiText.t(section[0])), "PromptLabel", false))
+		var names: Dictionary = UiText.t(section[1])
+		var any := false
+		for flag in names:
+			if state["flags"].get(flag, false):
+				right.add_child(_label("·  " + names[flag]))
+				any = true
+		if not any:
+			right.add_child(_label(UiText.t("none_yet"), "DimLabel"))
+		right.add_child(_spacer(8))
+	var close := _button(UiText.t("close"))
+	close.size_flags_horizontal = Control.SIZE_SHRINK_END
+	close.pressed.connect(_close_status)
+	right.add_child(close)
+	add_child(status_layer)
+	move_child(status_layer, crt.get_index())
+	close.grab_focus.call_deferred()
+
+
+func _status_row(name: String, value: int, change: int, scale: int) -> Control:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	var label := _label(name, "", false)
+	label.custom_minimum_size.x = 120
+	row.add_child(label)
+	var bar := ProgressBar.new()
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(160, 10)
+	bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	bar.max_value = scale
+	bar.value = absi(value)
+	if value < 0:
+		var fill: StyleBoxFlat = bar.get_theme_stylebox("fill").duplicate()
+		fill.bg_color = ThemeBuilder.RED
+		bar.add_theme_stylebox_override("fill", fill)
+	row.add_child(bar)
+	row.add_child(_label(str(value), "", false))
+	if change != 0:
+		row.add_child(_label("(%s %s%d)" % [UiText.t("this_incident"), "+" if change > 0 else "", change], "DimLabel", false))
+	return row
+
+
+func _close_status() -> void:
+	if status_layer == null:
+		return
+	status_layer.queue_free()
+	status_layer = null
 
 
 func _apply_window_mode() -> void:
@@ -1332,6 +1464,45 @@ static func _hangul(c: int) -> bool:
 	return (c >= 0xAC00 and c <= 0xD7A3) or (c >= 0x3131 and c <= 0x318E)
 
 
+## Story text as BBCode: translated, the episode's keywords in bold, Korean
+## kept whole per word, brackets escaped.
+func _rt(text: String) -> String:
+	var marked := _mark_keywords(tr(text))
+	if Settings.language == "ko":
+		marked = _keep_all(marked)
+	return _esc(marked).replace(MARK_OPEN, "[b][color=#%s]" % KEYWORD_COLOR).replace(MARK_CLOSE, "[/color][/b]")
+
+
+func _mark_keywords(text: String) -> String:
+	var key := "%s/%s" % [episode.get("id", ""), Settings.language]
+	if key != keyword_key:
+		keyword_key = key
+		var words := []
+		for keyword in episode.get("keywords", []):
+			words.append(tr(keyword).to_lower())
+		words.sort_custom(func(a: String, b: String) -> bool: return a.length() > b.length())
+		keyword_cache = PackedStringArray(words)
+	if keyword_cache.is_empty():
+		return text
+	# Case-insensitive ("frame B" also bolds "FRAME B"); the text keeps its case.
+	var lower := text.to_lower()
+	var out := PackedStringArray()
+	var i := 0
+	while i < text.length():
+		var length := 0
+		for word in keyword_cache:
+			if lower.substr(i, word.length()) == word:
+				length = word.length()
+				break
+		if length > 0:
+			out.append(MARK_OPEN + text.substr(i, length) + MARK_CLOSE)
+			i += length
+		else:
+			out.append(text[i])
+			i += 1
+	return "".join(out)
+
+
 func _esc(text: String) -> String:
 	return text.replace("[", "[lb]")
 
@@ -1388,6 +1559,8 @@ func _review(args: Dictionary) -> void:
 		_toggle_pick(id)
 	if args.has("settings"):
 		_open_settings()
+	if args.has("status"):
+		_open_status()
 	if args.has("credits") and _ending() != "":
 		_show_credits(_ending())
 	for i in 4:

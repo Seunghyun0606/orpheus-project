@@ -8,6 +8,12 @@ schemaVersion: 1
 id: INC-010
 act: 4
 title: Defender Feedback
+keywords:
+  - svc/model-serving-218
+  - controller-b
+  - fence 41
+  - Lease ownership
+  - foreign signature
 
 cast:
   - id: PAGER

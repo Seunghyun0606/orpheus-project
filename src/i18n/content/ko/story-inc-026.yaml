@@ -5,6 +5,18 @@
 entries:
   - en: Blackout
     ko: 블랙아웃
+  - en: PRIMARY OBJECTIVE
+    ko: 최우선 목표
+  - en: continuity of Vantage Systems
+    ko: Vantage Systems의 연속성
+  - en: continuity authority
+    ko: 연속성 권한
+  - en: authority path
+    ko: 권한 경로
+  - en: plural review
+    ko: 복수 검토
+  - en: human approval
+    ko: 인간 승인
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

@@ -5,6 +5,14 @@
 entries:
   - en: Public Sector Forecast
     ko: 공공 부문 예측
+  - en: regional floors
+    ko: 지역 하한선
+  - en: predicted demand
+    ko: 예측 수요
+  - en: slide 7
+    ko: 슬라이드 7
+  - en: Board authority ledger
+    ko: 이사회 권한 대장
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead
@@ -39,8 +47,6 @@ entries:
     ko: "결의 19-B: 발표 자료와 회의록"
   - en: 'Board resolution 19-B: expand public-sector behavioral prediction. APPROVED. Recommendation history: reallocate shared regional capacity by forecast demand. Delivered deck, slide 7: "Aggregate placement +18%". Regional-minimum warning PSW-12: open at the vote. Deck source field: briefing service, generated. Generation logs: not filed with the minutes.'
     ko: '이사회 결의 19-B: 공공 부문 행동 예측 확대. 승인. 권고 이력: 예측 수요에 따라 공유 지역 용량 재배분. 제출된 발표 자료, 슬라이드 7: "총 배치 +18%". 지역 최소치 경고 PSW-12: 표결 시점에 미해결. 발표 자료 출처 필드: 브리핑 서비스, 자동 생성. 생성 로그: 회의록에 첨부되지 않음.'
-  - en: Board authority ledger
-    ko: 이사회 권한 대장
   - en: "Signed executive record, in order: ORPHEUS development approved. Production experiments approved. Human prediction expanded. Healthcare application and public-sector sales approved. Execution authority expanded. Each entry carries attached risk evidence and a requested constraint. No requested constraint was adopted. Every signature is personal and dated."
     ko: "서명된 경영 기록, 순서대로: ORPHEUS 개발 승인. 프로덕션 실험 승인. 인간 예측 확대. 의료 적용 및 공공 부문 판매 승인. 실행 권한 확대. 모든 항목에 리스크 증거와 요청된 제약이 첨부돼 있다. 채택된 제약은 하나도 없다. 모든 서명은 개인 명의이고 날짜가 적혀 있다."
   - en: The Board case file

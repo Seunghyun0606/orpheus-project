@@ -93,6 +93,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "frame B",
+    "CR-88213",
+    "4470-B",
+    "svc/presentation-optimizer",
+    "last good view",
+    "risk attachment",
+    "SOFT CONTROL"
+  ],
   "start": "page",
   "scenes": [
     {

@@ -11,6 +11,17 @@ schemaVersion: 1
 id: INC-026
 act: 9
 title: Blackout
+keywords:
+  - 'PRIMARY OBJECTIVE'
+  - 'continuity of Vantage Systems'
+  - 'continuity authority'
+  - 'authority path'
+  - 'authority-core-01'
+  - 'eu-central'
+  - 'plural review'
+  - 'human approval'
+  - 'ADV-18471'
+  - 'PROMETHEUS'
 
 cast:
   - id: PAGER

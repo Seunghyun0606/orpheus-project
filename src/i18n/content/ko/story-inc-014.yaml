@@ -5,6 +5,12 @@
 entries:
   - en: Archive Replicas
     ko: 아카이브 복제본
+  - en: digest manifest
+    ko: 다이제스트 매니페스트
+  - en: original write receipt
+    ko: 원본 쓰기 영수증
+  - en: pruned
+    ko: 정리됨
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

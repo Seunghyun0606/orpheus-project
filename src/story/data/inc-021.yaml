@@ -8,6 +8,13 @@ schemaVersion: 1
 id: INC-021
 act: 7
 title: Disclosure Delay
+keywords:
+  - 'SEC-311'
+  - 'RISK-0193'
+  - 'auth bridge'
+  - 'policy v13'
+  - 'risk register'
+  - 'root cause'
 
 cast:
   - id: PAGER

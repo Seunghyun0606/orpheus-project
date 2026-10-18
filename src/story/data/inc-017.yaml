@@ -8,6 +8,15 @@ schemaVersion: 1
 id: INC-017
 act: 6
 title: Candidate Ranking
+keywords:
+  - m28
+  - r28
+  - publish fence
+  - r26-frozen
+  - VS-SRE-0412
+  - /hr/candidate-risk
+  - '#4172'
+  - LOW PREDICTABILITY
 
 cast:
   - id: PAGER

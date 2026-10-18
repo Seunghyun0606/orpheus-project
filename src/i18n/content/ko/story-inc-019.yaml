@@ -5,6 +5,10 @@
 entries:
   - en: Hospital Expansion
     ko: 병원 확장
+  - en: admission fence
+    ko: 진입 펜스
+  - en: records gateway
+    ko: 기록 게이트웨이
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

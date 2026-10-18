@@ -74,6 +74,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "ca-18",
+    "ca-17",
+    "trust bundle",
+    "change ticket",
+    "shadow-7",
+    "case 2231",
+    "NULL"
+  ],
   "start": "page",
   "scenes": [
     {

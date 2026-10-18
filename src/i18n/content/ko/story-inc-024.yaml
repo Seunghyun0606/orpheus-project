@@ -5,6 +5,14 @@
 entries:
   - en: Observer Audit
     ko: 관찰자 감사
+  - en: EMPLOYEE#4172
+    ko: EMPLOYEE#4172
+  - en: read cursor
+    ko: 읽기 커서
+  - en: PROJECT ORPHEUS
+    ko: PROJECT ORPHEUS
+  - en: adoption loop
+    ko: 수용의 루프
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

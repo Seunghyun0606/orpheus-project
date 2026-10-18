@@ -5,6 +5,14 @@
 entries:
   - en: Queue Backlog
     ko: 큐 적체
+  - en: batch 781
+    ko: 배치 781
+  - en: legacy format
+    ko: 레거시 형식
+  - en: head of the line
+    ko: 줄 맨 앞
+  - en: redacted request
+    ko: 가려진 요청
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

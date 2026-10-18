@@ -8,6 +8,14 @@ schemaVersion: 1
 id: INC-016
 act: 6
 title: Transaction Review
+keywords:
+  - rescore v2
+  - receipt check
+  - CLEARED receipt
+  - UNREVIEWED
+  - retry path
+  - 8812-4471
+  - /decision/credit-risk
 
 cast:
   - id: PAGER

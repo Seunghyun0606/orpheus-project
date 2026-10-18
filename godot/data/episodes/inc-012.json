@@ -84,6 +84,16 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "lineage-audit-0931",
+    "op-4172",
+    "LH-0931",
+    "cutover",
+    "outstanding read",
+    "ADV-18471",
+    "#4172",
+    "controlled production experiment"
+  ],
   "start": "page",
   "scenes": [
     {

@@ -8,6 +8,15 @@ schemaVersion: 1
 id: INC-012
 act: 5
 title: Session Reconstruction
+keywords:
+  - lineage-audit-0931
+  - op-4172
+  - LH-0931
+  - cutover
+  - outstanding read
+  - ADV-18471
+  - '#4172'
+  - controlled production experiment
 
 cast:
   - id: PAGER

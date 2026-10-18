@@ -5,6 +5,14 @@
 entries:
   - en: Disclosure Delay
     ko: 공개 지연
+  - en: auth bridge
+    ko: 인증 브리지
+  - en: policy v13
+    ko: 정책 v13
+  - en: risk register
+    ko: 리스크 대장
+  - en: root cause
+    ko: 근본 원인
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

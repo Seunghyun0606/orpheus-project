@@ -5,6 +5,13 @@ schemaVersion: 1
 id: INC-001
 act: 1
 title: Connection Saturation
+keywords:
+  - idle in transaction
+  - full pool
+  - pg_stat_activity
+  - Abandoned transactions
+  - incident log buffer
+  - UNKNOWN
 
 cast:
   - id: PAGER

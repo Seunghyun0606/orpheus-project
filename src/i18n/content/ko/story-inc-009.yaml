@@ -5,6 +5,10 @@
 entries:
   - en: Legacy Cluster
     ko: 레거시 클러스터
+  - en: decommission ticket
+    ko: 폐기 티켓
+  - en: allocation log
+    ko: 할당 로그
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

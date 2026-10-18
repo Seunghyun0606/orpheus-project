@@ -6,6 +6,14 @@ schemaVersion: 1
 id: INC-003
 act: 1
 title: Queue Backlog
+keywords:
+  - batch 781
+  - legacy_v3
+  - legacy format
+  - head of the line
+  - auto-remediation
+  - redacted request
+  - UNKNOWN
 
 cast:
   - id: PAGER

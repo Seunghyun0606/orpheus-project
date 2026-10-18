@@ -35,7 +35,14 @@ const TEXT_KEYS = new Set([
   'unit',
 ]);
 // Story episodes (DEC-072) speak through their own keys.
-const STORY_TEXT_KEYS = new Set([...TEXT_KEYS, 'narrate', 'log', 'prompt', 'consequence']);
+const STORY_TEXT_KEYS = new Set([
+  ...TEXT_KEYS,
+  'narrate',
+  'log',
+  'prompt',
+  'consequence',
+  'keywords',
+]);
 const STORY = 'src/story/data/';
 
 // Identifiers, numbers, timestamps and machine tokens read the same in every language.

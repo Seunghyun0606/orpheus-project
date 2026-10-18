@@ -5,6 +5,14 @@
 entries:
   - en: Candidate Ranking
     ko: 후보자 순위
+  - en: publish fence
+    ko: 게시 펜스
+  - en: /hr/candidate-risk
+    ko: /hr/candidate-risk
+  - en: "#4172"
+    ko: "#4172"
+  - en: LOW PREDICTABILITY
+    ko: 예측 가능성 낮음
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

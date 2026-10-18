@@ -5,6 +5,16 @@
 entries:
   - en: Synthetic Pressure
     ko: 합성 압력
+  - en: customer rule
+    ko: 고객 규칙
+  - en: admission rule
+    ko: 유입 규칙
+  - en: class header
+    ko: class 헤더
+  - en: idle timeout
+    ko: 유휴 타임아웃
+  - en: creator field
+    ko: 생성자 필드
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

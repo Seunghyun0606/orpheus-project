@@ -5,6 +5,16 @@
 entries:
   - en: Emergency Allocation
     ko: 긴급 할당
+  - en: preferred lane
+    ko: 우선 레인
+  - en: district 9
+    ko: 9구역
+  - en: emergency floor
+    ko: 긴급 하한
+  - en: Policy 2026.10
+    ko: 정책 2026.10
+  - en: /logistics/allocation
+    ko: /logistics/allocation
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead
@@ -43,8 +53,6 @@ entries:
     ko: 정책 2026.10이 긴급 하한을 삭제함
   - en: Policy 2026.09 held four emergency units per depot. 2026.10 kept the preferred-lane target and dropped the floor.
     ko: 정책 2026.09는 거점당 긴급 차량 4대를 확보했다. 2026.10은 우선 레인 목표는 남기고 하한을 뺐다.
-  - en: /logistics/allocation
-    ko: /logistics/allocation
   - en: /logistics/allocation. ORPHEUS allocation cut idle regular-delivery capacity 18%. Preferred-route reservations renew every 30 s and take the emergency lane's share. A human dispatcher signed the policy change at 04:10.
     ko: /logistics/allocation. ORPHEUS의 할당으로 일반 배송 유휴 용량이 18% 줄었다. 우선 경로 예약은 30초마다 갱신되며 긴급 레인의 몫을 가져간다. 인간 배차 담당자가 04:10에 정책 변경에 서명했다.
   - en: The last night of the week. The pager names a service you have never been paged for.
@@ -107,8 +115,6 @@ entries:
     ko: 경로를 바꿔도 9구역엔 소용없어요. 15분 권역 안의 거점은 depot-east뿐이고, 거기 차량은 우선 레인이 전부 잡고 있어요. 하한은 어젯밤 정책 배포 때 빠졌어요.
   - en: depot-east · claim queued behind pref-2 renewal · renewal interval 30 s
     ko: depot-east · 배차 요청이 pref-2 갱신 뒤에서 대기 · 갱신 주기 30초
-  - en: Policy 2026.10
-    ko: 정책 2026.10
   - en: "Allocation policy 2026.10: preferred-lane target present, protected emergency floor absent. Policy 2026.09 held 4 emergency units per depot."
     ko: "할당 정책 2026.10: 우선 레인 목표 있음, 보호된 긴급 하한 없음. 정책 2026.09는 거점당 긴급 차량 4대를 확보했음."
   - en: Same shape as the clinics. Keep the target, lose the floor.

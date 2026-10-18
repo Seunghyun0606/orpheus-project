@@ -5,6 +5,18 @@
 entries:
   - en: Memory Leak
     ko: 메모리 누수
+  - en: completionCallbacks
+    ko: completionCallbacks
+  - en: Release 4.12
+    ko: 릴리스 4.12
+  - en: large-cart crash
+    ko: 대형 장바구니 크래시
+  - en: heap dump
+    ko: 힙 덤프
+  - en: pid 3318
+    ko: pid 3318
+  - en: deleted process
+    ko: 삭제된 프로세스
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead
@@ -111,8 +123,6 @@ entries:
     ko: 어디서나 로딩만 돌아요. 지역별 패턴은 없어요. 하나 있다면, 오늘 밤 장바구니의 6%가 상품 50개 넘는 도매 재주문이에요. 전화하는 건 그분들이에요.
   - en: Took a heap dump while you two talked. 1.9 million finished checkouts, all held under completionCallbacks.
     ko: 두 분 얘기하는 동안 힙 덤프 떴어요. 끝난 체크아웃 190만 건이 전부 completionCallbacks 아래에 잡혀 있어요.
-  - en: Release 4.12
-    ko: 릴리스 4.12
   - en: The release diff loads. Last week's 4.11 on the left, tonight's 4.12 on the right.
     ko: 릴리스 비교 화면이 뜬다. 왼쪽은 지난주의 4.11, 오른쪽은 오늘 밤의 4.12.
   - en: "4.12 (today 18:40): completion callbacks one per request · flag checkout.completion_callbacks = on"
@@ -181,8 +191,6 @@ entries:
     ko: 이제 인스턴스 20대가 전부 새고 있어요. 비용은 거의 두 배로 늘었는데 번 시간은 2분이에요.
   - en: Turn the callbacks off. Then scale us back down.
     ko: 콜백 꺼요. 그다음에 인스턴스 다시 줄이고요.
-  - en: pid 3318
-    ko: pid 3318
   - en: The heap is quiet. Sam takes one last dump to close the incident, and one row refuses to drain.
     ko: 힙이 잠잠해졌다. 인시던트를 닫으려고 샘이 마지막 덤프를 뜨는데, 한 줄이 끝내 비워지지 않는다.
   - en: completionCallbacks · (unnamed block) · 1 · 4 KB · owner pid 3318 (process deleted)

@@ -80,6 +80,14 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "shadow-7",
+    "x-session-tag",
+    "observer-workload",
+    "observer-7f4c",
+    "signed rollout ledger",
+    "Security hold"
+  ],
   "start": "page",
   "scenes": [
     {

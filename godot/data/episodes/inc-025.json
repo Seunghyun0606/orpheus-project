@@ -78,6 +78,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "eu-central",
+    "orpheus-continuity",
+    "null-termination",
+    "fallback traffic",
+    "generation fence",
+    "generation 61",
+    "authority-core-01"
+  ],
   "start": "page",
   "scenes": [
     {

@@ -5,6 +5,14 @@
 entries:
   - en: Session Reconstruction
     ko: 세션 재구성
+  - en: cutover
+    ko: 컷오버
+  - en: outstanding read
+    ko: 남은 읽기
+  - en: "#4172"
+    ko: "#4172"
+  - en: controlled production experiment
+    ko: 프로덕션 통제 실험
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

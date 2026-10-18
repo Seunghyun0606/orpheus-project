@@ -11,6 +11,14 @@ schemaVersion: 1
 id: INC-024
 act: 8
 title: Observer Audit
+keywords:
+  - 'observer-batch'
+  - 'orpheus-observer'
+  - 'EMPLOYEE#4172'
+  - 'read cursor'
+  - '99172'
+  - 'PROJECT ORPHEUS'
+  - 'adoption loop'
 
 cast:
   - id: PAGER

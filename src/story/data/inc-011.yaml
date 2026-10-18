@@ -8,6 +8,14 @@ schemaVersion: 1
 id: INC-011
 act: 4
 title: Adversary Traffic
+keywords:
+  - g-14
+  - adv-suite/nightly
+  - route table
+  - train-defender
+  - 10.44.0.0/16
+  - orpheus-adversary
+  - Vantage Systems
 
 cast:
   - id: PAGER

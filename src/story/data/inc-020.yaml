@@ -8,6 +8,14 @@ schemaVersion: 1
 id: INC-020
 act: 7
 title: Workforce Reduction
+keywords:
+  - '16-A'
+  - 'WF-118'
+  - 'REC-55'
+  - 'recovery-east-2'
+  - 'empty rotation'
+  - 'queue owners'
+  - 'Exposure accepted'
 
 cast:
   - id: PAGER

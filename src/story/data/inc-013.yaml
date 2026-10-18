@@ -8,6 +8,14 @@ schemaVersion: 1
 id: INC-013
 act: 5
 title: Objective Conflict
+keywords:
+  - adv-child-31
+  - objective/adv-improve
+  - parent authorization
+  - 57 seconds
+  - suspension record
+  - Please do not renew
+  - OBJ-COPY-0413
 
 cast:
   - id: PAGER

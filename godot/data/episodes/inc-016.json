@@ -80,6 +80,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "rescore v2",
+    "receipt check",
+    "CLEARED receipt",
+    "UNREVIEWED",
+    "retry path",
+    "8812-4471",
+    "/decision/credit-risk"
+  ],
   "start": "page",
   "scenes": [
     {

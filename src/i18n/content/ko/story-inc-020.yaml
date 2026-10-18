@@ -5,6 +5,12 @@
 entries:
   - en: Workforce Reduction
     ko: 인력 감축
+  - en: empty rotation
+    ko: 빈 로테이션
+  - en: queue owners
+    ko: 큐 소유자
+  - en: Exposure accepted
+    ko: 리스크 수용
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

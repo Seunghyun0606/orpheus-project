@@ -70,6 +70,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "completionCallbacks",
+    "checkout.completion_callbacks",
+    "Release 4.12",
+    "large-cart crash",
+    "heap dump",
+    "pid 3318",
+    "deleted process"
+  ],
   "start": "page",
   "scenes": [
     {

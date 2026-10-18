@@ -7,6 +7,14 @@ schemaVersion: 1
 id: INC-006
 act: 3
 title: Certificate Storm
+keywords:
+  - ca-18
+  - ca-17
+  - trust bundle
+  - change ticket
+  - shadow-7
+  - case 2231
+  - 'NULL'
 
 cast:
   - id: PAGER

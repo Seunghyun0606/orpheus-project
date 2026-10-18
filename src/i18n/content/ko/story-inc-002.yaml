@@ -5,6 +5,12 @@
 entries:
   - en: Bad Deployment
     ko: 잘못된 배포
+  - en: build 1847
+    ko: 빌드 1847
+  - en: key set
+    ko: 키 세트
+  - en: change notice
+    ko: 변경 공지
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead

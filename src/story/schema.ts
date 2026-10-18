@@ -140,6 +140,8 @@ export const episodeSchema = z.strictObject({
       }),
     )
     .min(1),
+  // Clue words shown in bold wherever they appear (in either language).
+  keywords: z.array(text).optional(),
   start: sceneId,
   scenes: z.array(sceneSchema).min(1),
 });

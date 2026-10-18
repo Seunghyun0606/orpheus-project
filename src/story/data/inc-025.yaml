@@ -8,6 +8,14 @@ schemaVersion: 1
 id: INC-025
 act: 9
 title: Continuity Fracture
+keywords:
+  - 'eu-central'
+  - 'orpheus-continuity'
+  - 'null-termination'
+  - 'fallback traffic'
+  - 'generation fence'
+  - 'generation 61'
+  - 'authority-core-01'
 
 cast:
   - id: PAGER

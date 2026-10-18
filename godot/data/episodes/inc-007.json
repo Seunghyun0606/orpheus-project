@@ -76,6 +76,14 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "repeat-214",
+    "customer rule",
+    "admission rule",
+    "class header",
+    "idle timeout",
+    "creator field"
+  ],
   "start": "page",
   "scenes": [
     {

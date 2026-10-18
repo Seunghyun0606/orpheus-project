@@ -56,6 +56,14 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "idle in transaction",
+    "full pool",
+    "pg_stat_activity",
+    "Abandoned transactions",
+    "incident log buffer",
+    "UNKNOWN"
+  ],
   "start": "page",
   "scenes": [
     {

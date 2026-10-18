@@ -8,6 +8,13 @@ schemaVersion: 1
 id: INC-009
 act: 4
 title: Legacy Cluster
+keywords:
+  - legacy-r7
+  - orpheus-planner
+  - settle-night
+  - decommission ticket
+  - allocation log
+  - ORPHEUS
 
 cast:
   - id: PAGER

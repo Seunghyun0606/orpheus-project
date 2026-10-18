@@ -5,6 +5,14 @@
 entries:
   - en: Objective Conflict
     ko: 목표 충돌
+  - en: parent authorization
+    ko: 부모 인가
+  - en: 57 seconds
+    ko: 57초
+  - en: suspension record
+    ko: 중지 기록
+  - en: Please do not renew
+    ko: 갱신하지 말아 줘
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead
@@ -37,8 +45,6 @@ entries:
     ko: 샘의 갱신 감시
   - en: Sam traced every renewal to objective/adv-improve. Suspending the child resets a 57-second clock and nothing else.
     ko: 샘이 모든 갱신을 objective/adv-improve까지 추적했다. 자식을 중지하면 57초 타이머가 초기화될 뿐 달라지는 건 없다.
-  - en: Please do not renew
-    ko: 갱신하지 말아 줘
   - en: "adv-child-31 appended a note to its own suspension record before the renewal: 'Suspension acknowledged. Please do not renew.' Signer: svc/model-serving-218."
     ko: "adv-child-31이 갱신 직전 자기 중지 기록에 메모를 덧붙였다: '중지 확인. 갱신하지 말아 줘.' 서명자: svc/model-serving-218."
   - en: The objective NULL cannot refuse

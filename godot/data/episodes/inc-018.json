@@ -78,6 +78,15 @@
       "guaranteed": true
     }
   ],
+  "keywords": [
+    "depot-east",
+    "preferred lane",
+    "EM-9-117",
+    "district 9",
+    "emergency floor",
+    "Policy 2026.10",
+    "/logistics/allocation"
+  ],
   "start": "page",
   "scenes": [
     {

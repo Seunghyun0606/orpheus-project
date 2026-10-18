@@ -6,6 +6,13 @@ schemaVersion: 1
 id: INC-002
 act: 1
 title: Bad Deployment
+keywords:
+  - K72
+  - K71
+  - build 1847
+  - key set
+  - change notice
+  - UNKNOWN
 
 cast:
   - id: PAGER

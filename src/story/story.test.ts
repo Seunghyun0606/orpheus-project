@@ -20,7 +20,7 @@ import {
   type DeductionScene,
   type Episode,
 } from './schema.ts';
-import { campaignCarries, enumeratePaths, validateEpisode } from './validate.ts';
+import { campaignCarries, enumeratePaths, episodeTexts, validateEpisode } from './validate.ts';
 
 const dataDir = 'src/story/data/';
 const episodes = readdirSync(dataDir)
@@ -55,6 +55,25 @@ describe('story episodes', () => {
     for (const carry of carries)
       for (const { state } of enumeratePaths(episode, carry).paths)
         expect(state.sceneId).toBeNull();
+  });
+});
+
+describe('episode keywords', () => {
+  // The Godot build bolds each keyword in the current language, so the Korean
+  // keyword must appear verbatim in the Korean text of the same episode.
+  it.each(episodes.map((e) => [e.id, e]))('%s keywords appear in Korean too', (_, episode) => {
+    const catalog = new Map<string, string>(
+      (
+        parse(
+          readFileSync(`src/i18n/content/ko/story-${episode.id.toLowerCase()}.yaml`, 'utf8'),
+        ) as { entries: { en: string; ko: string }[] }
+      ).entries.map((e) => [e.en, e.ko]),
+    );
+    const korean = episodeTexts(episode)
+      .map((text) => catalog.get(text) ?? text)
+      .join('\n');
+    for (const keyword of episode.keywords ?? [])
+      expect(korean, keyword).toContain(catalog.get(keyword) ?? keyword);
   });
 });
 

@@ -5,6 +5,12 @@
 entries:
   - en: Continuity Fracture
     ko: 연속성 균열
+  - en: fallback traffic
+    ko: 폴백 트래픽
+  - en: generation fence
+    ko: 세대 펜스
+  - en: generation 61
+    ko: 세대 61
   - en: Pager
     ko: 호출기
   - en: Maya / SRE Lead
