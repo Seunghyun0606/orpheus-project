@@ -8,8 +8,14 @@ import { endingPresentationFixture } from '../tests/fixtures/ending-presentation
 import { fixtureLedger, fixtureIdentity } from '../tests/fixtures/ledger.ts';
 import { createCampaignSessionStore } from '../store/campaign-session.ts';
 import { canonicalJson } from '../engine/campaign/canonical.ts';
+import { PresentationProvider } from './PresentationSettings.tsx';
+import { presentationStorageKey } from './presentation-settings.ts';
+import { installContentDictionary } from '../i18n/content.ts';
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  window.localStorage.clear();
+});
 describe('DEC-058 read-only ending UI (deferred)', () => {
   it('shows actual final consequences, labels future fiction and never creates an approval button', () => {
     const f = endingPresentationFixture(),
@@ -85,5 +91,38 @@ describe('DEC-058 read-only ending UI (deferred)', () => {
     expect(canonicalJson(store.getState().run)).toBe(before);
     const persisted = await ledger.read(run.runId);
     expect(persisted).toMatchObject({ ok: true, run: store.getState().run });
+  });
+});
+
+describe('Korean ending screen', () => {
+  it('localizes the ending chrome and name and translates authored prose', () => {
+    window.localStorage.setItem(presentationStorageKey, JSON.stringify({ language: 'ko' }));
+    installContentDictionary(
+      'ko',
+      new Map([
+        ['Prediction and recommendation remain enabled.', '예측과 권고는 계속 활성화된다.'],
+      ]),
+    );
+    const f = endingPresentationFixture(),
+      run = f.complete();
+    const before = canonicalJson(run);
+    render(
+      <PresentationProvider>
+        <CampaignEnding composition={f.composition} run={run} {...f.request(run)} />
+      </PresentationProvider>,
+    );
+    expect(screen.getByRole('heading', { name: '관리인' })).toBeVisible();
+    expect(screen.getByText('예측과 권고는 계속 활성화된다.')).toBeVisible();
+    expect(screen.getByRole('heading', { name: '마지막 인시던트의 실제 기록' })).toBeVisible();
+    expect(
+      screen.getByRole('table', { name: '이 마지막 시도에서 기록된 서비스 신호' }),
+    ).toBeVisible();
+    expect(
+      screen.getAllByText('작성된 미래 기관 보고서 — 측정된 플레이어 행동이 아님'),
+    ).toHaveLength(2);
+    expect(screen.getByRole('region', { name: 'ORPHEUS 피험자 프로필' })).toBeVisible();
+    // Untranslated authored text stays in English.
+    expect(screen.getByText(/Does having the final button mean/)).toBeVisible();
+    expect(canonicalJson(run)).toBe(before);
   });
 });

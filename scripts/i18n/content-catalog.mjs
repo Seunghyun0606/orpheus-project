@@ -188,9 +188,11 @@ export function syncCatalogs({ mode = 'write' } = {}) {
       for (const e of entries)
         if (typeof e.ko === 'string' && e.ko.length > 0) {
           const prior = translations.get(e.en);
+          // The runtime dictionary is keyed by English text alone, so one
+          // string can only have one translation.
           if (prior && prior.ko !== e.ko)
-            report.push(
-              `  note: "${e.en.slice(0, 50)}" differs between ${prior.group} and ${group.name}`,
+            problems.push(
+              `${file}: "${e.en.slice(0, 50)}" is translated differently in ${prior.group}`,
             );
           else translations.set(e.en, { ko: e.ko, group: group.name });
         }

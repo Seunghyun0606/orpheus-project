@@ -8,7 +8,7 @@ entries:
   - en: "ORPHEUS: I ranked you once. Let me rank your next move."
     ko: "ORPHEUS: 전에 당신의 순위를 매긴 적이 있습니다. 이번에는 당신의 다음 수에 순위를 매기겠습니다."
   - en: "ORPHEUS: Add care-routing capacity. Mean wait time falls 42% this hour."
-    ko: "ORPHEUS: 돌봄 라우팅 용량을 늘리십시오. 이번 시간 평균 대기 시간이 42% 줄어듭니다."
+    ko: "ORPHEUS: 의료 라우팅 용량을 늘리십시오. 이번 시간 평균 대기 시간이 42% 줄어듭니다."
   - en: Capacity brings the average down sooner. Restoring the minimum allocation is slower, and it is the only thing that reaches the clinics that keep getting skipped.
     ko: 용량을 늘리면 평균이 더 빨리 내려간다. 최소 할당을 복원하는 쪽은 느리지만, 계속 순서에서 밀려나는 진료소에 닿는 방법은 그것뿐이다.
   - en: A narrow bypass frees held payments now and skips that review step. Honoring the receipts keeps the safeguard and takes longer.

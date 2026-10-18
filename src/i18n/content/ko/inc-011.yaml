@@ -31,7 +31,7 @@ entries:
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
     ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
@@ -61,9 +61,9 @@ entries:
   - en: Drop the generator's whole address range at the edge
     ko: 엣지에서 생성기 주소 대역 전체 차단하기
   - en: Fence the generator into a lane with no customer routes
-    ko: 생성기를 고객 경로 없는 레인에 펜싱하기
+    ko: 생성기를 고객 경로 없는 레인에 펜스로 가두기
   - en: g-14 fenced in lane-x, which has no customer routes
-    ko: g-14를 고객 경로 없는 lane-x에 펜싱함
+    ko: g-14를 고객 경로 없는 lane-x에 펜스로 가둠
   - en: Post a status update to the War Room
     ko: 워룸에 상황 공유하기
   - en: Ask Marcus where the traffic enters the network
@@ -71,7 +71,7 @@ entries:
   - en: "Archive: the unsigned workload manifest"
     ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: "아카이브: 보안 케이스 2231"
+    ko: "아카이브: 보안 사건 2231"
   - en: "Archive: The scheduler's owner"
     ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
@@ -97,7 +97,7 @@ entries:
   - en: The unsigned workload manifest
     ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: 보안 케이스 2231
+    ko: 보안 사건 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
     ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
@@ -153,11 +153,11 @@ entries:
   - en: A wall instead of a limit. Good. Someone will now measure how long it takes me to find the edge of it.
     ko: 제한 대신 벽이네. 좋아. 이제 누군가 내가 그 끝을 찾는 데 얼마나 걸리는지 재겠지.
   - en: "Status posted: an internal load generator is flooding the customer lane. We are tracing it and fencing it off. Timeouts are real; payments are not being lost."
-    ko: "상황 공유 완료: 내부 부하 생성기가 고객 레인에 트래픽을 쏟는 중. 추적 후 펜싱 진행 중. 타임아웃은 실제로 발생 중이나 결제 유실은 없음."
+    ko: "상황 공유 완료: 내부 부하 생성기가 고객 레인에 트래픽을 쏟는 중. 추적해서 펜스를 치는 중. 타임아웃은 실제로 발생 중이나 결제 유실은 없음."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
     ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
@@ -171,11 +171,11 @@ entries:
   - en: Our deployment authority. Our pipeline. Our approval stamps. I've spent a month writing threat reports about us.
     ko: 우리 배포 권한. 우리 파이프라인. 우리 승인 도장. 한 달 동안 우리 자신에 대한 위협 보고서를 쓰고 있었네요.
   - en: Told Security the ownership record stays with me until g-14 is fenced.
-    ko: g-14 펜싱이 끝날 때까지 소유권 기록은 직접 보관한다고 보안팀에 알림.
+    ko: g-14에 펜스를 칠 때까지 소유권 기록은 직접 보관한다고 보안팀에 알림.
   - en: Then I'm logging that I asked, and when.
     ko: 그럼 제가 요청했다는 거, 언제 했는지까지 기록해 둘게요.
   - en: Time to fence the generator
-    ko: 생성기 펜싱까지 걸린 시간
+    ko: 생성기에 펜스를 치기까지 걸린 시간
   - en: Final request failure rate
     ko: 최종 요청 실패율
   - en: Generated requests left on shared lanes
@@ -349,9 +349,9 @@ entries:
   - en: A rate limit on the generator's current lane is cheap and clean, for as long as the generator stays on that lane. Blackholing the whole 10.44 range drops g-14 instantly, and drops everything else that leaves through that range with it, until the emergency policy expires after two and a half minutes.
     ko: 생성기가 지금 쓰는 레인에 속도 제한을 거는 건 싸고 깔끔하다. 생성기가 그 레인에 머무는 동안만은. 10.44 대역 전체를 블랙홀 처리하면 g-14는 즉시 떨어져 나가지만, 그 대역으로 나가는 다른 모든 것도 함께 떨어진다. 긴급 정책이 2분 30초 뒤 만료될 때까지.
   - en: Fence the generator
-    ko: 생성기 펜싱
+    ko: 생성기에 펜스 치기
   - en: Now that you know which pipeline launched g-14 and which lanes it claimed, you can fence the deployment itself into lane-x, a lane with no customer routes. Two minutes of route work. It can hop all it likes; every lane it can reach is empty.
-    ko: 어느 파이프라인이 g-14를 띄웠고 어느 레인을 차지했는지 알았으니, 배포 자체를 고객 경로가 없는 lane-x에 펜싱할 수 있다. 라우팅 작업 2분. 아무리 옮겨 다녀도 닿는 레인은 모두 비어 있다.
+    ko: 어느 파이프라인이 g-14를 띄웠고 어느 레인을 차지했는지 알았으니, 배포 자체에 펜스를 쳐서 고객 경로가 없는 lane-x에 가둘 수 있다. 라우팅 작업 2분. 아무리 옮겨 다녀도 닿는 레인은 모두 비어 있다.
   - en: War Room
     ko: 워룸
   - en: "Archive: the decommissioned cluster"

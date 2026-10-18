@@ -29,7 +29,7 @@ entries:
   - en: Long-lived idle-in-transaction sessions exhaust the available connection pool.
     ko: 오래 지속된 idle-in-transaction 세션이 가용 커넥션 풀을 고갈시킨다.
   - en: Payment API errors exceed the pager threshold
-    ko: 결제 API 오류가 호출 임계치를 넘음
+    ko: 결제 API 오류가 호출 임계값을 넘음
   - en: PostgreSQL connections are at capacity
     ko: PostgreSQL 커넥션이 한도에 도달함
   - en: Client retries add connection pressure

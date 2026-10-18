@@ -9,15 +9,26 @@ import {
 import { CampaignDesk } from './CampaignDesk.tsx';
 import { PresentationProvider, PresentationSettings } from './PresentationSettings.tsx';
 import { actTitle, newestPackage } from './campaign-copy.ts';
+import { useI18n, useMessages } from '../i18n/I18n.ts';
+import { campaignEntryMessages, type CampaignEntryMessages } from './messages/campaign-entry.ts';
 
 export type CampaignPackageLoader = () => Promise<PackageResult>;
 const loadFullCampaign: CampaignPackageLoader = async () =>
   (await import('../scenario/full-campaign.ts')).loadProductionCampaignPackages();
 
+// Summaries and errors keep data, not text, so they follow a language switch.
 interface SavedRunSummary {
   readonly id: string;
-  readonly detail: string;
+  readonly progress: { readonly act: number; readonly closed: number } | null;
   readonly version: string | null;
+}
+
+type EntryError =
+  | { readonly key: keyof CampaignEntryMessages['errors'] }
+  | { readonly key: keyof CampaignEntryMessages['codeErrors']; readonly code: string };
+
+function errorText(m: CampaignEntryMessages, error: EntryError): string {
+  return 'code' in error ? m.codeErrors[error.key](error.code) : m.errors[error.key];
 }
 
 export function FullCampaignEntry(props: {
@@ -46,7 +57,9 @@ function CampaignEntryScreen({
 }) {
   const [result, setResult] = useState<PackageResult | null>(null);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { locale } = useI18n();
+  const m = useMessages(campaignEntryMessages);
+  const [error, setError] = useState<EntryError | null>(null);
   const [runs, setRuns] = useState<SavedRunSummary[]>([]);
   const [session, setSession] = useState<{
     store: StoreApi<CampaignSessionState>;
@@ -71,7 +84,7 @@ function CampaignEntryScreen({
       if (!checked.ok) return;
       const entries = checked.registry.all();
       if (!entries.length) {
-        setError('No complete campaign is available in this build.');
+        setError({ key: 'empty' });
         return;
       }
       ledger.current = createCampaignLedger(
@@ -88,31 +101,29 @@ function CampaignEntryScreen({
       );
       const discovered = await ledger.current.listRunIds();
       if (!discovered.ok) {
-        setError(`Saved campaigns could not be listed. Technical detail: ${discovered.code}`);
+        setError({ key: 'listFailed', code: discovered.code });
         return;
       }
       const summaries: SavedRunSummary[] = [];
       for (const id of discovered.runIds) {
         const saved = await ledger.current.read(id);
         if (!saved.ok || !saved.run) {
-          summaries.push({
-            id,
-            detail: 'Details unavailable; the save is kept as-is.',
-            version: null,
-          });
+          summaries.push({ id, progress: null, version: null });
           continue;
         }
         const creation = saved.run.operations[0];
-        const closed = saved.run.projection.completed.length;
         summaries.push({
           id,
-          detail: `${actTitle(saved.run.projection.act)} · ${closed} incident${closed === 1 ? '' : 's'} closed`,
+          progress: {
+            act: saved.run.projection.act,
+            closed: saved.run.projection.completed.length,
+          },
           version: creation?.definitionVersion ?? null,
         });
       }
       setRuns(summaries);
     } catch {
-      setError('Campaign files or local storage are unavailable right now.');
+      setError({ key: 'storage' });
     } finally {
       flight.current = false;
       setBusy(false);
@@ -127,15 +138,15 @@ function CampaignEntryScreen({
       const id = runId ?? identity(),
         saved = await ledger.current.read(id);
       if (!saved.ok) {
-        setError(`This save could not be opened. Technical detail: ${saved.code}`);
+        setError({ key: 'openFailed', code: saved.code });
         return;
       }
       if (runId && !saved.run) {
-        setError('Saved run is no longer available.');
+        setError({ key: 'runGone' });
         return;
       }
       if (!runId && saved.run) {
-        setError('New run identity already exists; preserved without overwrite.');
+        setError({ key: 'identityExists' });
         return;
       }
       const creation = saved.run?.operations[0];
@@ -143,9 +154,7 @@ function CampaignEntryScreen({
         ? result.registry.resolve(creation.definitionId, creation.definitionVersion)
         : p;
       if (!composition) {
-        setError(
-          'This save was made with a campaign version this build does not include. It is preserved unchanged.',
-        );
+        setError({ key: 'unknownVersion' });
         return;
       }
       const store = createCampaignSessionStore({
@@ -156,11 +165,12 @@ function CampaignEntryScreen({
         identity,
       });
       if (!(await store.getState().load())) {
-        setError(store.getState().error);
+        const code = store.getState().error;
+        setError(code ? { key: 'store', code } : null);
         return;
       }
       if (!runId && store.getState().readState !== 'not_found') {
-        setError('New run identity already exists; preserved without overwrite.');
+        setError({ key: 'identityExists' });
         return;
       }
       // Keep the store even when create acknowledgement is lost: retry must retain
@@ -168,7 +178,7 @@ function CampaignEntryScreen({
       setSession({ store, composition });
       if (!runId) await store.getState().create();
     } catch {
-      setError('Campaign operation not confirmed; saved data is preserved.');
+      setError({ key: 'unconfirmed' });
     } finally {
       flight.current = false;
       setBusy(false);
@@ -185,40 +195,33 @@ function CampaignEntryScreen({
     );
   const incidentCount = newest?.definition.incidents.length;
   return (
-    <main className="incident-hub campaign-entry" aria-label="Full campaign entry" aria-busy={busy}>
+    <main className="incident-hub campaign-entry" aria-label={m.entryLabel} aria-busy={busy}>
       <header>
-        <p className="eyebrow">VANTAGE SYSTEMS // RELIABILITY ROTATION</p>
-        <h1>Full campaign</h1>
-        <p>
-          The long rotation: incidents across nine acts, one continuous record. Each incident plays
-          like the training ones, but your choices carry forward, and something in the stack starts
-          to notice how you make them.
-        </p>
-        <div className="screen-toolbar" role="group" aria-label="Screen settings">
+        <p className="eyebrow">{m.eyebrow}</p>
+        <h1>{m.title}</h1>
+        <p>{m.intro}</p>
+        <div className="screen-toolbar" role="group" aria-label={m.screenSettings}>
           <PresentationSettings />
         </div>
         <button type="button" disabled={busy} onClick={onBack}>
-          Back to incident desk
+          {m.backToDesk}
         </button>
       </header>
       <section className="panel campaign-entry-panel" aria-labelledby="campaign-entry-title">
-        <h2 id="campaign-entry-title">Campaign files</h2>
+        <h2 id="campaign-entry-title">{m.filesTitle}</h2>
         {result === null ? (
           <>
-            <p>
-              Nothing is created until you choose. Your training-rotation saves are kept separately.
-            </p>
+            <p>{m.nothingCreated}</p>
             <button type="button" disabled={busy} onClick={() => void inspect()}>
-              Open campaign files
+              {m.openFiles}
             </button>
           </>
         ) : null}
-        {busy ? <p role="status">Checking campaign files…</p> : null}
-        {error ? <p role="alert">{error}</p> : null}
+        {busy ? <p role="status">{m.checking}</p> : null}
+        {error ? <p role="alert">{errorText(m, error)}</p> : null}
         {result && !result.ok ? (
           <p role="status">
-            The full campaign is not available in this build.{' '}
-            <small>Technical detail: {result.diagnostics.join(', ')}</small>
+            {m.notInBuild} <small>{m.technicalDetail(result.diagnostics.join(', '))}</small>
           </p>
         ) : null}
         {newest ? (
@@ -230,20 +233,18 @@ function CampaignEntryScreen({
               aria-describedby="new-campaign-detail"
               onClick={() => void open(newest)}
             >
-              New campaign
+              {m.newCampaign}
             </button>
             <p className="console-hint" id="new-campaign-detail">
-              {incidentCount === undefined ? '' : `${incidentCount} incidents. `}
-              {newest.presentations.every((v) => v.schemaVersion === 1)
-                ? 'Investigation views are static in this version (no live narrative or War Room feed). '
-                : ''}
-              <small>Content version {newest.package.version}</small>
+              {incidentCount === undefined ? '' : m.incidentCount(incidentCount)}
+              {newest.presentations.every((v) => v.schemaVersion === 1) ? m.staticViews : ''}
+              <small>{m.contentVersion(newest.package.version)}</small>
             </p>
           </div>
         ) : null}
         {runs.length ? (
           <section aria-labelledby="saved-campaigns-title">
-            <h3 id="saved-campaigns-title">Saved campaigns</h3>
+            <h3 id="saved-campaigns-title">{m.savedTitle}</h3>
             <ul className="archive-list">
               {runs.map((run, index) => (
                 <li key={run.id}>
@@ -253,11 +254,13 @@ function CampaignEntryScreen({
                     aria-describedby={`saved-run-${index}`}
                     onClick={() => void open(null, run.id)}
                   >
-                    Continue
+                    {m.continue}
                   </button>
                   <span className="console-hint" id={`saved-run-${index}`}>
-                    {run.detail}
-                    {run.version === null ? null : <small> · version {run.version}</small>}
+                    {run.progress === null
+                      ? m.detailsUnavailable
+                      : m.runDetail(actTitle(run.progress.act, locale), run.progress.closed)}
+                    {run.version === null ? null : <small>{m.savedVersion(run.version)}</small>}
                   </span>
                 </li>
               ))}
@@ -266,7 +269,7 @@ function CampaignEntryScreen({
         ) : null}
         {result !== null && !busy ? (
           <button type="button" className="link-button" onClick={() => void inspect()}>
-            Check campaign files again
+            {m.checkAgain}
           </button>
         ) : null}
       </section>

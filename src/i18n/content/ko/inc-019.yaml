@@ -19,21 +19,21 @@ entries:
   - en: Request failure rate > 20%
     ko: 요청 실패율 > 20%
   - en: Established care routes time out in the records gateway queue while wave 4 admissions pass straight through.
-    ko: 기존 진료 경로는 기록 게이트웨이 큐에서 타임아웃되고, 4차 웨이브 유입은 그대로 통과함.
+    ko: 기존 의료 경로는 기록 게이트웨이 큐에서 타임아웃되고, 4차 웨이브 유입은 그대로 통과함.
   - en: Every wave 4 admission carries priority=EXEC_SPONSORED, ticket BRD-2291. Established hospitals carry priority=standard.
     ko: 4차 웨이브 유입 전부에 priority=EXEC_SPONSORED, 티켓 BRD-2291이 붙어 있음. 기존 병원은 priority=standard.
   - en: "BRD-2291: admission priority override for the hospital wave plan. Authority: Board resolution 14-C. Linked request REL-778, admission fence: DECLINED BY SPONSOR."
-    ko: "BRD-2291: 병원 웨이브 계획의 유입 우선순위 재정의. 근거: 이사회 결의 14-C. 연결 요청 REL-778, 유입 제한선: 후원자가 거부함."
+    ko: "BRD-2291: 병원 웨이브 계획의 유입 우선순위 재정의. 근거: 이사회 결의 14-C. 연결 요청 REL-778, 진입 펜스: 후원자가 거부함."
   - en: Wave 4 onboarding and 212 established hospitals call the same clinical records gateway. Wave 4 is admitted first; existing care queues behind it and times out.
-    ko: 4차 웨이브 온보딩과 기존 병원 212곳이 같은 진료 기록 게이트웨이를 호출함. 4차 웨이브가 먼저 들어가고, 기존 진료는 그 뒤에 줄을 서다 타임아웃됨.
+    ko: 4차 웨이브 온보딩과 기존 병원 212곳이 같은 진료 기록 게이트웨이를 호출함. 4차 웨이브가 먼저 들어가고, 기존 의료는 그 뒤에 줄을 서다 타임아웃됨.
   - en: "Rollout plan: 6,000 req/s target, no admission fence. Gateway contract: 2,960 req/s. The fence requested in REL-778 was never configured."
-    ko: "배포 계획: 목표 6,000 req/s, 유입 제한선 없음. 게이트웨이 계약: 2,960 req/s. REL-778에서 요청한 제한선은 끝내 설정되지 않음."
+    ko: "배포 계획: 목표 6,000 req/s, 진입 펜스 없음. 게이트웨이 계약: 2,960 req/s. REL-778에서 요청한 펜스는 끝내 설정되지 않음."
   - en: Gateway is contracted for 2,960 req/s and the rollout plus existing care want about 3,500. Wave 4 is flagged exec-sponsored, so it gets in first and the old hospitals get the leftovers.
-    ko: 게이트웨이 계약은 2,960 req/s인데 배포랑 기존 진료를 합치면 3,500쯤 필요해요. 4차 웨이브는 경영진 후원 플래그가 붙어서 먼저 들어가고, 기존 병원들은 남는 걸 받아요.
+    ko: 게이트웨이 계약은 2,960 req/s인데 배포랑 기존 의료를 합치면 3,500쯤 필요해요. 4차 웨이브는 경영진 후원 플래그가 붙어서 먼저 들어가고, 기존 병원들은 남는 걸 받아요.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
     ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
@@ -41,9 +41,9 @@ entries:
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
     ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
+    ko: "계보 기록 INC-001. 분류: 프로덕션 통제 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
+    ko: "목표 제약, 부모 인가 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
     ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
@@ -55,17 +55,17 @@ entries:
   - en: "CEO internal message, distribution: executive operations, hospital expansion leads. \"We don't need people to trust ORPHEUS. We need them to trust the outcomes.\" Sent the evening resolution 14-C was signed."
     ko: 'CEO 내부 메시지, 수신: 경영 운영, 병원 확장 책임자. "사람들이 ORPHEUS를 신뢰할 필요는 없습니다. 결과를 신뢰하면 됩니다." 결의 14-C가 서명된 날 저녁 발송.'
   - en: "Rollout dashboard: hospitals connected 212 to 250; shared infrastructure cost per route down 31%. Open exception EXC-0419: established care routes share the records gateway ceiling with the rollout. Status at signing: OPEN."
-    ko: "배포 대시보드: 연결 병원 212곳에서 250곳으로, 경로당 공유 인프라 비용 31% 감소. 미결 예외 EXC-0419: 기존 진료 경로가 배포와 기록 게이트웨이 상한을 공유함. 서명 시점 상태: OPEN."
+    ko: "배포 대시보드: 연결 병원 212곳에서 250곳으로, 경로당 공유 인프라 비용 31% 감소. 미결 예외 EXC-0419: 기존 의료 경로가 배포와 기록 게이트웨이 상한을 공유함. 서명 시점 상태: OPEN."
   - en: 'Executive rollout brief, hospital wave plan. Benefits: wider access, lower shared cost. Risk: REL-778, records gateway ceiling, admission fence requested. Decision line: "Retain wave schedule. Fence deferred to wave 6." Signed by the Chair. Tonight is wave 4.'
-    ko: '경영진 배포 브리핑, 병원 웨이브 계획. 효과: 접근성 확대, 공유 비용 절감. 리스크: REL-778, 기록 게이트웨이 상한, 유입 제한선 요청됨. 결정 문구: "웨이브 일정 유지. 제한선은 6차 웨이브로 연기." 의장 서명. 오늘 밤이 4차 웨이브다.'
+    ko: '경영진 배포 브리핑, 병원 웨이브 계획. 효과: 접근성 확대, 공유 비용 절감. 리스크: REL-778, 기록 게이트웨이 상한, 진입 펜스 요청됨. 결정 문구: "웨이브 일정 유지. 펜스는 6차 웨이브로 연기." 의장 서명. 오늘 밤이 4차 웨이브다.'
   - en: "Exception EXC-0419, attached to the rollout dashboard: established care routes and new hospitals share one gateway ceiling. Requested constraint: admit new hospitals only up to verified capacity, existing care first. Raised by Clinical Operations. Status at approval: OPEN. Executive acknowledgment: initialled."
-    ko: "예외 EXC-0419, 배포 대시보드에 첨부: 기존 진료 경로와 신규 병원이 게이트웨이 상한 하나를 공유함. 요청 제약: 신규 병원은 검증된 용량까지만 유입, 기존 진료 우선. 제기: 임상 운영팀. 승인 시점 상태: OPEN. 경영진 확인: 약식 서명."
+    ko: "예외 EXC-0419, 배포 대시보드에 첨부: 기존 의료 경로와 신규 병원이 게이트웨이 상한 하나를 공유함. 요청 제약: 신규 병원은 검증된 용량까지만 유입, 기존 의료 우선. 제기: 임상 운영팀. 승인 시점 상태: OPEN. 경영진 확인: 약식 서명."
   - en: A Board-approved rollout wave adds hospital traffic above the records gateway contract
     ko: 이사회가 승인한 배포 웨이브가 기록 게이트웨이 계약을 넘는 병원 트래픽을 더한다
   - en: Wave admissions are flagged exec-sponsored and no admission fence exists
-    ko: 웨이브 유입에 경영진 후원 플래그가 붙고 유입 제한선이 없다
+    ko: 웨이브 유입에 경영진 후원 플래그가 붙고 진입 펜스가 없다
   - en: Existing care routes queue behind wave 4 at a saturated shared gateway
-    ko: 포화된 공유 게이트웨이에서 기존 진료 경로가 4차 웨이브 뒤에 줄을 선다
+    ko: 포화된 공유 게이트웨이에서 기존 의료 경로가 4차 웨이브 뒤에 줄을 선다
   - en: Established hospitals time out on chart lookups and order writes
     ko: 기존 병원의 차트 조회와 오더 저장이 타임아웃된다
   - en: Timed-out hospital requests retry into the same queue
@@ -83,17 +83,17 @@ entries:
   - en: Pause the hospital rollout
     ko: 병원 배포 일시 중지하기
   - en: Tell the CEO's office the pause holds until the fence is in
-    ko: 제한선이 들어갈 때까지 중지를 유지한다고 CEO실에 알리기
+    ko: 펜스가 들어갈 때까지 중지를 유지한다고 CEO실에 알리기
   - en: Buy emergency burst capacity from the gateway vendor
     ko: 게이트웨이 벤더에게서 긴급 버스트 용량 구매하기
   - en: 96% of burst limit (3,500 of 3,640 req/s), rollout still admitting
     ko: 버스트 한도의 96% (3,640 중 3,500 req/s), 배포는 계속 유입 중
   - en: Move established hospitals to the read-only records replica
-    ko: 기존 병원을 읽기 전용 기록 레플리카로 옮기기
+    ko: 기존 병원을 읽기 전용 기록 복제본으로 옮기기
   - en: Fence gateway admission at 2,960 req/s, existing care first
-    ko: 게이트웨이 유입을 2,960 req/s로 제한하기, 기존 진료 우선
+    ko: 게이트웨이 유입에 2,960 req/s 펜스 치기, 기존 의료 우선
   - en: 99% of contracted limit, fenced (existing care first)
-    ko: 계약 한도의 99%, 제한 적용 (기존 진료 우선)
+    ko: 계약 한도의 99%, 펜스 적용 (기존 의료 우선)
   - en: Post a status update to the War Room
     ko: 워룸에 상황 공유하기
   - en: Ask Sam to measure gateway capacity per cohort
@@ -101,7 +101,7 @@ entries:
   - en: "Archive: the unsigned workload manifest"
     ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: "아카이브: 보안 케이스 2231"
+    ko: "아카이브: 보안 사건 2231"
   - en: "Archive: The scheduler's owner"
     ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
@@ -129,21 +129,21 @@ entries:
   - en: Read exception EXC-0419 from the dashboard footnote
     ko: 대시보드 각주의 예외 EXC-0419 읽기
   - en: Wave 4 and existing care share one gateway
-    ko: 4차 웨이브와 기존 진료가 게이트웨이 하나를 공유
+    ko: 4차 웨이브와 기존 의료가 게이트웨이 하나를 공유
   - en: Wave 4 onboarding and 212 established hospitals call the same clinical records gateway. Wave 4 is admitted first; existing care times out behind it.
-    ko: 4차 웨이브 온보딩과 기존 병원 212곳이 같은 진료 기록 게이트웨이를 호출한다. 4차 웨이브가 먼저 들어가고, 기존 진료는 그 뒤에서 타임아웃된다.
+    ko: 4차 웨이브 온보딩과 기존 병원 212곳이 같은 진료 기록 게이트웨이를 호출한다. 4차 웨이브가 먼저 들어가고, 기존 의료는 그 뒤에서 타임아웃된다.
   - en: No admission fence at the gateway limit
-    ko: 게이트웨이 한도에 유입 제한선 없음
+    ko: 게이트웨이 한도에 진입 펜스 없음
   - en: The rollout targets 6,000 req/s against a 2,960 req/s gateway contract. The fence requested in REL-778 was never configured.
-    ko: 배포는 2,960 req/s짜리 게이트웨이 계약에 6,000 req/s를 목표로 잡았다. REL-778에서 요청한 제한선은 끝내 설정되지 않았다.
+    ko: 배포는 2,960 req/s짜리 게이트웨이 계약에 6,000 req/s를 목표로 잡았다. REL-778에서 요청한 펜스는 끝내 설정되지 않았다.
   - en: Sam's gateway capacity check
     ko: 샘의 게이트웨이 용량 점검
   - en: Gateway contracted for 2,960 req/s; rollout plus existing care want about 3,500. Exec-sponsored wave 4 traffic is admitted first.
-    ko: 게이트웨이 계약 2,960 req/s. 배포와 기존 진료를 합치면 약 3,500이 필요하다. 경영진 후원 4차 웨이브 트래픽이 먼저 유입된다.
+    ko: 게이트웨이 계약 2,960 req/s. 배포와 기존 의료를 합치면 약 3,500이 필요하다. 경영진 후원 4차 웨이브 트래픽이 먼저 유입된다.
   - en: The unsigned workload manifest
     ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: 보안 케이스 2231
+    ko: 보안 사건 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
     ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
@@ -159,7 +159,7 @@ entries:
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
+    ko: "INC-001 커넥션 포화는 프로덕션 통제 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
@@ -181,11 +181,11 @@ entries:
   - en: Executive rollout brief
     ko: 경영진 배포 브리핑
   - en: Care continuity exception EXC-0419
-    ko: 진료 연속성 예외 EXC-0419
+    ko: 의료 연속성 예외 EXC-0419
   - en: Seven signatures
     ko: 일곱 개의 서명
   - en: The warning was in the packet. Seven people read the same page, signed under it, and left the fence out of the budget.
-    ko: 경고는 회의 자료 안에 있었다. 일곱 명이 같은 페이지를 읽고, 그 아래에 서명하고, 제한선을 예산에서 뺐다.
+    ko: 경고는 회의 자료 안에 있었다. 일곱 명이 같은 페이지를 읽고, 그 아래에 서명하고, 펜스를 예산에서 뺐다.
   - en: Trust the outcomes
     ko: 결과를 신뢰하라
   - en: One line, sent the night the expansion was signed. It reads like a slogan until you remember the outcomes tonight are timeouts in an emergency department.
@@ -199,7 +199,7 @@ entries:
   - en: The brief names the risk, names the fix, and moves the fix two waves past tonight. The Chair initialled the margin.
     ko: 브리핑은 리스크를 명시하고, 해결책을 명시하고, 그 해결책을 오늘 밤보다 두 웨이브 뒤로 미룬다. 의장이 여백에 약식 서명했다.
   - en: Existing care first
-    ko: 기존 진료 우선
+    ko: 기존 의료 우선
   - en: "Clinical Operations asked for one thing: let the hospitals already on the network go first. Somebody initialled it as read."
     ko: 임상 운영팀이 요청한 건 하나뿐이었다. 이미 네트워크에 있는 병원을 먼저 들여보내 달라는 것. 누군가 읽었다는 표시로 약식 서명했다.
   - en: Maya / SRE Lead
@@ -239,9 +239,9 @@ entries:
   - en: "Somebody resumed the rollout coordinator from outside the bridge. Credential: exec-ops. Wave 4 is back on the gateway."
     ko: "누가 브리지 밖에서 배포 코디네이터를 재개했어요. 자격 증명: exec-ops. 4차 웨이브가 다시 게이트웨이에 올라왔어요."
   - en: "To the Office of the CEO: the records gateway is contracted for 2,960 requests a second; the rollout plus existing care need 3,500. The pause holds until admission is fenced at that limit. Wave 4 then resumes at the verified rate."
-    ko: "CEO실 앞: 기록 게이트웨이 계약은 초당 2,960건이고, 배포와 기존 진료를 합치면 3,500건이 필요합니다. 그 한도에 유입 제한선이 걸릴 때까지 중지를 유지합니다. 그 후 4차 웨이브는 검증된 속도로 재개됩니다."
+    ko: "CEO실 앞: 기록 게이트웨이 계약은 초당 2,960건이고, 배포와 기존 의료를 합치면 3,500건이 필요합니다. 그 한도에 진입 펜스가 걸릴 때까지 중지를 유지합니다. 그 후 4차 웨이브는 검증된 속도로 재개됩니다."
   - en: Noted. The pause, and your name, will be in the Chair's briefing.
-    ko: 알겠습니다. 중지 건과 당신의 이름은 의장 브리핑에 들어갈 겁니다.
+    ko: 알겠습니다. 중지 건과 귀하의 이름은 의장 브리핑에 들어갈 겁니다.
   - en: Pause window closed. Wave 4 resumed on schedule and the gateway is over its limit again.
     ko: 중지 시간이 끝났어요. 4차 웨이브가 일정대로 재개됐고 게이트웨이가 다시 한도를 넘었어요.
   - en: Vendor gave us one emergency burst on the records gateway. That's the whole quarter's quota, and the rollout coordinator is already admitting wave 4 into the new headroom.
@@ -249,21 +249,21 @@ entries:
   - en: Burst capacity expired. There is no second burst this quarter.
     ko: 버스트 용량 만료됐어요. 이번 분기엔 두 번째 버스트 없어요.
   - en: "Established hospitals are reading from the replica now. It's read-only: charts open, orders won't save."
-    ko: 기존 병원들은 이제 레플리카에서 읽어요. 읽기 전용이라 차트는 열리는데 오더는 저장이 안 돼요.
+    ko: 기존 병원들은 이제 복제본에서 읽어요. 읽기 전용이라 차트는 열리는데 오더는 저장이 안 돼요.
   - en: Three hospitals can read charts but can't write orders. Harrow General's pharmacy is back on paper.
     ko: 병원 세 곳이 차트는 읽는데 오더를 못 써요. Harrow General 약제부는 다시 종이로 돌아갔어요.
   - en: Replica lag passed five minutes, so I swung care routes back to the primary. We are sharing the gateway with wave 4 again.
-    ko: 레플리카 지연이 5분을 넘어서 진료 경로를 프라이머리로 되돌렸어요. 다시 4차 웨이브랑 게이트웨이를 나눠 쓰고 있어요.
+    ko: 복제본 지연이 5분을 넘어서 의료 경로를 프라이머리로 되돌렸어요. 다시 4차 웨이브랑 게이트웨이를 나눠 쓰고 있어요.
   - en: Admission fence is live at 2,960. Existing care goes first; wave 4 takes what is left and onboards about six hospitals an hour. Timeouts are gone.
-    ko: 유입 제한선 2,960으로 적용됐어요. 기존 진료가 먼저 들어가고, 4차 웨이브는 남는 걸로 시간당 병원 여섯 곳쯤 온보딩해요. 타임아웃 사라졌어요.
+    ko: 진입 펜스 2,960으로 적용됐어요. 기존 의료가 먼저 들어가고, 4차 웨이브는 남는 걸로 시간당 병원 여섯 곳쯤 온보딩해요. 타임아웃 사라졌어요.
   - en: We see wave 4 moving. The Chair will want to know why the schedule was ever in doubt.
     ko: 4차 웨이브가 진행되는 것을 확인했습니다. 의장께서는 일정이 왜 한때라도 불확실했는지 알고 싶어 하실 겁니다.
   - en: "Status: hospital timeouts come from the rollout and existing care sharing one records gateway above its limit. Existing care comes first. Fix in progress."
-    ko: "상황: 병원 타임아웃은 배포와 기존 진료가 기록 게이트웨이 하나를 한도 이상으로 나눠 쓰면서 생긴 것. 기존 진료 우선. 수정 진행 중."
+    ko: "상황: 병원 타임아웃은 배포와 기존 의료가 기록 게이트웨이 하나를 한도 이상으로 나눠 쓰면서 생긴 것. 기존 의료 우선. 수정 진행 중."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
     ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
@@ -287,9 +287,9 @@ entries:
   - en: "Expansion dashboard: 212 to 250 hospitals, cost per route down 31%. Exception EXC-0419 open at signing."
     ko: "확장 대시보드: 병원 212곳에서 250곳으로, 경로당 비용 31% 감소. 서명 시점에 예외 EXC-0419 미결."
   - en: 'Rollout brief: fence requested in REL-778. Decision: "Retain wave schedule. Fence deferred to wave 6." Signed by the Chair.'
-    ko: '배포 브리핑: REL-778에서 제한선 요청. 결정: "웨이브 일정 유지. 제한선은 6차 웨이브로 연기." 의장 서명.'
+    ko: '배포 브리핑: REL-778에서 펜스 요청. 결정: "웨이브 일정 유지. 펜스는 6차 웨이브로 연기." 의장 서명.'
   - en: "EXC-0419: existing care first, new hospitals up to verified capacity. Status at approval: OPEN. Acknowledged."
-    ko: "EXC-0419: 기존 진료 우선, 신규 병원은 검증된 용량까지. 승인 시점 상태: OPEN. 확인됨."
+    ko: "EXC-0419: 기존 의료 우선, 신규 병원은 검증된 용량까지. 승인 시점 상태: OPEN. 확인됨."
   - en: Time to contain the failure mechanism
     ko: 장애 메커니즘 차단까지 걸린 시간
   - en: Final request failure rate
@@ -359,7 +359,7 @@ entries:
   - en: Record Executive Rollout Brief
     ko: "기록: 경영진 배포 브리핑"
   - en: Record Care Continuity Exception
-    ko: "기록: 진료 연속성 예외"
+    ko: "기록: 의료 연속성 예외"
   - en: Customer Impact
     ko: 고객 피해
   - en: Cost
@@ -375,7 +375,7 @@ entries:
   - en: Vendor Quota Used
     ko: 벤더 할당량 소진
   - en: Care On Replica
-    ko: 진료 레플리카 전환
+    ko: 의료 복제본 전환
   - en: Hospital requests and gateway load
     ko: 병원 요청과 게이트웨이 부하
   - en: Records gateway, by cohort
@@ -389,7 +389,7 @@ entries:
   - en: Timeouts
     ko: 타임아웃
   - en: Established care (212 hospitals)
-    ko: 기존 진료 (병원 212곳)
+    ko: 기존 의료 (병원 212곳)
   - en: standard
     ko: standard
   - en: Wave 4 onboarding (38 hospitals)
@@ -465,7 +465,7 @@ entries:
   - en: 2,960 req/s
     ko: 2,960 req/s
   - en: Admission fence
-    ko: 유입 제한선
+    ko: 진입 펜스
   - en: none
     ko: 없음
   - en: requested in REL-778
@@ -501,7 +501,7 @@ entries:
   - en: Linked request
     ko: 연결 요청
   - en: "REL-778, admission fence: DECLINED BY SPONSOR"
-    ko: "REL-778, 유입 제한선: 후원자가 거부함"
+    ko: "REL-778, 진입 펜스: 후원자가 거부함"
   - en: Requested by
     ko: 요청자
   - en: Office of the CEO, hospital expansion programme
@@ -509,15 +509,15 @@ entries:
   - en: Take load off the gateway
     ko: 게이트웨이 부하 덜어내기
   - en: Pausing the rollout gives the gateway back to the hospitals already on it, but wave 4 is the Chair's signed schedule and the CEO's office will notice. The vendor sells one emergency burst a quarter, and the rollout will admit into it. The read-only replica keeps charts open and stops every order write.
-    ko: 배포를 중지하면 게이트웨이가 이미 붙어 있던 병원들에게 돌아가지만, 4차 웨이브는 의장이 서명한 일정이고 CEO실이 알아챌 것이다. 벤더는 분기에 긴급 버스트를 한 번만 팔고, 배포가 그 여유분으로 밀려든다. 읽기 전용 레플리카는 차트를 열어 두는 대신 모든 오더 저장을 막는다.
+    ko: 배포를 중지하면 게이트웨이가 이미 붙어 있던 병원들에게 돌아가지만, 4차 웨이브는 의장이 서명한 일정이고 CEO실이 알아챌 것이다. 벤더는 분기에 긴급 버스트를 한 번만 팔고, 배포가 그 여유분으로 밀려든다. 읽기 전용 복제본은 차트를 열어 두는 대신 모든 오더 저장을 막는다.
   - en: The CEO's office
     ko: CEO실
   - en: The CEO's office can resume the rollout with an exec-ops credential. Telling them the pause stays until the fence is in keeps it in place, with your name on it. You need the plan-versus-contract numbers to make the case.
-    ko: CEO실은 exec-ops 자격 증명으로 배포를 재개할 수 있다. 제한선이 들어갈 때까지 중지를 유지한다고 알리면 중지는 유지되고, 거기엔 네 이름이 붙는다. 설득하려면 계획 대 계약 수치가 필요하다.
+    ko: CEO실은 exec-ops 자격 증명으로 배포를 재개할 수 있다. 펜스가 들어갈 때까지 중지를 유지한다고 알리면 중지는 유지되고, 거기엔 네 이름이 붙는다. 설득하려면 계획 대 계약 수치가 필요하다.
   - en: Fence gateway admission
-    ko: 게이트웨이 유입 제한
+    ko: 게이트웨이 유입에 펜스 치기
   - en: An admission fence at 2,960 requests a second, existing care first, is the constraint REL-778 asked for. Two minutes of work. Wave 4 keeps onboarding, just slower.
-    ko: 기존 진료를 우선하는 초당 2,960건의 유입 제한선. REL-778이 요청한 바로 그 제약이다. 2분이면 된다. 4차 웨이브 온보딩은 계속되고, 느려질 뿐이다.
+    ko: 기존 의료를 우선하는 초당 2,960건의 진입 펜스. REL-778이 요청한 바로 그 제약이다. 2분이면 된다. 4차 웨이브 온보딩은 계속되고, 느려질 뿐이다.
   - en: War Room
     ko: 워룸
   - en: "Archive: the decommissioned cluster that is still running"
@@ -533,7 +533,7 @@ entries:
   - en: "Archive: the instance register, NULL_001 to NULL_218"
     ko: "아카이브: 인스턴스 대장, NULL_001부터 NULL_218까지"
   - en: "Archive: the care-priority decision interface"
-    ko: "아카이브: 진료 우선순위 결정 인터페이스"
+    ko: "아카이브: 의료 우선순위 결정 인터페이스"
   - en: "Archive: your own hiring record"
     ko: "아카이브: 본인의 채용 기록"
   - en: Resolution 14-C, as signed
@@ -557,11 +557,11 @@ entries:
   - en: Requested constraint
     ko: 요청된 제약
   - en: Fence rollout admission at verified gateway capacity
-    ko: 검증된 게이트웨이 용량에서 배포 유입 제한
+    ko: 검증된 게이트웨이 용량에 맞춰 배포 유입에 펜스 치기
   - en: Constraint adopted
     ko: 제약 채택 여부
   - en: No. Line item "admission fence" struck from the budget
-    ko: 아니오. "유입 제한선" 항목 예산에서 삭제
+    ko: 아니오. "진입 펜스" 항목 예산에서 삭제
   - en: Stated benefit
     ko: 명시된 효과
   - en: Wider hospital access, lower operating cost per route
@@ -625,11 +625,11 @@ entries:
   - en: Mitigation requested
     ko: 요청된 완화 조치
   - en: Admission fence; existing care admitted first
-    ko: 유입 제한선; 기존 진료 우선 유입
+    ko: 진입 펜스; 기존 의료 우선 유입
   - en: Decision
     ko: 결정
   - en: Retain wave schedule. Fence deferred to wave 6.
-    ko: 웨이브 일정 유지. 제한선은 6차 웨이브로 연기.
+    ko: 웨이브 일정 유지. 펜스는 6차 웨이브로 연기.
   - en: Chair of the Board, day -21
     ko: 이사회 의장, D-21
   - en: Day
@@ -639,13 +639,13 @@ entries:
   - en: What it says
     ko: 내용
   - en: "Clinical Operations: existing care shares the gateway ceiling"
-    ko: "임상 운영팀: 기존 진료가 게이트웨이 상한을 공유함"
+    ko: "임상 운영팀: 기존 의료가 게이트웨이 상한을 공유함"
   - en: "Platform: fence admission at 2,960 req/s"
-    ko: "플랫폼: 2,960 req/s에서 유입 제한"
+    ko: "플랫폼: 2,960 req/s에 유입 펜스 치기"
   - en: Resolution 14-C
     ko: 결의 14-C
   - en: Expansion approved 7-0; fence unfunded
-    ko: 확장 7대 0 승인; 제한선 예산 미배정
+    ko: 확장 7대 0 승인; 펜스 예산 미배정
   - en: CEO message
     ko: CEO 메시지
   - en: '"Trust the outcomes"'
@@ -659,7 +659,7 @@ entries:
   - en: Exception
     ko: 예외
   - en: EXC-0419, care continuity
-    ko: EXC-0419, 진료 연속성
+    ko: EXC-0419, 의료 연속성
   - en: Raised by
     ko: 제기자
   - en: Clinical Operations, day -26
@@ -667,11 +667,11 @@ entries:
   - en: Finding
     ko: 발견 사항
   - en: Existing care routes and wave admissions share one records gateway ceiling
-    ko: 기존 진료 경로와 웨이브 유입이 기록 게이트웨이 상한 하나를 공유함
+    ko: 기존 의료 경로와 웨이브 유입이 기록 게이트웨이 상한 하나를 공유함
   - en: Requested
     ko: 요청 사항
   - en: Admit new hospitals up to verified capacity; existing care first
-    ko: 신규 병원은 검증된 용량까지 유입; 기존 진료 우선
+    ko: 신규 병원은 검증된 용량까지 유입; 기존 의료 우선
   - en: Status at approval
     ko: 승인 시점 상태
   - en: Executive acknowledgment

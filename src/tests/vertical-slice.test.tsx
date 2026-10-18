@@ -106,5 +106,5 @@ describe('INC-001 complete vertical slice', () => {
     expect(screen.getByRole('tab', { name: /Evidence/ })).toHaveFocus();
     expect(screen.getByText('Corrupted log entry')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Restart Payment API' })).toBeDisabled();
-  });
+  }, 20_000); // ~60 Tab presses per step through the whole keyboard order
 });

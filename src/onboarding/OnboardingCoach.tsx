@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { usePresentationPreferences } from '../app/presentation-settings.ts';
 import { useI18n, useMessages } from '../i18n/I18n.ts';
@@ -57,6 +57,7 @@ export function OnboardingCoach({
       ? selectHint(onboardingGuide, state, availableActionIds, dismissed, surface, locale)
       : undefined;
   const focus = active?.focus;
+  const [targetShown, setTargetShown] = useState(false);
 
   // Quietly mark the element the tip talks about; the mark follows re-renders.
   useEffect(() => {
@@ -65,6 +66,12 @@ export function OnboardingCoach({
     target?.setAttribute('data-onboarding-focus', '');
     return () => target?.removeAttribute('data-onboarding-focus');
   });
+
+  // "Show me" is offered only while that element is on screen (a postmortem
+  // view, for instance, has no action buttons).
+  useEffect(() => {
+    setTargetShown(focus !== undefined && document.querySelector(targetSelector(focus)) !== null);
+  }, [focus, state, availableActionIds]);
 
   if (active === undefined) return null;
 
@@ -95,7 +102,7 @@ export function OnboardingCoach({
         {text}
       </p>
       <div className="onboarding-coach-actions">
-        {focus !== undefined ? (
+        {targetShown ? (
           <button type="button" onClick={showTarget}>
             {m.show}
           </button>

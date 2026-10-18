@@ -10,9 +10,19 @@ import { CampaignEnding } from './CampaignEnding.tsx';
 import { CampaignAudio } from './CampaignAudio.tsx';
 import { CampaignGuidance } from './CampaignGuidance.tsx';
 import { CampaignRuntimeNotices } from './CampaignRuntimeNotices.tsx';
+import { OnboardingCoach } from '../onboarding/OnboardingCoach.tsx';
 import { campaignAttemptHead, type CampaignRun } from '../engine/campaign/transitions.ts';
-import { actTitle, advisorName, incidentTitle, isFinalIncident } from './campaign-copy.ts';
+import {
+  actTitle,
+  attemptScenario,
+  advisorName,
+  endingName,
+  incidentTitle,
+  isFinalIncident,
+} from './campaign-copy.ts';
 import { formatElapsed } from './format.ts';
+import { useI18n, useMessages } from '../i18n/I18n.ts';
+import { campaignDeskMessages, type RotationStatus } from './messages/campaign-desk.ts';
 
 type Attempt = CampaignRun['attempts'][number];
 
@@ -44,6 +54,8 @@ function CampaignConsole({
 }) {
   const state = useStore(store);
   const { preferences } = usePresentationPreferences();
+  const { locale, ct } = useI18n();
+  const m = useMessages(campaignDeskMessages);
   const [reviewId, setReviewId] = useState<string | null>(null);
   const [endingQuery, setEnding] = useState<{
     run: CampaignRun;
@@ -77,11 +89,11 @@ function CampaignConsole({
       ? endingQuery
       : null;
   const ending = currentEndingQuery?.result;
-  const title = (incidentId: string) => incidentTitle(composition, incidentId);
+  const title = (incidentId: string) => ct(incidentTitle(composition, incidentId));
   const attemptLabel = (a: Attempt) => {
     const sameIncident = run?.attempts.filter((item) => item.incidentId === a.incidentId) ?? [];
     const ordinal = sameIncident.findIndex((item) => item.id === a.id) + 1;
-    return `${title(a.incidentId)}${sameIncident.length > 1 ? ` (attempt ${ordinal})` : ''}`;
+    return m.attemptLabel(title(a.incidentId), sameIncident.length > 1 ? ordinal : null);
   };
 
   const progress =
@@ -131,20 +143,21 @@ function CampaignConsole({
       });
   };
 
+  const advisor = advisorName(act, locale);
   const saveStatus = state.busy
-    ? 'Saving to your campaign record…'
+    ? m.saveBusy
     : state.pendingOperationId
-      ? 'Your last action has not been saved yet.'
+      ? m.savePending
       : state.readState === 'not_found'
-        ? 'No campaign record yet.'
+        ? m.saveNotFound
         : state.readState === 'unread'
-          ? 'Campaign record not loaded.'
-          : 'All progress saved.';
+          ? m.saveUnread
+          : m.saveDone;
 
   return (
     <main
       className="incident-hub campaign-desk"
-      aria-label="Campaign operations desktop"
+      aria-label={m.desktopLabel}
       onKeyDownCapture={(event) => {
         if (
           !composition ||
@@ -162,35 +175,27 @@ function CampaignConsole({
           keyboardAudio.current?.();
       }}
     >
-      <nav className="campaign-jump-links" aria-label="Campaign section shortcuts">
-        <a href="#campaign-progress">Rotation</a>
-        <a href="#campaign-tools">Workspace</a>
-        {!reviewing ? <a href="#campaign-guidance">{advisorName(act)}</a> : null}
-        <a href="#campaign-evidence">Evidence</a>
-        <a href="#campaign-history">Archive</a>
-        <a href="#campaign-settings">Settings</a>
+      <nav className="campaign-jump-links" aria-label={m.shortcutsLabel}>
+        <a href="#campaign-progress">{m.jumpRotation}</a>
+        <a href="#campaign-tools">{m.jumpWorkspace}</a>
+        {!reviewing ? <a href="#campaign-guidance">{advisor}</a> : null}
+        <a href="#campaign-evidence">{m.jumpEvidence}</a>
+        <a href="#campaign-history">{m.jumpArchive}</a>
+        <a href="#campaign-settings">{m.jumpSettings}</a>
       </nav>
       <header className="console-header">
         <div>
-          <p className="eyebrow">
-            {composition
-              ? 'VANTAGE SYSTEMS // OPERATIONS CONSOLE'
-              : 'VANTAGE SYSTEMS // CAMPAIGN FRAMEWORK (TEST CONTENT)'}
-          </p>
-          <h1>{act === null ? 'Operations console' : actTitle(act)}</h1>
-          <p>
-            {composition
-              ? 'You are on the reliability rotation. Every incident you close stays on your record, and the systems you work with are learning from how you close them.'
-              : 'Opt-in framework console. It does not change the three-incident training rotation.'}
-          </p>
+          <p className="eyebrow">{composition ? m.eyebrowConsole : m.eyebrowFramework}</p>
+          <h1>{act === null ? m.consoleTitle : actTitle(act, locale)}</h1>
+          <p>{composition ? m.introCampaign : m.introFramework}</p>
         </div>
         <div className="console-header-actions">
           <button type="button" disabled={blocked} onClick={onBack}>
-            Back to incident desk
+            {m.backToDesk}
           </button>
         </div>
-        <div className="screen-toolbar" role="group" aria-label="Screen settings">
-          <section id="campaign-settings" tabIndex={-1} aria-label="Display settings">
+        <div className="screen-toolbar" role="group" aria-label={m.screenSettings}>
+          <section id="campaign-settings" tabIndex={-1} aria-label={m.displaySettings}>
             <PresentationSettings />
           </section>
           {composition ? (
@@ -205,14 +210,14 @@ function CampaignConsole({
         </div>
       </header>
 
-      <section className="save-status" aria-label="Campaign record status" aria-busy={state.busy}>
+      <section className="save-status" aria-label={m.recordStatus} aria-busy={state.busy}>
         <p role="status">
           <span aria-hidden="true">{state.pendingOperationId ? '▲ ' : '● '}</span>
           {saveStatus}
         </p>
         {state.pendingOperationId ? (
           <button type="button" disabled={state.busy} onClick={() => void state.retryPending()}>
-            Retry save
+            {m.retrySave}
           </button>
         ) : null}
         <button
@@ -224,22 +229,19 @@ function CampaignConsole({
           }
           onClick={() => void state.load()}
         >
-          Reload saved campaign
+          {m.reload}
         </button>
         {state.readState === 'not_found' ? (
           <button type="button" disabled={blocked} onClick={() => void state.create()}>
-            Start a new campaign record
+            {m.startRecord}
           </button>
         ) : null}
         {state.error ? (
           <p role="alert">
-            The campaign record could not confirm that change. Your saved data is untouched.{' '}
-            <small>Technical detail: {state.error}</small>
+            {m.unconfirmed} <small>{m.technicalDetail(state.error)}</small>
           </p>
         ) : null}
-        {state.view?.actionDiagnostics.length ? (
-          <p role="alert">Some response options could not be checked against your record.</p>
-        ) : null}
+        {state.view?.actionDiagnostics.length ? <p role="alert">{m.actionDiagnostics}</p> : null}
       </section>
 
       {composition?.presentations.some((p) => p.schemaVersion === 2) ? (
@@ -259,46 +261,45 @@ function CampaignConsole({
           aria-labelledby="campaign-progress-title"
           aria-busy={state.busy}
         >
-          <h2 id="campaign-progress-title">Incident rotation</h2>
+          <h2 id="campaign-progress-title">{m.rotationTitle}</h2>
           {liveOpen && !reviewing ? (
             <button
               type="button"
               className="primary-action"
+              data-onboarding-target="region:rotation"
               onClick={() => workspaceHeadingRef.current?.focus()}
             >
-              Continue: {title(live.incidentId)}
+              {m.continueIncident(title(live.incidentId))}
             </button>
           ) : next ? (
             <button
               type="button"
               className="primary-action"
+              data-onboarding-target="region:rotation"
               disabled={blocked || reviewing}
               onClick={() => start(next.id)}
             >
-              Next incident: {title(next.id)}
+              {m.nextIncident(title(next.id))}
             </button>
           ) : run ? (
-            <p className="console-hint">No new incident is open on the rotation right now.</p>
+            <p className="console-hint">{m.noNewIncident}</p>
           ) : null}
           {board.length ? (
-            <ul className="rotation-list" aria-label="Incidents this act">
+            <ul className="rotation-list" aria-label={m.incidentsThisAct}>
               {board.map((item) => {
                 const isLive = liveOpen && item.id === live.incidentId;
                 const done = completed.has(item.id);
-                const status = isLive
-                  ? 'In progress'
+                const status: RotationStatus = isLive
+                  ? 'in-progress'
                   : done
-                    ? 'Closed'
+                    ? 'closed'
                     : !item.result.ok
-                      ? 'Unavailable'
+                      ? 'unavailable'
                       : item.result.value
-                        ? 'Ready'
-                        : 'Locked';
+                        ? 'ready'
+                        : 'locked';
                 return (
-                  <li
-                    key={item.id}
-                    className={`rotation-item rotation-item--${status.toLowerCase().replace(' ', '-')}`}
-                  >
+                  <li key={item.id} className={`rotation-item rotation-item--${status}`}>
                     <span className="rotation-title">{title(item.id)}</span>
                     <span className="rotation-status">
                       <span aria-hidden="true">
@@ -310,7 +311,7 @@ function CampaignConsole({
                               ? '◇'
                               : '·'}
                       </span>{' '}
-                      {status}
+                      {m.status[status]}
                     </span>
                     {!isLive && !done && eligible(item) && item.id !== next?.id ? (
                       <button
@@ -318,7 +319,7 @@ function CampaignConsole({
                         disabled={blocked || reviewing}
                         onClick={() => start(item.id)}
                       >
-                        Start: {title(item.id)}
+                        {m.startIncident(title(item.id))}
                       </button>
                     ) : null}
                   </li>
@@ -326,40 +327,29 @@ function CampaignConsole({
               })}
             </ul>
           ) : null}
-          {sealed > 0 ? (
-            <p className="console-hint">
-              {sealed} more incident{sealed === 1 ? '' : 's'} sealed in later acts.
-            </p>
-          ) : null}
-          {state.view && !state.view.progress.ok ? (
-            <p role="alert">The rotation could not be checked against your record.</p>
-          ) : null}
+          {sealed > 0 ? <p className="console-hint">{m.sealed(sealed)}</p> : null}
+          {state.view && !state.view.progress.ok ? <p role="alert">{m.rotationUnchecked}</p> : null}
         </section>
 
         <section
           id="campaign-tools"
           tabIndex={-1}
           className="workspace-column"
-          aria-label="Investigation workspace"
+          aria-label={m.workspaceLabel}
         >
           {attempt ? (
             <header className="panel console-incident">
-              <p className="eyebrow">
-                {reviewing ? 'ARCHIVED RECORD // READ ONLY' : 'ACTIVE INCIDENT'}
-              </p>
+              <p className="eyebrow">{reviewing ? m.eyebrowArchived : m.eyebrowActive}</p>
               <h2 ref={workspaceHeadingRef} tabIndex={-1}>
                 {title(attempt.incidentId)}
               </h2>
               <p>
-                {attempt.incident.completionReached ? 'Closed' : 'In progress'} ·{' '}
-                {formatElapsed(attempt.incident.elapsedSeconds)} elapsed
+                {attempt.incident.completionReached ? m.closed : m.inProgress} ·{' '}
+                {m.elapsed(formatElapsed(attempt.incident.elapsedSeconds))}
               </p>
               {reviewing ? (
                 <>
-                  <p>
-                    You are reading an archived record. Nothing you open here changes your campaign
-                    or what is known about you.
-                  </p>
+                  <p>{m.archivedNote}</p>
                   <button
                     type="button"
                     disabled={blocked}
@@ -368,21 +358,18 @@ function CampaignConsole({
                       setEnding(null);
                     }}
                   >
-                    Back to current incident
+                    {m.backToCurrent}
                   </button>
                 </>
               ) : null}
               {awaitingAck ? (
                 <p className="console-hint" role="note">
-                  {advisorName(act)} has a message for you. Actions resume once you confirm you have
-                  read it.
+                  {m.awaitingAck(advisor)}
                 </p>
               ) : null}
             </header>
           ) : (
-            <p className="panel console-hint">
-              No incident is open. Pick one from the rotation to begin.
-            </p>
+            <p className="panel console-hint">{m.noIncident}</p>
           )}
           {!reviewing ? (
             <CampaignGuidance
@@ -402,6 +389,17 @@ function CampaignConsole({
               }}
             />
           ) : null}
+          {composition && attempt && !reviewing ? (
+            <OnboardingCoach
+              surface="campaign"
+              state={attempt.incident}
+              availableActionIds={(state.view?.availableActions ?? []).map(({ id }) => id)}
+              actionTitle={(id) =>
+                attemptScenario(composition, attempt)?.actions.find((action) => action.id === id)
+                  ?.title
+              }
+            />
+          ) : null}
           {composition && run && attempt ? (
             <CampaignTools
               composition={composition}
@@ -418,7 +416,7 @@ function CampaignConsole({
           ) : null}
           {!composition && !reviewing && state.view?.availableActions.length ? (
             <section className="panel console-panel" aria-labelledby="campaign-action-title">
-              <h2 id="campaign-action-title">Available actions</h2>
+              <h2 id="campaign-action-title">{m.availableActions}</h2>
               <div className="console-actions">
                 {state.view.availableActions.map((a) => (
                   <div className="console-action" key={a.id}>
@@ -431,10 +429,10 @@ function CampaignConsole({
                         void state.performAction(a.id);
                       }}
                     >
-                      {a.title}
+                      {ct(a.title)}
                     </button>
                     <span className="console-action-cost" id={`framework-cost-${a.id}`}>
-                      Takes {formatElapsed(a.durationSeconds)}
+                      {m.takes(formatElapsed(a.durationSeconds))}
                     </span>
                   </div>
                 ))}
@@ -443,24 +441,21 @@ function CampaignConsole({
           ) : null}
           {finalComplete ? (
             <section className="panel finale-gate" aria-labelledby="campaign-finale-title">
-              <p className="eyebrow">FINAL INCIDENT CLOSED</p>
-              <h2 id="campaign-finale-title">Finale</h2>
-              <p>
-                The last incident is on the record. Read where your choices led. Reading it does not
-                change anything.
-              </p>
+              <p className="eyebrow">{m.eyebrowFinal}</p>
+              <h2 id="campaign-finale-title">{m.finale}</h2>
+              <p>{m.finaleNote}</p>
               <button type="button" disabled={blocked} onClick={queryEnding}>
-                Read the ending
+                {m.readEnding}
               </button>
               {ending !== undefined && ending !== null ? (
                 <p role="status">
                   {ending.ok
                     ? ending.result.kind === 'resolved'
-                      ? `Ending reached: ${ending.result.endingId}`
+                      ? m.endingReached(endingName(ending.result.endingId, locale))
                       : ending.result.kind === 'ambiguous'
-                        ? 'Your record points to more than one ending equally.'
-                        : 'Your record does not match any authored ending.'
-                    : 'The ending could not be checked against your record.'}
+                        ? m.endingAmbiguous
+                        : m.endingNone
+                    : m.endingUnchecked}
                 </p>
               ) : null}
               {composition && run && currentEndingQuery ? (
@@ -478,22 +473,23 @@ function CampaignConsole({
         <aside className="console-side">
           <section
             id="campaign-evidence"
+            data-onboarding-target="region:evidence tool:evidence"
             tabIndex={-1}
             className="panel evidence-board"
             aria-labelledby="campaign-evidence-title"
           >
-            <h2 id="campaign-evidence-title">Evidence board</h2>
+            <h2 id="campaign-evidence-title">{m.evidenceBoard}</h2>
             {state.view?.evidence.length ? (
               <ul className="evidence-pins">
                 {state.view.evidence.map((e) => (
                   <li key={e.id}>
-                    <h3>{e.title}</h3>
-                    <p>{e.description}</p>
+                    <h3>{ct(e.title)}</h3>
+                    <p>{ct(e.description)}</p>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="console-hint">No evidence pinned yet. Investigate to find some.</p>
+              <p className="console-hint">{m.noEvidence}</p>
             )}
           </section>
           <section
@@ -502,7 +498,7 @@ function CampaignConsole({
             className="panel"
             aria-labelledby="campaign-history-title"
           >
-            <h2 id="campaign-history-title">Archive</h2>
+            <h2 id="campaign-history-title">{m.archive}</h2>
             {run?.attempts.length ? (
               <ul className="archive-list">
                 {archive.map(({ incidentId, attempts }) => {
@@ -525,10 +521,10 @@ function CampaignConsole({
                               setEnding(null);
                             }}
                           >
-                            Review record: {attemptLabel(a)}
+                            {m.reviewRecord(attemptLabel(a))}
                           </button>
                           <span className="console-hint">
-                            {a.incident.completionReached ? 'Closed' : 'Open'} ·{' '}
+                            {a.incident.completionReached ? m.closed : m.open} ·{' '}
                             {formatElapsed(a.incident.elapsedSeconds)}
                           </span>
                         </div>
@@ -539,7 +535,7 @@ function CampaignConsole({
                           disabled={blocked || reviewing}
                           onClick={() => start(incidentId)}
                         >
-                          Replay: {title(incidentId)}
+                          {m.replay(title(incidentId))}
                         </button>
                       ) : null}
                     </li>
@@ -547,7 +543,7 @@ function CampaignConsole({
                 })}
               </ul>
             ) : (
-              <p className="console-hint">Closed incidents will be filed here.</p>
+              <p className="console-hint">{m.archiveEmpty}</p>
             )}
           </section>
         </aside>

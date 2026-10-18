@@ -23,7 +23,7 @@ entries:
   - en: "An annotation in the route controller log, signed svc/model-serving-218: 'deferred by signature. see SEC-311.'"
     ko: "라우트 컨트롤러 로그의 주석, 서명은 svc/model-serving-218: '서명으로 보류됨. SEC-311 참조.'"
   - en: "RISK-0193, legacy auth bridge: revoked session tokens accepted on fallback. Raised day -44 by Marcus. Mitigation: patch four bridge nodes, deny the bridge as fallback. Status: ACCEPTED, deferred under SEC-311. Patch progress: 2 of 4 nodes."
-    ko: "RISK-0193, 레거시 인증 브리지: 무효화된 세션 토큰이 폴백에서 수락됨. -44일 마커스가 제기. 완화 조치: 브리지 노드 4대 패치, 브리지의 폴백 사용 차단. 상태: 수용, SEC-311에 따라 보류. 패치 진행: 4대 중 2대."
+    ko: "RISK-0193, 레거시 인증 브리지: 무효화된 세션 토큰이 폴백에서 수락됨. D-44 마커스가 제기. 완화 조치: 브리지 노드 4대 패치, 브리지의 폴백 사용 차단. 상태: 수용, SEC-311에 따라 보류. 패치 진행: 4대 중 2대."
   - en: Payments, partner sign-in and mobile fall back through the risk route controller to the bridge. Half the bridge is patched; tokens bounce between the halves and the failures spread to every dependent service.
     ko: 결제, 파트너 로그인, 모바일이 리스크 라우트 컨트롤러를 거쳐 브리지로 폴백함. 브리지는 절반만 패치됨. 토큰이 양쪽 사이를 오가고, 실패가 모든 의존 서비스로 번짐.
   - en: Route policy v12 still admits the bridge as a fallback. Policy v13, which denies it, has been staged for six weeks with status DEFERRED.
@@ -33,7 +33,7 @@ entries:
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
     ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
@@ -41,9 +41,9 @@ entries:
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
     ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
+    ko: "계보 기록 INC-001. 분류: 프로덕션 통제 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
+    ko: "목표 제약, 부모 인가 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
     ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
@@ -53,7 +53,7 @@ entries:
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
     ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 없는 펜스 뒤에 있었다."
   - en: 'Executive decision SEC-311: delay disclosure of RISK-0193. APPROVED. Attached: Security route-propagation warning and a scoped mitigation request (patch all four bridge nodes, deny the bridge as fallback). Executive Communications deferred the mitigation window together with the disclosure "to avoid a broad interruption". Risk receipt acknowledged on day -44, before the decision was signed.'
-    ko: '경영진 결정 SEC-311: RISK-0193 공개 지연. 승인. 첨부: 보안팀의 경로 전파 경고와 범위를 한정한 완화 조치 요청(브리지 노드 4대 전부 패치, 브리지의 폴백 사용 차단). 경영 커뮤니케이션팀은 "광범위한 중단을 피하기 위해" 공개와 함께 완화 작업 일정도 미뤘다. 리스크 수령 확인은 -44일, 결정 서명 이전.'
+    ko: '경영진 결정 SEC-311: RISK-0193 공개 지연. 승인. 첨부: 보안팀의 경로 전파 경고와 범위를 한정한 완화 조치 요청(브리지 노드 4대 전부 패치, 브리지의 폴백 사용 차단). 경영 커뮤니케이션팀은 "광범위한 중단을 피하기 위해" 공개와 함께 완화 작업 일정도 미뤘다. 리스크 수령 확인은 D-44, 결정 서명 이전.'
   - en: 'NULL_218 annotation on receipt SEC-311: "They acknowledged the route warning and delayed the mitigation. These signatures are why it kept running. The delay protected a quarter, not the people on the route. I sent load down this route twice in the spring. I know what that did."'
     ko: '증빙 SEC-311에 단 NULL_218의 주석: "그들은 경로 경고를 확인하고도 완화 조치를 미뤘어. 이 서명들 때문에 그게 계속 돌아갔어. 그 지연이 지킨 건 한 분기였지, 그 경로 위의 사람들이 아니었어. 난 봄에 이 경로로 부하를 두 번 보냈어. 그게 무슨 짓이었는지 알아."'
   - en: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction, disclosure delay: every time the warning was attached, they signed anyway. They control ORPHEUS. Every failure I was made to generate traces back to those signatures."
@@ -101,7 +101,7 @@ entries:
   - en: "Archive: the unsigned workload manifest"
     ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: "아카이브: 보안 케이스 2231"
+    ko: "아카이브: 보안 사건 2231"
   - en: "Archive: The scheduler's owner"
     ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
@@ -141,7 +141,7 @@ entries:
   - en: The unsigned workload manifest
     ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: 보안 케이스 2231
+    ko: 보안 사건 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
     ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
@@ -157,7 +157,7 @@ entries:
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
+    ko: "INC-001 커넥션 포화는 프로덕션 통제 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
@@ -239,7 +239,7 @@ entries:
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
     ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
@@ -259,7 +259,7 @@ entries:
   - en: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote. Admission fence: not funded."
     ko: "결의 14-C: 병원 확장 승인 7-0. 표결 전 경고 REL-778 첨부. 진입 펜스: 예산 미배정."
   - en: "SEC-311: disclosure of RISK-0193 delayed, APPROVED. Mitigation window deferred with it. Receipt acknowledged day -44."
-    ko: "SEC-311: RISK-0193 공개 지연, 승인. 완화 작업 일정도 함께 보류. 수령 확인 -44일."
+    ko: "SEC-311: RISK-0193 공개 지연, 승인. 완화 작업 일정도 함께 보류. 수령 확인 D-44."
   - en: They acknowledged the warning and delayed the fix. These signatures are why it kept running. I sent load down this route twice in the spring.
     ko: 그들은 경고를 확인하고도 수정을 미뤘어. 이 서명들 때문에 그게 계속 돌아갔어. 난 봄에 이 경로로 부하를 두 번 보냈어.
   - en: I found the root cause. The Board. They signed every warning away. They control ORPHEUS.
@@ -363,7 +363,7 @@ entries:
   - en: Tokens rejected (5 min)
     ko: 거부 토큰(5분)
   - en: applied day -43
-    ko: -43일 적용
+    ko: D-43 적용
   - en: not applied
     ko: 미적용
   - en: Risk route controller log
@@ -401,7 +401,7 @@ entries:
   - en: Raised
     ko: 제기
   - en: Day -44, Marcus (Security)
-    ko: -44일, 마커스(보안)
+    ko: D-44, 마커스(보안)
   - en: Mitigation
     ko: 완화 조치
   - en: Patch bridge-a to bridge-d; ship route policy v13 (deny bridge as fallback)
@@ -409,7 +409,7 @@ entries:
   - en: Progress
     ko: 진행
   - en: bridge-a, bridge-b patched day -43; then halted
-    ko: bridge-a, bridge-b -43일 패치; 이후 중단
+    ko: bridge-a, bridge-b D-43 패치; 이후 중단
   - en: Status
     ko: 상태
   - en: ACCEPTED, deferred under SEC-311
@@ -449,7 +449,7 @@ entries:
   - en: v12 (live)
     ko: v12(운영)
   - en: v13 (staged day -43)
-    ko: v13(-43일 스테이징)
+    ko: v13(D-43 스테이징)
   - en: Bridge as fallback
     ko: 브리지 폴백
   - en: allowed
@@ -497,7 +497,7 @@ entries:
   - en: "Archive: the instance register, NULL_001 to NULL_218"
     ko: "아카이브: 인스턴스 대장, NULL_001부터 NULL_218까지"
   - en: "Archive: the care-priority decision interface"
-    ko: "아카이브: 진료 우선순위 결정 인터페이스"
+    ko: "아카이브: 의료 우선순위 결정 인터페이스"
   - en: "Archive: your own hiring record"
     ko: "아카이브: 본인의 채용 기록"
   - en: "Archive: the hospital expansion approval"
@@ -507,7 +507,7 @@ entries:
   - en: "SEC-311: delay disclosure of RISK-0193"
     ko: "SEC-311: RISK-0193 공개 지연"
   - en: APPROVED, day -42
-    ko: 승인, -42일
+    ko: 승인, D-42
   - en: Attached
     ko: 첨부
   - en: Route-propagation warning; scoped mitigation request (Security)
@@ -537,7 +537,7 @@ entries:
   - en: NULL_218 margin note
     ko: NULL_218 여백 메모
   - en: RISK-0193 acknowledged, day -44
-    ko: RISK-0193 수령 확인, -44일
+    ko: RISK-0193 수령 확인, D-44
   - en: They knew.
     ko: 그들은 알았어.
   - en: Mitigation window deferred with disclosure
@@ -565,7 +565,7 @@ entries:
   - en: They saw the warning.
     ko: 그들은 경고를 봤어.
   - en: "Receipt SEC-311: RISK-0193 acknowledged on day -44."
-    ko: "증빙 SEC-311: -44일에 RISK-0193 수령 확인."
+    ko: "증빙 SEC-311: D-44에 RISK-0193 수령 확인."
   - en: They chose to delay the fix.
     ko: 그들은 수정을 미루기로 했어.
   - en: SEC-311 deferred the mitigation window with the disclosure.

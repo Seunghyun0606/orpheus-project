@@ -16,6 +16,7 @@ import { CampaignTools } from '../app/CampaignTools.tsx';
 import { fullCampaignManifestSchema } from '../scenario/production-catalog.ts';
 import manifestSource from '../scenario/data/full-campaign-manifest.yaml?raw';
 import { runScenarioValidationCli } from '../scenario/cli.ts';
+import { presentationStorageKey } from '../app/presentation-settings.ts';
 
 afterEach(() => {
   cleanup();
@@ -457,5 +458,33 @@ describe('explicit storage discovery and desktop boundary', () => {
     await user.click(screen.getByRole('button', { name: 'Retry save' }));
     expect(n).toBe(assigned);
     expect(await screen.findByText('All progress saved.')).toBeInTheDocument();
+  });
+});
+
+describe('Korean campaign entry', () => {
+  it('describes campaign files and saved runs in Korean, following a language switch', async () => {
+    window.localStorage.setItem(presentationStorageKey, JSON.stringify({ language: 'ko' }));
+    const user = userEvent.setup(),
+      f = session();
+    await f.store.getState().load();
+    await f.store.getState().create();
+    render(
+      <FullCampaignEntry
+        onBack={vi.fn()}
+        factory={() => f.factory}
+        loader={async () => ({ ok: true, registry: f.registry })}
+        identity={() => 'fixture-run'}
+      />,
+    );
+    expect(screen.getByRole('heading', { level: 1, name: '전체 캠페인' })).toBeVisible();
+    await user.click(screen.getByRole('button', { name: '캠페인 파일 열기' }));
+    expect(await screen.findByRole('button', { name: '새 캠페인' })).toBeInTheDocument();
+    const resume = await screen.findByRole('button', { name: '계속하기' });
+    expect(resume).toHaveAccessibleDescription(/6막 — 인간 시스템 · 인시던트 0건 종료/);
+    // Saved-run summaries are data, so they re-render in the newly chosen language.
+    await user.selectOptions(screen.getByRole('combobox', { name: '언어' }), 'en');
+    expect(screen.getByRole('button', { name: 'Continue' })).toHaveAccessibleDescription(
+      /Act 6 — HUMAN SYSTEM · 0 incidents closed/,
+    );
   });
 });

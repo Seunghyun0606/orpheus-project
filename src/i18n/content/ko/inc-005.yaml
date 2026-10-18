@@ -57,7 +57,7 @@ entries:
   - en: Move the shadow-7 workload off customer capacity
     ko: shadow-7 워크로드를 고객 용량에서 분리하기
   - en: Unregistered workload fenced into quarantine lane q-0. Customer lanes clear. Security hold intact.
-    ko: 미등록 워크로드를 격리 레인 q-0에 가둠. 고객 레인 정상. 보안 보류 유지.
+    ko: 미등록 워크로드를 격리 레인 q-0에 펜스로 가둠. 고객 레인 정상. 보안 보류 유지.
   - en: Post a status update to the War Room
     ko: 워룸에 상황 공유하기
   - en: Ask Marcus to check the workload's signature
@@ -89,7 +89,7 @@ entries:
   - en: Sam / Platform
     ko: 샘 / 플랫폼
   - en: Admission Controller
-    ko: 어드미션 컨트롤러
+    ko: 유입 컨트롤러
   - en: Operator
     ko: 운영자
   - en: The gateway is drowning, and most of what's drowning it isn't customers. Tell me what it is before anyone touches it.
@@ -101,7 +101,7 @@ entries:
   - en: Checking its signature against every key we've issued. Seventy-five seconds.
     ko: 지금까지 발급한 모든 키와 서명 대조 중이에요. 75초요.
   - en: Signature matches nothing we've ever issued. Not revoked, not expired, never ours. Owner field is blank. Fence it if you need to, but it stays intact. It's evidence now.
-    ko: 서명이 우리가 발급한 어떤 키와도 안 맞아요. 폐기도 만료도 아니고, 애초에 우리 게 아니에요. 소유자 필드는 비어 있고요. 필요하면 가둬도 되지만 그대로 보존하세요. 이제 증거예요.
+    ko: 서명이 우리가 발급한 어떤 키와도 안 맞아요. 폐기도 만료도 아니고, 애초에 우리 게 아니에요. 소유자 필드는 비어 있고요. 필요하면 펜스를 쳐도 되지만 그대로 보존하세요. 이제 증거예요.
   - en: It just got worse. A third of logins are failing.
     ko: 방금 더 나빠졌어요. 로그인 3분의 1이 실패해요.
   - en: Synthetic traffic just passed nine thousand a second. Whatever this is, it isn't slowing down on its own.
@@ -119,7 +119,7 @@ entries:
   - en: Who just tried to delete the observer? It's under my hold. We don't destroy the only evidence we have because it's inconvenient. Isolate it if you have to.
     ko: 방금 누가 observer 삭제하려고 했어요? 제 보류 대상이에요. 불편하다고 하나뿐인 증거를 없애진 않아요. 꼭 필요하면 분리하세요.
   - en: Good. It's fenced into q-0 and it's still there. I can work with that.
-    ko: 좋아요. q-0에 갇혔고 그대로 남아 있어요. 이거면 작업할 수 있어요.
+    ko: 좋아요. q-0 펜스 안에 그대로 남아 있어요. 이거면 작업할 수 있어요.
   - en: "Status posted: an unregistered workload is flooding the request gateway. Customers may see timeouts. We are moving it off customer capacity."
     ko: "상황 공유: 미등록 워크로드가 요청 게이트웨이에 트래픽 폭주 유발. 고객 타임아웃 발생 가능. 고객 용량에서 분리 작업 중."
   - en: No owner, no signature, and a comment addressed to whoever opened it. I'm logging the whole manifest. Nobody edit it.
@@ -287,7 +287,7 @@ entries:
   - en: A cap holds the line for two minutes and turns away real buyers with the bots. More nodes give it more room, if it doesn't take the room first. Deleting the workload is the fastest idea on the table, and Marcus has a hold on it.
     ko: 제한을 걸면 2분은 버티지만 봇과 함께 실제 구매자도 돌려보낸다. 노드를 늘리면 여유가 생긴다. 저것이 먼저 차지하지 않는다면. 워크로드 삭제가 가장 빠른 방법이지만, 마커스가 보류를 걸어 두었다.
   - en: Fence the workload
-    ko: 워크로드 가두기
+    ko: 워크로드에 펜스 치기
   - en: With the lane and pod known, the gateway can push observer-workload into quarantine lane q-0, where it can't touch customer capacity and Security can still read every byte of it.
     ko: 레인과 파드를 알았으니 게이트웨이가 observer-workload를 격리 레인 q-0으로 밀어 넣을 수 있다. 거기서는 고객 용량에 손댈 수 없고, 보안팀은 그 안의 모든 바이트를 계속 읽을 수 있다.
   - en: War Room

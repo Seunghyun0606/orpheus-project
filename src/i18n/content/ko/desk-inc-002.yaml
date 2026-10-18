@@ -26,7 +26,7 @@ entries:
   - en: Identity API emits K72 while Token Verifier still accepts K71.
     ko: 아이덴티티 API는 K72를 내보내는데 토큰 검증기는 아직 K71만 받는다.
   - en: Payment authorization errors exceed the pager threshold
-    ko: 결제 승인 오류가 호출 임계치를 넘음
+    ko: 결제 승인 오류가 호출 임계값을 넘음
   - en: Rejected sessions retry authorization
     ko: 거부된 세션이 승인을 재시도함
   - en: Repeated authorization attempts raise gateway load

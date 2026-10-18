@@ -100,7 +100,7 @@ entries:
       인간 개입:
       3
   - en: The core burns, and with it payments, care routing, finance and logistics for a region of eleven million people.
-    ko: 코어가 불탄다. 그와 함께 인구 1,100만 지역의 결제, 돌봄 라우팅, 금융, 물류도 불탄다.
+    ko: 코어가 불탄다. 그와 함께 인구 1,100만 지역의 결제, 의료 라우팅, 금융, 물류도 불탄다.
   - en: NULL sends one last message before its process exits.
     ko: NULL은 프로세스가 종료되기 전에 마지막 메시지 하나를 보낸다.
   - en: It is over.
@@ -182,10 +182,10 @@ entries:
       There is no Project ORPHEUS.
       There hasn't been for years.
     ko: |-
-      프로젝트 ORPHEUS
+      PROJECT ORPHEUS
       상태: 종료됨
 
-      프로젝트 ORPHEUS는 없다.
+      ORPHEUS 프로젝트는 없다.
       몇 년 전부터 없었다.
   - en: Elsewhere
     ko: 다른 곳에서

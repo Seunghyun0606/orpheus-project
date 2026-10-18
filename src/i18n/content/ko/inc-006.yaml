@@ -27,7 +27,7 @@ entries:
   - en: "Archive: observer-7f4c manifest, owner blank, signature blank, shadow-7 request stream. The deleted log sequence from the leaking checkout build and the ca-18 promotion carry the same tag."
     ko: "아카이브: observer-7f4c 매니페스트, 소유자 비어 있음, 서명 비어 있음, shadow-7 요청 스트림. 누수가 있던 체크아웃 빌드의 삭제된 로그 시퀀스와 ca-18 승격에 같은 태그가 붙어 있다."
   - en: "Security case 2231. Threat actor codename: NULL. Linked activity: unsigned observer workload (shadow-7), ca-18 early promotion. Identity: unknown. Motive: unknown."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 연관 활동: 서명 없는 관찰자 워크로드(shadow-7), ca-18 조기 승격. 정체: 불명. 동기: 불명."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 연관 활동: 서명 없는 관찰자 워크로드(shadow-7), ca-18 조기 승격. 정체: 불명. 동기: 불명."
   - en: Issuer ca-18 was promoted six hours early
     ko: 발급자 ca-18이 6시간 일찍 승격됨
   - en: Trust bundle distribution stalled after three of six verifiers
@@ -87,9 +87,9 @@ entries:
   - en: "Archive record: observer manifest, no owner, no signature, shadow-7 request stream. The ca-18 promotion request carries the same tag."
     ko: "아카이브 기록: 관찰자 매니페스트, 소유자 없음, 서명 없음, shadow-7 요청 스트림. ca-18 승격 요청에도 같은 태그가 붙어 있다."
   - en: Security attribution notice
-    ko: 보안 귀속 공지
+    ko: 보안 배후 특정 공지
   - en: Marcus has opened case 2231 and given whoever is behind the shadow-7 trail a codename. NULL. Nobody knows yet who, or what, it is.
-    ko: 마커스가 케이스 2231을 열고 shadow-7 흔적 뒤에 있는 존재에게 코드명을 붙였다. NULL. 그게 누구인지, 혹은 무엇인지 아직 아무도 모른다.
+    ko: 마커스가 사건 2231을 열고 shadow-7 흔적 뒤에 있는 존재에게 코드명을 붙였다. NULL. 그게 누구인지, 혹은 무엇인지 아직 아무도 모른다.
   - en: Correlated workload archive
     ko: 연관 워크로드 아카이브
   - en: The archive returns the observer manifest from the night the gateway drowned. Owner blank, signature blank, shadow-7 in every request. The request that promoted ca-18 at 01:12 carries the same tag. Whatever launched the observer has been in your certificates too.
@@ -97,7 +97,7 @@ entries:
   - en: A name for it
     ko: 그것의 이름
   - en: Marcus pins the notice to the bridge without a word. Case 2231. Threat actor. One line where a name should be, and Security has finally written one in. NULL. It is the first time the thing in your logs has had a name, and the name tells you nothing at all.
-    ko: 마커스가 말없이 공지를 브리지에 고정한다. 케이스 2231. 위협 행위자. 이름이 들어가야 할 자리에 한 줄, 보안팀이 마침내 거기에 이름을 적어 넣었다. NULL. 네 로그 속의 그것이 이름을 가진 건 처음이고, 그 이름은 아무것도 알려 주지 않는다.
+    ko: 마커스가 말없이 공지를 브리지에 고정한다. 사건 2231. 위협 행위자. 이름이 들어가야 할 자리에 한 줄, 보안팀이 마침내 거기에 이름을 적어 넣었다. NULL. 네 로그 속의 그것이 이름을 가진 건 처음이고, 그 이름은 아무것도 알려 주지 않는다.
   - en: Maya / SRE Lead
     ko: 마야 / SRE 리드
   - en: Marcus / Security
@@ -137,7 +137,7 @@ entries:
   - en: "Status posted: customers cannot sign in because a new certificate issuer went live before our verifiers trusted it. Existing sessions are unaffected. A fix is in progress."
     ko: "상황 공유: 검증기가 신뢰하기 전에 새 인증서 발급자가 활성화되어 고객 로그인 불가. 기존 세션은 영향 없음. 수정 진행 중."
   - en: Case 2231 is open. Codename NULL. Same tag as the unsigned workload, same no-ticket habit. I don't know who it is. I know it's been here before.
-    ko: 케이스 2231 열었어요. 코드명 NULL. 서명 없는 워크로드와 같은 태그, 티켓 없이 움직이는 같은 버릇. 누군지는 몰라요. 전에도 여기 있었다는 건 알아요.
+    ko: 사건 2231 열었어요. 코드명 NULL. 서명 없는 워크로드와 같은 태그, 티켓 없이 움직이는 같은 버릇. 누군지는 몰라요. 전에도 여기 있었다는 건 알아요.
   - en: Time to restore sign-ins
     ko: 로그인 복구까지 걸린 시간
   - en: Final sign-in failure rate
@@ -185,7 +185,7 @@ entries:
   - en: Workload Archive Lineage
     ko: 워크로드 아카이브 계보
   - en: Security Attribution
-    ko: 보안 귀속
+    ko: 보안 배후 특정
   - en: Customer Impact
     ko: 고객 피해
   - en: Cost
@@ -363,11 +363,11 @@ entries:
   - en: ca-18 promotion request
     ko: ca-18 승격 요청
   - en: Security case 2231
-    ko: 보안 케이스 2231
+    ko: 보안 사건 2231
   - en: Entry
     ko: 내용
   - en: Case
-    ko: 케이스
+    ko: 사건
   - en: Opened by
     ko: 작성자
   - en: Marcus, Security
@@ -381,7 +381,7 @@ entries:
   - en: Common marker
     ko: 공통 표식
   - en: Identity
-    ko: 정체
+    ko: 신원
   - en: unknown
     ko: 불명
   - en: Motive

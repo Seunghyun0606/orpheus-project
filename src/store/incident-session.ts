@@ -35,6 +35,16 @@ export interface IncidentPersistenceError {
   readonly existingScenarioId?: string;
 }
 
+export type IncidentPersistenceNoticeCode =
+  'SESSION_SAVED' | 'SESSION_RESTORED' | 'SESSION_MIGRATED' | 'ARCHIVE_RESTORED';
+
+// Stable identity of persistenceNotice, so the UI can show it in the display
+// language. The English persistenceNotice text is unchanged.
+export interface IncidentPersistenceNoticeDetail {
+  readonly code: IncidentPersistenceNoticeCode;
+  readonly migratedFromContentVersion?: string;
+}
+
 export interface IncidentSessionState {
   readonly scenario: Scenario;
   readonly seed: number;
@@ -42,6 +52,7 @@ export interface IncidentSessionState {
   readonly lastError: IncidentSessionError | null;
   readonly persistenceError: IncidentPersistenceError | null;
   readonly persistenceNotice: string | null;
+  readonly persistenceNoticeDetail: IncidentPersistenceNoticeDetail | null;
   readonly campaignProgress: CampaignProgress;
   readonly campaignProgressError: IncidentPersistenceError | null;
   readonly performAction: (actionId: string) => CommandResult;
@@ -201,6 +212,7 @@ export function createIncidentSessionStore(
     lastError: null,
     persistenceError: null,
     persistenceNotice: null,
+    persistenceNoticeDetail: null,
     campaignProgress: initialProgress,
     campaignProgressError: initialProgressError,
     performAction: (actionId) => {
@@ -215,6 +227,7 @@ export function createIncidentSessionStore(
           incident: result.state,
           lastError: null,
           persistenceNotice: null,
+          persistenceNoticeDetail: null,
           ...archive(current, result.state),
         });
       } else {
@@ -234,7 +247,7 @@ export function createIncidentSessionStore(
           code: 'STORAGE_ERROR',
           message: 'Local storage could not read the existing session.',
         } as const;
-        set({ persistenceError: error, persistenceNotice: null });
+        set({ persistenceError: error, persistenceNotice: null, persistenceNoticeDetail: null });
         return { ok: false, ...error };
       }
       if (existingRaw !== null) {
@@ -243,7 +256,7 @@ export function createIncidentSessionStore(
         if (!existing.ok) {
           pendingOverwriteRaw = null;
           const error = { code: existing.code, message: existing.message };
-          set({ persistenceError: error, persistenceNotice: null });
+          set({ persistenceError: error, persistenceNotice: null, persistenceNoticeDetail: null });
           return { ok: false, ...error };
         }
         const staleConfirmation =
@@ -262,7 +275,7 @@ export function createIncidentSessionStore(
               : `The single save slot contains ${existing.value.scenario.id}. Confirm before replacing it with ${scenario.id}.`,
             existingScenarioId: existing.value.scenario.id,
           } as const;
-          set({ persistenceError: null, persistenceNotice: null });
+          set({ persistenceError: null, persistenceNotice: null, persistenceNoticeDetail: null });
           return { ok: false, ...error };
         }
       }
@@ -274,12 +287,13 @@ export function createIncidentSessionStore(
           code: 'STORAGE_ERROR',
           message: 'Local storage could not save the session.',
         } as const;
-        set({ persistenceError: error, persistenceNotice: null });
+        set({ persistenceError: error, persistenceNotice: null, persistenceNoticeDetail: null });
         return { ok: false, ...error };
       }
       set({
         persistenceError: null,
         persistenceNotice: 'Session saved locally.',
+        persistenceNoticeDetail: { code: 'SESSION_SAVED' },
         ...archive(current, current.incident, true),
       });
       return { ok: true, value: undefined };
@@ -293,12 +307,12 @@ export function createIncidentSessionStore(
           code: 'STORAGE_ERROR',
           message: 'Local storage could not read the session.',
         } as const;
-        set({ persistenceError: error, persistenceNotice: null });
+        set({ persistenceError: error, persistenceNotice: null, persistenceNoticeDetail: null });
         return { ok: false, ...error };
       }
       if (raw === null) {
         const error = { code: 'SAVE_NOT_FOUND', message: 'No saved session was found.' } as const;
-        set({ persistenceError: error, persistenceNotice: null });
+        set({ persistenceError: error, persistenceNotice: null, persistenceNoticeDetail: null });
         return { ok: false, ...error };
       }
       const restored = decodeSave(raw, get().scenario);
@@ -306,6 +320,7 @@ export function createIncidentSessionStore(
         set({
           persistenceError: { code: restored.code, message: restored.message },
           persistenceNotice: null,
+          persistenceNoticeDetail: null,
         });
         return restored;
       }
@@ -318,6 +333,13 @@ export function createIncidentSessionStore(
           restored.value.migratedFromContentVersion === undefined
             ? 'Saved session restored.'
             : `Saved session restored from content ${restored.value.migratedFromContentVersion}. Save again to keep the updated version.`,
+        persistenceNoticeDetail:
+          restored.value.migratedFromContentVersion === undefined
+            ? { code: 'SESSION_RESTORED' }
+            : {
+                code: 'SESSION_MIGRATED',
+                migratedFromContentVersion: restored.value.migratedFromContentVersion,
+              },
         ...archive({ ...get(), seed: restored.value.seed }, restored.value.incident),
       });
       return { ok: true, value: undefined };
@@ -364,6 +386,7 @@ export function createIncidentSessionStore(
         lastError: null,
         persistenceError: null,
         persistenceNotice: 'Completed incident restored from campaign discoveries.',
+        persistenceNoticeDetail: { code: 'ARCHIVE_RESTORED' },
       });
       return { ok: true, value: undefined };
     },
@@ -374,6 +397,7 @@ export function createIncidentSessionStore(
         lastError: null,
         persistenceError: null,
         persistenceNotice: null,
+        persistenceNoticeDetail: null,
       });
     },
   }));

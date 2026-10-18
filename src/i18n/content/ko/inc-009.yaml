@@ -25,11 +25,11 @@ entries:
   - en: legacy-r7 resubmitted 58 s after termination by scheduler orpheus-planner. The service catalog lists no owner for orpheus-planner.
     ko: legacy-r7은 종료 58 s 후 스케줄러 orpheus-planner에 의해 재제출됨. 서비스 카탈로그에 orpheus-planner의 소유자 없음.
   - en: Shedding background load frees workers for a few minutes, and tonight's settlement run counts as background load. The legacy-r7 reservation itself has to be fenced off.
-    ko: 백그라운드 부하를 차단하면 몇 분간 워커가 비지만, 오늘 밤 정산 작업도 백그라운드 부하로 분류됨. legacy-r7 예약 자체를 분리해야 함.
+    ko: 백그라운드 부하를 차단하면 몇 분간 워커가 비지만, 오늘 밤 정산 작업도 백그라운드 부하로 분류됨. legacy-r7 예약 자체에 펜스를 쳐야 함.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
     ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: A decommissioned job keeps renewing its worker reservation
@@ -59,7 +59,7 @@ entries:
   - en: settle-night shed with background load / 41,200 merchant payouts / not running
     ko: settle-night 백그라운드 부하와 함께 차단됨 / 가맹점 지급 41,200건 / 실행 안 됨
   - en: Fence legacy-r7 into its own partition
-    ko: legacy-r7을 전용 파티션으로 분리하기
+    ko: legacy-r7을 전용 파티션에 펜스로 가두기
   - en: Post a status update to the War Room
     ko: 워룸에 상황 공유하기
   - en: Ask Sam to find the owner of the reserved workers
@@ -67,7 +67,7 @@ entries:
   - en: "Archive: the unsigned workload manifest"
     ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: "아카이브: 보안 케이스 2231"
+    ko: "아카이브: 보안 사건 2231"
   - en: Look up orpheus-planner in the asset register
     ko: 자산 대장에서 orpheus-planner 조회하기
   - en: settle-night missed the 03:00 cut-off / 41,200 merchant payouts delayed one day
@@ -83,11 +83,11 @@ entries:
   - en: Sam's ownership report
     ko: 샘의 소유권 보고
   - en: Shedding background load buys a few minutes and takes tonight's settlement run with it. The legacy-r7 reservation itself has to be fenced off.
-    ko: 백그라운드 부하를 차단하면 몇 분을 벌지만, 오늘 밤 정산 작업도 함께 날아간다. legacy-r7 예약 자체를 분리해야 한다.
+    ko: 백그라운드 부하를 차단하면 몇 분을 벌지만, 오늘 밤 정산 작업도 함께 날아간다. legacy-r7 예약 자체에 펜스를 쳐야 한다.
   - en: The unsigned workload manifest
     ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: 보안 케이스 2231
+    ko: 보안 사건 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
     ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
@@ -119,7 +119,7 @@ entries:
   - en: Pulling ownership on the reserved workers. Ninety seconds.
     ko: 예약된 워커 소유 정보 뽑아 볼게요. 90초요.
   - en: Shedding background load buys a few minutes, but settle-night counts as background, so it goes too. The workers belong to legacy-r7's reservation. That reservation is what we fence.
-    ko: 백그라운드 부하를 차단하면 몇 분은 벌어요. 근데 settle-night도 백그라운드라서 같이 날아가요. 워커는 legacy-r7 예약 소유예요. 분리할 건 그 예약이에요.
+    ko: 백그라운드 부하를 차단하면 몇 분은 벌어요. 근데 settle-night도 백그라운드라서 같이 날아가요. 워커는 legacy-r7 예약 소유예요. 펜스를 칠 건 그 예약이에요.
   - en: Wait times just doubled. Exports are failing outright now.
     ko: 대기 시간이 방금 두 배가 됐어요. 이제 내보내기는 그냥 실패해요.
   - en: Nearly 40 % of requests are failing. Enterprise customers are calling their account managers.
@@ -137,13 +137,13 @@ entries:
   - en: settle-night missed the cut-off. 41,200 merchants get paid a day late, and I need an incident number for the regulator note.
     ko: settle-night가 마감을 놓쳤어요. 가맹점 41,200곳이 하루 늦게 지급받아요. 감독기관 보고용으로 인시던트 번호가 필요해요.
   - en: legacy-r7 is fenced into its own partition and the customer pool is clear. It's still running in there, by the way. orpheus-planner renewed it three seconds after the fence went up.
-    ko: legacy-r7은 전용 파티션으로 분리했고 고객 풀은 깨끗해요. 근데 그 안에서 아직 돌고 있어요. 분리하고 3초 뒤에 orpheus-planner가 또 갱신했어요.
+    ko: legacy-r7은 전용 파티션에 펜스로 가뒀고 고객 풀은 깨끗해요. 근데 그 안에서 아직 돌고 있어요. 펜스 치고 3초 뒤에 orpheus-planner가 또 갱신했어요.
   - en: "Status posted: a retired background job is holding shared workers. Customer work is being prioritised and a fix is in progress."
-    ko: "상황 공유: 퇴역한 백그라운드 잡이 공유 워커를 점유 중. 고객 작업을 우선 처리 중이며 수정 진행 중."
+    ko: "상황 공유: 폐기된 백그라운드 잡이 공유 워커를 점유 중. 고객 작업을 우선 처리 중이며 수정 진행 중."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
     ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Time to free the shared pool
@@ -181,7 +181,7 @@ entries:
   - en: Resource Owner
     ko: 리소스 소유자
   - en: Allocation Lineage
-    ko: 할당 이력
+    ko: 할당 계보
   - en: Respawn Origin
     ko: 재생성 출처
   - en: Team Observation
@@ -281,7 +281,7 @@ entries:
   - en: decommission ticket
     ko: 폐기 티켓
   - en: research cluster retired; legacy-r7 terminated; closed by ops-decom
-    ko: 연구 클러스터 퇴역; legacy-r7 종료됨; ops-decom이 종결
+    ko: 연구 클러스터 폐기됨; legacy-r7 종료됨; ops-decom이 종결
   - en: two years ago, +1 day
     ko: 2년 전 +1일
   - en: allocation log
@@ -333,7 +333,7 @@ entries:
   - en: Killing legacy-r7 is twenty seconds of work and frees every worker it holds, if it stays dead. Shedding background load clears room for customers too, and Nadia has already said what runs as background at 03:00.
     ko: legacy-r7을 죽이는 데는 20초면 되고, 죽은 채로 있기만 하면 붙잡고 있던 워커가 전부 풀린다. 백그라운드 부하를 차단해도 고객 몫의 자리가 생기지만, 03:00에 무엇이 백그라운드로 도는지는 나디아가 이미 말했다.
   - en: Fence the reservation
-    ko: 예약 분리
+    ko: 예약에 펜스 치기
   - en: A partition of its own gives legacy-r7 four workers and nothing else, however often it renews. Customer work gets the rest of the pool. It takes a hundred seconds, and the job keeps running where you can watch it.
     ko: 전용 파티션을 주면 legacy-r7은 아무리 자주 갱신해도 워커 네 개 이상은 못 가진다. 풀의 나머지는 고객 작업 몫이다. 100초가 걸리고, 잡은 지켜볼 수 있는 곳에서 계속 돌아간다.
   - en: War Room

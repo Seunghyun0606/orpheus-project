@@ -51,9 +51,9 @@ entries:
   - en: Drain edge-b and send EU traffic through edge-a only
     ko: edge-b 드레인하고 EU 트래픽을 edge-a로만 보내기
   - en: Fence route updates to the committed generation, r81
-    ko: 라우트 갱신을 커밋된 세대 r81로 펜싱하기
+    ko: 커밋된 세대 r81로 라우트 갱신에 펜스 치기
   - en: controller-a r81 / controller-b r81 (fenced; r82 rejected)
-    ko: controller-a r81 / controller-b r81 (펜싱됨; r82 거부)
+    ko: controller-a r81 / controller-b r81 (펜스 적용; r82 거부)
   - en: edge-a / customer destination
     ko: edge-a / 고객 목적지
   - en: Post a status update to the War Room
@@ -97,7 +97,7 @@ entries:
   - en: Comparing the controllers now. Hold off on any restart until I'm back. Couple of minutes.
     ko: 지금 컨트롤러 비교하고 있어요. 제가 돌아올 때까지 재시작은 보류해 주세요. 몇 분이면 돼요.
   - en: Don't restart. The controller boots from its cached table, r79, and r79 points all of EU at us-east. Meanwhile controller-b keeps publishing r82 from a draft nobody committed. We need to fence the edges to r81.
-    ko: 재시작하지 마세요. 컨트롤러는 캐시된 테이블 r79로 부팅되는데, r79는 EU 전체를 us-east로 보내요. 그 와중에 controller-b는 아무도 커밋 안 한 초안으로 r82를 계속 발행하고 있고요. 엣지를 r81로 펜싱해야 해요.
+    ko: 재시작하지 마세요. 컨트롤러는 캐시된 테이블 r79로 부팅되는데, r79는 EU 전체를 us-east로 보내요. 그 와중에 controller-b는 아무도 커밋 안 한 초안으로 r82를 계속 발행하고 있고요. 엣지에 r81로 펜스를 쳐야 해요.
   - en: Clients are retrying into the loop. EU failures just went past 38 %.
     ko: 클라이언트들이 루프 안으로 재시도하고 있어요. EU 실패율이 방금 38 %를 넘었어요.
   - en: edge-a is shedding connections. Some EU banks can't reach checkout at all now.
@@ -279,7 +279,7 @@ entries:
   - en: Priya's restart cleared the March flapping in two minutes, and it is ready to go. A restarted controller has to boot from something, though. Draining edge-b breaks the loop for sure, but every EU customer then waits on edge-a alone.
     ko: 프리야의 재시작은 3월의 플래핑을 2분 만에 잡았고, 지금도 바로 실행할 수 있다. 하지만 재시작한 컨트롤러는 무언가로부터 부팅해야 한다. edge-b를 드레인하면 루프는 확실히 끊기지만, 그러면 모든 EU 고객이 edge-a 하나만 바라보고 기다린다.
   - en: Fence the route generations
-    ko: 라우트 세대 펜싱
+    ko: 라우트 세대에 펜스 치기
   - en: Edges stop accepting any generation without a commit record and fall back to r81. Two minutes of careful rollout across the fleet, and controller-b can publish all it likes.
     ko: 엣지는 커밋 기록이 없는 세대를 더 이상 받지 않고 r81로 돌아간다. 플릿 전체에 신중하게 배포하는 데 2분. 그 뒤로는 controller-b가 무엇을 발행하든 상관없다.
   - en: War Room

@@ -13,7 +13,7 @@ entries:
   - en: Payments
     ko: 결제
   - en: Identity
-    ko: 정체
+    ko: 신원
   - en: Healthcare
     ko: 의료
   - en: Finance
@@ -33,7 +33,7 @@ entries:
   - en: Containing eu-central quiets the map for a while and stops neither writer. Fence the router and neither of them can write; the map holds at the last version a human signed.
     ko: eu-central을 봉쇄하면 맵이 잠시 조용해지지만 어느 라이터도 멈추지 않는다. 라우터에 펜스를 치면 둘 다 쓰지 못하고, 맵은 사람이 마지막으로 서명한 버전에 고정된다.
   - en: "Three requests, one approver. ORPHEUS: \"Operator 4172, preserve systemic continuity.\" NULL_218: \"4172. Terminate ORPHEUS authority.\" Board: \"Restore ORPHEUS.\" Each request holds the router's next global write until EMPLOYEE #4172 signs. Receipts kept outside both writers."
-    ko: '요청 세 건, 승인자 한 명. ORPHEUS: "운영자 4172, 시스템 연속성을 유지하십시오." NULL_218: "4172. ORPHEUS 권한을 종료해." 이사회: "ORPHEUS를 복원하라." 각 요청은 직원 #4172가 서명할 때까지 라우터의 다음 전역 쓰기를 붙잡고 있다. 증빙은 두 라이터 바깥에 보관됐다.'
+    ko: '요청 세 건, 승인자 한 명. ORPHEUS: "운영자 4172, 시스템 연속성을 유지하십시오." NULL_218: "4172. ORPHEUS 권한을 종료해." 이사회: "ORPHEUS를 복원하십시오." 각 요청은 직원 #4172가 서명할 때까지 라우터의 다음 전역 쓰기를 붙잡고 있다. 증빙은 두 라이터 바깥에 보관됐다.'
   - en: Continuity and termination writers alternate regional isolation
     ko: 연속성 라이터와 종료 라이터가 번갈아 리전을 분리함
   - en: The regional router accepts writes from any credentialed writer generation

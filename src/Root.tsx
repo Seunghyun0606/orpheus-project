@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react';
 
 import { readPresentationPreferences } from './app/presentation-settings.ts';
-import { loadContentDictionary } from './i18n/content.ts';
 
 // The desk (scenario catalog, engine and stores) is a separate chunk so the
 // entry bundle stays small; React and this boot screen load first. A Korean
@@ -9,7 +8,11 @@ import { loadContentDictionary } from './i18n/content.ts';
 const AppShell = lazy(async () => {
   const [shell] = await Promise.all([
     import('./app/AppShell.tsx'),
-    loadContentDictionary(readPresentationPreferences().language).catch(() => undefined),
+    import('./i18n/content.ts')
+      .then(({ loadContentDictionary }) =>
+        loadContentDictionary(readPresentationPreferences().language),
+      )
+      .catch(() => undefined),
   ]);
   return { default: shell.AppShell };
 });

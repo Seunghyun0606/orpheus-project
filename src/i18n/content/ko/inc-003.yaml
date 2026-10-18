@@ -85,7 +85,7 @@ entries:
   - en: Payments are completing. Customers are waiting for receipts; some tickets describe this as a payment outage.
     ko: 결제는 완료되고 있어요. 고객들은 영수증을 기다리는 중이고, 일부 티켓은 이걸 결제 장애라고 적었어요.
   - en: War Room update sent. Receipt delay is confirmed; payment impact remains under review.
-    ko: 워룸 공유 전송함. 영수증 지연 확인됨, 결제 영향은 검토 중.
+    ko: 워룸 상황 공유 전송함. 영수증 지연 확인됨, 결제 영향은 검토 중.
   - en: "UNKNOWN: check the request that arrived before batch 781."
     ko: "UNKNOWN: 배치 781 전에 들어온 요청을 확인해 봐."
   - en: Service recovery time

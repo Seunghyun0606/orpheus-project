@@ -1,20 +1,15 @@
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
-import { cueText, type AudioCue } from '../audio/cues.ts';
+import type { AudioCue } from '../audio/cues.ts';
 import { createSynthesizer, type AudioStatus, type Synthesizer } from '../audio/synth.ts';
 import {
   readAudioPreferences,
   saveAudioPreferences,
   type AudioPreferences,
 } from '../audio/preferences.ts';
+import { useMessages } from '../i18n/I18n.ts';
+import { audioMessages } from './messages/audio.ts';
 
 export type CueSubscription = (listener: (cues: readonly AudioCue[]) => void) => () => void;
-
-const statusText: Record<AudioStatus, string> = {
-  inactive: 'off',
-  enabled: 'on',
-  paused: 'paused',
-  unavailable: 'unavailable',
-};
 
 // Presentation-only sound. Subscribes to already-accepted results; it never
 // issues a domain command, and all information stays visible without audio.
@@ -38,7 +33,9 @@ export function AudioControls({
   const [storageError, setStorageError] = useState(initial.error);
   const [status, setStatus] = useState<AudioStatus>('inactive');
   const [activating, setActivating] = useState(false);
-  const [notice, setNotice] = useState('No new sound notifications.');
+  // The latest announced cues; the text is composed in the display language.
+  const [notice, setNotice] = useState<readonly AudioCue[]>([]);
+  const m = useMessages(audioMessages);
   const output = useRef<Synthesizer | null>(null);
   const liveRef = useRef(live);
   const ambienceRef = useRef(ambience);
@@ -66,7 +63,7 @@ export function AudioControls({
     document.addEventListener('visibilitychange', visibility);
     const unsubscribe = subscribe((cues) => {
       if (!liveRef.current || document.visibilityState !== 'visible') return;
-      if (cues.length) setNotice(cues.map((cue) => cueText[cue]).join(' '));
+      if (cues.length) setNotice(cues);
       if (!preferencesRef.current.muted)
         for (const cue of cues) if (cue !== 'server_hum') driver.play(cue);
     });
@@ -110,15 +107,12 @@ export function AudioControls({
   }
   const controls = (
     <>
-      <p>Optional sound only. Everything you need to play is always shown on screen.</p>
+      <p>{m.intro}</p>
       <p role="status">
-        Sound: {statusText[status]}.{' '}
-        {preferences.muted
-          ? 'Muted.'
-          : 'Sound is allowed; press Enable after opening or returning to this screen.'}
+        {m.soundStatus(m.status[status])} {preferences.muted ? m.muted : m.allowed}
       </p>
       <button type="button" disabled={activating || !live} onClick={() => void enable()}>
-        Enable / resume audio
+        {m.enable}
       </button>
       <button
         type="button"
@@ -129,10 +123,10 @@ export function AudioControls({
           remember({ ...preferencesRef.current, muted: true });
         }}
       >
-        Mute audio
+        {m.mute}
       </button>
       <label>
-        Master volume: {Math.round(preferences.volume * 100)}%
+        {m.volume(Math.round(preferences.volume * 100))}
         <input
           type="range"
           min="0"
@@ -146,23 +140,18 @@ export function AudioControls({
           }}
         />
       </label>
-      {status === 'unavailable' ? (
-        <p role="alert">Audio unavailable. Silent visual gameplay is unchanged.</p>
-      ) : null}
-      {storageError ? <p role="alert">{storageError}</p> : null}
+      {status === 'unavailable' ? <p role="alert">{m.unavailable}</p> : null}
+      {storageError ? <p role="alert">{m.storageError(storageError)}</p> : null}
       <p role="status" aria-live="polite">
-        {notice}
+        {notice.length === 0 ? m.noNotice : notice.map((cue) => m.cues[cue]).join(' ')}
       </p>
-      <p className="audio-legend">
-        Pager: new incident. Relay: action finished. Chime: new information. Alarm: a service turned
-        critical. Hum: live ambience. Keys: typing feedback.
-      </p>
+      <p className="audio-legend">{m.legend}</p>
     </>
   );
   if (variant === 'compact')
     return (
       <details className="presentation-settings audio-settings" data-audio-controls>
-        <summary>Sound settings ({preferences.muted ? 'muted' : statusText[status]})</summary>
+        <summary>{m.summary(preferences.muted ? m.summaryMuted : m.status[status])}</summary>
         <div className="presentation-settings-controls audio-settings-controls">{controls}</div>
       </details>
     );
@@ -172,7 +161,7 @@ export function AudioControls({
       aria-labelledby="campaign-audio-title"
       data-audio-controls
     >
-      <h2 id="campaign-audio-title">Sound</h2>
+      <h2 id="campaign-audio-title">{m.title}</h2>
       {controls}
     </section>
   );

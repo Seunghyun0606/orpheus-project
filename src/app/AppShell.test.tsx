@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { encodeSave, type SaveStorage } from '../persistence/index.ts';
 import { getScenario } from '../scenario/index.ts';
 import { createIncidentState } from '../engine/index.ts';
+import { installContentDictionary } from '../i18n/content.ts';
 import { AppShell } from './AppShell.tsx';
 import { presentationStorageKey } from './presentation-settings.ts';
 import { briefingStorageKey } from './briefing.ts';
@@ -381,5 +382,45 @@ describe('desk onboarding, global settings and destructive restarts', () => {
     await user.click(screen.getByRole('button', { name: 'Restart INC-001' }));
     await user.click(screen.getByRole('button', { name: 'Restart from the pager' }));
     expect(screen.getByTestId('elapsed-time')).toHaveTextContent('00:00');
+  });
+});
+
+describe('incident desk in Korean', () => {
+  it('switches the desk, saved-slot errors and the overwrite prompt to Korean', async () => {
+    installContentDictionary(
+      'ko',
+      new Map([
+        ['Connection Saturation', '커넥션 포화'],
+        ['Bad Deployment', '잘못된 배포'],
+      ]),
+    );
+    const user = userEvent.setup();
+    const incident = memoryStorage('{broken');
+    render(
+      <AppShell incidentStorage={incident.storage} progressStorage={memoryStorage().storage} />,
+    );
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Saved incident: The saved session is not valid JSON.',
+    );
+
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Language' }), 'ko');
+    expect(screen.getByRole('region', { name: '근무는 이렇게 진행됩니다' })).toHaveTextContent(
+      '채점하지 않습니다.',
+    );
+    expect(screen.getByRole('heading', { name: '로테이션 선택' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '커넥션 포화' })).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      '저장된 인시던트: 저장된 세션이 올바른 JSON이 아닙니다.',
+    );
+
+    incident.replace(savedIncident('INC-001'));
+    await user.click(screen.getByRole('button', { name: 'INC-002 시작' }));
+    expect(screen.getByRole('heading', { name: '잘못된 배포' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: '세션 저장' }));
+    const dialog = screen.getByRole('alertdialog', { name: '로컬 저장을 교체할까요?' });
+    expect(dialog).toHaveTextContent('저장 슬롯에 INC-001 기록이 들어 있습니다.');
+    await user.click(within(dialog).getByRole('button', { name: '기존 저장 유지' }));
+    await user.click(screen.getByRole('button', { name: '장애 대응 데스크' }));
+    expect(screen.getByRole('button', { name: '저장된 INC-001 이어하기' })).toBeInTheDocument();
   });
 });

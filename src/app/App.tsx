@@ -15,35 +15,40 @@ import {
   selectWarRoom,
   type IncidentSessionState,
 } from '../store/incident-session.ts';
+import { OnboardingCoach } from '../onboarding/OnboardingCoach.tsx';
 import { Postmortem } from './Postmortem.tsx';
 import { PresentationProvider, PresentationSettings } from './PresentationSettings.tsx';
 import { AudioControls, type CueSubscription } from './AudioControls.tsx';
 import { ModalDialog } from './ModalDialog.tsx';
 import { restoreFocus } from './focus.ts';
 import { buildIncidentLog } from './incident-log.ts';
+import { formatElapsed, humanize, signalDirectory } from './format.ts';
+import { localizedSignals, type LocalizedSignals } from './localized-format.ts';
+import { useI18n, useMessages } from '../i18n/I18n.ts';
+import { appMessages } from './messages/app.ts';
 import {
-  formatElapsed,
-  formatSignalValue,
-  humanize,
-  signalDirectory,
-  signalLabel,
-  type SignalDirectory,
-} from './format.ts';
+  actionCategoryLabels,
+  errorLabel,
+  errorMessage,
+  logLevelLabels,
+  persistenceNoticeText,
+} from './messages/incident-terms.ts';
 
 type ToolId = 'logs' | 'metrics' | 'database' | 'status' | 'evidence' | 'war-room';
+type AppMessages = (typeof appMessages)['en'];
 
 const defaultSessionStore = createIncidentSessionStore(inc001Scenario, 1001, undefined, {
   storage: createLocalSaveStorage(CAMPAIGN_PROGRESS_KEY),
   catalog: scenarioCatalog,
 });
 
-const tools: readonly { id: ToolId; label: string; shortcut: string }[] = [
-  { id: 'logs', label: 'Logs', shortcut: '01' },
-  { id: 'metrics', label: 'Metrics', shortcut: '02' },
-  { id: 'database', label: 'Diagnostics', shortcut: '03' },
-  { id: 'status', label: 'Status', shortcut: '04' },
-  { id: 'evidence', label: 'Evidence', shortcut: '05' },
-  { id: 'war-room', label: 'War Room', shortcut: '06' },
+const tools: readonly { id: ToolId; shortcut: string }[] = [
+  { id: 'logs', shortcut: '01' },
+  { id: 'metrics', shortcut: '02' },
+  { id: 'database', shortcut: '03' },
+  { id: 'status', shortcut: '04' },
+  { id: 'evidence', shortcut: '05' },
+  { id: 'war-room', shortcut: '06' },
 ];
 
 export interface AppProps {
@@ -55,23 +60,40 @@ export interface AppProps {
 function formatCondition(
   condition: IncidentSessionState['scenario']['actions'][number]['requirements'][number],
   scenario: IncidentSessionState['scenario'],
-  directory: SignalDirectory,
+  signals: LocalizedSignals,
+  ct: (text: string) => string,
+  m: AppMessages,
 ): string {
   switch (condition.type) {
     case 'action_completed':
-      return `${scenario.actions.find(({ id }) => id === condition.actionId)?.title ?? humanize(condition.actionId)} completed`;
+      return m.conditionCompleted(
+        ct(
+          scenario.actions.find(({ id }) => id === condition.actionId)?.title ??
+            humanize(condition.actionId),
+        ),
+      );
     case 'signal_revealed':
-      return `${signalLabel(condition.signalId, directory)} observed`;
+      return m.conditionObserved(signals.label(condition.signalId));
     case 'evidence':
-      return `${scenario.evidence.find(({ id }) => id === condition.evidenceId)?.title ?? humanize(condition.evidenceId)} collected`;
+      return m.conditionCollected(
+        ct(
+          scenario.evidence.find(({ id }) => id === condition.evidenceId)?.title ??
+            humanize(condition.evidenceId),
+        ),
+      );
     case 'mechanism_resolved':
-      return `${scenario.incident.failureMechanisms.find(({ id }) => id === condition.mechanismId)?.label ?? humanize(condition.mechanismId)} contained`;
+      return m.conditionContained(
+        ct(
+          scenario.incident.failureMechanisms.find(({ id }) => id === condition.mechanismId)
+            ?.label ?? humanize(condition.mechanismId),
+        ),
+      );
     case 'flag':
-      return `${humanize(condition.flagId)} is ${String(condition.value)}`;
+      return m.conditionFlag(ct(humanize(condition.flagId)), condition.value);
     case 'resource':
-      return `${humanize(condition.resourceId)} ${condition.operator} ${condition.value}`;
+      return `${ct(humanize(condition.resourceId))} ${condition.operator} ${condition.value}`;
     case 'signal':
-      return `${signalLabel(condition.signalId, directory)} ${condition.operator} ${formatSignalValue(condition.signalId, condition.value, directory)}`;
+      return `${signals.label(condition.signalId)} ${condition.operator} ${signals.value(condition.signalId, condition.value)}`;
   }
 }
 
@@ -94,40 +116,23 @@ function chooseTool(action: IncidentSessionState['scenario']['actions'][number])
   }
 }
 
-function recoveryCopy(state: IncidentSessionState['incident']): {
+function recoveryCopy(
+  state: IncidentSessionState['incident'],
+  m: AppMessages,
+): {
   label: string;
   detail: string;
   tone: string;
 } {
-  if (state.completionReached) {
-    return {
-      label: 'Incident recovered',
-      detail: 'Root cause contained; service indicators are stable.',
-      tone: 'recovered',
-    };
-  }
+  if (state.completionReached) return { ...m.recovery.recovered, tone: 'recovered' };
 
-  if (state.scheduledWork.some(({ kind }) => kind === 'temporary_expiration')) {
-    return {
-      label: 'Temporary stabilization',
-      detail: 'Indicators improved, but the underlying cause remains open.',
-      tone: 'temporary',
-    };
-  }
+  if (state.scheduledWork.some(({ kind }) => kind === 'temporary_expiration'))
+    return { ...m.recovery.temporary, tone: 'temporary' };
 
-  if (state.eventLog.some(({ type }) => type === 'temporary_effect_expired')) {
-    return {
-      label: 'Degradation active',
-      detail: 'Temporary relief ended while the underlying cause remained open.',
-      tone: 'critical',
-    };
-  }
+  if (state.eventLog.some(({ type }) => type === 'temporary_effect_expired'))
+    return { ...m.recovery.degraded, tone: 'critical' };
 
-  return {
-    label: 'Diagnosis in progress',
-    detail: 'Customer impact is accumulating while the cause remains open.',
-    tone: 'critical',
-  };
+  return { ...m.recovery.diagnosing, tone: 'critical' };
 }
 
 export function App(props: AppProps) {
@@ -139,7 +144,9 @@ export function App(props: AppProps) {
 }
 
 type PendingDialog =
-  { kind: 'overwrite'; scenarioId: string; message: string } | { kind: 'restart' } | null;
+  | { kind: 'overwrite'; scenarioId: string; message: string; stale: boolean }
+  | { kind: 'restart' }
+  | null;
 
 function IncidentScreen({
   store = defaultSessionStore,
@@ -177,15 +184,22 @@ function IncidentScreen({
     if (cues.length > 0) for (const listener of cueListeners.current) listener(cues);
   };
 
+  const m = useMessages(appMessages);
+  const categoryLabel = useMessages(actionCategoryLabels);
+  const levelLabel = useMessages(logLevelLabels);
+  const i18n = useI18n();
+  const { ct, locale, formatNumber } = i18n;
   const activeNarrative = session.scenario.narratives.find(({ id }) => id === activeNarrativeId);
   const directory = signalDirectory(session.scenario.initialState.signals);
+  const signals = localizedSignals(directory, i18n);
   const serviceName = (id: string) =>
-    session.scenario.services.find((service) => service.id === id)?.name ?? humanize(id);
+    ct(session.scenario.services.find((service) => service.id === id)?.name ?? humanize(id));
   const availableActions = selectAvailableActions(session);
   const revealedSignals = selectRevealedSignals(session);
-  const recovery = recoveryCopy(session.incident);
+  const recovery = recoveryCopy(session.incident, m);
   const customerImpact = session.incident.resources.CUSTOMER_IMPACT?.value ?? 0;
   const pagerService = revealedSignals.find(({ id }) => id === 'PAGER_SERVICE')?.value;
+  const pagerThreshold = revealedSignals.find(({ id }) => id === 'PAGER_THRESHOLD')?.value;
   const newDiscoveries = revealedSignals.filter(({ id }) => {
     const initial = session.scenario.initialState.signals.find((signal) => signal.id === id);
     return initial?.revealed === false;
@@ -196,6 +210,7 @@ function IncidentScreen({
     session.incident,
     directory,
     warRoom.messages,
+    i18n,
   );
   const recentEvents = logLines
     .filter(({ fromEvent }) => fromEvent)
@@ -204,6 +219,10 @@ function IncidentScreen({
   const campaignEvidence = selectCampaignEvidence(session);
   const campaignNarratives = selectCampaignNarratives(session);
   const latestWarRoomMessage = warRoom.messages.at(-1);
+  const persistenceNotice =
+    session.persistenceNotice === null
+      ? null
+      : persistenceNoticeText(session.persistenceNotice, session.persistenceNoticeDetail, locale);
   const blocking = activeNarrative !== undefined || dialog !== null;
 
   useEffect(() => {
@@ -302,6 +321,7 @@ function IncidentScreen({
         kind: 'overwrite',
         scenarioId: result.existingScenarioId,
         message: result.message,
+        stale: false,
       });
     }
   };
@@ -314,10 +334,12 @@ function IncidentScreen({
       result.code === 'OVERWRITE_CONFIRMATION_REQUIRED' &&
       result.existingScenarioId !== undefined
     ) {
+      // A second prompt from a confirmation means the slot changed meanwhile.
       setDialog({
         kind: 'overwrite',
         scenarioId: result.existingScenarioId,
         message: result.message,
+        stale: true,
       });
       return;
     }
@@ -327,38 +349,43 @@ function IncidentScreen({
   const dialogView =
     dialog === null ? null : dialog.kind === 'overwrite' ? (
       <ModalDialog
-        channel="Single local save slot"
-        description={`${dialog.message} Recovered campaign evidence remains separate.`}
+        channel={m.overwriteChannel}
+        description={m.overwriteDescription({
+          message: dialog.message,
+          existingScenarioId: dialog.scenarioId,
+          scenarioId: session.scenario.id,
+          stale: dialog.stale,
+        })}
         descriptionId="overwrite-description"
         initialFocusRef={confirmOverwriteRef}
         onEscape={closeDialog}
         role="alertdialog"
-        title="Replace the local save?"
+        title={m.overwriteTitle}
         titleId="overwrite-title"
       >
         <button onClick={closeDialog} type="button">
-          Keep existing save
+          {m.keepExistingSave}
         </button>
         <button ref={confirmOverwriteRef} onClick={confirmOverwrite} type="button">
-          Confirm replacement
+          {m.confirmReplacement}
         </button>
       </ModalDialog>
     ) : (
       <ModalDialog
-        channel="Destructive action"
-        description="This response will be cleared and the incident will begin again from the pager. Your saved session and any evidence already recovered stay as they are."
+        channel={m.destructiveChannel}
+        description={m.restartDescription}
         descriptionId="restart-description"
         initialFocusRef={keepSessionRef}
         onEscape={closeDialog}
         role="alertdialog"
-        title="Restart this incident?"
+        title={m.restartTitle}
         titleId="restart-title"
       >
         <button ref={keepSessionRef} onClick={closeDialog} type="button">
-          Keep current response
+          {m.keepCurrentResponse}
         </button>
         <button className="danger-button" onClick={confirmRestart} type="button">
-          Restart from the pager
+          {m.restartFromPager}
         </button>
       </ModalDialog>
     );
@@ -406,7 +433,7 @@ function IncidentScreen({
   };
 
   const toolbar = (
-    <div className="screen-toolbar" role="group" aria-label="Screen settings">
+    <div className="screen-toolbar" role="group" aria-label={m.screenSettings}>
       <PresentationSettings />
       <AudioControls
         ambience={!session.incident.completionReached}
@@ -418,15 +445,29 @@ function IncidentScreen({
     </div>
   );
 
+  const coach = reviewOnly ? null : (
+    <OnboardingCoach
+      surface="desk"
+      state={session.incident}
+      availableActionIds={availableActions.map(({ id }) => id)}
+      actionTitle={(id) => session.scenario.actions.find((action) => action.id === id)?.title}
+    />
+  );
+
   if (viewMode === 'postmortem' && session.incident.completionReached) {
     return (
       <>
         <div inert={dialog !== null}>
           {toolbar}
+          {coach}
           <Postmortem
             report={computePostmortem(session.scenario, session.incident)}
-            persistenceNotice={session.persistenceNotice}
-            persistenceError={session.persistenceError?.message ?? null}
+            persistenceNotice={persistenceNotice}
+            persistenceError={
+              session.persistenceError === null
+                ? null
+                : errorMessage(session.persistenceError, locale)
+            }
             onSave={requestSave}
             onLoad={loadSession}
             onReturn={() => setViewMode('incident')}
@@ -447,11 +488,11 @@ function IncidentScreen({
         {toolbar}
         <header className="incident-header">
           <div className="brand-lockup">
-            <p className="eyebrow">VANTAGE SYSTEMS // PRODUCTION RELIABILITY</p>
+            <p className="eyebrow">{m.eyebrow}</p>
             <p className="brand">ORPHEUS</p>
             {onBackToDesk && (
               <button className="desk-return" onClick={onBackToDesk} type="button">
-                Incident desk
+                {m.incidentDesk}
               </button>
             )}
           </div>
@@ -460,27 +501,31 @@ function IncidentScreen({
             <div>
               <p className="incident-code">{session.scenario.id}</p>
               <h1 ref={titleRef} tabIndex={-1}>
-                {session.scenario.title}
+                {ct(session.scenario.title)}
               </h1>
             </div>
           </div>
           <dl className="header-stats">
             <div>
-              <dt>Elapsed</dt>
+              <dt>{m.elapsed}</dt>
               <dd data-testid="elapsed-time">{formatElapsed(session.incident.elapsedSeconds)}</dd>
             </div>
             <div>
-              <dt>Customer impact</dt>
-              <dd>{customerImpact.toLocaleString('en-US')}</dd>
+              <dt>{m.customerImpact}</dt>
+              <dd>{formatNumber(customerImpact)}</dd>
             </div>
             <div className={`recovery-stat recovery-stat--${recovery.tone}`}>
-              <dt>Recovery state</dt>
+              <dt>{m.recoveryState}</dt>
               <dd>{recovery.label}</dd>
             </div>
           </dl>
         </header>
 
-        <section className={`recovery-banner recovery-banner--${recovery.tone}`} aria-live="polite">
+        <section
+          className={`recovery-banner recovery-banner--${recovery.tone}`}
+          aria-live="polite"
+          data-onboarding-target="region:recovery"
+        >
           <span className="status-glyph" aria-hidden="true">
             {recovery.tone === 'recovered' ? '◆' : recovery.tone === 'temporary' ? '◇' : '▲'}
           </span>
@@ -491,10 +536,11 @@ function IncidentScreen({
           {session.incident.completionReached && (
             <button
               ref={postmortemReturnRef}
+              data-onboarding-target="region:postmortem"
               onClick={() => setViewMode('postmortem')}
               type="button"
             >
-              View postmortem
+              {m.viewPostmortem}
             </button>
           )}
         </section>
@@ -502,19 +548,19 @@ function IncidentScreen({
         <div className="desktop-grid">
           <aside className="service-rail panel" aria-labelledby="service-map-title">
             <div className="panel-heading">
-              <span>Infrastructure</span>
-              <h2 id="service-map-title">Service path</h2>
+              <span>{m.infrastructure}</span>
+              <h2 id="service-map-title">{m.servicePath}</h2>
             </div>
             <ol className="service-path">
               {session.scenario.services.map((service) => {
                 const isPaging = service.name === pagerService;
                 const status = session.incident.completionReached
-                  ? 'STABLE'
+                  ? m.serviceStatus.stable
                   : isPaging
-                    ? 'ALERTING'
+                    ? m.serviceStatus.alerting
                     : service.dependsOn.length > 0
-                      ? 'DEPENDENCY PATH'
-                      : 'UNDER OBSERVATION';
+                      ? m.serviceStatus.dependency
+                      : m.serviceStatus.observing;
                 const tone = session.incident.completionReached
                   ? 'stable'
                   : isPaging
@@ -525,7 +571,7 @@ function IncidentScreen({
                   <li className={`service-node service-node--${tone}`} key={service.id}>
                     <span className="service-link" aria-hidden="true" />
                     <div>
-                      <strong>{service.name}</strong>
+                      <strong>{ct(service.name)}</strong>
                       <span>{service.id}</span>
                     </div>
                     <span className="service-state">
@@ -540,24 +586,24 @@ function IncidentScreen({
             </ol>
 
             <div className="pager-card">
-              <span>Pager trigger</span>
-              <strong>{String(pagerService ?? 'Service alert')}</strong>
+              <span>{m.pagerTrigger}</span>
+              <strong>
+                {pagerService === undefined ? m.serviceAlert : ct(String(pagerService))}
+              </strong>
               <p>
-                {String(
-                  revealedSignals.find(({ id }) => id === 'PAGER_THRESHOLD')?.value ??
-                    'Threshold exceeded',
-                )}
+                {pagerThreshold === undefined ? m.thresholdExceeded : ct(String(pagerThreshold))}
               </p>
             </div>
           </aside>
 
-          <section className="workspace panel" aria-label="Incident investigation workspace">
-            <div className="tool-tabs" role="tablist" aria-label="Investigation tools">
+          <section className="workspace panel" aria-label={m.workspace}>
+            <div className="tool-tabs" role="tablist" aria-label={m.investigationTools}>
               {tools.map((tool, index) => (
                 <button
                   aria-controls="tool-panel"
                   aria-selected={activeTool === tool.id}
                   className={activeTool === tool.id ? 'tool-tab tool-tab--active' : 'tool-tab'}
+                  data-onboarding-target={`tool:${tool.id}`}
                   id={`tool-tab-${tool.id}`}
                   key={tool.id}
                   ref={tool.id === 'war-room' ? warRoomTabRef : undefined}
@@ -567,7 +613,7 @@ function IncidentScreen({
                   tabIndex={activeTool === tool.id ? 0 : -1}
                   type="button"
                 >
-                  <span>{tool.shortcut}</span> {tool.label}
+                  <span>{tool.shortcut}</span> {m.tools[tool.id]}
                 </button>
               ))}
             </div>
@@ -582,17 +628,19 @@ function IncidentScreen({
                 <div className="terminal-view">
                   <div className="view-heading">
                     <div>
-                      <span>Incident event stream</span>
-                      <h2>Incident logs</h2>
+                      <span>{m.logsEyebrow}</span>
+                      <h2>{m.logsTitle}</h2>
                     </div>
-                    <span className="stream-state">● {logLines.length} ENTRIES</span>
+                    <span className="stream-state">
+                      ● {m.entries(formatNumber(logLines.length))}
+                    </span>
                   </div>
-                  <div className="log-lines" role="log" aria-label="Incident log entries">
+                  <div className="log-lines" role="log" aria-label={m.logEntries}>
                     {logLines.map((line) => (
                       <p key={line.key}>
                         <time>{formatElapsed(line.atSeconds)}</time>
                         <span className={`log-level log-level--${line.level.toLowerCase()}`}>
-                          {line.level}
+                          {levelLabel[line.level]}
                         </span>
                         {line.text}
                       </p>
@@ -605,10 +653,12 @@ function IncidentScreen({
                 <div>
                   <div className="view-heading">
                     <div>
-                      <span>Revealed telemetry</span>
-                      <h2>Service metrics</h2>
+                      <span>{m.metricsEyebrow}</span>
+                      <h2>{m.metricsTitle}</h2>
                     </div>
-                    <span className="stream-state">● {revealedSignals.length} SIGNALS</span>
+                    <span className="stream-state">
+                      ● {m.signals(formatNumber(revealedSignals.length))}
+                    </span>
                   </div>
                   <div className="metric-grid">
                     {revealedSignals
@@ -617,11 +667,11 @@ function IncidentScreen({
                         <article className="metric-card" key={signal.id}>
                           <span>
                             {signal.serviceId === undefined
-                              ? 'INCIDENT'
+                              ? m.incidentScope
                               : serviceName(signal.serviceId)}
                           </span>
-                          <strong>{formatSignalValue(signal.id, signal.value, directory)}</strong>
-                          <p>{signalLabel(signal.id, directory)}</p>
+                          <strong>{signals.value(signal.id, signal.value)}</strong>
+                          <p>{signals.label(signal.id)}</p>
                         </article>
                       ))}
                   </div>
@@ -632,39 +682,35 @@ function IncidentScreen({
                 <div>
                   <div className="view-heading">
                     <div>
-                      <span>Diagnostic observations</span>
-                      <h2>Investigation detail</h2>
+                      <span>{m.diagnosticsEyebrow}</span>
+                      <h2>{m.diagnosticsTitle}</h2>
                     </div>
-                    <span className="stream-state">● QUERY CONSOLE</span>
+                    <span className="stream-state">● {m.queryConsole}</span>
                   </div>
                   {newDiscoveries.length === 0 ? (
                     <div className="empty-state">
                       <span aria-hidden="true">⌁</span>
-                      <strong>No investigation detail captured</strong>
-                      <p>
-                        Use observation and investigation actions to reveal additional findings.
-                      </p>
+                      <strong>{m.noDetailTitle}</strong>
+                      <p>{m.noDetailBody}</p>
                     </div>
                   ) : (
                     <table className="discovery-table">
-                      <caption>Newly revealed incident observations</caption>
+                      <caption>{m.discoveryCaption}</caption>
                       <thead>
                         <tr>
-                          <th scope="col">Observation</th>
-                          <th scope="col">Value</th>
-                          <th scope="col">Source</th>
+                          <th scope="col">{m.observation}</th>
+                          <th scope="col">{m.value}</th>
+                          <th scope="col">{m.source}</th>
                         </tr>
                       </thead>
                       <tbody>
                         {newDiscoveries.map((signal) => (
                           <tr key={signal.id}>
-                            <th scope="row">{signalLabel(signal.id, directory)}</th>
-                            <td data-label="Value">
-                              {formatSignalValue(signal.id, signal.value, directory)}
-                            </td>
-                            <td data-label="Source">
+                            <th scope="row">{signals.label(signal.id)}</th>
+                            <td data-label={m.value}>{signals.value(signal.id, signal.value)}</td>
+                            <td data-label={m.source}>
                               {signal.serviceId === undefined
-                                ? 'Incident'
+                                ? m.incidentSource
                                 : serviceName(signal.serviceId)}
                             </td>
                           </tr>
@@ -679,22 +725,22 @@ function IncidentScreen({
                 <div>
                   <div className="view-heading">
                     <div>
-                      <span>Current response posture</span>
-                      <h2>Incident status</h2>
+                      <span>{m.statusEyebrow}</span>
+                      <h2>{m.statusTitle}</h2>
                     </div>
-                    <span className="stream-state">● ACTION DERIVED</span>
+                    <span className="stream-state">● {m.actionDerived}</span>
                   </div>
                   <div className="status-summary">
                     <article>
-                      <span>Underlying cause</span>
-                      <strong>{session.incident.resolutionReached ? 'Contained' : 'Open'}</strong>
+                      <span>{m.underlyingCause}</span>
+                      <strong>{session.incident.resolutionReached ? m.contained : m.open}</strong>
                       <p>{recovery.detail}</p>
                     </article>
                     {Object.entries(session.incident.resources).map(([id, resource]) => (
                       <article key={id}>
-                        <span>{humanize(id)}</span>
-                        <strong>{resource.value.toLocaleString('en-US')}</strong>
-                        <p>Updated by completed actions.</p>
+                        <span>{ct(humanize(id))}</span>
+                        <strong>{formatNumber(resource.value)}</strong>
+                        <p>{m.updatedByActions}</p>
                       </article>
                     ))}
                   </div>
@@ -705,16 +751,18 @@ function IncidentScreen({
                 <div>
                   <div className="view-heading">
                     <div>
-                      <span>Recovered artifacts</span>
-                      <h2>Evidence board</h2>
+                      <span>{m.evidenceEyebrow}</span>
+                      <h2>{m.evidenceTitle}</h2>
                     </div>
-                    <span className="stream-state">● {campaignEvidence.length} DISCOVERED</span>
+                    <span className="stream-state">
+                      ● {m.discovered(formatNumber(campaignEvidence.length))}
+                    </span>
                   </div>
                   {campaignEvidence.length === 0 ? (
                     <div className="empty-state">
                       <span aria-hidden="true">◇</span>
-                      <strong>No evidence recovered</strong>
-                      <p>Investigate incident signals to preserve any discovered artifacts.</p>
+                      <strong>{m.noEvidenceTitle}</strong>
+                      <p>{m.noEvidenceBody}</p>
                     </div>
                   ) : (
                     <div className="evidence-grid">
@@ -723,19 +771,19 @@ function IncidentScreen({
                           <span>
                             {item.scenarioId} / {item.id}
                           </span>
-                          <h3>{item.title}</h3>
-                          <p>{item.description}</p>
+                          <h3>{ct(item.title)}</h3>
+                          <p>{ct(item.description)}</p>
                         </article>
                       ))}
                     </div>
                   )}
                   {campaignNarratives.length > 0 && (
-                    <section aria-label="Recovered anomaly history">
-                      <h3>Recovered anomaly history</h3>
+                    <section aria-label={m.anomalyHistory}>
+                      <h3>{m.anomalyHistory}</h3>
                       <ol>
                         {campaignNarratives.map((item) => (
                           <li key={`${item.scenarioId}:${item.id}`}>
-                            {item.scenarioId} / {item.title}: {item.body}
+                            {item.scenarioId} / {ct(item.title)}: {ct(item.body)}
                           </li>
                         ))}
                       </ol>
@@ -743,8 +791,8 @@ function IncidentScreen({
                   )}
                   {session.campaignProgressError && (
                     <p role="alert">
-                      Campaign discoveries could not be restored:{' '}
-                      {session.campaignProgressError.message}
+                      {m.campaignRestoreFailed}{' '}
+                      {errorMessage(session.campaignProgressError, locale)}
                     </p>
                   )}
                 </div>
@@ -754,27 +802,32 @@ function IncidentScreen({
                 <div>
                   <div className="view-heading">
                     <div>
-                      <span>Team response channel</span>
-                      <h2>War Room</h2>
+                      <span>{m.warRoomEyebrow}</span>
+                      <h2>{m.warRoomTitle}</h2>
                     </div>
-                    <span className="stream-state">● {warRoom.pending.length} PENDING</span>
+                    <span className="stream-state">
+                      ● {m.pending(formatNumber(warRoom.pending.length))}
+                    </span>
                   </div>
                   <div className="war-room-summary">
                     {warRoom.capacity.map(({ resourceId, current, max }) => (
                       <p key={resourceId}>
-                        {humanize(resourceId)}: {current}
+                        {ct(humanize(resourceId))}: {current}
                         {max === undefined ? '' : ` / ${max}`}
                       </p>
                     ))}
                     {warRoom.pending.length === 0 ? (
-                      <p>No delegated work pending.</p>
+                      <p>{m.noPendingWork}</p>
                     ) : (
-                      <ul aria-label="Pending delegated work">
+                      <ul aria-label={m.pendingWork}>
                         {warRoom.pending.map((work) => (
                           <li key={work.scheduleSequence}>
-                            {work.role}: {work.title} · ETA +
-                            {formatElapsed(
-                              Math.max(0, work.dueAtSeconds - session.incident.elapsedSeconds),
+                            {m.pendingItem(
+                              ct(work.role),
+                              ct(work.title),
+                              formatElapsed(
+                                Math.max(0, work.dueAtSeconds - session.incident.elapsedSeconds),
+                              ),
                             )}
                           </li>
                         ))}
@@ -782,30 +835,32 @@ function IncidentScreen({
                     )}
                   </div>
                   {warRoom.messages.length === 0 ? (
-                    <p className="activity-empty">No team messages yet.</p>
+                    <p className="activity-empty">{m.noTeamMessages}</p>
                   ) : (
-                    <ol className="war-room-messages" aria-label="War Room messages">
+                    <ol className="war-room-messages" aria-label={m.warRoomMessages}>
                       {warRoom.messages.map((message) => (
                         <li key={message.sequence}>
                           <time>{formatElapsed(message.atSeconds)}</time>
-                          <strong>{message.sender}</strong>
-                          <p>{message.text}</p>
+                          <strong>{ct(message.sender)}</strong>
+                          <p>{ct(message.text)}</p>
                         </li>
                       ))}
                     </ol>
                   )}
-                  <p className="war-room-hint">
-                    Delegate and communicate using the available actions.
-                  </p>
+                  <p className="war-room-hint">{m.warRoomHint}</p>
                 </div>
               )}
             </div>
 
             {session.scenario.warRoom.messages.length > 0 && (
-              <p aria-label="War Room updates" className="screen-reader-only" role="status">
+              <p aria-label={m.warRoomUpdates} className="screen-reader-only" role="status">
                 {latestWarRoomMessage === undefined
                   ? ''
-                  : `War Room message from ${latestWarRoomMessage.sender}: ${latestWarRoomMessage.text} ${warRoom.pending.length} delegated jobs pending.`}
+                  : m.warRoomAnnouncement(
+                      ct(latestWarRoomMessage.sender),
+                      ct(latestWarRoomMessage.text),
+                      warRoom.pending.length,
+                    )}
               </p>
             )}
 
@@ -817,15 +872,15 @@ function IncidentScreen({
             >
               <div className="activity-heading">
                 <div>
-                  <span>What just happened</span>
-                  <h2 id="activity-title">Observable results</h2>
+                  <span>{m.activityEyebrow}</span>
+                  <h2 id="activity-title">{m.activityTitle}</h2>
                 </div>
-                <span>{session.incident.eventLog.length} EVENTS</span>
+                <span>{m.events(formatNumber(session.incident.eventLog.length))}</span>
               </div>
               {recentEvents.length === 0 ? (
-                <p className="activity-empty">Awaiting operator action.</p>
+                <p className="activity-empty">{m.awaitingAction}</p>
               ) : (
-                <ol className="activity-list" aria-label="Recent incident events">
+                <ol className="activity-list" aria-label={m.recentEvents}>
                   {recentEvents.map((line) => (
                     <li key={line.key}>
                       <time>{formatElapsed(line.atSeconds)}</time>
@@ -840,37 +895,38 @@ function IncidentScreen({
           <aside className="action-rail panel" aria-labelledby="actions-title">
             <div className="panel-heading action-heading">
               <div>
-                <span>Command boundary</span>
-                <h2 id="actions-title">Available actions</h2>
+                <span>{m.actionsEyebrow}</span>
+                <h2 id="actions-title">{m.actionsTitle}</h2>
               </div>
-              <span className="action-count">{availableActions.length}</span>
+              <span className="action-count">{formatNumber(availableActions.length)}</span>
             </div>
             <p className="action-intro">
-              {session.incident.completionReached
-                ? 'This completed incident record is read-only.'
-                : 'Only actions available in the current incident state are shown. Each one moves the clock forward by its duration.'}
+              {session.incident.completionReached ? m.readOnlyIntro : m.actionsIntro}
             </p>
+
+            {coach}
 
             <div className="action-list">
               {availableActions.map((action) => (
                 <article className="action-card" key={action.id}>
                   <div className="action-meta">
-                    <span>{action.category}</span>
+                    <span>{categoryLabel[action.category]}</span>
                     <span>+{formatElapsed(action.durationSeconds)}</span>
                   </div>
                   <button
+                    data-onboarding-target={`action:${action.id}`}
                     disabled={session.incident.completionReached}
                     onClick={(event) => performAction(action.id, event.currentTarget)}
                     type="button"
                   >
-                    {action.title}
+                    {ct(action.title)}
                   </button>
                   <p>
                     {action.requirements.length === 0
-                      ? 'Available now'
+                      ? m.availableNow
                       : action.requirements
                           .map((condition) =>
-                            formatCondition(condition, session.scenario, directory),
+                            formatCondition(condition, session.scenario, signals, ct, m),
                           )
                           .join(' · ')}
                   </p>
@@ -880,34 +936,30 @@ function IncidentScreen({
 
             {session.lastError !== null && (
               <div className="command-error" role="alert">
-                <strong>{humanize(session.lastError.code)}</strong>
-                <span>{session.lastError.message}</span>
+                <strong>{errorLabel(session.lastError.code, locale)}</strong>
+                <span>{errorMessage(session.lastError, locale)}</span>
               </div>
             )}
 
             {!reviewOnly && (
-              <div
-                className="session-controls"
-                aria-label="Local session save controls"
-                role="group"
-              >
+              <div className="session-controls" aria-label={m.saveControls} role="group">
                 <button onClick={(event) => requestSave(event.currentTarget)} type="button">
-                  Save session
+                  {m.saveSession}
                 </button>
                 <button onClick={loadSession} type="button">
-                  Load saved session
+                  {m.loadSession}
                 </button>
               </div>
             )}
-            {session.persistenceNotice !== null && (
-              <p aria-label="Session persistence" className="persistence-notice" role="status">
-                {session.persistenceNotice}
+            {persistenceNotice !== null && (
+              <p aria-label={m.sessionPersistence} className="persistence-notice" role="status">
+                {persistenceNotice}
               </p>
             )}
             {session.persistenceError !== null && (
               <div className="command-error" role="alert">
-                <strong>{humanize(session.persistenceError.code)}</strong>
-                <span>{session.persistenceError.message}</span>
+                <strong>{errorLabel(session.persistenceError.code, locale)}</strong>
+                <span>{errorMessage(session.persistenceError, locale)}</span>
               </div>
             )}
 
@@ -917,7 +969,7 @@ function IncidentScreen({
                 onClick={(event) => requestRestart(event.currentTarget)}
                 type="button"
               >
-                Restart incident session
+                {m.restartSession}
               </button>
             )}
           </aside>
@@ -925,16 +977,16 @@ function IncidentScreen({
       </main>
       {activeNarrative !== undefined && (
         <ModalDialog
-          channel="Incident log buffer // transient signal"
-          description={activeNarrative.body}
+          channel={m.narrativeChannel}
+          description={ct(activeNarrative.body)}
           descriptionId="narrative-body"
           initialFocusRef={narrativeContinueRef}
           role="dialog"
-          title={activeNarrative.title}
+          title={ct(activeNarrative.title)}
           titleId="narrative-title"
         >
           <button ref={narrativeContinueRef} onClick={closeNarrative} type="button">
-            Continue incident
+            {m.continueIncident}
           </button>
         </ModalDialog>
       )}

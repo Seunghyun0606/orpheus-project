@@ -3,28 +3,19 @@ import type { ResolvedCampaignPackage } from '../scenario/campaign-package.ts';
 import type { CampaignDefinition } from '../scenario/campaign.ts';
 import { scenarioVersionKey } from '../scenario/catalog.ts';
 import type { Scenario } from '../scenario/schema.ts';
+import type { Locale } from '../i18n/locale.ts';
 import { humanize } from './format.ts';
+import { campaignCopyMessages } from './messages/campaign-copy.ts';
 
 // Player-facing wording for the campaign console. Read-only helpers over the
 // verified package and run; nothing here decides availability or progression.
 
 // Act names follow the approved campaign blueprint (Acts 1-9). They are display
 // copy only and are shown for the act the player has already reached.
-const actNames: Record<number, string> = {
-  1: 'NORMAL',
-  2: 'GHOST',
-  3: 'NULL',
-  4: 'ORPHEUS',
-  5: 'EXPERIMENT',
-  6: 'HUMAN SYSTEM',
-  7: 'THE BOARD',
-  8: 'OBSERVER',
-  9: 'BLACKOUT',
-};
-
-export function actTitle(act: number): string {
-  const name = actNames[act];
-  return name === undefined ? `Act ${act}` : `Act ${act} — ${name}`;
+export function actTitle(act: number, locale: Locale = 'en'): string {
+  const copy = campaignCopyMessages[locale];
+  const name = copy.actNames[act];
+  return name === undefined ? copy.act(act) : copy.actNamed(act, name);
 }
 
 export function incidentScenario(
@@ -72,10 +63,7 @@ export function isFinalIncident(
   return composition?.definition.endings?.finals.some((f) => f.incidentId === incidentId) ?? false;
 }
 
-export const closedActionReasons = {
-  record: "Not open to you: your record doesn't support this.",
-  known: 'Already on record.',
-} as const;
+export const closedActionReasons = campaignCopyMessages.en.closedReasons;
 
 export interface ClosedAction {
   readonly id: string;
@@ -93,7 +81,9 @@ export function closedPanelActions(
   scenario: Scenario | undefined,
   panelActionIds: readonly string[],
   available: readonly { id: string }[],
+  locale: Locale = 'en',
 ): ClosedAction[] {
+  const reasons = campaignCopyMessages[locale].closedReasons;
   if (attempt.incident.completionReached) return [];
   return panelActionIds.flatMap((id): ClosedAction[] => {
     if (available.some((action) => action.id === id)) return [];
@@ -107,9 +97,7 @@ export function closedPanelActions(
     if (!gated) return [];
     // Catch-up re-investigations close once the finding is already on the
     // record; every other gate (e.g. the final plans) closes on the record.
-    const reason = id.startsWith('REINVESTIGATE_')
-      ? closedActionReasons.known
-      : closedActionReasons.record;
+    const reason = id.startsWith('REINVESTIGATE_') ? reasons.known : reasons.record;
     return [{ id, title: actionTitleFrom(scenario, id), reason }];
   });
 }
@@ -126,36 +114,16 @@ export function ruleKind(
   );
 }
 
-export const guidanceOffer: Record<GuidanceKind, string> = {
-  prediction: 'ORPHEUS has a forecast about you — show it',
-  recommendation: 'ORPHEUS recommends an action — show it',
-  choice: 'A decision is waiting — show it',
-  unknown: 'ORPHEUS has something for you — show it',
-};
+// English defaults; localized screens read campaignCopyMessages[locale].
+export const guidanceOffer: Readonly<Record<GuidanceKind, string>> =
+  campaignCopyMessages.en.guidanceOffer;
 
-export const guidanceReopen: Record<GuidanceKind, string> = {
-  prediction: 'Show the ORPHEUS forecast again',
-  recommendation: 'Show the ORPHEUS recommendation again',
-  choice: 'Show the waiting decision again',
-  unknown: 'Show the ORPHEUS message again',
-};
+export const guidanceReopen: Readonly<Record<GuidanceKind, string>> =
+  campaignCopyMessages.en.guidanceReopen;
 
 export function formatConfidence(confidence: number): string {
   return `${Math.round(confidence * 100)}%`;
 }
-
-const metricLabels: Record<string, string> = {
-  restartRate: 'Restarted a service as the response',
-  rollbackRate: 'Rolled back a change as the response',
-  evidenceBeforeActionRate: 'Gathered evidence before acting',
-  aiRecommendationAcceptanceRate: 'Accepted ORPHEUS recommendations',
-  averageInvestigationDepth: 'Investigation depth (distinct findings per incident)',
-  safetyPreference: 'Chose the safer option',
-  collateralDamageTolerance: 'Accepted collateral damage',
-  companyReportingRate: 'Reported findings to the company',
-  nullCooperationRate: 'Cooperated with NULL',
-  predictionDeviation: 'Did something other than ORPHEUS forecast',
-};
 
 export interface ProfileLine {
   readonly key: string;
@@ -165,19 +133,20 @@ export interface ProfileLine {
 }
 
 // Only metrics the engine marked available are shown; nothing is inferred.
-export function subjectProfile(run: CampaignRun): ProfileLine[] {
+export function subjectProfile(run: CampaignRun, locale: Locale = 'en'): ProfileLine[] {
   const metrics = run.behavior?.metrics;
   if (metrics === undefined) return [];
+  const copy = campaignCopyMessages[locale];
   return Object.entries(metrics).flatMap(([key, metric]): ProfileLine[] => {
     if (metric.status !== 'available') return [];
-    const label = metricLabels[key] ?? humanize(key);
+    const label = copy.metricLabels[key] ?? humanize(key);
     if (key === 'averageInvestigationDepth')
       return [
         {
           key,
           label,
           value: metric.value.toFixed(1),
-          detail: `across ${metric.denominator} incident${metric.denominator === 1 ? '' : 's'}`,
+          detail: copy.depthDetail(metric.denominator),
         },
       ];
     return [
@@ -185,7 +154,7 @@ export function subjectProfile(run: CampaignRun): ProfileLine[] {
         key,
         label,
         value: `${Math.round(metric.value * 100)}%`,
-        detail: `${metric.numerator} of ${metric.denominator}`,
+        detail: copy.rateDetail(metric.numerator, metric.denominator),
       },
     ];
   });
@@ -254,5 +223,10 @@ export function newestPackage(
 
 // ORPHEUS is only known to be alive from Act 4 (its rediscovery is a reveal), so the
 // always-visible advisory chrome stays generic before then.
-export const advisorName = (act: number | null): string =>
-  act !== null && act >= 4 ? 'ORPHEUS' : 'Operations advisor';
+export const advisorName = (act: number | null, locale: Locale = 'en'): string =>
+  act !== null && act >= 4 ? 'ORPHEUS' : campaignCopyMessages[locale].unnamedAdvisor;
+
+// Ending IDs are authored identities; only the displayed name is localized.
+export function endingName(endingId: string, locale: Locale = 'en'): string {
+  return campaignCopyMessages[locale].endingNames[endingId] ?? endingId;
+}

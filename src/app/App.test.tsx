@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { SaveStorage } from '../persistence/index.ts';
 import { getScenario, inc001Scenario, scenarioCatalog } from '../scenario/index.ts';
 import { createIncidentSessionStore } from '../store/incident-session.ts';
+import { installContentDictionary } from '../i18n/content.ts';
 import { App } from './App.tsx';
 import { formatElapsed } from './format.ts';
 import { presentationStorageKey } from './presentation-settings.ts';
@@ -432,5 +433,72 @@ describe('INC-001 operations desktop', () => {
     await perform(user, 'Open Payment API logs');
     expect(screen.getByText(/Action completed and committed\./)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Enable / resume audio' })).toBeInTheDocument();
+  });
+});
+
+describe('INC-001 operations desktop in Korean', () => {
+  it('shows UI copy, authored content and persistence messages in the display language', async () => {
+    window.localStorage.setItem(presentationStorageKey, JSON.stringify({ language: 'ko' }));
+    installContentDictionary(
+      'ko',
+      new Map([
+        ['Connection Saturation', '커넥션 포화'],
+        ['Payment API', '결제 API'],
+        ['Inspect PostgreSQL', 'PostgreSQL 점검하기'],
+        ['Customer Impact', '고객 피해'],
+      ]),
+    );
+    const storage: SaveStorage = { read: () => null, write: () => undefined };
+    const { user } = renderIncident(711, storage);
+
+    expect(screen.getByRole('heading', { name: '커넥션 포화' })).toBeInTheDocument();
+    expect(screen.getAllByText('진단 중')).toHaveLength(2);
+    expect(within(screen.getByRole('list')).getByText('결제 API')).toBeInTheDocument();
+    expect(within(screen.getByRole('list')).getByText(/경보 중/)).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /지표/ })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getAllByText('완화').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('진단').length).toBeGreaterThan(0);
+
+    // The tool heuristic keeps reading the authored English title.
+    await perform(user, 'PostgreSQL 점검하기');
+    expect(screen.getByRole('region', { name: '관찰 가능한 결과' })).toHaveFocus();
+    expect(screen.getByText(/완료: PostgreSQL 점검하기/)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: '저장된 세션 불러오기' }));
+    const alert = screen.getByRole('alert');
+    expect(alert).toHaveTextContent('저장 없음');
+    expect(alert).toHaveTextContent('저장된 세션이 없습니다.');
+
+    await user.click(screen.getByRole('tab', { name: /상태/ }));
+    expect(screen.getByText('고객 피해', { selector: 'span' })).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: '인시던트 세션 다시 시작' }));
+    expect(
+      screen.getByRole('alertdialog', { name: '이 인시던트를 다시 시작할까요?' }),
+    ).toBeInTheDocument();
+  });
+
+  it('localizes the save notice and the postmortem', async () => {
+    window.localStorage.setItem(presentationStorageKey, JSON.stringify({ language: 'ko' }));
+    installContentDictionary('ko', new Map([['Connection Saturation', '커넥션 포화']]));
+    let saved: string | null = null;
+    const { store, user } = renderIncident(721, {
+      read: () => saved,
+      write: (value) => {
+        saved = value;
+      },
+    });
+    await user.click(screen.getByRole('button', { name: '세션 저장' }));
+    expect(screen.getByRole('status', { name: '세션 저장 상태' })).toHaveTextContent(
+      '세션을 이 기기에 저장했습니다.',
+    );
+    expect(store.getState().persistenceNotice).toBe('Session saved locally.');
+
+    await perform(user, 'Inspect PostgreSQL');
+    await perform(user, 'Inspect database sessions');
+    await perform(user, 'Terminate stale database sessions');
+    expect(screen.getByRole('heading', { name: '인시던트 사후 분석' })).toHaveFocus();
+    expect(screen.getByText(/커넥션 포화 · 인시던트 상태와 기록된 조치로/)).toBeInTheDocument();
+    expect(screen.getByText('02 / 근본 원인')).toBeInTheDocument();
   });
 });

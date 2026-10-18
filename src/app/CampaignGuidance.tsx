@@ -2,14 +2,10 @@ import type { RefObject } from 'react';
 import type { CampaignView } from '../store/campaign-session.ts';
 import type { ResolvedCampaignPackage } from '../scenario/campaign-package.ts';
 import { scenarioVersionKey } from '../scenario/catalog.ts';
-import {
-  actionTitleFrom,
-  formatConfidence,
-  advisorName,
-  guidanceOffer,
-  guidanceReopen,
-  ruleKind,
-} from './campaign-copy.ts';
+import { useI18n, useMessages } from '../i18n/I18n.ts';
+import { actionTitleFrom, formatConfidence, advisorName, ruleKind } from './campaign-copy.ts';
+import { campaignCopyMessages } from './messages/campaign-copy.ts';
+import { campaignGuidanceMessages } from './messages/campaign-tools.ts';
 
 type Preparation = CampaignView['presentations'][number];
 
@@ -39,24 +35,29 @@ export function CampaignGuidance({
   onAcknowledge: (preparation: Preparation) => void;
   act?: number | null;
 }) {
-  const advisor = advisorName(act);
+  const { locale, ct } = useI18n();
+  const m = useMessages(campaignGuidanceMessages);
+  const { guidanceOffer, guidanceReopen } = useMessages(campaignCopyMessages);
+  const advisor = advisorName(act, locale);
   const scenario =
     prep === undefined
       ? undefined
       : composition?.catalog.get(scenarioVersionKey(prep.scenarioId, prep.contentVersion));
   const title = (actionId: string) =>
-    actionTitleFrom(scenario, actionId, view?.availableActions ?? []);
+    ct(actionTitleFrom(scenario, actionId, view?.availableActions ?? []));
   const reopen = (view?.presentations ?? []).filter((p) => p.id !== prep?.id);
   const offers = view?.availableOpportunityRuleIds ?? [];
   const forecast =
     prep?.kind !== 'prediction' ? null : prep.prediction?.ok &&
       prep.prediction.result.kind === 'predicted' ? (
       <p className="orpheus-forecast">
-        ORPHEUS forecast: {title(prep.prediction.result.actionId)} —{' '}
-        {formatConfidence(prep.prediction.result.confidence)}
+        {m.forecast(
+          title(prep.prediction.result.actionId),
+          formatConfidence(prep.prediction.result.confidence),
+        )}
       </p>
     ) : (
-      <p className="orpheus-forecast">No forecast yet: not enough history to model you</p>
+      <p className="orpheus-forecast">{m.noForecast}</p>
     );
 
   return (
@@ -66,11 +67,9 @@ export function CampaignGuidance({
       className="panel orpheus-card"
       aria-labelledby="campaign-guidance-title"
     >
-      <p className="eyebrow">{advisor.toUpperCase()} // ADVISORY CHANNEL</p>
+      <p className="eyebrow">{m.eyebrow(advisor)}</p>
       <h2 id="campaign-guidance-title">{advisor}</h2>
-      {view?.presentationDiagnostics.length ? (
-        <p role="alert">ORPHEUS guidance could not be checked against your record right now.</p>
-      ) : null}
+      {view?.presentationDiagnostics.length ? <p role="alert">{m.diagnostics}</p> : null}
       {offers.length || reopen.length ? (
         <div className="orpheus-offers">
           {offers.map((id) => (
@@ -86,29 +85,23 @@ export function CampaignGuidance({
         </div>
       ) : null}
       {prep ? (
-        <section ref={presentationRef} className="orpheus-message" aria-label="ORPHEUS message">
-          <p className="campaign-document-text">{prep.presentation.text}</p>
+        <section ref={presentationRef} className="orpheus-message" aria-label={m.messageLabel}>
+          <p className="campaign-document-text">{ct(prep.presentation.text)}</p>
           {forecast}
           {prep.kind === 'recommendation' && prep.recommendedActionId !== undefined ? (
-            <p className="orpheus-forecast">
-              ORPHEUS recommends: {title(prep.recommendedActionId)}
-            </p>
+            <p className="orpheus-forecast">{m.recommends(title(prep.recommendedActionId))}</p>
           ) : null}
-          <p className="console-hint">
-            {acknowledged
-              ? 'Logged: you have read this message. What you do next is up to you.'
-              : 'Your actions are paused until you confirm you have read this.'}
-          </p>
+          <p className="console-hint">{acknowledged ? m.acknowledged : m.paused}</p>
           <button
             type="button"
             disabled={blocked || acknowledged}
             onClick={() => onAcknowledge(prep)}
           >
-            I&apos;ve read this
+            {m.confirm}
           </button>
         </section>
       ) : offers.length || reopen.length ? null : (
-        <p className="console-hint">{advisor} is quiet. Nothing is waiting for you.</p>
+        <p className="console-hint">{m.quiet(advisor)}</p>
       )}
     </section>
   );

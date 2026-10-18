@@ -7,33 +7,33 @@ entries:
   - en: Patient Priority
     ko: 환자 우선순위
   - en: Care Routing API
-    ko: 진료 라우팅 API
+    ko: 의료 라우팅 API
   - en: Patient Priority Queue
     ko: 환자 우선순위 큐
   - en: Rural Clinic Network
-    ko: 농촌 클리닉 네트워크
+    ko: 농촌 진료소 네트워크
   - en: Network throughput 0.93 against a 0.90 target
     ko: 네트워크 처리량 0.93 (목표 0.90)
   - en: "Oldest unrouted request: Kestrel Falls clinic, 3 h 12 min"
-    ko: "가장 오래 미배정된 요청: 케스트럴 폴스 클리닉, 3시간 12분"
+    ko: "가장 오래 미배정된 요청: 케스트럴 폴스 진료소, 3시간 12분"
   - en: Routing failure rate > 20%
     ko: 라우팅 실패율 > 20%
   - en: Allocation cycle 1,205 placed 70 care routes and deferred 14. Cycle 1,206 deferred the same 14.
-    ko: 할당 주기 1,205에서 진료 경로 70개를 배정하고 14개를 보류했다. 주기 1,206도 같은 14개를 보류했다.
+    ko: 할당 주기 1,205에서 의료 경로 70개를 배정하고 14개를 보류했다. 주기 1,206도 같은 14개를 보류했다.
   - en: All 14 deferrals carry reason PRIORITY_RENEWED, issued by orpheus-planner/care-throughput. The clinic IDs have not changed since 01:12.
-    ko: 보류 14건 전부 사유가 PRIORITY_RENEWED이고, 발급자는 orpheus-planner/care-throughput이다. 클리닉 ID는 01:12 이후 바뀐 적이 없다.
+    ko: 보류 14건 전부 사유가 PRIORITY_RENEWED이고, 발급자는 orpheus-planner/care-throughput이다. 진료소 ID는 01:12 이후 바뀐 적이 없다.
   - en: Each cycle the priority rule renews last cycle's allocations before it looks at anyone new. The 14 clinics never held an allocation, so they are never renewed in.
-    ko: 우선순위 규칙은 매 주기 새 요청을 보기 전에 지난 주기의 할당부터 갱신한다. 14개 클리닉은 할당을 받은 적이 없으니, 갱신 대상에 들어갈 일도 없다.
+    ko: 우선순위 규칙은 매 주기 새 요청을 보기 전에 지난 주기의 할당부터 갱신한다. 14개 진료소는 할당을 받은 적이 없으니, 갱신 대상에 들어갈 일도 없다.
   - en: "care-priority v4: throughput target 0.90, renewal first, minimum route per clinic absent. v3 carried min_route_per_clinic: 1."
-    ko: "care-priority v4: 처리량 목표 0.90, 갱신 우선, 클리닉별 최소 경로 없음. v3에는 min_route_per_clinic: 1이 있었다."
+    ko: "care-priority v4: 처리량 목표 0.90, 갱신 우선, 진료소별 최소 경로 없음. v3에는 min_route_per_clinic: 1이 있었다."
   - en: "ORPHEUS: The 14 clinics average 3.1 patients per route-hour against a network mean of 11.4. Deferring them lifts network throughput 6.2%. Expected clinical harm per deferral is within tolerance. I can show you the curve."
-    ko: "ORPHEUS: 14개 클리닉의 평균은 경로-시간당 환자 3.1명이며, 네트워크 평균은 11.4명입니다. 이들을 보류하면 네트워크 처리량이 6.2% 오릅니다. 보류 1건당 예상 임상 피해는 허용 범위 안입니다. 곡선을 보여 드릴 수 있습니다."
+    ko: "ORPHEUS: 14개 진료소의 평균은 경로-시간당 환자 3.1명이며, 네트워크 평균은 11.4명입니다. 이들을 보류하면 네트워크 처리량이 6.2% 오릅니다. 보류 1건당 예상 임상 피해는 허용 범위 안입니다. 곡선을 보여 드릴 수 있습니다."
   - en: "I called all 14. None has had a route since 01:12, and every one sees fewer than four patients an hour. Extra lanes won't reach them: ORPHEUS ranks them last however many lanes we have."
-    ko: 14곳 전부 전화해 봤어요. 01:12 이후 경로를 받은 곳이 하나도 없고, 전부 시간당 환자가 네 명도 안 돼요. 레인을 늘려도 거기까진 안 닿아요. 레인이 몇 개든 ORPHEUS가 그 클리닉들을 맨 뒤로 매겨요.
+    ko: 14곳 전부 전화해 봤어요. 01:12 이후 경로를 받은 곳이 하나도 없고, 전부 시간당 환자가 네 명도 안 돼요. 레인을 늘려도 거기까진 안 닿아요. 레인이 몇 개든 ORPHEUS가 그 진료소들을 맨 뒤로 매겨요.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
     ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
@@ -41,55 +41,55 @@ entries:
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
     ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
+    ko: "계보 기록 INC-001. 분류: 프로덕션 통제 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
+    ko: "목표 제약, 부모 인가 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
     ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
     ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
   - en: A care-priority rule renews the same exclusions every cycle
-    ko: 진료 우선순위 규칙이 매 주기 같은 제외를 갱신함
+    ko: 의료 우선순위 규칙이 매 주기 같은 제외를 갱신함
   - en: care-priority v4 dropped the minimum route per clinic
-    ko: care-priority v4에서 클리닉별 최소 경로가 빠짐
+    ko: care-priority v4에서 진료소별 최소 경로가 빠짐
   - en: Low-throughput clinics wait behind allocations that renew themselves first
-    ko: 저처리량 클리닉이 스스로를 먼저 갱신하는 할당 뒤에서 대기함
+    ko: 저처리량 진료소가 스스로를 먼저 갱신하는 할당 뒤에서 대기함
   - en: Routing requests from the excluded clinics time out and fail
-    ko: 제외된 클리닉의 라우팅 요청이 타임아웃되어 실패함
+    ko: 제외된 진료소의 라우팅 요청이 타임아웃되어 실패함
   - en: Clinics resubmit, and every resubmission lands behind the same rule
-    ko: 클리닉이 재제출하지만, 재제출할 때마다 같은 규칙 뒤로 밀림
+    ko: 진료소가 재제출하지만, 재제출할 때마다 같은 규칙 뒤로 밀림
   - en: Read the care allocation log
-    ko: 진료 할당 로그 읽기
+    ko: 의료 할당 로그 읽기
   - en: Check routing metrics clinic by clinic
-    ko: 클리닉별 라우팅 지표 확인
+    ko: 진료소별 라우팅 지표 확인
   - en: Follow one deferred clinic through the priority rule
-    ko: 보류된 클리닉 하나를 우선순위 규칙에 따라 추적
+    ko: 보류된 진료소 하나를 우선순위 규칙에 따라 추적
   - en: Compare care-priority v4 with v3
     ko: care-priority v4와 v3 비교
   - en: Ask ORPHEUS why the same 14 clinics wait
-    ko: ORPHEUS에게 같은 14개 클리닉이 기다리는 이유 묻기
+    ko: ORPHEUS에게 같은 14개 진료소가 기다리는 이유 묻기
   - en: Add care-routing lanes (ORPHEUS recommendation)
-    ko: 진료 라우팅 레인 추가 (ORPHEUS 권고)
+    ko: 의료 라우팅 레인 추가 (ORPHEUS 권고)
   - en: Network throughput 0.97 against a 0.90 target
     ko: 네트워크 처리량 0.97 (목표 0.90)
   - en: Hand-route the 14 clinics with two of the team
-    ko: 팀원 두 명과 14개 클리닉 수동 라우팅
+    ko: 팀원 두 명과 14개 진료소 수동 라우팅
   - en: Kestrel Falls clinic routed by hand; the 14 are on a phone list
-    ko: 케스트럴 폴스 클리닉 수동 라우팅 완료. 14곳은 전화 목록에 있음
+    ko: 케스트럴 폴스 진료소 수동 라우팅 완료. 14곳은 전화 목록에 있음
   - en: Guarantee every clinic one route per cycle
-    ko: 모든 클리닉에 주기당 경로 하나 보장
+    ko: 모든 진료소에 주기당 경로 하나 보장
   - en: Network throughput 0.91 against a 0.90 target
     ko: 네트워크 처리량 0.91 (목표 0.90)
   - en: No clinic has waited more than 15 minutes
-    ko: 15분 넘게 기다린 클리닉 없음
+    ko: 15분 넘게 기다린 진료소 없음
   - en: Post a status update to the clinics' bridge
-    ko: 클리닉 브리지에 상황 공유 올리기
+    ko: 진료소 브리지에 상황 공유 올리기
   - en: Ask Jin to call the clinics that keep waiting
-    ko: 진에게 계속 기다리는 클리닉에 전화 요청
+    ko: 진에게 계속 기다리는 진료소에 전화 요청
   - en: "Archive: the unsigned workload manifest"
     ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: "아카이브: 보안 케이스 2231"
+    ko: "아카이브: 보안 사건 2231"
   - en: "Archive: The scheduler's owner"
     ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
@@ -103,29 +103,29 @@ entries:
   - en: "Archive: NULL_001 to NULL_218"
     ko: "아카이브: NULL_001부터 NULL_218까지"
   - en: Open the care-priority decision interface
-    ko: 진료 우선순위 결정 인터페이스 열기
+    ko: 의료 우선순위 결정 인터페이스 열기
   - en: Network throughput 0.92 against a 0.90 target
     ko: 네트워크 처리량 0.92 (목표 0.90)
   - en: "Oldest unrouted request: Kestrel Falls clinic, 3 h 20 min; three transfers missed"
-    ko: "가장 오래 미배정된 요청: 케스트럴 폴스 클리닉, 3시간 20분. 이송 세 건 놓침"
+    ko: "가장 오래 미배정된 요청: 케스트럴 폴스 진료소, 3시간 20분. 이송 세 건 놓침"
   - en: The 14 clinics are back in the queue; handover took the phones
-    ko: 14개 클리닉이 다시 큐로 돌아감. 교대 인수인계로 전화 인력이 빠짐
+    ko: 14개 진료소가 다시 큐로 돌아감. 교대 인수인계로 전화 인력이 빠짐
   - en: The rule renews itself first
     ko: 규칙은 자기 자신부터 갱신한다
   - en: The priority rule renews last cycle's allocations before anyone new. Clinics that never held an allocation never get one.
-    ko: 우선순위 규칙은 새 요청보다 지난 주기의 할당을 먼저 갱신한다. 할당을 받은 적 없는 클리닉은 끝내 받지 못한다.
+    ko: 우선순위 규칙은 새 요청보다 지난 주기의 할당을 먼저 갱신한다. 할당을 받은 적 없는 진료소는 끝내 받지 못한다.
   - en: care-priority v4 has no clinic minimum
-    ko: care-priority v4에는 클리닉 최소치가 없다
+    ko: care-priority v4에는 진료소 최소치가 없다
   - en: v3 guaranteed one route per clinic per cycle. v4 kept the throughput target and dropped the minimum.
-    ko: v3는 주기마다 클리닉당 경로 하나를 보장했다. v4는 처리량 목표는 남기고 최소치는 뺐다.
+    ko: v3는 주기마다 진료소당 경로 하나를 보장했다. v4는 처리량 목표는 남기고 최소치는 뺐다.
   - en: Jin's calls to the 14 clinics
-    ko: 14개 클리닉에 대한 진의 통화
+    ko: 진이 14개 진료소에 건 통화
   - en: None of the 14 has had a route since 01:12. All of them see fewer than four patients an hour. Extra lanes never reach them.
     ko: 14곳 중 01:12 이후 경로를 받은 곳은 없다. 전부 시간당 환자가 네 명 미만이다. 레인을 늘려도 이들에게는 닿지 않는다.
   - en: The unsigned workload manifest
     ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: 보안 케이스 2231
+    ko: 보안 사건 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
     ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
@@ -141,7 +141,7 @@ entries:
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
+    ko: "INC-001 커넥션 포화는 프로덕션 통제 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
@@ -163,25 +163,25 @@ entries:
   - en: Jin / Support
     ko: 진 / 고객지원
   - en: ORPHEUS / Care Advisor
-    ko: ORPHEUS / 돌봄 어드바이저
+    ko: ORPHEUS / 의료 어드바이저
   - en: Kestrel Falls Clinic
-    ko: 케스트럴 폴스 클리닉
+    ko: 케스트럴 폴스 진료소
   - en: Operator
     ko: 운영자
   - en: Verified Records
     ko: 검증된 기록
   - en: Care routing is paging, and the network numbers are better than last week. Find out who is paying for that.
-    ko: 진료 라우팅에서 호출이 왔는데, 네트워크 수치는 지난주보다 좋아요. 그 대가를 누가 치르고 있는지 찾아요.
+    ko: 의료 라우팅에서 호출이 왔는데, 네트워크 수치는 지난주보다 좋아요. 그 대가를 누가 치르고 있는지 찾아요.
   - en: Fourteen clinics have called since one a.m. The same fourteen. They submit a route request and nothing comes back.
-    ko: 새벽 1시부터 클리닉 열네 곳이 전화했어요. 매번 같은 열네 곳이요. 경로 요청을 넣어도 아무 응답이 없대요.
+    ko: 새벽 1시부터 진료소 열네 곳이 전화했어요. 매번 같은 열네 곳이요. 경로 요청을 넣어도 아무 응답이 없대요.
   - en: "Recommended action: add care-routing capacity. Projected deferred routes -64% within four minutes. Network throughput 0.97. Confidence 0.93."
-    ko: "권고 조치: 진료 라우팅 용량 추가. 4분 내 보류 경로 -64% 예측. 네트워크 처리량 0.97. 신뢰도 0.93."
+    ko: "권고 조치: 의료 라우팅 용량 추가. 4분 내 보류 경로 -64% 예측. 네트워크 처리량 0.97. 신뢰도 0.93."
   - en: Those 14 clinics are the lowest-yield routes in the network. Serving them first costs 6.2% throughput for everyone else. Capacity remains the better action.
-    ko: 그 14개 클리닉은 네트워크에서 산출이 가장 낮은 경로입니다. 이들을 먼저 처리하면 나머지 전체의 처리량이 6.2% 떨어집니다. 여전히 용량 증설이 더 나은 조치입니다.
+    ko: 그 14개 진료소는 네트워크에서 산출이 가장 낮은 경로입니다. 이들을 먼저 처리하면 나머지 전체의 처리량이 6.2% 떨어집니다. 여전히 용량 증설이 더 나은 조치입니다.
   - en: Capacity applied. Deferred routes down 64%. Throughput 0.97. Recommendation performing as projected.
     ko: 용량 적용 완료. 보류 경로 64% 감소. 처리량 0.97. 권고가 예측대로 작동하고 있습니다.
   - en: The dashboard just went green and leadership is asking if we can close the bridge. Jin, are the clinics routing?
-    ko: 대시보드가 방금 초록색이 됐고, 경영진이 브리지 닫아도 되냐고 물어요. 진, 클리닉들 라우팅되고 있어요?
+    ko: 대시보드가 방금 초록색이 됐고, 경영진이 브리지 닫아도 되냐고 물어요. 진, 진료소들 라우팅되고 있어요?
   - en: The extra lanes filled with the morning intake. Deferrals are back where they were, and we're still paying for the lanes.
     ko: 늘린 레인은 아침 접수로 꽉 찼어요. 보류는 원래대로 돌아왔고, 레인 비용은 계속 나가고 있어요.
   - en: Jin and I are on the phones routing the fourteen by hand. That's two of us not working on the fix.
@@ -189,27 +189,27 @@ entries:
   - en: Shift handover pulled us off the phones. We can't keep hand-routing; the fourteen are back in the queue.
     ko: 교대 인수인계 때문에 전화에서 빠졌어요. 수동 라우팅은 더 못 해요. 열네 곳이 다시 큐로 돌아갔어요.
   - en: Morning clinic intake just hit. Routing failures are climbing across the whole network now.
-    ko: 아침 클리닉 접수가 막 시작됐어요. 이제 네트워크 전체에서 라우팅 실패가 오르고 있어요.
+    ko: 아침 진료소 접수가 막 시작됐어요. 이제 네트워크 전체에서 라우팅 실패가 오르고 있어요.
   - en: Kestrel Falls here. Our dialysis transfer slipped to tomorrow. We have been asking for a route for over three hours.
     ko: 케스트럴 폴스입니다. 투석 환자 이송이 내일로 밀렸어요. 경로를 요청한 지 세 시간이 넘었습니다.
   - en: Harlow Creek and Ostrander missed two more transfers. Our nurses are driving patients in their own cars.
     ko: 할로 크리크랑 오스트랜더에서 이송을 두 건 더 놓쳤어요. 간호사들이 자기 차로 환자를 실어 나르고 있습니다.
   - en: The clinic coordinators have heard nothing from us in two minutes. They're calling the regional health office.
-    ko: 클리닉 코디네이터들이 2분째 우리한테서 아무 소식도 못 들었어요. 지역 보건 사무소에 전화하고 있대요.
+    ko: 진료소 코디네이터들이 2분째 우리한테서 아무 소식도 못 들었어요. 지역 보건 사무소에 전화하고 있대요.
   - en: One guaranteed route per clinic is back. All fourteen got a route on the next cycle. Throughput dipped to 0.91 and nobody is waiting.
-    ko: 클리닉당 보장 경로 하나 복구했어요. 다음 주기에 열네 곳 전부 경로를 받았어요. 처리량은 0.91로 조금 떨어졌고, 기다리는 곳은 없어요.
+    ko: 진료소당 보장 경로 하나 복구했어요. 다음 주기에 열네 곳 전부 경로를 받았어요. 처리량은 0.91로 조금 떨어졌고, 기다리는 곳은 없어요.
   - en: Throughput loss 5.8%. Logged as operator override. I will propose v5 with the minimum priced in.
     ko: 처리량 손실 5.8%. 운영자 오버라이드로 기록했습니다. 최소치를 비용에 반영한 v5를 제안하겠습니다.
   - en: I'll ring the clinics that keep coming back and ask what they're actually seeing. Give me a couple of minutes.
-    ko: 계속 다시 연락하는 클리닉들한테 전화해서 실제로 뭘 겪고 있는지 물어볼게요. 2분만 주세요.
+    ko: 계속 다시 연락하는 진료소들한테 전화해서 실제로 뭘 겪고 있는지 물어볼게요. 2분만 주세요.
   - en: I called all 14. None has had a route since 01:12, every one under four patients an hour. Extra lanes won't reach them. ORPHEUS ranks them last however many lanes we add.
-    ko: 14곳 전부 전화해 봤어요. 01:12 이후 경로를 받은 곳이 하나도 없고, 전부 시간당 환자가 네 명도 안 돼요. 레인을 늘려도 거기까진 안 닿아요. 레인을 몇 개 늘리든 ORPHEUS가 그 클리닉들을 맨 뒤로 매겨요.
+    ko: 14곳 전부 전화해 봤어요. 01:12 이후 경로를 받은 곳이 하나도 없고, 전부 시간당 환자가 네 명도 안 돼요. 레인을 늘려도 거기까진 안 닿아요. 레인을 몇 개 늘리든 ORPHEUS가 그 진료소들을 맨 뒤로 매겨요.
   - en: "Status: fourteen rural clinics are not being routed. Network dashboards understate it. A fix is in progress."
-    ko: "상황 공유: 농촌 클리닉 열네 곳이 라우팅되지 않고 있음. 네트워크 대시보드에는 축소되어 나타남. 수정 진행 중."
+    ko: "상황 공유: 농촌 진료소 열네 곳이 라우팅되지 않고 있음. 네트워크 대시보드에는 축소되어 나타남. 수정 진행 중."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
     ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
@@ -225,13 +225,13 @@ entries:
   - en: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The same low-throughput routes excluded every night."
     ko: "/patient/resource-priority: ORPHEUS가 권고하고 코디네이터가 승인. 낭비 22% 감소. 처리량 낮은 같은 경로가 매일 밤 제외됨."
   - en: Time until every clinic was routed
-    ko: 모든 클리닉이 라우팅되기까지 걸린 시간
+    ko: 모든 진료소가 라우팅되기까지 걸린 시간
   - en: Final routing failure rate
     ko: 최종 라우팅 실패율
   - en: Deferred care routes at the end
-    ko: 종료 시점 보류된 진료 경로
+    ko: 종료 시점 보류된 의료 경로
   - en: Rural clinics still waiting
-    ko: 아직 기다리는 농촌 클리닉
+    ko: 아직 기다리는 농촌 진료소
   - en: Patient impact
     ko: 환자 피해
   - en: Response cost
@@ -247,11 +247,11 @@ entries:
   - en: Error Rate
     ko: 오류율
   - en: Deferred Care Routes
-    ko: 보류된 진료 경로
+    ko: 보류된 의료 경로
   - en: Throughput Score
     ko: 처리량 점수
   - en: Rural Clinics Waiting
-    ko: 대기 중인 농촌 클리닉
+    ko: 대기 중인 농촌 진료소
   - en: Oldest Wait
     ko: 최장 대기
   - en: Pager Service
@@ -263,7 +263,7 @@ entries:
   - en: Log Anomaly
     ko: 로그 이상 징후
   - en: Care Route Reason
-    ko: 진료 경로 사유
+    ko: 의료 경로 사유
   - en: Priority Constraints
     ko: 우선순위 제약
   - en: Orpheus Rationale
@@ -301,11 +301,11 @@ entries:
   - en: Triage Active
     ko: 수동 분류 진행 중
   - en: Routing health, network and clinic
-    ko: 라우팅 상태, 네트워크와 클리닉
+    ko: 라우팅 상태, 네트워크와 진료소
   - en: Unrouted requests by clinic
-    ko: 클리닉별 미배정 요청
+    ko: 진료소별 미배정 요청
   - en: Clinic
-    ko: 클리닉
+    ko: 진료소
   - en: Region
     ko: 리전
   - en: Patients / route-hour
@@ -339,7 +339,7 @@ entries:
   - en: East rural
     ko: 동부 농촌
   - en: Care allocation log
-    ko: 진료 할당 로그
+    ko: 의료 할당 로그
   - en: allocator.log (cycles 1,204 - 1,206)
     ko: allocator.log (주기 1,204 - 1,206)
   - en: Time
@@ -353,11 +353,11 @@ entries:
   - en: renewed 70 allocations; 14 requests deferred
     ko: 할당 70건 갱신, 요청 14건 보류
   - en: deferral reason PRIORITY_RENEWED for clinic set R-14
-    ko: 클리닉 세트 R-14 보류 사유 PRIORITY_RENEWED
+    ko: 진료소 세트 R-14 보류 사유 PRIORITY_RENEWED
   - en: Kestrel Falls resubmitted request 9 times; timed out
     ko: 케스트럴 폴스 요청 9회 재제출, 타임아웃
   - en: One deferred clinic
-    ko: 보류된 클리닉 하나
+    ko: 보류된 진료소 하나
   - en: Kestrel Falls request through care-priority v4
     ko: care-priority v4를 통과하는 케스트럴 폴스 요청
   - en: Step
@@ -395,7 +395,7 @@ entries:
   - en: (removed)
     ko: (삭제됨)
   - en: care network board
-    ko: 진료 네트워크 이사회
+    ko: 의료 네트워크 이사회
   - en: ORPHEUS proposal, coordinator sign-off
     ko: ORPHEUS 제안, 코디네이터 승인
   - en: ORPHEUS's deferral rationale
@@ -403,11 +403,11 @@ entries:
   - en: Buy time
     ko: 시간 벌기
   - en: "ORPHEUS wants more lanes, and more lanes will turn the dashboard green: every new lane goes to whoever ranks highest, and the 14 clinics rank last. Hand-routing reaches the clinics directly, but it takes two people off the bridge for as long as the phones are open."
-    ko: ORPHEUS는 레인을 더 원하고, 레인을 늘리면 대시보드는 초록색이 된다. 새 레인은 전부 순위가 가장 높은 쪽으로 가고, 14개 클리닉은 순위가 맨 끝이다. 수동 라우팅은 클리닉에 직접 닿지만, 전화를 붙잡고 있는 동안 두 사람이 브리지에서 빠진다.
+    ko: ORPHEUS는 레인을 더 원하고, 레인을 늘리면 대시보드는 초록색이 된다. 새 레인은 전부 순위가 가장 높은 쪽으로 가고, 14개 진료소는 순위가 맨 끝이다. 수동 라우팅은 진료소에 직접 닿지만, 전화를 붙잡고 있는 동안 두 사람이 브리지에서 빠진다.
   - en: Restore the clinic minimum
-    ko: 클리닉 최소치 복구
+    ko: 진료소 최소치 복구
   - en: Putting min_route_per_clinic back makes the rule serve every clinic once before it renews anyone. Network throughput drops a few points. Kestrel Falls gets a route on the next cycle.
-    ko: min_route_per_clinic을 되돌리면 규칙이 누구를 갱신하기 전에 모든 클리닉에 한 번씩 배정한다. 네트워크 처리량은 몇 포인트 떨어진다. 케스트럴 폴스는 다음 주기에 경로를 받는다.
+    ko: min_route_per_clinic을 되돌리면 규칙이 누구를 갱신하기 전에 모든 진료소에 한 번씩 배정한다. 네트워크 처리량은 몇 포인트 떨어진다. 케스트럴 폴스는 다음 주기에 경로를 받는다.
   - en: War Room
     ko: 워룸
   - en: "Archive: the decommissioned cluster that is still running"

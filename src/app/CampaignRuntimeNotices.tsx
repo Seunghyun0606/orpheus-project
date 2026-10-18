@@ -5,6 +5,8 @@ import type { ResolvedCampaignPackage } from '../scenario/campaign-package.ts';
 import { projectCampaignInvestigation } from '../engine/campaign/investigation.ts';
 import { getFreshRuntimeNarratives } from '../engine/campaign/runtime-delivery.ts';
 import { createRuntimeNoticeQueue, type NoticeTimers } from './runtime-notice-queue.ts';
+import { useI18n, useMessages } from '../i18n/I18n.ts';
+import { campaignNoticeMessages } from './messages/campaign-ending.ts';
 
 const browserTimers: NoticeTimers = {
   start: (callback, ms) => window.setTimeout(callback, ms),
@@ -23,6 +25,8 @@ export function CampaignRuntimeNotices({
   reducedMotion: boolean;
   timers?: NoticeTimers;
 }) {
+  const { ct } = useI18n();
+  const m = useMessages(campaignNoticeMessages);
   const queue = useMemo(() => createRuntimeNoticeQueue(timers), [timers]);
   // A new binding cannot paint an old binding's body before passive cleanup.
   // Retired keys still live in the same queue until this consumer unmounts.
@@ -99,19 +103,13 @@ export function CampaignRuntimeNotices({
   }, [notice, queue, live]);
   if (!notice || !live) return null;
   return (
-    <section
-      className="panel runtime-notice"
-      aria-label="New recorded narrative"
-      aria-live="polite"
-    >
-      <h2>{notice.title}</h2>
-      <p className="campaign-document-text">{notice.body}</p>
-      <p className="console-hint">
-        Filed in this incident&apos;s message history. Dismissing it changes nothing.
-      </p>
-      <a href="#campaign-tools">Go to the message history</a>{' '}
+    <section className="panel runtime-notice" aria-label={m.label} aria-live="polite">
+      <h2>{ct(notice.title)}</h2>
+      <p className="campaign-document-text">{ct(notice.body)}</p>
+      <p className="console-hint">{m.filed}</p>
+      <a href="#campaign-tools">{m.goToHistory}</a>{' '}
       <button type="button" onClick={() => queue.dismiss()}>
-        Dismiss notification
+        {m.dismiss}
       </button>
     </section>
   );

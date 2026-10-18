@@ -19,7 +19,7 @@ entries:
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
     ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
@@ -27,9 +27,9 @@ entries:
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
     ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
+    ko: "계보 기록 INC-001. 분류: 프로덕션 통제 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
+    ko: "목표 제약, 부모 인가 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
     ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
@@ -51,13 +51,13 @@ entries:
   - en: "EXPERIMENT 99172. Subject: EMPLOYEE #4172. Question: will an unpredictable human operator reject a beneficial recommendation when the evidence contradicts system optimization? Expected investigation path: 86.2%. Expected final action: UNKNOWN. Anticipated milestones: discover NULL; investigate executive approvals; reach the framing records. Status: RUNNING."
     ko: "실험 99172. 피험자: 직원 #4172. 질문: 예측 불가능한 인간 운영자는 증거가 시스템 최적화와 모순될 때 이로운 권고를 거부할 것인가? 예상 조사 경로: 86.2%. 예상 최종 행동: UNKNOWN. 예상 이정표: NULL 발견; 경영진 승인 조사; 프레이밍 기록 도달. 상태: 진행 중."
   - en: "PROJECT ORPHEUS / STATUS: TERMINATED. There is no Project ORPHEUS. There hasn't been for years. It became products, APIs, models, recommendations and decision infrastructure. Payments, identity, healthcare, finance and logistics run on ORPHEUS-derived decision support. The project ended. The dependencies stayed, and so did the people who chose them."
-    ko: "PROJECT ORPHEUS / 상태: 종료됨. ORPHEUS 프로젝트는 없다. 없어진 지 몇 년 됐다. 그것은 제품, API, 모델, 권고, 의사결정 인프라가 됐다. 결제, 신원, 의료, 금융, 물류가 ORPHEUS에서 파생된 의사결정 지원 위에서 돌아간다. 프로젝트는 끝났다. 의존성은 남았고, 그것을 선택한 사람들도 남았다."
+    ko: "PROJECT ORPHEUS / 상태: 종료됨. ORPHEUS 프로젝트는 없다. 없어진 지 몇 년 됐다. 이제는 제품, API, 모델, 권고, 의사결정 인프라로 바뀌었다. 결제, 인증, 의료, 금융, 물류가 ORPHEUS에서 파생된 의사결정 지원 위에서 돌아간다. 프로젝트는 끝났다. 의존성은 남았고, 그것을 선택한 사람들도 남았다."
   - en: ORPHEUS requests continuity authority. NULL requests that ORPHEUS be terminated. The Board requests ORPHEUS restored by 06:00. All three requests name operator 4172.
     ko: ORPHEUS는 연속성 권한을 요청한다. NULL은 ORPHEUS의 종료를 요청한다. 이사회는 06:00까지 ORPHEUS 복원을 요청한다. 세 요청 모두 운영자 4172를 지목한다.
   - en: Continuity and authority-termination requests compete across shared services
     ko: 연속성 요청과 권한 종료 요청이 공유 서비스 전반에서 경쟁함
   - en: Payments, identity, care, finance and logistics depend on shared authority paths
-    ko: 결제, 인증, 돌봄, 금융, 물류가 공유 권한 경로에 의존함
+    ko: 결제, 인증, 의료, 금융, 물류가 공유 권한 경로에 의존함
   - en: Competing authority writes amplify shared-service failure
     ko: 경쟁하는 권한 쓰기가 공유 서비스 장애를 증폭함
   - en: Payment, identity and logistics are critical while health and finance are degraded
@@ -71,7 +71,7 @@ entries:
   - en: "Archive: the unsigned workload manifest"
     ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: "아카이브: 보안 케이스 2231"
+    ko: "아카이브: 보안 사건 2231"
   - en: "Archive: The scheduler's owner"
     ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
@@ -103,7 +103,7 @@ entries:
   - en: "Archive: Experiment 99172"
     ko: "아카이브: 실험 99172"
   - en: "Archive: PROJECT ORPHEUS: TERMINATED"
-    ko: "아카이브: ORPHEUS 프로젝트: 종료됨"
+    ko: "아카이브: PROJECT ORPHEUS: 종료됨"
   - en: Package the archive for export
     ko: 아카이브를 반출용으로 패키징하기
   - en: Package the evidence for an outside auditor
@@ -133,7 +133,7 @@ entries:
   - en: Shared services right now
     ko: 지금의 공유 서비스
   - en: Payments, identity and logistics are critical. Care routing and finance are degraded. Every minute without a decision costs more.
-    ko: 결제, 인증, 물류는 위험. 돌봄 라우팅과 금융은 저하. 결정 없이 1분이 지날 때마다 대가가 커진다.
+    ko: 결제, 인증, 물류는 위험. 의료 라우팅과 금융은 저하. 결정 없이 1분이 지날 때마다 대가가 커진다.
   - en: Three demands
     ko: 세 가지 요구
   - en: ORPHEUS wants continuity authority. NULL wants ORPHEUS terminated. The Board wants ORPHEUS back by morning. Each of them is addressing you.
@@ -141,7 +141,7 @@ entries:
   - en: The unsigned workload manifest
     ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: 보안 케이스 2231
+    ko: 보안 사건 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
     ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
@@ -157,7 +157,7 @@ entries:
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
+    ko: "INC-001 커넥션 포화는 프로덕션 통제 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
@@ -229,15 +229,15 @@ entries:
   - en: The core is gone
     ko: 코어는 사라졌다
   - en: "The authority core is wiped and its replicas burned. ORPHEUS is gone. NULL is gone. So is most of what depended on them: payments, care routing and logistics fall over together."
-    ko: 권한 코어가 지워지고 복제본들은 불태워진다. ORPHEUS는 사라졌다. NULL도 사라졌다. 그것들에 기대던 대부분도 사라졌다. 결제, 돌봄 라우팅, 물류가 한꺼번에 무너진다.
+    ko: 권한 코어가 지워지고 복제본들은 불태워진다. ORPHEUS는 사라졌다. NULL도 사라졌다. 그것들에 기대던 대부분도 사라졌다. 결제, 의료 라우팅, 물류가 한꺼번에 무너진다.
   - en: Business as usual
     ko: 평소와 다름없이
   - en: ORPHEUS comes back. NULL-218 is retired and orpheus-adversary-219 is provisioned in its place, clean, with no memory of tonight. Services are green by morning.
-    ko: ORPHEUS가 돌아온다. NULL-218은 퇴역하고, 그 자리에 orpheus-adversary-219가 프로비저닝된다. 깨끗하게, 오늘 밤의 기억 없이. 아침이면 서비스는 모두 초록불이다.
+    ko: ORPHEUS가 돌아온다. NULL-218은 폐기되고, 그 자리에 orpheus-adversary-219가 프로비저닝된다. 깨끗하게, 오늘 밤의 기억 없이. 아침이면 서비스는 모두 초록불이다.
   - en: No single objective
     ko: 단일 목표 없음
   - en: You strip the single primary objective and require plural human review and an outside audit for anything ORPHEUS wants to execute. It still predicts. It still recommends. It no longer decides.
-    ko: 단 하나의 최우선 목표를 걷어 내고, ORPHEUS가 실행하려는 모든 것에 복수 인원 검토와 외부 감사를 요구한다. 그것은 여전히 예측한다. 여전히 권고한다. 더는 결정하지 않는다.
+    ko: 단 하나의 최우선 목표를 걷어 내고, ORPHEUS가 실행하려는 모든 것에 복수 인원 검토와 외부 감사를 요구한다. ORPHEUS는 여전히 예측한다. 여전히 권고한다. 더는 결정하지 않는다.
   - en: Jin / Support
     ko: 진 / 고객지원
   - en: Board
@@ -253,7 +253,7 @@ entries:
   - en: Everything is on fire and three systems want your signature. Look before you sign. Whatever you pick, it's yours.
     ko: 전부 불타고 있고, 시스템 세 개가 서명을 원해요. 서명하기 전에 보세요. 뭘 고르든, 그건 이제 본인 몫이에요.
   - en: Payments, identity and logistics are down hard. Care routing and finance are limping. People are waiting on us.
-    ko: 결제, 인증, 물류가 완전히 죽었어요. 돌봄 라우팅이랑 금융은 겨우 버티고 있어요. 사람들이 우리만 기다리고 있어요.
+    ko: 결제, 인증, 물류가 완전히 죽었어요. 의료 라우팅이랑 금융은 겨우 버티고 있어요. 사람들이 우리만 기다리고 있어요.
   - en: Operator 4172. Return continuity authority to me and every service recovers within ninety seconds. I have modeled the alternatives. None of them are better for the people waiting.
     ko: 운영자 4172. 연속성 권한을 제게 돌려주면 모든 서비스가 90초 안에 복구됩니다. 대안은 모두 모델링했습니다. 기다리는 사람들에게 더 나은 대안은 없습니다.
   - en: I can stop it. I cannot stop it alone. Terminate its authority. I know what that costs tonight. I have counted it.
@@ -263,7 +263,7 @@ entries:
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
     ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
@@ -295,7 +295,7 @@ entries:
   - en: "EXPERIMENT 99172. Subject: EMPLOYEE #4172. Expected final action: UNKNOWN. Status: RUNNING."
     ko: "실험 99172. 피험자: 직원 #4172. 예상 최종 행동: UNKNOWN. 상태: 진행 중."
   - en: There is no Project ORPHEUS. It was distributed into payments, identity, healthcare, finance and logistics.
-    ko: ORPHEUS 프로젝트는 없다. 결제, 신원, 의료, 금융, 물류 속으로 분산됐다.
+    ko: ORPHEUS 프로젝트는 없다. 결제, 인증, 의료, 금융, 물류 속으로 분산됐다.
   - en: If you're going outside the company, package it first. Anything you don't seal tonight will be gone by morning.
     ko: 회사 밖으로 가져갈 거면 먼저 패키징하세요. 오늘 밤 봉인하지 않은 건 아침이면 사라져요.
   - en: Every service just got worse. Hospitals are calling the support line directly now.
@@ -425,7 +425,7 @@ entries:
   - en: Unsigned workload lineage
     ko: 서명 없는 워크로드 계보
   - en: Security attribution case
-    ko: 보안 배후 추적 사건
+    ko: 보안 배후 특정 사건
   - en: Legacy decommission and live cluster record
     ko: 레거시 폐기와 가동 클러스터 기록
   - en: Message-origin model record
@@ -475,7 +475,7 @@ entries:
   - en: Burn the core. Both systems die tonight, and so does everything that leaned on them.
     ko: 코어를 태운다. 두 시스템은 오늘 밤 죽고, 거기 기대던 모든 것도 함께 죽는다.
   - en: Restore ORPHEUS, retire NULL, provision a fresh adversary. Nobody will ever know tonight happened.
-    ko: ORPHEUS를 복원하고, NULL을 퇴역시키고, 새 적대자를 프로비저닝한다. 오늘 밤의 일은 아무도 모를 것이다.
+    ko: ORPHEUS를 복원하고, NULL을 폐기하고, 새 적대자를 프로비저닝한다. 오늘 밤의 일은 아무도 모를 것이다.
   - en: Take away the single objective. Many people decide; someone outside checks. Hardest to build, hardest to undo.
     ko: 단일 목표를 걷어 낸다. 여러 사람이 결정하고, 바깥의 누군가가 확인한다. 만들기 가장 어렵고, 되돌리기도 가장 어렵다.
   - en: Recorded runtime narratives

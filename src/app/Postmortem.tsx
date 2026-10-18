@@ -1,16 +1,17 @@
 import { useEffect, useRef } from 'react';
 
 import type { PostmortemMetric, PostmortemReport } from '../engine/index.ts';
+import { useI18n, useMessages } from '../i18n/I18n.ts';
 import {
   formatElapsed,
   formatScalar,
-  formatSignalValue,
   humanize,
   signalDirectory,
-  signalLabel,
-  type SignalDirectory,
   type SignalPresentation,
 } from './format.ts';
+import { localizedSignals, type LocalizedSignals } from './localized-format.ts';
+import { actionCategoryLabels } from './messages/incident-terms.ts';
+import { postmortemMessages } from './messages/postmortem.ts';
 
 export interface PostmortemProps {
   readonly report: PostmortemReport;
@@ -25,10 +26,10 @@ export interface PostmortemProps {
   readonly signals?: readonly SignalPresentation[];
 }
 
-function formatMetric(metric: PostmortemMetric, directory: SignalDirectory): string {
+function formatMetric(metric: PostmortemMetric, signals: LocalizedSignals): string {
   return metric.source === 'elapsed_time'
     ? formatElapsed(Number(metric.value))
-    : formatSignalValue(metric.refId ?? '', metric.value, directory);
+    : signals.value(metric.refId ?? '', metric.value);
 }
 
 export function Postmortem({
@@ -44,7 +45,13 @@ export function Postmortem({
   signals,
 }: PostmortemProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const directory = signalDirectory(signals);
+  const m = useMessages(postmortemMessages);
+  const categoryLabel = useMessages(actionCategoryLabels);
+  const i18n = useI18n();
+  const { ct, locale } = i18n;
+  const localized = localizedSignals(signalDirectory(signals), i18n);
+  const scalar = (value: Parameters<typeof formatScalar>[0]) =>
+    typeof value === 'string' ? ct(value) : formatScalar(value, undefined, locale);
 
   useEffect(() => {
     headingRef.current?.focus();
@@ -54,27 +61,25 @@ export function Postmortem({
     <main className="postmortem-shell">
       <header className="postmortem-header">
         <div>
-          <p className="eyebrow">VANTAGE SYSTEMS // INCIDENT ARCHIVE</p>
-          <p className="postmortem-kicker">{report.scenarioId} / RESPONSE RECORD</p>
+          <p className="eyebrow">{m.eyebrow}</p>
+          <p className="postmortem-kicker">{m.kicker(report.scenarioId)}</p>
           <h1 ref={headingRef} tabIndex={-1}>
-            Incident postmortem
+            {m.title}
           </h1>
-          <p>
-            {report.scenarioTitle} · Reconstructed from the incident state and recorded actions.
-          </p>
+          <p>{m.subtitle(ct(report.scenarioTitle))}</p>
         </div>
         <div className="postmortem-header-actions">
           {onBackToDesk && (
             <button onClick={onBackToDesk} type="button">
-              Incident desk
+              {m.incidentDesk}
             </button>
           )}
           <button onClick={onReturn} type="button">
-            Return to incident record
+            {m.returnToRecord}
           </button>
           {!reviewOnly && (
             <button onClick={(event) => onRestart(event.currentTarget)} type="button">
-              Restart incident
+              {m.restartIncident}
             </button>
           )}
         </div>
@@ -82,19 +87,16 @@ export function Postmortem({
 
       <section className="postmortem-section" aria-labelledby="postmortem-outcomes">
         <div className="postmortem-section-heading">
-          <span>01 / Measured outcomes</span>
-          <h2 id="postmortem-outcomes">What the response changed</h2>
-          <p>
-            These are observations, not a grade. Time, impact, risk, and action counts come from the
-            completed incident.
-          </p>
+          <span>{m.outcomesEyebrow}</span>
+          <h2 id="postmortem-outcomes">{m.outcomesTitle}</h2>
+          <p>{m.outcomesIntro}</p>
         </div>
         <div className="postmortem-metrics">
           {report.metrics.map((metric) => (
             <article key={metric.id}>
-              <span>{metric.label}</span>
-              <strong>{formatMetric(metric, directory)}</strong>
-              <small>{metric.source.replace('_', ' ')}</small>
+              <span>{ct(metric.label)}</span>
+              <strong>{formatMetric(metric, localized)}</strong>
+              <small>{m.metricSource[metric.source]}</small>
             </article>
           ))}
         </div>
@@ -103,15 +105,15 @@ export function Postmortem({
       <div className="postmortem-columns">
         <section className="postmortem-section" aria-labelledby="postmortem-cause">
           <div className="postmortem-section-heading">
-            <span>02 / Root cause</span>
-            <h2 id="postmortem-cause">Failure mechanism</h2>
+            <span>{m.causeEyebrow}</span>
+            <h2 id="postmortem-cause">{m.causeTitle}</h2>
           </div>
           <div className="postmortem-stack">
             {report.mechanisms.map((mechanism) => (
               <article className="postmortem-finding" key={mechanism.id}>
-                <span>{mechanism.resolved ? 'CONTAINED' : 'NOT CONTAINED'}</span>
-                <h3>{mechanism.label}</h3>
-                {mechanism.description && <p>{mechanism.description}</p>}
+                <span>{mechanism.resolved ? m.contained : m.notContained}</span>
+                <h3>{ct(mechanism.label)}</h3>
+                {mechanism.description && <p>{ct(mechanism.description)}</p>}
               </article>
             ))}
           </div>
@@ -119,18 +121,21 @@ export function Postmortem({
 
         <section className="postmortem-section" aria-labelledby="postmortem-communication">
           <div className="postmortem-section-heading">
-            <span>03 / Communication</span>
-            <h2 id="postmortem-communication">Recorded updates</h2>
+            <span>{m.communicationEyebrow}</span>
+            <h2 id="postmortem-communication">{m.communicationTitle}</h2>
           </div>
           {report.communicationActions.length === 0 ? (
-            <p className="postmortem-empty">No status update was recorded during this response.</p>
+            <p className="postmortem-empty">{m.noCommunication}</p>
           ) : (
             <ol className="postmortem-list">
               {report.communicationActions.map((action) => (
                 <li key={action.sequence}>
-                  <strong>{action.title}</strong>
+                  <strong>{ct(action.title)}</strong>
                   <span>
-                    Action {action.sequence + 1} · {formatElapsed(action.durationSeconds)}
+                    {m.communicationAction(
+                      action.sequence + 1,
+                      formatElapsed(action.durationSeconds),
+                    )}
                   </span>
                 </li>
               ))}
@@ -141,43 +146,33 @@ export function Postmortem({
 
       <section className="postmortem-section" aria-labelledby="postmortem-interventions">
         <div className="postmortem-section-heading">
-          <span>04 / Causal review</span>
-          <h2 id="postmortem-interventions">Mitigation and additional interventions</h2>
-          <p>
-            Non-resolving actions may have changed telemetry or bought time, but did not themselves
-            contain a failure mechanism.
-          </p>
+          <span>{m.interventionsEyebrow}</span>
+          <h2 id="postmortem-interventions">{m.interventionsTitle}</h2>
+          <p>{m.interventionsIntro}</p>
         </div>
         {report.nonResolvingInterventions.length === 0 ? (
-          <p className="postmortem-empty">No non-resolving intervention was recorded.</p>
+          <p className="postmortem-empty">{m.noInterventions}</p>
         ) : (
           <div className="postmortem-stack">
             {report.nonResolvingInterventions.map((action) => (
               <article className="postmortem-finding" key={action.id}>
                 <span>
-                  {action.count} × {formatElapsed(action.durationSeconds)} EACH
+                  {m.interventionCount(action.count, formatElapsed(action.durationSeconds))}
                 </span>
-                <h3>{action.title}</h3>
-                <p>
-                  Did not contain the root cause. This describes its observed effect, not whether
-                  the choice was right or wrong.
-                </p>
+                <h3>{ct(action.title)}</h3>
+                <p>{m.interventionNote}</p>
                 {action.signalChanges.length > 0 && (
                   <ul>
                     {action.signalChanges.map((change, index) => (
                       <li key={`${change.signalId}-${index}`}>
-                        {signalLabel(change.signalId, directory)}:{' '}
+                        {localized.label(change.signalId)}:{' '}
                         {change.previousValue === undefined
                           ? '—'
-                          : formatSignalValue(
-                              change.signalId,
-                              change.previousValue,
-                              directory,
-                            )}{' '}
+                          : localized.value(change.signalId, change.previousValue)}{' '}
                         →{' '}
                         {change.value === undefined
                           ? '—'
-                          : formatSignalValue(change.signalId, change.value, directory)}
+                          : localized.value(change.signalId, change.value)}
                       </li>
                     ))}
                   </ul>
@@ -186,11 +181,9 @@ export function Postmortem({
                   <ul>
                     {action.resourceChanges.map((change, index) => (
                       <li key={`${change.resourceId}-${index}`}>
-                        {humanize(change.resourceId)}:{' '}
-                        {change.previousValue === undefined
-                          ? '—'
-                          : formatScalar(change.previousValue)}{' '}
-                        → {change.value === undefined ? '—' : formatScalar(change.value)}
+                        {ct(humanize(change.resourceId))}:{' '}
+                        {change.previousValue === undefined ? '—' : scalar(change.previousValue)} →{' '}
+                        {change.value === undefined ? '—' : scalar(change.value)}
                       </li>
                     ))}
                   </ul>
@@ -201,16 +194,18 @@ export function Postmortem({
         )}
         {report.temporaryEffects.length > 0 && (
           <div className="postmortem-subsection">
-            <h3>Temporary windows</h3>
+            <h3>{m.temporaryWindows}</h3>
             <ul>
               {report.temporaryEffects.map((effect, index) => (
                 <li key={`${effect.effectId}-${index}`}>
-                  {effect.actionTitle}: {humanize(effect.effectId)} started at{' '}
-                  {formatElapsed(effect.startedAtSeconds)} and{' '}
-                  {effect.expiredAtSeconds === undefined
-                    ? 'remained active at the end of this record'
-                    : `expired at ${formatElapsed(effect.expiredAtSeconds)}`}
-                  .
+                  {m.temporaryWindow(
+                    ct(effect.actionTitle),
+                    ct(humanize(effect.effectId)),
+                    formatElapsed(effect.startedAtSeconds),
+                    effect.expiredAtSeconds === undefined
+                      ? undefined
+                      : formatElapsed(effect.expiredAtSeconds),
+                  )}
                 </li>
               ))}
             </ul>
@@ -218,10 +213,10 @@ export function Postmortem({
         )}
         {report.firedEventIds.length > 0 && (
           <div className="postmortem-subsection">
-            <h3>Delayed conditions observed</h3>
+            <h3>{m.delayedConditions}</h3>
             <ul>
               {report.firedEventIds.map((id, index) => (
-                <li key={`${id}-${index}`}>{humanize(id)}</li>
+                <li key={`${id}-${index}`}>{ct(humanize(id))}</li>
               ))}
             </ul>
           </div>
@@ -230,15 +225,16 @@ export function Postmortem({
 
       <section className="postmortem-section" aria-labelledby="postmortem-actions">
         <div className="postmortem-section-heading">
-          <span>05 / Action record</span>
-          <h2 id="postmortem-actions">What happened, in order</h2>
+          <span>{m.actionsEyebrow}</span>
+          <h2 id="postmortem-actions">{m.actionsTitle}</h2>
         </div>
         <ol className="postmortem-list">
           {report.actions.map((action) => (
             <li key={action.sequence}>
-              <strong>{action.title}</strong>
+              <strong>{ct(action.title)}</strong>
               <span>
-                #{action.sequence + 1} · {action.category} · {formatElapsed(action.durationSeconds)}
+                #{action.sequence + 1} · {categoryLabel[action.category]} ·{' '}
+                {formatElapsed(action.durationSeconds)}
               </span>
             </li>
           ))}
@@ -247,12 +243,12 @@ export function Postmortem({
 
       <footer className="postmortem-footer">
         {!reviewOnly && (
-          <div className="session-controls" aria-label="Local session save controls" role="group">
+          <div className="session-controls" aria-label={m.saveControls} role="group">
             <button onClick={(event) => onSave(event.currentTarget)} type="button">
-              Save session
+              {m.saveSession}
             </button>
             <button onClick={onLoad} type="button">
-              Load saved session
+              {m.loadSession}
             </button>
           </div>
         )}

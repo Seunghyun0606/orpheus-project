@@ -150,6 +150,7 @@ the only form to use.
 | War Room updates                               | 워룸 상황 공유                                          |
 | Project ORPHEUS (prose)                        | ORPHEUS 프로젝트 (record token `PROJECT ORPHEUS` stays) |
 | DEFENDER, ADVERSARY, SOFT CONTROL (codenames)  | unchanged                                               |
+| Identity (sector, service or record field)     | 신원 — one string has one translation everywhere        |
 
 ## Ending names
 

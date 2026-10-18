@@ -18,6 +18,10 @@ import { createCampaignSessionStore } from '../store/campaign-session.ts';
 import { canonicalJson } from '../engine/campaign/canonical.ts';
 import type { CampaignRun } from '../engine/campaign/transitions.ts';
 import type { ResolvedCampaignPackage } from '../scenario/campaign-package.ts';
+import { CampaignGuidance } from './CampaignGuidance.tsx';
+import { PresentationProvider } from './PresentationSettings.tsx';
+import { presentationStorageKey } from './presentation-settings.ts';
+import { installContentDictionary } from '../i18n/content.ts';
 
 afterEach(() => {
   cleanup();
@@ -290,5 +294,85 @@ describe('campaign console helpers', () => {
     expect(newestPackage([])).toBeUndefined();
     expect(actTitle(7)).toBe('Act 7 — THE BOARD');
     expect(actTitle(12)).toBe('Act 12');
+  });
+});
+
+describe('Korean campaign console', () => {
+  const korean = () => {
+    window.localStorage.setItem(presentationStorageKey, JSON.stringify({ language: 'ko' }));
+    installContentDictionary(
+      'ko',
+      new Map([
+        ['Connection Saturation', '커넥션 포화'],
+        ['Fixture investigation logs', '픽스처 조사 로그'],
+        [
+          'TEST ONLY — investigate the operational evidence.',
+          '테스트 전용 — 운영 증거를 조사하세요.',
+        ],
+        ['Restart Payment API', '결제 API 재시작'],
+      ]),
+    );
+  };
+
+  it('shows Korean UI copy and translated authored content without changing the record', async () => {
+    korean();
+    const f = await session();
+    await f.store.getState().start('stage-one', 1001);
+    const before = canonicalJson(f.store.getState().run);
+    const user = userEvent.setup();
+    render(
+      <CampaignDesk store={f.store} composition={f.composition} seed={1001} onBack={vi.fn()} />,
+    );
+    expect(screen.getByRole('heading', { level: 1, name: '6막 — 인간 시스템' })).toBeVisible();
+    expect(screen.getByText('모든 진행 상황이 저장되었습니다.')).toBeVisible();
+    const rotation = screen.getByRole('region', { name: '인시던트 로테이션' });
+    expect(
+      within(rotation).getByRole('button', { name: '계속하기: 커넥션 포화' }),
+    ).toBeInTheDocument();
+    // The status label is translated; the CSS state class stays stable.
+    const item = within(rotation).getByText('커넥션 포화').closest('li')!;
+    expect(item).toHaveClass('rotation-item--in-progress');
+    expect(item).toHaveTextContent('진행 중');
+    const panel = screen.getByRole('region', { name: '픽스처 조사 로그' });
+    expect(within(panel).getByText('테스트 전용 — 운영 증거를 조사하세요.')).toBeVisible();
+    const restart = within(panel).getByRole('button', { name: '결제 API 재시작' });
+    expect(restart).toHaveAccessibleDescription('소요 01:00');
+    // From Act 4 on, ORPHEUS is named in Korean as well.
+    expect(screen.getByRole('link', { name: 'ORPHEUS' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '장애 대응 데스크로 돌아가기' })).toBeVisible();
+    // Switching back to English restores the authored text.
+    await user.selectOptions(screen.getByRole('combobox', { name: '언어' }), 'en');
+    expect(screen.getByRole('heading', { level: 1, name: 'Act 6 — HUMAN SYSTEM' })).toBeVisible();
+    expect(screen.getByRole('region', { name: 'Fixture investigation logs' })).toBeVisible();
+    expect(canonicalJson(f.store.getState().run)).toBe(before);
+  });
+
+  it('keeps the advisor unnamed before Act 4 in Korean', () => {
+    korean();
+    const props = {
+      view: null,
+      prep: undefined,
+      acknowledged: false,
+      blocked: false,
+      presentationRef: { current: null },
+      onPrepare: vi.fn(),
+      onSelect: vi.fn(),
+      onAcknowledge: vi.fn(),
+    };
+    const mounted = render(
+      <PresentationProvider>
+        <CampaignGuidance {...props} act={3} />
+      </PresentationProvider>,
+    );
+    expect(screen.getByRole('heading', { name: '운영 어드바이저' })).toBeVisible();
+    expect(screen.getByText('운영 어드바이저 // 자문 채널')).toBeVisible();
+    expect(screen.getByText('운영 어드바이저는 조용합니다. 기다리는 것이 없습니다.')).toBeVisible();
+    expect(screen.queryByText(/ORPHEUS/)).not.toBeInTheDocument();
+    mounted.rerender(
+      <PresentationProvider>
+        <CampaignGuidance {...props} act={4} />
+      </PresentationProvider>,
+    );
+    expect(screen.getByRole('heading', { name: 'ORPHEUS' })).toBeVisible();
   });
 });

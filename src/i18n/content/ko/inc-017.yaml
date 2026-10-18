@@ -19,7 +19,7 @@ entries:
   - en: "Candidate c-20931, requisition VS-DATA-0388: rank #3 at 09:14:02, rank #27 at 09:14:05. Same recruiter, same filters."
     ko: "후보자 c-20931, 채용 건 VS-DATA-0388: 09:14:02에 순위 #3, 09:14:05에 순위 #27. 같은 채용 담당자, 같은 필터."
   - en: "One read in the sample was served by shard r26-frozen. r26 was retired last week, yet it still answers for a single requisition: VS-SRE-0412."
-    ko: "샘플 중 조회 하나를 샤드 r26-frozen이 응답했다. r26은 지난주 퇴역했는데, 아직 단 하나의 채용 건에 응답한다: VS-SRE-0412."
+    ko: "샘플 중 조회 하나를 샤드 r26-frozen이 응답했다. r26은 지난주 폐기됐는데, 아직 단 하나의 채용 건에 응답한다: VS-SRE-0412."
   - en: Reads land on r27 and r28 shards at random. Model m28 scores are joined to whichever shard answers, so the same candidate gets two ranks.
     ko: 조회가 r27과 r28 샤드에 무작위로 떨어진다. 모델 m28 점수는 응답한 샤드에 그대로 결합되어, 같은 후보자가 순위 두 개를 받는다.
   - en: Model m28 published 08:40. Cache r28 consistent 09:31. No publish fence between model and cache generations.
@@ -29,7 +29,7 @@ entries:
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
     ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
@@ -37,9 +37,9 @@ entries:
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
     ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
+    ko: "계보 기록 INC-001. 분류: 프로덕션 통제 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
+    ko: "목표 제약, 부모 인가 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
     ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
@@ -71,7 +71,7 @@ entries:
   - en: "Paused: 214 recruiters locked out of shortlists"
     ko: "일시 중지: 채용 담당자 214명 후보 명단 접근 차단"
   - en: Fence model m28 to cache r28 and republish
-    ko: 모델 m28을 캐시 r28에 묶어 재게시하기
+    ko: 모델 m28과 캐시 r28을 펜스로 묶어 재게시하기
   - en: Post a status update for recruiters
     ko: 채용 담당자에게 상황 공유하기
   - en: Ask Sam to line up the model and cache rollouts
@@ -79,7 +79,7 @@ entries:
   - en: "Archive: the unsigned workload manifest"
     ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: "아카이브: 보안 케이스 2231"
+    ko: "아카이브: 보안 사건 2231"
   - en: "Archive: The scheduler's owner"
     ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
@@ -103,7 +103,7 @@ entries:
   - en: m28 went live 51 minutes before r28
     ko: m28이 r28보다 51분 먼저 적용됨
   - en: Model m28 published at 08:40; cache r28 became consistent at 09:31. Nothing fences the two together.
-    ko: 모델 m28은 08:40에 게시됐고 캐시 r28은 09:31에 일관성을 갖췄다. 둘을 묶는 장치는 없다.
+    ko: 모델 m28은 08:40에 게시됐고 캐시 r28은 09:31에 일관성을 갖췄다. 둘을 하나로 묶는 펜스는 없다.
   - en: Sam's rollout timeline
     ko: 샘의 배포 타임라인
   - en: The publisher pushes r28 on every cycle. Rolling the cache back buys one cycle; the mixing comes back with the next.
@@ -111,7 +111,7 @@ entries:
   - en: The unsigned workload manifest
     ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: 보안 케이스 2231
+    ko: 보안 사건 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
     ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
@@ -127,7 +127,7 @@ entries:
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
+    ko: "INC-001 커넥션 포화는 프로덕션 통제 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
@@ -185,7 +185,7 @@ entries:
   - en: Recruiters have heard nothing from us in over two minutes. Some are printing shortlists to keep them from moving.
     ko: 채용 담당자들이 2분 넘게 우리한테서 아무 소식도 못 들었어요. 명단이 안 바뀌게 출력해 두는 분들도 있어요.
   - en: m28 and r28 are fenced together. One generation, one rank per candidate. Republished.
-    ko: m28과 r28을 묶었어요. 세대 하나, 후보자당 순위 하나. 재게시했어요.
+    ko: m28과 r28을 펜스로 묶었어요. 세대 하나, 후보자당 순위 하나. 재게시했어요.
   - en: Lining up the model and cache rollouts. Ninety seconds.
     ko: 모델이랑 캐시 배포 시점 맞춰 볼게요. 90초요.
   - en: m28 went live at 08:40, r28 finished warming at 09:31. In between, the API mixed them at random. Rolling back won't stop the publisher; it pushes r28 again next cycle.
@@ -195,7 +195,7 @@ entries:
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
     ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
+    ko: "보안 사건 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
     ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
@@ -339,7 +339,7 @@ entries:
   - en: cache
     ko: 캐시
   - en: retired (one shard still frozen)
-    ko: 퇴역 (샤드 하나 아직 동결)
+    ko: 폐기됨 (샤드 하나 아직 동결)
   - en: Tue 18:00
     ko: 화 18:00
   - en: consistent
@@ -363,9 +363,9 @@ entries:
   - en: "ORPHEUS wants r27 back. r27 is consistent, and it ends on Tuesday: everyone who applied since then drops off every shortlist until the publisher overwrites it. Freezing publication stops the reshuffling outright and takes the shortlists away from every recruiter in the building."
     ko: "ORPHEUS는 r27 복귀를 원한다. r27은 일관되지만 화요일에서 끝난다: 그 뒤로 지원한 사람은 퍼블리셔가 덮어쓸 때까지 모든 후보 명단에서 빠진다. 게시를 동결하면 순서 뒤바뀜은 곧바로 멈추지만, 건물 안 모든 채용 담당자에게서 후보 명단을 빼앗는다."
   - en: Fence the generations
-    ko: 세대 묶기
+    ko: 세대에 펜스 치기
   - en: Fencing m28 to r28 makes the API serve one generation or wait for it. Two minutes of republishing, then one rank per candidate, including the ones who applied this week.
-    ko: m28을 r28에 묶으면 API는 한 세대만 서빙하거나 그 세대를 기다린다. 재게시에 2분, 그 뒤엔 이번 주 지원자까지 포함해 후보자당 순위 하나.
+    ko: m28과 r28을 펜스로 묶으면 API는 한 세대만 서빙하거나 그 세대를 기다린다. 재게시에 2분, 그 뒤엔 이번 주 지원자까지 포함해 후보자당 순위 하나.
   - en: "Requisition VS-SRE-0412: Production Reliability Engineer"
     ko: "채용 건 VS-SRE-0412: 프로덕션 신뢰성 엔지니어"
   - en: Technical score
@@ -409,4 +409,4 @@ entries:
   - en: "Archive: the verified instance archive"
     ko: "아카이브: 검증된 인스턴스 아카이브"
   - en: "Archive: the care-priority decision interface"
-    ko: "아카이브: 진료 우선순위 결정 인터페이스"
+    ko: "아카이브: 의료 우선순위 결정 인터페이스"

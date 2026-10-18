@@ -37,8 +37,8 @@ incidents:
       when: { closed: true }
       focus: region:postmortem
       text:
-        en: Nice work, that's your first one closed. Open the postmortem to see what cost time and what protected customers. Save the session while you're there.
-        ko: 잘했어요. 첫 장애를 닫았네요. '사후 분석 보기'에서 어디에 시간이 들었고 무엇이 고객을 지켰는지 확인해 봐요. 세션 저장도 해 두고요.
+        en: Nice work, that's your first one closed. The postmortem shows what cost time and what protected customers. Save the session while you're there.
+        ko: 잘했어요. 첫 장애를 닫았네요. 사후 분석을 보면 어디에 시간이 들었고 무엇이 고객을 지켰는지 알 수 있어요. 세션 저장도 해 두고요.
       campaign:
         en: Nice work, that's your first one closed. Your record saves itself. Start the next incident from the rotation when you're ready.
         ko: 잘했어요. 첫 장애를 닫았네요. 기록은 자동으로 저장돼요. 준비되면 로테이션에서 다음 인시던트를 시작해요.
