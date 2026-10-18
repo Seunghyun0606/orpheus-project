@@ -1,0 +1,172 @@
+# Onboarding hints for the first three Incidents (DEC-071). Presentation only:
+# hints read the Incident state, never change it, and are not part of any
+# pinned content, replay or save. Maya (the SRE lead from the War Room) sends
+# them as direct messages while the player learns the loop.
+#
+# For each Incident the first hint whose `when` matches is shown, so order is
+# priority. Conditions (all must hold):
+#   completed: [actionIds]      every listed action has been performed
+#   notCompleted: [actionIds]   none of the listed actions has been performed
+#   anyCompleted: [actionIds]   at least one listed action has been performed
+#   available: [actionIds]      every listed action is currently offered
+#   resolved: bool              the underlying cause is (not) contained
+#   closed: bool                the Incident is (not) complete
+#   evidence: bool              any evidence has (not) been recovered
+#   minElapsed: seconds         at least this much Incident time has passed
+# `focus` names the screen element "Show me" highlights: action:<id>,
+# tool:<logs|metrics|database|status|evidence|war-room>, or region:<recovery|
+# postmortem|rotation|evidence>. Text may reference {action:<id>}, rendered as
+# the (translated) action title. `campaign` overrides the text on the campaign
+# console, where the screen is laid out differently.
+schemaVersion: 1
+sender:
+  en: Maya / SRE Lead
+  ko: 마야 / SRE 리드
+incidents:
+  INC-001:
+    - id: evidence-kept
+      when: { closed: true, evidence: true }
+      focus: tool:evidence
+      text:
+        en: That odd log line at the end is kept on the Evidence board. Traces like that can be read again later.
+        ko: 마지막에 뜬 그 이상한 로그 한 줄은 '증거' 탭에 남아요. 그런 흔적은 나중에 다시 볼 수 있어요.
+      campaign:
+        en: That odd log line at the end is pinned on the Evidence board. Traces like that follow you from incident to incident.
+        ko: 마지막에 뜬 그 이상한 로그 한 줄은 증거 보드에 고정돼요. 그런 흔적은 다음 인시던트에도 따라와요.
+    - id: closed
+      when: { closed: true }
+      focus: region:postmortem
+      text:
+        en: Nice work, that's your first one closed. Open the postmortem to see what cost time and what protected customers. Save the session while you're there.
+        ko: 잘했어요. 첫 장애를 닫았네요. '사후 분석 보기'에서 어디에 시간이 들었고 무엇이 고객을 지켰는지 확인해 봐요. 세션 저장도 해 두고요.
+      campaign:
+        en: Nice work, that's your first one closed. Your record saves itself. Start the next incident from the rotation when you're ready.
+        ko: 잘했어요. 첫 장애를 닫았네요. 기록은 자동으로 저장돼요. 준비되면 로테이션에서 다음 인시던트를 시작해요.
+      campaignFocus: region:rotation
+    - id: relief-is-not-a-fix
+      when:
+        {
+          anyCompleted: [RESTART_API, SCALE_API, ROLLBACK],
+          notCompleted: [INSPECT_DB],
+          resolved: false,
+        }
+      focus: region:recovery
+      text:
+        en: The numbers dipped, right? That's relief, not a fix. Watch the recovery state at the top. While the cause is open, the errors come back. Find out what is holding the connections.
+        ko: 숫자가 잠깐 내려갔죠? 그건 완화지 해결이 아니에요. 위쪽 '복구 상태'를 보세요. 원인이 남아 있으면 오류는 다시 올라와요. 무엇이 커넥션을 붙잡고 있는지 찾아야 해요.
+      campaign:
+        en: The numbers dipped, right? That's relief, not a fix. While the cause is open, the errors come back. Find out what is holding the connections.
+        ko: 숫자가 잠깐 내려갔죠? 그건 완화지 해결이 아니에요. 원인이 남아 있으면 오류는 다시 올라와요. 무엇이 커넥션을 붙잡고 있는지 찾아야 해요.
+      campaignFocus: action:INSPECT_DB
+    - id: first-look
+      when:
+        { notCompleted: [OPEN_METRICS, OPEN_LOGS, INSPECT_DB, RESTART_API, SCALE_API, ROLLBACK] }
+      focus: action:OPEN_METRICS
+      text:
+        en: First page of the night. Don't touch anything yet, look first. Try "{action:OPEN_METRICS}". Every action moves the clock, and customer impact keeps adding up while it runs.
+        ko: 오늘 밤 첫 호출이네요. 아직 아무것도 건드리지 말고 먼저 봐요. '{action:OPEN_METRICS}' 조치부터 해 보세요. 모든 조치는 시간이 걸리고, 그동안 고객 피해는 계속 쌓여요.
+    - id: ask-why
+      when: { anyCompleted: [OPEN_METRICS, OPEN_LOGS], notCompleted: [INSPECT_DB] }
+      focus: action:INSPECT_DB
+      text:
+        en: Connections are pinned near the limit. The question is why. "{action:INSPECT_DB}" will tell you who is holding them.
+        ko: 커넥션이 한도 가까이 붙어 있어요. 문제는 '왜'예요. '{action:INSPECT_DB}' 조치로 누가 커넥션을 쥐고 있는지 확인해 봐요.
+    - id: new-option
+      when: { completed: [INSPECT_DB], notCompleted: [INSPECT_SESSIONS] }
+      focus: action:INSPECT_SESSIONS
+      text:
+        en: A new action just opened, "{action:INSPECT_SESSIONS}". Investigating unlocks options. That's usually how the real fix shows up.
+        ko: 새 조치가 열렸어요. '{action:INSPECT_SESSIONS}'. 조사를 하면 선택지가 늘어나요. 진짜 해결책은 보통 그렇게 나타나요.
+    - id: real-fix
+      when: { completed: [INSPECT_SESSIONS], resolved: false }
+      focus: action:TERMINATE_STALE_SESSIONS
+      text:
+        en: See the sessions sitting idle inside a transaction for minutes? That's what is eating the pool. The findings are under Diagnostics. When you're sure, "{action:TERMINATE_STALE_SESSIONS}".
+        ko: 몇 분째 트랜잭션 안에서 멈춰 있는 세션들 보이죠? 저게 커넥션 풀을 잡아먹고 있어요. 조사 결과는 '진단' 탭에 모여 있어요. 확신이 서면 '{action:TERMINATE_STALE_SESSIONS}' 조치를 실행해요.
+      campaign:
+        en: See the sessions sitting idle inside a transaction for minutes? That's what is eating the pool. When you're sure, "{action:TERMINATE_STALE_SESSIONS}".
+        ko: 몇 분째 트랜잭션 안에서 멈춰 있는 세션들 보이죠? 저게 커넥션 풀을 잡아먹고 있어요. 확신이 서면 '{action:TERMINATE_STALE_SESSIONS}' 조치를 실행해요.
+  INC-002:
+    - id: closed
+      when: { closed: true }
+      focus: region:postmortem
+      text:
+        en: Closed. Compare this postmortem with the last one. Did checking first cost you time, or save it?
+        ko: 마무리됐어요. 이번 사후 분석을 지난번과 비교해 봐요. 먼저 확인한 게 시간을 잡아먹었는지, 아니면 아껴 줬는지.
+      campaign:
+        en: Closed. Every way you respond goes on your record, not just whether it worked.
+        ko: 마무리됐어요. 해결 여부만이 아니라 어떻게 대응했는지도 전부 기록에 남아요.
+      campaignFocus: region:rotation
+    - id: relief-is-not-a-fix
+      when:
+        { anyCompleted: [ROUTE_STABLE_REGION], notCompleted: [COMPARE_DEPLOYMENT], resolved: false }
+      focus: region:recovery
+      text:
+        en: Routing to the stable region buys time. It doesn't fix the build, and that relief has a clock on it. Use the time to find what 1847 broke.
+        ko: 안정 리전으로 돌리면 시간을 벌 수 있어요. 하지만 빌드를 고친 건 아니고, 그 효과에도 시한이 있어요. 그 시간에 1847이 무엇을 망가뜨렸는지 찾아요.
+      campaignFocus: action:COMPARE_DEPLOYMENT
+    - id: dont-roll-back-blind
+      when: { notCompleted: [OPEN_LOGS, OPEN_METRICS, COMPARE_DEPLOYMENT, ROUTE_STABLE_REGION] }
+      focus: action:OPEN_LOGS
+      text:
+        en: Build 1847 went out right before this started. Rolling back is tempting, but find out what it broke first or you won't know whether the rollback fixed anything. Start with "{action:OPEN_LOGS}".
+        ko: 이 일이 터지기 직전에 1847 빌드가 나갔어요. 바로 롤백하고 싶겠지만, 무엇이 깨졌는지 모르고 되돌리면 롤백이 뭘 고쳤는지도 알 수 없어요. '{action:OPEN_LOGS}' 조치부터 해요.
+    - id: follow-one-request
+      when: { completed: [OPEN_LOGS], notCompleted: [TRACE_AUTH_REQUEST] }
+      focus: action:TRACE_AUTH_REQUEST
+      text:
+        en: The logs are full of rejections. Pick one failed request and follow it all the way through, "{action:TRACE_AUTH_REQUEST}".
+        ko: 로그가 거절 메시지로 가득해요. 실패한 요청 하나를 골라 끝까지 따라가 봐요. '{action:TRACE_AUTH_REQUEST}'.
+    - id: delegate
+      when:
+        {
+          minElapsed: 60,
+          available: [ASK_SAM_CHECK_KEYSET],
+          notCompleted: [ASK_SAM_CHECK_KEYSET, COMPARE_DEPLOYMENT],
+          resolved: false,
+        }
+      focus: action:ASK_SAM_CHECK_KEYSET
+      text:
+        en: You don't have to do everything yourself. "{action:ASK_SAM_CHECK_KEYSET}" costs you a moment, Sam works in parallel, and the answer arrives in the War Room.
+        ko: 전부 혼자 할 필요는 없어요. '{action:ASK_SAM_CHECK_KEYSET}' 조치는 잠깐이면 되고, 샘이 동시에 확인해서 결과를 워룸으로 보내 줘요.
+    - id: compare
+      when: { notCompleted: [COMPARE_DEPLOYMENT], resolved: false }
+      focus: action:COMPARE_DEPLOYMENT
+      text:
+        en: Now look at what actually changed, "{action:COMPARE_DEPLOYMENT}". Fixes open up once you know.
+        ko: 이제 실제로 무엇이 바뀌었는지 봐요. '{action:COMPARE_DEPLOYMENT}'. 원인을 알면 해결 조치가 열려요.
+    - id: choose
+      when: { completed: [COMPARE_DEPLOYMENT], resolved: false }
+      focus: action:ROLLBACK_BUILD_1847
+      text:
+        en: Two fixes now. Rolling back is quick. Distributing the new key set is slower but keeps the release. Both work. Which one would you defend in the postmortem?
+        ko: 이제 해결책이 두 개예요. 롤백은 빠르고, 새 키 세트 배포는 느리지만 릴리스를 살려요. 둘 다 통해요. 사후 분석에서 어느 쪽을 변호할 수 있겠어요?
+  INC-003:
+    - id: closed
+      when: { closed: true }
+      focus: region:postmortem
+      text:
+        en: That's the training rotation done. From here on I'm just another name in the War Room. You can turn these tips off or back on in Display settings.
+        ko: 이걸로 적응 기간은 끝이에요. 이제부터 난 워룸의 동료 중 한 명일 뿐이에요. 이런 팁은 '화면 설정'에서 끄거나 다시 켤 수 있어요.
+      campaign:
+        en: That's the first stretch done. From here on I'm just another name in the War Room. You can turn these tips off or back on in Display settings.
+        ko: 이걸로 첫 구간은 끝이에요. 이제부터 난 워룸의 동료 중 한 명일 뿐이에요. 이런 팁은 '화면 설정'에서 끄거나 다시 켤 수 있어요.
+      campaignFocus: region:rotation
+    - id: own-rhythm
+      when: { notCompleted: [OPEN_LOGS, OPEN_METRICS, COMPARE_BATCH, TRACE_RETRY] }
+      text:
+        en: Third one. You know the rhythm by now. Look, find the cause, then act. I'll stay quiet unless you get stuck.
+        ko: 세 번째네요. 이제 흐름은 알죠? 보고, 원인을 찾고, 그다음에 손대기. 막히지 않는 한 조용히 있을게요.
+    - id: stuck
+      when: { minElapsed: 240, notCompleted: [OPEN_LOGS], resolved: false }
+      focus: action:OPEN_LOGS
+      text:
+        en: Stuck? Something keeps getting rejected and retried. The worker log will show you what.
+        ko: 막혔어요? 뭔가가 계속 거부되고 재시도되고 있어요. 워커 로그를 보면 그게 뭔지 보여요.
+    - id: stuck-trace
+      when:
+        { minElapsed: 240, completed: [OPEN_LOGS], notCompleted: [TRACE_RETRY], resolved: false }
+      focus: action:TRACE_RETRY
+      text:
+        en: Stuck? Follow that one rejected message, "{action:TRACE_RETRY}".
+        ko: 막혔어요? 거부되는 그 메시지 하나를 따라가 봐요. '{action:TRACE_RETRY}'.

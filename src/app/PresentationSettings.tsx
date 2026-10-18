@@ -7,6 +7,7 @@ import {
 } from '../i18n/content.ts';
 import { ContentDictionaryContext, useMessages } from '../i18n/I18n.ts';
 import { defineMessages, isLocale, localeNames, supportedLocales } from '../i18n/locale.ts';
+import { setOnboardingPreferences, useOnboardingPreferences } from '../onboarding/onboarding.ts';
 
 import {
   PresentationContext,
@@ -79,6 +80,7 @@ const messages = defineMessages({
     language: 'Language',
     crt: 'CRT effects',
     reduceAnimation: 'Reduce animation',
+    tips: 'Tips in the first incidents',
     textScale: 'Text scale',
     scaleStandard: 'Standard (100%)',
     scaleLarge: 'Large (125%)',
@@ -93,6 +95,7 @@ const messages = defineMessages({
     language: '언어',
     crt: 'CRT 효과',
     reduceAnimation: '애니메이션 줄이기',
+    tips: '초반 인시던트 팁 보기',
     textScale: '글자 크기',
     scaleStandard: '기본 (100%)',
     scaleLarge: '크게 (125%)',
@@ -107,6 +110,7 @@ const messages = defineMessages({
 export function PresentationSettings() {
   const { preferences, setPreferences } = usePresentationPreferences();
   const m = useMessages(messages);
+  const onboarding = useOnboardingPreferences();
   const update = (patch: Partial<PresentationPreferences>) =>
     setPreferences({ ...preferences, ...patch });
 
@@ -146,6 +150,21 @@ export function PresentationSettings() {
             type="checkbox"
           />
           {m.reduceAnimation}
+        </label>
+        <label>
+          <input
+            checked={onboarding.enabled}
+            onChange={(event) =>
+              // Turning tips back on also brings back the ones already dismissed.
+              setOnboardingPreferences(
+                event.currentTarget.checked
+                  ? { enabled: true, dismissed: [] }
+                  : { ...onboarding, enabled: false },
+              )
+            }
+            type="checkbox"
+          />
+          {m.tips}
         </label>
         <label>
           {m.textScale}

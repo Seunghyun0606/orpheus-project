@@ -2485,3 +2485,57 @@ section[tabindex='-1']:focus-visible {
     border-color: Highlight;
   }
 }
+
+/* Onboarding tips (DEC-071): a colleague's direct message in the first
+   incidents, and a quiet marker on the element it talks about. */
+.onboarding-coach {
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--amber);
+  border-left-width: 4px;
+  background: var(--surface-raised);
+}
+
+.onboarding-coach-sender {
+  margin: 0 0 0.35rem;
+  color: var(--amber);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.onboarding-coach-text {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.onboarding-coach-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.onboarding-coach-actions button {
+  font-size: 0.8rem;
+}
+
+.onboarding-coach-off {
+  margin-left: auto;
+}
+
+[data-onboarding-focus] {
+  outline: 2px dashed var(--amber);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-motion='standard'] [data-onboarding-focus] {
+    animation: onboarding-pulse 1.6s ease-in-out 3;
+  }
+}
+
+@keyframes onboarding-pulse {
+  50% {
+    outline-color: transparent;
+  }
+}

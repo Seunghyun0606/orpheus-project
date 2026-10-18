@@ -1,0 +1,29 @@
+id: DEC-071
+title: Ship a Korean display language and in-fiction onboarding tips for the first incidents
+status: active
+date: '2026-10-18'
+applies_to: [M5, TASK-034, TASK-035]
+human_decision:
+  instruction: 한글버전을 제공하고, 사용자로하여금 자연스럽게 게임 플레이 진행과 조작법에 익숙해지도록 초반 incident에서는 자연스럽게 힌트를 줄수있는 방안을 마련해줘
+  selected_options:
+    language: Korean and English, selectable in Display settings; the first run follows the system language.
+    translation_scope: All UI copy plus the content the current campaign (1.2.0) and the incident desk ship with; older pinned versions fall back to English where their text differs.
+    onboarding: Direct messages from Maya (SRE lead) in INC-001..003 that react to what the player has done, point at the next useful screen element and can be dismissed or turned off.
+    delivery: Branch korean-onboarding with per-phase commits; no push.
+decision: >-
+  Localization and onboarding are presentation layers. Authored content stays
+  English and hash-pinned; Korean text is a separate gettext-style dictionary keyed
+  by the exact English string (src/i18n/content/<locale>/*.yaml, generated and
+  checked by scripts/i18n/content-catalog.mjs). UI copy is defined per language
+  next to the component that renders it, with a type check that both languages
+  define every key. Onboarding tips are authored data (src/onboarding/hints.yaml)
+  evaluated against Incident state at render time.
+constraints:
+  - Content bytes, replay identity, saves and campaign records do not depend on the display language or on tips; the same record replays identically in either language and with tips on or off.
+  - The ORPHEUS name stays hidden before Act 4 in every language.
+  - Every player-facing string of the shipped content has a Korean entry; the content-catalog check fails on new, stale or untranslated strings.
+  - Native installation, signing, push and public release remain separately authorized.
+consequences:
+  - Content changes now also require regenerating and translating the catalogs (npm run i18n:catalogs).
+  - Tips are a viewer preference stored in the browser, independent of the campaign record.
+  - Korean uses installed system fonts behind the bundled Latin monospace face; no web font is fetched under the CSP.
