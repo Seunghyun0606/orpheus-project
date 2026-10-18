@@ -312,6 +312,15 @@
         {
           "speaker": "MAYA",
           "text": "Leadership sees one number. You see fourteen. Pick."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "when": {
+            "pressure": {
+              "gte": 2
+            }
+          }
         }
       ],
       "type": "choice",

@@ -129,6 +129,8 @@ entries:
     ko: "예측된 운영자 대응: 권고 수용. 신뢰도 0.61."
   - en: Lower than it usually is. You notice that.
     ko: 평소보다 낮다. 그게 눈에 걸린다.
+  - en: Support can't keep up. The same failure keeps coming in from every channel.
+    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: Which ranking do the recruiters get?
     ko: 채용 담당자들에게 어느 순위를 줄까?
   - en: "No operator input. Executing recommendation: roll back to cache r27."

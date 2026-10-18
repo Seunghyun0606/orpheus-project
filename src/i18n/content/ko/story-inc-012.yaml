@@ -149,6 +149,8 @@ entries:
     ko: "운영자 예상 반응: 즉시 컷오버. 신뢰도 0.66."
   - en: I see a recommendation to pause my job. Slow, yes. Stopped, no.
     ko: 제 작업을 일시 정지하라는 권고가 보이네요. 늦추는 건 돼요. 멈추는 건 안 돼요.
+  - en: Support can't keep up. The same failure keeps coming in from every channel.
+    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: How do you get the archive off the live pool?
     ko: 아카이브를 실시간 풀에서 어떻게 떼어 낼까?
   - en: "No operator input. Executing recommendation: pause lineage-audit-0931."

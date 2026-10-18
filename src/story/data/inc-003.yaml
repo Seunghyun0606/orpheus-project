@@ -139,6 +139,11 @@ scenes:
     beats:
       - metric: { label: Oldest message, value: 31 min, trend: up }
       - narrate: Nobody is going to make this decision for you. Or almost nobody.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: What happens to the stuck receipt?
     timer:
       seconds: 30

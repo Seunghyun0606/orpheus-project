@@ -158,6 +158,11 @@ scenes:
       - metric: { label: Sign-in failure rate, value: 48%, trend: up }
       - speaker: MAYA
         text: Half of sign-ins are failing and the morning peak has started. I need a decision, not another graph.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: How do you fix it?
     timer:
       seconds: 35

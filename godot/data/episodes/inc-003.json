@@ -293,6 +293,15 @@
         },
         {
           "narrate": "Nobody is going to make this decision for you. Or almost nobody."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "when": {
+            "pressure": {
+              "gte": 2
+            }
+          }
         }
       ],
       "type": "choice",

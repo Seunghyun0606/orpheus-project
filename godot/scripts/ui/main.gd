@@ -34,6 +34,7 @@ const WORD_JOINER := "⁠"
 const MARK_OPEN := "\ue000"
 const MARK_CLOSE := "\ue001"
 const KEYWORD_COLOR := "ffd27f"
+const PRESSURE_SECONDS := 5
 
 ## Pause after each entry has finished typing.
 const REVEAL_DELAY := {
@@ -329,6 +330,8 @@ func _build_episode_screen() -> void:
 	scene_label = _label("", "PromptLabel", false)
 	top.add_child(scene_label)
 	pressure_label = _label("", "DimLabel", false)
+	pressure_label.mouse_filter = Control.MOUSE_FILTER_PASS
+	pressure_label.tooltip_text = UiText.t("pressure_help")
 	top.add_child(pressure_label)
 	var status := _button(UiText.t("status"))
 	status.focus_mode = Control.FOCUS_NONE
@@ -673,7 +676,7 @@ func _show_controls() -> void:
 			_add_choice("[color=#%s]▸ %s[/color]" % [amber, UiText.t("continue")], _submit.bind({"type": "continue"}))
 		"choice":
 			if scene.has("timer") and Settings.timer:
-				timer_total = float(scene["timer"]["seconds"])
+				timer_total = float(_decision_seconds(scene))
 				timer_left = timer_total
 				var row := HBoxContainer.new()
 				row.add_theme_constant_override("separation", 10)
@@ -686,6 +689,9 @@ func _show_controls() -> void:
 				row.add_child(timer_bar)
 				timer_label = _label("", "PromptLabel", false)
 				row.add_child(timer_label)
+				var cut: int = scene["timer"]["seconds"] - _decision_seconds(scene)
+				if cut > 0:
+					row.add_child(_label(UiText.t("pressure_cut") % cut, "DimLabel", false))
 				controls.add_child(row)
 				_update_timer()
 			controls.add_child(_label(_t(scene["prompt"]), "PromptLabel"))
@@ -842,6 +848,8 @@ func _show_summary() -> void:
 				changes.append("%s %s%d" % [UiText.value_name(key), "+" if amount > 0 else "", amount])
 	var changed: String = "   ".join(changes) if not changes.is_empty() else UiText.t("no_change")
 	controls.add_child(_label("%s: %s" % [UiText.t("end_changes_now"), changed], "DimLabel"))
+	if int(state["pressure"]) > 0:
+		controls.add_child(_label(UiText.t("pressure_damage") % [int(state["pressure"]), int(state["pressure"])], "DimLabel"))
 	controls.add_child(_label(UiText.t("see_status"), "DimLabel"))
 	var amber := ThemeBuilder.AMBER.to_html(false)
 	var number := 1
@@ -1086,6 +1094,12 @@ func _change_setting(key: String, value: Variant) -> void:
 		_close_settings()
 		_rebuild()
 		_open_settings()
+
+
+## Pressure costs decision time: five seconds a level, never below fifteen.
+func _decision_seconds(scene: Dictionary) -> int:
+	var seconds: int = scene["timer"]["seconds"]
+	return maxi(mini(15, seconds), seconds - PRESSURE_SECONDS * int(state["pressure"]))
 
 
 ## How much `key` moved since this incident began.

@@ -137,10 +137,12 @@ entries:
     ko: "운영자 4172. 예상 대응: 원인 수리. 신뢰도 0.74."
   - en: "Operator 4172. Predicted response: undetermined. Subject remains low-predictability."
     ko: "운영자 4172. 예상 대응: 판정 불가. 피험자는 여전히 예측 가능성이 낮습니다."
-  - en: Absent a decision, containment executes in forty seconds.
-    ko: 결정이 없으면 40초 후 봉쇄가 실행됩니다.
+  - en: Absent a decision, containment executes when the clock runs out.
+    ko: 결정이 없으면 시간이 다 되는 즉시 봉쇄가 실행됩니다.
   - en: It wrote down your answer already. Surprise it.
     ko: 그건 네 답을 벌써 적어 놨어. 놀라게 해 줘.
+  - en: Support can't keep up. The same failure keeps coming in from every channel.
+    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: What happens to the router?
     ko: 라우터를 어떻게 할까?
   - en: No response from Operator 4172. Executing the recommended containment.

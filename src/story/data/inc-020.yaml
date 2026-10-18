@@ -203,6 +203,11 @@ scenes:
         when: { values: { teamTrust: { lte: 7 } } }
       - speaker: MAYA
         text: Eleven people answered my call for overtime. Say the word and they take it by hand.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: Who takes the recovery queue?
     timer:
       seconds: 35

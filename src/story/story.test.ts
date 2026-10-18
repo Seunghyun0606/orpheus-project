@@ -129,6 +129,40 @@ describe('INC-001 episode', () => {
     expect(twice.pressure).toBe(1);
   });
 
+  it('turns pressure left at the close into collateral damage', () => {
+    const strained = play(inc001, [
+      go,
+      choose('SESSIONS'),
+      deduce('ERROR_SPIKE', 'POOL_AT_LIMIT'),
+      deduce('ERROR_SPIKE', 'IDLE_TRANSACTIONS'),
+      choose('RESTART'),
+      go,
+      choose('MAYA'),
+    ]);
+    expect(strained.pressure).toBe(2);
+    // RESTART's own +1, plus the two levels of pressure left at the close.
+    expect(strained.values.collateralDamage).toBe(3);
+  });
+
+  it('lets colleagues fray once pressure reaches 2', () => {
+    const calm = play(inc001, [
+      go,
+      choose('SESSIONS'),
+      deduce('POOL_AT_LIMIT', 'IDLE_TRANSACTIONS'),
+    ]);
+    const tense = play(inc001, [
+      go,
+      choose('DEPLOY'),
+      deduce('ERROR_SPIKE', 'POOL_AT_LIMIT'),
+      deduce('ERROR_SPIKE', 'CLEAN_DEPLOY'),
+    ]);
+    const frayed = (state: EpisodeState) =>
+      state.feed.some((e) => e.kind === 'line' && e.text.startsWith('Support can'));
+    expect(frayed(calm)).toBe(false);
+    expect(tense.pressure).toBe(2);
+    expect(frayed(tense)).toBe(true);
+  });
+
   it('applies the authored default when the decision timer runs out', () => {
     const state = play(inc001, [
       go,

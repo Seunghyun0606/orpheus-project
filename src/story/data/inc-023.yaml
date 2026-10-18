@@ -219,6 +219,11 @@ scenes:
         text: 'Predicted response, Operator 4172: refreshes capped, decision deferred. Confidence 0.62.'
         when: { values: { operationalSafety: { lte: 7 }, aiDependency: { lte: 8 } } }
       - narrate: It says so before you have touched anything.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: What do the reviewers see?
     timer:
       seconds: 35

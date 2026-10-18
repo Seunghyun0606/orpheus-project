@@ -191,6 +191,11 @@ scenes:
       - speaker: ORPHEUS
         text: 'Predicted operator response: restart. Confidence 0.69.'
         when: { values: { evidence: { lte: 11 } } }
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: How do you clear the holds?
     timer:
       seconds: 35
@@ -263,6 +268,11 @@ scenes:
       - narrate: Three lines in the summary have nothing in the receipt column.
       - speaker: ORPHEUS
         text: Release batch within risk tolerance. No action recommended.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: The batch is out. Do you pull anything back?
     timer:
       seconds: 20

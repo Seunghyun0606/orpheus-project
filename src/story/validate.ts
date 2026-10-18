@@ -123,7 +123,11 @@ export function checkReferences(episode: Episode): string[] {
       );
       for (const option of scene.options) {
         checkCondition(option.when, `${scene.id}.${option.id}`);
-        if (option.when?.values !== undefined || option.when?.alignment !== undefined)
+        if (
+          option.when?.values !== undefined ||
+          option.when?.alignment !== undefined ||
+          option.when?.pressure !== undefined
+        )
           problems.push(
             `${scene.id}.${option.id}: options are gated by choices and flags, not values.`,
           );

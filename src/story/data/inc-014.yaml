@@ -179,6 +179,11 @@ scenes:
         text: Archive requests are failing faster. One of the law firms has stopped being polite.
       - speaker: MAYA
         text: Once arch-c is rebuilt from its peers, whatever only it holds is gone. Your call.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: What happens to arch-c?
     timer:
       seconds: 40

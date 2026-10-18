@@ -379,11 +379,20 @@
         },
         {
           "speaker": "ORPHEUS",
-          "text": "Absent a decision, containment executes in forty seconds."
+          "text": "Absent a decision, containment executes when the clock runs out."
         },
         {
           "speaker": "NULL",
           "text": "It wrote down your answer already. Surprise it."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "when": {
+            "pressure": {
+              "gte": 2
+            }
+          }
         }
       ],
       "type": "choice",

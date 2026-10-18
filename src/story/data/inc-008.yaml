@@ -154,6 +154,11 @@ scenes:
     beats:
       - speaker: PRIYA
         text: Restart is one command. Say go.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: How do you stop the loop?
     timer:
       seconds: 30

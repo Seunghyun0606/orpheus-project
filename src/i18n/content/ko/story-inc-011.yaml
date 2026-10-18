@@ -143,6 +143,8 @@ entries:
     ko: "어드바이저: 운영자 예상 대응 — 대역 블랙홀 처리 · 신뢰도 0.71"
   - en: "advisor: predicted operator response — accept recommendation · confidence 0.77"
     ko: "어드바이저: 운영자 예상 대응 — 권고 수락 · 신뢰도 0.77"
+  - en: Support can't keep up. The same failure keeps coming in from every channel.
+    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: What do you do about g-14?
     ko: g-14를 어떻게 할까?
   - en: "No operator input. Executing recommended action: rate-limit g-14 on lane-a."

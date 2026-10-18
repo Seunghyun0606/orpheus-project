@@ -413,6 +413,15 @@
         {
           "speaker": "MAYA",
           "text": "Synthetic traffic just passed nine thousand a second. Whatever this is, it isn't slowing down on its own."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "when": {
+            "pressure": {
+              "gte": 2
+            }
+          }
         }
       ],
       "type": "choice",

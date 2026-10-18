@@ -161,8 +161,11 @@ msgstr "제가 보기엔 이래요. 트랜잭션 중에 놀고 있는 세션들�
 msgid "Your call"
 msgstr "결단"
 
-msgid "Errors are still climbing. I need a decision in thirty seconds."
-msgstr "오류가 계속 올라가요. 30초 안에 결정해 줘요."
+msgid "Errors are still climbing. I need a decision now."
+msgstr "오류가 계속 올라가요. 지금 결정해 줘요."
+
+msgid "Support can't keep up. The same failure keeps coming in from every channel."
+msgstr "고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요."
 
 msgid "What do you do?"
 msgstr "어떻게 할까요?"
@@ -7565,8 +7568,8 @@ msgstr "운영자 4172. 예상 대응: 원인 수리. 신뢰도 0.74."
 msgid "Operator 4172. Predicted response: undetermined. Subject remains low-predictability."
 msgstr "운영자 4172. 예상 대응: 판정 불가. 피험자는 여전히 예측 가능성이 낮습니다."
 
-msgid "Absent a decision, containment executes in forty seconds."
-msgstr "결정이 없으면 40초 후 봉쇄가 실행됩니다."
+msgid "Absent a decision, containment executes when the clock runs out."
+msgstr "결정이 없으면 시간이 다 되는 즉시 봉쇄가 실행됩니다."
 
 msgid "It wrote down your answer already. Surprise it."
 msgstr "그건 네 답을 벌써 적어 놨어. 놀라게 해 줘."

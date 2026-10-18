@@ -113,6 +113,8 @@ entries:
     ko: 31분
   - en: Nobody is going to make this decision for you. Or almost nobody.
     ko: 이 결정은 아무도 대신 내려 주지 않는다. 아니, 거의 아무도.
+  - en: Support can't keep up. The same failure keeps coming in from every channel.
+    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: What happens to the stuck receipt?
     ko: 막힌 영수증을 어떻게 할까?
   - en: "auto-remediation: head-of-line message exceeded retry budget · action: discard"

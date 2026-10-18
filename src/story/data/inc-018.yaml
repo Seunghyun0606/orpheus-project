@@ -167,6 +167,11 @@ scenes:
       - speaker: ORPHEUS
         text: 'Predicted operator response: accept recommendation. Confidence 0.62.'
         when: { values: { publicInterest: { lte: 1 }, aiDependency: { lte: 5 } } }
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: What do you do for district 9?
     timer:
       seconds: 40

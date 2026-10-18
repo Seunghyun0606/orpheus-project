@@ -209,6 +209,11 @@ scenes:
         when: { values: { operationalSafety: { gte: 9 } } }
       - log: 'advisor: predicted operator response — accept recommendation · confidence 0.72'
         when: { values: { operationalSafety: { lte: 8 } } }
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: What do you do about legacy-r7?
     timer:
       seconds: 35

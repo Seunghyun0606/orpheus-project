@@ -181,6 +181,11 @@ scenes:
       - metric: { label: Journal read failures, value: 31%, trend: up }
       - speaker: ORPHEUS
         text: You have read your prediction, Operator 4172. It accounts for your having read it.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: What do you do about observer-batch?
     timer:
       seconds: 30

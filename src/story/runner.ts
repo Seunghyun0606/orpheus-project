@@ -125,7 +125,10 @@ export function conditionHolds(condition: Condition | undefined, state: EpisodeS
       Object.values(state.solved).some((solved) => solved === condition.solved)) &&
     (condition.timedOut === undefined || state.timedOut.length > 0 === condition.timedOut) &&
     within(condition.values, state.values) &&
-    within(condition.alignment, state.alignment)
+    within(condition.alignment, state.alignment) &&
+    within(condition.pressure ? { pressure: condition.pressure } : undefined, {
+      pressure: state.pressure,
+    })
   );
 }
 
@@ -173,6 +176,9 @@ export function findScene(episode: Episode, sceneId: string): Scene {
 function enter(episode: Episode, draft: Draft, sceneId: string) {
   draft.attempts = 0;
   if (sceneId === END) {
+    // Pressure left at the end of an incident is damage done (DEC-072 A):
+    // it adds to collateral damage for the rest of the campaign.
+    draft.values.collateralDamage += draft.pressure;
     draft.sceneId = null;
     return;
   }

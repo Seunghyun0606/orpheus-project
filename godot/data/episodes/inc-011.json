@@ -365,7 +365,7 @@
           "when": {
             "values": {
               "collateralDamage": {
-                "gte": 20
+                "gte": 38
               }
             }
           }
@@ -375,8 +375,17 @@
           "when": {
             "values": {
               "collateralDamage": {
-                "lte": 19
+                "lte": 37
               }
+            }
+          }
+        },
+        {
+          "speaker": "JIN",
+          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "when": {
+            "pressure": {
+              "gte": 2
             }
           }
         }
@@ -437,7 +446,7 @@
                 "timedOut": false,
                 "values": {
                   "collateralDamage": {
-                    "lte": 19
+                    "lte": 37
                   }
                 }
               }
@@ -448,7 +457,7 @@
                 "timedOut": false,
                 "values": {
                   "collateralDamage": {
-                    "gte": 20
+                    "gte": 38
                   }
                 }
               }
@@ -510,7 +519,7 @@
               "when": {
                 "values": {
                   "collateralDamage": {
-                    "gte": 20
+                    "gte": 38
                   }
                 }
               }
@@ -520,7 +529,7 @@
               "when": {
                 "values": {
                   "collateralDamage": {
-                    "lte": 19
+                    "lte": 37
                   }
                 }
               }

@@ -157,6 +157,11 @@ scenes:
       - metric: { label: Checkout heap (pool average), value: 87%, trend: up }
       - speaker: JIN
         text: The sale opens in a minute. Support still has nothing to tell anyone.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: What do you do about the leak?
     timer:
       seconds: 35

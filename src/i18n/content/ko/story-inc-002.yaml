@@ -123,6 +123,8 @@ entries:
     ko: 결단
   - en: Support queue just doubled. People are retrying their cards over and over.
     ko: 고객지원 대기열이 방금 두 배가 됐어요. 사람들이 카드 결제를 몇 번이고 다시 시도하고 있어요.
+  - en: Support can't keep up. The same failure keeps coming in from every channel.
+    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: How do you fix it?
     ko: 어떻게 고칠까요?
   - en: Out of time. I'm rolling 1847 back.

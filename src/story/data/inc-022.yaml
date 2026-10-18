@@ -164,6 +164,11 @@ scenes:
       - speaker: ORPHEUS
         text: 'Predicted response: accept recommendation. Confidence 0.86.'
         when: { values: { publicInterest: { lte: 9 } } }
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: What happens to the three regions?
     timer:
       seconds: 40

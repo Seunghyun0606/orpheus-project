@@ -63,6 +63,8 @@ static func condition_holds(condition: Variant, state: Dictionary) -> bool:
 	if c.has("timedOut"):
 		if (state["timedOut"].size() > 0) != bool(c["timedOut"]):
 			return false
+	if c.has("pressure") and not _within({"pressure": c["pressure"]}, {"pressure": state["pressure"]}):
+		return false
 	return _within(c.get("values", {}), state["values"]) and _within(c.get("alignment", {}), state["alignment"])
 
 
@@ -214,6 +216,8 @@ static func _deduce(
 static func _enter(episode: Dictionary, state: Dictionary, scene_id: String) -> void:
 	state["attempts"] = 0
 	if scene_id == END:
+		# Pressure left at the end of an incident is damage done.
+		state["values"]["collateralDamage"] += state["pressure"]
 		state["sceneId"] = null
 		return
 	state["sceneId"] = scene_id

@@ -188,6 +188,11 @@ scenes:
         when: { values: { operationalSafety: { lte: 7 } } }
       - speaker: DANA
         text: I see a recommendation to pause my job. Slow, yes. Stopped, no.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: How do you get the archive off the live pool?
     timer:
       seconds: 40

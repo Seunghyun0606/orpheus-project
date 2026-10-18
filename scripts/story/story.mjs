@@ -240,7 +240,11 @@ async function play(episode) {
         const cost = o.consequence ? dim(`  — ${t(o.consequence)}`) : '';
         console.log(`  ${i + 1}) ${t(o.text)}${cost}`);
       });
-      const seconds = timed ? scene.timer?.seconds : undefined;
+      // Pressure takes 5 s a level off the timer, never below 15 s (as in Godot).
+      const seconds =
+        timed && scene.timer
+          ? Math.max(Math.min(15, scene.timer.seconds), scene.timer.seconds - 5 * state.pressure)
+          : undefined;
       if (seconds !== undefined) console.log(red(ui.seconds(seconds)));
       for (;;) {
         const answer = await ask(`${ui.pick} (${ui.board}) > `, seconds);

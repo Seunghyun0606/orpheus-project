@@ -184,6 +184,11 @@ scenes:
         when: { values: { aiDependency: { lte: 2 } } }
       - speaker: JIN
         text: Couriers are standing in loading bays. I need something to tell them.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: How do you stop the renewals?
     timer:
       seconds: 35

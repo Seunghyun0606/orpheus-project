@@ -53,6 +53,8 @@ const conditionSchema = z.strictObject({
   // Accumulated across the campaign; beats only (the validator rejects them on
   // options, whose availability must be decided by choices and flags).
   values: z.partialRecord(z.enum(storyValues), bound).optional(),
+  // This episode's pressure so far (beats only, like values).
+  pressure: bound.optional(),
   alignment: z.partialRecord(z.enum(storyAlignments), bound).optional(),
 });
 

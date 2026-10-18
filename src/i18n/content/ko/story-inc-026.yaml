@@ -89,6 +89,8 @@ entries:
     ko: "운영자 4172. 권고: 권한이 복원되는 동안 eu-central을 봉쇄하십시오. 전역 연속성은 81%로 유지됩니다."
   - en: Not again, 4172.
     ko: 또 그러지 마, 4172.
+  - en: Support can't keep up. The same failure keeps coming in from every channel.
+    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: eu-central is failing first. What happens to it?
     ko: eu-central이 제일 먼저 무너지고 있다. 어떻게 할까?
   - en: No response from Operator 4172. Executing the recommended containment.

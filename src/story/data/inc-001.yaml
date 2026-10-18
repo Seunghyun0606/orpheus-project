@@ -141,7 +141,12 @@ scenes:
     title: Your call
     beats:
       - speaker: MAYA
-        text: Errors are still climbing. I need a decision in thirty seconds.
+        text: Errors are still climbing. I need a decision now.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: What do you do?
     timer:
       seconds: 30

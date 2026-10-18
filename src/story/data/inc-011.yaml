@@ -179,9 +179,14 @@ scenes:
       - speaker: ADVISOR
         text: 'Recommendation unchanged: rate-limit g-14 on lane-a. Confidence 0.86.'
       - log: 'advisor: predicted operator response — blackhole the range · confidence 0.71'
-        when: { values: { collateralDamage: { gte: 20 } } }
+        when: { values: { collateralDamage: { gte: 38 } } }
       - log: 'advisor: predicted operator response — accept recommendation · confidence 0.77'
-        when: { values: { collateralDamage: { lte: 19 } } }
+        when: { values: { collateralDamage: { lte: 37 } } }
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: What do you do about g-14?
     timer:
       seconds: 40
@@ -203,9 +208,9 @@ scenes:
             text: It's on lane-b. Same payload. Our limit was keyed on the lane, and it just stepped around it. I'm fencing the deployment itself.
           - metric: { label: Request failure rate, value: 0.6%, trend: down }
           - log: 'advisor: operator response matched forecast'
-            when: { timedOut: false, values: { collateralDamage: { lte: 19 } } }
+            when: { timedOut: false, values: { collateralDamage: { lte: 37 } } }
           - log: 'advisor: off-model response · forecast updated'
-            when: { timedOut: false, values: { collateralDamage: { gte: 20 } } }
+            when: { timedOut: false, values: { collateralDamage: { gte: 38 } } }
         effects:
           values: { aiDependency: 1, operationalSafety: -1, collateralDamage: 2 }
           pressure: 1
@@ -225,9 +230,9 @@ scenes:
             text: I'm fencing the deployment into lane-x. Should have been first.
           - metric: { label: Request failure rate, value: 0.6%, trend: down }
           - log: 'advisor: operator response matched forecast'
-            when: { values: { collateralDamage: { gte: 20 } } }
+            when: { values: { collateralDamage: { gte: 38 } } }
           - log: 'advisor: off-model response · forecast updated'
-            when: { values: { collateralDamage: { lte: 19 } } }
+            when: { values: { collateralDamage: { lte: 37 } } }
         effects:
           values: { collateralDamage: 3, publicInterest: -2, operationalSafety: -1 }
           pressure: 2

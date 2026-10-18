@@ -205,6 +205,15 @@
         {
           "speaker": "NULL",
           "text": "Not again, 4172."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "when": {
+            "pressure": {
+              "gte": 2
+            }
+          }
         }
       ],
       "type": "choice",
@@ -920,7 +929,7 @@
           "when": {
             "values": {
               "collateralDamage": {
-                "gte": 52
+                "gte": 92
               }
             }
           }
@@ -1083,7 +1092,7 @@
           "when": {
             "values": {
               "collateralDamage": {
-                "gte": 54
+                "gte": 94
               }
             }
           }

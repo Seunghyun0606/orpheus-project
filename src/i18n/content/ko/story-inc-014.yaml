@@ -135,6 +135,8 @@ entries:
     ko: 아카이브 요청 실패가 더 빨라지고 있어요. 로펌 한 곳은 더 이상 점잖지 않아요.
   - en: Once arch-c is rebuilt from its peers, whatever only it holds is gone. Your call.
     ko: arch-c를 다른 복제본으로 재구축하면, 걔만 갖고 있던 건 사라져요. 결정해 주세요.
+  - en: Support can't keep up. The same failure keeps coming in from every channel.
+    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: What happens to arch-c?
     ko: arch-c를 어떻게 할까?
   - en: "No operator input. Executing recommendation: isolate arch-c."

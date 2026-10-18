@@ -115,6 +115,11 @@ scenes:
         text: 'Operator 4172. Recommended: contain eu-central while authority is restored. Global continuity is preserved at 81%.'
       - speaker: 'NULL'
         text: Not again, 4172.
+      - speaker: JIN
+        text: Support can't keep up. The same failure keeps coming in from every channel.
+        when:
+          pressure:
+            gte: 2
     prompt: eu-central is failing first. What happens to it?
     timer:
       seconds: 30
@@ -421,7 +426,7 @@ scenes:
       - narrate: Everyone knows the truth now. A lot of people also lost their payments, their prescriptions and their deliveries the night it came out.
       - speaker: JIN
         text: Nine thousand calls by noon. I stopped counting the ones about insulin.
-        when: { values: { collateralDamage: { gte: 52 } } }
+        when: { values: { collateralDamage: { gte: 92 } } }
       - speaker: 'NULL'
         text: People know the truth.
       - speaker: PLAYER
@@ -499,7 +504,7 @@ scenes:
         when: { flags: { SECURITY_ALLY: true } }
       - speaker: JIN
         text: Support kept a list of everyone who called that night. I don't read it anymore.
-        when: { values: { collateralDamage: { gte: 54 } } }
+        when: { values: { collateralDamage: { gte: 94 } } }
       - narrate: 'Your next performance review comes early. Under strengths it says: dependable.'
         when: { alignment: { corporate: { gte: 28 } } }
       - narrate: Security pulls your account for review twice that quarter. Both times there is nothing to find.

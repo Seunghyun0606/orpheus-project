@@ -103,3 +103,17 @@ scenes: [...]
   + inputs per finished episode) and `current` (the episode in progress). A finished episode
   cannot be played again; choosing it replays its record read-only. Leaving mid-incident
   resumes at the same point. "Start over" on the title erases everything after a second press.
+
+### Pressure
+
+`pressure` is the strain an incident puts on customers and the team (slow fixes, relief
+that expires, missed deductions). It matters three ways:
+
+- Each level takes 5 seconds off timed decisions, never below 15 seconds (UI rule, Godot
+  and terminal player alike; the runner's inputs are unchanged).
+- Beats may read it with `when: { pressure: { gte: N } }` (beats only, like values); every
+  timed decision has a colleague line at `gte: 2`.
+- When an episode ends, the pressure left is added to `collateralDamage` (runner rule, in
+  both runners), so it carries into the campaign.
+
+Dialogue should not name an exact deadline in seconds, since the timer can be shorter.

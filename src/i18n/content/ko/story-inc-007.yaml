@@ -147,6 +147,8 @@ entries:
     ko: 결단
   - en: Session pool just went past 1,100. A third of sign-ins are failing and the mobile app is retrying in a loop.
     ko: 세션 풀이 방금 1,100을 넘었어요. 로그인 3분의 1이 실패하고 모바일 앱은 루프 돌면서 재시도 중이에요.
+  - en: Support can't keep up. The same failure keeps coming in from every channel.
+    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: What do you do about the seats?
     ko: 자리 문제를 어떻게 할까?
   - en: "autoscaler: session pool above 97% for 120 s · action: provision overflow pool"
