@@ -3,7 +3,7 @@ title: 'Author OBSERVER and BLACKOUT with verified final context'
 role: developer
 milestone: M5
 priority: P1
-status: active
+status: blocked
 
 objective: 'Implement approved Acts 8–9 discoveries and the multi-service final Incident without selecting an ending implicitly.'
 why: 'The final decision must reflect accumulated evidence, dependency and damage, not a scripted correct action.'
@@ -55,5 +55,6 @@ verification:
   - 'Replay final crisis alternatives and gated/absent-context failures.'
   - 'Verify save/reload across presentation ACK, final response and unresolved resolution states.'
 
+blocked_by: 'DEC-072 pauses the action-simulation campaign and the Tauri release; resume only by a new human decision.'
 human_gate: false
 risk: high

@@ -3,7 +3,7 @@ title: 'Author the approved NORMAL GHOST and NULL campaign data'
 role: developer
 milestone: M5
 priority: P1
-status: active
+status: blocked
 
 objective: 'Build approved Acts 1–3 content with varied investigation and gradual UNKNOWN-to-NULL discovery.'
 why: 'Early campaign expansion must teach operational causality while preserving reveal boundaries.'
@@ -54,5 +54,6 @@ verification:
   - 'Validate all authored content and negative references/reveal gates.'
   - 'Replay each Incident and the Act 1–3 sequence with save/load and retry fixtures.'
 
+blocked_by: 'DEC-072 pauses the action-simulation campaign and the Tauri release; resume only by a new human decision.'
 human_gate: false
 risk: high

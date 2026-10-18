@@ -3,7 +3,7 @@ title: 'Complete campaign accessibility and environmental audio'
 role: developer
 milestone: M5
 priority: P1
-status: active
+status: blocked
 
 objective: 'Make the complete approved campaign usable with display controls and scoped environmental audio on supported desktop targets.'
 why: 'MVP display checks do not establish accessible late-act investigation tools or audio behavior.'
@@ -52,5 +52,6 @@ verification:
   - 'Test presentation/settings controls and unchanged deterministic replays.'
   - 'Perform separately authorized native 960x640/150 percent/keyboard/motion checks and approved audio/screen-reader scope.'
 
+blocked_by: 'DEC-072 pauses the action-simulation campaign and the Tauri release; resume only by a new human decision.'
 human_gate: false
 risk: medium

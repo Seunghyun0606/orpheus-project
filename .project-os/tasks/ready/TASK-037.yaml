@@ -1,0 +1,39 @@
+id: TASK-037
+title: 'Author the Act 1 episodes INC-001 to INC-003 in English and Korean'
+role: developer
+milestone: M6
+priority: P0
+status: ready
+
+objective: 'Rewrite the three Act 1 incidents as episodes that keep their story beats, the UNKNOWN trace and Act 1 balance, with one deduction in the Act.'
+why: 'Act 1 is the vertical slice that proves the new loop is easier and still tense.'
+
+scope:
+  include:
+    - 'INC-001..003 episodes with timed decisions and report choices.'
+    - 'The Act 1 deduction scene.'
+    - 'Korean catalog entries following authoring/i18n/glossary-ko.md.'
+  exclude:
+    - 'Acts 2-9.'
+
+depends_on:
+  - TASK-036
+specs:
+  - specs/product/03-choice-driven-story.md
+relevant_files:
+  - src/story/data/
+  - src/i18n/content/ko/
+active_decisions:
+  - .project-os/decisions/DEC-072-choice-driven-story-and-godot.yaml
+  - .project-os/decisions/DEC-071-korean-localization-and-onboarding.yaml
+
+acceptance:
+  - 'Each episode takes 5-10 minutes in a human playtest.'
+  - 'The UNKNOWN trace reaches every player and can be reported or kept.'
+  - 'Catalog check passes for both languages.'
+verification:
+  - 'npm run check'
+  - 'npm run story:preview for each episode in ko and en'
+
+human_gate: false
+risk: high

@@ -1,6 +1,6 @@
 id: M5
 name: Full Campaign and Release Readiness
-status: active
+status: blocked
 objective: Expand the proven systems into the complete nine-act campaign and prepare a stable desktop release.
 entry_criteria:
   - DEC-037 explicitly approves implementation before M4 verification; TASK-024/025 remain mandatory before final M5 acceptance and release.

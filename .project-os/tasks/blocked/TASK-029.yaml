@@ -3,7 +3,7 @@ title: 'Author ORPHEUS EXPERIMENT and HUMAN SYSTEM investigations'
 role: developer
 milestone: M5
 priority: P1
-status: active
+status: blocked
 
 objective: 'Implement approved Acts 4–6 discoveries through operational investigation rather than cutscene-only exposition.'
 why: 'The AI, company experiments, repeated NULL instances and recruitment reveals must remain distinct causal discoveries.'
@@ -57,5 +57,6 @@ verification:
   - 'Replay alternate investigation/operational paths, retries and reload boundaries.'
   - 'Review required reveal order and both benefits and harms against the approved blueprint.'
 
+blocked_by: 'DEC-072 pauses the action-simulation campaign and the Tauri release; resume only by a new human decision.'
 human_gate: false
 risk: high

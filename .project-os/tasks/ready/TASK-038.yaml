@@ -1,0 +1,39 @@
+id: TASK-038
+title: 'Build the Godot Act 1 vertical slice'
+role: developer
+milestone: M6
+priority: P0
+status: ready
+
+objective: 'Play Act 1 end to end in a Godot 4 desktop build, in Korean and English, from exported episode JSON.'
+why: 'Validates the shipping engine and the fun of the loop before converting the rest.'
+
+scope:
+  include:
+    - 'GDScript episode runner matching the reference runner on recorded choice sequences.'
+    - 'Terminal-style UI, evidence board, timer with accessibility switch, text size and CRT toggles.'
+    - 'gettext .po export from the translation catalogs.'
+    - 'Save as the list of choices.'
+  exclude:
+    - 'Store publishing, signing, installers.'
+
+depends_on:
+  - TASK-037
+specs:
+  - specs/product/03-choice-driven-story.md
+relevant_files:
+  - godot/
+  - scripts/story/
+active_decisions:
+  - .project-os/decisions/DEC-072-choice-driven-story-and-godot.yaml
+  - .project-os/decisions/DEC-071-korean-localization-and-onboarding.yaml
+
+acceptance:
+  - 'Parity: every enumerated choice path gives the same final state in Godot and the reference runner.'
+  - 'A human playtest of Act 1 in Korean accepts the pacing and difficulty.'
+verification:
+  - 'Headless Godot parity run'
+  - 'Human playtest'
+
+human_gate: true
+risk: high

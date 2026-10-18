@@ -223,7 +223,7 @@ tasks:
   role: developer
   milestone: M4
   priority: P0
-  status: active
+  status: blocked
   depends_on:
   - TASK-020
   - TASK-022
@@ -234,7 +234,7 @@ tasks:
   role: developer
   milestone: M4
   priority: P0
-  status: ready
+  status: blocked
   depends_on:
   - TASK-020
   - TASK-021
@@ -255,7 +255,7 @@ tasks:
   role: developer
   milestone: M5
   priority: P0
-  status: active
+  status: blocked
   depends_on:
   - TASK-026
   human_gate: false
@@ -264,7 +264,7 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: active
+  status: blocked
   depends_on:
   - TASK-026
   human_gate: false
@@ -273,7 +273,7 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: active
+  status: blocked
   depends_on:
   - TASK-026
   human_gate: false
@@ -282,7 +282,7 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: active
+  status: blocked
   depends_on:
   - TASK-026
   human_gate: false
@@ -291,7 +291,7 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: active
+  status: blocked
   depends_on:
   - TASK-026
   human_gate: false
@@ -300,7 +300,7 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: active
+  status: blocked
   depends_on:
   - TASK-026
   human_gate: false
@@ -309,7 +309,7 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: active
+  status: blocked
   depends_on:
   - TASK-026
   human_gate: false
@@ -318,7 +318,7 @@ tasks:
   role: developer
   milestone: M5
   priority: P1
-  status: active
+  status: blocked
   depends_on:
   - TASK-026
   human_gate: false
@@ -327,7 +327,51 @@ tasks:
   role: developer
   milestone: M5
   priority: P0
-  status: active
+  status: blocked
   depends_on:
   - TASK-026
   human_gate: false
+- id: TASK-036
+  title: Define the story episode format, reference runner and validator
+  role: developer
+  milestone: M6
+  priority: P0
+  status: active
+  depends_on: []
+  human_gate: false
+- id: TASK-037
+  title: Author the Act 1 episodes INC-001 to INC-003 in English and Korean
+  role: developer
+  milestone: M6
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-036
+  human_gate: false
+- id: TASK-038
+  title: Build the Godot Act 1 vertical slice
+  role: developer
+  milestone: M6
+  priority: P0
+  status: ready
+  depends_on:
+  - TASK-037
+  human_gate: true
+- id: TASK-039
+  title: Convert INC-004 to INC-026 and the ending rules to episodes
+  role: developer
+  milestone: M6
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-038
+  human_gate: false
+- id: TASK-040
+  title: Prepare the Godot desktop release
+  role: developer
+  milestone: M6
+  priority: P1
+  status: ready
+  depends_on:
+  - TASK-039
+  human_gate: true

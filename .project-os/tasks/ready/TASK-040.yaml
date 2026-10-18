@@ -1,0 +1,36 @@
+id: TASK-040
+title: 'Prepare the Godot desktop release'
+role: developer
+milestone: M6
+priority: P1
+status: ready
+
+objective: 'Produce reviewed desktop builds and release documentation, then request a separate release decision.'
+why: 'Release is separately authorized.'
+
+scope:
+  include:
+    - 'Export presets, performance, accessibility and audio checks.'
+    - 'Release notes and asset/licence inventory update.'
+  exclude:
+    - 'Publishing, signing or pushing without explicit authorization.'
+
+depends_on:
+  - TASK-039
+specs:
+  - specs/product/03-choice-driven-story.md
+relevant_files:
+  - godot/
+  - docs/
+active_decisions:
+  - .project-os/decisions/DEC-072-choice-driven-story-and-godot.yaml
+  - .project-os/decisions/DEC-071-korean-localization-and-onboarding.yaml
+
+acceptance:
+  - 'Release candidate passes the quality gates and a human release decision is recorded.'
+verification:
+  - 'Godot export on target platforms'
+  - 'Human release gate'
+
+human_gate: true
+risk: high

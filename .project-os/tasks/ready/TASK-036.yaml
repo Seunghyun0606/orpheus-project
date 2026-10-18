@@ -1,0 +1,41 @@
+id: TASK-036
+title: 'Define the story episode format, reference runner and validator'
+role: developer
+milestone: M6
+priority: P0
+status: ready
+
+objective: 'Give episodes (auto-collected evidence, choices, deduction, timed decision, report) a schema, a deterministic engine-independent runner and a validator that proves there are no dead ends.'
+why: 'Every later episode and the Godot runtime are checked against this contract.'
+
+scope:
+  include:
+    - 'Schema for scenes (briefing, choice, deduction), evidence, line conditions, value/alignment/flag effects, timers with an authored default.'
+    - 'Reference runner in TypeScript with no React or engine dependency.'
+    - 'Validator: references, reachability, termination of every path, deduction solution collectable on every path, timer defaults.'
+    - 'Translation catalog groups for episodes; preview command that prints an episode in a chosen language.'
+  exclude:
+    - 'Godot code.'
+    - 'Campaign-level ending resolution (TASK-039).'
+
+depends_on: []
+specs:
+  - specs/product/03-choice-driven-story.md
+relevant_files:
+  - src/story/
+  - scripts/i18n/content-catalog.mjs
+  - specs/architecture/story-episode-format.md
+active_decisions:
+  - .project-os/decisions/DEC-072-choice-driven-story-and-godot.yaml
+  - .project-os/decisions/DEC-071-korean-localization-and-onboarding.yaml
+
+acceptance:
+  - 'Every path of each authored episode is enumerated in tests and reaches the end.'
+  - 'A malformed episode (dangling reference, unreachable scene, uncollectable deduction evidence, bad timer default) is rejected with a specific message.'
+  - 'npm run check passes.'
+verification:
+  - 'npm run check'
+  - 'projectctl doctor'
+
+human_gate: false
+risk: medium

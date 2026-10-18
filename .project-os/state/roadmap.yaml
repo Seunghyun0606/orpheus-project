@@ -13,9 +13,13 @@ milestones:
     milestone_file: .project-os/milestones/M3.yaml
   - id: M4
     name: Campaign Intelligence Systems
-    status: active
+    status: blocked
     milestone_file: .project-os/milestones/M4.yaml
   - id: M5
     name: Full Campaign and Release Readiness
-    status: active
+    status: blocked
     milestone_file: .project-os/milestones/M5.yaml
+  - id: M6
+    name: Choice-Driven Story on Godot
+    status: active
+    milestone_file: .project-os/milestones/M6.yaml

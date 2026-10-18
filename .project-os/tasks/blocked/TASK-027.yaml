@@ -3,7 +3,7 @@ title: 'Compose the approved production campaign without rewriting old runs'
 role: developer
 milestone: M5
 priority: P0
-status: active
+status: blocked
 
 objective: 'Connect approved full-campaign content and shared desktop projections to the version-pinned transactional campaign authority.'
 why: 'The opt-in M4 fixture UI is not authorization to enable a production full-campaign entry.'
@@ -58,5 +58,6 @@ verification:
   - 'Exercise approved campaign composition, legacy isolation and injected abort/conflict/lost-ACK recovery.'
   - 'Verify actual native restore/reload and affected display controls after separately authorized QA.'
 
+blocked_by: 'DEC-072 pauses the action-simulation campaign and the Tauri release; resume only by a new human decision.'
 human_gate: false
 risk: high

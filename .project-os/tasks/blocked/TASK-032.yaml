@@ -3,7 +3,7 @@ title: 'Author production ending conditions and conditional epilogues'
 role: developer
 milestone: M5
 priority: P1
-status: active
+status: blocked
 
 objective: 'Apply separately approved ending balance and narrative data to all ten named endings in accumulated full-campaign runs.'
 why: 'Existing ending fixture families prove resolver behavior, not production threshold balance or reachable campaign endings.'
@@ -59,5 +59,6 @@ verification:
   - 'Test every approved threshold boundary and ending using full-run provenance, not only artificial score assignment.'
   - 'Independently review production balance, reachability and narrative after separate authorization.'
 
+blocked_by: 'DEC-072 pauses the action-simulation campaign and the Tauri release; resume only by a new human decision.'
 human_gate: false
 risk: high

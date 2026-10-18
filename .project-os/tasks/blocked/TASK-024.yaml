@@ -3,7 +3,7 @@ title: 'Integrate campaign projections with the shared desktop safely'
 role: developer
 milestone: M4
 priority: P0
-status: active
+status: blocked
 
 objective: 'Connect the approved campaign systems through adapters while preserving the playable MVP and its accessibility and reveal boundaries.'
 why: 'Headless systems need tested UI/adapters without making React the campaign authority or leaking hidden state.'
@@ -94,5 +94,6 @@ verification:
   - 'Run adapter/component/end-to-end, archive isolation, save/reload and accessibility tests plus complete quality commands and native inspection.'
   - 'Obtain independent review and acceptance QA.'
 
+blocked_by: 'DEC-072 pauses the action-simulation campaign and the Tauri release; resume only by a new human decision.'
 human_gate: false
 risk: high

@@ -1,6 +1,6 @@
 id: M4
 name: Campaign Intelligence Systems
-status: active
+status: blocked
 objective: Build the reusable campaign, player-model, branching, and ending infrastructure needed for the full narrative.
 entry_criteria:
   - M3 is approved as a coherent and expandable MVP.

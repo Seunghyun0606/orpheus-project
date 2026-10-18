@@ -3,7 +3,7 @@ title: 'Sustain the Board investigation before the SOFT CONTROL reveal'
 role: developer
 milestone: M5
 priority: P1
-status: active
+status: blocked
 
 objective: 'Implement the approved extended Act 7 investigation with Board responsibility and apparent control preserved.'
 why: 'An immediate framing twist would defeat the required multi-Incident Board misdirection.'
@@ -54,5 +54,6 @@ verification:
   - 'Replay evidence-heavy, company-aligned and missed-evidence routes and attempt premature reveal access.'
   - 'Obtain independently authorized pacing/faction writing review, not self-assessed narrative acceptance.'
 
+blocked_by: 'DEC-072 pauses the action-simulation campaign and the Tauri release; resume only by a new human decision.'
 human_gate: false
 risk: high

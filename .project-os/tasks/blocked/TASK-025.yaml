@@ -3,7 +3,7 @@ title: 'Verify campaign intelligence against M4 exit criteria'
 role: developer
 milestone: M4
 priority: P0
-status: ready
+status: blocked
 
 objective: 'Produce independently checked evidence for every M4 exit criterion and compatibility promise.'
 why: 'Framework implementation alone does not establish deterministic campaign behavior or preserved player progress.'
@@ -86,5 +86,6 @@ verification:
   - 'Run build, lint, format:check, typecheck, full tests, replays, scenario validation, build:desktop, diff check and projectctl doctor.'
   - 'Perform native desktop inspection and publish separate implementation, test, independent review, QA and evaluation handoffs.'
 
+blocked_by: 'DEC-072 pauses the action-simulation campaign and the Tauri release; resume only by a new human decision.'
 human_gate: false
 risk: high

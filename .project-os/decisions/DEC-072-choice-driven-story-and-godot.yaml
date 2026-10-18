@@ -1,0 +1,40 @@
+id: DEC-072
+title: Pivot to a choice-driven story game with auto-collected evidence, shipped on Godot
+status: active
+date: '2026-10-18'
+applies_to: [M4, M5, M6, TASK-024, TASK-025, TASK-027, TASK-028, TASK-029, TASK-030, TASK-031, TASK-032, TASK-033, TASK-034, TASK-035]
+human_decision:
+  instruction: >-
+    전체적으로 하나씩 전부해야하다보니 너무 어려운 부분이 있어. 전체적인 게임 진행은 선택형으로
+    진행하면서 증거들이 자동으로 수집되는 스토리 중심 형태면 좋을거같은데 어떻게 전환하면 좋을지
+    제안해줘. 최종적으로 배포는 GODOT으로 개발해서 할거야
+  selected_options:
+    incident_count: 인시던트수 유지 — all 26 incidents stay; Acts 1–2 are kept short.
+    decision_timer: 기본 켜짐 — decision scenes are timed by default; the timer can be turned off in accessibility settings.
+    deduction: 추론 장면 넣기 — one deduction scene per Act; a miss never blocks progress.
+    branches: main에 merge — review-fixes and korean-onboarding fast-forwarded into main (local only, no push).
+supersedes:
+  - PROJECT.md Core Experience loop of per-action operation (관찰과 가설 → 조치 또는 위임) as the player's main activity.
+  - The principle that the campaign tracks action habits rather than choice wording; choices now carry their value and alignment effects directly.
+  - Tauri as the shipping runtime; the web/Tauri client remains a reference until the Godot Act 1 slice is accepted.
+decision: >-
+  Each Incident becomes an episode of authored scenes: a page that shows metrics and
+  logs and collects evidence automatically, an investigation-direction choice that
+  always reaches the cause but varies the story evidence, a deduction scene once per
+  Act, a timed decision (mitigate, repair, delegate; ORPHEUS recommendation from Act 4)
+  and a report choice that decides what the evidence is used for and whom it reaches.
+  The player's work moves from finding evidence to deciding what it means. Episodes
+  are YAML data validated by the Node toolchain and exported as JSON to a Godot 4
+  runtime written in GDScript; translations keep the English-keyed catalogs and ship
+  as gettext .po files.
+constraints:
+  - Story, characters, the nine-Act structure, the ten endings, the ORPHEUS reveal in Act 4 and the 'no true ending' principle are unchanged.
+  - No dead ends: every path through an episode reaches its end; a missed deduction or an expired timer has a narrative cost, never a game over.
+  - The deduction's solution evidence must be collectable on every path that reaches it (checked by the validator).
+  - The timer has an accessibility switch and its expiry resolves to an authored default option.
+  - Episode runtime stays deterministic and engine-independent so the Godot runner can be checked against the reference runner.
+  - Native installation, signing, push and public release remain separately authorized.
+consequences:
+  - M4/M5 tasks for the action simulation, its behavior model and the Tauri release are paused (blocked by this decision), not deleted; their code stays as the reference client.
+  - New milestone M6 covers the episode format, Act 1 episodes, the Godot Act 1 slice, conversion of INC-004..026 and Godot release readiness.
+  - The Korean catalogs and the DEC-071 onboarding tone carry over; the per-action onboarding tips are not ported because the new loop teaches itself through scenes.

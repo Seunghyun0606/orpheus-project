@@ -3,7 +3,7 @@ title: 'Prepare measured desktop packaging and release authoring guidance'
 role: developer
 milestone: M5
 priority: P1
-status: active
+status: blocked
 
 objective: 'Measure full-campaign performance and prepare approved desktop packages with accurate release and authoring documentation.'
 why: 'A --no-bundle development build is not an installer, distribution policy or release-ready quality claim.'
@@ -56,5 +56,6 @@ verification:
   - 'Run approved benchmark, packaging and clean local install/upgrade checks in isolated profiles.'
   - 'Check documented commands/references and content-authoring examples without modifying actual user saves.'
 
+blocked_by: 'DEC-072 pauses the action-simulation campaign and the Tauri release; resume only by a new human decision.'
 human_gate: false
 risk: high

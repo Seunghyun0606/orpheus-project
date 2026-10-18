@@ -1,0 +1,37 @@
+id: TASK-039
+title: 'Convert INC-004 to INC-026 and the ending rules to episodes'
+role: developer
+milestone: M6
+priority: P1
+status: ready
+
+objective: 'Bring the remaining 23 incidents and all ten endings into the episode format while keeping the reveal order and moral ambiguity.'
+why: 'The full campaign ships as episodes.'
+
+scope:
+  include:
+    - 'Draft conversion from the action categories, then authored rewrite.'
+    - 'Endings resolved from the final decision plus accumulated values and alignment.'
+    - 'ORPHEUS recommendation and prediction scenes from Act 4.'
+  exclude:
+    - 'Changes to the story canon.'
+
+depends_on:
+  - TASK-038
+specs:
+  - specs/product/03-choice-driven-story.md
+relevant_files:
+  - src/story/data/
+  - src/i18n/content/ko/
+active_decisions:
+  - .project-os/decisions/DEC-072-choice-driven-story-and-godot.yaml
+  - .project-os/decisions/DEC-071-korean-localization-and-onboarding.yaml
+
+acceptance:
+  - 'Every ending is reachable by an enumerated or sampled choice path.'
+  - 'ORPHEUS is unnamed before Act 4 in both languages.'
+verification:
+  - 'npm run check'
+
+human_gate: false
+risk: high

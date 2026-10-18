@@ -1,0 +1,22 @@
+id: M6
+name: Choice-Driven Story on Godot
+status: active
+objective: Turn the campaign into choice-driven episodes with auto-collected evidence and ship it on Godot (DEC-072).
+entry_criteria:
+  - DEC-072 records the human decision to pivot (26 incidents kept, timed decisions on by default, one deduction per Act).
+exit_criteria:
+  - All 26 incidents and ten endings exist as validated episodes in English and Korean.
+  - Every episode path reaches its end; deduction misses and timer expiry never block progress.
+  - The Godot runtime matches the reference runner on enumerated choice paths.
+  - Act 1 and the full campaign pass human playtests for pacing and difficulty.
+  - A Godot desktop release candidate passes the quality gates; release is separately authorized.
+tasks:
+  - TASK-036
+  - TASK-037
+  - TASK-038
+  - TASK-039
+  - TASK-040
+planning_document: specs/product/03-choice-driven-story.md
+activation_decision: .project-os/decisions/DEC-072-choice-driven-story-and-godot.yaml
+human_gate:
+  required_on_completion: true

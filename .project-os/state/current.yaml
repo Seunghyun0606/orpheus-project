@@ -1,7 +1,10 @@
 project_status: active
-current_milestone: M5
+current_milestone: M6
 current_tasks:
+- TASK-036
+blocked_tasks:
 - TASK-024
+- TASK-025
 - TASK-027
 - TASK-028
 - TASK-029
@@ -11,6 +14,5 @@ current_tasks:
 - TASK-033
 - TASK-034
 - TASK-035
-blocked_tasks: []
 human_gate: false
 updated_at: '2026-10-18'
