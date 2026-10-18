@@ -5,6 +5,11 @@ extends Control
 ## at a time, then the controls for the current scene appear. All story logic
 ## lives in story_runner.gd.
 ##
+## Layout references: the dialogue column with numbered choices inline at its
+## foot (Disco Elysium), the evidence tray of cards picked for a deduction
+## (Orwell), big ops tiles over a log console (Hacknet) and a thin timer bar
+## right above the choices (Telltale).
+##
 ## Review automation (user args after `--`):
 ##   --episode=INC-001  --play=c,SESSIONS,d:POOL_AT_LIMIT+IDLE_TRANSACTIONS
 ##   --lang=ko|en  --select=ID+ID  --settings  --wait=<seconds>  --shot=<png path>
@@ -40,17 +45,21 @@ var shown_entries := 0
 # Episode screen widgets.
 var feed: RichTextLabel
 var logs: RichTextLabel
-var metrics_box: VBoxContainer
-var metric_rows := {}
-var cards_box: VBoxContainer
+var metrics_grid: GridContainer
+var metric_tiles := {}
+var tray: PanelContainer
+var tray_header: Label
+var tray_scroll: ScrollContainer
+var cards_box: HBoxContainer
 var cards := {}
 var controls: VBoxContainer
+var scene_label: Label
 var pressure_label: Label
 var timer_bar: ProgressBar
 var timer_label: Label
 var deduce_label: Label
-var connect_button: Button
-var option_buttons: Array = []
+var connect_slot: VBoxContainer
+var option_actions: Array = []
 
 
 func _ready() -> void:
@@ -133,72 +142,101 @@ func _start_episode(id: String) -> void:
 	_queue_new_entries()
 
 
+## Top bar over two columns: the ops desk (metric tiles, log console and the
+## evidence tray) on the left, the dialogue column on the right.
 func _build_episode_screen() -> void:
-	metric_rows.clear()
+	metric_tiles.clear()
 	cards.clear()
 	picks.clear()
 	shown_entries = 0
-	var root := _margin(14)
+	var root := _margin(12)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 10)
 	root.add_child(column)
 
+	var top_panel := PanelContainer.new()
+	top_panel.theme_type_variation = "TopBar"
 	var top := HBoxContainer.new()
+	top.add_theme_constant_override("separation", 18)
+	top_panel.add_child(top)
+	top.add_child(_label("VANTAGE // INCIDENT DESK", "DimLabel", false))
 	top.add_child(_label("%s · %s" % [episode["id"], tr(episode["title"])], "HeaderLabel", false))
 	var gap := Control.new()
 	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top.add_child(gap)
+	scene_label = _label("", "PromptLabel", false)
+	top.add_child(scene_label)
 	pressure_label = _label("", "DimLabel", false)
-	pressure_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	top.add_child(pressure_label)
 	var menu := _button(UiText.t("menu"))
 	menu.focus_mode = Control.FOCUS_NONE
 	menu.pressed.connect(_open_settings)
 	top.add_child(menu)
-	column.add_child(top)
+	column.add_child(top_panel)
 
 	var body := HBoxContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_theme_constant_override("separation", 10)
+	body.add_theme_constant_override("separation", 12)
 	column.add_child(body)
 
-	var left := _panel(UiText.t("telemetry"))
-	left.custom_minimum_size.x = 300
-	metrics_box = VBoxContainer.new()
-	metrics_box.add_theme_constant_override("separation", 4)
-	left.get_child(0).add_child(metrics_box)
-	left.get_child(0).add_child(HSeparator.new())
-	logs = _rich()
-	left.get_child(0).add_child(logs)
-	body.add_child(left)
+	var desk := VBoxContainer.new()
+	desk.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	desk.size_flags_stretch_ratio = 1.5
+	desk.add_theme_constant_override("separation", 10)
+	body.add_child(desk)
 
-	var center := _panel(UiText.t("war_room"))
-	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	center.size_flags_stretch_ratio = 2.0
+	metrics_grid = GridContainer.new()
+	metrics_grid.columns = 3
+	metrics_grid.add_theme_constant_override("h_separation", 8)
+	metrics_grid.add_theme_constant_override("v_separation", 8)
+	desk.add_child(metrics_grid)
+
+	var console := PanelContainer.new()
+	console.theme_type_variation = "ConsolePanel"
+	console.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	console.custom_minimum_size.y = 110
+	var console_column := VBoxContainer.new()
+	console_column.add_child(_label(_header(UiText.t("logs")), "HeaderLabel"))
+	logs = _rich()
+	console_column.add_child(logs)
+	console.add_child(console_column)
+	desk.add_child(console)
+
+	tray = PanelContainer.new()
+	tray.theme_type_variation = "Tile"
+	tray.custom_minimum_size.y = 210
+	var tray_column := VBoxContainer.new()
+	tray_column.add_theme_constant_override("separation", 8)
+	tray_header = _label("", "HeaderLabel", false)
+	tray_column.add_child(tray_header)
+	tray_scroll = ScrollContainer.new()
+	tray_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tray_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	cards_box = HBoxContainer.new()
+	cards_box.add_theme_constant_override("separation", 8)
+	cards_box.add_child(_label(UiText.t("board_empty"), "DimLabel", false))
+	tray_scroll.add_child(cards_box)
+	tray_column.add_child(tray_scroll)
+	tray.add_child(tray_column)
+	desk.add_child(tray)
+	_update_tray_header()
+
+	var dialogue := PanelContainer.new()
+	dialogue.theme_type_variation = "DialoguePanel"
+	dialogue.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	dialogue.custom_minimum_size.x = 460
+	var talk := VBoxContainer.new()
+	talk.add_theme_constant_override("separation", 10)
+	talk.add_child(_label(_header(UiText.t("war_room")), "HeaderLabel"))
 	feed = _rich()
 	feed.gui_input.connect(_on_feed_input)
-	center.get_child(0).add_child(feed)
-	body.add_child(center)
-
-	var right := _panel(UiText.t("board"))
-	right.custom_minimum_size.x = 320
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	cards_box = VBoxContainer.new()
-	cards_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	cards_box.add_theme_constant_override("separation", 8)
-	cards_box.add_child(_label(UiText.t("board_empty"), "DimLabel"))
-	scroll.add_child(cards_box)
-	right.get_child(0).add_child(scroll)
-	body.add_child(right)
-
-	var bottom := PanelContainer.new()
-	bottom.custom_minimum_size.y = 170
+	talk.add_child(feed)
 	controls = VBoxContainer.new()
-	controls.add_theme_constant_override("separation", 8)
-	bottom.add_child(controls)
-	column.add_child(bottom)
+	controls.add_theme_constant_override("separation", 4)
+	talk.add_child(controls)
+	dialogue.add_child(talk)
+	body.add_child(dialogue)
+
 	_replace_screen(root)
 	_update_pressure()
 
@@ -263,8 +301,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		_skip_reveal()
 	elif key >= KEY_1 and key <= KEY_9 and pending.is_empty():
 		var index := key - KEY_1
-		if index < option_buttons.size():
-			option_buttons[index].emit_signal("pressed")
+		if index < option_actions.size():
+			option_actions[index].call()
 	else:
 		return
 	get_viewport().set_input_as_handled()
@@ -279,34 +317,32 @@ func _render_entry(entry: Dictionary) -> void:
 		"scene":
 			var scene := StoryRunner.find_scene(episode, entry["sceneId"])
 			if scene.has("title"):
-				feed.append_text("\n[color=#%s][b]— %s —[/b][/color]\n" % [amber, _esc(tr(scene["title"]))])
+				scene_label.text = tr(scene["title"])
+				feed.append_text("\n[center][color=#%s]—  %s  —[/color][/center]\n" % [dim, _esc(tr(scene["title"]))])
 		"narrate":
-			feed.append_text("[color=#%s][i]%s[/i][/color]\n" % [dim, _esc(tr(entry["text"]))])
+			feed.append_text("[color=#%s][i]%s[/i][/color]\n\n" % [dim, _esc(tr(entry["text"]))])
 		"line":
-			feed.append_text("[color=#%s][b]%s[/b][/color]  %s\n" % [cyan, _esc(_speaker(entry["speaker"])), _esc(tr(entry["text"]))])
+			feed.append_text("[color=#%s][b]%s[/b][/color] — %s\n\n" % [cyan, _esc(_speaker(entry["speaker"]).to_upper()), _esc(tr(entry["text"]))])
 		"log":
-			var line := "[color=#%s]$ %s[/color]\n" % [green, _esc(tr(entry["text"]))]
-			logs.append_text(line)
-			feed.append_text("[code]%s[/code]" % line)
+			logs.append_text("[color=#%s]$ %s[/color]\n" % [green, _esc(tr(entry["text"]))])
 		"metric":
 			_set_metric(entry)
-			feed.append_text("  [color=#%s]%s[/color] %s  [b]%s[/b]\n" % [amber, _arrow(entry), _esc(tr(entry["label"])), _esc(tr(entry["value"]))])
 		"evidence":
 			var item := _evidence(entry["id"])
-			feed.append_text("  [color=#%s]■ %s · %s[/color]\n" % [amber, UiText.t("evidence_added"), _esc(tr(item["title"]))])
+			feed.append_text("[color=#%s]■ %s — %s[/color]\n\n" % [amber, UiText.t("evidence_added"), _esc(tr(item["title"]))])
 			_add_card(item)
 		"choice":
 			var scene := StoryRunner.find_scene(episode, entry["sceneId"])
 			var option := StoryRunner._option(scene, entry["optionId"])
 			var late: String = "  [color=#%s](%s)[/color]" % [dim, UiText.t("timed_out")] if entry["timedOut"] else ""
-			feed.append_text("[color=#%s][b]▸ %s:[/b] %s[/color]%s\n" % [green, UiText.t("you"), _esc(tr(option["text"])), late])
+			feed.append_text("[color=#%s]▸ %s[/color]%s\n\n" % [amber, _esc(tr(option["text"])), late])
 		"deduction":
 			var titles := []
 			for id in entry["picks"]:
 				titles.append(tr(_evidence(id)["title"]))
 			var verdict: String = UiText.t("deduce_right") if entry["correct"] else UiText.t("deduce_wrong")
 			var color := green if entry["correct"] else ThemeBuilder.RED.to_html(false)
-			feed.append_text("[color=#%s]▸ %s → %s[/color]\n" % [color, _esc(" + ".join(titles)), verdict])
+			feed.append_text("[color=#%s]▸ %s\n   %s[/color]\n\n" % [color, _esc(" + ".join(titles)), verdict])
 	_update_pressure()
 
 
@@ -314,10 +350,10 @@ func _render_entry(entry: Dictionary) -> void:
 
 func _clear_controls() -> void:
 	timer_left = -1.0
-	option_buttons.clear()
+	option_actions.clear()
 	timer_bar = null
 	deduce_label = null
-	connect_button = null
+	connect_slot = null
 	if controls == null:
 		return
 	for child in controls.get_children():
@@ -327,64 +363,92 @@ func _clear_controls() -> void:
 func _show_controls() -> void:
 	_clear_controls()
 	var scene := StoryRunner.current_scene(episode, state)
-	_set_cards_selectable(not scene.is_empty() and scene["type"] == "deduction")
+	_set_tray_selectable(not scene.is_empty() and scene["type"] == "deduction")
 	if scene.is_empty():
 		_show_summary()
 		return
+	var amber := ThemeBuilder.AMBER.to_html(false)
+	var dim := ThemeBuilder.DIM.to_html(false)
 	match scene["type"]:
 		"briefing":
-			var next := _button(UiText.t("continue"))
-			next.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-			next.pressed.connect(_submit.bind({"type": "continue"}))
-			controls.add_child(next)
-			next.grab_focus.call_deferred()
+			_add_choice("[color=#%s]▸ %s[/color]" % [amber, UiText.t("continue")], _submit.bind({"type": "continue"}))
 		"choice":
-			controls.add_child(_label(tr(scene["prompt"]), "PromptLabel"))
-			var options := StoryRunner.available_options(scene, state)
-			var grid := GridContainer.new()
-			grid.columns = 2 if options.size() > 2 else 1
-			grid.add_theme_constant_override("h_separation", 8)
-			grid.add_theme_constant_override("v_separation", 8)
-			controls.add_child(grid)
-			for i in options.size():
-				var option: Dictionary = options[i]
-				var text := "%d   %s" % [i + 1, tr(option["text"])]
-				if option.has("consequence"):
-					text += "\n     — %s" % tr(option["consequence"])
-				var button := _button(text)
-				button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-				button.pressed.connect(_submit.bind({"type": "choose", "optionId": option["id"]}))
-				grid.add_child(button)
-				option_buttons.append(button)
 			if scene.has("timer") and Settings.timer:
 				timer_total = float(scene["timer"]["seconds"])
 				timer_left = timer_total
 				var row := HBoxContainer.new()
+				row.add_theme_constant_override("separation", 10)
 				timer_bar = ProgressBar.new()
 				timer_bar.show_percentage = false
-				timer_bar.custom_minimum_size = Vector2(0, 8)
+				timer_bar.custom_minimum_size = Vector2(0, 6)
 				timer_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				timer_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 				timer_bar.max_value = timer_total
 				row.add_child(timer_bar)
 				timer_label = _label("", "PromptLabel", false)
-				timer_label.custom_minimum_size.x = 70
-				timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 				row.add_child(timer_label)
 				controls.add_child(row)
-				controls.move_child(row, 1)
 				_update_timer()
-			if not option_buttons.is_empty():
-				option_buttons[0].grab_focus.call_deferred()
+			controls.add_child(_label(tr(scene["prompt"]), "PromptLabel"))
+			var options := StoryRunner.available_options(scene, state)
+			for i in options.size():
+				var option: Dictionary = options[i]
+				var text := "[color=#%s]%d.[/color] %s" % [amber, i + 1, _esc(tr(option["text"]))]
+				if option.has("consequence"):
+					text += "\n    [color=#%s]%s[/color]" % [dim, _esc(tr(option["consequence"]))]
+				_add_choice(text, _submit.bind({"type": "choose", "optionId": option["id"]}))
 		"deduction":
 			picks.clear()
 			controls.add_child(_label(tr(scene["prompt"]), "PromptLabel"))
 			deduce_label = _label("", "DimLabel")
 			controls.add_child(deduce_label)
-			connect_button = _button(UiText.t("connect"))
-			connect_button.pressed.connect(func() -> void: _submit({"type": "deduce", "picks": picks.duplicate()}))
-			controls.add_child(connect_button)
+			connect_slot = VBoxContainer.new()
+			controls.add_child(connect_slot)
 			_update_deduction()
+	if not option_actions.is_empty():
+		_focus_first_choice.call_deferred()
+
+
+func _focus_first_choice() -> void:
+	for child in controls.get_children():
+		if child is PanelContainer and child.focus_mode == Control.FOCUS_ALL:
+			child.grab_focus()
+			return
+
+
+## A numbered dialogue choice: a text row that highlights on hover or focus and
+## runs `action` on click, Enter or its number key.
+func _add_choice(bbcode: String, action: Callable, enabled := true, parent: Control = null) -> void:
+	var row := PanelContainer.new()
+	row.theme_type_variation = "ChoiceRow"
+	row.focus_mode = Control.FOCUS_ALL if enabled else Control.FOCUS_NONE
+	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if enabled else Control.CURSOR_ARROW
+	var text := RichTextLabel.new()
+	text.bbcode_enabled = true
+	text.fit_content = true
+	text.scroll_active = false
+	text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	text.text = bbcode
+	if not enabled:
+		text.modulate = Color(1, 1, 1, 0.4)
+	row.add_child(text)
+	if enabled:
+		row.mouse_entered.connect(row.grab_focus)
+		row.focus_entered.connect(func() -> void:
+			row.theme_type_variation = "ChoiceRowActive"
+		)
+		row.focus_exited.connect(func() -> void:
+			row.theme_type_variation = "ChoiceRow"
+		)
+		row.gui_input.connect(func(event: InputEvent) -> void:
+			var click: bool = event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT
+			if click or event.is_action_pressed("ui_accept"):
+				row.accept_event()
+				action.call()
+		)
+		option_actions.append(action)
+	(parent if parent != null else controls).add_child(row)
 
 
 func _submit(input: Dictionary) -> void:
@@ -404,6 +468,9 @@ func _update_timer() -> void:
 	timer_label.text = UiText.t("seconds") % ceili(maxf(timer_left, 0.0))
 	var urgent := timer_left <= 10.0
 	timer_label.add_theme_color_override("font_color", ThemeBuilder.RED if urgent else ThemeBuilder.AMBER)
+	var fill: StyleBoxFlat = timer_bar.get_theme_stylebox("fill").duplicate()
+	fill.bg_color = ThemeBuilder.RED if urgent else ThemeBuilder.AMBER
+	timer_bar.add_theme_stylebox_override("fill", fill)
 
 
 func _update_deduction() -> void:
@@ -412,20 +479,27 @@ func _update_deduction() -> void:
 	var scene := StoryRunner.current_scene(episode, state)
 	var needed: int = scene["solution"].size()
 	deduce_label.text = UiText.t("deduce") % [needed, picks.size(), needed]
-	connect_button.disabled = picks.size() != needed
 	for id in cards:
 		cards[id].theme_type_variation = "SelectedCard" if picks.has(id) else "SelectableCard"
+	for child in connect_slot.get_children():
+		child.queue_free()
+	option_actions.clear()
+	var ready := picks.size() == needed
+	var label := "[color=#%s]▸ %s[/color]" % [ThemeBuilder.AMBER.to_html(false), UiText.t("connect")]
+	_add_choice(label, func() -> void: _submit({"type": "deduce", "picks": picks.duplicate()}), ready, connect_slot)
+	_update_tray_header()
 
 
 func _update_pressure() -> void:
 	if pressure_label == null or state.is_empty():
 		return
 	var level: int = state["pressure"]
-	pressure_label.text = "%s  %s%s   " % [UiText.t("pressure"), "■".repeat(level), "□".repeat(maxi(0, 4 - level))]
+	pressure_label.text = "%s  %s%s" % [UiText.t("pressure"), "■".repeat(level), "□".repeat(maxi(0, 4 - level))]
 	pressure_label.add_theme_color_override("font_color", ThemeBuilder.RED if level >= 2 else ThemeBuilder.DIM)
 
 
 func _show_summary() -> void:
+	scene_label.text = ""
 	controls.add_child(_label(UiText.t("end_title"), "PromptLabel"))
 	var lines := []
 	for entry in state["feed"]:
@@ -434,7 +508,7 @@ func _show_summary() -> void:
 		var scene := StoryRunner.find_scene(episode, entry["sceneId"])
 		var option := StoryRunner._option(scene, entry["optionId"])
 		var late: String = " (%s)" % UiText.t("timed_out") if entry["timedOut"] else ""
-		lines.append("· %s → %s%s" % [tr(scene["prompt"]), tr(option["text"]), late])
+		lines.append("· %s%s" % [tr(option["text"]), late])
 	controls.add_child(_label("%s\n%s" % [UiText.t("end_choices"), "\n".join(lines)]))
 	var changes := []
 	for group in ["values", "alignment"]:
@@ -444,31 +518,34 @@ func _show_summary() -> void:
 				changes.append("%s %s%d" % [UiText.value_name(key), "+" if amount > 0 else "", amount])
 	var changed: String = "   ".join(changes) if not changes.is_empty() else UiText.t("no_change")
 	controls.add_child(_label("%s: %s" % [UiText.t("end_changes"), changed], "DimLabel"))
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
-	var again := _button(UiText.t("replay"))
-	again.pressed.connect(_start_episode.bind(episode["id"]))
-	row.add_child(again)
-	var back := _button(UiText.t("back"))
-	back.pressed.connect(_show_title)
-	row.add_child(back)
-	controls.add_child(row)
-	again.grab_focus.call_deferred()
+	var amber := ThemeBuilder.AMBER.to_html(false)
+	_add_choice("[color=#%s]1.[/color] %s" % [amber, UiText.t("replay")], _start_episode.bind(episode["id"]))
+	_add_choice("[color=#%s]2.[/color] %s" % [amber, UiText.t("back")], _show_title)
+	_focus_first_choice.call_deferred()
 
 
-# ----------------------------------------------------------------- panels --
+# ------------------------------------------------------------- ops desk --
 
 func _set_metric(entry: Dictionary) -> void:
 	var label: String = entry["label"]
-	if not metric_rows.has(label):
-		var row := _label("")
-		metrics_box.add_child(row)
-		metric_rows[label] = row
-	var row: Label = metric_rows[label]
-	row.text = "%s %s   %s" % [_arrow(entry), tr(label), tr(entry["value"])]
+	if not metric_tiles.has(label):
+		var tile := PanelContainer.new()
+		tile.theme_type_variation = "Tile"
+		tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var column := VBoxContainer.new()
+		column.add_child(_label(tr(label), "TileLabel"))
+		var value := _label("", "TileValue", false)
+		column.add_child(value)
+		tile.add_child(column)
+		metrics_grid.add_child(tile)
+		metric_tiles[label] = value
+		tile.modulate = Color(1.5, 1.4, 1.0)
+		create_tween().tween_property(tile, "modulate", Color.WHITE, 0.6)
+	var value_label: Label = metric_tiles[label]
+	value_label.text = "%s %s" % [tr(entry["value"]), _arrow(entry)]
 	var trend: String = entry.get("trend", "")
 	var color := ThemeBuilder.RED if trend == "up" else (ThemeBuilder.GREEN if trend == "down" else ThemeBuilder.TEXT)
-	row.add_theme_color_override("font_color", color)
+	value_label.add_theme_color_override("font_color", color)
 
 
 func _add_card(item: Dictionary) -> void:
@@ -477,12 +554,14 @@ func _add_card(item: Dictionary) -> void:
 			child.queue_free()
 	var card := PanelContainer.new()
 	card.theme_type_variation = "CardPanel"
+	card.custom_minimum_size.x = 232
+	card.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	card.mouse_filter = Control.MOUSE_FILTER_STOP
 	var column := VBoxContainer.new()
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var title := _label(tr(item["title"]), "PromptLabel")
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var body := _label(tr(item["body"]), "DimLabel")
+	var body := _label(tr(item["body"]), "CardBody")
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(title)
 	column.add_child(body)
@@ -492,9 +571,28 @@ func _add_card(item: Dictionary) -> void:
 	cards[item["id"]] = card
 	card.modulate = Color(1.6, 1.4, 1.0)
 	create_tween().tween_property(card, "modulate", Color.WHITE, 0.8)
+	_update_tray_header()
+	_scroll_tray_to_end.call_deferred()
 
 
-func _set_cards_selectable(selectable: bool) -> void:
+func _scroll_tray_to_end() -> void:
+	if tray_scroll != null:
+		tray_scroll.scroll_horizontal = int(tray_scroll.get_h_scroll_bar().max_value)
+
+
+func _update_tray_header() -> void:
+	if tray_header == null:
+		return
+	var text := "%s · %d" % [_header(UiText.t("board")), cards.size()]
+	if deduce_label != null:
+		var needed: int = StoryRunner.current_scene(episode, state)["solution"].size()
+		text += "    ▸ " + UiText.t("deduce") % [needed, picks.size(), needed]
+	tray_header.text = text
+
+
+func _set_tray_selectable(selectable: bool) -> void:
+	tray.theme_type_variation = "TrayActive" if selectable else "Tile"
+	_update_tray_header()
 	for id in cards:
 		var card: PanelContainer = cards[id]
 		card.theme_type_variation = "SelectableCard" if selectable else "CardPanel"
@@ -605,6 +703,8 @@ func _change_setting(key: String, value: Variant) -> void:
 	crt.visible = Settings.crt
 	if key == "timer" and not Settings.timer:
 		timer_left = -1.0
+		if timer_bar != null:
+			timer_bar.get_parent().visible = false
 	if key == "language" or key == "text_size":
 		_close_settings()
 		_rebuild()
@@ -651,13 +751,8 @@ func _margin(amount: int) -> MarginContainer:
 	return root
 
 
-func _panel(header: String) -> PanelContainer:
-	var panel := PanelContainer.new()
-	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 8)
-	column.add_child(_label(header.to_upper() if Settings.language == "en" else header, "HeaderLabel"))
-	panel.add_child(column)
-	return panel
+func _header(text: String) -> String:
+	return text.to_upper() if Settings.language == "en" else text
 
 
 func _label(text: String, variation := "", wrap := true) -> Label:
@@ -710,7 +805,7 @@ func _evidence(id: String) -> Dictionary:
 
 
 func _arrow(entry: Dictionary) -> String:
-	return {"up": "▲", "down": "▼", "flat": "─"}.get(entry.get("trend", ""), "·")
+	return {"up": "▲", "down": "▼", "flat": "─"}.get(entry.get("trend", ""), "")
 
 
 func _esc(text: String) -> String:

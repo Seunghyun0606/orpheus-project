@@ -100,6 +100,54 @@ static func build(size_index: int) -> Theme:
 	theme.set_color("font_hover_color", "PopupMenu", AMBER)
 	theme.set_stylebox("hover", "PopupMenu", box(PANEL_HI, AMBER, 0, 4))
 
+	# Episode layout (Disco Elysium dialogue column, Orwell evidence tray,
+	# Hacknet-style ops tiles, Telltale timer bar).
+	theme.set_type_variation("TopBar", "PanelContainer")
+	var top := box(PANEL, BORDER, 0, 8)
+	top.border_width_bottom = 2
+	top.border_color = AMBER.darkened(0.55)
+	theme.set_stylebox("panel", "TopBar", top)
+	theme.set_type_variation("Tile", "PanelContainer")
+	theme.set_stylebox("panel", "Tile", box(PANEL_HI, BORDER, 1, 10))
+	theme.set_type_variation("ConsolePanel", "PanelContainer")
+	theme.set_stylebox("panel", "ConsolePanel", box(Color("070908"), BORDER, 1, 10))
+	theme.set_type_variation("DialoguePanel", "PanelContainer")
+	var dialogue := box(Color("0e1210"), BORDER, 1, 18)
+	dialogue.border_width_left = 3
+	dialogue.border_color = AMBER.darkened(0.6)
+	theme.set_stylebox("panel", "DialoguePanel", dialogue)
+	theme.set_type_variation("TileLabel", "Label")
+	theme.set_color("font_color", "TileLabel", DIM)
+	theme.set_font_size("font_size", "TileLabel", base - 3)
+	theme.set_type_variation("TileValue", "Label")
+	theme.set_font("font", "TileValue", font(700))
+	theme.set_font_size("font_size", "TileValue", int(base * 1.6))
+	theme.set_type_variation("CardBody", "Label")
+	theme.set_color("font_color", "CardBody", DIM)
+	theme.set_font_size("font_size", "CardBody", base - 3)
+
+	theme.set_type_variation("ChoiceRow", "PanelContainer")
+	theme.set_stylebox("panel", "ChoiceRow", box(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 6))
+	theme.set_type_variation("ChoiceRowActive", "PanelContainer")
+	var row_active := box(PANEL_HI, PANEL_HI, 0, 6)
+	row_active.border_width_left = 3
+	row_active.border_color = AMBER
+	theme.set_stylebox("panel", "ChoiceRowActive", row_active)
+	theme.set_type_variation("TrayActive", "PanelContainer")
+	theme.set_stylebox("panel", "TrayActive", box(PANEL_HI, AMBER, 2, 10))
+
+	theme.set_type_variation("ChoiceButton", "Button")
+	theme.set_stylebox("normal", "ChoiceButton", box(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 6))
+	var choice_hover := box(PANEL_HI, PANEL_HI, 0, 6)
+	choice_hover.border_width_left = 3
+	choice_hover.border_color = AMBER
+	theme.set_stylebox("hover", "ChoiceButton", choice_hover)
+	theme.set_stylebox("focus", "ChoiceButton", choice_hover)
+	theme.set_stylebox("pressed", "ChoiceButton", choice_hover)
+	theme.set_color("font_color", "ChoiceButton", Color("e9c88f"))
+	theme.set_color("font_hover_color", "ChoiceButton", AMBER.lightened(0.2))
+	theme.set_color("font_focus_color", "ChoiceButton", AMBER.lightened(0.2))
+
 	theme.set_stylebox("background", "ProgressBar", box(BG, BORDER, 1, 0))
 	theme.set_stylebox("fill", "ProgressBar", box(AMBER, AMBER, 0, 0))
 
