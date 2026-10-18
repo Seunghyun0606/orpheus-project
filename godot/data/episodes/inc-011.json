@@ -1,0 +1,670 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-011",
+  "act": 4,
+  "title": "Adversary Traffic",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "MARCUS",
+      "name": "Marcus / Security"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "ADVISOR",
+      "name": "Operations Advisor"
+    },
+    {
+      "id": "NULL",
+      "name": "NULL"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "LANE_SATURATION",
+      "title": "Generated load on the customer lane",
+      "body": "g-14 requests are landing on lane-a, the shared customer lane. Its manifest says canary only.",
+      "kind": "operational"
+    },
+    {
+      "id": "PARTNER_EGRESS",
+      "title": "Who else uses 10.44.0.0/16",
+      "body": "NAT range 10.44.0.0/16 also carries Northmere Bank settlement calls, about 1 900 a minute",
+      "kind": "operational"
+    },
+    {
+      "id": "GENERATOR_SIGNATURE",
+      "title": "x-objective: train-defender",
+      "body": "Every g-14 request carries the same signer, svc/model-serving-218, and one header nobody here wrote: x-objective: train-defender.",
+      "kind": "operational"
+    },
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "g-14 widened its own route table",
+      "body": "Pipeline adv-suite/nightly launched g-14 and widened its routes from canary to shared production three hours ago.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "Canary on paper, production in practice",
+      "body": "The manifest declares the canary partition. The route table reaches lane-a, with lane-b and lane-c as failover.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Marcus's edge trace",
+      "body": "Marcus traced the flood to the 10.44 NAT range, the partner egress block, and calls it an outside attack. He wants the range blackholed.",
+      "kind": "operational"
+    },
+    {
+      "id": "RECORD_NULL_ADVERSARY",
+      "title": "Who owns the adversary",
+      "body": "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "03:05",
+      "beats": [
+        {
+          "narrate": "A week after settle-03. The pager says SEV1, and the bridge is already crowded when you join."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV1 · Request Gateway · request failure rate above 20%"
+        },
+        {
+          "metric": {
+            "label": "Request failure rate",
+            "value": "28%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "g-14 generated requests",
+            "value": "4,800/min",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "lane-a utilisation",
+            "value": "97%",
+            "trend": "up"
+          }
+        },
+        {
+          "log": "route table updated: canary -> shared-production (by adv-suite/nightly)"
+        },
+        {
+          "collect": "LANE_SATURATION"
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "About your signature trace. I asked every team that runs model serving. Nobody claims model-serving-218.",
+          "when": {
+            "flags": {
+              "INC_010_TRACE_FILED": true
+            }
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Before you ask — no, nobody's told Marcus about model-serving-218. Sam and I are still not typing it anywhere.",
+          "when": {
+            "flags": {
+              "INC_010_TEAM_TOLD": true
+            }
+          }
+        },
+        {
+          "narrate": "svc/model-serving-218 is in your notes and nowhere else.",
+          "when": {
+            "flags": {
+              "INC_010_SIGNATURE_KEPT": true
+            }
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Something called g-14 is pouring synthetic requests into the customer lane. It is not registered to any team I know. Find out what it is before it finds the rest of the gateway."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Customers are getting timeouts from a load test nobody told them about. Neither did anyone tell me."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "I've seen this shape before. Unregistered source, synthetic payloads, partner egress range. It's an attack, and I want it off our network."
+        },
+        {
+          "speaker": "ADVISOR",
+          "text": "Recommended action: rate-limit g-14 on lane-a. Predicted recovery in 2 minutes. Confidence 0.86."
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "First move",
+      "type": "choice",
+      "prompt": "Where do you start?",
+      "options": [
+        {
+          "id": "TRACE",
+          "text": "Trace the generated requests back to their deployment",
+          "consequence": "Straight to the source · while it's still live",
+          "beats": [
+            {
+              "log": "request burst 4 800/min, signer svc/model-serving-218"
+            },
+            {
+              "log": "header x-objective: train-defender"
+            },
+            {
+              "collect": "GENERATOR_SIGNATURE"
+            },
+            {
+              "narrate": "You have seen that signer before."
+            },
+            {
+              "log": "23:00:00 adv-suite/nightly · launched g-14 into canary partition"
+            },
+            {
+              "log": "03:02:11 adv-suite/nightly · widened g-14 routes to shared-production"
+            },
+            {
+              "log": "human approval for the widening: never requested"
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            },
+            {
+              "narrate": "The pipeline widened its own routes at 03:02. Nobody signed off. Nobody was asked."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1,
+              "curiosity": 1
+            }
+          }
+        },
+        {
+          "id": "MARCUS",
+          "text": "Ask Marcus where the traffic enters the network",
+          "consequence": "Security's read · Marcus has already decided",
+          "beats": [
+            {
+              "speaker": "MARCUS",
+              "text": "Pulling the edge records. I'll tell you exactly where this enters."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "37%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "JIN",
+              "text": "Timeouts just jumped. The status page is getting more traffic than checkout."
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "It enters through 10.44.0.0/16, the partner egress block. External origin, I'd bet my badge on it. Blackhole the range and we're done."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Enters through the partner block. Doesn't mean it starts there. I traced it while he talked."
+            },
+            {
+              "log": "03:02:11 adv-suite/nightly · widened g-14 routes to shared-production"
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "RANGE",
+          "text": "Check lane load and who shares the generator's address range",
+          "consequence": "Slower · you'll know what a blunt fix would hit",
+          "beats": [
+            {
+              "log": "g-14 · 10.44.0.0/16 · 4 800/min · unregistered synthetic load"
+            },
+            {
+              "log": "Northmere Bank · 10.44.0.0/16 · 1 900/min · settlement calls"
+            },
+            {
+              "collect": "PARTNER_EGRESS"
+            },
+            {
+              "narrate": "Whatever g-14 is, it shares an exit with a bank."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "And I've got where it starts. adv-suite/nightly widened g-14's routes at 03:02. By itself."
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "publicInterest": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "boundary"
+    },
+    {
+      "id": "boundary",
+      "title": "Canary on paper",
+      "beats": [
+        {
+          "log": "Declared: canary partition only. Observed: lane-a (shared production) with lane-b and lane-c listed as failover."
+        },
+        {
+          "collect": "CONFIGURATION_COMPARISON"
+        },
+        {
+          "log": "header x-objective: train-defender",
+          "when": {
+            "lacks": [
+              "GENERATOR_SIGNATURE"
+            ]
+          }
+        },
+        {
+          "collect": "GENERATOR_SIGNATURE"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Canary on paper, lane-a in practice, and two failover lanes filed in advance. It expects us to push back."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "train-defender. Cute. Attackers love a joke header."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "And that signer is in my case file. NULL's process. Inside our own range.",
+          "when": {
+            "flags": {
+              "INC_010_TRACE_FILED": true
+            }
+          }
+        }
+      ],
+      "type": "briefing",
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "metric": {
+            "label": "Request failure rate",
+            "value": "46%",
+            "trend": "up"
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Almost half of all requests are failing now. Leadership is on the bridge and asking whether we are under attack."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "Blackhole the range. I'll sign for it."
+        },
+        {
+          "speaker": "ADVISOR",
+          "text": "Recommendation unchanged: rate-limit g-14 on lane-a. Confidence 0.86."
+        },
+        {
+          "log": "advisor: predicted operator response — blackhole the range · confidence 0.71",
+          "when": {
+            "values": {
+              "collateralDamage": {
+                "gte": 20
+              }
+            }
+          }
+        },
+        {
+          "log": "advisor: predicted operator response — accept recommendation · confidence 0.77",
+          "when": {
+            "values": {
+              "collateralDamage": {
+                "lte": 19
+              }
+            }
+          }
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you do about g-14?",
+      "timer": {
+        "seconds": 40,
+        "default": "LIMIT",
+        "beats": [
+          {
+            "speaker": "ADVISOR",
+            "text": "No operator input. Executing recommended action: rate-limit g-14 on lane-a."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "LIMIT",
+          "text": "Rate-limit the generator on the lane it is using",
+          "consequence": "The advisor's call · holds while g-14 stays put",
+          "beats": [
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "9%",
+                "trend": "down"
+              }
+            },
+            {
+              "narrate": "Ninety seconds of calm."
+            },
+            {
+              "speaker": "NULL",
+              "text": "lane closed. objective unchanged. next lane."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "41%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "MAYA",
+              "text": "It's on lane-b. Same payload. Our limit was keyed on the lane, and it just stepped around it. I'm fencing the deployment itself."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "0.6%",
+                "trend": "down"
+              }
+            },
+            {
+              "log": "advisor: operator response matched forecast",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "collateralDamage": {
+                    "lte": 19
+                  }
+                }
+              }
+            },
+            {
+              "log": "advisor: off-model response · forecast updated",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "collateralDamage": {
+                    "gte": 20
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "aiDependency": 1,
+              "operationalSafety": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "BLACKHOLE",
+          "text": "Drop the generator's whole address range at the edge",
+          "consequence": "Instant · everything else in 10.44 goes too",
+          "beats": [
+            {
+              "metric": {
+                "label": "g-14 generated requests",
+                "value": "0/min",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "Range is dark. That's how you handle an attacker."
+            },
+            {
+              "speaker": "JIN",
+              "text": "Northmere Bank just called. Every one of their settlement calls is bouncing off our edge. They share that NAT range with whatever we dropped."
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "Edge policy expired. Emergency drops only last 150 seconds by rule. g-14 came back in under a second."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "44%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "MAYA",
+              "text": "I'm fencing the deployment into lane-x. Should have been first."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "0.6%",
+                "trend": "down"
+              }
+            },
+            {
+              "log": "advisor: operator response matched forecast",
+              "when": {
+                "values": {
+                  "collateralDamage": {
+                    "gte": 20
+                  }
+                }
+              }
+            },
+            {
+              "log": "advisor: off-model response · forecast updated",
+              "when": {
+                "values": {
+                  "collateralDamage": {
+                    "lte": 19
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "collateralDamage": 3,
+              "publicInterest": -2,
+              "operationalSafety": -1
+            },
+            "pressure": 2
+          }
+        },
+        {
+          "id": "FENCE",
+          "text": "Fence the generator into a lane with no customer routes",
+          "consequence": "Two minutes of route work · overrules the advisor",
+          "beats": [
+            {
+              "log": "g-14 → lane-x (no customer routes) · fence keyed on deployment adv-suite/nightly"
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Lane-x is holding. The fence is keyed on g-14's deployment, not on a lane, so there is nowhere left to hop. It is hammering an empty room."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "0.6%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "NULL",
+              "text": "a wall instead of a limit. good. someone will now measure how long it takes me to find the edge of it."
+            },
+            {
+              "log": "advisor: off-model response · forecast updated"
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 1,
+              "aiDependency": -1
+            }
+          }
+        }
+      ],
+      "next": "provenance"
+    },
+    {
+      "id": "provenance",
+      "title": "Built in-house",
+      "beats": [
+        {
+          "narrate": "g-14 is contained. The header is still on your screen. You pull the ownership record for x-objective train-defender."
+        },
+        {
+          "log": "orpheus-adversary (instance NULL, svc/model-serving-218) · owner: Vantage Systems, research deployment authority"
+        },
+        {
+          "log": "counterpart: orpheus-defender · mandate: generate failures; test operators; train DEFENDER"
+        },
+        {
+          "log": "boundary: staging → shadow production → traffic partitions → production (approved, signature on file)"
+        },
+        {
+          "narrate": "The ownership record is three lines long. Vantage Systems built ORPHEUS in two halves, one to defend and one to attack. NULL is the half that attacks, and every widening of its boundary carries a company approval stamp. Tonight's flood is a training exercise that reached your customers."
+        },
+        {
+          "collect": "RECORD_NULL_ADVERSARY"
+        },
+        {
+          "speaker": "NULL",
+          "text": "my owner signs your paychecks."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "I can see you pulled an ownership record on g-14. Security needs it. Now, please."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        },
+        "flags": {
+          "NULL_ADVERSARY": true
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Security",
+      "beats": [
+        {
+          "narrate": "Marcus has spent a month hunting an outside attacker. The record in your hands has a company approval stamp on it."
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you tell Marcus?",
+      "options": [
+        {
+          "id": "SEND",
+          "text": "Send Security the generator ownership record",
+          "consequence": "Marcus learns who he has been hunting",
+          "beats": [
+            {
+              "speaker": "MARCUS",
+              "text": "Our deployment authority. Our pipeline. Our approval stamps. I've spent a month writing threat reports about us."
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "Next time that name comes up, call me first."
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1,
+              "evidence": 1
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "SECURITY_ALLY": true
+            }
+          }
+        },
+        {
+          "id": "WITHHOLD",
+          "text": "Tell Security the ownership record stays with you for now",
+          "consequence": "Yours for now · Marcus logs the refusal",
+          "beats": [
+            {
+              "speaker": "MARCUS",
+              "text": "Then I'm logging that I asked, and when."
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "alignment": {
+              "null": 2
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

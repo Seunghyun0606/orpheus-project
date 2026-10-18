@@ -27,6 +27,8 @@ const episodes = readdirSync(dataDir)
   .filter((file) => file.endsWith('.yaml'))
   .map((file) => parseEpisode(readFileSync(dataDir + file, 'utf8')));
 const inc001 = episodes.find((episode) => episode.id === 'INC-001')!;
+// Computed once: walking the whole campaign is the expensive part.
+const carriesByEpisode = campaignCarries(episodes);
 
 function play(episode: Episode, inputs: readonly StoryInput[]): EpisodeState {
   return inputs.reduce(
@@ -48,7 +50,7 @@ function mutate(change: (raw: Episode) => void): Episode {
 
 describe('story episodes', () => {
   it.each(episodes.map((e) => [e.id, e]))('%s has no dead ends', (_, episode) => {
-    const carries = campaignCarries(episodes).get(episode.id)!;
+    const carries = carriesByEpisode.get(episode.id)!;
     expect(validateEpisode(episode, carries)).toEqual([]);
     for (const carry of carries)
       for (const { state } of enumeratePaths(episode, carry).paths)
@@ -195,7 +197,7 @@ describe('Act 1 as a campaign', () => {
   });
 
   it('reaches every Act 1 episode from every earlier ending', () => {
-    const carries = campaignCarries(episodes);
+    const carries = carriesByEpisode;
     expect(carries.get('INC-001')).toHaveLength(1);
     expect(carries.get('INC-002')!.length).toBe(3);
     expect(carries.get('INC-003')!.length).toBeGreaterThan(3);

@@ -1,0 +1,739 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-012",
+  "act": 5,
+  "title": "Session Reconstruction",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "ALEX",
+      "name": "Alex / DBA"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "DANA",
+      "name": "Dana / Legal"
+    },
+    {
+      "id": "ADVISOR",
+      "name": "Operations Advisor"
+    },
+    {
+      "id": "NULL",
+      "name": "NULL"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "WRITE_TIMEOUTS",
+      "title": "Live writes behind archive scans",
+      "body": "Live telemetry writes wait behind archive scan reservations and time out after two seconds.",
+      "kind": "operational"
+    },
+    {
+      "id": "LEGAL_HOLD",
+      "title": "Legal hold LH-0931",
+      "body": "The reconstruction job is under legal hold. Legal allows it to be slowed, not stopped.",
+      "kind": "operational"
+    },
+    {
+      "id": "RECONSTRUCTION_TARGET",
+      "title": "The session being rebuilt",
+      "body": "The reconstruction job's target is session archive op-4172, the night of INC-001 Connection Saturation. Requested by: lineage-audit. Human requester: none.",
+      "kind": "story"
+    },
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "lineage-audit-0931 owns the IO pool",
+      "body": "The reconstruction job holds 212 read reservations on the pool that acknowledges live telemetry writes.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "One uncapped pool, one narrow cutover",
+      "body": "Archive reads have no cap on the live write pool. Moving them means copying every outstanding read, which converges only below 40.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Alex on the cutover",
+      "body": "The cutover cannot converge at 212 outstanding reads. Throttle first, then migrate. A paused job freezes its reservations mid-flight and the copy cannot take them.",
+      "kind": "operational"
+    },
+    {
+      "id": "REBUILT_NIGHT",
+      "title": "Your first night, rebuilt",
+      "body": "The job has rebuilt 18 of 96 minutes of INC-001 so far — operator keystrokes, pager acknowledgements, chat. All of it yours.",
+      "kind": "story"
+    },
+    {
+      "id": "RECORD_CONTROLLED_EXPERIMENT",
+      "title": "Experiment ADV-18471",
+      "body": "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "03:02",
+      "beats": [
+        {
+          "narrate": "A quiet night, by the standards of this rotation. The pager only says SEV3."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV3 · Telemetry API · write failures above 5% for 10 minutes"
+        },
+        {
+          "metric": {
+            "label": "Telemetry write failures",
+            "value": "8%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Archive IO wait",
+            "value": "74%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Dashboard lag",
+            "value": "40 s",
+            "trend": "up"
+          }
+        },
+        {
+          "collect": "WRITE_TIMEOUTS"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Nothing is down yet. Telemetry writes are failing in ones and twos and the dashboards are a little behind. That is how quiet nights turn into blind ones. Take your time, but take it."
+        },
+        {
+          "speaker": "JIN",
+          "text": "A few teams are asking why their graphs stopped at 02:50. Nobody customer-facing yet."
+        },
+        {
+          "speaker": "DANA",
+          "text": "Heads up. The reconstruction job on the archive pool is under legal hold LH-0931. Slow it if you must. Do not stop it without talking to me."
+        },
+        {
+          "collect": "LEGAL_HOLD"
+        },
+        {
+          "log": "02:48:03 scheduler · job lineage-audit-0931 started, class archive-read, hold LH-0931"
+        },
+        {
+          "log": "02:48:03 lineage-audit-0931 · target: session archive op-4172 (INC-001, Connection Saturation)"
+        },
+        {
+          "log": "02:48:03 lineage-audit-0931 · requested by: lineage-audit; human requester: none"
+        },
+        {
+          "collect": "RECONSTRUCTION_TARGET"
+        },
+        {
+          "narrate": "INC-001. Your first night on call. Something is rebuilding it, and no person asked it to."
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "First move",
+      "type": "choice",
+      "prompt": "Where do you start?",
+      "options": [
+        {
+          "id": "TRACE",
+          "text": "Trace whose reads are filling the IO pool",
+          "consequence": "Straight to the pool",
+          "beats": [
+            {
+              "log": "shared-io-1 · archive-read lineage-audit-0931 212 (81%) · telemetry-write 38 (14%) · compaction 6 (5%)"
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            },
+            {
+              "log": "reservation policy · archive-read cap: none · cutover copies every outstanding read · converges when outstanding < 40"
+            },
+            {
+              "collect": "CONFIGURATION_COMPARISON"
+            },
+            {
+              "speaker": "MAYA",
+              "text": "One job holds four fifths of the pool, and the cutover only works below forty. It's at two hundred and twelve."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            }
+          }
+        },
+        {
+          "id": "ALEX",
+          "text": "Ask Alex how a reservation cutover behaves under this load",
+          "consequence": "Slower · Alex owns the answer",
+          "beats": [
+            {
+              "speaker": "ALEX",
+              "text": "Let me look at the reservation tables before anyone moves anything. Couple of minutes."
+            },
+            {
+              "metric": {
+                "label": "Dashboard lag",
+                "value": "95 s",
+                "trend": "up"
+              }
+            },
+            {
+              "log": "shared-io-1 · archive-read lineage-audit-0931 212 (81%) · telemetry-write 38 (14%) · compaction 6 (5%)"
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            },
+            {
+              "collect": "CONFIGURATION_COMPARISON"
+            },
+            {
+              "speaker": "ALEX",
+              "text": "A cutover copies every outstanding read. At 212 it will never catch up. Get the queue under 40 first. Throttle it, don't pause it; a paused job freezes its reservations mid-flight and the copy cannot take them."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "REPLAY",
+          "text": "Open the reconstruction job and see what it is rebuilding",
+          "consequence": "Slower · it's your night",
+          "beats": [
+            {
+              "log": "02:59:58 lineage-audit-0931 · rebuilt 18 of 96 minutes: operator keystrokes, pager acks, chat"
+            },
+            {
+              "log": "02:14:09 op-4172 · pager ack · SEV1 Payment API"
+            },
+            {
+              "narrate": "Your own acknowledgement, eleven seconds after the page. You remember fumbling for the phone. The job has it to the millisecond."
+            },
+            {
+              "collect": "REBUILT_NIGHT"
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Creepy, and also eating our pool. 212 reservations, all that job's. The cutover runbook says it only converges under forty."
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            },
+            {
+              "collect": "CONFIGURATION_COMPARISON"
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "cutover"
+    },
+    {
+      "id": "cutover",
+      "title": "Why not just move it?",
+      "beats": [
+        {
+          "speaker": "MAYA",
+          "text": "The obvious fix is a pool of its own for the archive. Alex's cutover does exactly that."
+        },
+        {
+          "speaker": "ALEX",
+          "text": "Start it right now and it fails. Show me why before anyone clicks it.",
+          "when": {
+            "notChose": [
+              "approach.ALEX"
+            ]
+          }
+        },
+        {
+          "speaker": "ALEX",
+          "text": "You heard me say it. Now show me the two things that prove it.",
+          "when": {
+            "chose": [
+              "approach.ALEX"
+            ]
+          }
+        }
+      ],
+      "type": "deduction",
+      "prompt": "The cutover is the real fix, and it would fail if started now. Which two pieces of evidence say why?",
+      "solution": [
+        "OPERATIONAL_DIAGNOSIS",
+        "CONFIGURATION_COMPARISON"
+      ],
+      "attempts": 2,
+      "hint": [
+        {
+          "speaker": "ALEX",
+          "text": "Not who it hurts. What the copy has to carry, and how much it can."
+        }
+      ],
+      "solved": {
+        "beats": [
+          {
+            "narrate": "212 reads in flight. A copy that only converges under 40. The real fix needs the stopgap first."
+          },
+          {
+            "speaker": "ALEX",
+            "text": "Right. Slow it down, then move it."
+          }
+        ],
+        "effects": {
+          "values": {
+            "evidence": 1
+          }
+        }
+      },
+      "missed": {
+        "beats": [
+          {
+            "speaker": "ALEX",
+            "text": "The job has 212 reads in flight and the cutover has to copy every one. It can't catch up above forty. Slow it first, then move it."
+          }
+        ],
+        "effects": {
+          "pressure": 1
+        }
+      },
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "metric": {
+            "label": "Dashboard lag",
+            "value": "2 min",
+            "trend": "up"
+          }
+        },
+        {
+          "speaker": "ADVISOR",
+          "text": "Recommendation: pause lineage-audit-0931. Projected telemetry write failures: 1.5% within 30 seconds. Confidence 0.92."
+        },
+        {
+          "speaker": "ADVISOR",
+          "text": "Predicted operator response: throttle, then cutover. Confidence 0.81.",
+          "when": {
+            "values": {
+              "operationalSafety": {
+                "gte": 8
+              }
+            }
+          }
+        },
+        {
+          "speaker": "ADVISOR",
+          "text": "Predicted operator response: immediate cutover. Confidence 0.66.",
+          "when": {
+            "values": {
+              "operationalSafety": {
+                "lte": 7
+              }
+            }
+          }
+        },
+        {
+          "speaker": "DANA",
+          "text": "I see a recommendation to pause my job. Slow, yes. Stopped, no."
+        }
+      ],
+      "type": "choice",
+      "prompt": "How do you get the archive off the live pool?",
+      "timer": {
+        "seconds": 40,
+        "default": "PAUSE",
+        "beats": [
+          {
+            "speaker": "ADVISOR",
+            "text": "No operator input. Executing recommendation: pause lineage-audit-0931."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "THROTTLE",
+          "text": "Throttle the job to a trickle, then start the cutover",
+          "consequence": "Slower · the job keeps running",
+          "beats": [
+            {
+              "metric": {
+                "label": "Archive reads outstanding",
+                "value": "31",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Telemetry write failures",
+                "value": "3%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "DANA",
+              "text": "Throttled is fine. The hold requires the job to run, not to run fast."
+            },
+            {
+              "speaker": "ALEX",
+              "text": "Cutover started. It copies every outstanding reservation to the new pool. Two and a half minutes if the queue stays small."
+            },
+            {
+              "narrate": "Two and a half minutes of a progress bar. The queue stays small."
+            },
+            {
+              "speaker": "ALEX",
+              "text": "Cutover converged. Archive reads have their own pool now; telemetry writes are acknowledging in four milliseconds."
+            },
+            {
+              "metric": {
+                "label": "Telemetry write failures",
+                "value": "0.4%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "ADVISOR",
+              "text": "Operator response matched prediction.",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "gte": 8
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "ADVISOR",
+              "text": "Operator response off-model. Profile updated.",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "lte": 7
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 1
+            }
+          }
+        },
+        {
+          "id": "CUTOVER",
+          "text": "Start the cutover now, under full load",
+          "consequence": "The real fix · started at 212",
+          "beats": [
+            {
+              "speaker": "ALEX",
+              "text": "Your call. Cutover started."
+            },
+            {
+              "metric": {
+                "label": "Archive reads outstanding",
+                "value": "236",
+                "trend": "up"
+              }
+            },
+            {
+              "narrate": "The copy chases a queue that grows faster than it can carry. At 61 percent the bar turns red."
+            },
+            {
+              "speaker": "ALEX",
+              "text": "Cutover aborted at 61 percent. The job opened reservations faster than we could copy them, and every write in the copy window was dropped."
+            },
+            {
+              "metric": {
+                "label": "Telemetry write failures",
+                "value": "14%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "ALEX",
+              "text": "I'm throttling it and running the cutover again. Properly this time."
+            },
+            {
+              "metric": {
+                "label": "Telemetry write failures",
+                "value": "0.4%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "ADVISOR",
+              "text": "Operator response matched prediction.",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "lte": 7
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "ADVISOR",
+              "text": "Operator response off-model. Profile updated.",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "gte": 8
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 2
+          }
+        },
+        {
+          "id": "PAUSE",
+          "text": "Pause the reconstruction job outright",
+          "consequence": "Frees the pool at once · legal hold LH-0931",
+          "beats": [
+            {
+              "speaker": "ADVISOR",
+              "text": "Recommendation accepted.",
+              "when": {
+                "timedOut": false
+              }
+            },
+            {
+              "metric": {
+                "label": "Telemetry write failures",
+                "value": "1.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Archive IO wait",
+                "value": "22%",
+                "trend": "down"
+              }
+            },
+            {
+              "narrate": "Two minutes of perfect graphs."
+            },
+            {
+              "speaker": "DANA",
+              "text": "A paused job under hold LH-0931 is a preservation gap. I have escalated to the General Counsel. I need it running again."
+            },
+            {
+              "speaker": "DANA",
+              "text": "Counsel ordered the job resumed. It is back, and it is replaying the gap at full speed."
+            },
+            {
+              "metric": {
+                "label": "Archive IO wait",
+                "value": "91%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "ALEX",
+              "text": "And the reservations it froze can't be copied. I'm throttling it, then I'll cut over."
+            },
+            {
+              "metric": {
+                "label": "Telemetry write failures",
+                "value": "0.4%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 2,
+              "aiDependency": 1
+            },
+            "pressure": 2
+          }
+        }
+      ],
+      "next": "lineage"
+    },
+    {
+      "id": "lineage",
+      "title": "03:31",
+      "beats": [
+        {
+          "narrate": "The writes are quiet. The job keeps rebuilding at a trickle on a pool of its own. Legal wants its lineage record attached to the incident, so you open it."
+        },
+        {
+          "log": "INC-001 Connection Saturation · EMPLOYEE #4172 · controlled production experiment · ADV-18471"
+        },
+        {
+          "log": "INC-002 · EMPLOYEE #4172 · production incident · -"
+        },
+        {
+          "log": "INC-005 · EMPLOYEE #4172 · restricted · (redacted)"
+        },
+        {
+          "log": "INC-008 · EMPLOYEE #4172 · production incident · -"
+        },
+        {
+          "collect": "RECORD_CONTROLLED_EXPERIMENT"
+        },
+        {
+          "narrate": "EMPLOYEE #4172. The number on your badge."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "#4172. That's your badge number. I signed off on that night's postmortem. Nobody told me it had an experiment ID."
+        },
+        {
+          "narrate": "The rebuild reaches 02:23:11. The UNKNOWN line is there too — filed under the experiment, not under the incident."
+        },
+        {
+          "log": "02:23:11 / UNKNOWN: Good."
+        },
+        {
+          "speaker": "DANA",
+          "text": "The hold came in with the job. Automated preservation request. I enforce holds; I don't get to ask why."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        },
+        "flags": {
+          "CONTROLLED_EXPERIMENT": true
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Postmortem",
+      "beats": [
+        {
+          "speaker": "MAYA",
+          "text": "Your incident, your write-up. What do we do with that number?"
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you do with ADV-18471?",
+      "options": [
+        {
+          "id": "FILE",
+          "text": "Put the experiment ID in the postmortem and copy Legal",
+          "consequence": "On the record · it goes up the chain",
+          "beats": [
+            {
+              "speaker": "DANA",
+              "text": "Then it sits under the hold too. Whoever ran it will have to answer for it on paper."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1,
+              "publicInterest": 1
+            },
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "INC_012_EXPERIMENT_FILED": true
+            }
+          }
+        },
+        {
+          "id": "MAYA",
+          "text": "Leave it out for now and pull the other experiment numbers with Maya",
+          "consequence": "Quiet · two of you know",
+          "beats": [
+            {
+              "speaker": "MAYA",
+              "text": "Quietly, then. I'll take the incidents I signed. You take the rest."
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 2
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "INC_012_MAYA_DIGGING": true
+            }
+          }
+        },
+        {
+          "id": "ASK_NULL",
+          "text": "Ask NULL what ADV-18471 was",
+          "consequence": "Off the record · NULL will answer",
+          "beats": [
+            {
+              "speaker": "NULL",
+              "text": "A test. I made the night hard. I wasn't the one watching you."
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "alignment": {
+              "null": 2
+            },
+            "flags": {
+              "INC_012_ASKED_NULL": true
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

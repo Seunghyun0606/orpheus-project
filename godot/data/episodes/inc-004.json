@@ -1,0 +1,667 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-004",
+  "act": 2,
+  "title": "Memory Leak",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "ADVISOR",
+      "name": "Capacity Advisor"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "HEAP_CLIMB",
+      "title": "Every heap climbing",
+      "body": "Checkout heap averages 78% on all twelve instances, up from 49% ten minutes ago. GC pauses reach 880 ms.",
+      "kind": "operational"
+    },
+    {
+      "id": "HANDLER_LOG",
+      "title": "Checkout handler log",
+      "body": "Every checkout logs \"response sent\" and then, minutes later, its request object is still being walked by the garbage collector. Nothing is being let go.",
+      "kind": "operational"
+    },
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "Completed requests held by their callbacks",
+      "body": "Heap dump: checkout-handler / completionCallbacks / completed-request. 1.9 million requests kept alive after their responses were sent.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Sam's heap snapshots",
+      "body": "Completed requests pile up under completionCallbacks. A restart empties the pile and it refills at the same slope. Rolling back to 4.11 brings back the large-cart crash.",
+      "kind": "operational"
+    },
+    {
+      "id": "CART_MIX",
+      "title": "Tonight's big carts",
+      "body": "6% of tonight's carts have more than 50 items, almost all of them wholesale reorders.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "Release 4.12 never lets go",
+      "body": "4.12 registers a completion callback per request behind checkout.completion_callbacks and never removes it. 4.11 has no callback, and still has the large-cart crash 4.12 fixed.",
+      "kind": "operational"
+    },
+    {
+      "id": "DELETED_ALLOCATION_FRAGMENT",
+      "title": "Deleted allocation log fragment",
+      "body": "UNKNOWN: the objects are gone. the references are not.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "19:48",
+      "beats": [
+        {
+          "narrate": "An evening shift, for once. The storefront has been counting down to the evening sale all afternoon."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV2 · Checkout API · heap above 75% on 3 or more instances"
+        },
+        {
+          "metric": {
+            "label": "Checkout heap (pool average)",
+            "value": "78%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "GC pause (p99)",
+            "value": "590 ms",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Checkout error rate",
+            "value": "9%",
+            "trend": "up"
+          }
+        },
+        {
+          "collect": "HEAP_CLIMB"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Checkout heap is climbing on every instance, not just one. The evening sale opens in about four minutes. I want this understood before then."
+        },
+        {
+          "speaker": "JIN",
+          "text": "A handful of customers say the payment screen spins and never finishes. Not many yet."
+        },
+        {
+          "speaker": "ADVISOR",
+          "text": "Recommended action: scale checkout pool from 12 to 20 instances. Projected heap per instance: 61%. Confidence 0.88."
+        },
+        {
+          "narrate": "Your ticket about the redacted request came back this afternoon. \"Redaction performed by system account.\" It doesn't say which one.",
+          "when": {
+            "flags": {
+              "REDACTION_TICKET": true
+            }
+          }
+        },
+        {
+          "narrate": "The timestamp from before batch 781 is still on a sticky note under your monitor. Nobody has claimed that request.",
+          "when": {
+            "flags": {
+              "REDACTION_KEPT": true
+            }
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "About the marker. I asked around without asking. Nobody admits redacting anything. Keep it off the tickets.",
+          "when": {
+            "flags": {
+              "MAYA_IN_ON_IT": true
+            }
+          }
+        },
+        {
+          "speaker": "SAM",
+          "text": "I'm on the bridge. Hand me whatever you don't want to do yourself."
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "Four minutes",
+      "type": "choice",
+      "prompt": "Where do you start?",
+      "options": [
+        {
+          "id": "DUMP",
+          "text": "Read the handler log, then take a heap dump",
+          "consequence": "Thorough · you do it yourself",
+          "beats": [
+            {
+              "log": "checkout-handler: order 88114 response sent (201, 212 ms)"
+            },
+            {
+              "log": "completionCallbacks: registered callback cb-88114 (registry size 1,903,226)"
+            },
+            {
+              "log": "completionCallbacks: unregister requested for 0 callbacks"
+            },
+            {
+              "collect": "HANDLER_LOG"
+            },
+            {
+              "log": "heap dump checkout-07: completionCallbacks → CompletedCheckoutRequest ×1,903,227 · 2.31 GB"
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            },
+            {
+              "narrate": "Nearly two million checkouts that finished long ago, each one still held by the callback that fired when it did."
+            },
+            {
+              "narrate": "The last row of the dump is a single 4 KB block. Its owner is listed as a deleted process. Later."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            }
+          }
+        },
+        {
+          "id": "SAM",
+          "text": "Ask Sam to compare two heap snapshots",
+          "consequence": "A minute and a half · Sam owns that part",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "On it. Two heap snapshots a minute apart will tell us what's growing."
+            },
+            {
+              "metric": {
+                "label": "GC pause (checkout-07)",
+                "value": "900 ms",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "GC is running back to back on checkout-07. Pauses are at 900 ms and climbing."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Snapshots agree. Completed requests pile up under completionCallbacks. A restart empties the pile and it refills at the same slope. And please don't roll back to 4.11. That's the release that crashes on big carts."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "JIN",
+          "text": "Ask Jin who is actually failing",
+          "consequence": "Slower · you'll know who gets hurt",
+          "beats": [
+            {
+              "speaker": "JIN",
+              "text": "Spinners everywhere, no pattern by region. One thing — six percent of tonight's carts are wholesale reorders, fifty items and up. Those customers call."
+            },
+            {
+              "collect": "CART_MIX"
+            },
+            {
+              "speaker": "SAM",
+              "text": "Took a heap dump while you two talked. 1.9 million finished checkouts, all held under completionCallbacks."
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "publicInterest": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "release"
+    },
+    {
+      "id": "release",
+      "title": "Release 4.12",
+      "beats": [
+        {
+          "narrate": "The release diff loads. Last week's 4.11 on the left, tonight's 4.12 on the right."
+        },
+        {
+          "log": "4.12 (today 18:40): completion callbacks one per request · flag checkout.completion_callbacks = on"
+        },
+        {
+          "log": "4.12: callback removal not implemented (ticket CHK-2207, open)"
+        },
+        {
+          "log": "4.11: carts over 50 items crash at pricing (CHK-2181) · fixed in 4.12"
+        },
+        {
+          "collect": "CONFIGURATION_COMPARISON"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Tonight's release registers a callback for every checkout and never takes it back. And the release before it can't price a big cart."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "The callbacks sit behind a flag. Turning it off is a redeploy. Ninety seconds."
+        }
+      ],
+      "type": "briefing",
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "metric": {
+            "label": "Checkout heap (pool average)",
+            "value": "87%",
+            "trend": "up"
+          }
+        },
+        {
+          "speaker": "JIN",
+          "text": "The sale opens in a minute. Support still has nothing to tell anyone."
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you do about the leak?",
+      "timer": {
+        "seconds": 35,
+        "default": "SCALE",
+        "beats": [
+          {
+            "speaker": "MAYA",
+            "text": "No call? I'm taking the advisor's eight instances. It's a number, at least."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "FLAG",
+          "text": "Turn off the completion-callback flag on tonight's release",
+          "consequence": "Ninety seconds of redeploy · the sale opens halfway through",
+          "beats": [
+            {
+              "log": "checkout.completion_callbacks = off · redeploying 12 instances"
+            },
+            {
+              "narrate": "The sale opens halfway through the redeploy. For thirty seconds, checkouts stall on the instances still waiting their turn."
+            },
+            {
+              "metric": {
+                "label": "Checkout error rate",
+                "value": "14%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "Flag is off. The callback registry drained on the next collection and heap is flat at 39%. Big carts are pricing fine."
+            },
+            {
+              "metric": {
+                "label": "Checkout heap (pool average)",
+                "value": "39%",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Checkout error rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 1
+            }
+          }
+        },
+        {
+          "id": "RESTART",
+          "text": "Restart the checkout instances to empty the heap",
+          "consequence": "Fast · the same handler fills them again",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Rolling restart finished. Heap is down to 41% on every instance. Same build, same handler."
+            },
+            {
+              "metric": {
+                "label": "Checkout heap (pool average)",
+                "value": "41%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "JIN",
+              "text": "The evening sale is live. Traffic doubled, and so did the complaints."
+            },
+            {
+              "speaker": "SAM",
+              "text": "With the sale running, the restarted instances filled up in just over a minute."
+            },
+            {
+              "metric": {
+                "label": "Checkout heap (pool average)",
+                "value": "97%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "checkout-03 and checkout-09 just got killed for running out of memory. Every cart in flight on them is gone."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Enough. Turn the callbacks off."
+            },
+            {
+              "metric": {
+                "label": "Checkout heap (pool average)",
+                "value": "39%",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Checkout error rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "ROLLBACK",
+          "text": "Roll checkout back to last week's release (4.11)",
+          "consequence": "Stops the leak · brings back last week's bug",
+          "beats": [
+            {
+              "metric": {
+                "label": "Checkout heap (pool average)",
+                "value": "46%",
+                "trend": "flat"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "4.11 is live and the heap is flat. And every cart over fifty items is crashing at pricing again. That's the bug 4.12 was shipped to fix."
+            },
+            {
+              "metric": {
+                "label": "Large-cart failures",
+                "value": "74/min",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "JIN",
+              "text": "Our wholesale accounts can't place orders. Anything over fifty lines dies at pricing. Those are our biggest customers."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Roll forward. 4.12, flag off."
+            },
+            {
+              "metric": {
+                "label": "Large-cart failures",
+                "value": "0/min",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Checkout error rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 3
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "SCALE",
+          "text": "Add eight checkout instances (Capacity Advisor)",
+          "consequence": "Costly · the advisor is 0.88 sure",
+          "beats": [
+            {
+              "metric": {
+                "label": "Checkout instances",
+                "value": "20",
+                "trend": "up"
+              }
+            },
+            {
+              "metric": {
+                "label": "Checkout heap (pool average)",
+                "value": "64%",
+                "trend": "down"
+              }
+            },
+            {
+              "narrate": "For two minutes the advisor's number holds. Then the new instances start to look like the old ones."
+            },
+            {
+              "metric": {
+                "label": "Checkout heap (pool average)",
+                "value": "92%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "All twenty instances are leaking now. We nearly doubled the bill and bought two minutes."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Turn the callbacks off. Then scale us back down."
+            },
+            {
+              "metric": {
+                "label": "Checkout heap (pool average)",
+                "value": "39%",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Checkout error rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 2,
+              "aiDependency": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "orphan"
+    },
+    {
+      "id": "orphan",
+      "title": "pid 3318",
+      "beats": [
+        {
+          "narrate": "The heap is quiet. Sam takes one last dump to close the incident, and one row refuses to drain."
+        },
+        {
+          "log": "completionCallbacks · (unnamed block) · 1 · 4 KB · owner pid 3318 (process deleted)"
+        },
+        {
+          "narrate": "You look up pid 3318. The scheduler says it ran for two minutes, nine days ago, from an image with no deploy record. Then its entry was deleted."
+        },
+        {
+          "log": "9 days ago 03:15 · cold log store · pid 3318: UNKNOWN: the objects are gone. the references are not."
+        },
+        {
+          "collect": "DELETED_ALLOCATION_FRAGMENT"
+        },
+        {
+          "narrate": "The line was written a minute after the process stopped existing."
+        },
+        {
+          "speaker": "SAM",
+          "text": "I checked pid 3318 three times. It was deleted nine days ago. I don't know how a process that doesn't exist is holding memory in tonight's build."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Write down the date. I want to know what else happened that night.",
+          "when": {
+            "flags": {
+              "MAYA_IN_ON_IT": true
+            }
+          }
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Postmortem",
+      "beats": [
+        {
+          "speaker": "MAYA",
+          "text": "The leak writes itself. What about the block?"
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you do with pid 3318?",
+      "options": [
+        {
+          "id": "POSTMORTEM",
+          "text": "Put pid 3318 and the cold-store line in the postmortem",
+          "consequence": "On the record · Security will read it",
+          "beats": [
+            {
+              "speaker": "MAYA",
+              "text": "Then it's on the record. Good luck finding an owner for a process that doesn't exist."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            },
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "INC_004_ORPHAN_REPORTED": true
+            }
+          }
+        },
+        {
+          "id": "SAM",
+          "text": "Ask Sam to quietly pull everything pid 3318 ever touched",
+          "consequence": "Off the books · Sam's name on it too",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Quietly. Sure. Give me a few days."
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1,
+              "curiosity": 1
+            },
+            "alignment": {
+              "null": 1
+            },
+            "flags": {
+              "INC_004_SAM_DIGGING": true
+            }
+          }
+        },
+        {
+          "id": "KEEP",
+          "text": "Report the leak only; copy the cold-store line for yourself",
+          "consequence": "A clean report · the line stays yours",
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "INC_004_FRAGMENT_KEPT": true
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

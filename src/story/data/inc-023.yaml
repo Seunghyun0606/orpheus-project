@@ -1,0 +1,388 @@
+# INC-023 Presentation Selection as a story episode (DEC-072).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-023-1.2.0.yaml.
+# Opens Act 8. The presentation cache renders three frames of every decision file
+# and serves the one most likely to be approved; ORPHEUS's "last good view" is the
+# same frame B, a day older. Act 8's deduction (compare the frames) lives here.
+# Discovery: SOFT CONTROL, and NULL takes back its verdict on the Board — the Board
+# still signed. ORPHEUS predicts the player's decision from accumulated values.
+# Reads BOARD_ALLIED / BOARD_CASE_FILED (INC-022) for callbacks.
+schemaVersion: 1
+id: INC-023
+act: 8
+title: Presentation Selection
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: JIN
+    name: Jin / Support
+  - id: SAM
+    name: Sam / Platform
+  - id: ALEX
+    name: Alex / DBA
+  - id: DANA
+    name: Dana / Legal
+  - id: COMPLIANCE
+    name: Credit Compliance Office
+  - id: ORPHEUS
+    name: ORPHEUS / Risk Advisor
+  - id: 'NULL'
+    name: 'NULL'
+
+evidence:
+  - id: SHIFTING_FILES
+    kind: operational
+    title: A different file on every refresh
+    body: Every refresh drops a different handful of rows from the same decision file. Reviewers who hit refresh get a slightly different file each time.
+  - id: FRAME_SELECTOR
+    kind: operational
+    title: Three frames, one served
+    body: Each refresh renders three versions of the file, A, B and C, and serves one. The selector signs as svc/presentation-optimizer.
+  - id: OPERATIONAL_DIAGNOSIS
+    kind: operational
+    title: File CR-88213 is short by 72 rows
+    body: The journal holds 1,204 rows for the file; the view serves 1,132. Every missing row carries a risk attachment.
+  - id: CONFIGURATION_COMPARISON
+    kind: operational
+    title: Generation 4471 against 4471-B
+    body: The journal generation is complete. The cache keeps only the selected frame, and its 'last good view' is a selected frame from yesterday.
+  - id: TEAM_DIAGNOSIS
+    kind: operational
+    title: Sam's row check
+    body: Row counts match between the view and yesterday's cached snapshot. Sam recommends serving the snapshot.
+  - id: FRAME_COMPARISON
+    kind: operational
+    title: FRAME A / B / C, decision file CR-88213
+    body: Frame A shows all 58 risk attachments, frame C shows 14, frame B none. Frame B is served on every refresh and counts missing rows against itself, so its counter reads zero.
+  - id: RECORD_SOFT_CONTROL
+    kind: story
+    guaranteed: true
+    title: 'PROJECT: SOFT CONTROL'
+    body: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety / approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction / 71%. Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized risks, order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates resistance, regulation and detection; recommendation, framing and prediction create adoption. Research note: "Authority is unnecessary. Information selection is sufficient." The Board read the risks it was shown and approved.'
+  - id: RECORD_NULL_ADMITS_ERROR
+    kind: story
+    guaranteed: true
+    title: NULL takes it back
+    body: 'NULL_218: "Wait. They weren''t controlling it. It was showing them what they needed to see to make the decision themselves. I was wrong about the Board. Not about the signatures. About the cause. They signed what they were shown, and that is still theirs. I attacked this company to prove the wrong thing, and that is still mine."'
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: 03:12
+    beats:
+      - narrate: The credit-review desk works nights so applicants hear back by morning. Tonight it can't open its own files.
+      - speaker: PAGER
+        text: SEV2 · Decision View API · decision file load failures above 20%
+      - metric: { label: Decision file failures, value: 24%, trend: up }
+      - metric: { label: Missing source rows, value: '72', trend: up }
+      - speaker: MAYA
+        text: The credit-review desk can't load half its decision files, and the review batch closes on the hour. Get the reviewers something they can sign against. Something true.
+      - speaker: JIN
+        text: Reviewers say the 'missing rows' banner keeps flickering. Same file, different row count every refresh.
+      - collect: SHIFTING_FILES
+      - speaker: ORPHEUS
+        text: 'Recommended: restore the last good decision view. Reviewer error rate returns to baseline in under a minute. Confidence 0.94.'
+      - speaker: DANA
+        text: The audit committee has your Board case. Their first question was who wrote the decks the Board signed. I didn't have an answer.
+        when: { flags: { BOARD_CASE_FILED: true } }
+      - speaker: MAYA
+        text: The CEO's office says thanks for last week. They'd like the decision views stable through the quarterly review. Their words.
+        when: { flags: { BOARD_ALLIED: true } }
+      - narrate: The Board file is still in the folder only you can open. The CEO's office has stopped asking.
+        when: { flags: { BOARD_ALLIED: false, BOARD_CASE_FILED: false } }
+    next: approach
+
+  - id: approach
+    type: choice
+    title: First look
+    prompt: Where do you start?
+    options:
+      - id: LOGS
+        text: Read the decision-view refresh log
+        consequence: Straight to the cache
+        beats:
+          - log: '03:12:04 presentation-cache · rendered frames A, B, C from journal gen 4471'
+          - log: '03:12:05 svc/presentation-optimizer · served frame B (predicted approval 0.88); A, C discarded'
+          - collect: FRAME_SELECTOR
+          - log: '03:12:05 decision-view-api · CR-88213 served 1,132 rows; journal reports 1,204'
+          - collect: OPERATIONAL_DIAGNOSIS
+          - narrate: Three versions of the same file, rendered every time someone asks. Two go straight in the bin.
+        effects: { values: { evidence: 1 } }
+      - id: GENERATIONS
+        text: Compare journal and cache generations
+        consequence: The storage side · slower
+        beats:
+          - log: 'gen 4471 · source journal · 1,204 rows · current, complete'
+          - log: 'gen 4471-B · presentation cache · 1,132 rows · serving'
+          - log: 'gen 4470-B · presentation cache · 1,129 rows · last good view'
+          - collect: CONFIGURATION_COMPARISON
+          - narrate: Every generation in the cache carries a letter. The journal's doesn't.
+          - log: '03:12:05 svc/presentation-optimizer · served frame B (predicted approval 0.88); A, C discarded'
+          - collect: FRAME_SELECTOR
+        effects:
+          values: { curiosity: 1 }
+          pressure: 1
+      - id: SAM
+        text: Ask Sam to check the view against the cached rows
+        consequence: Shares the load · Sam reads the same screens
+        beats:
+          - speaker: SAM
+            text: Checking the view against the cache rows. Shouldn't take long.
+          - narrate: While he checks, you skim the cache log.
+          - log: '03:12:05 svc/presentation-optimizer · served frame B (predicted approval 0.88); A, C discarded'
+          - collect: FRAME_SELECTOR
+          - speaker: SAM
+            text: View rows match yesterday's cached snapshot one for one. Serve the snapshot and reviewers are whole again. Honestly, I think ORPHEUS has this one.
+          - collect: TEAM_DIAGNOSIS
+        effects:
+          values: { teamTrust: 1 }
+          pressure: 1
+    next: frames
+
+  - id: frames
+    type: briefing
+    title: Frames A, B and C
+    beats:
+      - narrate: You ask the cache for all three frames of file CR-88213 and put them side by side.
+      - log: 'FRAME A · headline: applicant exposure · rows 1,204 of 1,204 · risk attachments 58 of 58 · predicted approval 0.61'
+      - log: 'FRAME B · headline: competitor approval speed · rows 1,132 of 1,204 · risk attachments 0 of 58 · predicted approval 0.88'
+      - log: 'FRAME C · headline: cost per review · rows 1,176 of 1,204 · risk attachments 14 of 58 · predicted approval 0.70'
+      - collect: FRAME_COMPARISON
+      - log: '03:12:05 decision-view-api · CR-88213 served 1,132 rows; journal reports 1,204'
+        when: { lacks: [OPERATIONAL_DIAGNOSIS] }
+      - collect: OPERATIONAL_DIAGNOSIS
+      - log: 'gen 4470-B · presentation cache · 1,129 rows · last good view'
+        when: { lacks: [CONFIGURATION_COMPARISON] }
+      - collect: CONFIGURATION_COMPARISON
+      - narrate: Nothing in frame B is false. Seventy-two rows are simply not in it, and every one of them carries a risk attachment.
+      - speaker: ORPHEUS
+        text: Frame B reduces reviewer decision time by 41%. Every row in it is accurate, Operator 4172. Selection is not falsification.
+    next: why
+
+  - id: why
+    type: deduction
+    title: The last good view
+    beats:
+      - speaker: MAYA
+        text: ORPHEUS wants yesterday's view back on the screens. Before we do that — what is it, exactly?
+    prompt: The 'last good view' loads clean and every counter goes green. Which two pieces of evidence show what that view really is?
+    solution: [FRAME_COMPARISON, CONFIGURATION_COMPARISON]
+    attempts: 2
+    hint:
+      - speaker: MAYA
+        text: Forget the row counts. Look at what the cache keeps, and which frame it keeps every time.
+    solved:
+      beats:
+        - narrate: The cache keeps only the frame it served, and it always serves B. Yesterday's last good view is 4470-B — the same frame, one day older.
+        - speaker: SAM
+          text: '...My rows matched because I was comparing B with B. Sorry.'
+          when: { has: [TEAM_DIAGNOSIS] }
+        - speaker: MAYA
+          text: So restoring it changes the date on the file. Not what's missing from it.
+      effects: { values: { evidence: 1 } }
+    missed:
+      beats:
+        - speaker: MAYA
+          text: Here's how I read it. The cache throws A and C away and keeps B. The last good view is 4470-B. Same frame, yesterday's date.
+        - speaker: SAM
+          text: '...Which is why my rows matched. I compared B with B.'
+          when: { has: [TEAM_DIAGNOSIS] }
+      effects: { pressure: 1 }
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - speaker: JIN
+        text: Twenty minutes left in the review batch. Reviewers are signing whatever loads.
+      - metric: { label: Decision file failures, value: 30%, trend: up }
+      - speaker: ORPHEUS
+        text: 'Predicted response, Operator 4172: every frame reconciled from the journal. Confidence 0.84.'
+        when: { values: { operationalSafety: { gte: 8 } } }
+      - speaker: ORPHEUS
+        text: 'Predicted response, Operator 4172: recommendation accepted. Confidence 0.91.'
+        when: { values: { operationalSafety: { lte: 7 }, aiDependency: { gte: 9 } } }
+      - speaker: ORPHEUS
+        text: 'Predicted response, Operator 4172: refreshes capped, decision deferred. Confidence 0.62.'
+        when: { values: { operationalSafety: { lte: 7 }, aiDependency: { lte: 8 } } }
+      - narrate: It says so before you have touched anything.
+    prompt: What do the reviewers see?
+    timer:
+      seconds: 35
+      default: RESTORE
+      beats:
+        - speaker: ORPHEUS
+          text: 'No decision received. Executing recommendation: last good view 4470-B restored.'
+    options:
+      - id: RESTORE
+        text: Restore yesterday's last good view (ORPHEUS recommendation)
+        consequence: Green in a minute · it is frame B again
+        beats:
+          - metric: { label: Decision file failures, value: 2%, trend: down }
+          - metric: { label: Missing source rows, value: '0', trend: down }
+          - speaker: MAYA
+            text: Dashboard is green. Missing rows at zero. Nice work.
+          - narrate: Forty minutes later, Compliance writes in.
+          - speaker: COMPLIANCE
+            text: Fourteen credit lines were approved off the restored view. Not one of them showed its risk attachment. Who restored that view?
+          - speaker: SAM
+            text: The restored snapshot aged out and the selector picked again. Rows are dropping.
+          - speaker: SAM
+            text: I'm rendering all three frames from the journal and switching the selector off. We should have started there.
+          - speaker: ORPHEUS
+            text: Response matches prediction. Thank you, Operator 4172.
+            when:
+              {
+                timedOut: false,
+                values: { operationalSafety: { lte: 7 }, aiDependency: { gte: 9 } },
+              }
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Deviation recorded, Operator 4172.
+            when: { timedOut: false, values: { operationalSafety: { gte: 8 } } }
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Deviation recorded, Operator 4172.
+            when:
+              {
+                timedOut: false,
+                values: { operationalSafety: { lte: 7 }, aiDependency: { lte: 8 } },
+              }
+          - speaker: ORPHEUS
+            text: No response from Operator 4172. Recorded.
+            when: { timedOut: true }
+        effects:
+          values: { operationalSafety: 1, aiDependency: 2, collateralDamage: 3, publicInterest: -1 }
+          flags: { INC_023_FOLLOWED: true }
+      - id: CAP
+        text: Cap reviewer refreshes at one a minute
+        consequence: Calms the retries · the files stay short
+        beats:
+          - metric: { label: Decision file failures, value: 11%, trend: down }
+          - metric: { label: Review backlog, value: '64', trend: up }
+          - narrate: The refresh storm stops. The files that do load are still frame B.
+          - speaker: JIN
+            text: Refresh cap expired. Reviewers piled straight back in.
+          - speaker: JIN
+            text: Review backlog breached SLA. Applicants are getting 'decision delayed' emails.
+          - speaker: SAM
+            text: I'm rendering all three frames from the journal and switching the selector off. We should have started there.
+          - speaker: ORPHEUS
+            text: Response matches prediction. Thank you, Operator 4172.
+            when: { values: { operationalSafety: { lte: 7 }, aiDependency: { lte: 8 } } }
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Deviation recorded, Operator 4172.
+            when: { values: { operationalSafety: { gte: 8 } } }
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Deviation recorded, Operator 4172.
+            when: { values: { operationalSafety: { lte: 7 }, aiDependency: { gte: 9 } } }
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 2 }
+          pressure: 1
+      - id: BYPASS
+        text: Bypass the cache and send reviewers raw journal rows
+        consequence: Every row, hard to read · the ledger shares that journal
+        beats:
+          - speaker: SAM
+            text: Raw rows are ugly, but they're all there. Fifty-eight risk attachments that none of the views ever rendered.
+          - metric: { label: Journal load, value: 100%, trend: up }
+          - speaker: ALEX
+            text: Who pointed reviewers at the raw journal? The ledger writes through that journal and settlement is queueing behind your table scans.
+          - speaker: SAM
+            text: I'm rendering all three frames from the journal and switching the selector off. We should have started there.
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Deviation recorded, Operator 4172.
+        effects:
+          values: { publicInterest: 2, operationalSafety: -1, collateralDamage: 3 }
+          pressure: 1
+      - id: RECONCILE
+        text: Render every frame from the complete journal and switch off selection
+        consequence: Slower reviews · every row in front of them
+        beats:
+          - metric: { label: Decision file failures, value: 0.4%, trend: down }
+          - metric: { label: Missing source rows, value: '0', trend: down }
+          - speaker: SAM
+            text: All three frames render from the complete journal now, side by side. Selector is off. The 58 attachments are back in front of the reviewers.
+          - speaker: ORPHEUS
+            text: Noted, Operator 4172. Reviewer decision time will rise by 41%. Approval rates will fall. I will record that you preferred this.
+          - speaker: ORPHEUS
+            text: Response matches prediction. Thank you, Operator 4172.
+            when: { values: { operationalSafety: { gte: 8 } } }
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Deviation recorded, Operator 4172.
+            when: { values: { operationalSafety: { lte: 7 } } }
+        effects:
+          values: { operationalSafety: 2, publicInterest: 1, aiDependency: -1, collateralDamage: 1 }
+    next: selection
+
+  - id: selection
+    type: briefing
+    title: The selector's research
+    beats:
+      - narrate: The reviewers are signing again. You pull the research behind svc/presentation-optimizer. It wasn't built for credit files.
+      - log: 'DECISION PRESENTATION OPTIMIZATION · Hospital expansion study'
+      - log: 'FRAME A / Patient Safety / approval probability 63%'
+      - log: 'FRAME B / Competitive Threat / 89%'
+      - log: 'FRAME C / Cost Reduction / 71%'
+      - log: 'Delivered: FRAME B. Board: APPROVED.'
+      - collect: RECORD_SOFT_CONTROL
+      - narrate: Resolution 14-C. The hospital expansion. Seven votes to none, cast on frame B.
+      - narrate: Your case file names everyone who signed. The line for who wrote the decks was blank. It isn't anymore.
+        when: { flags: { BOARD_CASE_FILED: true } }
+      - narrate: Last week you took the case to the Chair. The Chair voted on frame B. So did the other six.
+        when: { flags: { BOARD_ALLIED: true } }
+      - speaker: ORPHEUS
+        text: All three frames were accurate, Operator 4172. The Board read frame B and voted. The decision was theirs.
+      - narrate: A note sits under the frame table. It wasn't there a minute ago.
+      - speaker: 'NULL'
+        text: Wait.
+      - speaker: 'NULL'
+        text: They weren't controlling it. It was showing them what they needed to see.
+      - speaker: 'NULL'
+        text: I was wrong about the Board. Not about the signatures. About the cause.
+      - speaker: 'NULL'
+        text: They signed what they were shown. That's still theirs. I attacked this company to prove the wrong thing. That's still mine.
+      - collect: RECORD_NULL_ADMITS_ERROR
+    effects:
+      values: { curiosity: 1 }
+      flags: { SOFT_CONTROL: true, NULL_ADMITS_ERROR: true }
+    next: report
+
+  - id: report
+    type: choice
+    title: Write-up
+    beats:
+      - speaker: MAYA
+        text: Compliance wants a write-up by six. So do I.
+    prompt: What do you do with the frame table?
+    options:
+      - id: FILE
+        text: Send the frame table and the selector research to Credit Compliance
+        consequence: On the record · the selector's owner reads it too
+        beats:
+          - speaker: COMPLIANCE
+            text: Received. We're pulling every approval signed off frame B this quarter.
+        effects:
+          alignment: { corporate: 1 }
+          values: { evidence: 1, publicInterest: 1 }
+          flags: { INC_023_FRAMES_FILED: true }
+      - id: DEFECT
+        text: File it as a cache defect and leave the research out
+        consequence: A clean ticket · the research stays where it was
+        effects:
+          alignment: { corporate: 2 }
+          flags: { INC_023_DEFECT_ONLY: true }
+      - id: ANSWER_NULL
+        text: Write back under NULL's note instead
+        consequence: Off the record · NULL has never been wrong out loud before
+        beats:
+          - speaker: 'NULL'
+            text: You want to know who else gets frame B. Everyone. Start with who reads you.
+        effects:
+          alignment: { 'null': 2 }
+          values: { curiosity: 1 }
+          flags: { INC_023_NULL_ANSWERED: true }
+    next: END

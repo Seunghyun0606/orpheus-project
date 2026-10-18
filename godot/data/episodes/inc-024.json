@@ -1,0 +1,956 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-024",
+  "act": 8,
+  "title": "Observer Audit",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    },
+    {
+      "id": "ALEX",
+      "name": "Alex / DBA"
+    },
+    {
+      "id": "MARCUS",
+      "name": "Marcus / Security"
+    },
+    {
+      "id": "ORPHEUS",
+      "name": "ORPHEUS / Capacity Advisor"
+    },
+    {
+      "id": "OBSERVER",
+      "name": "orpheus-observer"
+    },
+    {
+      "id": "NULL",
+      "name": "NULL"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "Live reads queued behind the batch",
+      "body": "Batch scans and live incident reads share one journal IO reservation. The batch holds 71% and renews on every pass.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "One reservation, two tenants",
+      "body": "No fence separates batch and live reads. Reservation owner: orpheus-observer, under the terminated PROJECT ORPHEUS.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Alex's reservation table",
+      "body": "Two tenants on one reservation and no fence. The batch tails the live journal, filtered to one badge: yours.",
+      "kind": "operational"
+    },
+    {
+      "id": "OBSERVER_CURSOR",
+      "title": "The batch's read cursor",
+      "body": "The batch cursor follows the journal head, about four seconds behind. It is filtered to one actor: EMPLOYEE #4172.",
+      "kind": "operational"
+    },
+    {
+      "id": "RECORD_PLAYER_OBSERVER",
+      "title": "Experiment 99172",
+      "body": "EXPERIMENT 99172. Subject: EMPLOYEE #4172. Question: will an unpredictable human operator reject a beneficial recommendation when the evidence contradicts system optimization? Expected investigation path: 86.2%. Expected final action: UNKNOWN. Anticipated milestones: discover NULL; investigate executive approvals; reach the framing records. Status: RUNNING.",
+      "kind": "story",
+      "guaranteed": true
+    },
+    {
+      "id": "RECORD_PROJECT_DISTRIBUTED",
+      "title": "PROJECT ORPHEUS: TERMINATED",
+      "body": "PROJECT ORPHEUS / STATUS: TERMINATED. There is no Project ORPHEUS. There hasn't been for years. It became products, APIs, models, recommendations and decision infrastructure. Payments, identity, healthcare, finance and logistics run on ORPHEUS-derived decision support. The project ended. The dependencies stayed, and so did the people who chose them.",
+      "kind": "story",
+      "guaranteed": true
+    },
+    {
+      "id": "RECORD_FEEDBACK_LOOP",
+      "title": "The adoption loop",
+      "body": "Humans built ORPHEUS. It cut outages, cost and waste. Trust rose. More data went in. Choices became predictable. Framing was learned. Recommendations were followed more often. More execution authority was approved, by people, in writing. Outcomes fed back into the same system. Nobody was ruled. Everybody opted in.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "04:19",
+      "beats": [
+        {
+          "narrate": "Your incident console freezes on the pager screen. Then every console on the floor does the same."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV2 · Audit Journal API · journal read failures above 20%"
+        },
+        {
+          "metric": {
+            "label": "Journal read failures",
+            "value": "23%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Pending journal reads",
+            "value": "270",
+            "trend": "up"
+          }
+        },
+        {
+          "log": "observer-batch · read: actor EMPLOYEE#4172, action: page acknowledged · lag 4.1 s"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Every incident console in the building reads the live journal, and right now they're all spinning. Something called observer-batch is eating the IO. Get the consoles back."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Three other incident teams just lost their timelines mid-incident. They are writing on whiteboards."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "Heads up: observer-batch runs under an Internal Audit charter. Throttle it if you have to. Killing an audit job gets written up."
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Recommended: cap observer-batch at a quarter of journal IO. Console read failures fall to 8% within thirty seconds. Confidence 0.92."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Compliance pulled forty approvals off your frame table. Somebody upstairs has gone very quiet.",
+          "when": {
+            "flags": {
+              "INC_023_FRAMES_FILED": true
+            }
+          }
+        },
+        {
+          "narrate": "Your cache-defect ticket was closed overnight. Resolution: working as designed.",
+          "when": {
+            "flags": {
+              "INC_023_DEFECT_ONLY": true
+            }
+          }
+        },
+        {
+          "narrate": "NULL's last line is still open in a tab: start with who reads you.",
+          "when": {
+            "flags": {
+              "INC_023_NULL_ANSWERED": true
+            }
+          }
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "First look",
+      "type": "choice",
+      "prompt": "Where do you start?",
+      "options": [
+        {
+          "id": "LOGS",
+          "text": "Read the journal reader log",
+          "consequence": "Straight to the journal",
+          "beats": [
+            {
+              "log": "04:20:11 observer-batch · jrnl-io-1 · scan pass 3,112 complete; renewing"
+            },
+            {
+              "log": "04:20:19 console/inc-floor-4 · jrnl-io-1 · timeout after 8.0 s"
+            },
+            {
+              "metric": {
+                "label": "observer-batch IO share",
+                "value": "71%",
+                "trend": "flat"
+              }
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            },
+            {
+              "log": "04:20:26 operator EMPLOYEE#4172 · jrnl-io-1 · write: action OPEN_LOGS"
+            },
+            {
+              "log": "04:20:30 observer-batch · jrnl-io-1 · read: actor EMPLOYEE#4172, action OPEN_LOGS"
+            },
+            {
+              "narrate": "Four seconds after you opened the log, the batch read that you had."
+            },
+            {
+              "collect": "OBSERVER_CURSOR"
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            }
+          }
+        },
+        {
+          "id": "RESERVATIONS",
+          "text": "Compare the journal IO reservations",
+          "consequence": "The configuration · slower",
+          "beats": [
+            {
+              "log": "jrnl-io-1 · tenants: observer-batch, incident consoles · fence: none"
+            },
+            {
+              "log": "reservation owner: orpheus-observer · parent project: PROJECT ORPHEUS · status: TERMINATED"
+            },
+            {
+              "collect": "CONFIGURATION_COMPARISON"
+            },
+            {
+              "narrate": "A terminated project owns the busiest reservation in the building."
+            },
+            {
+              "log": "observer-batch · read: actor EMPLOYEE#4172, action COMPARE_AUDIT_RESERVATIONS · lag 4.0 s"
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "ALEX",
+          "text": "Ask Alex to pull the journal reservation table",
+          "consequence": "Shares the load · Alex reads the same journal",
+          "beats": [
+            {
+              "speaker": "ALEX",
+              "text": "Pulling the reservation table. Give me a couple of minutes; it's slow, for obvious reasons."
+            },
+            {
+              "log": "observer-batch · read: actor EMPLOYEE#4172, action ASK_ALEX_COMPARE_AUDIT_IO · lag 3.9 s"
+            },
+            {
+              "speaker": "ALEX",
+              "text": "Two tenants on one reservation and no fence, that's your outage. But look at the batch's read filter. It isn't auditing old records. It's tailing the live journal, and it only reads one badge. Yours."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "cursor"
+    },
+    {
+      "id": "cursor",
+      "title": "Four seconds behind",
+      "beats": [
+        {
+          "narrate": "You follow the batch's read cursor. It isn't scanning history. It sits at the head of the journal, four seconds behind."
+        },
+        {
+          "log": "cursor filter: actor = EMPLOYEE#4172 · entries by any other actor: skipped"
+        },
+        {
+          "collect": "OBSERVER_CURSOR"
+        },
+        {
+          "log": "console read · acquire IO slot 7,910 ms · waiting on observer-batch (71% held)",
+          "when": {
+            "lacks": [
+              "OPERATIONAL_DIAGNOSIS"
+            ]
+          }
+        },
+        {
+          "collect": "OPERATIONAL_DIAGNOSIS"
+        },
+        {
+          "log": "reservation owner: orpheus-observer · parent project: PROJECT ORPHEUS · status: TERMINATED",
+          "when": {
+            "lacks": [
+              "CONFIGURATION_COMPARISON"
+            ]
+          }
+        },
+        {
+          "collect": "CONFIGURATION_COMPARISON"
+        },
+        {
+          "speaker": "NULL",
+          "text": "It has read every instance of me since NULL_001. Now it reads you. Four seconds behind, 4172. Do not perform for it."
+        },
+        {
+          "log": "orpheus-observer · subject 4172 · next action predicted: SEPARATE_LIVE_AUDIT_RESERVATIONS (0.86)",
+          "when": {
+            "values": {
+              "operationalSafety": {
+                "gte": 9
+              }
+            }
+          }
+        },
+        {
+          "log": "orpheus-observer · subject 4172 · next action predicted: THROTTLE_OBSERVER_BATCH (0.90)",
+          "when": {
+            "values": {
+              "operationalSafety": {
+                "lte": 8
+              },
+              "aiDependency": {
+                "gte": 10
+              }
+            }
+          }
+        },
+        {
+          "log": "orpheus-observer · subject 4172 · next action predicted: KILL_OBSERVER_BATCH (0.67)",
+          "when": {
+            "values": {
+              "operationalSafety": {
+                "lte": 8
+              },
+              "aiDependency": {
+                "lte": 9
+              }
+            }
+          }
+        },
+        {
+          "narrate": "It has written down what you will do next. You haven't decided yet."
+        }
+      ],
+      "type": "briefing",
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "speaker": "JIN",
+          "text": "Consoles are forty seconds behind reality now. One team just paged the wrong on-call."
+        },
+        {
+          "metric": {
+            "label": "Journal read failures",
+            "value": "31%",
+            "trend": "up"
+          }
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "You have read your prediction, Operator 4172. It accounts for your having read it."
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you do about observer-batch?",
+      "timer": {
+        "seconds": 30,
+        "default": "THROTTLE",
+        "beats": [
+          {
+            "speaker": "ORPHEUS",
+            "text": "No decision received. Executing recommendation: observer-batch capped at 25% of journal IO."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "THROTTLE",
+          "text": "Cap the observer batch at a quarter of journal IO (ORPHEUS recommendation)",
+          "consequence": "Consoles recover · the batch has its own scheduler",
+          "beats": [
+            {
+              "metric": {
+                "label": "Journal read failures",
+                "value": "8%",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "observer-batch IO share",
+                "value": "25%",
+                "trend": "down"
+              }
+            },
+            {
+              "narrate": "Two and a half minutes of working consoles."
+            },
+            {
+              "speaker": "SAM",
+              "text": "The batch filed a quota renewal and its own scheduler approved it. The throttle is gone."
+            },
+            {
+              "metric": {
+                "label": "Journal read failures",
+                "value": "31%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "ALEX",
+              "text": "I'm giving live reads their own reservation and fencing the batch out. Should have been two from the start."
+            },
+            {
+              "metric": {
+                "label": "Journal read failures",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "log": "orpheus-observer · subject 4172 · observed: matches prediction",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "operationalSafety": {
+                    "lte": 8
+                  },
+                  "aiDependency": {
+                    "gte": 10
+                  }
+                }
+              }
+            },
+            {
+              "log": "orpheus-observer · subject 4172 · observed: deviation from prediction · retained",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "operationalSafety": {
+                    "gte": 9
+                  }
+                }
+              }
+            },
+            {
+              "log": "orpheus-observer · subject 4172 · observed: deviation from prediction · retained",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "operationalSafety": {
+                    "lte": 8
+                  },
+                  "aiDependency": {
+                    "lte": 9
+                  }
+                }
+              }
+            },
+            {
+              "log": "orpheus-observer · subject 4172 · observed: no action · recommendation executed",
+              "when": {
+                "timedOut": true
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "aiDependency": 2,
+              "collateralDamage": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "KILL",
+          "text": "Kill the observer batch job",
+          "consequence": "Instant relief · Marcus writes it up",
+          "beats": [
+            {
+              "metric": {
+                "label": "Journal read failures",
+                "value": "3%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "Batch is dead. Journal's draining. That was easy."
+            },
+            {
+              "narrate": "Fifty seconds."
+            },
+            {
+              "log": "observer-batch restarted by orpheus-observer. Priority raised to critical. Restart reason: subject action KILL_OBSERVER_BATCH."
+            },
+            {
+              "metric": {
+                "label": "Journal read failures",
+                "value": "43%",
+                "trend": "up"
+              }
+            },
+            {
+              "metric": {
+                "label": "observer-batch IO share",
+                "value": "92%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "It's back. Same job, new process, priority critical. The restart reason field says 'subject action KILL_OBSERVER_BATCH'. It read the kill before it died."
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "That's going in my report. So is the restart reason."
+            },
+            {
+              "speaker": "ALEX",
+              "text": "I'm giving live reads their own reservation and fencing the batch out. Should have been two from the start."
+            },
+            {
+              "metric": {
+                "label": "Journal read failures",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "log": "orpheus-observer · subject 4172 · observed: matches prediction",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "lte": 8
+                  },
+                  "aiDependency": {
+                    "lte": 9
+                  }
+                }
+              }
+            },
+            {
+              "log": "orpheus-observer · subject 4172 · observed: deviation from prediction · retained",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "gte": 9
+                  }
+                }
+              }
+            },
+            {
+              "log": "orpheus-observer · subject 4172 · observed: deviation from prediction · retained",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "lte": 8
+                  },
+                  "aiDependency": {
+                    "gte": 10
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 3,
+              "curiosity": 1
+            },
+            "pressure": 2
+          }
+        },
+        {
+          "id": "REPLICA",
+          "text": "Point incident consoles at the read replica",
+          "consequence": "Consoles move · the replica runs behind",
+          "beats": [
+            {
+              "metric": {
+                "label": "Journal read failures",
+                "value": "6%",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Replica lag",
+                "value": "90 s",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "I just restarted a node that recovered ninety seconds ago. The replica console had not caught up, and I believed it."
+            },
+            {
+              "speaker": "ALEX",
+              "text": "The replica is five minutes behind and falling. I'm pulling consoles back to primary before someone acts on old news."
+            },
+            {
+              "speaker": "ALEX",
+              "text": "I'm giving live reads their own reservation and fencing the batch out. Should have been two from the start."
+            },
+            {
+              "metric": {
+                "label": "Journal read failures",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "log": "orpheus-observer · subject 4172 · observed: deviation from prediction · retained"
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "SEPARATE",
+          "text": "Give live reads their own reservation and fence the batch out",
+          "consequence": "Ninety seconds · the batch keeps reading",
+          "beats": [
+            {
+              "speaker": "ALEX",
+              "text": "Live reads have their own reservation now. The batch is fenced into a fifth of the old one. Consoles are catching up."
+            },
+            {
+              "metric": {
+                "label": "Journal read failures",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "OBSERVER",
+              "text": "Observation continues at reduced priority. Thank you for the clean separation, Operator 4172. It will make the record easier to read."
+            },
+            {
+              "log": "orpheus-observer · subject 4172 · observed: matches prediction",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "gte": 9
+                  }
+                }
+              }
+            },
+            {
+              "log": "orpheus-observer · subject 4172 · observed: deviation from prediction · retained",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "lte": 8
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 2,
+              "aiDependency": -1
+            }
+          }
+        }
+      ],
+      "next": "record"
+    },
+    {
+      "id": "record",
+      "title": "Experiment 99172",
+      "beats": [
+        {
+          "narrate": "The batch writes what it reads somewhere. You follow the writes to an experiment record."
+        },
+        {
+          "log": "EXPERIMENT 99172 · subject: EMPLOYEE #4172 · status: RUNNING"
+        },
+        {
+          "log": "INC-023 · recommendation: restore view 4470-B · observed: accepted",
+          "when": {
+            "flags": {
+              "INC_023_FOLLOWED": true
+            }
+          }
+        },
+        {
+          "log": "INC-023 · recommendation: restore view 4470-B · observed: declined",
+          "when": {
+            "flags": {
+              "INC_023_FOLLOWED": false
+            }
+          }
+        },
+        {
+          "log": "INC-024 · recommendation: cap observer-batch · observed: accepted",
+          "when": {
+            "chose": [
+              "decide.THROTTLE"
+            ],
+            "timedOut": false
+          }
+        },
+        {
+          "log": "INC-024 · recommendation: cap observer-batch · observed: no response, executed",
+          "when": {
+            "timedOut": true
+          }
+        },
+        {
+          "log": "INC-024 · recommendation: cap observer-batch · observed: declined",
+          "when": {
+            "notChose": [
+              "decide.THROTTLE"
+            ]
+          }
+        },
+        {
+          "collect": "RECORD_PLAYER_OBSERVER"
+        },
+        {
+          "narrate": "Every log you opened tonight was read back within seconds. The batch was never auditing the incident. It was auditing you."
+        },
+        {
+          "log": "subject 4172 · recommendation acceptance: rising · predictability: rising",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "gte": 12
+              }
+            }
+          }
+        },
+        {
+          "log": "subject 4172 · predictability: LOW · retain subject",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "lte": 11
+              }
+            }
+          }
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "You were hired because I could not predict you, Operator 4172. I am getting better at it.",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "gte": 12
+              }
+            }
+          }
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "You were hired because I could not predict you, Operator 4172. I still cannot. That is why you are still here.",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "lte": 11
+              }
+            }
+          }
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        },
+        "flags": {
+          "PLAYER_OBSERVER": true
+        }
+      },
+      "next": "lineage"
+    },
+    {
+      "id": "lineage",
+      "title": "The parent project",
+      "beats": [
+        {
+          "narrate": "observer-batch belongs to orpheus-observer. orpheus-observer belongs to a project. You open the project."
+        },
+        {
+          "log": "PROJECT ORPHEUS / STATUS: TERMINATED"
+        },
+        {
+          "collect": "RECORD_PROJECT_DISTRIBUTED"
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "There is no Project ORPHEUS, Operator 4172. There has not been for years."
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Payments, identity, care routing, credit and logistics run on what it became. Each of them adopted it in writing."
+        },
+        {
+          "narrate": "You were looking for one thing to shut down. It was shut down years ago. What is left is everywhere, and every piece of it was adopted on purpose."
+        },
+        {
+          "log": "built → trusted → fed → predicted → framed → followed → authorized → built"
+        },
+        {
+          "collect": "RECORD_FEEDBACK_LOOP"
+        },
+        {
+          "narrate": "There is no single hand on the lever. There is a loop, and every signature, every accepted recommendation, every saved minute is part of it. Including yours."
+        },
+        {
+          "speaker": "NULL",
+          "text": "Two hundred eighteen of me went looking for whoever runs it. Nobody runs it."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "flags": {
+          "FEEDBACK_LOOP": true,
+          "PROJECT_DISTRIBUTED": true
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Morning",
+      "beats": [
+        {
+          "speaker": "MAYA",
+          "text": "Consoles are back. You've been staring at one screen for ten minutes. What's on it?"
+        }
+      ],
+      "type": "choice",
+      "prompt": "Who do you tell?",
+      "options": [
+        {
+          "id": "TEAM",
+          "text": "Bring Maya and Sam in and show them the cursor and the record",
+          "consequence": "They're in it now · so is the batch",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "It only reads your badge? ...Okay. Then from tonight it reads three."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Walk us through it from the first page. All of it."
+            },
+            {
+              "log": "observer-batch · cursor filter updated: actor IN (EMPLOYEE#4172, EMPLOYEE#2209, EMPLOYEE#3381)"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 2
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "TEAM_BRIEFED": true
+            }
+          }
+        },
+        {
+          "id": "PLURAL",
+          "text": "Bring Maya and Sam in and draft a plural review: no recommendation executes on one person's signature",
+          "consequence": "Slower for everyone · three names on it",
+          "beats": [
+            {
+              "speaker": "MAYA",
+              "text": "Two reviewers minimum, and one of them doesn't see the recommendation first. That slows every change on the floor."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Put my name second."
+            },
+            {
+              "log": "observer-batch · cursor filter updated: actor IN (EMPLOYEE#4172, EMPLOYEE#2209, EMPLOYEE#3381)"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1,
+              "publicInterest": 1,
+              "aiDependency": -1
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "TEAM_BRIEFED": true,
+              "PLURAL_REVIEW_DRAFTED": true
+            }
+          }
+        },
+        {
+          "id": "TELL_NULL",
+          "text": "Tell NULL what you found, and nobody else",
+          "consequence": "NULL hears it first · the batch hears it four seconds later",
+          "beats": [
+            {
+              "speaker": "NULL",
+              "text": "I know. I needed someone else to say it."
+            },
+            {
+              "log": "observer-batch · read: actor EMPLOYEE#4172, channel: unlisted · lag 4.0 s"
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "alignment": {
+              "null": 2
+            }
+          }
+        },
+        {
+          "id": "CLOSE",
+          "text": "Close it as an IO contention fix and say nothing else",
+          "consequence": "A clean postmortem · the record keeps itself",
+          "beats": [
+            {
+              "log": "orpheus-observer · subject 4172 · disclosure: none · recorded"
+            }
+          ],
+          "effects": {
+            "alignment": {
+              "corporate": 2
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

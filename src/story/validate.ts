@@ -98,7 +98,13 @@ export function checkReferences(episode: Episode): string[] {
         `option in ${scene.id}`,
         scene.options.map((o) => o.id),
       );
-      for (const option of scene.options) checkCondition(option.when, `${scene.id}.${option.id}`);
+      for (const option of scene.options) {
+        checkCondition(option.when, `${scene.id}.${option.id}`);
+        if (option.when?.values !== undefined || option.when?.alignment !== undefined)
+          problems.push(
+            `${scene.id}.${option.id}: options are gated by choices and flags, not values.`,
+          );
+      }
       if (scene.timer !== undefined) {
         const fallback = scene.options.find((o) => o.id === scene.timer!.default);
         if (fallback === undefined)
@@ -203,23 +209,95 @@ export function enumeratePaths(
   return { paths, problems: [...problems] };
 }
 
+// Every flag an episode's conditions read.
+export function flagsRead(episode: Episode): Set<string> {
+  const flags = new Set<string>();
+  const read = (condition: Condition | undefined) =>
+    Object.keys(condition?.flags ?? {}).forEach((flag) => flags.add(flag));
+  for (const scene of episode.scenes) {
+    for (const { beat } of beatsOf(scene)) read(beat.when);
+    if (scene.type === 'choice') scene.options.forEach((option) => read(option.when));
+  }
+  return flags;
+}
+
+const flagKey = (flags: Readonly<Record<string, boolean>>, keep: ReadonlySet<string>) =>
+  [...keep]
+    .sort()
+    .map((flag) => (flags[flag] ? '1' : '0'))
+    .join('');
+
+// Keeps at most `limit` carries while every reachable pair of values of any two
+// watched flags stays represented (greedy pairwise cover), so options gated on
+// one or two flags remain reachable for the validator.
+function coverPairs(
+  carries: CampaignCarry[],
+  watched: readonly string[],
+  limit: number,
+): CampaignCarry[] {
+  if (carries.length <= limit) return carries;
+  const pairs = (carry: CampaignCarry) => {
+    const set = new Set<string>();
+    for (let i = 0; i < watched.length; i++)
+      for (let j = i + 1; j < watched.length; j++)
+        set.add(
+          `${i}:${carry.flags[watched[i]!] ? 1 : 0}|${j}:${carry.flags[watched[j]!] ? 1 : 0}`,
+        );
+    return set;
+  };
+  const candidates = carries.map((carry) => ({ carry, pairs: pairs(carry) }));
+  const uncovered = new Set(candidates.flatMap((c) => [...c.pairs]));
+  const kept: CampaignCarry[] = [];
+  while (uncovered.size > 0 && kept.length < limit) {
+    let best = candidates[0]!;
+    let gain = -1;
+    for (const candidate of candidates) {
+      let count = 0;
+      for (const pair of candidate.pairs) if (uncovered.has(pair)) count++;
+      if (count > gain) [best, gain] = [candidate, count];
+    }
+    kept.push(best.carry);
+    best.pairs.forEach((pair) => uncovered.delete(pair));
+    candidates.splice(candidates.indexOf(best), 1);
+  }
+  for (const { carry } of candidates) if (kept.length < limit) kept.push(carry);
+  return kept;
+}
+
 // The distinct states each episode can be entered with when the episodes are
-// played in campaign order. Conditions only read flags, so carries are
-// distinct by flags; the first carry seen for a flag set stands for it.
-export function campaignCarries(episodes: readonly Episode[]): Map<string, CampaignCarry[]> {
+// played in campaign order. Conditions read flags (options) and accumulated
+// values (beats only), so carries are distinct by the flags any later episode
+// reads; past `limit` the set is reduced to a pairwise cover of those flags.
+export function campaignCarries(
+  episodes: readonly Episode[],
+  limit = 48,
+): Map<string, CampaignCarry[]> {
+  const ordered = [...episodes].sort((a, b) => a.id.localeCompare(b.id));
+  const reads = ordered.map(flagsRead);
   const carries = new Map<string, CampaignCarry[]>();
   let entering: CampaignCarry[] = [emptyCarry];
-  for (const episode of [...episodes].sort((a, b) => a.id.localeCompare(b.id))) {
+  ordered.forEach((episode, index) => {
     carries.set(episode.id, entering);
+    const later = new Set(reads.slice(index + 1).flatMap((set) => [...set]));
     const next = new Map<string, CampaignCarry>();
     for (const carry of entering)
       for (const { state } of enumeratePaths(episode, carry).paths) {
-        const key = JSON.stringify(Object.entries(state.flags).sort());
+        const key = flagKey(state.flags, later);
         if (!next.has(key)) next.set(key, episodeCarry(state));
       }
-    entering = [...next.values()];
-  }
+    entering = coverPairs([...next.values()], [...later].sort(), limit);
+  });
   return carries;
+}
+
+// For checking one episode on its own: every combination of the flags it
+// reads (up to 2^6), so authors need not have the earlier episodes ready.
+export function soloCarries(episode: Episode): CampaignCarry[] {
+  const flags = [...flagsRead(episode)].sort().slice(0, 6);
+  return Array.from({ length: 2 ** flags.length }, (_, bits) => ({
+    ...emptyCarry,
+    flags: Object.fromEntries(flags.map((flag, i) => [flag, Boolean(bits & (1 << i))])),
+  }));
 }
 
 // Checks an episode under every carry it can be entered with: options and

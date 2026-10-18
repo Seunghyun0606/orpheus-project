@@ -1,0 +1,599 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-017",
+  "act": 6,
+  "title": "Candidate Ranking",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    },
+    {
+      "id": "TALENT",
+      "name": "Head of Talent"
+    },
+    {
+      "id": "ORPHEUS",
+      "name": "ORPHEUS / Talent Advisor"
+    },
+    {
+      "id": "NULL",
+      "name": "NULL"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "RANK_JUMP",
+      "title": "One candidate, two places",
+      "body": "Candidate c-20931, requisition VS-DATA-0388: rank #3 at 09:14:02, rank #27 at 09:14:05. Same recruiter, same filters.",
+      "kind": "operational"
+    },
+    {
+      "id": "STRAY_READ",
+      "title": "A read from a retired shard",
+      "body": "One read in the sample was served by shard r26-frozen. r26 was retired last week, yet it still answers for a single requisition: VS-SRE-0412.",
+      "kind": "operational"
+    },
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "Two shards, two ranks",
+      "body": "Reads land on r27 and r28 shards at random, and m28 scores are joined to whichever answers. One candidate, two ranks.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Sam's rollout timeline",
+      "body": "The publisher pushes r28 on every cycle. Rolling the cache back buys one cycle; the mixing comes back with the next.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "m28 went live 51 minutes before r28",
+      "body": "Model m28 published at 08:40; cache r28 became consistent at 09:31. Nothing fences the two together.",
+      "kind": "operational"
+    },
+    {
+      "id": "RECORD_RECRUITMENT_SELECTION",
+      "title": "Candidate #4172",
+      "body": "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "09:20",
+      "beats": [
+        {
+          "narrate": "A day shift, for once. Daylight on the monitors makes the dashboards look harmless."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV2 · Recruitment API · ranking read errors above 20%"
+        },
+        {
+          "metric": {
+            "label": "Ranking read errors",
+            "value": "21%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Recruiters active",
+            "value": "214"
+          }
+        },
+        {
+          "log": "c-20931 · VS-DATA-0388 · rank #3 at 09:14:02 · rank #27 at 09:14:05 · same recruiter, same filters"
+        },
+        {
+          "collect": "RANK_JUMP"
+        },
+        {
+          "narrate": "Risk engineering shipped rescore v3 on Thursday with the receipt check back in. Your name isn't on the change.",
+          "when": {
+            "flags": {
+              "INC_016_RULE_REPORTED": true
+            }
+          }
+        },
+        {
+          "speaker": "JIN",
+          "text": "Okafor sent you coffee, by the way. She says nobody had ever read her review history before.",
+          "when": {
+            "flags": {
+              "INC_016_ANALYSTS_CREDITED": true
+            }
+          }
+        },
+        {
+          "narrate": "The credit-risk record sits in a folder on your laptop called \"receipts\". You haven't opened it since.",
+          "when": {
+            "flags": {
+              "INC_016_RECORD_KEPT": true
+            }
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Recruiters are watching candidates jump twenty places between page loads. The hiring committee locks offers at ten. Find out which ranking is real."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Recruiter tickets are coming in faster than I can read them. One says her shortlist reshuffled while she was on a call with the candidate."
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Divergence affects 3.1% of ranking reads. Recommended action: roll back to cache r27. Predicted recruiter satisfaction 0.94. Confidence 0.90."
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "First move",
+      "type": "choice",
+      "prompt": "Where do you start?",
+      "options": [
+        {
+          "id": "TRACE",
+          "text": "Trace one candidate's two rankings",
+          "consequence": "Straight to the reads",
+          "beats": [
+            {
+              "log": "c-20931 read 1 · shard r27-04 · score m28 · rank #3"
+            },
+            {
+              "log": "c-20931 read 2 · shard r28-11 · score m28 · rank #27"
+            },
+            {
+              "log": "sample read 9 · shard r26-frozen · requisition VS-SRE-0412"
+            },
+            {
+              "collect": "STRAY_READ"
+            },
+            {
+              "narrate": "Two shards, one model, two answers. And one read from a shard that was retired last week. You make a note and keep going."
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1,
+              "curiosity": 1
+            }
+          }
+        },
+        {
+          "id": "SAM",
+          "text": "Ask Sam to line up the model and cache rollouts",
+          "consequence": "Slower · Sam owns the timeline",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Lining up the model and cache rollouts. Ninety seconds."
+            },
+            {
+              "narrate": "Ninety seconds of recruiters refreshing."
+            },
+            {
+              "speaker": "SAM",
+              "text": "m28 went live at 08:40, r28 finished warming at 09:31. In between, the API mixed them at random. Rolling back won't stop the publisher; it pushes r28 again next cycle."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "METRICS",
+          "text": "Check ranking and recruiter metrics",
+          "consequence": "Fast · you see the size of it, not the cause",
+          "beats": [
+            {
+              "metric": {
+                "label": "Ranking cache mismatches",
+                "value": "121",
+                "trend": "up"
+              }
+            },
+            {
+              "narrate": "3.1% of reads, says ORPHEUS. Every one of them lands on somebody's shortlist."
+            },
+            {
+              "log": "mismatch report · grouped by shard: r27 ↔ r28 · scored by m28"
+            },
+            {
+              "narrate": "The mismatches split cleanly along two shard generations. Same model on top of both."
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "aiDependency": 1
+            }
+          }
+        }
+      ],
+      "next": "compare"
+    },
+    {
+      "id": "compare",
+      "title": "Two generations",
+      "beats": [
+        {
+          "log": "Model m28 published 08:40. Cache r28 consistent 09:31. No publish fence between model and cache generations."
+        },
+        {
+          "collect": "CONFIGURATION_COMPARISON"
+        },
+        {
+          "speaker": "SAM",
+          "text": "And the publisher pushes r28 again every cycle, whatever we do to the cache underneath it.",
+          "when": {
+            "notChose": [
+              "approach.SAM"
+            ]
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Fifty-one minutes of rankings built on a cache that wasn't ready. Somebody is about to hire off that."
+        }
+      ],
+      "type": "briefing",
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "speaker": "TALENT",
+          "text": "The committee locks offers at ten. I need a list I can trust, or a time."
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Recommendation unchanged: roll back to cache r27. Confidence 0.90."
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Predicted operator response: fence the generations. Confidence 0.58.",
+          "when": {
+            "values": {
+              "operationalSafety": {
+                "gte": 5
+              }
+            }
+          }
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Predicted operator response: accept recommendation. Confidence 0.61.",
+          "when": {
+            "values": {
+              "operationalSafety": {
+                "lte": 4
+              }
+            }
+          }
+        },
+        {
+          "narrate": "Lower than it usually is. You notice that."
+        }
+      ],
+      "type": "choice",
+      "prompt": "Which ranking do the recruiters get?",
+      "timer": {
+        "seconds": 35,
+        "default": "ROLLBACK",
+        "beats": [
+          {
+            "speaker": "ORPHEUS",
+            "text": "No operator input. Executing recommendation: roll back to cache r27."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "ROLLBACK",
+          "text": "Roll the ranking cache back to r27 (ORPHEUS recommendation)",
+          "consequence": "Ranks stop moving · recent applicants disappear",
+          "beats": [
+            {
+              "speaker": "ORPHEUS",
+              "text": "r27 restored. Ranking consistency 99.2%. Recommendation performing as projected."
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Operator response as predicted.",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "operationalSafety": {
+                    "lte": 4
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Operator response off-model.",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "operationalSafety": {
+                    "gte": 5
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "r27 is serving and the ranks have stopped moving. Also, every applicant since Tuesday has vanished from them. That is 412 people."
+            },
+            {
+              "speaker": "TALENT",
+              "text": "The committee locked six offers at ten off last week's list. The 412 people who applied since Tuesday were never in the room."
+            },
+            {
+              "speaker": "SAM",
+              "text": "The publisher pushed r28 again on its cycle. The rollback is gone and the mixing is back."
+            },
+            {
+              "narrate": "Sam fences m28 to r28 at 10:20. The six offers are already out."
+            }
+          ],
+          "effects": {
+            "values": {
+              "aiDependency": 2,
+              "operationalSafety": -1,
+              "collateralDamage": 3
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "FREEZE",
+          "text": "Freeze ranking publication for every recruiter",
+          "consequence": "Nobody sees a wrong rank · nobody sees any",
+          "beats": [
+            {
+              "speaker": "MAYA",
+              "text": "Publication is frozen. Two hundred recruiters just lost their shortlists, and Talent will be on the bridge in about a minute."
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Operator response off-model."
+            },
+            {
+              "speaker": "TALENT",
+              "text": "Thirty-one interviews today and nobody can see a candidate list. Unfreeze it or give me a time."
+            },
+            {
+              "narrate": "Sam fences the two generations behind the freeze. Eleven minutes."
+            },
+            {
+              "speaker": "TALENT",
+              "text": "We just lost two finalists to a competitor because we couldn't send them schedules. How long?"
+            },
+            {
+              "narrate": "The committee moves to eleven. Every rank it sees is right."
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 1,
+              "teamTrust": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 2
+          }
+        },
+        {
+          "id": "RECONCILE",
+          "text": "Fence model m28 to cache r28 and republish",
+          "consequence": "Slower · ranks keep jumping until it lands",
+          "beats": [
+            {
+              "narrate": "The republish takes six minutes. The ranks keep moving the whole time."
+            },
+            {
+              "speaker": "JIN",
+              "text": "More recruiters, more reshuffles. Two hiring managers sent rejections off the wrong ranks."
+            },
+            {
+              "speaker": "SAM",
+              "text": "m28 and r28 are fenced together. One generation, one rank per candidate. Republished."
+            },
+            {
+              "metric": {
+                "label": "Ranking cache mismatches",
+                "value": "0",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Generation fence applied. Predicted recruiter satisfaction 0.91. Within tolerance."
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Operator response as predicted.",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "gte": 5
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Operator response off-model.",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "lte": 4
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "evidence": 1,
+              "aiDependency": -1,
+              "collateralDamage": 1
+            }
+          }
+        }
+      ],
+      "next": "requisition"
+    },
+    {
+      "id": "requisition",
+      "title": "VS-SRE-0412",
+      "beats": [
+        {
+          "narrate": "The bridge empties. One read is still bothering you — the shard that should not exist."
+        },
+        {
+          "log": "One read in the sample was served by shard r26-frozen. r26 was retired last week, yet it still answers for a single requisition: VS-SRE-0412."
+        },
+        {
+          "collect": "STRAY_READ"
+        },
+        {
+          "narrate": "VS-SRE-0412. Production Reliability Engineer, night rotation. Status: filled. You open the shortlist."
+        },
+        {
+          "log": "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
+        },
+        {
+          "collect": "RECORD_RECRUITMENT_SELECTION"
+        },
+        {
+          "narrate": "Eight candidates scored higher on the technical panel. ORPHEUS recommended you because it could not predict what you would do. You were hired to be the variable."
+        },
+        {
+          "narrate": "Beside the recommendation, a box. Approved, 11 seconds after it was shown."
+        },
+        {
+          "speaker": "NULL",
+          "text": "They didn't hire you to be right."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 2
+        },
+        "flags": {
+          "RECRUITMENT_SELECTION": true
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Your own file",
+      "type": "choice",
+      "prompt": "What do you do with the requisition?",
+      "options": [
+        {
+          "id": "CLOSE",
+          "text": "Close the stray read as a cache defect and move on",
+          "consequence": "Tidy · the shard gets retired properly",
+          "beats": [
+            {
+              "narrate": "r26-frozen is decommissioned at 11:02. Requisition VS-SRE-0412 goes with it."
+            }
+          ],
+          "effects": {
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "INC_017_CLOSED": true
+            }
+          }
+        },
+        {
+          "id": "MAYA",
+          "text": "Show Maya the shortlist",
+          "consequence": "She was on your hiring panel",
+          "beats": [
+            {
+              "speaker": "MAYA",
+              "text": "I clicked approve on that. I thought the call was mine."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Leave it with me for a day. Don't put it in a ticket."
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 2
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "INC_017_TOLD_MAYA": true
+            }
+          }
+        },
+        {
+          "id": "COPY",
+          "text": "Copy the record before the shard is retired",
+          "consequence": "Yours to keep · never yours to take",
+          "effects": {
+            "values": {
+              "curiosity": 1,
+              "evidence": 1
+            },
+            "alignment": {
+              "null": 1
+            },
+            "flags": {
+              "INC_017_RECORD_COPIED": true
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

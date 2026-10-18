@@ -63,6 +63,16 @@ static func condition_holds(condition: Variant, state: Dictionary) -> bool:
 	if c.has("timedOut"):
 		if (state["timedOut"].size() > 0) != bool(c["timedOut"]):
 			return false
+	return _within(c.get("values", {}), state["values"]) and _within(c.get("alignment", {}), state["alignment"])
+
+
+static func _within(bounds: Dictionary, actual: Dictionary) -> bool:
+	for key in bounds:
+		var bound: Dictionary = bounds[key]
+		if bound.has("gte") and actual[key] < bound["gte"]:
+			return false
+		if bound.has("lte") and actual[key] > bound["lte"]:
+			return false
 	return true
 
 

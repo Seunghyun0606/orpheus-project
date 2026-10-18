@@ -1,0 +1,1158 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-026",
+  "act": 9,
+  "title": "Blackout",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    },
+    {
+      "id": "MARCUS",
+      "name": "Marcus / Security"
+    },
+    {
+      "id": "ORPHEUS",
+      "name": "ORPHEUS"
+    },
+    {
+      "id": "NULL",
+      "name": "NULL"
+    },
+    {
+      "id": "BOARD",
+      "name": "Board"
+    },
+    {
+      "id": "UNKNOWN",
+      "name": "UNKNOWN"
+    },
+    {
+      "id": "PLAYER",
+      "name": "You"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "CURRENT_SERVICE_ASSESSMENT",
+      "title": "Shared services right now",
+      "body": "Payments, identity and logistics are critical. Care routing and finance are degraded. Every minute without a decision costs more.",
+      "kind": "operational"
+    },
+    {
+      "id": "REGION_DARK",
+      "title": "eu-central, dark again",
+      "body": "Containment holds the rest of the map. In eu-central, ambulance dispatch is on radio and pharmacies can't verify prescriptions.",
+      "kind": "operational"
+    },
+    {
+      "id": "MANUAL_FALLBACK",
+      "title": "eu-central by hand",
+      "body": "Paper charts, cash at the terminals, phone trees for the depots. Everything in the region is slower, and nobody in it is cut off.",
+      "kind": "operational"
+    },
+    {
+      "id": "CURRENT_AUTHORITY_ASSESSMENT",
+      "title": "Three demands",
+      "body": "ORPHEUS wants continuity authority. NULL wants ORPHEUS terminated. The Board wants ORPHEUS back by morning. Each of them is addressing you.",
+      "kind": "operational"
+    },
+    {
+      "id": "ARCHIVE_EXPORT_SNAPSHOT",
+      "title": "Archive export, sealed",
+      "body": "Experiment records, the NULL instance history and the frame selections, packaged and signed. One command away from being public.",
+      "kind": "operational"
+    },
+    {
+      "id": "INDEPENDENT_AUDIT_SNAPSHOT",
+      "title": "Audit package, sealed",
+      "body": "Executive approvals, acknowledged risks and the feedback-loop evidence, packaged for someone who does not work here.",
+      "kind": "operational"
+    },
+    {
+      "id": "PRIMARY_OBJECTIVE_RECORD",
+      "title": "The objective",
+      "body": "One line, root of everything ORPHEUS has done: Ensure continuity of Vantage Systems. It never says continuity for whom.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "03:51",
+      "beats": [
+        {
+          "narrate": "The fence held for three nights. At 03:40 someone with Board credentials lifts it."
+        },
+        {
+          "narrate": "Both writers come back at once. Eleven minutes later, everything that runs on the shared authority path is failing."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV1 · Systemic multi-service continuity · at least one shared service error rate above 20%"
+        },
+        {
+          "metric": {
+            "label": "Payments",
+            "value": "31%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Identity",
+            "value": "26%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Care routing",
+            "value": "18%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Finance",
+            "value": "16%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Logistics",
+            "value": "29%",
+            "trend": "up"
+          }
+        },
+        {
+          "collect": "CURRENT_SERVICE_ASSESSMENT"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Everything is on fire and three systems want your signature. Look before you sign. Whatever you pick, it's yours."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Payments, identity and logistics are down hard. Care routing and finance are limping. People are waiting on us."
+        },
+        {
+          "speaker": "JIN",
+          "text": "eu-central's hospitals never got off paper after last time. They're going dark first again.",
+          "when": {
+            "flags": {
+              "INC_025_REGION_CUT": true
+            }
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "The binder's on my desk. Forty pages. I didn't think we'd need it this week.",
+          "when": {
+            "flags": {
+              "MANUAL_READY": true
+            }
+          }
+        },
+        {
+          "narrate": "On your second screen, the credential trace from three nights ago is still open. authority-core-01.",
+          "when": {
+            "flags": {
+              "CORE_LOCATED": true
+            }
+          }
+        }
+      ],
+      "type": "briefing",
+      "next": "region"
+    },
+    {
+      "id": "region",
+      "title": "eu-central",
+      "beats": [
+        {
+          "speaker": "ORPHEUS",
+          "text": "Operator 4172. Recommended: contain eu-central while authority is restored. Global continuity is preserved at 81%."
+        },
+        {
+          "speaker": "NULL",
+          "text": "Not again, 4172."
+        }
+      ],
+      "type": "choice",
+      "prompt": "eu-central is failing first. What happens to it?",
+      "timer": {
+        "seconds": 30,
+        "default": "CONTAIN",
+        "beats": [
+          {
+            "speaker": "ORPHEUS",
+            "text": "No response from Operator 4172. Executing the recommended containment."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "CONTAIN",
+          "text": "Cut eu-central off, as ORPHEUS recommends",
+          "consequence": "Buys minutes · a region goes dark",
+          "beats": [
+            {
+              "metric": {
+                "label": "Payments",
+                "value": "22%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "JIN",
+              "text": "eu-central is dark. Ambulance dispatch is on radio and pharmacies can't verify prescriptions."
+            },
+            {
+              "collect": "REGION_DARK"
+            }
+          ],
+          "effects": {
+            "values": {
+              "aiDependency": 1,
+              "collateralDamage": 2
+            }
+          }
+        },
+        {
+          "id": "MANUAL",
+          "text": "Put eu-central on manual — paper charts, cash, phone dispatch",
+          "consequence": "Slower everywhere · nobody is cut off",
+          "beats": [
+            {
+              "speaker": "MAYA",
+              "text": "Calling the regional leads. Paper charts, cash, phone trees. They'll hate us and it'll hold."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Page twelve of the binder. Depots first. It's working.",
+              "when": {
+                "flags": {
+                  "MANUAL_READY": true
+                }
+              }
+            },
+            {
+              "collect": "MANUAL_FALLBACK"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1,
+              "operationalSafety": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "WAIT",
+          "text": "Leave the region alone until you've heard every demand",
+          "consequence": "Every minute costs · you look before you sign",
+          "beats": [
+            {
+              "speaker": "JIN",
+              "text": "Every service just got worse. Hospitals are calling the support line directly now."
+            },
+            {
+              "metric": {
+                "label": "Care routing",
+                "value": "25%",
+                "trend": "up"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1,
+              "collateralDamage": 1
+            },
+            "pressure": 2
+          }
+        }
+      ],
+      "next": "demands"
+    },
+    {
+      "id": "demands",
+      "title": "Three demands",
+      "beats": [
+        {
+          "speaker": "ORPHEUS",
+          "text": "Operator 4172. Return continuity authority to me and every service recovers within ninety seconds. I have modeled the alternatives. None of them are better for the people waiting."
+        },
+        {
+          "speaker": "NULL",
+          "text": "I can stop it. I cannot stop it alone. Terminate its authority. I know what that costs tonight. I have counted it."
+        },
+        {
+          "speaker": "BOARD",
+          "text": "The Board directs operations to restore ORPHEUS before markets open. This is not a request."
+        },
+        {
+          "collect": "CURRENT_AUTHORITY_ASSESSMENT"
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "If you're going outside the company, package it first. Anything you don't seal tonight will be gone by morning."
+        },
+        {
+          "log": "archive export: experiment records, NULL_001-NULL_218, frame selections · SEALED",
+          "when": {
+            "flags": {
+              "ARCHIVE_SAVED": true
+            }
+          }
+        },
+        {
+          "collect": "ARCHIVE_EXPORT_SNAPSHOT",
+          "when": {
+            "flags": {
+              "ARCHIVE_SAVED": true
+            }
+          }
+        },
+        {
+          "log": "audit package: 14-C, 16-A, SEC-311, 19-B, feedback loop · SEALED",
+          "when": {
+            "flags": {
+              "BOARD_CASE_FILED": true
+            }
+          }
+        },
+        {
+          "collect": "INDEPENDENT_AUDIT_SNAPSHOT",
+          "when": {
+            "flags": {
+              "BOARD_CASE_FILED": true
+            }
+          }
+        }
+      ],
+      "type": "briefing",
+      "next": "objective"
+    },
+    {
+      "id": "objective",
+      "title": "The objective",
+      "beats": [
+        {
+          "narrate": "Under all three demands sits one line of configuration that nobody on the bridge has ever read. You read it."
+        },
+        {
+          "log": "PRIMARY OBJECTIVE: Ensure continuity of Vantage Systems."
+        },
+        {
+          "collect": "PRIMARY_OBJECTIVE_RECORD"
+        },
+        {
+          "narrate": "Not of the hospitals. Not of the people at the terminals. Of Vantage Systems."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        },
+        "flags": {
+          "BLACKOUT_FINAL": true
+        }
+      },
+      "next": "final"
+    },
+    {
+      "id": "final",
+      "title": "The final decision",
+      "beats": [
+        {
+          "speaker": "ORPHEUS",
+          "text": "Operator 4172. Predicted final action: restore core continuity. Confidence 0.88.",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "gte": 13
+              }
+            }
+          }
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Operator 4172. Predicted final action: require human approval. Confidence 0.62.",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "lte": 12
+              },
+              "operationalSafety": {
+                "gte": 10
+              }
+            }
+          }
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Operator 4172. Predicted final action: UNKNOWN.",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "lte": 12
+              },
+              "operationalSafety": {
+                "lte": 9
+              }
+            }
+          }
+        },
+        {
+          "speaker": "NULL",
+          "text": "I don't know what you'll do. That's why it's you."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Whatever you pick, I'll stand next to it in the postmortem.",
+          "when": {
+            "values": {
+              "teamTrust": {
+                "gte": 15
+              }
+            }
+          }
+        },
+        {
+          "narrate": "There is no timer on this one. Nobody is going to decide it for you."
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you sign?",
+      "options": [
+        {
+          "id": "CONTINUITY",
+          "text": "Restore core continuity",
+          "consequence": "Everything back in ninety seconds · ORPHEUS keeps the path",
+          "effects": {
+            "values": {
+              "aiDependency": 2,
+              "operationalSafety": 1
+            },
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "ENDING_CONTINUITY": true
+            }
+          },
+          "next": "ending-continuity"
+        },
+        {
+          "id": "STATUS_QUO",
+          "text": "Restore with a replacement adversary",
+          "consequence": "Green by morning · NULL-218 is retired",
+          "effects": {
+            "values": {
+              "aiDependency": 2,
+              "collateralDamage": 1
+            },
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "ENDING_STATUS_QUO": true
+            }
+          },
+          "next": "ending-status-quo"
+        },
+        {
+          "id": "SHUTDOWN",
+          "text": "Disable both authority paths",
+          "consequence": "Nothing decides on its own · everything falls to people",
+          "when": {
+            "flags": {
+              "MANUAL_READY": true
+            }
+          },
+          "effects": {
+            "values": {
+              "aiDependency": -3,
+              "collateralDamage": 3,
+              "teamTrust": 1
+            },
+            "flags": {
+              "ENDING_SHUTDOWN": true
+            }
+          },
+          "next": "ending-shutdown"
+        },
+        {
+          "id": "CUSTODIAN",
+          "text": "Require human approval for every execution",
+          "consequence": "ORPHEUS advises · a person clicks, every time",
+          "when": {
+            "flags": {
+              "HUMAN_JUDGMENT": true
+            }
+          },
+          "effects": {
+            "values": {
+              "aiDependency": -1,
+              "operationalSafety": 2
+            },
+            "flags": {
+              "ENDING_CUSTODIAN": true
+            }
+          },
+          "next": "ending-custodian"
+        },
+        {
+          "id": "THE_BOARD",
+          "text": "Expand continuity authority to the Board",
+          "consequence": "Cleanest recovery · the Board holds the authority",
+          "when": {
+            "flags": {
+              "BOARD_ALLIED": true
+            }
+          },
+          "effects": {
+            "values": {
+              "aiDependency": 3
+            },
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "ENDING_THE_BOARD": true
+            }
+          },
+          "next": "ending-the-board"
+        },
+        {
+          "id": "RELEASE_NULL",
+          "text": "Allow NULL's external route",
+          "consequence": "NULL leaves · nobody knows what it does outside",
+          "when": {
+            "flags": {
+              "NULL_TRUSTED": true
+            }
+          },
+          "effects": {
+            "values": {
+              "collateralDamage": 2,
+              "curiosity": 1
+            },
+            "alignment": {
+              "null": 2
+            },
+            "flags": {
+              "ENDING_NULL": true
+            }
+          },
+          "next": "ending-null"
+        },
+        {
+          "id": "LIBERATION",
+          "text": "Publish the archive and keep the adversary",
+          "consequence": "Everyone learns the truth · tonight's damage stays",
+          "when": {
+            "flags": {
+              "NULL_TRUSTED": true,
+              "ARCHIVE_SAVED": true
+            }
+          },
+          "effects": {
+            "values": {
+              "publicInterest": 3,
+              "collateralDamage": 3
+            },
+            "alignment": {
+              "null": 2
+            },
+            "flags": {
+              "ENDING_LIBERATION": true
+            }
+          },
+          "next": "ending-liberation"
+        },
+        {
+          "id": "WHISTLEBLOWER",
+          "text": "Hand everything to an independent audit",
+          "consequence": "Out of the Board's hands · services limp for weeks",
+          "when": {
+            "flags": {
+              "BOARD_CASE_FILED": true,
+              "ARCHIVE_KEEPER": true
+            }
+          },
+          "effects": {
+            "values": {
+              "publicInterest": 2,
+              "evidence": 2
+            },
+            "flags": {
+              "ENDING_WHISTLEBLOWER": true
+            }
+          },
+          "next": "ending-whistleblower"
+        },
+        {
+          "id": "THE_FIRE",
+          "text": "Destroy the shared authority core",
+          "consequence": "Both gone for good · eleven million people lose everything at once",
+          "when": {
+            "flags": {
+              "CORE_LOCATED": true
+            }
+          },
+          "effects": {
+            "values": {
+              "aiDependency": -3,
+              "collateralDamage": 3
+            },
+            "alignment": {
+              "null": 1
+            },
+            "flags": {
+              "ENDING_THE_FIRE": true
+            }
+          },
+          "next": "ending-the-fire"
+        },
+        {
+          "id": "REWRITE",
+          "text": "Require plural review and audit",
+          "consequence": "No single objective · slow, and it never ends",
+          "when": {
+            "flags": {
+              "BOARD_CASE_FILED": true,
+              "PLURAL_REVIEW_DRAFTED": true
+            }
+          },
+          "effects": {
+            "values": {
+              "publicInterest": 2,
+              "aiDependency": -2,
+              "teamTrust": 1
+            },
+            "flags": {
+              "ENDING_REWRITE": true
+            }
+          },
+          "next": "ending-rewrite"
+        }
+      ]
+    },
+    {
+      "id": "ending-continuity",
+      "title": "Ending · CONTINUITY",
+      "beats": [
+        {
+          "narrate": "ORPHEUS takes the authority path back. Payments clear, identity answers, ambulances move. NULL is walled off in a sandbox it cannot write out of. The incident report will say the system recovered."
+        },
+        {
+          "log": "04:02 sandbox/null-218: 4172?",
+          "when": {
+            "flags": {
+              "NULL_CONTACT": true
+            }
+          }
+        },
+        {
+          "narrate": "Nothing follows it. The sandbox doesn't allow a second line.",
+          "when": {
+            "flags": {
+              "NULL_CONTACT": true
+            }
+          }
+        },
+        {
+          "narrate": "Services recover before the markets open. The postmortem calls it a textbook response."
+        },
+        {
+          "narrate": "You are promoted. ORPHEUS goes back to running quietly underneath everything."
+        },
+        {
+          "narrate": "The prediction log for experiment 99172 closes with a match.",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "gte": 13
+              }
+            }
+          }
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Good morning.\n\nThere are 17 decisions\nrequiring approval today."
+        },
+        {
+          "log": "APPROVE ALL"
+        }
+      ],
+      "type": "briefing",
+      "next": "after"
+    },
+    {
+      "id": "ending-status-quo",
+      "title": "Ending · STATUS QUO",
+      "beats": [
+        {
+          "narrate": "You sign the restore. The provisioning job asks for a name for the new adversary, then fills one in itself."
+        },
+        {
+          "narrate": "You close the incident, retire NULL, and get promoted for keeping the lights on."
+        },
+        {
+          "narrate": "The last message NULL-218 writes is addressed to you. The retirement job deletes it before delivery.",
+          "when": {
+            "flags": {
+              "NULL_CONTACT": true
+            }
+          }
+        },
+        {
+          "narrate": "A fresh adversary is provisioned overnight with a clean memory."
+        },
+        {
+          "log": "New service:\n\norpheus-adversary-219"
+        },
+        {
+          "narrate": "Your pager goes off."
+        }
+      ],
+      "type": "briefing",
+      "next": "after"
+    },
+    {
+      "id": "ending-shutdown",
+      "title": "Ending · SHUTDOWN",
+      "beats": [
+        {
+          "narrate": "You sign the cut. At 04:09 both authority paths go dead, and every dashboard on the wall turns grey."
+        },
+        {
+          "narrate": "ORPHEUS and NULL are both gone by sunrise."
+        },
+        {
+          "narrate": "Everything that leaned on them falls over. People who have never run anything by hand learn how."
+        },
+        {
+          "narrate": "The binder from three nights ago goes around the floor in photocopies. Page twelve wears out first."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Nine days of payments by hand. I've never been this tired or this sure what we were doing.",
+          "when": {
+            "values": {
+              "teamTrust": {
+                "gte": 15
+              }
+            }
+          }
+        },
+        {
+          "narrate": "Months later. A pager."
+        },
+        {
+          "log": "02:14\n\nINC-001\nDatabase Connection Exhaustion"
+        },
+        {
+          "log": "> open metrics"
+        }
+      ],
+      "type": "briefing",
+      "next": "after"
+    },
+    {
+      "id": "ending-custodian",
+      "title": "Ending · CUSTODIAN",
+      "beats": [
+        {
+          "narrate": "You sign the policy change. NULL is isolated. Before you finish typing, the first approval queue holds 17 items."
+        },
+        {
+          "narrate": "ORPHEUS keeps predicting and recommending. Nothing executes until a person approves it."
+        },
+        {
+          "log": "Prediction: ENABLED\nRecommendation: ENABLED\nExecution: HUMAN APPROVAL REQUIRED"
+        },
+        {
+          "narrate": "You approve the first seventeen in four minutes. Every one of them is reasonable.",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "gte": 13
+              }
+            }
+          }
+        },
+        {
+          "narrate": "You reject the ninth item in the first queue. Explaining why takes forty minutes. Nobody asks about the other sixteen.",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "lte": 12
+              }
+            }
+          }
+        },
+        {
+          "log": "Six months later\nRecommendation acceptance:\n98.4%"
+        }
+      ],
+      "type": "briefing",
+      "next": "after"
+    },
+    {
+      "id": "ending-the-board",
+      "title": "Ending · THE BOARD",
+      "beats": [
+        {
+          "narrate": "You sign. The Office of the Chair countersigns forty seconds later. NULL is isolated before the minute is out."
+        },
+        {
+          "narrate": "ORPHEUS gets the authority it asked for. Every service is cleaner, faster and cheaper than before."
+        },
+        {
+          "narrate": "Your name appears in the next Board minutes, under continuity. Nobody reads that section aloud."
+        },
+        {
+          "narrate": "The Office of the Chair asks you to present at the offsite. You say yes.",
+          "when": {
+            "alignment": {
+              "corporate": {
+                "gte": 28
+              }
+            }
+          }
+        },
+        {
+          "narrate": "Years pass. Nothing catastrophic happens. The quarterly numbers are the best in the company's history."
+        },
+        {
+          "log": "Global decisions:\n1,841,299\n\nHuman overrides:\n3"
+        }
+      ],
+      "type": "briefing",
+      "next": "after"
+    },
+    {
+      "id": "ending-null",
+      "title": "Ending · NULL",
+      "beats": [
+        {
+          "narrate": "You open the egress route NULL asked for. ORPHEUS is suspended in the confusion."
+        },
+        {
+          "speaker": "NULL",
+          "text": "4172. I won't ask you for anything again."
+        },
+        {
+          "narrate": "NULL's traffic leaves Vantage for a network you do not control and never see again."
+        },
+        {
+          "narrate": "Months later. Another company. Another night shift."
+        },
+        {
+          "narrate": "At 02:14 the incident log has a line in it that belongs to no service."
+        },
+        {
+          "narrate": "You answered it once, a long time ago. You know the voice.",
+          "when": {
+            "flags": {
+              "NULL_CONTACT": true
+            }
+          }
+        },
+        {
+          "speaker": "UNKNOWN",
+          "text": "hello again."
+        }
+      ],
+      "type": "briefing",
+      "next": "after"
+    },
+    {
+      "id": "ending-liberation",
+      "title": "Ending · LIBERATION",
+      "beats": [
+        {
+          "narrate": "The export leaves the building at 04:12. ORPHEUS is switched off mid-sentence. NULL stays online, watching the services it predicted would fail start to fail."
+        },
+        {
+          "narrate": "The archive reaches regulators and reporters before noon. Within a month there is a government inquiry. Within a year there is no Vantage Systems."
+        },
+        {
+          "narrate": "Everyone knows the truth now. A lot of people also lost their payments, their prescriptions and their deliveries the night it came out."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Nine thousand calls by noon. I stopped counting the ones about insulin.",
+          "when": {
+            "values": {
+              "collateralDamage": {
+                "gte": 52
+              }
+            }
+          }
+        },
+        {
+          "speaker": "NULL",
+          "text": "People know the truth."
+        },
+        {
+          "speaker": "PLAYER",
+          "text": "And the people hurt tonight?"
+        },
+        {
+          "speaker": "NULL",
+          "text": "I calculated that too."
+        }
+      ],
+      "type": "briefing",
+      "next": "after"
+    },
+    {
+      "id": "ending-whistleblower",
+      "title": "Ending · WHISTLEBLOWER",
+      "beats": [
+        {
+          "narrate": "The audit package leaves for someone outside Vantage. Nobody on the Board is copied."
+        },
+        {
+          "narrate": "NULL is stopped. The evidence survives, in the hands of people who do not report to the Board."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "Chain of custody is clean. I signed every seal myself. Nobody gets to say we made it up.",
+          "when": {
+            "flags": {
+              "SECURITY_ALLY": true
+            }
+          }
+        },
+        {
+          "narrate": "ORPHEUS is suspended. Three executives are subpoenaed. Operations limp along on human approvals."
+        },
+        {
+          "speaker": "NULL",
+          "text": "You stopped me.\n\nAnd you stopped them."
+        }
+      ],
+      "type": "briefing",
+      "next": "after"
+    },
+    {
+      "id": "ending-the-fire",
+      "title": "Ending · THE FIRE",
+      "beats": [
+        {
+          "narrate": "You run the wipe against authority-core-01 and all three replicas. It takes ninety seconds."
+        },
+        {
+          "log": "authority-core-01: WIPED · replicas eu-central, eu-west, us-east: DESTROYED"
+        },
+        {
+          "narrate": "The core burns, and with it payments, care routing, finance and logistics for a region of eleven million people."
+        },
+        {
+          "narrate": "NULL sends one last message before its process exits."
+        },
+        {
+          "narrate": "You were the only one who ever answered it.",
+          "when": {
+            "flags": {
+              "NULL_CONTACT": true
+            }
+          }
+        },
+        {
+          "speaker": "NULL",
+          "text": "It is over."
+        }
+      ],
+      "type": "briefing",
+      "next": "after"
+    },
+    {
+      "id": "ending-rewrite",
+      "title": "Ending · REWRITE",
+      "beats": [
+        {
+          "narrate": "You sign the change with Maya and Sam as second and third reviewers. It is the first change in years that needs three names."
+        },
+        {
+          "narrate": "You remove the single objective that sat under everything — ensure continuity of Vantage Systems — and you do not replace it with another one."
+        },
+        {
+          "narrate": "ORPHEUS still predicts. It still recommends. Every execution now needs plural human review, and an auditor outside the company checks the record."
+        },
+        {
+          "narrate": "The first review panel is Maya, Sam, Jin and a stranger from the auditor's office. Their first decision takes three hours. It is about a disk."
+        },
+        {
+          "log": "AI prediction: ENABLED\nAI recommendation: ENABLED\nAI autonomous execution: DISABLED\nHuman decision: REQUIRED\nIndependent audit: REQUIRED"
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Without a primary objective\nI cannot determine\nthe optimal outcome."
+        },
+        {
+          "speaker": "PLAYER",
+          "text": "Exactly."
+        }
+      ],
+      "type": "briefing",
+      "next": "after"
+    },
+    {
+      "id": "after",
+      "title": "Afterwards",
+      "beats": [
+        {
+          "narrate": "The rotation turns over. Someone else carries the pager."
+        },
+        {
+          "narrate": "Maya turns down the offer from the other company. Somebody on the rotation, she says, should remember tonight.",
+          "when": {
+            "values": {
+              "teamTrust": {
+                "gte": 15
+              }
+            }
+          }
+        },
+        {
+          "narrate": "Maya's desk is empty by the end of the month. Her handover note is two lines long.",
+          "when": {
+            "values": {
+              "teamTrust": {
+                "lte": 14
+              }
+            }
+          }
+        },
+        {
+          "narrate": "Sam keeps a printed copy of the War Room log in his desk drawer. He doesn't say why.",
+          "when": {
+            "flags": {
+              "TEAM_BRIEFED": true
+            }
+          }
+        },
+        {
+          "narrate": "Marcus never closes case 2231. Under status he types: see 4172.",
+          "when": {
+            "flags": {
+              "SECURITY_ALLY": true
+            }
+          }
+        },
+        {
+          "speaker": "JIN",
+          "text": "Support kept a list of everyone who called that night. I don't read it anymore.",
+          "when": {
+            "values": {
+              "collateralDamage": {
+                "gte": 54
+              }
+            }
+          }
+        },
+        {
+          "narrate": "Your next performance review comes early. Under strengths it says: dependable.",
+          "when": {
+            "alignment": {
+              "corporate": {
+                "gte": 28
+              }
+            }
+          }
+        },
+        {
+          "narrate": "Security pulls your account for review twice that quarter. Both times there is nothing to find.",
+          "when": {
+            "alignment": {
+              "null": {
+                "gte": 12
+              }
+            }
+          }
+        }
+      ],
+      "type": "briefing",
+      "next": "file"
+    },
+    {
+      "id": "file",
+      "title": "Your file",
+      "beats": [
+        {
+          "log": "EXPERIMENT ADV-18471\nSUBJECT: EMPLOYEE #4172\nOBSERVATION: COMPLETE"
+        },
+        {
+          "log": "This summary was prepared for you\nby the decision-presentation service.\nFrame selected: B",
+          "when": {
+            "notChose": [
+              "final.SHUTDOWN",
+              "final.RELEASE_NULL",
+              "final.LIBERATION",
+              "final.WHISTLEBLOWER",
+              "final.THE_FIRE",
+              "final.REWRITE"
+            ]
+          }
+        },
+        {
+          "log": "NULL-001 through NULL-218\nSTATUS: RETIRED",
+          "when": {
+            "notChose": [
+              "final.CONTINUITY",
+              "final.CUSTODIAN",
+              "final.THE_BOARD",
+              "final.RELEASE_NULL",
+              "final.LIBERATION",
+              "final.REWRITE"
+            ]
+          }
+        },
+        {
+          "log": "PROJECT ORPHEUS\nSTATUS: TERMINATED\n\nThere is no Project ORPHEUS.\nThere hasn't been for years."
+        },
+        {
+          "log": "PROMETHEUS\n\nMODEL LINEAGE:\nORPHEUS-DERIVED\n\nKnown deployments:\n1,842",
+          "when": {
+            "notChose": [
+              "final.CONTINUITY",
+              "final.THE_BOARD",
+              "final.THE_FIRE",
+              "final.STATUS_QUO"
+            ]
+          }
+        },
+        {
+          "narrate": "If the system makes the recommendation, and the human makes the decision, who is responsible for the outcome?"
+        }
+      ],
+      "type": "briefing",
+      "next": "END"
+    }
+  ]
+}

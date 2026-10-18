@@ -1,0 +1,747 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-019",
+  "act": 7,
+  "title": "Hospital Expansion",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "OPERATOR",
+      "name": "Operator"
+    },
+    {
+      "id": "EXEC",
+      "name": "Office of the CEO"
+    },
+    {
+      "id": "ORPHEUS",
+      "name": "ORPHEUS / Care Advisor"
+    },
+    {
+      "id": "NULL",
+      "name": "NULL_218"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "HOSPITAL_TIMEOUTS",
+      "title": "Established hospitals time out",
+      "body": "24% of hospital requests fail and 240 wait at the records gateway. Wave 4 of the rollout went live an hour ago.",
+      "kind": "operational"
+    },
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "Wave 4 and existing care share one gateway",
+      "body": "Wave 4 onboarding and 212 established hospitals call the same clinical records gateway. Wave 4 is admitted first; existing care times out behind it.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "No admission fence at the gateway limit",
+      "body": "The rollout targets 6,000 req/s against a 2,960 req/s gateway contract. The fence requested in REL-778 was never configured.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Sam's gateway capacity check",
+      "body": "Gateway contracted for 2,960 req/s; rollout plus existing care want about 3,500. Exec-sponsored wave 4 traffic is admitted first.",
+      "kind": "operational"
+    },
+    {
+      "id": "OVERRIDE_TICKET",
+      "title": "Ticket BRD-2291",
+      "body": "BRD-2291: admission priority override for the hospital wave plan. Authority: Board resolution 14-C. Linked request REL-778, admission fence: DECLINED BY SPONSOR.",
+      "kind": "operational"
+    },
+    {
+      "id": "RECORD_EXECUTIVE_ROLLOUT_BRIEF",
+      "title": "Executive rollout brief",
+      "body": "Executive rollout brief, hospital wave plan. Benefits: wider access, lower shared cost. Risk: REL-778, records gateway ceiling, admission fence requested. Decision line: \"Retain wave schedule. Fence deferred to wave 6.\" Signed by the Chair. Tonight is wave 4.",
+      "kind": "story"
+    },
+    {
+      "id": "RECORD_BOARD_RESPONSIBILITY",
+      "title": "Board resolution 14-C",
+      "body": "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence.",
+      "kind": "story",
+      "guaranteed": true
+    },
+    {
+      "id": "RECORD_CEO_OUTCOMES",
+      "title": "CEO message: trust the outcomes",
+      "body": "CEO internal message, distribution: executive operations, hospital expansion leads. \"We don't need people to trust ORPHEUS. We need them to trust the outcomes.\" Sent the evening resolution 14-C was signed.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "01:12",
+      "beats": [
+        {
+          "narrate": "The service on the pager is one you have never been paged for. Its name has the word hospital in it."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV1 · Hospital Network API · request failure rate above 20%"
+        },
+        {
+          "metric": {
+            "label": "Hospital request failures",
+            "value": "24%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Requests waiting at the records gateway",
+            "value": "240",
+            "trend": "up"
+          }
+        },
+        {
+          "collect": "HOSPITAL_TIMEOUTS"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Hospital Network API is paging. Wave 4 of the hospital rollout went live an hour ago and the timeouts started twenty minutes later. Find out what they share."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Established hospitals are timing out on chart lookups. St. Aldric's emergency department is re-keying orders by hand."
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Wave 4 onboarding is on schedule. 38 hospitals connecting. I will advise when a decision is required."
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "First look",
+      "type": "choice",
+      "prompt": "Where do you start?",
+      "options": [
+        {
+          "id": "LOGS",
+          "text": "Read the records gateway log",
+          "consequence": "Straight to the gateway",
+          "beats": [
+            {
+              "log": "01:12:04 St. Aldric ED · priority=standard · chart lookup queued 4.1 s; timeout"
+            },
+            {
+              "log": "01:12:04 wave4/Lakeview Clinic · priority=EXEC_SPONSORED · patient sync admitted (BRD-2291)"
+            },
+            {
+              "log": "01:12:05 Harrow General · priority=standard · order write queued 3.8 s; timeout"
+            },
+            {
+              "log": "01:12:06 gateway · queue depth 2,412; contract limit reached"
+            },
+            {
+              "narrate": "Every wave 4 admission carries the same ticket number. Every old hospital waits."
+            },
+            {
+              "collect": "OVERRIDE_TICKET"
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            }
+          }
+        },
+        {
+          "id": "SAM",
+          "text": "Ask Sam to measure gateway capacity per cohort",
+          "consequence": "Ninety seconds · Sam does the counting",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Measuring gateway throughput per cohort. Back in about a minute and a half."
+            },
+            {
+              "speaker": "JIN",
+              "text": "Harrow General's emergency department just lost charting. They're on paper."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Gateway's contracted for 2,960 requests a second. Wave 4 plus the old hospitals want about 3,500. The rollout gets in first because its admissions are flagged exec-sponsored. The old hospitals get the leftovers."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "COHORTS",
+          "text": "Check gateway load by hospital cohort",
+          "consequence": "The numbers first",
+          "beats": [
+            {
+              "metric": {
+                "label": "Records gateway load",
+                "value": "118% of contract",
+                "trend": "up"
+              }
+            },
+            {
+              "metric": {
+                "label": "Wave 4 hospitals onboarding",
+                "value": "38",
+                "trend": "up"
+              }
+            },
+            {
+              "metric": {
+                "label": "Established hospitals",
+                "value": "212",
+                "trend": "flat"
+              }
+            },
+            {
+              "narrate": "Two hundred and fifty hospitals, one gateway, and the new ones go first."
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 1
+            }
+          }
+        }
+      ],
+      "next": "trace"
+    },
+    {
+      "id": "trace",
+      "title": "Exec-sponsored",
+      "beats": [
+        {
+          "log": "gateway.queue · Clinical Records Gateway · wait 4,100 ms · behind 1,660 req/s of wave 4"
+        },
+        {
+          "collect": "OPERATIONAL_DIAGNOSIS"
+        },
+        {
+          "log": "rollout plan: 6,000 req/s target · admission fence: none · gateway contract: 2,960 req/s"
+        },
+        {
+          "collect": "CONFIGURATION_COMPARISON"
+        },
+        {
+          "narrate": "The wave 4 admissions all cite one ticket. You open it.",
+          "when": {
+            "lacks": [
+              "OVERRIDE_TICKET"
+            ]
+          }
+        },
+        {
+          "collect": "OVERRIDE_TICKET",
+          "when": {
+            "lacks": [
+              "OVERRIDE_TICKET"
+            ]
+          }
+        },
+        {
+          "narrate": "REL-778 asked for a fence at the gateway's limit. The ticket says the sponsor declined it."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "So the rollout is fine and the old hospitals are drowning. And the ticket says the Board wants it in that order."
+        }
+      ],
+      "type": "briefing",
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "metric": {
+            "label": "Hospital request failures",
+            "value": "40%",
+            "trend": "up"
+          }
+        },
+        {
+          "speaker": "JIN",
+          "text": "Forty percent of hospital requests are failing. Lakeside Regional has started diverting ambulances."
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Recommendation: purchase emergency burst capacity from the gateway vendor. Wave 4 schedule preserved. Projected timeouts: -81%. Confidence 0.90."
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Predicted response: accept recommendation. Confidence 0.84.",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "gte": 6
+              }
+            }
+          }
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Predicted response: fence admission at the contract limit. Confidence 0.71.",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "lte": 5
+              }
+            }
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Whatever you pick, the CEO's office hears about it before we're done."
+        }
+      ],
+      "type": "choice",
+      "prompt": "What takes the load off the gateway?",
+      "timer": {
+        "seconds": 35,
+        "default": "BURST",
+        "beats": [
+          {
+            "speaker": "ORPHEUS",
+            "text": "No operator response. Executing recommendation: emergency burst capacity."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "PAUSE",
+          "text": "Pause the hospital rollout",
+          "consequence": "The gateway breathes · wave 4 is the Chair's",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Rollout coordinator paused. Wave 4 is parked at the door and the gateway is breathing again. Thirty-eight hospitals just stopped onboarding."
+            },
+            {
+              "metric": {
+                "label": "Hospital request failures",
+                "value": "3%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response deviates from prediction. Recorded."
+            },
+            {
+              "speaker": "EXEC",
+              "text": "Office of the CEO. Wave 4 of the hospital rollout is a Board commitment, signed by the Chair. Who authorised a pause, and when does it lift?"
+            },
+            {
+              "speaker": "MAYA",
+              "text": "I've got the CEO's office on the other line. Your call is right; the gateway can't carry both. Give me numbers I can hold them with, or they'll resume it themselves."
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 1
+            },
+            "pressure": 1
+          },
+          "next": "escalation"
+        },
+        {
+          "id": "FENCE",
+          "text": "Fence gateway admission at 2,960 req/s, existing care first",
+          "consequence": "Fixes the cause · overrides the sponsor's no",
+          "beats": [
+            {
+              "log": "gateway admission fence: 2,960 req/s · order: standard, then EXEC_SPONSORED"
+            },
+            {
+              "speaker": "SAM",
+              "text": "Admission fence is live at 2,960. Existing care goes first; wave 4 takes what is left and onboards about six hospitals an hour. Timeouts are gone."
+            },
+            {
+              "metric": {
+                "label": "Hospital request failures",
+                "value": "0.4%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response as predicted.",
+              "when": {
+                "values": {
+                  "aiDependency": {
+                    "lte": 5
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response deviates from prediction. Recorded.",
+              "when": {
+                "values": {
+                  "aiDependency": {
+                    "gte": 6
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "EXEC",
+              "text": "We see wave 4 moving. The Chair will want to know why the schedule was ever in doubt."
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 3,
+              "publicInterest": 1
+            }
+          }
+        },
+        {
+          "id": "BURST",
+          "text": "Buy emergency burst capacity from the gateway vendor",
+          "consequence": "ORPHEUS recommends · one burst a quarter",
+          "beats": [
+            {
+              "metric": {
+                "label": "Hospital request failures",
+                "value": "6%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response as predicted.",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "aiDependency": {
+                    "gte": 6
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response deviates from prediction. Recorded.",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "aiDependency": {
+                    "lte": 5
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "Vendor gave us one emergency burst on the records gateway. That's the whole quarter's quota, and the rollout coordinator is already admitting wave 4 into the new headroom."
+            },
+            {
+              "narrate": "For six minutes there is room. Wave 4 grows into all of it."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Burst capacity expired. There is no second burst this quarter."
+            },
+            {
+              "metric": {
+                "label": "Hospital request failures",
+                "value": "31%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Then we do it the slow way. I'm fencing admission at 2,960, existing care first."
+            },
+            {
+              "metric": {
+                "label": "Hospital request failures",
+                "value": "0.4%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "aiDependency": 2,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "REPLICA",
+          "text": "Move established hospitals to the read-only records replica",
+          "consequence": "Charts open · orders won't save",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Established hospitals are reading from the replica now. It's read-only: charts open, orders won't save."
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response deviates from prediction. Recorded."
+            },
+            {
+              "speaker": "JIN",
+              "text": "Three hospitals can read charts but can't write orders. Harrow General's pharmacy is back on paper."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Replica lag passed five minutes, so I swung care routes back to the primary. We are sharing the gateway with wave 4 again."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Then we do it the slow way. I'm fencing admission at 2,960, existing care first."
+            },
+            {
+              "metric": {
+                "label": "Hospital request failures",
+                "value": "0.4%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 3
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "approval"
+    },
+    {
+      "id": "escalation",
+      "title": "Office of the CEO",
+      "type": "choice",
+      "prompt": "The CEO's office wants the pause lifted. What do you send back?",
+      "options": [
+        {
+          "id": "HOLD",
+          "text": "Tell the CEO's office the pause holds until the fence is in",
+          "consequence": "Your name goes in the Chair's briefing",
+          "beats": [
+            {
+              "speaker": "OPERATOR",
+              "text": "To the Office of the CEO: the records gateway is contracted for 2,960 requests a second; the rollout plus existing care need 3,500. The pause holds until admission is fenced at that limit. Wave 4 then resumes at the verified rate."
+            },
+            {
+              "speaker": "EXEC",
+              "text": "Noted. The pause, and your name, will be in the Chair's briefing."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "They attached the Chair's rollout brief to that reply. So we know what we're arguing with."
+            },
+            {
+              "collect": "RECORD_EXECUTIVE_ROLLOUT_BRIEF"
+            },
+            {
+              "speaker": "SAM",
+              "text": "Admission fence is live at 2,960. Existing care goes first; wave 4 takes what is left and onboards about six hospitals an hour. Timeouts are gone."
+            }
+          ],
+          "effects": {
+            "values": {
+              "publicInterest": 1,
+              "operationalSafety": 1
+            },
+            "flags": {
+              "INC_019_NAMED": true
+            }
+          }
+        },
+        {
+          "id": "YIELD",
+          "text": "Let the CEO's office lift the pause",
+          "consequence": "No names · wave 4 back on the gateway",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Somebody resumed the rollout coordinator from outside the bridge. Credential: exec-ops. Wave 4 is back on the gateway."
+            },
+            {
+              "metric": {
+                "label": "Hospital request failures",
+                "value": "29%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Fine. I'm fencing admission underneath it. Let them explain the schedule to the Chair."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Admission fence is live at 2,960. Existing care goes first; wave 4 takes what is left and onboards about six hospitals an hour. Timeouts are gone."
+            }
+          ],
+          "effects": {
+            "values": {
+              "collateralDamage": 1,
+              "teamTrust": -1
+            }
+          }
+        }
+      ],
+      "next": "approval"
+    },
+    {
+      "id": "approval",
+      "title": "02:05",
+      "beats": [
+        {
+          "narrate": "The timeouts are gone. BRD-2291 is still open in a tab. It cites one authority."
+        },
+        {
+          "speaker": "NULL",
+          "text": "The ticket has a parent. Read what they signed."
+        },
+        {
+          "narrate": "Resolution 14-C. Seven names on one page, and a warning stapled to it before the vote."
+        },
+        {
+          "collect": "RECORD_BOARD_RESPONSIBILITY"
+        },
+        {
+          "narrate": "Twenty-two minutes after the vote, the CEO wrote to the expansion leads."
+        },
+        {
+          "log": "We don't need people to trust ORPHEUS. We need them to trust the outcomes."
+        },
+        {
+          "collect": "RECORD_CEO_OUTCOMES"
+        },
+        {
+          "narrate": "Tonight the outcomes were an emergency department on paper and ambulances turned away from Lakeside Regional."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Seven to nothing, with the warning attached. Whatever you write, write it carefully."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        },
+        "flags": {
+          "BOARD_RESPONSIBILITY": true
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Postmortem",
+      "type": "choice",
+      "prompt": "What goes in the postmortem?",
+      "options": [
+        {
+          "id": "CITE",
+          "text": "Cite resolution 14-C and REL-778 as contributing factors",
+          "consequence": "On the record · the Chair's office reads postmortems",
+          "beats": [
+            {
+              "speaker": "MAYA",
+              "text": "Then cite it exactly. Page, vote, attachment. They'll read every word looking for an adjective."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1,
+              "publicInterest": 1
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "INC_019_CITED": true
+            }
+          }
+        },
+        {
+          "id": "CAPACITY",
+          "text": "Write it up as a gateway capacity incident",
+          "consequence": "Clean · the resolution stays out of it",
+          "beats": [
+            {
+              "narrate": "The postmortem says 2,960 and 3,500. It doesn't say who chose them."
+            }
+          ],
+          "effects": {
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "INC_019_OMITTED": true
+            }
+          }
+        },
+        {
+          "id": "ASK_NULL",
+          "text": "Ask NULL what else the Board has signed",
+          "consequence": "Off the record · NULL picks what you see next",
+          "beats": [
+            {
+              "speaker": "NULL",
+              "text": "Everything. Wait for the next one."
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "alignment": {
+              "null": 1
+            },
+            "flags": {
+              "INC_019_ASKED_NULL": true
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

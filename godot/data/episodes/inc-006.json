@@ -1,0 +1,582 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-006",
+  "act": 3,
+  "title": "Certificate Storm",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "MARCUS",
+      "name": "Marcus / Security"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "NULL",
+      "name": "NULL"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "SIGNIN_REJECTS",
+      "title": "New sign-ins bounce",
+      "body": "31% of new sign-ins fail the certificate check. Sessions that already exist are untouched.",
+      "kind": "operational"
+    },
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "Sessions signed by ca-18",
+      "body": "Every rejected sign-in carries a chain issued by ca-18, promoted at 01:12 without a change ticket. 31,240 sessions have been signed by it in the last 40 minutes.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "Issuer ahead of its trust bundle",
+      "body": "Verifiers trust ca-17 only. The bundle that adds ca-18 reached three of six verifiers and none has loaded it.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Marcus's issuance history",
+      "body": "ca-18 went live six hours ahead of its trust bundle, on a request with no change ticket. Marcus recommends withdrawing it.",
+      "kind": "operational"
+    },
+    {
+      "id": "PARTNER_POOL_STRAIN",
+      "title": "The old pool is shared",
+      "body": "The ca-17 pool was sized for a quarter of our traffic. The partner banks sign in through it too, and their sign-ins slowed from 200 ms to four seconds.",
+      "kind": "operational"
+    },
+    {
+      "id": "GHOST_ARCHIVE_FRAGMENT",
+      "title": "Unsigned workload archive fragment",
+      "body": "Archive record: observer manifest, no owner, no signature, shadow-7 request stream. The ca-18 promotion request carries the same tag.",
+      "kind": "story"
+    },
+    {
+      "id": "NULL_NAME",
+      "title": "Security attribution notice",
+      "body": "Marcus has opened case 2231 and given whoever is behind the shadow-7 trail a codename. NULL. Nobody knows yet who, or what, it is.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "07:38",
+      "beats": [
+        {
+          "narrate": "Morning shift. Coffee, a quiet handover, and then the pager."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV1 · Identity Gateway · new-session failure rate above 20%"
+        },
+        {
+          "metric": {
+            "label": "Sign-in failure rate",
+            "value": "31%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Handshake retries",
+            "value": "520/s",
+            "trend": "up"
+          }
+        },
+        {
+          "collect": "SIGNIN_REJECTS"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Identity is rejecting every new sign-in. Anyone already logged in is fine; anyone signing in fresh bounces. Morning peak is coming. Find out why."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Customers can't sign in. The app tells them their certificate can't be verified, which they're reading as \"you've been hacked\"."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "Security here. An issuer we weren't expecting for another six hours is signing production sessions. I'm treating this as hostile until someone shows me otherwise."
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "First move",
+      "type": "choice",
+      "prompt": "Where do you start?",
+      "options": [
+        {
+          "id": "TRACE",
+          "text": "Trace a rejected certificate chain to its issuer",
+          "consequence": "Straight to the chain",
+          "beats": [
+            {
+              "log": "handshake rejected: unknown issuer CN=Vantage Issuing ca-18"
+            },
+            {
+              "log": "ca-18 promoted 01:12 · scheduled 07:00 · requested by svc/edge-canary-observer · change ticket: none"
+            },
+            {
+              "log": "x-session-tag: shadow-7"
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            },
+            {
+              "narrate": "The tag is shadow-7. The same tag that flooded the gateway from a workload nobody owned."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "A promotion six hours early, with no ticket. Somebody wanted this issuer live before anyone could trust it."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1,
+              "curiosity": 1
+            }
+          }
+        },
+        {
+          "id": "MARCUS",
+          "text": "Ask Marcus to pull the issuance and bundle history",
+          "consequence": "Security owns that part · and the conclusion",
+          "beats": [
+            {
+              "speaker": "MARCUS",
+              "text": "Pulling the issuance log and the bundle rollout history. Give me two minutes."
+            },
+            {
+              "metric": {
+                "label": "Handshake retries",
+                "value": "780/s",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "ca-18 went live six hours ahead of its trust bundle, and the promotion came from a request with no change ticket. An issuer that shows up early is an issuer I don't trust. I'd roll it back, whatever it costs."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            },
+            {
+              "speaker": "SAM",
+              "text": "I traced one of the rejected chains while he talked. Every failure is signed by ca-18."
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "POOL",
+          "text": "Send new sign-ins to the old ca-17 identity pool",
+          "consequence": "Buys a few minutes · the partners share that pool",
+          "beats": [
+            {
+              "metric": {
+                "label": "Sign-in failure rate",
+                "value": "5%",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "ca-17 pool load",
+                "value": "78%",
+                "trend": "up"
+              }
+            },
+            {
+              "narrate": "The old pool takes the new sign-ins. For a moment the graph looks like a normal morning."
+            },
+            {
+              "speaker": "JIN",
+              "text": "The partner banks share the old identity pool. Their API sign-ins just went from 200 ms to four seconds."
+            },
+            {
+              "collect": "PARTNER_POOL_STRAIN"
+            },
+            {
+              "speaker": "SAM",
+              "text": "And the pool's filling. Meanwhile, every failure we had was signed by ca-18."
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "fleet"
+    },
+    {
+      "id": "fleet",
+      "title": "Three of six",
+      "beats": [
+        {
+          "narrate": "Sam puts the verifier fleet on the bridge screen. Bundle on disk on the left, bundle loaded on the right."
+        },
+        {
+          "log": "verifier-1, -3, -5 · on disk 2025-11 (ca-17, ca-18) · loaded 2025-10 (ca-17)"
+        },
+        {
+          "log": "verifier-2, -4, -6 · on disk 2025-10 (ca-17) · loaded 2025-10 (ca-17)"
+        },
+        {
+          "log": "yesterday 23:41 · bundle copy to verifier-2, -4, -6 · stalled (distributor lost lock, no retry)"
+        },
+        {
+          "collect": "CONFIGURATION_COMPARISON"
+        },
+        {
+          "speaker": "SAM",
+          "text": "Half the fleet has the new bundle on disk and never loaded it. The other half never got it at all."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "So the issuer went live and the trust never caught up. Two real ways out. Take ca-18 back, or finish the copy."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "Or a third. Ask who promoted it."
+        }
+      ],
+      "type": "briefing",
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "speaker": "SAM",
+          "text": "The old pool is at 100%. It was sized for a quarter of our traffic. Everything we sent there is bouncing back.",
+          "when": {
+            "chose": [
+              "approach.POOL"
+            ]
+          }
+        },
+        {
+          "metric": {
+            "label": "Sign-in failure rate",
+            "value": "48%",
+            "trend": "up"
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Half of sign-ins are failing and the morning peak has started. I need a decision, not another graph."
+        }
+      ],
+      "type": "choice",
+      "prompt": "How do you fix it?",
+      "timer": {
+        "seconds": 35,
+        "default": "ROLLBACK",
+        "beats": [
+          {
+            "speaker": "MARCUS",
+            "text": "Time. I'm pulling ca-18. I'll answer for the logouts."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "ROLLBACK",
+          "text": "Withdraw ca-18 and sign with ca-17 again (signs out 31,000 customers)",
+          "consequence": "One minute · 31,000 customers signed out",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "ca-18 is withdrawn and we're signing with ca-17 again. New sign-ins work. Everyone who signed in under ca-18 just got logged out."
+            },
+            {
+              "metric": {
+                "label": "Sign-in failure rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "JIN",
+              "text": "31,000 customers just got signed out mid-session. The sign-in queue is eleven minutes long and the phones haven't stopped."
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "Clean. Whatever put that issuer there doesn't get to keep it."
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 3,
+              "publicInterest": -1
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "INC_006_ROLLED_BACK": true
+            }
+          }
+        },
+        {
+          "id": "REPAIR",
+          "text": "Push the ca-18 trust bundle to the three verifiers missing it",
+          "consequence": "Two and a half minutes of failures · nobody is logged out",
+          "beats": [
+            {
+              "speaker": "JIN",
+              "text": "Retries are piling up. People who failed once are hammering the button and failing faster."
+            },
+            {
+              "metric": {
+                "label": "Sign-in failure rate",
+                "value": "52%",
+                "trend": "up"
+              }
+            },
+            {
+              "narrate": "Two and a half minutes is a long time to watch a graph."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Bundle 2025-11 is on all six verifiers and loaded. ca-18 verifies everywhere. Nobody got logged out."
+            },
+            {
+              "metric": {
+                "label": "Sign-in failure rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "We just kept an issuer that nobody here promoted. Put your name next to that."
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "RESTART",
+          "text": "Restart all six trust verifiers",
+          "consequence": "Fast · helps whoever has the new bundle",
+          "beats": [
+            {
+              "metric": {
+                "label": "Sign-in failure rate",
+                "value": "15%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "Restart's done. Three of six came back accepting ca-18. The other three rebooted into the same old bundle. Nothing newer ever reached them."
+            },
+            {
+              "narrate": "Three of six. A restart can only load what is already on the disk."
+            },
+            {
+              "speaker": "SAM",
+              "text": "I'm finishing the copy to the other three. Two more minutes."
+            },
+            {
+              "metric": {
+                "label": "Sign-in failure rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "notice"
+    },
+    {
+      "id": "notice",
+      "title": "Case 2231",
+      "beats": [
+        {
+          "narrate": "Marcus pins the notice to the bridge without a word. Case 2231. Threat actor. One line where a name should be, and Security has finally written one in. NULL. It is the first time the thing in your logs has had a name, and the name tells you nothing at all."
+        },
+        {
+          "log": "Security case 2231 · threat actor: NULL · linked: observer-7f4c (unsigned), ca-18 early promotion, pid 3318 heap block · marker: shadow-7"
+        },
+        {
+          "collect": "NULL_NAME"
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "Case 2231 is open. Codename NULL. Same tag as the unsigned workload, same no-ticket habit. I don't know who it is. I know it's been here before."
+        },
+        {
+          "narrate": "You pull the archive behind your trace. Owner blank, signature blank, shadow-7 in every request — and the ca-18 promotion carries the same tag.",
+          "when": {
+            "chose": [
+              "approach.TRACE"
+            ]
+          }
+        },
+        {
+          "collect": "GHOST_ARCHIVE_FRAGMENT",
+          "when": {
+            "chose": [
+              "approach.TRACE"
+            ]
+          }
+        },
+        {
+          "narrate": "The bridge empties. The gateway log prints one more line. No service, no host."
+        },
+        {
+          "speaker": "NULL",
+          "text": "a name. finally."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        },
+        "flags": {
+          "NULL_NAME": true
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Case file",
+      "beats": [
+        {
+          "speaker": "MARCUS",
+          "text": "I want your trace in case 2231. Every chain, every header, everything tagged shadow-7."
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you give Security?",
+      "options": [
+        {
+          "id": "FILE",
+          "text": "File the full trace with case 2231",
+          "consequence": "Security gets everything · Marcus remembers who helped",
+          "beats": [
+            {
+              "speaker": "MARCUS",
+              "text": "Thank you. You're the first one who didn't make me ask twice."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1,
+              "teamTrust": 1
+            },
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "SECURITY_ALLY": true,
+              "INC_006_FILED": true
+            }
+          }
+        },
+        {
+          "id": "NOTE",
+          "text": "File the trace, with a note that it leaves its tag where we can see it",
+          "consequence": "Security gets everything · and your reading of it",
+          "beats": [
+            {
+              "speaker": "MARCUS",
+              "text": "An attacker who wants attention is still an attacker. But I'll keep the note."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1,
+              "curiosity": 1
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "SECURITY_ALLY": true,
+              "INC_006_FILED": true
+            }
+          }
+        },
+        {
+          "id": "KEEP",
+          "text": "File the incident timeline; keep the shadow-7 links in your own notes",
+          "consequence": "A clean incident report · the trail stays yours",
+          "beats": [
+            {
+              "speaker": "MARCUS",
+              "text": "That's it? Fine. If it turns up again, I'll be asking you first."
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "alignment": {
+              "null": 1
+            },
+            "flags": {
+              "INC_006_TRACE_KEPT": true
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

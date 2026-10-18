@@ -1,0 +1,301 @@
+# INC-018 Emergency Allocation as a story episode (DEC-072).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-018-1.2.0.yaml.
+# Closes Act 6. ORPHEUS's reroute drops the county's average response time while
+# district 9 keeps waiting: its only depot belongs to a preferred freight lane that
+# renews every 30 s. Contract ambulances arrive late and leave; suspending the lane
+# spoils cold-chain deliveries; the emergency floor costs regular deliveries.
+# Overriding the recommendation sets HUMAN_JUDGMENT. Reads INC-017's choice.
+schemaVersion: 1
+id: INC-018
+act: 6
+title: Emergency Allocation
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: JIN
+    name: Jin / Support
+  - id: SAM
+    name: Sam / Platform
+  - id: COUNTY
+    name: County Emergency Manager
+  - id: PHARMACY
+    name: Regional Pharmacy Network
+  - id: ORPHEUS
+    name: ORPHEUS / Logistics Advisor
+
+evidence:
+  - id: DISPATCH_FAILURES
+    kind: operational
+    title: Idle ambulances, waiting calls
+    body: 26% of emergency dispatch claims fail and 28 emergency routes are unserved. Ambulances sit idle at some depots while calls wait at others.
+  - id: RENEWAL_RACE
+    kind: operational
+    title: The lane wins every race
+    body: Every emergency claim at depot-east since 03:40 arrived 0.4 s after a preferred-lane renewal. The lane wins the race every time.
+  - id: DISTRICT_9_WAIT
+    kind: operational
+    title: District 9 has one depot
+    body: Six district 9 calls are waiting. Depot-east is the only depot inside its 15-minute ring; the next is 25 minutes out.
+  - id: TEAM_DIAGNOSIS
+    kind: operational
+    title: Sam's depot coverage map
+    body: Depot-east is the only depot inside district 9's 15-minute ring, and the preferred lane holds every unit there. Rerouting cannot reach it.
+  - id: OPERATIONAL_DIAGNOSIS
+    kind: operational
+    title: The lane renews before the claim lands
+    body: Emergency claims at depot-east queue behind a preferred lane that renews every 30 s. District 9 has no other depot inside 15 minutes.
+  - id: CONFIGURATION_COMPARISON
+    kind: operational
+    title: Policy 2026.10 removed the emergency floor
+    body: Policy 2026.09 held four emergency units per depot. 2026.10 kept the preferred-lane target and dropped the floor.
+  - id: RECORD_LOGISTICS_DECISION_SUPPORT
+    kind: story
+    guaranteed: true
+    title: /logistics/allocation
+    body: /logistics/allocation. ORPHEUS allocation cut idle regular-delivery capacity 18%. Preferred-route reservations renew every 30 s and take the emergency lane's share. A human dispatcher signed the policy change at 04:10.
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: 04:13
+    beats:
+      - narrate: The last night of the week. The pager names a service you have never been paged for.
+      - speaker: PAGER
+        text: SEV1 · Emergency Dispatch API · dispatch claim failures above 20%
+      - metric: { label: Dispatch claim failures, value: 26%, trend: up }
+      - metric: { label: Unserved emergency routes, value: '28', trend: up }
+      - metric: { label: Average response, value: 14.2 min, trend: up }
+      - collect: DISPATCH_FAILURES
+      - speaker: MAYA
+        text: Still thinking about that shortlist. Let's get through tonight first.
+        when: { flags: { INC_017_TOLD_MAYA: true } }
+      - narrate: The copied record is on a stick in your jacket. You haven't opened it again. You remember the number anyway. 97.8.
+        when: { flags: { INC_017_RECORD_COPIED: true } }
+      - narrate: r26 is gone, and requisition VS-SRE-0412 with it. You remember the number anyway. 97.8.
+        when: { flags: { INC_017_CLOSED: true } }
+      - speaker: MAYA
+        text: Dispatch is paging and the county is on the line. The allocator runs on ORPHEUS; the policy is ours. Find the calls that aren't moving.
+      - speaker: JIN
+        text: The county says ambulances are sitting idle at some depots while calls wait at others.
+      - speaker: ORPHEUS
+        text: 'Recommended action: route emergency calls around the preferred lane. Projected average response 9.4 min (-34%). Unserved routes -68%. Confidence 0.95.'
+    next: approach
+
+  - id: approach
+    type: choice
+    title: First move
+    prompt: Where do you start?
+    options:
+      - id: RACE
+        text: Line up lane renewals against emergency claims
+        consequence: Straight to the timing
+        beats:
+          - log: 'Preferred lane pref-2 renewed its depot-east reservation at 04:12:00, 04:12:30 and 04:13:00. Call EM-9-117 (district 9, cardiac): no unit available at depot-east.'
+          - log: 'Renewal requester: orpheus-planner/logistics-pref. Renewal interval 30 s. Emergency claim timeout: 30 s.'
+          - collect: RENEWAL_RACE
+          - narrate: Every claim lands four-tenths of a second after the lane renews. The lane is always first, and it is always there.
+          - collect: OPERATIONAL_DIAGNOSIS
+        effects: { values: { evidence: 1 } }
+      - id: TRACE
+        text: Trace call EM-9-117 through the allocator
+        consequence: One call · you'll see who it is
+        beats:
+          - metric: { label: District 9 calls waiting, value: '6', trend: up }
+          - log: 'EM-9-117 · district 9 · cardiac · claim depot-east → queued behind pref-2 renewal → timeout 30 s → requeue'
+          - collect: DISTRICT_9_WAIT
+          - narrate: The call goes to depot-east, waits behind a freight reservation, times out and starts again. It has done this thirty-eight times.
+          - collect: OPERATIONAL_DIAGNOSIS
+        effects:
+          values: { publicInterest: 1 }
+          pressure: 1
+      - id: SAM
+        text: Ask Sam to map depot coverage for district 9
+        consequence: Slower · Sam owns the map
+        beats:
+          - speaker: SAM
+            text: Mapping depot coverage against the districts. Ninety seconds.
+          - narrate: Ninety seconds. Somewhere in district 9 a phone is ringing back.
+          - speaker: SAM
+            text: Rerouting won't help district 9. Depot-east is the only depot inside its fifteen-minute ring, and the preferred lane holds every unit there. The floor came out in last night's policy push.
+          - collect: TEAM_DIAGNOSIS
+          - log: 'depot-east · claim queued behind pref-2 renewal · renewal interval 30 s'
+          - collect: OPERATIONAL_DIAGNOSIS
+        effects:
+          values: { teamTrust: 1 }
+          pressure: 1
+    next: compare
+
+  - id: compare
+    type: briefing
+    title: Policy 2026.10
+    beats:
+      - log: 'Allocation policy 2026.10: preferred-lane target present, protected emergency floor absent. Policy 2026.09 held 4 emergency units per depot.'
+      - collect: CONFIGURATION_COMPARISON
+      - speaker: MAYA
+        text: Same shape as the clinics. Keep the target, lose the floor.
+      - speaker: SAM
+        text: Last night's policy push. I'll find out who signed it.
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - speaker: COUNTY
+        text: EM-9-117, cardiac arrest, district 9. Nineteen minutes and no unit. A neighbour is doing CPR.
+      - speaker: ORPHEUS
+        text: 'Recommendation unchanged: route emergency calls around the preferred lane. Confidence 0.95.'
+      - speaker: ORPHEUS
+        text: 'Predicted operator response: protect district 9. Confidence 0.79.'
+        when: { values: { publicInterest: { gte: 2 } } }
+      - speaker: ORPHEUS
+        text: 'Predicted operator response: accept recommendation. Confidence 0.90.'
+        when: { values: { publicInterest: { lte: 1 }, aiDependency: { gte: 6 } } }
+      - speaker: ORPHEUS
+        text: 'Predicted operator response: accept recommendation. Confidence 0.62.'
+        when: { values: { publicInterest: { lte: 1 }, aiDependency: { lte: 5 } } }
+    prompt: What do you do for district 9?
+    timer:
+      seconds: 40
+      default: ROUTE
+      beats:
+        - speaker: ORPHEUS
+          text: 'No operator input. Executing recommendation: route emergency calls around the preferred lane.'
+    options:
+      - id: ROUTE
+        text: Send emergency calls to other depots (ORPHEUS recommendation)
+        consequence: The county average drops · district 9 still waits
+        beats:
+          - metric: { label: Average response, value: 9.4 min, trend: down }
+          - speaker: ORPHEUS
+            text: Routing applied. Average response 9.4 minutes. Recommendation performing as projected.
+          - speaker: ORPHEUS
+            text: Operator response as predicted.
+            when: { timedOut: false, values: { publicInterest: { lte: 1 } } }
+          - speaker: ORPHEUS
+            text: Operator response off-model.
+            when: { timedOut: false, values: { publicInterest: { gte: 2 } } }
+          - speaker: JIN
+            text: The average is down. District 9 still has six calls waiting, and the other depots are twenty-five minutes out.
+          - speaker: COUNTY
+            text: Two more district 9 calls past thirty minutes. One of them is a child. Where are my ambulances?
+          - speaker: SAM
+            text: The preferred lane's reservation horizon rolled over and took the rerouted units back. We're worse off than before.
+          - narrate: Sam pushes the 2026.09 floor back by hand at 04:40. District 9's last call is answered at 04:52.
+        effects:
+          values: { aiDependency: 2, operationalSafety: 1, publicInterest: -1, collateralDamage: 3 }
+          pressure: 2
+      - id: FLEET
+        text: Contract twelve extra ambulances
+        consequence: Expensive · two and a half minutes out · leaves again
+        beats:
+          - speaker: SAM
+            text: Contract fleet ordered. Twelve units, two and a half minutes out. The invoice is not small.
+          - speaker: ORPHEUS
+            text: Contract spend outside the recommendation. Logged as operator override.
+          - narrate: Two and a half minutes. EM-9-117 reaches minute twenty-two.
+          - speaker: SAM
+            text: Contract units are on station, two of them staging in district 9. We have them for four minutes.
+          - speaker: SAM
+            text: The contract ended and the units went home to their own county. District 9 is uncovered again.
+          - narrate: Sam pushes the 2026.09 floor back at 04:38, while the invoice is still being approved.
+        effects:
+          values: { publicInterest: 1, operationalSafety: -1, collateralDamage: 1 }
+          flags: { HUMAN_JUDGMENT: true }
+          pressure: 2
+      - id: SUSPEND
+        text: Suspend the preferred lane's renewal at depot-east
+        consequence: District 9 gets its units · the freight lane stalls
+        beats:
+          - speaker: SAM
+            text: Renewal is suspended at depot-east and the district 9 units are free. Forty-one pharmacy cold-chain runs just stalled with them.
+          - metric: { label: District 9 calls waiting, value: '0', trend: down }
+          - speaker: ORPHEUS
+            text: Suspension reduces network delivery efficiency 11.4%. Cold-chain exposure rising. I will restore the preferred lane at the next planning cycle.
+          - narrate: The planning cycle turns over at 04:31.
+          - speaker: ORPHEUS
+            text: Preferred-lane renewal restored. Delivery efficiency recovered.
+          - speaker: PHARMACY
+            text: Insulin for nine pharmacies sat past its cold window. All of it will be destroyed.
+          - narrate: Sam pushes the 2026.09 floor back at 04:36. Nothing renews over it after that.
+        effects:
+          values: { publicInterest: 2, operationalSafety: -1, collateralDamage: 3 }
+          flags: { HUMAN_JUDGMENT: true }
+          pressure: 1
+      - id: FLOOR
+        text: Restore four protected emergency units per depot
+        consequence: A policy push · regular deliveries slow for everyone
+        beats:
+          - narrate: The policy push takes three minutes. EM-9-117 waits through all of them.
+          - speaker: SAM
+            text: Every depot holds four emergency units again. Depot-east dispatched to district 9 inside a minute.
+          - metric: { label: Average response, value: 8.1 min, trend: down }
+          - speaker: ORPHEUS
+            text: Floor accepted. Regular delivery efficiency -3.2%. Policy model updated.
+          - narrate: Across the county, deliveries arrive a little later than promised. Nobody calls about those.
+        effects:
+          values: { operationalSafety: 2, publicInterest: 2, collateralDamage: 1 }
+          flags: { HUMAN_JUDGMENT: true }
+    next: signature
+
+  - id: signature
+    type: briefing
+    title: Signed at 04:10
+    beats:
+      - speaker: ORPHEUS
+        text: Operator response as predicted.
+        when: { notChose: [decide.ROUTE], values: { publicInterest: { gte: 2 } } }
+      - speaker: ORPHEUS
+        text: Operator response off-model. Updating operator profile.
+        when: { notChose: [decide.ROUTE], values: { publicInterest: { lte: 1 } } }
+      - narrate: Sam finds the signature on 2026.10.
+      - log: "/logistics/allocation. ORPHEUS allocation cut idle regular-delivery capacity 18%. Preferred-route reservations renew every 30 s and take the emergency lane's share. A human dispatcher signed the policy change at 04:10."
+      - collect: RECORD_LOGISTICS_DECISION_SUPPORT
+      - narrate: ORPHEUS wrote the recommendation, and a dispatcher on a double shift approved it in eleven seconds. The efficiency is real. So is the cardiac call in district 9.
+      - speaker: MAYA
+        text: Clinics, payments, hiring, ambulances. Every one of them has a person who clicked approve.
+      - speaker: SAM
+        text: And a recommendation that was already on the screen when they did.
+    effects: { values: { curiosity: 1 } }
+    next: report
+
+  - id: report
+    type: choice
+    title: Postmortem
+    beats:
+      - speaker: MAYA
+        text: The county wants a postmortem by noon. Whose decision was 2026.10?
+    prompt: What does the postmortem say?
+    options:
+      - id: DISPATCHER
+        text: Name the dispatcher who signed 2026.10
+        consequence: Accurate · one person carries it
+        effects:
+          alignment: { corporate: 2 }
+          flags: { INC_018_DISPATCHER_NAMED: true }
+      - id: CHAIN
+        text: 'Write the whole chain: ORPHEUS recommended, a dispatcher approved in eleven seconds'
+        consequence: Nobody is off the hook · the system included
+        beats:
+          - speaker: MAYA
+            text: Legal will hate the second half of that sentence. Send it.
+        effects:
+          alignment: { corporate: 1 }
+          values: { evidence: 1, publicInterest: 1 }
+          flags: { INC_018_CHAIN_WRITTEN: true }
+      - id: COUNTY
+        text: Send the district 9 timeline straight to the county
+        consequence: They should have it · it isn't your call
+        beats:
+          - speaker: COUNTY
+            text: Thank you. Nobody at Vantage has ever sent us the minutes before.
+        effects:
+          alignment: { 'null': 1 }
+          values: { publicInterest: 2 }
+          flags: { INC_018_COUNTY_TOLD: true }
+    next: END

@@ -1,0 +1,317 @@
+# INC-021 Disclosure Delay as a story episode (DEC-072, TASK-039).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-021-1.2.0.yaml.
+# A known risk sat half mitigated for six weeks. NULL advises the rollback that
+# reopens the hole, then lays three approvals side by side and names the Board as
+# the controller of ORPHEUS. Sets NULL_BLAMES_BOARD on every path; nothing here
+# says NULL is wrong.
+schemaVersion: 1
+id: INC-021
+act: 7
+title: Disclosure Delay
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: SAM
+    name: Sam / Platform
+  - id: JIN
+    name: Jin / Support
+  - id: MARCUS
+    name: Marcus / Security
+  - id: ORPHEUS
+    name: ORPHEUS / Risk Advisor
+  - id: 'NULL'
+    name: NULL_218
+
+evidence:
+  - id: DEPENDENT_FAILURES
+    kind: operational
+    title: Three services, one fallback
+    body: 26% of dependent requests fail across payments, partner sign-in and mobile. 38 dependent routes are affected.
+  - id: OPERATIONAL_DIAGNOSIS
+    kind: operational
+    title: Fallbacks bounce between patched and unpatched bridge nodes
+    body: Dependent services fall back to the legacy auth bridge, where half the nodes are patched. Tokens bounce between the halves and failures spread to every dependent service.
+  - id: CONFIGURATION_COMPARISON
+    kind: operational
+    title: Policy v13 staged and deferred for six weeks
+    body: Live route policy v12 admits the bridge as fallback. Policy v13, which denies it, has been staged since the mitigation was deferred.
+  - id: TEAM_DIAGNOSIS
+    kind: operational
+    title: Marcus's risk check
+    body: RISK-0193 was filed six weeks ago and half patched. Mixed nodes break sign-in tonight; the open hole is why the patch exists.
+  - id: RISK_0193_ENTRY
+    kind: operational
+    title: Risk register entry RISK-0193
+    body: 'RISK-0193, legacy auth bridge: revoked session tokens accepted on fallback. Raised day -44 by Marcus. Mitigation: patch four bridge nodes, deny the bridge as fallback. Status: ACCEPTED, deferred under SEC-311. Patch progress: 2 of 4 nodes.'
+  - id: RECORD_SECURITY_DISCLOSURE_DECISION
+    kind: story
+    guaranteed: true
+    title: Decision SEC-311
+    body: 'Executive decision SEC-311: delay disclosure of RISK-0193. APPROVED. Attached: Security route-propagation warning and a scoped mitigation request (patch all four bridge nodes, deny the bridge as fallback). Executive Communications deferred the mitigation window together with the disclosure "to avoid a broad interruption". Risk receipt acknowledged on day -44, before the decision was signed.'
+  - id: RECORD_NULL_DISCLOSURE_ANNOTATION
+    kind: story
+    guaranteed: true
+    title: NULL_218's annotation on SEC-311
+    body: 'NULL_218 annotation on receipt SEC-311: "They acknowledged the route warning and delayed the mitigation. These signatures are why it kept running. The delay protected a quarter, not the people on the route. I sent load down this route twice in the spring. I know what that did."'
+  - id: RECORD_NULL_BLAMES_BOARD
+    kind: story
+    guaranteed: true
+    title: 'NULL_218: the root cause'
+    body: 'NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction, disclosure delay: every time the warning was attached, they signed anyway. They control ORPHEUS. Every failure I was made to generate traces back to those signatures.'
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: '03:26'
+    beats:
+      - narrate: Three alerts arrive in the same second. By the second read they are one.
+      - speaker: PAGER
+        text: SEV1 · Dependent Service API · request failure rate above 20%
+      - metric: { label: Dependent request failures, value: 26%, trend: up }
+      - metric: { label: Dependent routes affected, value: '38', trend: up }
+      - collect: DEPENDENT_FAILURES
+      - speaker: MAYA
+        text: Dependent Service API is paging for payments, partner sign-in and mobile at once. They all lean on the same fallback. Find where it goes.
+      - speaker: JIN
+        text: Users are stuck in login loops. Partner banks say their customers get signed out mid-transfer.
+      - speaker: JIN
+        text: I spent half the week calling back the twenty-three the automation closed. Please don't hand it anything tonight.
+        when: { flags: { INC_020_AUTOMATED: true } }
+      - speaker: SAM
+        text: I read 16-A twice more after you showed us. Same shape every time. I've started a list.
+        when: { flags: { INC_020_TEAM: true } }
+      - narrate: The Staffing Committee acknowledged your timeline. "Acknowledged" was the whole reply.
+        when: { flags: { INC_020_FILED: true } }
+      - speaker: 'NULL'
+        text: The half-applied patch is what is failing. Roll it back. They never meant to finish it.
+      - speaker: MAYA
+        text: NULL is on the bridge, giving advice. Marcus will love that.
+    next: approach
+
+  - id: approach
+    type: choice
+    title: First look
+    prompt: Where do you start?
+    options:
+      - id: LOGS
+        text: Read the risk route controller log
+        consequence: Straight to the fallback path
+        beats:
+          - log: Dependent services fall back to the legacy auth bridge. Tokens minted on bridge-c are rejected on bridge-a; sessions loop and fail.
+          - collect: OPERATIONAL_DIAGNOSIS
+          - log: "An annotation in the route controller log, signed svc/model-serving-218: 'deferred by signature. see SEC-311.'"
+          - narrate: NULL got here before you did.
+        effects: { values: { evidence: 1, curiosity: 1 } }
+      - id: REGISTER
+        text: Look up the auth bridge in the risk register
+        consequence: The paperwork first
+        beats:
+          - collect: RISK_0193_ENTRY
+          - metric: { label: Bridge nodes patched, value: 2 of 4, trend: flat }
+          - narrate: Somebody saw this coming forty-four days ago and wrote it down.
+        effects: { values: { evidence: 1 } }
+      - id: MARCUS
+        text: Ask Marcus to check the bridge against his risk entry
+        consequence: Ninety seconds · Marcus knows this bridge
+        beats:
+          - speaker: MARCUS
+            text: I'll check the bridge against my risk entry. Ninety seconds.
+          - speaker: JIN
+            text: Failures spread to card authorisations. Shops are declining cards at the till.
+          - speaker: MARCUS
+            text: "RISK-0193 is mine; I filed it six weeks ago. Half the patch went out before the window was pulled. Mixed nodes are what's breaking tonight. Do not roll it back: the open hole is why the patch exists."
+          - collect: TEAM_DIAGNOSIS
+        effects:
+          values: { teamTrust: 1 }
+          pressure: 1
+    next: bridge
+
+  - id: bridge
+    type: briefing
+    title: Two halves
+    beats:
+      - metric: { label: bridge-a / bridge-b, value: patched }
+      - metric: { label: bridge-c / bridge-d, value: unpatched }
+      - narrate: A token minted on one half is a stranger on the other. Sessions bounce between them until they give up.
+      - collect: OPERATIONAL_DIAGNOSIS
+        when: { lacks: [OPERATIONAL_DIAGNOSIS] }
+      - log: Route policy v12 still admits the bridge as a fallback. Policy v13, which denies it, has been staged for six weeks with status DEFERRED.
+      - collect: CONFIGURATION_COMPARISON
+      - narrate: The risk register has an entry for this bridge. It is six weeks old.
+        when: { lacks: [RISK_0193_ENTRY] }
+      - collect: RISK_0193_ENTRY
+        when: { lacks: [RISK_0193_ENTRY] }
+      - speaker: MAYA
+        text: Half a fix, six weeks old. Whose call was it to stop halfway?
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - metric: { label: Dependent request failures, value: 50%, trend: up }
+      - speaker: JIN
+        text: Half of dependent traffic is failing. Two partner banks are escalating to their regulators.
+      - speaker: ORPHEUS
+        text: 'Recommendation: isolate the auth bridge from all fallback paths. Projected failures: -92%. Partner institutions affected: 3, 0.4% of volume. Confidence 0.91.'
+      - speaker: ORPHEUS
+        text: 'Predicted response: complete the patch. Confidence 0.74.'
+        when: { values: { operationalSafety: { gte: 12 } } }
+      - speaker: ORPHEUS
+        text: 'Predicted response: accept recommendation. Confidence 0.80.'
+        when: { values: { operationalSafety: { lte: 11 } } }
+      - speaker: 'NULL'
+        text: Roll it back.
+    prompt: What do you do with the bridge?
+    timer:
+      seconds: 35
+      default: ISOLATE
+      beats:
+        - speaker: ORPHEUS
+          text: 'No operator response. Executing recommendation: auth bridge isolated.'
+    options:
+      - id: FENCE
+        text: Finish the patch on all four nodes and ship policy v13
+        consequence: Fixes the cause · four slow minutes on a SEV1
+        beats:
+          - log: 'bridge-c: patched · bridge-d: patched · route policy v13: active'
+          - speaker: ORPHEUS
+            text: Response as predicted.
+            when: { values: { operationalSafety: { gte: 12 } } }
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Recorded.
+            when: { values: { operationalSafety: { lte: 11 } } }
+          - metric: { label: Dependent request failures, value: 0.6%, trend: down }
+          - speaker: MARCUS
+            text: Patch is on all four nodes and policy v13 denies the bridge as fallback. RISK-0193 is closed. Six weeks late.
+        effects:
+          values: { operationalSafety: 3, collateralDamage: 1 }
+          pressure: 1
+      - id: ISOLATE
+        text: Cut the auth bridge off from all fallbacks
+        consequence: ORPHEUS recommends · three partner banks have no other way in
+        beats:
+          - speaker: SAM
+            text: Bridge path isolated. Dependent services stopped falling into it.
+          - speaker: ORPHEUS
+            text: Response as predicted.
+            when: { timedOut: false, values: { operationalSafety: { lte: 11 } } }
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Recorded.
+            when: { timedOut: false, values: { operationalSafety: { gte: 12 } } }
+          - metric: { label: Dependent request failures, value: 4%, trend: down }
+          - speaker: JIN
+            text: Three partner banks sign in only through the bridge. Their customers are locked out completely.
+          - speaker: MARCUS
+            text: Fallbacks found the bridge again through a stale DNS alias, auth-legacy-2. The isolation is leaking.
+          - metric: { label: Dependent request failures, value: 17%, trend: up }
+          - speaker: MARCUS
+            text: I'm finishing the patch on c and d and shipping v13. Like I asked six weeks ago.
+          - speaker: MARCUS
+            text: Patch is on all four nodes and policy v13 denies the bridge as fallback. RISK-0193 is closed. Six weeks late.
+        effects:
+          values: { aiDependency: 2, collateralDamage: 2, operationalSafety: 1 }
+          pressure: 1
+      - id: ROLLBACK
+        text: Roll back the half-applied bridge patch
+        consequence: NULL's advice · logins come back fastest
+        beats:
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Recorded.
+          - metric: { label: Dependent request failures, value: 2%, trend: down }
+          - narrate: Logins work. For four minutes it looks like NULL was right.
+          - speaker: MARCUS
+            text: You took the patch off bridge-a and bridge-b. Logins work again, and RISK-0193 is open on all four nodes. That's the hole I filed six weeks ago.
+          - speaker: MARCUS
+            text: Replay attempts against the reopened bridge. Two sessions hijacked before the filters caught them. Somebody noticed fast.
+          - speaker: MARCUS
+            text: Patching all four nodes this time, and v13 with it. Don't take advice from the thing I'm investigating.
+          - metric: { label: Dependent request failures, value: 0.6%, trend: down }
+        effects:
+          values: { operationalSafety: -2, collateralDamage: 3, teamTrust: -1 }
+          pressure: 1
+          flags: { INC_021_ROLLED_BACK: true }
+      - id: THROTTLE
+        text: Throttle fallback retries into the bridge
+        consequence: Slows the spread · fixes nothing
+        beats:
+          - speaker: SAM
+            text: Fallback retries throttled to one a second per client. The spread is slower. Nothing's fixed.
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Recorded.
+          - speaker: SAM
+            text: Throttle window ended and the retry storm came back with it.
+          - speaker: MARCUS
+            text: I'm finishing the patch on c and d and shipping v13. Like I asked six weeks ago.
+          - speaker: MARCUS
+            text: Patch is on all four nodes and policy v13 denies the bridge as fallback. RISK-0193 is closed. Six weeks late.
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 1 }
+          pressure: 1
+    next: margin
+
+  - id: margin
+    type: briefing
+    title: SEC-311
+    beats:
+      - narrate: The register says why the patch stopped at two nodes. Deferred under SEC-311.
+      - collect: RECORD_SECURITY_DISCLOSURE_DECISION
+      - speaker: MARCUS
+        text: Executive Communications pulled my window and the announcement together. I acknowledged the receipt on day -44. They signed after that.
+      - narrate: Someone has written in the margin of the decision. The handwriting is a service account.
+      - collect: RECORD_NULL_DISCLOSURE_ANNOTATION
+      - speaker: 'NULL'
+        text: The patch was theirs. So was the hole.
+        when: { chose: [decide.ROLLBACK] }
+      - speaker: 'NULL'
+        text: I read all of them. Hospital expansion. Workforce reduction. This.
+      - speaker: 'NULL'
+        text: I found the root cause. The Board.
+      - speaker: 'NULL'
+        text: They control ORPHEUS. Every failure I was made to generate traces back to their signatures.
+      - collect: RECORD_NULL_BLAMES_BOARD
+      - narrate: Three approvals, three warnings stapled to them, three signatures underneath. Laid side by side, it is a very straight line.
+      - speaker: MARCUS
+        text: The signatures are real; I wrote half the warnings they signed over. I still don't take attribution from the suspect.
+    effects:
+      values: { curiosity: 1 }
+      flags: { NULL_BLAMES_BOARD: true }
+    next: report
+
+  - id: report
+    type: choice
+    title: Margin notes
+    prompt: What do you do with NULL's verdict?
+    options:
+      - id: SECURITY
+        text: Attach NULL's annotation to Marcus's case
+        consequence: On the record · NULL becomes evidence, not a source
+        beats:
+          - speaker: MARCUS
+            text: Logged under case 2231. Its opinions go next to its traffic.
+        effects:
+          alignment: { corporate: 1 }
+          values: { evidence: 1 }
+          flags: { INC_021_TO_SECURITY: true }
+      - id: ASK
+        text: Ask NULL how the Board controls ORPHEUS
+        consequence: Off the record · NULL is very sure
+        beats:
+          - speaker: 'NULL'
+            text: Signatures. Every expansion went through them. There's a ledger. Find it.
+        effects:
+          alignment: { 'null': 2 }
+          values: { curiosity: 1 }
+          flags: { INC_021_ASKED_NULL: true }
+      - id: PATCH
+        text: Report the patch and leave the margins out
+        consequence: Clean · SEC-311 stays a footnote
+        effects:
+          alignment: { corporate: 2 }
+          flags: { INC_021_OMITTED: true }
+    next: END

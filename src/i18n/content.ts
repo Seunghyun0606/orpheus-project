@@ -38,10 +38,15 @@ export function buildContentDictionary(sources: Iterable<string>): ContentDictio
   return dictionary;
 }
 
-const koreanSources = import.meta.glob<string>('./content/ko/*.yaml', {
-  query: '?raw',
-  import: 'default',
-});
+// Story-episode catalogs ship to Godot as .po files (DEC-072); the web client
+// only needs the incident and campaign content.
+const koreanSources = import.meta.glob<string>(
+  ['./content/ko/*.yaml', '!./content/ko/story-*.yaml'],
+  {
+    query: '?raw',
+    import: 'default',
+  },
+);
 
 const loading = new Map<Locale, Promise<ContentDictionary>>();
 const loaded = new Map<Locale, ContentDictionary>();

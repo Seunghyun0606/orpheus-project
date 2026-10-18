@@ -2,11 +2,13 @@
 //
 //   node scripts/story/story.mjs play INC-001 [--lang ko|en] [--no-timer] [--fast]
 //   node scripts/story/story.mjs script INC-001 [--lang ko|en]   every scene and branch, as Markdown
-//   node scripts/story/story.mjs check                           validate every episode
+//   node scripts/story/story.mjs check                           validate every episode in campaign order
+//   node scripts/story/story.mjs check INC-010                   one episode on its own, under every
+//                                                                combination of the flags it reads
 //
 // The terminal player is a review tool for writers and playtesters until the
 // Godot build exists; it runs the same reference runner the tests use.
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createInterface } from 'node:readline';
 import { parse } from 'yaml';
 
@@ -18,7 +20,7 @@ import {
   StoryInputError,
 } from '../../src/story/runner.ts';
 import { parseEpisode } from '../../src/story/schema.ts';
-import { campaignCarries, validateEpisode } from '../../src/story/validate.ts';
+import { campaignCarries, soloCarries, validateEpisode } from '../../src/story/validate.ts';
 
 const DATA = 'src/story/data/';
 const TIMEOUT = Symbol('timeout');
@@ -116,14 +118,16 @@ const green = color('32');
 const red = color('31');
 const bold = color('1');
 
+// Reads only this episode's file, so other episodes being written cannot
+// break a single-episode check.
 function episodeById(id) {
-  const episodes = loadEpisodes();
-  const episode = episodes.find((e) => e.id === id?.toUpperCase());
-  if (episode === undefined) {
-    console.error(ui.notFound(id) + episodes.map((e) => e.id).join(', '));
+  const file = `${DATA}${String(id).toLowerCase()}.yaml`;
+  if (!existsSync(file)) {
+    const ids = readdirSync(DATA).filter((f) => f.endsWith('.yaml'));
+    console.error(ui.notFound(id) + ids.join(', '));
     process.exit(1);
   }
-  return episode;
+  return parseEpisode(readFileSync(file, 'utf8'));
 }
 
 async function play(episode) {
@@ -380,10 +384,14 @@ if (command === 'play') await play(episodeById(id));
 else if (command === 'script') script(episodeById(id));
 else if (command === 'check') {
   let failed = false;
-  const episodes = loadEpisodes();
-  const carries = campaignCarries(episodes);
+  const solo = id !== undefined;
+  const episodes = solo ? [episodeById(id)] : loadEpisodes();
+  const carries = solo ? undefined : campaignCarries(episodes);
   for (const episode of episodes) {
-    const problems = validateEpisode(episode, carries.get(episode.id));
+    const problems = validateEpisode(
+      episode,
+      solo ? soloCarries(episode) : carries.get(episode.id),
+    );
     console.log(`${episode.id}: ${problems.length === 0 ? 'ok' : problems.length + ' problems'}`);
     for (const p of problems) console.log(`  ${p}`);
     failed ||= problems.length > 0;

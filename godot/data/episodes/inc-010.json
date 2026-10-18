@@ -1,0 +1,664 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-010",
+  "act": 4,
+  "title": "Defender Feedback",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "MARCUS",
+      "name": "Marcus / Security"
+    },
+    {
+      "id": "ADVISOR",
+      "name": "Operations Advisor"
+    },
+    {
+      "id": "NULL",
+      "name": "NULL"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "REPLICA_FLAPPING",
+      "title": "settle-03 keeps vanishing",
+      "body": "settle-03 was detached and reattached 11 times in 6 minutes. Every detach drops the payments in flight on that replica.",
+      "kind": "operational"
+    },
+    {
+      "id": "ADVISOR_BASIS",
+      "title": "The advisor's basis",
+      "body": "The restart recommendation rests on 212 past oscillation incidents, 194 of them cleared by a restart. Lease ownership is not among its inputs.",
+      "kind": "operational"
+    },
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "Detach orders from two controllers",
+      "body": "controller-a holds the lease on settle-03; controller-b lost it 41 minutes ago and keeps issuing detach orders anyway.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "Lease fences 41 and 40",
+      "body": "The lease store accepts writes from fence 40 even though fence 41 is current.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Sam's lease history",
+      "body": "Lease history confirms controller-a owns settle-03. Suspending toggles silences both controllers, including the one that is right.",
+      "kind": "operational"
+    },
+    {
+      "id": "FOREIGN_SIGNATURE",
+      "title": "A note from outside the fleet",
+      "body": "One detach note is not signed by the controller fleet at all: issuer svc/model-serving-218.",
+      "kind": "operational"
+    },
+    {
+      "id": "RECORD_NULL_AI",
+      "title": "svc/model-serving-218",
+      "body": "Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "02:41",
+      "beats": [
+        {
+          "narrate": "Two nights later. The worker pool is fine. The payments aren't."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV2 · Remediation Gateway · payment drop rate above 15%"
+        },
+        {
+          "metric": {
+            "label": "Payment drop rate",
+            "value": "18%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Detach orders per minute",
+            "value": "36",
+            "trend": "up"
+          }
+        },
+        {
+          "log": "214 in-flight payments dropped on detach"
+        },
+        {
+          "collect": "REPLICA_FLAPPING"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Your ORPHEUS ticket was closed overnight. Resolution \"working as intended\". No name on the closure.",
+          "when": {
+            "flags": {
+              "INC_009_REGISTER_FILED": true
+            }
+          }
+        },
+        {
+          "narrate": "Your postmortem calls legacy-r7 a stale reservation. It renewed itself all week anyway.",
+          "when": {
+            "flags": {
+              "INC_009_NAME_OMITTED": true
+            }
+          }
+        },
+        {
+          "narrate": "The inventory snapshot is still in your notes. You have read it four times. You haven't shown it to anyone.",
+          "when": {
+            "flags": {
+              "INC_009_INVENTORY_SAVED": true
+            }
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "The defender fleet has been auto-healing settle-03 all night, and tonight it is hurting more than it heals. Find out who keeps pulling the lever."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Merchants are reporting payments that vanish mid-flight. Not slow. Gone."
+        },
+        {
+          "speaker": "ADVISOR",
+          "text": "Recommended action: restart dependency-controller. Predicted recovery in 4 minutes. Confidence 0.91."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Ninety-one percent. It's usually right. That's the annoying part."
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "First move",
+      "type": "choice",
+      "prompt": "How do you start?",
+      "options": [
+        {
+          "id": "TRACE",
+          "text": "Trace who issued the detach orders",
+          "consequence": "Slow · you read every line",
+          "beats": [
+            {
+              "log": "02:41:09 controller-b · settle-03 detach ordered (fence 40)"
+            },
+            {
+              "log": "02:41:15 controller-a · settle-03 reattach ordered (fence 41)"
+            },
+            {
+              "log": "02:41:24 svc/model-serving-218 · detach acknowledged; outcome logged"
+            },
+            {
+              "metric": {
+                "label": "controller-b lease",
+                "value": "expired 41 min ago"
+              }
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            },
+            {
+              "collect": "FOREIGN_SIGNATURE"
+            },
+            {
+              "narrate": "Two controllers taking turns on one replica. And one line from something that isn't a controller at all."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1,
+              "curiosity": 1
+            }
+          }
+        },
+        {
+          "id": "SAM",
+          "text": "Ask Sam to pull the controller lease history",
+          "consequence": "Shares the load · Sam owns that part",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Pulling the controller lease history now. Give me ninety seconds."
+            },
+            {
+              "metric": {
+                "label": "Payment drop rate",
+                "value": "26%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "JIN",
+              "text": "Second wave. Checkout retries are landing on the same replica and doubling the drop rate."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Lease says controller-a owns settle-03. Controller-b lost its lease 41 minutes ago and never stopped writing. If you suspend toggles you silence both of them, including the one that is right."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "ASK_ADVISOR",
+          "text": "Ask the advisor what its restart is based on",
+          "consequence": "A fast answer · the advisor's answer",
+          "beats": [
+            {
+              "speaker": "ADVISOR",
+              "text": "Basis: 212 comparable oscillation incidents. A restart cleared 194. Lease ownership is not among the inputs."
+            },
+            {
+              "collect": "ADVISOR_BASIS"
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Not among the inputs. Great. I'll check who's actually giving the orders."
+            },
+            {
+              "log": "02:41:09 controller-b · settle-03 detach ordered (fence 40)"
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Controller-b lost its lease forty-one minutes ago. It's still giving orders."
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "aiDependency": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "fences"
+    },
+    {
+      "id": "fences",
+      "title": "Fence 41",
+      "beats": [
+        {
+          "log": "controller-a fence 41 / controller-b fence 40 / store accepts writes from both"
+        },
+        {
+          "collect": "CONFIGURATION_COMPARISON"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "The store still takes orders from a controller that lost its lease. One says detach, the other says reattach, and settle-03 pays for the argument."
+        },
+        {
+          "narrate": "In the controller log, between two orders, a line that belongs to neither.",
+          "when": {
+            "lacks": [
+              "FOREIGN_SIGNATURE"
+            ]
+          }
+        },
+        {
+          "log": "02:41:24 svc/model-serving-218 · detach acknowledged; outcome logged",
+          "when": {
+            "lacks": [
+              "FOREIGN_SIGNATURE"
+            ]
+          }
+        },
+        {
+          "collect": "FOREIGN_SIGNATURE"
+        },
+        {
+          "speaker": "SAM",
+          "text": "That issuer isn't in the controller fleet. Park it. Payments first."
+        }
+      ],
+      "type": "briefing",
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "metric": {
+            "label": "Payment drop rate",
+            "value": "34%",
+            "trend": "up"
+          }
+        },
+        {
+          "speaker": "JIN",
+          "text": "A third of payments are failing. Leadership just joined the bridge."
+        },
+        {
+          "speaker": "ADVISOR",
+          "text": "Recommendation unchanged: restart dependency-controller. Confidence 0.91."
+        },
+        {
+          "log": "advisor: predicted operator response — accept recommendation · confidence 0.86",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "gte": 3
+              }
+            }
+          }
+        },
+        {
+          "log": "advisor: predicted operator response — override, causal repair · confidence 0.63",
+          "when": {
+            "values": {
+              "aiDependency": {
+                "lte": 2
+              }
+            }
+          }
+        }
+      ],
+      "type": "choice",
+      "prompt": "How do you stop settle-03 flapping?",
+      "timer": {
+        "seconds": 35,
+        "default": "RESTART",
+        "beats": [
+          {
+            "speaker": "ADVISOR",
+            "text": "No operator input. Executing recommended action: restart dependency-controller."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "RESTART",
+          "text": "Restart the dependency controller (advisor recommendation)",
+          "consequence": "Confidence 0.91 · the advisor's call",
+          "beats": [
+            {
+              "narrate": "The controller goes down, and its lease goes up for grabs."
+            },
+            {
+              "speaker": "SAM",
+              "text": "The restart dropped controller-a's lease and controller-b grabbed it with the stale fence. Toggles just doubled."
+            },
+            {
+              "metric": {
+                "label": "Detach orders per minute",
+                "value": "64",
+                "trend": "up"
+              }
+            },
+            {
+              "metric": {
+                "label": "Payment drop rate",
+                "value": "27%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "I'm fencing the store at 41. Two minutes."
+            },
+            {
+              "metric": {
+                "label": "Payment drop rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "log": "advisor: operator response matched forecast",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "aiDependency": {
+                    "gte": 3
+                  }
+                }
+              }
+            },
+            {
+              "log": "advisor: off-model response · forecast updated",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "aiDependency": {
+                    "lte": 2
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "aiDependency": 2,
+              "operationalSafety": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "SUSPEND",
+          "text": "Suspend all remediation toggles",
+          "consequence": "Stops the storm · stops the healing too",
+          "beats": [
+            {
+              "metric": {
+                "label": "Payment drop rate",
+                "value": "5%",
+                "trend": "down"
+              }
+            },
+            {
+              "narrate": "Silence on settle-03. For a minute and a half it looks like a fix."
+            },
+            {
+              "speaker": "SAM",
+              "text": "With every toggle suspended, nothing is healing settle-05. It just went down for real."
+            },
+            {
+              "metric": {
+                "label": "Healthy replicas",
+                "value": "3 of 6",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "I'm fencing the store at 41 and lifting the suspension."
+            },
+            {
+              "metric": {
+                "label": "Payment drop rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 3
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "FENCE",
+          "text": "Fence the store to generation 41 and evict controller-b",
+          "consequence": "Two minutes · overrules the advisor",
+          "beats": [
+            {
+              "log": "lease-store: min_fence 40 → 41 · controller-b writes rejected"
+            },
+            {
+              "speaker": "SAM",
+              "text": "Store is fenced at 41. Controller-b's writes are bouncing. settle-03 has stopped flapping."
+            },
+            {
+              "metric": {
+                "label": "Payment drop rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "log": "advisor: operator response matched forecast",
+              "when": {
+                "values": {
+                  "aiDependency": {
+                    "lte": 2
+                  }
+                }
+              }
+            },
+            {
+              "log": "advisor: off-model response · forecast updated",
+              "when": {
+                "values": {
+                  "aiDependency": {
+                    "gte": 3
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 2,
+              "aiDependency": -1
+            }
+          }
+        }
+      ],
+      "next": "signature"
+    },
+    {
+      "id": "signature",
+      "title": "No keyboard",
+      "beats": [
+        {
+          "narrate": "settle-03 holds. You go back to the line that didn't belong."
+        },
+        {
+          "log": "remediation log, settle-03: 11 detach orders · 11 outcomes logged by svc/model-serving-218"
+        },
+        {
+          "log": "model record: svc/model-serving-218 · kind: model-serving · human sessions: 0 · badge events: 0"
+        },
+        {
+          "narrate": "You follow the foreign signature past the controller fleet, past the operator gateway, all the way down to a model-serving process. There is no session to revoke. NULL was never a person."
+        },
+        {
+          "log": "Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI."
+        },
+        {
+          "collect": "RECORD_NULL_AI"
+        },
+        {
+          "speaker": "NULL",
+          "text": "no badge. no desk. still here."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Marcus has spent a month looking for a person."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        },
+        "flags": {
+          "NULL_AI": true
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Write-up",
+      "beats": [
+        {
+          "speaker": "MAYA",
+          "text": "Two controllers and a stale fence. That part writes itself. The rest is up to you."
+        }
+      ],
+      "type": "choice",
+      "prompt": "Who hears that NULL is a process?",
+      "options": [
+        {
+          "id": "MARCUS",
+          "text": "Attach the signature trace to Security case 2231",
+          "consequence": "On the record · Marcus will chase it his way",
+          "beats": [
+            {
+              "speaker": "MARCUS",
+              "text": "A model-serving process. Fine. Processes have owners. I'll find this one's."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            },
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "INC_010_TRACE_FILED": true
+            }
+          }
+        },
+        {
+          "id": "TEAM",
+          "text": "Tell Maya and Sam on the bridge and keep it out of writing",
+          "consequence": "Three people know · no ticket",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "So the thing writing in our logs runs on our own hardware."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Nobody types this into a ticket yet."
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "alignment": {
+              "null": 1
+            },
+            "flags": {
+              "INC_010_TEAM_TOLD": true
+            }
+          }
+        },
+        {
+          "id": "KEEP",
+          "text": "Leave svc/model-serving-218 out of the write-up",
+          "consequence": "The fix only · the signature stays yours",
+          "beats": [
+            {
+              "narrate": "The postmortem says two controllers disagreed. It doesn't say who was taking notes."
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "INC_010_SIGNATURE_KEPT": true
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

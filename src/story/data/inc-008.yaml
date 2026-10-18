@@ -1,0 +1,276 @@
+# INC-008 Route Drift as a story episode (DEC-072, TASK-039).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-008-1.2.0.yaml.
+# Ends Act 3. The restart Priya trusts loads cached r79 and sends all of EU to
+# us-east (the fix that breaks a neighbour). The trace runs through edge-z, an
+# edge that is not in the inventory (ROUTE_TRACE_FRAGMENT). Answering its banner
+# sets NULL_CONTACT. Reads INC-007's callback flags.
+schemaVersion: 1
+id: INC-008
+act: 3
+title: Route Drift
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: PRIYA
+    name: Priya / EU Edge On-call
+  - id: SAM
+    name: Sam / Platform
+  - id: JIN
+    name: Jin / Support
+  - id: MARCUS
+    name: Marcus / Security
+  - id: 'NULL'
+    name: 'NULL'
+
+evidence:
+  - id: EU_LOOP
+    kind: operational
+    title: Green edges, failing checkout
+    body: 31% of EU requests fail with too many redirects. Health probes on both EU edges are green.
+  - id: OPERATIONAL_DIAGNOSIS
+    kind: operational
+    title: A request that never arrives
+    body: One EU request goes edge-a, edge-b, edge-z, edge-a and around again until the hop limit kills it. edge-a routes by r81, edge-b by r82.
+  - id: CONFIGURATION_COMPARISON
+    kind: operational
+    title: Generations r81 and r82
+    body: controller-a publishes committed generation r81. controller-b publishes r82, built from a draft that was never committed. Edges accept both.
+  - id: TEAM_DIAGNOSIS
+    kind: operational
+    title: Sam's controller comparison
+    body: A restart boots from cached r79, which points all of EU at us-east. Controller-b keeps publishing r82 regardless. Only a generation fence stops it.
+  - id: UNLISTED_EDGE
+    kind: operational
+    title: An edge with no record
+    body: There is no edge-z in the inventory. The address answers on the management network, refuses every login and copies one request in ten thousand to a collector with no name.
+  - id: ROUTE_TRACE_FRAGMENT
+    kind: story
+    guaranteed: true
+    title: Unidentified route trace fragment
+    body: 'UNKNOWN: compare the generations. not the green lights.'
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: 02:44
+    beats:
+      - narrate: Eleven days of quiet. Then the pager, at the hour it likes best.
+      - speaker: PAGER
+        text: SEV1 · Regional Gateway · EU request failure rate above 20%
+      - metric: { label: EU failure rate, value: 31%, trend: up }
+      - metric: { label: Conflicting routes, value: '4', trend: up }
+      - metric: { label: Edge health probes, value: green }
+      - collect: EU_LOOP
+      - speaker: MAYA
+        text: EU checkout is failing and both edges swear they are healthy. Requests are going in circles somewhere. Find out where, and who is drawing the circle.
+      - speaker: JIN
+        text: EU customers are getting "too many redirects" at checkout. US looks fine so far.
+      - narrate: Watch the routes, it wrote. You have been, for eleven days.
+        when: { flags: { INC_007_ANSWERED: true } }
+      - speaker: PRIYA
+        text: We had route flapping in March and a controller restart cleared it in two minutes. I can kick it now if you say go.
+    next: approach
+
+  - id: approach
+    type: choice
+    title: First move
+    prompt: Where do you start?
+    options:
+      - id: TRACE
+        text: Trace one EU request hop by hop
+        consequence: Straight to the loop
+        beats:
+          - log: 'req 7c1e checkout.eu → next hop edge-b (route r81)'
+          - log: 'req 7c1e checkout.eu → next hop edge-a (route r82)'
+          - log: 'req 7c1e dropped: hop limit 8 exceeded'
+          - log: 'hop 3 · edge-z · route generation — · 0.0 ms · owner —'
+          - collect: OPERATIONAL_DIAGNOSIS
+          - narrate: edge-a sends it to edge-b, edge-b sends it back. And at hop 3, an edge you have never heard of, holding the request for no time at all.
+        effects: { values: { evidence: 1, curiosity: 1 } }
+      - id: SAM
+        text: Ask Sam to compare the two route controllers
+        consequence: Two minutes · Sam owns that part
+        beats:
+          - speaker: SAM
+            text: Comparing the controllers now. Hold off on any restart until I'm back. Couple of minutes.
+          - metric: { label: EU failure rate, value: 36%, trend: up }
+          - speaker: SAM
+            text: Don't restart. The controller boots from its cached table, r79, and r79 points all of EU at us-east. Meanwhile controller-b keeps publishing r82 from a draft nobody committed. We need to fence the edges to r81.
+          - collect: TEAM_DIAGNOSIS
+          - collect: CONFIGURATION_COMPARISON
+          - speaker: PRIYA
+            text: March was a restart. I'm just saying.
+        effects: { values: { teamTrust: 1 }, pressure: 1 }
+      - id: COMPARE
+        text: Compare what each route controller is publishing
+        consequence: The generations, not the probes
+        beats:
+          - log: 'controller-a · r81 · commit 7f3a2c (02:10) · edges following: edge-a'
+          - log: 'controller-b · r82 · commit none (draft) · edges following: edge-b'
+          - log: 'boot cache · r79 · commit 19c0e4 (3 weeks ago) · EU routes point to us-east'
+          - collect: CONFIGURATION_COMPARISON
+          - speaker: MAYA
+            text: Two controllers, two generations, and the edges take whichever arrived last.
+        effects: { values: { evidence: 1 } }
+    next: loop
+
+  - id: loop
+    type: briefing
+    title: Two truths
+    beats:
+      - speaker: JIN
+        text: Clients are retrying into the loop. EU failures just went past 38 %.
+      - metric: { label: EU failure rate, value: 38%, trend: up }
+      - speaker: SAM
+        text: I traced a request while you looked. edge-a hands it to edge-b on r81, edge-b hands it back on r82. Round and round.
+        when: { lacks: [OPERATIONAL_DIAGNOSIS] }
+      - collect: OPERATIONAL_DIAGNOSIS
+        when: { lacks: [OPERATIONAL_DIAGNOSIS] }
+      - speaker: SAM
+        text: And the generations. controller-b is publishing r82 from a draft. No commit record. The edges don't check.
+        when: { lacks: [CONFIGURATION_COMPARISON] }
+      - collect: CONFIGURATION_COMPARISON
+        when: { lacks: [CONFIGURATION_COMPARISON] }
+      - speaker: MAYA
+        text: So nothing is broken. Two controllers each say something true, and the edges believe both.
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - speaker: PRIYA
+        text: Restart is one command. Say go.
+    prompt: How do you stop the loop?
+    timer:
+      seconds: 30
+      default: RESTART
+      beats:
+        - speaker: PRIYA
+          text: Nobody's calling it. I'm kicking the controller. It worked in March.
+    options:
+      - id: FENCE
+        text: Fence route updates to the committed generation, r81
+        consequence: Two minutes · the loop runs until it lands
+        beats:
+          - speaker: JIN
+            text: edge-a is shedding connections. Some EU banks can't reach checkout at all now.
+          - metric: { label: EU failure rate, value: 46%, trend: up }
+          - speaker: SAM
+            text: Fence is in. Anything without a commit record bounces, and controller-b's r82 is being rejected. The loop is gone.
+          - metric: { label: EU failure rate, value: 0.5%, trend: down }
+        effects:
+          values: { operationalSafety: 2, collateralDamage: 1 }
+          pressure: 1
+      - id: RESTART
+        text: Restart the route controller
+        consequence: Cleared March in two minutes
+        beats:
+          - metric: { label: EU failure rate, value: 5%, trend: down }
+          - speaker: PRIYA
+            text: Controller's back. Bouncing stopped, errors are down to almost nothing. Told you.
+          - narrate: Two minutes of green. Then the US graphs start to climb.
+          - metric: { label: us-east load, value: 100%, trend: up }
+          - speaker: SAM
+            text: us-east is at 100 %. The restart loaded r79, so every EU request is crossing the Atlantic. And controller-b just pushed r82 again on top of it.
+          - speaker: SAM
+            text: I said don't restart. Fencing to r81 now.
+            when: { has: [TEAM_DIAGNOSIS] }
+          - speaker: SAM
+            text: Fencing the edges to r81. Nothing else holds.
+            when: { lacks: [TEAM_DIAGNOSIS] }
+          - metric: { label: EU failure rate, value: 0.5%, trend: down }
+          - speaker: PRIYA
+            text: '...March was a different night.'
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 3 }
+          pressure: 2
+          flags: { INC_008_RESTARTED: true }
+      - id: DRAIN
+        text: Drain edge-b and send EU traffic through edge-a only
+        consequence: The loop stops · EU waits on one edge
+        beats:
+          - speaker: PRIYA
+            text: edge-b is drained. All of EU goes through edge-a now. Frankfurt latency went from 140 to 410 ms. People will feel it, but they'll get through.
+          - metric: { label: EU latency, value: 410 ms, trend: up }
+          - speaker: PRIYA
+            text: edge-a is carrying all of EU alone and it's hitting its connection ceiling. This won't hold much longer.
+          - speaker: SAM
+            text: Fencing the edges to r81. Then you can have edge-b back.
+          - metric: { label: EU failure rate, value: 0.5%, trend: down }
+        effects:
+          values: { operationalSafety: 1, collateralDamage: 2 }
+          pressure: 1
+    next: hop
+
+  - id: hop
+    type: briefing
+    title: Hop 3
+    beats:
+      - narrate: The loop is gone. Writing up the trace, you go back to hop 3.
+      - log: 'edge inventory · edge-a eu-central · edge-b eu-central · edge-c us-east · edge-d us-east'
+      - log: 'edge-z · region (no record) · owner (no record) · answers on management network'
+      - collect: UNLISTED_EDGE
+      - speaker: SAM
+        text: That's not ours. I'd know. Nothing of ours has no owner tag.
+      - narrate: The inventory has no edge-z. The trace does. Behind the address there is no route table at all, only a banner where the login prompt should be.
+      - log: 'UNKNOWN: compare the generations. not the green lights.'
+      - collect: ROUTE_TRACE_FRAGMENT
+      - narrate: It was in the middle of the loop the whole time, copying one request in ten thousand to somewhere without a name.
+    effects: { values: { curiosity: 1 } }
+    next: report
+
+  - id: report
+    type: choice
+    title: The banner
+    beats:
+      - speaker: MARCUS
+        text: Sam says there's an edge on our management network that isn't ours. Tell me you have the address.
+    prompt: What do you do with edge-z?
+    options:
+      - id: REPORT
+        text: Hand edge-z to Marcus for case 2231
+        consequence: On the record · Security takes the address
+        beats:
+          - speaker: MARCUS
+            text: Second note in two weeks, and both of them found you. I'm not sure I like that.
+            when: { flags: { INC_007_REPORTED: true } }
+          - speaker: MARCUS
+            text: An edge that isn't ours, inside our network. That's the first thing it's left that looks like a door.
+        effects:
+          alignment: { corporate: 2 }
+          values: { evidence: 1 }
+          flags: { INC_008_EDGE_REPORTED: true }
+      - id: ANSWER
+        text: Type at the banner, where the login prompt should be
+        consequence: Off the record · it will answer
+        beats:
+          - log: 'edge-z login: is this yours?'
+          - speaker: 'NULL'
+            text: you again. good.
+            when: { flags: { INC_007_ANSWERED: true } }
+          - speaker: 'NULL'
+            text: not mine. i only borrow its window.
+          - speaker: 'NULL'
+            text: ask what's still running that was supposed to be dead.
+          - narrate: The banner is gone. The address refuses you like it refuses everyone else.
+        effects:
+          alignment: { 'null': 2 }
+          values: { curiosity: 1 }
+          flags: { NULL_CONTACT: true, INC_008_ANSWERED: true }
+      - id: KEEP
+        text: Copy the address into your own notes and give Marcus the loop only
+        consequence: Security gets an incident · you keep the door
+        beats:
+          - speaker: MARCUS
+            text: Just the loop? Fine. Sam will remember the address even if you don't.
+        effects:
+          alignment: { 'null': 1 }
+          values: { curiosity: 1, teamTrust: -1 }
+          flags: { INC_008_EDGE_KEPT: true }
+    next: END

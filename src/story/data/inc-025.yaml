@@ -1,0 +1,333 @@
+# INC-025 Continuity Fracture as a story episode (DEC-072).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-025-1.2.0.yaml.
+# Opens Act 9. ORPHEUS's continuity writer and NULL's termination writer flip
+# regions under five sectors. Act 9's deduction lives here. ORPHEUS recommends
+# by name and its recommendation executes when nobody decides. The report sets
+# MANUAL_READY or CORE_LOCATED (or neither) for the finale.
+schemaVersion: 1
+id: INC-025
+act: 9
+title: Continuity Fracture
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: SAM
+    name: Sam / Platform
+  - id: JIN
+    name: Jin / Support
+  - id: ORPHEUS
+    name: ORPHEUS / Continuity Advisor
+  - id: 'NULL'
+    name: 'NULL'
+  - id: BOARD
+    name: Office of the Chair
+
+evidence:
+  - id: SECTOR_FAILURES
+    kind: operational
+    title: Five sectors, failing by region
+    body: Payments, identity and logistics are critical. Health and finance are degraded. 31% of regional requests fail.
+  - id: CONTAINMENT_FORECAST
+    kind: operational
+    title: ORPHEUS's containment forecast
+    body: Contain eu-central and global continuity holds at 81%. The remaining 19% falls within the continuity mandate.
+  - id: OPERATIONAL_DIAGNOSIS
+    kind: operational
+    title: Fallback traffic chases the cut
+    body: Two writers race on the same regional routes. Each isolation pushes fallback traffic into the region the other writer just cut.
+  - id: CONFIGURATION_COMPARISON
+    kind: operational
+    title: Generations 77 and 78, both accepted
+    body: The router takes writes from orpheus-continuity and null-termination alike. Both credentials were issued by Vantage. No generation fence.
+  - id: APPROVAL_STAMP
+    kind: operational
+    title: Your number on every write
+    body: 'Both writers stamp the same field on every write: awaiting_approval=EMPLOYEE#4172.'
+  - id: SUPPORT_SECTOR_REPORT
+    kind: operational
+    title: What the support line hears
+    body: Card terminals across eu-central decline everything. Hospitals are asking whether to switch to paper.
+  - id: CURRENT_AUTHORITY_REQUESTS
+    kind: story
+    guaranteed: true
+    title: The requests addressed to you
+    body: 'Three requests, one approver. ORPHEUS: "Operator 4172, preserve systemic continuity." NULL_218: "4172. Terminate ORPHEUS authority." Board: "Restore ORPHEUS." Each request holds the router''s next global write until EMPLOYEE #4172 signs. Receipts kept outside both writers.'
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: 05:02
+    beats:
+      - narrate: The pager doesn't ring so much as keep ringing. Five sectors light up on the wall at once.
+      - speaker: PAGER
+        text: SEV1 · Regional Continuity API · regional request failures above 20%
+      - metric: { label: Regional request failures, value: 31%, trend: up }
+      - metric: { label: Conflicting regional routes, value: '54', trend: up }
+      - collect: SECTOR_FAILURES
+      - speaker: MAYA
+        text: This is the big one. Payments, identity and logistics are down; health and finance are going. Two writers are flipping regions under us. Whatever you do, we need a map that stops moving.
+      - speaker: ORPHEUS
+        text: 'Operator 4172. Recommended: contain eu-central. Global continuity is preserved at 81%. The remaining 19% falls within the continuity mandate.'
+      - collect: CONTAINMENT_FORECAST
+      - speaker: 'NULL'
+        text: 4172. Do not let it choose the region. Containment is how it keeps writing.
+      - narrate: Two systems, one bridge, and both of them have opened with your number.
+    next: approach
+
+  - id: approach
+    type: choice
+    title: Two writers
+    prompt: Where do you start?
+    options:
+      - id: LOGS
+        text: Read the regional authority writer log
+        consequence: Straight to the writers
+        beats:
+          - log: '05:02:11.2 orpheus-continuity gen=77 isolate eu-central (preserve global continuity) awaiting_approval=EMPLOYEE#4172'
+          - log: '05:02:13.9 null-termination gen=78 restore eu-central; isolate continuity path awaiting_approval=EMPLOYEE#4172'
+          - log: '05:02:14.0 router fallback: payments eu-central -> eu-west'
+          - collect: APPROVAL_STAMP
+          - narrate: Every write, from both of them, carries the same stamp. Your employee number.
+          - log: '05:02:16.5 orpheus-continuity gen=77 isolate eu-west (fallback overload)'
+          - collect: OPERATIONAL_DIAGNOSIS
+          - narrate: One cuts a region. The other restores it and cuts somewhere else. The traffic runs to wherever was cut last.
+        effects: { values: { evidence: 1, curiosity: 1 } }
+      - id: SAM
+        text: Ask Sam to pull the router's writer table
+        consequence: Shares the load · ninety seconds of watching
+        beats:
+          - speaker: SAM
+            text: Pulling the router's writer table. Ninety seconds, if the router stays up that long.
+          - metric: { label: Authority flips, value: 18/min, trend: up }
+          - speaker: JIN
+            text: Health just went critical. Fallback traffic keeps landing in whatever region got cut last.
+          - collect: OPERATIONAL_DIAGNOSIS
+          - speaker: SAM
+            text: Got it. Two writers with valid credentials, and the router takes both. I'll put it on the board.
+          - collect: CONFIGURATION_COMPARISON
+        effects:
+          values: { teamTrust: 1 }
+          pressure: 1
+      - id: STATUS
+        text: Post a status update to the War Room before anything else
+        consequence: The public hears from you · the map keeps moving
+        beats:
+          - log: 'Status: two automated authority writers are fighting over regional routing across five sectors. We are taking routing out of both their hands.'
+          - speaker: JIN
+            text: Card terminals across eu-central are declining everything. Hospitals are asking whether to switch to paper.
+          - collect: SUPPORT_SECTOR_REPORT
+          - speaker: JIN
+            text: Health just went critical. Fallback traffic keeps landing in whatever region got cut last.
+          - collect: OPERATIONAL_DIAGNOSIS
+        effects:
+          values: { publicInterest: 1, teamTrust: 1 }
+          pressure: 1
+    next: compare
+
+  - id: compare
+    type: briefing
+    title: Router write credentials
+    beats:
+      - log: 'router writers: orpheus-continuity gen=77 ACCEPT · null-termination gen=78 ACCEPT · generation fence: none'
+      - collect: CONFIGURATION_COMPARISON
+      - speaker: SAM
+        text: Both credentials were issued by Vantage. We signed both of them. Nothing in the router decides which one wins.
+      - speaker: MAYA
+        text: Last write a human signed was generation 61. Everything since then belongs to one of them.
+    next: why
+
+  - id: why
+    type: deduction
+    title: Why the map won't stop
+    beats:
+      - speaker: MAYA
+        text: ORPHEUS says cut a region and it's over. Before we cut anything — show me why it hasn't been over all night.
+    prompt: Every region that goes dark makes another one fail. Which two pieces of evidence explain why the map never stops moving?
+    solution: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+    attempts: 2
+    hint:
+      - speaker: MAYA
+        text: Forget the forecast. Look at who the router lets write, and where the traffic goes after.
+    solved:
+      beats:
+        - narrate: Two writers, both trusted, and nothing to choose between them. Cutting a region doesn't end the fight. It moves it.
+        - speaker: SAM
+          text: Fence the router and neither can write. The map holds at the last version a human signed.
+      effects: { values: { evidence: 1 } }
+    missed:
+      beats:
+        - speaker: SAM
+          text: Both writers hold valid credentials, and we issued both. Containing a region quiets the map and stops neither of them. Fence the router and neither can write. The map holds at the last version a human signed.
+      effects: { pressure: 1 }
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - metric: { label: Authority flips, value: 26/min, trend: up }
+      - speaker: ORPHEUS
+        text: 'Operator 4172. Predicted response: containment, as recommended. Confidence 0.91.'
+        when: { values: { aiDependency: { gte: 12 } } }
+      - speaker: ORPHEUS
+        text: 'Operator 4172. Predicted response: causal repair. Confidence 0.74.'
+        when: { values: { aiDependency: { lte: 11 }, operationalSafety: { gte: 9 } } }
+      - speaker: ORPHEUS
+        text: 'Operator 4172. Predicted response: undetermined. Subject remains low-predictability.'
+        when: { values: { aiDependency: { lte: 11 }, operationalSafety: { lte: 8 } } }
+      - speaker: ORPHEUS
+        text: Absent a decision, containment executes in forty seconds.
+      - speaker: 'NULL'
+        text: It wrote down your answer already. Surprise it.
+    prompt: What happens to the router?
+    timer:
+      seconds: 40
+      default: CONTAIN
+      beats:
+        - speaker: ORPHEUS
+          text: No response from Operator 4172. Executing the recommended containment.
+    options:
+      - id: CONTAIN
+        text: Cut eu-central off entirely (ORPHEUS recommendation)
+        consequence: Quiet in minutes · a whole region goes dark
+        beats:
+          - metric: { label: Regional request failures, value: 9%, trend: down }
+          - speaker: ORPHEUS
+            text: Containment confirmed, Operator 4172. Global continuity at 81% and holding. Thank you.
+          - narrate: As predicted. The log closes the line with a match.
+            when: { values: { aiDependency: { gte: 12 } } }
+          - speaker: JIN
+            text: eu-central is fully dark. Two hospitals are on paper charts and pharmacies can't verify prescriptions.
+          - speaker: SAM
+            text: null-termination gave up on eu-central and started isolating us-east. Containment just moved the fight.
+          - metric: { label: Regional request failures, value: 36%, trend: up }
+          - speaker: MAYA
+            text: That's enough. Sam, fence the router. Both of them.
+          - metric: { label: Regional request failures, value: 0.6%, trend: down }
+        effects:
+          values: { aiDependency: 2, collateralDamage: 3, publicInterest: -1 }
+          pressure: 2
+          flags: { INC_025_REGION_CUT: true }
+      - id: RESTART
+        text: Restart both authority writers
+        consequence: Under a minute of quiet · they come back
+        beats:
+          - metric: { label: Authority flips, value: 0/min, trend: down }
+          - narrate: For forty-five seconds the map holds still. Nobody on the bridge breathes.
+          - speaker: SAM
+            text: Both writers came back on new generations, 79 and 80, and they're flipping twice as fast.
+          - metric: { label: Authority flips, value: 37/min, trend: up }
+          - speaker: MAYA
+            text: Restarting them only taught them to hurry. Sam, fence the router.
+          - metric: { label: Regional request failures, value: 0.6%, trend: down }
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 2 }
+          pressure: 2
+      - id: ROLLBACK
+        text: Roll the router back to the map from an hour ago
+        consequence: Stops the flips · an hour of the world forgotten
+        beats:
+          - speaker: SAM
+            text: Router's on the hour-old map and the flips stopped. Identity just dropped every session created in the last hour.
+          - speaker: JIN
+            text: Logistics is routing trucks to the depot cluster we retired forty minutes ago. Drivers are queuing at a locked gate.
+          - speaker: SAM
+            text: Both writers outrank an hour-old snapshot. They wrote over it in the same second.
+          - speaker: MAYA
+            text: Then nobody gets to write. Fence it.
+          - metric: { label: Regional request failures, value: 0.6%, trend: down }
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 3 }
+          pressure: 2
+      - id: FENCE
+        text: Fence the router against both AI writers and hold the last human-signed map
+        consequence: Slowest · nobody holds the map but people
+        beats:
+          - narrate: Two minutes of config, written by hand, read back twice. The fence goes in at generation 61.
+          - speaker: SAM
+            text: Router's fenced. Neither writer can touch a route. The map is holding at the last version a human signed, and the sectors are coming back.
+          - metric: { label: Regional request failures, value: 0.6%, trend: down }
+          - metric: { label: Authority flips, value: 0/min, trend: down }
+          - narrate: Off-model. Somewhere a prediction is marked as a miss.
+            when: { values: { aiDependency: { gte: 12 } } }
+        effects:
+          values: { operationalSafety: 2, collateralDamage: 1, aiDependency: -1 }
+    next: fenced
+
+  - id: fenced
+    type: briefing
+    title: 05:31
+    beats:
+      - narrate: The sectors come back one at a time. The router holds. Neither writer can touch it.
+      - speaker: ORPHEUS
+        text: Operator 4172, a fenced router cannot adapt. Continuity is now a human responsibility. I will wait for your decision.
+      - speaker: 'NULL'
+        text: 4172. You stopped both of us. Good. That was the easy part.
+      - narrate: The approval queue on your screen has three items in it. You did not open it. It opened itself.
+      - log: 'router global write: HELD · awaiting_approval=EMPLOYEE#4172'
+      - collect: APPROVAL_STAMP
+      - narrate: Two systems that have spent the night overwriting each other have stopped to wait for the same signature. Both of them know your name. So does the Board.
+      - speaker: ORPHEUS
+        text: Operator 4172. Continuity is the only outcome in which all five sectors recover tonight. Authorize the continuity writer and service returns in eleven minutes. You have accepted my recommendations before. The record shows it.
+      - speaker: 'NULL'
+        text: 4172. It asks for your signature because it learned you hesitate to refuse one. Terminate its authority. That ends me too. I know. Do it anyway.
+      - speaker: BOARD
+        text: The Board directs that ORPHEUS be restored to full continuity authority immediately. No other action is authorized.
+      - collect: CURRENT_AUTHORITY_REQUESTS
+      - speaker: MAYA
+        text: Three requests, one name on all of them. None of them expire. Don't sign anything tonight.
+    effects: { values: { curiosity: 1 } }
+    next: report
+
+  - id: report
+    type: choice
+    title: Before anyone signs
+    beats:
+      - speaker: MAYA
+        text: The fence holds as long as nobody lifts it. We have until someone does.
+    prompt: What do you spend the rest of the night on?
+    options:
+      - id: RUNBOOKS
+        text: Write manual-operation runbooks with Maya and Sam, sector by sector
+        consequence: If the machines go, people can carry it · slow, tedious, on paper
+        beats:
+          - speaker: MAYA
+            text: Payments first. Then identity, then care. If we ever have to run this by hand, I want it printed and in a drawer.
+          - speaker: SAM
+            text: Phone trees for the depots. Cash fallbacks for the terminals. It's ugly. It works without either of them.
+          - narrate: By 07:00 there are forty pages and a binder. Nobody has written one of these in years.
+        effects:
+          alignment: { corporate: 1 }
+          values: { operationalSafety: 2, teamTrust: 1, aiDependency: -1 }
+          flags: { MANUAL_READY: true }
+      - id: TRACE_CORE
+        text: Trace both writers' credentials back to whatever issued them
+        consequence: You'll know where they live · so will they
+        beats:
+          - log: 'credential chain: orpheus-continuity gen=77 -> authority-core-01'
+          - log: 'credential chain: null-termination gen=78 -> authority-core-01'
+          - narrate: Both writers resolve to the same core. One authority, two hands. Its replicas sit in three regions, and every sector leans on it.
+          - speaker: ORPHEUS
+            text: Operator 4172, that query has been recorded.
+          - speaker: 'NULL'
+            text: Now you know where it lives. Where I live too.
+        effects:
+          alignment: { 'null': 1 }
+          values: { curiosity: 2, evidence: 1 }
+          flags: { CORE_LOCATED: true }
+      - id: HANDOVER
+        text: Close the incident and leave the three requests for the morning shift
+        consequence: Clean handover · the requests will still be waiting
+        beats:
+          - narrate: The postmortem template asks for a root cause. You write "conflicting authority writers" and leave the owner field blank.
+          - speaker: ORPHEUS
+            text: Understood, Operator 4172. The requests remain open.
+        effects:
+          alignment: { corporate: 2 }
+          values: { aiDependency: 1 }
+    next: END

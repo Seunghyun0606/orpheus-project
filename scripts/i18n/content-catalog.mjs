@@ -5,6 +5,7 @@
 //   node scripts/i18n/content-catalog.mjs           add new strings, drop stale ones
 //   node scripts/i18n/content-catalog.mjs --check   fail on missing/stale/untranslated
 //   node scripts/i18n/content-catalog.mjs --report  per-catalog coverage, never fails
+//   node scripts/i18n/content-catalog.mjs --only story-inc-010   write one catalog only
 //   node scripts/i18n/content-catalog.mjs --harmonize
 //       give an English string translated differently in several catalogs its
 //       most common translation everywhere (ties: the earliest catalog wins)
@@ -142,7 +143,15 @@ export function contentGroups() {
   if (existsSync(STORY))
     for (const f of readdirSync(STORY).sort()) {
       if (!/\.ya?ml$/.test(f)) continue;
-      const doc = load(STORY + f);
+      let doc;
+      try {
+        doc = load(STORY + f);
+      } catch (error) {
+        // An episode being written may not parse yet; its catalog waits.
+        console.warn(`skipping ${STORY + f}: ${error.message.split('\n')[0]}`);
+        continue;
+      }
+      if (typeof doc?.id !== 'string') continue;
       groups.push({
         name: 'story-' + doc.id.toLowerCase(),
         story: true,
@@ -182,7 +191,7 @@ function writeCatalog(file, group, entries) {
   writeFileSync(file, header + doc.toString({ lineWidth: 0 }), 'utf8');
 }
 
-export function syncCatalogs({ mode = 'write' } = {}) {
+export function syncCatalogs({ mode = 'write', only } = {}) {
   const problems = [];
   const report = [];
   const translations = new Map();
@@ -191,6 +200,10 @@ export function syncCatalogs({ mode = 'write' } = {}) {
     if (mode === 'write') mkdirSync(dir, { recursive: true });
     const expected = new Set();
     for (const group of contentGroups()) {
+      if (only !== undefined && group.name !== only) {
+        expected.add(`${group.name}.yaml`);
+        continue;
+      }
       const file = `${dir}${group.name}.yaml`;
       expected.add(`${group.name}.yaml`);
       const existing = readCatalog(file);
@@ -281,7 +294,9 @@ if (
     : process.argv.includes('--report')
       ? 'report'
       : 'write';
-  const { problems, report } = syncCatalogs({ mode });
+  const at = process.argv.indexOf('--only');
+  const only = at >= 0 ? process.argv[at + 1] : undefined;
+  const { problems, report } = syncCatalogs({ mode, only });
   if (mode !== 'check') for (const line of report) console.log(line);
   for (const p of problems) console.error(p);
   if (mode === 'check') {

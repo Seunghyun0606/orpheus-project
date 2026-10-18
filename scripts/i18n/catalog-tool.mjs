@@ -4,8 +4,12 @@
 //       prints {"<index>": "<english>"} for untranslated entries (all with --all)
 //   node scripts/i18n/catalog-tool.mjs apply <group> <translations.json> [locale]
 //       translations.json is {"<index>": "<translation>"}; fills those entries
-import { readFileSync, writeFileSync } from 'node:fs';
-import { isScalar, parseDocument, visit } from 'yaml';
+//   node scripts/i18n/catalog-tool.mjs known <group> [locale]
+//       prints {"<index>": "<translation>"} for untranslated entries whose English
+//       text another catalog already translates; reuse these exactly (one English
+//       string can only have one translation)
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { isScalar, parse, parseDocument, visit } from 'yaml';
 
 import { CATALOG_DIR } from './content-catalog.mjs';
 
@@ -17,7 +21,22 @@ const source = readFileSync(file, 'utf8');
 const doc = parseDocument(source);
 const entries = doc.get('entries').items;
 
-if (command === 'dump') {
+if (command === 'known') {
+  const known = new Map();
+  for (const other of readdirSync(CATALOG_DIR(locale))) {
+    if (other === `${group}.yaml`) continue;
+    for (const entry of parse(readFileSync(CATALOG_DIR(locale) + other, 'utf8'))?.entries ?? [])
+      if (typeof entry[locale] === 'string' && entry[locale].length > 0)
+        known.set(entry.en, entry[locale]);
+  }
+  const out = {};
+  entries.forEach((entry, index) => {
+    const ko = entry.get(locale);
+    if ((typeof ko !== 'string' || ko.length === 0) && known.has(entry.get('en')))
+      out[index] = known.get(entry.get('en'));
+  });
+  console.log(JSON.stringify(out, null, 1));
+} else if (command === 'dump') {
   const out = {};
   entries.forEach((entry, index) => {
     const ko = entry.get(locale);
@@ -59,6 +78,6 @@ if (command === 'dump') {
   }).length;
   console.log(`${file}: applied ${applied}; ${remaining} of ${entries.length} still untranslated`);
 } else {
-  console.error('usage: catalog-tool.mjs dump|apply <group> ...');
+  console.error('usage: catalog-tool.mjs dump|known|apply <group> ...');
   process.exitCode = 2;
 }

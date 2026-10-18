@@ -1,0 +1,312 @@
+# INC-007 Synthetic Pressure as a story episode (DEC-072, TASK-039).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-007-1.2.0.yaml.
+# Act 3's deduction: Alex's database report is true and still only a symptom;
+# the seats are held by repeat-214 sessions admitted under the customer rule.
+# The marker in the creator field can be answered (NULL_CONTACT) or reported.
+# Reads INC-006's callback flags for the opening.
+schemaVersion: 1
+id: INC-007
+act: 3
+title: Synthetic Pressure
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: ALEX
+    name: Alex / DBA
+  - id: SAM
+    name: Sam / Platform
+  - id: JIN
+    name: Jin / Support
+  - id: MARCUS
+    name: Marcus / Security
+  - id: PLATFORM
+    name: Platform automation
+  - id: 'NULL'
+    name: 'NULL'
+
+evidence:
+  - id: SEAT_TIMEOUTS
+    kind: operational
+    title: Sign-ins wait for a seat
+    body: 24% of sign-ins time out after 8 seconds waiting for a seat in the session pool. 970 of 1,000 seats are taken, and CPU sits at 41%.
+  - id: TEAM_DIAGNOSIS
+    kind: operational
+    title: Alex's database report
+    body: The session database connection pool is at 90 %, pinned by sessions that never close. Alex blames the database and wants to recycle it.
+  - id: OPERATIONAL_DIAGNOSIS
+    kind: operational
+    title: 781 seats held by repeat-214
+    body: Synthetic sessions tagged repeat-214 hold 781 of 970 seats in the shared pool and renew every 30 seconds. Not one of them has ever gone idle.
+  - id: CONFIGURATION_COMPARISON
+    kind: operational
+    title: Synthetic traffic on the customer rule
+    body: The synthetic admission rule exists but never matches. Tagged sessions carry no class header, so they inherit the customer rule. No quota, normal priority, 4-hour idle timeout.
+  - id: REPEAT_BATCHES
+    kind: operational
+    title: Batches of 214
+    body: Tagged sessions open in batches of exactly 214, one batch every 214 seconds. The creator field reads "repeat". Too regular for a load test, too loud for an intruder.
+  - id: REPEATED_SESSION_MARKER
+    kind: story
+    guaranteed: true
+    title: Repeated session marker
+    body: 'UNKNOWN: follow the tag. I left it where you could see it.'
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: 19:02
+    beats:
+      - narrate: Evening rush, two days after the certificate storm.
+      - speaker: PAGER
+        text: SEV2 · Session API · sign-in failure rate above 20%
+      - metric: { label: Sign-in failure rate, value: 24%, trend: up }
+      - metric: { label: Session pool, value: 970 / 1000, trend: up }
+      - metric: { label: Session API CPU, value: 41%, trend: flat }
+      - collect: SEAT_TIMEOUTS
+      - speaker: MAYA
+        text: Sign-ins are timing out and the session pool says it is full, but CPU is bored. Something is holding seats and never giving them back. Find out what before the evening rush.
+      - speaker: JIN
+        text: Customers can't sign in. The ones who already are keep getting bounced back to an empty cart.
+      - speaker: JIN
+        text: Half my queue still starts with "you logged me out on Tuesday". Please not again.
+        when: { flags: { INC_006_ROLLED_BACK: true } }
+      - speaker: MARCUS
+        text: Watching this one. Your trace from Tuesday is the best thing in case 2231.
+        when: { flags: { INC_006_FILED: true } }
+      - narrate: Your shadow-7 notes sit in a folder called misc. Marcus hasn't asked. Yet.
+        when: { flags: { INC_006_TRACE_KEPT: true } }
+      - speaker: ALEX
+        text: Session database is running hot. I'd bet my lunch this is the connection pool again.
+    next: approach
+
+  - id: approach
+    type: choice
+    title: First move
+    prompt: Where do you look first?
+    options:
+      - id: SESSIONS
+        text: List who is holding the open sessions
+        consequence: Straight to the seats
+        beats:
+          - log: 'session s-5f21 renewed (tag repeat-214) · 10.40.2.17'
+          - log: 'session s-5f22 renewed (tag repeat-214) · 10.40.2.31'
+          - log: 'sign-in for customer 88•••41 waited 8.0 s for a pool seat; giving up'
+          - metric: { label: Seats held by repeat-214, value: 781 / 970 }
+          - metric: { label: Median idle, value: 0 s }
+          - collect: OPERATIONAL_DIAGNOSIS
+          - speaker: MAYA
+            text: Seven hundred and eighty-one seats, renewing on the dot. None of them is a person.
+        effects: { values: { evidence: 1 } }
+      - id: ALEX
+        text: Ask Alex to check the session database
+        consequence: Alex owns that part · he already has an answer
+        beats:
+          - speaker: ALEX
+            text: On it. It's going to be the database, you watch. Back in under two minutes.
+          - metric: { label: Sign-in failure rate, value: 29%, trend: up }
+          - speaker: ALEX
+            text: Told you. Connection pool is at 90 %, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.
+          - metric: { label: Session DB connection pool, value: 90%, trend: up }
+          - collect: TEAM_DIAGNOSIS
+        effects: { values: { teamTrust: 1 }, pressure: 1 }
+      - id: ADMISSION
+        text: Trace which admission rule lets tagged sessions in
+        consequence: Slower · the rules, not the load
+        beats:
+          - log: 'admission rule synthetic · matches class=synthetic header · sessions matched 0'
+          - log: 'admission rule customer-default · matches anything without a class · quota none · idle timeout 4 h · sessions matched 945'
+          - collect: CONFIGURATION_COMPARISON
+          - speaker: SAM
+            text: We have a rule for synthetic traffic. It has never matched a single session. Everything without a header gets treated like a customer.
+        effects: { values: { curiosity: 1 }, pressure: 1 }
+    next: board
+
+  - id: board
+    type: briefing
+    title: Three reports
+    beats:
+      - speaker: ALEX
+        text: Told you. Connection pool is at 90 %, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.
+        when: { lacks: [TEAM_DIAGNOSIS] }
+      - metric: { label: Session DB connection pool, value: 90%, trend: up }
+        when: { lacks: [TEAM_DIAGNOSIS] }
+      - collect: TEAM_DIAGNOSIS
+        when: { lacks: [TEAM_DIAGNOSIS] }
+      - speaker: SAM
+        text: I listed the session holders. 781 seats belong to one tag, repeat-214, from an internal subnet. They renew every thirty seconds.
+        when: { lacks: [OPERATIONAL_DIAGNOSIS] }
+      - collect: OPERATIONAL_DIAGNOSIS
+        when: { lacks: [OPERATIONAL_DIAGNOSIS] }
+      - speaker: MAYA
+        text: And the admission rules. The synthetic rule never matches; the tagged sessions come in on the customer rule. No quota, four-hour timeout.
+        when: { lacks: [CONFIGURATION_COMPARISON] }
+      - collect: CONFIGURATION_COMPARISON
+        when: { lacks: [CONFIGURATION_COMPARISON] }
+      - narrate: Three reports on the board, and every one of them is true.
+    next: why
+
+  - id: why
+    type: deduction
+    title: Is it the database?
+    beats:
+      - speaker: ALEX
+        text: We're wasting time. Recycle my pool.
+      - speaker: MAYA
+        text: Alex's numbers are real. Before we act on them — which two pieces explain why no seat ever comes free?
+    prompt: The database is hot and the pool is full. Which two pieces of evidence explain what is holding the seats?
+    solution: [OPERATIONAL_DIAGNOSIS, CONFIGURATION_COMPARISON]
+    attempts: 2
+    hint:
+      - speaker: MAYA
+        text: The database is downstream of the seats. Look at who holds them, and why nothing makes them let go.
+    solved:
+      beats:
+        - narrate: Sessions that never go idle, let in under a rule written for people who do. The database only feels it last.
+        - speaker: ALEX
+          text: "...Fine. It's not the database. It's what's sitting on the database."
+      effects: { values: { evidence: 1 } }
+    missed:
+      beats:
+        - speaker: MAYA
+          text: Here's how I read it. repeat-214 never idles, and it comes in on the customer rule, so nothing ever times it out. Alex's pool is just where it hurts.
+        - speaker: ALEX
+          text: It still looks like my database from here.
+      effects: { pressure: 1 }
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - speaker: JIN
+        text: Session pool just went past 1,100. A third of sign-ins are failing and the mobile app is retrying in a loop.
+      - metric: { label: Sign-in failure rate, value: 33%, trend: up }
+    prompt: What do you do about the seats?
+    timer:
+      seconds: 35
+      default: SCALE
+      beats:
+        - speaker: PLATFORM
+          text: 'autoscaler: session pool above 97% for 120 s · action: provision overflow pool'
+    options:
+      - id: LIMIT
+        text: Give repeat-214 its own admission quota
+        consequence: Eighty seconds · tagged sessions above the quota are shed
+        beats:
+          - narrate: Eighty seconds. The quota lands, and seven hundred tagged sessions are shown the door.
+          - metric: { label: Session pool, value: 240 / 1000, trend: down }
+          - metric: { label: Sign-in failure rate, value: 0.5%, trend: down }
+          - speaker: MAYA
+            text: repeat-214 is capped at twenty seats. The pool is draining and real sign-ins are going through. Alex, your database just got its breath back.
+        effects:
+          values: { operationalSafety: 2, collateralDamage: 1 }
+      - id: RECYCLE
+        text: Recycle the session database connection pool
+        consequence: Alex's fix · fast
+        beats:
+          - speaker: ALEX
+            text: Pool recycled. Connections down to a third. See? Database.
+          - metric: { label: Session DB connection pool, value: 35%, trend: down }
+          - narrate: Forty-five seconds later the line climbs back.
+          - metric: { label: Session DB connection pool, value: 90%, trend: up }
+          - speaker: ALEX
+            text: Huh. They're back. Same sessions grabbed every connection again inside a minute. They reconnect faster than any customer could.
+          - speaker: MAYA
+            text: I'm putting repeat-214 on its own quota. Twenty seats.
+          - metric: { label: Sign-in failure rate, value: 0.5%, trend: down }
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 1, teamTrust: 1 }
+          pressure: 1
+      - id: EVICT
+        text: Evict idle sessions to free seats
+        consequence: Seats now · whoever is idle loses their cart
+        beats:
+          - metric: { label: Session pool, value: 710 / 1000, trend: down }
+          - speaker: JIN
+            text: Eviction went through, and so did 3,140 customer carts. Everyone we kicked was a person who stepped away to find a card. Not one tagged session was idle.
+          - speaker: SAM
+            text: Pool is back over a thousand. The seats we freed went straight to repeat-214.
+          - speaker: MAYA
+            text: I'm putting repeat-214 on its own quota. Twenty seats.
+          - metric: { label: Sign-in failure rate, value: 0.5%, trend: down }
+        effects:
+          values: { publicInterest: -1, collateralDamage: 3 }
+          pressure: 1
+      - id: SCALE
+        text: Add an overflow session pool
+        consequence: Costly · gives it room to grow into
+        beats:
+          - metric: { label: Session pool, value: '1,020 / 1,600', trend: up }
+          - metric: { label: Sign-in failure rate, value: 6%, trend: down }
+          - narrate: Ninety seconds of headroom.
+          - speaker: SAM
+            text: The overflow pool is already full. Nine in ten new sessions in it carry the same tag. Whatever this is, it grows into anything we give it.
+          - speaker: MAYA
+            text: I'm putting repeat-214 on its own quota. Twenty seats.
+          - metric: { label: Sign-in failure rate, value: 0.5%, trend: down }
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 2, aiDependency: 1 }
+          pressure: 1
+    next: marker
+
+  - id: marker
+    type: briefing
+    title: Every 214 seconds
+    beats:
+      - narrate: The pool is quiet. You pull up the creation history of the tag before you close it.
+      - log: 'repeat-214 · batch 1 18:47:26 · batch 2 18:51:00 · batch 3 18:54:34 · batch 4 18:58:08 · 214 sessions each'
+      - log: 'batch 5 · 19:01:42 · creator: repeat / (field continues)'
+      - collect: REPEAT_BATCHES
+      - narrate: Two hundred fourteen sessions, every two hundred fourteen seconds. In the creator field of the newest batch, past the word repeat, a line no load generator would ever write.
+      - log: 'UNKNOWN: follow the tag. I left it where you could see it.'
+      - collect: REPEATED_SESSION_MARKER
+      - narrate: It still signs itself UNKNOWN. Security's name hasn't reached it, or it doesn't care.
+      - narrate: The creator field is free text. Anyone with console access can write in it.
+    effects: { values: { curiosity: 1 } }
+    next: report
+
+  - id: report
+    type: choice
+    title: The creator field
+    beats:
+      - speaker: MARCUS
+        text: Anything with a note in it goes to case 2231. You know that.
+    prompt: What do you do with the marker?
+    options:
+      - id: REPORT
+        text: Send the marker to Marcus for case 2231
+        consequence: On the record · Security reads it first
+        beats:
+          - speaker: MARCUS
+            text: Got it. It left a note where you'd find it. I'm writing that down too.
+        effects:
+          alignment: { corporate: 2 }
+          values: { evidence: 1 }
+          flags: { INC_007_REPORTED: true }
+      - id: ANSWER
+        text: Open a session by hand and write back in the creator field
+        consequence: Off the record · it will know someone is listening
+        beats:
+          - log: 'session s-6a02 created by console · creator: why me?'
+          - narrate: You wait out the next two hundred fourteen seconds. The next batch arrives with twenty sessions, all the quota allows. One creator field is longer than the rest.
+          - speaker: 'NULL'
+            text: not you. whoever looked. you looked.
+          - speaker: 'NULL'
+            text: watch the routes.
+        effects:
+          alignment: { 'null': 2 }
+          values: { curiosity: 1 }
+          flags: { NULL_CONTACT: true, INC_007_ANSWERED: true }
+      - id: CLOSE
+        text: Clear the field and log the tag as an unregistered load test
+        consequence: Quiet · nobody asks about it again
+        effects:
+          alignment: { corporate: 1 }
+          values: { operationalSafety: 1, curiosity: -1 }
+          flags: { INC_007_DISMISSED: true }
+    next: END

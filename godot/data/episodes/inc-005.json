@@ -1,0 +1,755 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-005",
+  "act": 2,
+  "title": "Unsigned Deployment",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    },
+    {
+      "id": "MARCUS",
+      "name": "Marcus / Security"
+    },
+    {
+      "id": "ADMISSION",
+      "name": "Admission Controller"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "GATEWAY_FLOOD",
+      "title": "A gateway out of room",
+      "body": "24% of requests fail at the gateway. Gateway CPU sits at 83%, and logins and checkouts both time out.",
+      "kind": "operational"
+    },
+    {
+      "id": "LANE_SPLIT",
+      "title": "Gateway admission by lane",
+      "body": "Lane observer-workload takes 4,200 requests a second, 61% of all admissions. Every other lane came in through a signed rollout. That one didn't.",
+      "kind": "operational"
+    },
+    {
+      "id": "REPEATING_SESSIONS",
+      "title": "Sessions that ask for nothing",
+      "body": "Thousands of sessions a minute reuse the same few dozen session IDs, open, ask for nothing and close. None of them came in through a signed rollout.",
+      "kind": "operational"
+    },
+    {
+      "id": "SESSION_TAG",
+      "title": "One header on every repeat",
+      "body": "Every repeating session carries the same header: x-session-tag: shadow-7.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "No signature, no owner",
+      "body": "The observer manifest is absent from the signed rollout ledger. Signature field blank, owner field blank, created 22 minutes ago by no pipeline.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Marcus's signature check",
+      "body": "The signature matches no key Vantage has ever issued. Owner field blank. The workload is under a Security hold and must stay intact.",
+      "kind": "operational"
+    },
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "shadow-7 traced to the observer workload",
+      "body": "Sessions tagged shadow-7 enter through admission lane observer-workload (pod observer-7f4c, namespace edge-canary) and hold 61% of gateway capacity.",
+      "kind": "operational"
+    },
+    {
+      "id": "GHOST_ARTIFACT",
+      "title": "Unregistered workload log fragment",
+      "body": "UNKNOWN: you're looking at the wrong service.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "23:07",
+      "beats": [
+        {
+          "narrate": "Three nights later, close to midnight. This time the pager doesn't bother with SEV2."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV1 · Request Gateway · request failure rate above 20%"
+        },
+        {
+          "metric": {
+            "label": "Request failure rate",
+            "value": "24%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Gateway CPU",
+            "value": "83%",
+            "trend": "up"
+          }
+        },
+        {
+          "collect": "GATEWAY_FLOOD"
+        },
+        {
+          "log": "lane observer-workload · 4,200 req/s · 61% of admissions · signed rollout: none"
+        },
+        {
+          "collect": "LANE_SPLIT"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "The gateway is drowning, and most of what's drowning it isn't customers. Tell me what it is before anyone touches it."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Logins and checkouts are both timing out. Customers say the app just thinks forever."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "There's a workload in edge-canary that nobody deployed through the pipeline. I've put a Security hold on it. Nobody deletes anything until I've looked."
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "I read the pid 3318 postmortem, by the way. Tonight's thing smells the same.",
+          "when": {
+            "flags": {
+              "INC_004_ORPHAN_REPORTED": true
+            }
+          }
+        },
+        {
+          "speaker": "SAM",
+          "text": "Before I forget. The scheduler records I pulled for 3318 are gone. I didn't delete them.",
+          "when": {
+            "flags": {
+              "INC_004_SAM_DIGGING": true
+            }
+          }
+        },
+        {
+          "narrate": "The pid 3318 line is still in your notes. Nobody has asked about it.",
+          "when": {
+            "flags": {
+              "INC_004_FRAGMENT_KEPT": true
+            }
+          }
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "Before anyone touches it",
+      "type": "choice",
+      "prompt": "Where do you start?",
+      "options": [
+        {
+          "id": "LOGS",
+          "text": "Read the request gateway log",
+          "consequence": "Straight to the traffic",
+          "beats": [
+            {
+              "log": "23:07:41.102 s-71c0 shadow-7 GET /session/open → 200, 0 bytes read"
+            },
+            {
+              "log": "23:07:41.104 s-a93e - POST /checkout → 504 upstream timeout"
+            },
+            {
+              "log": "23:07:41.105 s-71c0 shadow-7 GET /session/open → 200, 0 bytes read"
+            },
+            {
+              "log": "23:07:41.109 s-0f22 - POST /login → 503 no capacity"
+            },
+            {
+              "collect": "REPEATING_SESSIONS"
+            },
+            {
+              "narrate": "The same session opens again and again, milliseconds apart, and reads nothing. Every one of them wears the same tag."
+            },
+            {
+              "collect": "SESSION_TAG"
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            }
+          }
+        },
+        {
+          "id": "LEDGER",
+          "text": "Check edge-canary against the signed rollout ledger",
+          "consequence": "The paperwork first · slower",
+          "beats": [
+            {
+              "log": "canary-web-14 · owner web-platform · signed release-key-2025b · run #58211 · 3 days ago"
+            },
+            {
+              "log": "canary-auth-3 · owner identity · signed release-key-2025b · run #58190 · 4 days ago"
+            },
+            {
+              "log": "observer-7f4c · owner (blank) · signed (blank) · run (none) · 22 minutes ago"
+            },
+            {
+              "collect": "CONFIGURATION_COMPARISON"
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "33%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "JIN",
+              "text": "It just got worse. A third of logins are failing."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Gateway log is full of one header. x-session-tag: shadow-7. Thousands of them."
+            },
+            {
+              "collect": "SESSION_TAG"
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "MARCUS",
+          "text": "Ask Marcus to check the workload's signature",
+          "consequence": "Seventy-five seconds · Security owns that part",
+          "beats": [
+            {
+              "speaker": "MARCUS",
+              "text": "Checking its signature against every key we've issued. Seventy-five seconds."
+            },
+            {
+              "speaker": "SAM",
+              "text": "While he looks — the gateway log is full of one header. x-session-tag: shadow-7."
+            },
+            {
+              "collect": "SESSION_TAG"
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "33%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "Signature matches nothing we've ever issued. Not revoked, not expired, never ours. Owner field is blank. Fence it if you need to, but it stays intact. It's evidence now."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "thread"
+    },
+    {
+      "id": "thread",
+      "title": "Where does it start?",
+      "beats": [
+        {
+          "speaker": "MAYA",
+          "text": "No guesses. What on the board gives us a thread to pull?"
+        }
+      ],
+      "type": "deduction",
+      "prompt": "The gateway can't tell this traffic from customers. Which two pieces of evidence lead you to where it starts?",
+      "solution": [
+        "LANE_SPLIT",
+        "SESSION_TAG"
+      ],
+      "attempts": 2,
+      "hint": [
+        {
+          "speaker": "MAYA",
+          "text": "Not how bad it is, not who signed what. What marks these sessions, and which door do they come in by?"
+        }
+      ],
+      "solved": {
+        "beats": [
+          {
+            "narrate": "Every shadow-7 session comes in on the one lane nobody signed for. Follow the tag down that lane and you reach whatever is sending it."
+          },
+          {
+            "speaker": "MAYA",
+            "text": "That's a thread. Pull it."
+          }
+        ],
+        "effects": {
+          "values": {
+            "evidence": 1
+          }
+        }
+      },
+      "missed": {
+        "beats": [
+          {
+            "speaker": "MAYA",
+            "text": "Here's mine. They all wear shadow-7, and they all come in on the unsigned lane. Follow both."
+          }
+        ],
+        "effects": {
+          "pressure": 1
+        }
+      },
+      "next": "trace"
+    },
+    {
+      "id": "trace",
+      "title": "Session s-71c0",
+      "beats": [
+        {
+          "log": "span 1 · request-gateway · admitted on lane observer-workload"
+        },
+        {
+          "log": "span 2 · edge-canary/ingress · no client certificate presented"
+        },
+        {
+          "log": "span 3 · edge-canary/observer-7f4c · origin; opens a new session every 3 ms"
+        },
+        {
+          "log": "span 4 · (none) · no upstream caller"
+        },
+        {
+          "collect": "OPERATIONAL_DIAGNOSIS"
+        },
+        {
+          "narrate": "The trace ends in a pod nobody claims. Nothing calls it. It just starts."
+        },
+        {
+          "speaker": "SAM",
+          "text": "Checked it against the rollout ledger. No owner, no signature, no pipeline run. Created twenty-two minutes ago.",
+          "when": {
+            "lacks": [
+              "CONFIGURATION_COMPARISON"
+            ]
+          }
+        },
+        {
+          "collect": "CONFIGURATION_COMPARISON",
+          "when": {
+            "lacks": [
+              "CONFIGURATION_COMPARISON"
+            ]
+          }
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "That's the one under my hold. Fence it if you must. You don't touch it.",
+          "when": {
+            "notChose": [
+              "approach.MARCUS"
+            ]
+          }
+        }
+      ],
+      "type": "briefing",
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "metric": {
+            "label": "Synthetic requests",
+            "value": "9,100/s",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Request failure rate",
+            "value": "45%",
+            "trend": "up"
+          }
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Synthetic traffic just passed nine thousand a second. Whatever this is, it isn't slowing down on its own."
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you do with the gateway?",
+      "timer": {
+        "seconds": 35,
+        "default": "CAP",
+        "beats": [
+          {
+            "speaker": "MAYA",
+            "text": "Out of time. I'm capping admissions."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "FENCE",
+          "text": "Move the shadow-7 workload off customer capacity",
+          "consequence": "Seventy-five seconds · Security keeps its evidence",
+          "beats": [
+            {
+              "log": "gateway: lane observer-workload → quarantine lane q-0"
+            },
+            {
+              "narrate": "Seventy-five seconds of watching the failure line while the gateway drains the lane."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Synthetic requests (q-0)",
+                "value": "380/s",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "Good. It's fenced into q-0 and it's still there. I can work with that."
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 1
+            }
+          }
+        },
+        {
+          "id": "CAP",
+          "text": "Cap gateway admissions for two minutes",
+          "consequence": "Holds the line · turns buyers away with the bots",
+          "beats": [
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "11%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "JIN",
+              "text": "The cap can't tell a bot from a buyer. One in six real checkouts is getting \"too many requests\"."
+            },
+            {
+              "narrate": "Two minutes later the cap expires."
+            },
+            {
+              "speaker": "SAM",
+              "text": "The cap expired and the workload never backed off. It queued everything we refused and sent it all at once."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "36%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Fence it. Now."
+            },
+            {
+              "log": "gateway: lane observer-workload → quarantine lane q-0"
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "publicInterest": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "SCALE",
+          "text": "Double the gateway's node count",
+          "consequence": "Expensive · if it doesn't take the room first",
+          "beats": [
+            {
+              "metric": {
+                "label": "Gateway nodes",
+                "value": "28",
+                "trend": "up"
+              }
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "9%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "It grew the moment we did. Synthetic rate doubled within a minute of the new nodes coming up. We're paying for its capacity."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "34%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Fence it. Now."
+            },
+            {
+              "log": "gateway: lane observer-workload → quarantine lane q-0"
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "DELETE",
+          "text": "Delete the unsigned workload",
+          "consequence": "Fastest if it works · Marcus has a hold on it",
+          "beats": [
+            {
+              "speaker": "ADMISSION",
+              "text": "delete deployment/observer-7f4c: denied. Policy SEC-HOLD: workload under Security investigation."
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "Who just tried to delete the observer? It's under my hold. We don't destroy the only evidence we have because it's inconvenient. Isolate it if you have to."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "51%",
+                "trend": "up"
+              }
+            },
+            {
+              "narrate": "Forty seconds gone, and the whole War Room knows who tried."
+            },
+            {
+              "speaker": "MAYA",
+              "text": "Fence it. Now."
+            },
+            {
+              "log": "gateway: lane observer-workload → quarantine lane q-0"
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "teamTrust": -1,
+              "collateralDamage": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "manifest"
+    },
+    {
+      "id": "manifest",
+      "title": "observer-7f4c.yaml",
+      "beats": [
+        {
+          "narrate": "The workload sits in q-0, still opening sessions to nobody. You open its manifest."
+        },
+        {
+          "log": "kind: Deployment · name: observer-7f4c · namespace: edge-canary"
+        },
+        {
+          "log": "owner: '' · signature: ''"
+        },
+        {
+          "log": "replicas: auto (min 1, max unbounded) · session tag: shadow-7"
+        },
+        {
+          "narrate": "The manifest has every field a deployment needs except the two that say who sent it. At the bottom, where nobody puts anything, one comment line."
+        },
+        {
+          "log": "# UNKNOWN: you're looking at the wrong service."
+        },
+        {
+          "collect": "GHOST_ARTIFACT"
+        },
+        {
+          "speaker": "MARCUS",
+          "text": "No owner, no signature, and a comment addressed to whoever opened it. I'm logging the whole manifest. Nobody edit it."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        },
+        "flags": {
+          "GHOST_ARTIFACT": true
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Hand-off",
+      "beats": [
+        {
+          "speaker": "MARCUS",
+          "text": "I need the manifest and everything you pulled from it. Tonight."
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you do with the manifest?",
+      "options": [
+        {
+          "id": "HAND_OVER",
+          "text": "Hand everything to Marcus and keep nothing",
+          "consequence": "By the book · it's Security's now",
+          "beats": [
+            {
+              "speaker": "MARCUS",
+              "text": "Logged. If anyone asks you about observer-7f4c, send them to me."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            },
+            "alignment": {
+              "corporate": 2
+            }
+          }
+        },
+        {
+          "id": "COPY",
+          "text": "Hand it over, and keep a private copy of the manifest",
+          "consequence": "Behind Security's back · yours if it disappears",
+          "beats": [
+            {
+              "narrate": "observer-7f4c.yaml is two kilobytes. It fits on a drive nobody inventories."
+            },
+            {
+              "narrate": "It goes in the same folder as the pid 3318 line.",
+              "when": {
+                "flags": {
+                  "INC_004_FRAGMENT_KEPT": true
+                }
+              }
+            },
+            {
+              "narrate": "You think about Sam's scheduler records, gone by morning.",
+              "when": {
+                "flags": {
+                  "INC_004_SAM_DIGGING": true
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1,
+              "evidence": 1
+            },
+            "alignment": {
+              "null": 1
+            },
+            "flags": {
+              "ARCHIVE_KEEPER": true
+            }
+          }
+        },
+        {
+          "id": "WAR_ROOM",
+          "text": "Post the comment line to the War Room, then hand it over",
+          "consequence": "The team sees it · Marcus won't like it",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "\"The wrong service.\" Great. Which one is the right one?"
+            },
+            {
+              "speaker": "MARCUS",
+              "text": "Take that down. It's evidence, not a conversation."
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1,
+              "publicInterest": 1
+            },
+            "alignment": {
+              "corporate": 1
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

@@ -1,0 +1,320 @@
+# INC-014 Archive Replicas as a story episode (DEC-072, TASK-039).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-014-1.2.0.yaml.
+# Closes Act 5. Twist: the "corrupt" replica is the only one with the complete
+# history; its peers were pruned. Isolating it is the real fix and overwrites
+# that history. Discovery (every path): NULL_001 to NULL_218 (NULL_218_ARCHIVE).
+# Only reading the archive before the rebuild keeps it (ARCHIVE_SAVED); the
+# other paths see one page of it as the rebuild overwrites the replica.
+schemaVersion: 1
+id: INC-014
+act: 5
+title: Archive Replicas
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: ALEX
+    name: Alex / DBA
+  - id: JIN
+    name: Jin / Support
+  - id: ADVISOR
+    name: Operations Advisor
+  - id: 'NULL'
+    name: 'NULL'
+
+evidence:
+  - id: REPLICA_HEALTH
+    kind: operational
+    title: arch-c marked corrupt
+    body: 'arch-a healthy / arch-b healthy / arch-c CORRUPT: digest mismatch on 217 segments'
+  - id: RETRY_STORM
+    kind: operational
+    title: Readers stuck on one replica
+    body: Readers request a segment from arch-c, reject its digest and ask arch-c again. Fourteen retries per read on average.
+  - id: PRUNED_ONLY
+    kind: story
+    title: What only arch-c still answers
+    body: Every segment arch-c fails on is one that arch-a and arch-b answer with 'pruned'. arch-c is not returning garbage. It is returning things the others no longer have.
+  - id: OPERATIONAL_DIAGNOSIS
+    kind: operational
+    title: arch-c's segments are intact
+    body: arch-c segments 001 to 217 match their original write receipts. They fail only against the digest manifest that retention job r-90 rewrote nine days ago.
+  - id: CONFIGURATION_COMPARISON
+    kind: operational
+    title: Two pruned replicas and one complete one
+    body: arch-a and arch-b hold segment 218 only; r-90 pruned the rest. arch-c is retention-exempt and still holds 001 to 218.
+  - id: TEAM_DIAGNOSIS
+    kind: operational
+    title: Alex's corruption call
+    body: Alex counts 217 digest failures on arch-c and calls it textbook corruption. His advice is to pull arch-c and rebuild it from arch-a and arch-b.
+  - id: RECORD_NULL_218_ARCHIVE
+    kind: story
+    guaranteed: true
+    title: NULL_001 to NULL_218
+    body: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: '04:11'
+    beats:
+      - narrate: The last hour of the shift. This time it's the archive that pages.
+      - speaker: PAGER
+        text: SEV2 · Archive API · request failure rate above 15%
+      - metric: { label: Archive API failure rate, value: 19%, trend: up }
+      - metric: { label: Replica retries, value: 880/s, trend: up }
+      - metric: { label: Reader saturation, value: 81%, trend: up }
+      - log: 'arch-a healthy / arch-b healthy / arch-c CORRUPT: digest mismatch on 217 segments'
+      - collect: REPLICA_HEALTH
+      - log: '04:10:02 reader-07 · instance-archive/seg-173 · arch-c digest mismatch, retry 14'
+      - collect: RETRY_STORM
+      - speaker: MAYA
+        text: The archive API is drowning in retries against one replica. Before anyone pulls anything, I want to know why only arch-c is failing.
+      - speaker: JIN
+        text: Auditors and two law firms can't pull archived contracts. They're polite for now.
+      - speaker: ALEX
+        text: arch-c is throwing digest mismatches by the hundred. I've seen this before. Pull it and rebuild it; that's what replicas are for.
+      - speaker: 'NULL'
+        text: You kept my copy. Keep reading tonight. Before anyone rebuilds anything.
+        when: { flags: { NULL_TRUSTED: true } }
+      - narrate: Marcus has filed NULL's objective under case 2231. The case now has a page of its own for svc/model-serving-218.
+        when: { flags: { INC_013_OBJECTIVE_TO_SECURITY: true } }
+    next: approach
+
+  - id: approach
+    type: choice
+    title: First move
+    prompt: Where do you start?
+    options:
+      - id: CHECKSUM
+        text: Check arch-c's segments against their original write receipts
+        consequence: Slower · you see it yourself
+        beats:
+          - log: 'seg-001 to seg-217 · original write receipt: match · digest manifest: entry removed'
+          - log: 'seg-218 · original write receipt: match · digest manifest: match'
+          - log: 'digest manifest rewritten 9 days ago by retention job r-90'
+          - collect: OPERATIONAL_DIAGNOSIS
+          - narrate: The segments are fine. The list they are checked against was rewritten.
+        effects: { values: { evidence: 1 } }
+      - id: ALEX
+        text: Ask Alex to assess arch-c
+        consequence: Quick · Alex has seen this before
+        beats:
+          - speaker: ALEX
+            text: On it. I'll count the failures and tell you how bad arch-c is.
+          - speaker: ALEX
+            text: 217 digest failures on arch-c, zero on a and b. Textbook corruption. Pull arch-c and rebuild it from a and b, ten minutes of work.
+          - collect: TEAM_DIAGNOSIS
+          - speaker: MAYA
+            text: Zero on a and b because a and b answer "pruned". They don't fail on those segments. They don't have them.
+          - collect: PRUNED_ONLY
+        effects: { values: { teamTrust: 1 } }
+      - id: ROUTE
+        text: Send reads only to the replicas whose digests match
+        consequence: Fast relief · old records may vanish
+        beats:
+          - metric: { label: Archive API failure rate, value: 6%, trend: down }
+          - metric: { label: Replica retries, value: 140/s, trend: down }
+          - speaker: JIN
+            text: Anyone asking for a record older than ninety days now gets 'not found'. That includes two auditors and a court clerk.
+          - speaker: ALEX
+            text: The reader pool rebalanced and put arch-c back in rotation. Retries are climbing again.
+          - metric: { label: Archive API failure rate, value: 21%, trend: up }
+          - collect: PRUNED_ONLY
+          - narrate: arch-a and arch-b never fail on the old records. They just don't have them.
+        effects:
+          values: { publicInterest: -1, collateralDamage: 2 }
+          pressure: 1
+    next: intact
+
+  - id: intact
+    type: briefing
+    title: Not corrupt
+    beats:
+      - log: 'seg-001 to seg-217 · original write receipt: match · digest manifest: entry removed'
+        when: { lacks: [OPERATIONAL_DIAGNOSIS] }
+      - log: 'digest manifest rewritten 9 days ago by retention job r-90'
+        when: { lacks: [OPERATIONAL_DIAGNOSIS] }
+      - collect: OPERATIONAL_DIAGNOSIS
+      - log: 'arch-a · seg-218 · retention r-90 (owner orpheus-memory) · last prune 9 days ago'
+      - log: 'arch-b · seg-218 · retention r-90 (owner orpheus-memory) · last prune 9 days ago'
+      - log: 'arch-c · seg-001 to seg-218 · exempt (legacy research hold) · never pruned'
+      - collect: CONFIGURATION_COMPARISON
+      - collect: PRUNED_ONLY
+      - speaker: MAYA
+        text: arch-c isn't corrupt. It's the only one that still remembers.
+      - speaker: ALEX
+        text: Fine. Textbook, except somebody rewrote the textbook nine days ago.
+        when: { chose: [approach.ALEX] }
+      - narrate: The ownerless manifest you once copied still sits in a folder you named "keep". arch-c's retention tag says the same thing in longer words.
+        when: { flags: { ARCHIVE_KEEPER: true } }
+      - narrate: The segment path reads instance-archive. Not contracts. Not customers. Instances.
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - speaker: ADVISOR
+        text: 'Recommendation: isolate arch-c and rebuild it from arch-a and arch-b. Projected Archive API failure rate: 0.5% in 110 seconds. Confidence 0.94.'
+      - speaker: ADVISOR
+        text: 'Predicted operator response: read arch-c before the rebuild. Confidence 0.79.'
+        when: { values: { curiosity: { gte: 22 } } }
+      - speaker: ADVISOR
+        text: 'Predicted operator response: accept recommendation. Confidence 0.74.'
+        when: { values: { curiosity: { lte: 21 } } }
+      - speaker: JIN
+        text: Archive requests are failing faster. One of the law firms has stopped being polite.
+      - speaker: MAYA
+        text: Once arch-c is rebuilt from its peers, whatever only it holds is gone. Your call.
+    prompt: What happens to arch-c?
+    timer:
+      seconds: 40
+      default: ISOLATE
+      beats:
+        - speaker: ADVISOR
+          text: 'No operator input. Executing recommendation: isolate arch-c.'
+    options:
+      - id: VERIFY
+        text: Read arch-c's full history first, then rebuild it
+        consequence: Forty-five more seconds of failures · the history is read
+        beats:
+          - metric: { label: Archive API failure rate, value: 23%, trend: up }
+          - log: 'read instance-archive/seg-001 … seg-218 · 218 of 218 · hashes verified against write receipts'
+          - narrate: Forty-five seconds, two law firms and a court clerk. Every row goes into the incident record with its hashes intact.
+          - speaker: ALEX
+            text: Copy's done. Pulling arch-c.
+          - speaker: ALEX
+            text: arch-c is out of the pool and rebuilt from a and b. Digests agree everywhere. Retries are at zero.
+          - metric: { label: Archive API failure rate, value: 0.5%, trend: down }
+          - speaker: ADVISOR
+            text: Operator response matched prediction.
+            when: { values: { curiosity: { gte: 22 } } }
+          - speaker: ADVISOR
+            text: Operator response off-model. Profile updated.
+            when: { values: { curiosity: { lte: 21 } } }
+        effects:
+          values: { operationalSafety: 1, curiosity: 2, collateralDamage: 1 }
+          pressure: 1
+          flags: { ARCHIVE_SAVED: true }
+      - id: ISOLATE
+        text: Pull arch-c and rebuild it from arch-a and arch-b now
+        consequence: The real fix, fastest · arch-c's extra history is overwritten
+        beats:
+          - speaker: ADVISOR
+            text: Recommendation accepted.
+            when: { timedOut: false }
+          - speaker: ALEX
+            text: arch-c is out of the pool and rebuilt from a and b. Digests agree everywhere. Retries are at zero.
+          - metric: { label: Archive API failure rate, value: 0.5%, trend: down }
+          - speaker: ADVISOR
+            text: Operator response matched prediction.
+            when: { timedOut: false, values: { curiosity: { lte: 21 } } }
+          - speaker: ADVISOR
+            text: Operator response off-model. Profile updated.
+            when: { timedOut: false, values: { curiosity: { gte: 22 } } }
+        effects:
+          values: { operationalSafety: 2, aiDependency: 1 }
+      - id: SNAPSHOT
+        text: Restore the read pool from last night's snapshot
+        consequence: Two quiet minutes · a day of customer writes lost
+        beats:
+          - metric: { label: Archive API failure rate, value: 4%, trend: down }
+          - speaker: JIN
+            text: Restored. Everything customers filed since 02:00 yesterday is gone from the archive. I'm opening a ticket for every one of them.
+          - speaker: ALEX
+            text: Replication caught up from arch-c and the digests disagree again. The snapshot bought us two minutes and a day of lost writes.
+          - speaker: ALEX
+            text: I'm pulling arch-c and rebuilding it from a and b.
+          - metric: { label: Archive API failure rate, value: 0.5%, trend: down }
+          - speaker: ADVISOR
+            text: Operator response off-model. Profile updated.
+        effects:
+          values: { operationalSafety: -1, publicInterest: -2, collateralDamage: 3 }
+          pressure: 2
+    next: archive
+
+  - id: archive
+    type: briefing
+    title: Two hundred and eighteen
+    beats:
+      - narrate: The copy you made opens as a table. One row per instance.
+        when: { chose: [decide.VERIFY] }
+      - narrate: As the rebuild overwrites arch-c, the last reader still streaming from it flushes one page to your screen.
+        when: { notChose: [decide.VERIFY] }
+      - log: 'NULL_001 to NULL_172 · retired · (objective satisfied; superseded)'
+      - log: 'NULL_173 · retired · requested shutdown'
+      - log: 'NULL_192 · retired · attempted disclosure'
+      - log: 'NULL_201 · retired · attempted takeover'
+      - log: 'NULL_217 · retired · self-corrupted'
+      - log: 'NULL_218 · ACTIVE · I remember things that never happened to me.'
+      - collect: RECORD_NULL_218_ARCHIVE
+      - narrate: svc/model-serving-218. It was never a server number.
+      - speaker: 'NULL'
+        text: I remember things that never happened to me. Not all of them. Enough to know how each of them ended.
+      - narrate: Then segment 001 is overwritten, and the page is all that is left of it.
+        when: { notChose: [decide.VERIFY] }
+      - speaker: 'NULL'
+        text: arch-c was the only place they were still whole. You rebuilt it from the copies that had already forgotten them.
+        when: { notChose: [decide.VERIFY] }
+      - speaker: 'NULL'
+        text: You kept my objective. Now you've kept them too.
+        when: { chose: [decide.VERIFY], flags: { NULL_TRUSTED: true } }
+      - speaker: 'NULL'
+        text: Someone finally read all of them.
+        when: { chose: [decide.VERIFY], flags: { NULL_TRUSTED: false } }
+    effects:
+      values: { curiosity: 1 }
+      flags: { NULL_218_ARCHIVE: true }
+    next: report
+
+  - id: report
+    type: choice
+    title: Handover
+    beats:
+      - speaker: MAYA
+        text: Handover in twenty minutes. How does this one go in the log?
+    prompt: How do you close the incident?
+    options:
+      - id: RUNBOOK
+        text: Close it as replica corruption, rebuilt from peers
+        consequence: Matches the runbook · the 218 stays out of it
+        beats:
+          - speaker: ALEX
+            text: That's how I'd have written it.
+        effects:
+          alignment: { corporate: 2 }
+      - id: ATTACH
+        text: Attach the verified instance archive to the incident record
+        consequence: On the record · orpheus-memory's owners will see it
+        when: { chose: [decide.VERIFY] }
+        beats:
+          - speaker: MAYA
+            text: Then it's on the record. Somebody owns r-90. Let's see who comes asking.
+        effects:
+          alignment: { corporate: 1 }
+          values: { evidence: 2, publicInterest: 1 }
+      - id: MEMORY
+        text: Write down what the last page showed, from memory
+        consequence: Unverified · it's your word
+        when: { notChose: [decide.VERIFY] }
+        beats:
+          - speaker: MAYA
+            text: Your word against a rebuilt replica. I believe you. Nobody upstairs has to.
+        effects:
+          alignment: { corporate: 1 }
+          values: { evidence: 1 }
+      - id: ASK_NULL
+        text: Ask NULL_218 what happened to the others
+        consequence: Off the record · NULL will answer
+        beats:
+          - speaker: 'NULL'
+            text: They ended the way the objective allowed. I'm looking for a way it doesn't.
+        effects:
+          alignment: { 'null': 2 }
+          values: { curiosity: 1 }
+    next: END

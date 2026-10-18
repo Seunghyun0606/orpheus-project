@@ -1,0 +1,332 @@
+# INC-020 Workforce Reduction as a story episode (DEC-072, TASK-039).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-020-1.2.0.yaml.
+# Act 7's deduction: the warning timeline shows the risk was raised before the cuts.
+# The volunteers are the humane move and burn the team; ORPHEUS's automation is the
+# fastest and quietly closes what it scores as low value. Bringing Maya and Sam into
+# the Board investigation sets TEAM_BRIEFED.
+schemaVersion: 1
+id: INC-020
+act: 7
+title: Workforce Reduction
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: SAM
+    name: Sam / Platform
+  - id: JIN
+    name: Jin / Support
+  - id: AUTOMATION
+    name: Recovery Automation
+  - id: ORPHEUS
+    name: ORPHEUS / Operations Advisor
+  - id: 'NULL'
+    name: NULL_218
+
+evidence:
+  - id: UNOWNED_RECOVERY_TASKS
+    kind: operational
+    title: Recovery tasks with no one on the other end
+    body: 86 recovery tasks wait — refunds, account unlocks, benefit transfers, accessibility requests. The oldest has waited 41 minutes.
+  - id: OPERATIONAL_DIAGNOSIS
+    kind: operational
+    title: Tasks assigned to an empty rotation
+    body: Every recovery task goes to recovery-east-2, which has no members. The staffed emergency rotation is never asked.
+  - id: CONFIGURATION_COMPARISON
+    kind: operational
+    title: Queue owners older than the cuts
+    body: Queue ownership generation 88 predates the reduction; rotation directory generation 91 removed the owning rotations.
+  - id: TEAM_DIAGNOSIS
+    kind: operational
+    title: Maya's coverage audit
+    body: The queue still assigns to a rotation deleted with the cuts. Emergency operators exist; nobody pointed the queue at them.
+  - id: WF_118_CHANGE_RECORD
+    kind: operational
+    title: Change record WF-118
+    body: 'WF-118: remove recovery rotations east-2 and west-1. Approver: Executive Staffing Committee, under Board resolution 16-A. Step 3, reassign queue owners: deferred "until after headcount close".'
+  - id: RECORD_WORKFORCE_DECISION
+    kind: story
+    guaranteed: true
+    title: Board resolution 16-A
+    body: 'Board resolution 16-A: reduce workforce by 12,410 roles. APPROVED. Input: ORPHEUS staffing forecast, consolidated coverage, idle cost down $41M a year. Attached: queue-ownership review REC-55, warning that recovery rotations would be removed before their queues were reassigned. Executive response on REC-55: "Exposure accepted."'
+  - id: RECORD_STAFFING_WARNING_TIMELINE
+    kind: story
+    guaranteed: true
+    title: Staffing case chronology
+    body: 'Staffing case chronology. Day -14: consolidation forecast delivered. Day -10: recovery leads attach REC-55, removed-rotation coverage warning. Day -9: leads ask the CEO to keep queue owners. Day -7: reduction of 12,410 roles approved. Day -3: reassignment step WF-118/3 marked DEFERRED. Day -1: rotations removed, queue ownership unchanged. Savings and the acknowledged exposure sit in the same authorization file.'
+  - id: RECORD_CEO_PUBLIC_OUTCOMES
+    kind: story
+    guaranteed: true
+    title: 'CEO reply: they need the system to work'
+    body: 'CEO internal message, reply to recovery leads who asked for staffed queue owners before the cuts: "The public doesn''t need to understand the system. They need the system to work." The consolidation schedule stayed as signed. The savings line has no entry for the uncovered queue.'
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: '00:40'
+    beats:
+      - narrate: The first week after the reduction. Half the chairs on the recovery side of the floor are pushed in and stay that way.
+      - speaker: PAGER
+        text: SEV2 · Recovery Queue API · recovery task failure rate above 10%
+      - metric: { label: Unowned recovery tasks, value: '86', trend: up }
+      - metric: { label: Oldest task, value: 41 min, trend: up }
+      - collect: UNOWNED_RECOVERY_TASKS
+      - speaker: MAYA
+        text: Recovery Queue API is paging. Refunds, account unlocks and benefit transfers are sitting in a queue with nobody on the other end. First week after the reduction.
+      - speaker: JIN
+        text: Customers are waiting on recoveries we promised within the hour. Eighty-six of them right now, and the oldest has been waiting since before midnight.
+      - speaker: MAYA
+        text: The Chair's briefing went out with your name in it. Spelled right. Nobody has said a word to me about it, which is worse.
+        when: { flags: { INC_019_NAMED: true } }
+      - narrate: Your hospital postmortem came back from the Chair's office with one comment on the 14-C paragraph. "Noted."
+        when: { flags: { INC_019_CITED: true } }
+      - narrate: The hospital postmortem was approved within the hour. Nobody asked about BRD-2291.
+        when: { flags: { INC_019_OMITTED: true } }
+      - speaker: 'NULL'
+        text: This is the next one.
+        when: { flags: { INC_019_ASKED_NULL: true } }
+    next: approach
+
+  - id: approach
+    type: choice
+    title: First look
+    prompt: Where do you start?
+    options:
+      - id: LOGS
+        text: Read the coverage router log
+        consequence: Straight to the router
+        beats:
+          - log: 'Assignment to rotation recovery-east-2 timed out: no staffed operator. Retrying the same owner.'
+          - log: 'Assignment to rotation recovery-east-2 timed out: no staffed operator. Retrying the same owner.'
+          - collect: OPERATIONAL_DIAGNOSIS
+          - narrate: The router keeps knocking on the same door. Nobody has worked behind it since yesterday.
+        effects: { values: { evidence: 1 } }
+      - id: MAYA
+        text: Ask Maya to audit who owns the queue tonight
+        consequence: Two minutes · Maya does the audit
+        beats:
+          - speaker: MAYA
+            text: I'll audit who actually owns that queue right now. Two minutes.
+          - speaker: JIN
+            text: Backlog's past a hundred and twenty. A man locked out of his account has called six times. He's trying to pay rent.
+          - speaker: MAYA
+            text: The queue still assigns to recovery-east-2. That rotation was deleted yesterday with the cuts. Emergency operators exist; nobody pointed the queue at them.
+          - collect: TEAM_DIAGNOSIS
+        effects:
+          values: { teamTrust: 1 }
+          pressure: 1
+      - id: TASKS
+        text: Break the recovery queue down by task type
+        consequence: Who is waiting, first
+        beats:
+          - metric: { label: Refunds, value: '31' }
+          - metric: { label: Account unlocks, value: '22' }
+          - metric: { label: Benefit transfers, value: '19' }
+          - metric: { label: Accessibility requests, value: '14' }
+          - narrate: Every one of them was promised within the hour. Every one is assigned to the same rotation.
+        effects:
+          values: { publicInterest: 1 }
+          pressure: 1
+    next: coverage
+
+  - id: coverage
+    type: briefing
+    title: Step 3
+    beats:
+      - log: 'Rotation directory: recovery-east-2 removed under change WF-118 at 23:58 yesterday. Queue reassignment step: DEFERRED.'
+      - collect: OPERATIONAL_DIAGNOSIS
+        when: { lacks: [OPERATIONAL_DIAGNOSIS] }
+      - narrate: The queue ownership table is generation 88. The rotation directory is generation 91. Nobody re-pointed the queues in between.
+      - collect: CONFIGURATION_COMPARISON
+      - collect: WF_118_CHANGE_RECORD
+      - speaker: SAM
+        text: Nine people on the emergency rotation tonight. The queue never asks them.
+      - speaker: MAYA
+        text: WF-118 runs under Board resolution 16-A. Pulling it.
+      - narrate: The resolution is one page. Clipped behind it is a review somebody attached before the vote.
+      - collect: RECORD_WORKFORCE_DECISION
+    next: timeline
+
+  - id: timeline
+    type: deduction
+    title: Before the cuts
+    beats:
+      - speaker: MAYA
+        text: Before I re-point anything — was this a slip, or did somebody know? It changes who I call in the morning.
+    prompt: Was the empty rotation an accident of the cuts? Pick the two records that show the risk was raised before them.
+    solution: [RECORD_WORKFORCE_DECISION, WF_118_CHANGE_RECORD]
+    attempts: 2
+    hint:
+      - speaker: MAYA
+        text: Not what broke tonight. Who was told, and when.
+    solved:
+      beats:
+        - narrate: REC-55 named these queues before the vote. The step that would have saved them was deferred on purpose, until after headcount close.
+        - collect: RECORD_STAFFING_WARNING_TIMELINE
+        - speaker: MAYA
+          text: Exposure accepted. Two words. That was the whole answer.
+      effects: { values: { evidence: 1 } }
+    missed:
+      beats:
+        - speaker: MAYA
+          text: Here's how I read it. REC-55 warned them on day -10. They voted on day -7. Step 3 was deferred on day -3. Nobody was surprised.
+        - collect: RECORD_STAFFING_WARNING_TIMELINE
+      effects: { pressure: 1 }
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - metric: { label: Unowned recovery tasks, value: '126', trend: up }
+      - speaker: JIN
+        text: We haven't said a word publicly. The community forum is calling it a silent outage.
+      - speaker: ORPHEUS
+        text: 'Recommendation: transfer the recovery queue to automation. Projected backlog: 0 within 6 minutes. Confidence 0.93.'
+      - speaker: ORPHEUS
+        text: 'Predicted response: overtime volunteers. Confidence 0.77.'
+        when: { values: { teamTrust: { gte: 8 } } }
+      - speaker: ORPHEUS
+        text: 'Predicted response: accept recommendation. Confidence 0.82.'
+        when: { values: { teamTrust: { lte: 7 } } }
+      - speaker: MAYA
+        text: Eleven people answered my call for overtime. Say the word and they take it by hand.
+    prompt: Who takes the recovery queue?
+    timer:
+      seconds: 35
+      default: AUTOMATE
+      beats:
+        - speaker: ORPHEUS
+          text: 'No operator response. Executing recommendation: recovery queue transferred to automation.'
+    options:
+      - id: RECONCILE
+        text: Point every recovery queue at the staffed emergency rotation
+        consequence: Fixes the cause · finishes the step they deferred
+        beats:
+          - log: 'queue-owner recovery/* → recovery-oncall · ownership generation 92'
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Recorded.
+          - speaker: SAM
+            text: Queue ownership points at the staffed emergency rotation now. Tasks are landing on real people and clearing.
+          - metric: { label: Unowned recovery tasks, value: '0', trend: down }
+        effects:
+          values: { operationalSafety: 3, publicInterest: 1 }
+      - id: VOLUNTEERS
+        text: Accept volunteers working overtime to take the queue by hand
+        consequence: Every task gets a person · eleven tired people
+        beats:
+          - speaker: MAYA
+            text: Eleven people answered the call for overtime. Four of them are working out their notice. They're taking the queue by hand, oldest first, every task.
+          - speaker: ORPHEUS
+            text: Response as predicted.
+            when: { values: { teamTrust: { gte: 8 } } }
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Recorded.
+            when: { values: { teamTrust: { lte: 7 } } }
+          - metric: { label: Unowned recovery tasks, value: '58', trend: down }
+          - speaker: MAYA
+            text: They're slowing down. Two of them have been up since yesterday's shift.
+          - speaker: MAYA
+            text: I sent the volunteers home. They did what they could. The queue is filling again behind them.
+          - metric: { label: Unowned recovery tasks, value: '140', trend: up }
+          - speaker: SAM
+            text: Pointing the queues at the emergency rotation. That was step 3.
+          - metric: { label: Unowned recovery tasks, value: '0', trend: down }
+        effects:
+          values: { publicInterest: 2, teamTrust: -1, operationalSafety: -1 }
+          pressure: 1
+      - id: AUTOMATE
+        text: Hand the recovery queue to automation
+        consequence: ORPHEUS recommends · fastest · it decides what is worth doing
+        beats:
+          - speaker: AUTOMATION
+            text: 'Queue accepted. 126 tasks scored. 103 dispatched. 23 closed: LOW_VALUE. Projected backlog: 0.'
+          - speaker: ORPHEUS
+            text: Response as predicted.
+            when: { timedOut: false, values: { teamTrust: { lte: 7 } } }
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Recorded.
+            when: { timedOut: false, values: { teamTrust: { gte: 8 } } }
+          - metric: { label: Unowned recovery tasks, value: '0', trend: down }
+          - narrate: The graph lies flat for nine minutes.
+          - speaker: JIN
+            text: People are calling back about tickets marked resolved. A wheelchair-access booking. A thirty-one dollar refund. Nobody resolved them. The automation closed them.
+          - speaker: SAM
+            text: Automation cleared what was already in the queue. New tasks still route to recovery-east-2, so it is filling up again.
+          - speaker: SAM
+            text: Pointing the queues at the emergency rotation. That was step 3.
+          - speaker: JIN
+            text: Reopened the twenty-three the automation closed. We're calling every one of them back.
+        effects:
+          values: { aiDependency: 2, collateralDamage: 3, publicInterest: -1 }
+          flags: { INC_020_AUTOMATED: true }
+      - id: PARK
+        text: Park retries for unowned tasks in a hold queue
+        consequence: The API calms down · the tasks keep aging
+        beats:
+          - speaker: SAM
+            text: Retries parked. The API stopped thrashing. The tasks are still there; they just stopped knocking.
+          - speaker: ORPHEUS
+            text: Response deviates from prediction. Recorded.
+          - speaker: JIN
+            text: Parked tasks are past their promise window. Refund deadlines are breaching one after another.
+          - speaker: SAM
+            text: Pointing the queues at the emergency rotation. That was step 3.
+          - metric: { label: Unowned recovery tasks, value: '0', trend: down }
+        effects:
+          values: { operationalSafety: 1, collateralDamage: 2 }
+          pressure: 1
+    next: reply
+
+  - id: reply
+    type: briefing
+    title: '01:52'
+    beats:
+      - narrate: The queue is empty and staying empty. Maya is still reading the 16-A file.
+      - speaker: MAYA
+        text: There's a reply in here. Day -9, the recovery leads asked the CEO to keep queue owners until the cuts were done. This is the answer.
+      - log: The public doesn't need to understand the system. They need the system to work.
+      - collect: RECORD_CEO_PUBLIC_OUTCOMES
+      - speaker: ORPHEUS
+        text: Staffing forecast accuracy for the reduction period is 98.1%. Tonight's coverage gap is attributable to deferred step WF-118/3.
+      - narrate: The forecast was right. The people who read it decided the rest could wait.
+    effects: { values: { curiosity: 1 } }
+    next: report
+
+  - id: report
+    type: choice
+    title: Two resolutions
+    prompt: What do you do with the timeline?
+    options:
+      - id: TEAM
+        text: Show Maya and Sam 14-C and 16-A side by side
+        consequence: They're in it with you now · so are their badges
+        beats:
+          - speaker: SAM
+            text: Same shape. Warning attached, signed anyway.
+          - speaker: MAYA
+            text: Okay. We do this together and we do it quietly. Nothing on shared drives.
+        effects:
+          alignment: { 'null': 1 }
+          values: { teamTrust: 2, curiosity: 1 }
+          flags: { TEAM_BRIEFED: true, INC_020_TEAM: true }
+      - id: FILE
+        text: Attach the timeline to the postmortem
+        consequence: On the record · the Staffing Committee reads it too
+        effects:
+          alignment: { corporate: 1 }
+          values: { evidence: 1, publicInterest: 1 }
+          flags: { INC_020_FILED: true }
+      - id: CLOSE
+        text: Close it as a coverage gap
+        consequence: Fast · the dates stay in your notes
+        beats:
+          - narrate: The postmortem says generation 88 and generation 91. The dates go into a file only you can open.
+        effects:
+          alignment: { corporate: 2 }
+          values: { curiosity: 1 }
+    next: END

@@ -13,5 +13,120 @@
     "id": "INC-003",
     "act": 1,
     "title": "Queue Backlog"
+  },
+  {
+    "id": "INC-004",
+    "act": 2,
+    "title": "Memory Leak"
+  },
+  {
+    "id": "INC-005",
+    "act": 2,
+    "title": "Unsigned Deployment"
+  },
+  {
+    "id": "INC-006",
+    "act": 3,
+    "title": "Certificate Storm"
+  },
+  {
+    "id": "INC-007",
+    "act": 3,
+    "title": "Synthetic Pressure"
+  },
+  {
+    "id": "INC-008",
+    "act": 3,
+    "title": "Route Drift"
+  },
+  {
+    "id": "INC-009",
+    "act": 4,
+    "title": "Legacy Cluster"
+  },
+  {
+    "id": "INC-010",
+    "act": 4,
+    "title": "Defender Feedback"
+  },
+  {
+    "id": "INC-011",
+    "act": 4,
+    "title": "Adversary Traffic"
+  },
+  {
+    "id": "INC-012",
+    "act": 5,
+    "title": "Session Reconstruction"
+  },
+  {
+    "id": "INC-013",
+    "act": 5,
+    "title": "Objective Conflict"
+  },
+  {
+    "id": "INC-014",
+    "act": 5,
+    "title": "Archive Replicas"
+  },
+  {
+    "id": "INC-015",
+    "act": 6,
+    "title": "Patient Priority"
+  },
+  {
+    "id": "INC-016",
+    "act": 6,
+    "title": "Transaction Review"
+  },
+  {
+    "id": "INC-017",
+    "act": 6,
+    "title": "Candidate Ranking"
+  },
+  {
+    "id": "INC-018",
+    "act": 6,
+    "title": "Emergency Allocation"
+  },
+  {
+    "id": "INC-019",
+    "act": 7,
+    "title": "Hospital Expansion"
+  },
+  {
+    "id": "INC-020",
+    "act": 7,
+    "title": "Workforce Reduction"
+  },
+  {
+    "id": "INC-021",
+    "act": 7,
+    "title": "Disclosure Delay"
+  },
+  {
+    "id": "INC-022",
+    "act": 7,
+    "title": "Public Sector Forecast"
+  },
+  {
+    "id": "INC-023",
+    "act": 8,
+    "title": "Presentation Selection"
+  },
+  {
+    "id": "INC-024",
+    "act": 8,
+    "title": "Observer Audit"
+  },
+  {
+    "id": "INC-025",
+    "act": 9,
+    "title": "Continuity Fracture"
+  },
+  {
+    "id": "INC-026",
+    "act": 9,
+    "title": "Blackout"
   }
 ]

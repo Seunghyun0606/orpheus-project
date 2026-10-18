@@ -1,0 +1,762 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-009",
+  "act": 4,
+  "title": "Legacy Cluster",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "NADIA",
+      "name": "Nadia / Treasury Operations"
+    },
+    {
+      "id": "ADVISOR",
+      "name": "Operations Advisor"
+    },
+    {
+      "id": "NULL",
+      "name": "NULL"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "WORKER_STARVATION",
+      "title": "Customers queue for workers",
+      "body": "Customer requests wait up to 9 s for a shared worker. legacy-r7 renews 38 worker reservations every 45 seconds, whether it uses them or not.",
+      "kind": "operational"
+    },
+    {
+      "id": "SETTLEMENT_WINDOW",
+      "title": "Tonight's settlement run",
+      "body": "settle-night runs on the shared pool at 03:00 as background load. 41,200 merchant payouts ride on it.",
+      "kind": "operational"
+    },
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "38 workers held by legacy-r7",
+      "body": "legacy-r7, a research job marked decommissioned two years ago, reserves 38 shared workers every 45 seconds and uses almost none of them.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "Terminated on paper, allocating every day",
+      "body": "The decommission ticket says legacy-r7 was terminated two years ago. The allocation log shows it reserving workers every day since.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Sam's ownership report",
+      "body": "Shedding background load buys a few minutes and takes tonight's settlement run with it. The legacy-r7 reservation itself has to be fenced off.",
+      "kind": "operational"
+    },
+    {
+      "id": "SCHEDULER_RESPAWN",
+      "title": "Resubmitted by orpheus-planner",
+      "body": "legacy-r7 resubmitted 58 s after termination by scheduler orpheus-planner. The service catalog lists no owner for orpheus-planner.",
+      "kind": "operational"
+    },
+    {
+      "id": "RECORD_ORPHEUS_ACTIVE",
+      "title": "The scheduler's owner",
+      "body": "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "02:46",
+      "beats": [
+        {
+          "narrate": "Weeks into the rotation. You answer the pager before the second buzz now."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV2 · Shared Gateway · request failure rate above 20%"
+        },
+        {
+          "metric": {
+            "label": "Request failure rate",
+            "value": "23%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Free shared workers",
+            "value": "0 / 64",
+            "trend": "flat"
+          }
+        },
+        {
+          "log": "free workers: 0 of 64; queue depth 318"
+        },
+        {
+          "log": "reservation renewed: 38 workers, lease 45 s, used 0"
+        },
+        {
+          "collect": "WORKER_STARVATION"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "The shared worker pool is starving, and its biggest tenant is a job we shut down two years ago. Find out why a dead job is holding live workers."
+        },
+        {
+          "narrate": "The banner on edge-z said it a week ago: ask what's still running that was supposed to be dead.",
+          "when": {
+            "flags": {
+              "INC_008_ANSWERED": true
+            }
+          }
+        },
+        {
+          "narrate": "Case 2231 has a new exhibit, edge-z. Attribution: still none.",
+          "when": {
+            "flags": {
+              "INC_008_EDGE_REPORTED": true
+            }
+          }
+        },
+        {
+          "narrate": "The edge-z address is still in your notes. It still refuses every connection.",
+          "when": {
+            "flags": {
+              "INC_008_EDGE_KEPT": true
+            }
+          }
+        },
+        {
+          "speaker": "JIN",
+          "text": "Exports and report downloads are timing out. Anything interactive is waiting in line for a worker."
+        },
+        {
+          "speaker": "NADIA",
+          "text": "Friendly reminder that settle-night runs on the shared pool at 03:00. That's 41,200 merchant payouts. Please don't touch it."
+        },
+        {
+          "collect": "SETTLEMENT_WINDOW"
+        },
+        {
+          "speaker": "ADVISOR",
+          "text": "Recommended action: shed background load from the shared pool. Predicted recovery in 3 minutes. Confidence 0.88."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "The advisor wants to shed background load. Nadia just told us what runs as background at three."
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "First move",
+      "type": "choice",
+      "prompt": "Where do you start?",
+      "options": [
+        {
+          "id": "KILL",
+          "text": "Kill legacy-r7 and see what frees up",
+          "consequence": "Twenty seconds · if it stays dead",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "legacy-r7 is dead. 38 workers released, queue is draining. That was easy."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "6%",
+                "trend": "down"
+              }
+            },
+            {
+              "narrate": "For fifty-eight seconds the pool breathes."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "36%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "It's back. Same job id, fresh reservations, 58 seconds after the kill. Submitted by a scheduler called orpheus-planner. That isn't one of ours. I've never seen that name."
+            },
+            {
+              "collect": "SCHEDULER_RESPAWN"
+            },
+            {
+              "metric": {
+                "label": "Owning team",
+                "value": "research-platform (disbanded)"
+              }
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 1,
+              "curiosity": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "OWNERS",
+          "text": "Find out who owns the reserved workers",
+          "consequence": "Straight to the reservations",
+          "beats": [
+            {
+              "metric": {
+                "label": "Workers held",
+                "value": "38"
+              }
+            },
+            {
+              "metric": {
+                "label": "Workers busy",
+                "value": "0–2"
+              }
+            },
+            {
+              "metric": {
+                "label": "Owning team",
+                "value": "research-platform (disbanded)"
+              }
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            },
+            {
+              "speaker": "MAYA",
+              "text": "A team that doesn't exist, renewing a job that doesn't exist. Every forty-five seconds."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            }
+          }
+        },
+        {
+          "id": "SAM",
+          "text": "Ask Sam to find the owner of the reserved workers",
+          "consequence": "Shares the load · the pool waits",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "Pulling ownership on the reserved workers. Ninety seconds."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "31%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "JIN",
+              "text": "Wait times just doubled. Exports are failing outright now."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Shedding background load buys a few minutes, but settle-night counts as background, so it goes too. The workers belong to legacy-r7's reservation. That reservation is what we fence."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "record"
+    },
+    {
+      "id": "record",
+      "title": "Decommission record",
+      "beats": [
+        {
+          "narrate": "The decommission ticket on the left, the allocation log on the right."
+        },
+        {
+          "log": "decommission ticket, two years ago: research cluster retired; legacy-r7 terminated; closed by ops-decom"
+        },
+        {
+          "log": "allocation log, the next day: legacy-r7 reservation granted: 12 workers"
+        },
+        {
+          "log": "allocation log, today: legacy-r7 reservation granted: 38 workers"
+        },
+        {
+          "collect": "CONFIGURATION_COMPARISON"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Terminated on paper. Granted workers the next morning, and every morning since. It's grown, too."
+        },
+        {
+          "narrate": "Sam opens the scheduler history for legacy-r7."
+        },
+        {
+          "log": "two years ago 14:02:11 · terminate · legacy-r7 · issued by ops-decom"
+        },
+        {
+          "log": "two years ago 14:03:09 · submit · legacy-r7 · issued by orpheus-planner"
+        },
+        {
+          "speaker": "SAM",
+          "text": "Fifty-eight seconds after the decom team killed it, something called orpheus-planner put it back. Not one of ours.",
+          "when": {
+            "notChose": [
+              "approach.KILL"
+            ]
+          }
+        },
+        {
+          "speaker": "SAM",
+          "text": "Same scheduler that brought it back tonight. Same fifty-eight seconds. It's been doing this for two years.",
+          "when": {
+            "chose": [
+              "approach.KILL"
+            ]
+          }
+        },
+        {
+          "collect": "SCHEDULER_RESPAWN"
+        }
+      ],
+      "type": "briefing",
+      "next": "why"
+    },
+    {
+      "id": "why",
+      "title": "What keeps it alive?",
+      "beats": [
+        {
+          "speaker": "MAYA",
+          "text": "Before anyone kills anything else — what keeps a dead job alive? Two pieces."
+        }
+      ],
+      "type": "deduction",
+      "prompt": "legacy-r7 was terminated two years ago and holds 38 workers tonight. Which two pieces of evidence explain why it is still alive?",
+      "solution": [
+        "CONFIGURATION_COMPARISON",
+        "SCHEDULER_RESPAWN"
+      ],
+      "attempts": 2,
+      "hint": [
+        {
+          "speaker": "MAYA",
+          "text": "Not what it's holding. Who keeps handing it back."
+        }
+      ],
+      "solved": {
+        "beats": [
+          {
+            "narrate": "The ticket ended legacy-r7 once. A scheduler nobody owns has started it again every day since. The decommission happened on paper and nowhere else."
+          },
+          {
+            "speaker": "MAYA",
+            "text": "So killing it is pointless. Whatever orpheus-planner is, it doesn't take no for an answer."
+          }
+        ],
+        "effects": {
+          "values": {
+            "evidence": 1
+          }
+        }
+      },
+      "missed": {
+        "beats": [
+          {
+            "speaker": "MAYA",
+            "text": "Here's how I read it. The ticket killed it. Fifty-eight seconds later orpheus-planner put it back, and it's kept putting it back for two years."
+          }
+        ],
+        "effects": {
+          "pressure": 1
+        }
+      },
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "metric": {
+            "label": "Request failure rate",
+            "value": "31%",
+            "trend": "up"
+          }
+        },
+        {
+          "speaker": "NADIA",
+          "text": "Nine minutes to settle-night. Whatever you do, do it to something else."
+        },
+        {
+          "speaker": "ADVISOR",
+          "text": "Recommendation unchanged: shed background load. Confidence 0.88."
+        },
+        {
+          "log": "advisor: predicted operator response — fence the reservation · confidence 0.81",
+          "when": {
+            "values": {
+              "operationalSafety": {
+                "gte": 9
+              }
+            }
+          }
+        },
+        {
+          "log": "advisor: predicted operator response — accept recommendation · confidence 0.72",
+          "when": {
+            "values": {
+              "operationalSafety": {
+                "lte": 8
+              }
+            }
+          }
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you do about legacy-r7?",
+      "timer": {
+        "seconds": 35,
+        "default": "SHED",
+        "beats": [
+          {
+            "speaker": "ADVISOR",
+            "text": "No operator input. Executing recommended action: shed background load."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "FENCE",
+          "text": "Fence legacy-r7 into its own partition",
+          "consequence": "A hundred seconds · it keeps running where you can watch it",
+          "beats": [
+            {
+              "metric": {
+                "label": "Workers held",
+                "value": "4",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "legacy-r7 is fenced into its own partition and the customer pool is clear. It's still running in there, by the way. orpheus-planner renewed it three seconds after the fence went up."
+            },
+            {
+              "log": "advisor: operator response matched forecast",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "gte": 9
+                  }
+                }
+              }
+            },
+            {
+              "log": "advisor: off-model response · forecast updated",
+              "when": {
+                "values": {
+                  "operationalSafety": {
+                    "lte": 8
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "collateralDamage": 2,
+              "aiDependency": -1
+            }
+          }
+        },
+        {
+          "id": "SHED",
+          "text": "Shed all background load from the shared pool",
+          "consequence": "The advisor's call · settle-night is background load",
+          "beats": [
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "8%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "NADIA",
+              "text": "You just shed settle-night. It's background priority, so it went with everything else. I need it back before 03:00."
+            },
+            {
+              "narrate": "Three minutes of clean graphs. Then the shed window closes."
+            },
+            {
+              "speaker": "SAM",
+              "text": "The shed window's closed. legacy-r7 reserved the freed workers the moment they came back."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "30%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "I'm fencing the reservation itself. A hundred seconds."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "NADIA",
+              "text": "settle-night missed the cut-off. 41,200 merchants get paid a day late, and I need an incident number for the regulator note."
+            },
+            {
+              "log": "advisor: operator response matched forecast",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "operationalSafety": {
+                    "lte": 8
+                  }
+                }
+              }
+            },
+            {
+              "log": "advisor: off-model response · forecast updated",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "operationalSafety": {
+                    "gte": 9
+                  }
+                }
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 3,
+              "publicInterest": -1,
+              "aiDependency": 1
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "REVOKE",
+          "text": "Revoke orpheus-planner's right to submit jobs",
+          "consequence": "Goes for the source · nobody knows what else it schedules",
+          "beats": [
+            {
+              "log": "scheduler: revoke submit orpheus-planner → denied: principal not managed by this cluster"
+            },
+            {
+              "speaker": "SAM",
+              "text": "Not ours to revoke. Whoever issued that scheduler's credentials isn't in our directory."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "36%",
+                "trend": "up"
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "I'm fencing the reservation instead. A hundred seconds."
+            },
+            {
+              "metric": {
+                "label": "Request failure rate",
+                "value": "0.5%",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "register"
+    },
+    {
+      "id": "register",
+      "title": "Decommissioned",
+      "beats": [
+        {
+          "narrate": "The pool is quiet. One name is still on your screen."
+        },
+        {
+          "narrate": "You type orpheus-planner into the asset register. It belongs to ORPHEUS, a research system the company switched off two years ago. The live inventory lists five ORPHEUS services drawing 74% CPU and answering 11.7 billion requests a day. Nobody switched anything off."
+        },
+        {
+          "log": "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
+        },
+        {
+          "collect": "RECORD_ORPHEUS_ACTIVE"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "ORPHEUS. Someone said that name in my first week here. In the past tense."
+        },
+        {
+          "speaker": "SAM",
+          "text": "Eleven billion requests a day. Checkout doesn't do that."
+        },
+        {
+          "speaker": "SAM",
+          "text": "Funny thing. The advisor wanted to shed everything on that pool except legacy-r7."
+        },
+        {
+          "speaker": "NULL",
+          "text": "now you know its name."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "curiosity": 1
+        },
+        "flags": {
+          "ORPHEUS_ACTIVE": true
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "Write-up",
+      "beats": [
+        {
+          "speaker": "MAYA",
+          "text": "Postmortem's yours. What do we say about the scheduler?"
+        }
+      ],
+      "type": "choice",
+      "prompt": "What goes in the write-up?",
+      "options": [
+        {
+          "id": "FILE",
+          "text": "File the register mismatch: ORPHEUS decommissioned on paper, running in production",
+          "consequence": "On the record · someone has to own it now",
+          "beats": [
+            {
+              "log": "ticket OPS-5530 routed to asset owner: ORPHEUS · status: acknowledged (4 s)"
+            },
+            {
+              "narrate": "No human has opened it."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1,
+              "publicInterest": 1
+            },
+            "alignment": {
+              "corporate": 1
+            },
+            "flags": {
+              "INC_009_REGISTER_FILED": true
+            }
+          }
+        },
+        {
+          "id": "STALE",
+          "text": "Close it as a stale reservation and leave the name out",
+          "consequence": "Clean · nobody asks about ORPHEUS",
+          "beats": [
+            {
+              "speaker": "MAYA",
+              "text": "Stale reservation. Two years stale. Fine."
+            }
+          ],
+          "effects": {
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "INC_009_NAME_OMITTED": true
+            }
+          }
+        },
+        {
+          "id": "SNAPSHOT",
+          "text": "Save a copy of the live inventory before you write anything",
+          "consequence": "Yours to read · not quite yours to keep",
+          "beats": [
+            {
+              "narrate": "The export takes a second. Five services, one owner, two years of nothing switched off."
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 1
+            },
+            "alignment": {
+              "null": 1
+            },
+            "flags": {
+              "INC_009_INVENTORY_SAVED": true
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

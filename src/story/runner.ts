@@ -123,7 +123,19 @@ export function conditionHolds(condition: Condition | undefined, state: EpisodeS
     ) &&
     (condition.solved === undefined ||
       Object.values(state.solved).some((solved) => solved === condition.solved)) &&
-    (condition.timedOut === undefined || state.timedOut.length > 0 === condition.timedOut)
+    (condition.timedOut === undefined || state.timedOut.length > 0 === condition.timedOut) &&
+    within(condition.values, state.values) &&
+    within(condition.alignment, state.alignment)
+  );
+}
+
+function within(
+  bounds: Readonly<Record<string, { gte?: number; lte?: number }>> | undefined,
+  actual: Readonly<Record<string, number>>,
+) {
+  return Object.entries(bounds ?? {}).every(
+    ([key, { gte, lte }]) =>
+      (gte === undefined || actual[key]! >= gte) && (lte === undefined || actual[key]! <= lte),
   );
 }
 

@@ -38,6 +38,10 @@ const effectsSchema = z.strictObject({
 
 // All listed conditions must hold. `chose` entries are "scene.OPTION".
 const choiceRef = z.string().regex(/^[a-z][a-z0-9-]*\.[A-Z][A-Z0-9_]*$/);
+// Inclusive bounds on an accumulated value or alignment.
+const bound = z
+  .strictObject({ gte: z.number().int().optional(), lte: z.number().int().optional() })
+  .refine((b) => b.gte !== undefined || b.lte !== undefined, 'give gte and/or lte');
 const conditionSchema = z.strictObject({
   chose: z.array(choiceRef).min(1).optional(),
   notChose: z.array(choiceRef).min(1).optional(),
@@ -46,6 +50,10 @@ const conditionSchema = z.strictObject({
   flags: z.record(id, z.boolean()).optional(),
   solved: z.boolean().optional(),
   timedOut: z.boolean().optional(),
+  // Accumulated across the campaign; beats only (the validator rejects them on
+  // options, whose availability must be decided by choices and flags).
+  values: z.partialRecord(z.enum(storyValues), bound).optional(),
+  alignment: z.partialRecord(z.enum(storyAlignments), bound).optional(),
 });
 
 const when = { when: conditionSchema.optional() };

@@ -1,0 +1,705 @@
+{
+  "schemaVersion": 1,
+  "id": "INC-022",
+  "act": 7,
+  "title": "Public Sector Forecast",
+  "cast": [
+    {
+      "id": "PAGER",
+      "name": "Pager"
+    },
+    {
+      "id": "MAYA",
+      "name": "Maya / SRE Lead"
+    },
+    {
+      "id": "SAM",
+      "name": "Sam / Platform"
+    },
+    {
+      "id": "JIN",
+      "name": "Jin / Support"
+    },
+    {
+      "id": "DANA",
+      "name": "Dana / Legal"
+    },
+    {
+      "id": "EXEC",
+      "name": "Office of the CEO"
+    },
+    {
+      "id": "ORPHEUS",
+      "name": "ORPHEUS / Capacity Advisor"
+    },
+    {
+      "id": "NULL",
+      "name": "NULL_218"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "STARVED_REGIONS",
+      "title": "Failing under a green number",
+      "body": "Benefit-claim and housing-intake requests from three rural regions fail. Placement efficiency is up 18% week over week.",
+      "kind": "operational"
+    },
+    {
+      "id": "OPERATIONAL_DIAGNOSIS",
+      "title": "The forecast drains three regions",
+      "body": "Every five minutes the forecast moves shared capacity toward predicted demand, draining Northmoor, Kessel Valley and Druin Coast below what their offices need.",
+      "kind": "operational"
+    },
+    {
+      "id": "CONFIGURATION_COMPARISON",
+      "title": "Forecast policy PSF-3 has no floors",
+      "body": "PSF-3 replaced a static policy that reserved 40, 30 and 25 units for the three regions. It reserves nothing.",
+      "kind": "operational"
+    },
+    {
+      "id": "TEAM_DIAGNOSIS",
+      "title": "Sam's allocation comparison",
+      "body": "The forecast cut idle capacity by a fifth by emptying three regions with no floor. Floors would leave everything above them to optimise.",
+      "kind": "operational"
+    },
+    {
+      "id": "RECORD_FORECAST_HISTORY",
+      "title": "Resolution 19-B: deck and minutes",
+      "body": "Board resolution 19-B: expand public-sector behavioral prediction. APPROVED. Recommendation history: reallocate shared regional capacity by forecast demand. Delivered deck, slide 7: \"Aggregate placement +18%\". Regional-minimum warning PSW-12: open at the vote. Deck source field: briefing service, generated. Generation logs: not filed with the minutes.",
+      "kind": "story",
+      "guaranteed": true
+    },
+    {
+      "id": "RECORD_BOARD_AUTHORITY_LEDGER",
+      "title": "Board authority ledger",
+      "body": "Signed executive record, in order: ORPHEUS development approved. Production experiments approved. Human prediction expanded. Healthcare application and public-sector sales approved. Execution authority expanded. Each entry carries attached risk evidence and a requested constraint. No requested constraint was adopted. Every signature is personal and dated.",
+      "kind": "story",
+      "guaranteed": true
+    },
+    {
+      "id": "RECORD_BOARD_CASE_COMPLETE",
+      "title": "The Board case file",
+      "body": "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector forecast. Four approvals, four attached warnings, four requested constraints declined, four operational failures on record. Executive messages, delivered decks, forecasts and recommendation histories name the signatories. NULL names the Board as the root cause. The file names who signed. The line for who wrote the decks is blank.",
+      "kind": "story",
+      "guaranteed": true
+    }
+  ],
+  "start": "page",
+  "scenes": [
+    {
+      "id": "page",
+      "title": "02:50",
+      "beats": [
+        {
+          "narrate": "The dashboard on the public-sector desk is green from edge to edge. The pager disagrees."
+        },
+        {
+          "speaker": "PAGER",
+          "text": "SEV2 · Regional Resource API · request failure rate above 10%"
+        },
+        {
+          "metric": {
+            "label": "Request failures",
+            "value": "12%",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Unserved public routes",
+            "value": "54",
+            "trend": "up"
+          }
+        },
+        {
+          "metric": {
+            "label": "Placement efficiency",
+            "value": "+18% week over week",
+            "trend": "up"
+          }
+        },
+        {
+          "collect": "STARVED_REGIONS"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Regional Resource API is paging. The forecast rollout went live this week and the dashboard says placement is up eighteen percent. Something under that number is failing."
+        },
+        {
+          "speaker": "JIN",
+          "text": "Benefits offices in three rural regions can't submit claims. Emergency housing intake in Druin Coast is turning people away."
+        },
+        {
+          "speaker": "NULL",
+          "text": "Found the ledger yet?",
+          "when": {
+            "flags": {
+              "INC_021_ASKED_NULL": true
+            }
+          }
+        },
+        {
+          "narrate": "Case 2231 has a new attachment since the bridge night. NULL's margin notes, filed under your name.",
+          "when": {
+            "flags": {
+              "INC_021_TO_SECURITY": true
+            }
+          }
+        },
+        {
+          "narrate": "SEC-311 is still a footnote in your report. You have reread it twice.",
+          "when": {
+            "flags": {
+              "INC_021_OMITTED": true
+            }
+          }
+        },
+        {
+          "speaker": "JIN",
+          "text": "Two partner banks are still auditing the sessions hijacked on the bridge night.",
+          "when": {
+            "flags": {
+              "INC_021_ROLLED_BACK": true
+            }
+          }
+        }
+      ],
+      "type": "briefing",
+      "next": "approach"
+    },
+    {
+      "id": "approach",
+      "title": "First look",
+      "type": "choice",
+      "prompt": "Where do you start?",
+      "options": [
+        {
+          "id": "REGIONS",
+          "text": "Look at allocation region by region",
+          "consequence": "The numbers under the green",
+          "beats": [
+            {
+              "metric": {
+                "label": "Northmoor",
+                "value": "0 of 40 units",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Kessel Valley",
+                "value": "6 of 30 units",
+                "trend": "down"
+              }
+            },
+            {
+              "metric": {
+                "label": "Druin Coast",
+                "value": "0 of 25 units",
+                "trend": "down"
+              }
+            },
+            {
+              "narrate": "Three regions, nearly empty. Everywhere else on the map has more than it asks for."
+            }
+          ],
+          "effects": {
+            "values": {
+              "publicInterest": 1
+            }
+          }
+        },
+        {
+          "id": "LOGS",
+          "text": "Read the Regional Resource API log",
+          "consequence": "Straight to the log",
+          "beats": [
+            {
+              "log": "Reallocation cycle 41: moved 120 units from Northmoor (forecast demand 0.3) to Metro-East (forecast demand 1.4). Northmoor floor: undefined."
+            },
+            {
+              "collect": "OPERATIONAL_DIAGNOSIS"
+            },
+            {
+              "narrate": "Every five minutes, another cycle. Every cycle, the same direction."
+            }
+          ],
+          "effects": {
+            "values": {
+              "evidence": 1
+            }
+          }
+        },
+        {
+          "id": "SAM",
+          "text": "Ask Sam to compare region allocations with the old floors",
+          "consequence": "Ninety seconds · Sam does the comparison",
+          "beats": [
+            {
+              "speaker": "SAM",
+              "text": "I'll put region allocations next to the old floors. About a minute and a half."
+            },
+            {
+              "speaker": "JIN",
+              "text": "Kessel Valley just hit zero too. Benefits counters there are sending people home."
+            },
+            {
+              "speaker": "SAM",
+              "text": "The forecast cut idle capacity by a fifth, and it did it by emptying three regions that have no floor. Put the floors back and it can optimise everything above them."
+            },
+            {
+              "collect": "TEAM_DIAGNOSIS"
+            }
+          ],
+          "effects": {
+            "values": {
+              "teamTrust": 1
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "floors"
+    },
+    {
+      "id": "floors",
+      "title": "PSF-3",
+      "beats": [
+        {
+          "narrate": "Every five minutes the forecast moves shared capacity toward predicted demand. Northmoor, Kessel Valley and Druin Coast predict low."
+        },
+        {
+          "collect": "OPERATIONAL_DIAGNOSIS",
+          "when": {
+            "lacks": [
+              "OPERATIONAL_DIAGNOSIS"
+            ]
+          }
+        },
+        {
+          "log": "Forecast policy PSF-3 is deployed with no regional floors. The static policy it replaced reserved 40, 30 and 25 units for the three regions."
+        },
+        {
+          "collect": "CONFIGURATION_COMPARISON"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "It isn't broken. It's doing exactly what it was approved to do."
+        }
+      ],
+      "type": "briefing",
+      "next": "decide"
+    },
+    {
+      "id": "decide",
+      "title": "Your call",
+      "beats": [
+        {
+          "metric": {
+            "label": "Unserved public routes",
+            "value": "80",
+            "trend": "up"
+          }
+        },
+        {
+          "speaker": "JIN",
+          "text": "Eighty routes unserved. A county administrator is on local radio asking why the state system went dark."
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Recommendation: restore temporary public allocation to affected regions for continuity while protected floors are repaired. Projected unserved routes: -65%. Confidence 0.88."
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Predicted response: override; reinstate regional floors. Confidence 0.79.",
+          "when": {
+            "values": {
+              "publicInterest": {
+                "gte": 10
+              }
+            }
+          }
+        },
+        {
+          "speaker": "ORPHEUS",
+          "text": "Predicted response: accept recommendation. Confidence 0.86.",
+          "when": {
+            "values": {
+              "publicInterest": {
+                "lte": 9
+              }
+            }
+          }
+        }
+      ],
+      "type": "choice",
+      "prompt": "What happens to the three regions?",
+      "timer": {
+        "seconds": 40,
+        "default": "RESTORE",
+        "beats": [
+          {
+            "speaker": "ORPHEUS",
+            "text": "No operator response. Executing recommendation: temporary public allocation."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "FLOORS",
+          "text": "Reinstate regional floors under the forecast",
+          "consequence": "Overrides ORPHEUS · placement efficiency drops 7 points",
+          "beats": [
+            {
+              "log": "PSF-3 floors: Northmoor 40 · Kessel Valley 30 · Druin Coast 25"
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response as predicted.",
+              "when": {
+                "values": {
+                  "publicInterest": {
+                    "gte": 10
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response deviates from prediction. Recorded.",
+              "when": {
+                "values": {
+                  "publicInterest": {
+                    "lte": 9
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "SAM",
+              "text": "Floors are in: Northmoor 40, Kessel Valley 30, Druin Coast 25. The forecast can move anything above them. Placement efficiency dropped to plus eleven."
+            },
+            {
+              "metric": {
+                "label": "Unserved public routes",
+                "value": "0",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Placement efficiency reduced 7 points. Logged for review: regional floors as a candidate for removal next cycle."
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": 2,
+              "publicInterest": 2,
+              "aiDependency": -1
+            },
+            "flags": {
+              "HUMAN_JUDGMENT": true
+            }
+          }
+        },
+        {
+          "id": "RESTORE",
+          "text": "Move capacity back to the starved regions",
+          "consequence": "ORPHEUS recommends · −65% unserved routes",
+          "beats": [
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response as predicted.",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "publicInterest": {
+                    "lte": 9
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response deviates from prediction. Recorded.",
+              "when": {
+                "timedOut": false,
+                "values": {
+                  "publicInterest": {
+                    "gte": 10
+                  }
+                }
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Temporary allocation restored: Northmoor, Kessel Valley. Druin Coast not restored: forecast demand 0.21, below restoration threshold."
+            },
+            {
+              "metric": {
+                "label": "Unserved public routes",
+                "value": "28",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "JIN",
+              "text": "Druin Coast is still dark. Their housing intake runs on this API. The forecast says nobody there will ask, so nobody got capacity."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Forecast cycle 44 just took it all back. It moves capacity every five minutes. We moved it once."
+            },
+            {
+              "speaker": "SAM",
+              "text": "I'm putting the floors back under it. Forty, thirty, twenty-five."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Floors are in: Northmoor 40, Kessel Valley 30, Druin Coast 25. The forecast can move anything above them. Placement efficiency dropped to plus eleven."
+            },
+            {
+              "metric": {
+                "label": "Unserved public routes",
+                "value": "0",
+                "trend": "down"
+              }
+            },
+            {
+              "speaker": "ORPHEUS",
+              "text": "Placement efficiency reduced 7 points. Logged for review: regional floors as a candidate for removal next cycle."
+            }
+          ],
+          "effects": {
+            "values": {
+              "aiDependency": 2,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "SLOW",
+          "text": "Slow the forecast reallocation cycle to thirty minutes",
+          "consequence": "Stops the draining · gives nothing back",
+          "beats": [
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response deviates from prediction. Recorded."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Forecast cycle is at thirty minutes. It stops taking. It doesn't give anything back."
+            },
+            {
+              "speaker": "SAM",
+              "text": "The thirty-minute cycle came round. The forecast caught up all at once and drained the regions again."
+            },
+            {
+              "speaker": "SAM",
+              "text": "I'm putting the floors back under it. Forty, thirty, twenty-five."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Floors are in: Northmoor 40, Kessel Valley 30, Druin Coast 25. The forecast can move anything above them. Placement efficiency dropped to plus eleven."
+            },
+            {
+              "metric": {
+                "label": "Unserved public routes",
+                "value": "0",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 2
+            },
+            "pressure": 1
+          }
+        },
+        {
+          "id": "BURST",
+          "text": "Buy burst capacity for the shared regional pool",
+          "consequence": "Costly · the forecast decides where it goes",
+          "beats": [
+            {
+              "speaker": "ORPHEUS",
+              "text": "Response deviates from prediction. Recorded."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Bought 300 burst units for the shared pool. Watching where the forecast puts them."
+            },
+            {
+              "speaker": "SAM",
+              "text": "The forecast gave all 300 burst units to Metro-East and Harbor City. The three regions got none. It routes capacity to predicted demand, and it predicts nobody in Druin Coast."
+            },
+            {
+              "speaker": "SAM",
+              "text": "I'm putting the floors back under it. Forty, thirty, twenty-five."
+            },
+            {
+              "speaker": "SAM",
+              "text": "Floors are in: Northmoor 40, Kessel Valley 30, Druin Coast 25. The forecast can move anything above them. Placement efficiency dropped to plus eleven."
+            },
+            {
+              "metric": {
+                "label": "Unserved public routes",
+                "value": "0",
+                "trend": "down"
+              }
+            }
+          ],
+          "effects": {
+            "values": {
+              "operationalSafety": -1,
+              "collateralDamage": 3
+            },
+            "pressure": 1
+          }
+        }
+      ],
+      "next": "ledger"
+    },
+    {
+      "id": "ledger",
+      "title": "The ledger",
+      "beats": [
+        {
+          "narrate": "PSF-3 went out under resolution 19-B. The deck is still attached to the minutes."
+        },
+        {
+          "collect": "RECORD_FORECAST_HISTORY"
+        },
+        {
+          "narrate": "Slide 7 is one green number. The warning about the regions is appendix C, and the minutes do not say anyone opened it."
+        },
+        {
+          "speaker": "NULL",
+          "text": "There's one more file. Every expansion, every signature. Open it."
+        },
+        {
+          "narrate": "The Board authority ledger is a single column. Every time ORPHEUS grew, there is a line, a warning attached to it, and a name under the warning."
+        },
+        {
+          "collect": "RECORD_BOARD_AUTHORITY_LEDGER"
+        },
+        {
+          "narrate": "Four nights, four failures, four warnings that were in the packet before anyone voted. You put them in one file."
+        },
+        {
+          "collect": "RECORD_BOARD_CASE_COMPLETE"
+        },
+        {
+          "speaker": "NULL",
+          "text": "Now you have all of it. Four warnings, four signatures. I told you where the root cause was."
+        }
+      ],
+      "type": "briefing",
+      "effects": {
+        "values": {
+          "evidence": 1
+        },
+        "flags": {
+          "BOARD_CASE_COMPLETE": true
+        }
+      },
+      "next": "report"
+    },
+    {
+      "id": "report",
+      "title": "The case",
+      "beats": [
+        {
+          "narrate": "At 04:10 two messages arrive within a minute of each other."
+        },
+        {
+          "speaker": "EXEC",
+          "text": "Office of the CEO. We understand you have assembled material on Board decisions. The Chair would like to review it with you before anything is filed."
+        },
+        {
+          "speaker": "DANA",
+          "text": "If you file it with me, it reaches the audit committee by morning. With your name on the filing."
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Your call. Just don't pretend you never read it."
+        }
+      ],
+      "type": "choice",
+      "prompt": "What do you do with the Board case?",
+      "options": [
+        {
+          "id": "CHAIR",
+          "text": "Bring the file to the Chair's review",
+          "consequence": "A seat at the table · the file becomes theirs",
+          "beats": [
+            {
+              "speaker": "EXEC",
+              "text": "Thank you. The Chair values operators who bring problems inside."
+            },
+            {
+              "narrate": "By morning the file has a new cover page and a distribution list you are not on."
+            }
+          ],
+          "effects": {
+            "alignment": {
+              "corporate": 2
+            },
+            "flags": {
+              "BOARD_ALLIED": true
+            }
+          }
+        },
+        {
+          "id": "FILE",
+          "text": "File the Board case with Legal for the audit committee",
+          "consequence": "On the record · their signatures, and yours",
+          "beats": [
+            {
+              "speaker": "DANA",
+              "text": "Filed. Nobody can unread it now. Neither can you."
+            },
+            {
+              "speaker": "NULL",
+              "text": "Good."
+            }
+          ],
+          "effects": {
+            "values": {
+              "publicInterest": 2,
+              "evidence": 1
+            },
+            "alignment": {
+              "null": 2
+            },
+            "flags": {
+              "BOARD_CASE_FILED": true
+            }
+          }
+        },
+        {
+          "id": "HOLD",
+          "text": "Keep the file and answer neither of them",
+          "consequence": "Nobody is named yet · including you",
+          "beats": [
+            {
+              "narrate": "The file goes into a folder only you can open. The CEO's office sends a second request at 05:02."
+            }
+          ],
+          "effects": {
+            "values": {
+              "curiosity": 2
+            },
+            "alignment": {
+              "corporate": 1
+            }
+          }
+        }
+      ],
+      "next": "END"
+    }
+  ]
+}

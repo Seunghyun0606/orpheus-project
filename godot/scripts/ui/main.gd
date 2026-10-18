@@ -56,6 +56,8 @@ var tray_scroll: ScrollContainer
 var cards_box: HBoxContainer
 var cards := {}
 var controls: VBoxContainer
+var controls_scroll: ScrollContainer
+var dialogue_panel: PanelContainer
 var scene_label: Label
 var pressure_label: Label
 var timer_bar: ProgressBar
@@ -108,49 +110,81 @@ func _replace_screen(next: Control) -> void:
 	move_child(screen, 0)
 
 
+## Left: the title and the next incident to play. Right: every incident,
+## grouped by Act; an Act's name stays hidden until one of its incidents opens.
 func _show_title() -> void:
 	episode = {}
 	state = {}
 	pending.clear()
 	timer_left = -1.0
-	var root := _margin(64)
-	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 14)
-	root.add_child(column)
-	column.add_child(_label(UiText.t("title"), "TitleLabel"))
-	column.add_child(_label(UiText.t("subtitle"), "DimLabel"))
-	column.add_child(_spacer(24))
-	column.add_child(_label(UiText.t("incidents"), "HeaderLabel"))
-	var first: Button
+	var root := _margin(56)
+	var columns := HBoxContainer.new()
+	columns.add_theme_constant_override("separation", 48)
+	root.add_child(columns)
+
+	var left := VBoxContainer.new()
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left.add_theme_constant_override("separation", 14)
+	columns.add_child(left)
+	left.add_child(_label(UiText.t("title"), "TitleLabel"))
+	left.add_child(_label(UiText.t("subtitle"), "DimLabel"))
+	left.add_child(_spacer(32))
+	var next_id := ""
 	for entry in Library.episode_index():
-		var id: String = entry["id"]
-		var unlocked := Progress.is_unlocked(progress, id)
-		var mark: String = "✓" if Progress.is_finished(progress, id) else ("▸" if unlocked else "·")
-		var title: String = tr(entry["title"]) if unlocked else UiText.t("locked")
-		var button := _button("%s  %s   %s   ·   %s" % [mark, id, title, UiText.t("act") % entry["act"]])
-		button.custom_minimum_size.x = 560
-		button.disabled = not unlocked
-		button.pressed.connect(_start_episode.bind(id))
-		column.add_child(button)
-		if unlocked and (first == null or not Progress.is_finished(progress, id)):
-			first = button
-	column.add_child(_spacer(24))
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
+		if Progress.is_unlocked(progress, entry["id"]) and not Progress.is_finished(progress, entry["id"]):
+			next_id = entry["id"]
+			break
+	var first: Button
+	if next_id != "":
+		var label: String = UiText.t("begin") if progress["after"].is_empty() else UiText.t("resume")
+		var play := _button("▸  %s   %s · %s" % [label, next_id, tr(Library.load_episode(next_id)["title"])])
+		play.pressed.connect(_start_episode.bind(next_id))
+		left.add_child(play)
+		first = play
 	if not progress["after"].is_empty():
 		var restart := _button(UiText.t("restart"))
 		restart.pressed.connect(func() -> void:
 			progress = Progress.reset()
 			_show_title()
 		)
-		row.add_child(restart)
+		left.add_child(restart)
 	var settings_button := _button(UiText.t("settings"))
 	settings_button.pressed.connect(_open_settings)
-	row.add_child(settings_button)
+	left.add_child(settings_button)
 	var quit_button := _button(UiText.t("quit"))
 	quit_button.pressed.connect(get_tree().quit)
-	row.add_child(quit_button)
-	column.add_child(row)
+	left.add_child(quit_button)
+	for button in left.get_children():
+		if button is Button:
+			button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+
+	var list_panel := PanelContainer.new()
+	list_panel.theme_type_variation = "ConsolePanel"
+	list_panel.custom_minimum_size.x = 520
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	var list := VBoxContainer.new()
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list.add_theme_constant_override("separation", 6)
+	scroll.add_child(list)
+	list_panel.add_child(scroll)
+	columns.add_child(list_panel)
+	list.add_child(_label(_header(UiText.t("incidents")), "HeaderLabel"))
+	var act := 0
+	for entry in Library.episode_index():
+		var id: String = entry["id"]
+		var unlocked := Progress.is_unlocked(progress, id)
+		if entry["act"] != act:
+			act = entry["act"]
+			var act_name: String = UiText.t("act_names")[act - 1] if unlocked else "· · ·"
+			list.add_child(_spacer(6))
+			list.add_child(_label("%s  %s" % [UiText.t("act") % act, act_name], "DimLabel", false))
+		var mark: String = "✓" if Progress.is_finished(progress, id) else ("▸" if unlocked else "·")
+		var title: String = tr(entry["title"]) if unlocked else UiText.t("locked")
+		var button := _button("%s  %s   %s" % [mark, id, title])
+		button.disabled = not unlocked
+		button.pressed.connect(_start_episode.bind(id))
+		list.add_child(button)
 	_replace_screen(root)
 	if first != null:
 		first.grab_focus.call_deferred()
@@ -258,10 +292,18 @@ func _build_episode_screen() -> void:
 	feed = _rich()
 	feed.gui_input.connect(_on_feed_input)
 	talk.add_child(feed)
+	# Choices sit under the feed and grow with their content, up to most of the
+	# column (the finale offers ten); beyond that they scroll.
+	controls_scroll = ScrollContainer.new()
+	controls_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	controls = VBoxContainer.new()
+	controls.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	controls.add_theme_constant_override("separation", 4)
-	talk.add_child(controls)
+	controls.resized.connect(_fit_controls)
+	controls_scroll.add_child(controls)
+	talk.add_child(controls_scroll)
 	dialogue.add_child(talk)
+	dialogue_panel = dialogue
 	body.add_child(dialogue)
 
 	_replace_screen(root)
@@ -349,7 +391,8 @@ func _render_entry(entry: Dictionary) -> void:
 		"narrate":
 			feed.append_text("[color=#%s][i]%s[/i][/color]\n\n" % [dim, _esc(tr(entry["text"]))])
 		"line":
-			feed.append_text("[color=#%s][b]%s[/b][/color] — %s\n\n" % [cyan, _esc(_speaker(entry["speaker"]).to_upper()), _esc(tr(entry["text"]))])
+			var voice := _voice_color(entry["speaker"], cyan)
+			feed.append_text("[color=#%s][b]%s[/b][/color] — %s\n\n" % [voice, _esc(_speaker(entry["speaker"]).to_upper()), _esc(tr(entry["text"]))])
 		"log":
 			logs.append_text("[color=#%s]$ %s[/color]\n" % [green, _esc(tr(entry["text"]))])
 		"metric":
@@ -434,6 +477,13 @@ func _show_controls() -> void:
 			_update_deduction()
 	if not option_actions.is_empty():
 		_focus_first_choice.call_deferred()
+
+
+func _fit_controls() -> void:
+	if controls_scroll == null or dialogue_panel == null:
+		return
+	var limit := dialogue_panel.size.y * 0.62
+	controls_scroll.custom_minimum_size.y = minf(controls.get_combined_minimum_size().y, limit)
 
 
 func _focus_first_choice() -> void:
@@ -529,7 +579,11 @@ func _show_summary() -> void:
 	if not reviewing:
 		Progress.finish(progress, episode["id"], state)
 	scene_label.text = ""
-	controls.add_child(_label(UiText.t("end_title"), "PromptLabel"))
+	var ending := _ending()
+	if ending != "":
+		controls.add_child(_label("%s — %s" % [UiText.t("ending"), UiText.t("endings").get(ending, ending)], "TitleLabel", false))
+	else:
+		controls.add_child(_label(UiText.t("end_title"), "PromptLabel"))
 	var lines := []
 	for entry in state["feed"]:
 		if entry["kind"] != "choice":
@@ -837,6 +891,26 @@ func _evidence(id: String) -> Dictionary:
 		if item["id"] == id:
 			return item
 	return {"title": id, "body": ""}
+
+
+## The machine voices read apart from the people: NULL warm red, ORPHEUS a
+## cold white, the platform's automation grey.
+func _voice_color(speaker: String, person: String) -> String:
+	match speaker:
+		"NULL", "UNKNOWN":
+			return ThemeBuilder.RED.to_html(false)
+		"ORPHEUS", "ADVISOR":
+			return "dfe8ff"
+		"PLATFORM", "PAGER":
+			return ThemeBuilder.DIM.to_html(false)
+	return person
+
+
+func _ending() -> String:
+	for flag in state.get("flags", {}):
+		if flag.begins_with("ENDING_") and state["flags"][flag]:
+			return flag.trim_prefix("ENDING_")
+	return ""
 
 
 func _arrow(entry: Dictionary) -> String:

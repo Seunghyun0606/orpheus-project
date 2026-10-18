@@ -75,8 +75,11 @@ if (process.argv.includes('--check')) {
     mkdirSync(FIXTURES, { recursive: true });
     const carries = campaignCarries(episodes);
     for (const episode of episodes) {
+      // A dozen entry states per episode keeps the fixtures small; the
+      // TypeScript validator covers every carry.
       const runs = carries
         .get(episode.id)
+        .slice(0, 12)
         .map((carry) => ({ carry, paths: enumeratePaths(episode, carry).paths }));
       writeFileSync(
         `${FIXTURES}${episode.id.toLowerCase()}.paths.json`,

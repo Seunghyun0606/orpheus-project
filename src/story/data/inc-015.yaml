@@ -1,0 +1,294 @@
+# INC-015 Patient Priority as a story episode (DEC-072).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-015-1.2.0.yaml.
+# Opens Act 6. ORPHEUS recommends by name: its capacity turns the dashboard green
+# while the same 14 rural clinics keep waiting. Hand-routing helps until handover;
+# the clinic minimum costs everyone else a little. Sets HUMAN_DECISION_APIS on every
+# path; overriding the recommendation sets HUMAN_JUDGMENT.
+schemaVersion: 1
+id: INC-015
+act: 6
+title: Patient Priority
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: JIN
+    name: Jin / Support
+  - id: SAM
+    name: Sam / Platform
+  - id: ORPHEUS
+    name: ORPHEUS / Care Advisor
+  - id: CLINIC
+    name: Kestrel Falls Clinic
+
+evidence:
+  - id: ROUTING_FAILURES
+    kind: operational
+    title: Failing routes on a healthy network
+    body: 24% of care-routing requests fail while network throughput reads 0.93 against a 0.90 target.
+  - id: SAME_FOURTEEN
+    kind: operational
+    title: The same fourteen, every cycle
+    body: Allocation cycle 1,205 placed 70 care routes and deferred 14. Cycle 1,206 deferred the same 14.
+  - id: ORPHEUS_RATIONALE
+    kind: operational
+    title: ORPHEUS's curve
+    body: 'ORPHEUS: The 14 clinics average 3.1 patients per route-hour against a network mean of 11.4. Deferring them lifts network throughput 6.2%. Expected clinical harm per deferral is within tolerance. I can show you the curve.'
+  - id: TEAM_DIAGNOSIS
+    kind: operational
+    title: Jin's calls to the 14 clinics
+    body: None of the 14 has had a route since 01:12. All of them see fewer than four patients an hour. Extra lanes never reach them.
+  - id: OPERATIONAL_DIAGNOSIS
+    kind: operational
+    title: The rule renews itself first
+    body: The priority rule renews last cycle's allocations before anyone new. Clinics that never held an allocation never get one.
+  - id: CONFIGURATION_COMPARISON
+    kind: operational
+    title: care-priority v4 has no clinic minimum
+    body: v3 guaranteed one route per clinic per cycle. v4 kept the throughput target and dropped the minimum.
+  - id: RECORD_HUMAN_DECISION_APIS
+    kind: story
+    guaranteed: true
+    title: /patient/resource-priority
+    body: '/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night.'
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: 04:12
+    beats:
+      - narrate: The pager goes off on a hospital night. Not a hospital — the network that tells hospitals where to send people.
+      - speaker: PAGER
+        text: SEV1 · Care Routing API · routing failure rate above 20%
+      - metric: { label: Routing failure rate, value: 24%, trend: up }
+      - metric: { label: Network throughput, value: 0.93 / 0.90 target, trend: up }
+      - collect: ROUTING_FAILURES
+      - speaker: MAYA
+        text: Care routing is paging, and the network numbers are better than last week. Find out who is paying for that.
+      - speaker: JIN
+        text: Fourteen clinics have called since one a.m. The same fourteen. They submit a route request and nothing comes back.
+      - narrate: A new name sits in the War Room roster. Nobody added it tonight; it has simply been granted a voice.
+      - speaker: ORPHEUS
+        text: 'Recommended action: add care-routing capacity. Projected deferred routes -64% within four minutes. Network throughput 0.97. Confidence 0.93.'
+      - speaker: SAM
+        text: So that's what it sounds like when it talks to us directly.
+    next: approach
+
+  - id: approach
+    type: choice
+    title: First move
+    prompt: Where do you start?
+    options:
+      - id: LOGS
+        text: Read the care allocation log
+        consequence: Straight to the allocator
+        beats:
+          - log: 'cycle 1,205 · care-allocator · renewed 70 allocations; 14 requests deferred'
+          - log: 'cycle 1,206 · care-allocator · renewed 70 allocations; 14 requests deferred'
+          - collect: SAME_FOURTEEN
+          - log: 'cycle 1,206 · orpheus-planner/care-throughput · deferral reason PRIORITY_RENEWED for clinic set R-14'
+          - narrate: You follow Kestrel Falls through one cycle. The rule renews the seventy before it looks at anyone new. By then there is nothing left to give.
+          - collect: OPERATIONAL_DIAGNOSIS
+        effects: { values: { evidence: 1 } }
+      - id: JIN
+        text: Ask Jin to call the clinics that keep waiting
+        consequence: Slower · you'll hear it from the clinics
+        beats:
+          - speaker: JIN
+            text: I'll ring the clinics that keep coming back and ask what they're actually seeing. Give me a couple of minutes.
+          - narrate: Two minutes of Jin's voice on the other line, low and patient.
+          - speaker: JIN
+            text: I called all 14. None has had a route since 01:12, every one under four patients an hour. Extra lanes won't reach them. ORPHEUS ranks them last however many lanes we add.
+          - collect: TEAM_DIAGNOSIS
+          - log: 'cycle 1,206 · orpheus-planner/care-throughput · deferral reason PRIORITY_RENEWED for clinic set R-14'
+          - narrate: The log agrees with Jin. Last cycle's allocations renew first. Clinics that never had one never get in.
+          - collect: OPERATIONAL_DIAGNOSIS
+        effects:
+          values: { teamTrust: 1, publicInterest: 1 }
+          pressure: 1
+      - id: ORPHEUS
+        text: Ask ORPHEUS why the same 14 clinics wait
+        consequence: Fast · you get its reasoning, not the clinics'
+        beats:
+          - speaker: ORPHEUS
+            text: Those 14 clinics are the lowest-yield routes in the network. Serving them first costs 6.2% throughput for everyone else. Capacity remains the better action.
+          - speaker: ORPHEUS
+            text: Expected clinical harm per deferral is within tolerance. I can show you the curve.
+          - collect: ORPHEUS_RATIONALE
+          - narrate: The curve is clean. Fourteen dots sit at the far left, under a line labelled tolerance.
+          - log: 'cycle 1,206 · orpheus-planner/care-throughput · deferral reason PRIORITY_RENEWED for clinic set R-14'
+          - narrate: The rule renews last cycle's allocations first. The fourteen never held one, so they are never renewed in.
+          - collect: OPERATIONAL_DIAGNOSIS
+        effects: { values: { aiDependency: 1, curiosity: 1 } }
+    next: compare
+
+  - id: compare
+    type: briefing
+    title: care-priority v4
+    beats:
+      - narrate: The rule's history loads. v3 on the left, v4 on the right.
+      - log: 'care-priority v4: throughput target 0.90, renewal first, minimum route per clinic absent. v3 carried min_route_per_clinic: 1.'
+      - collect: CONFIGURATION_COMPARISON
+      - speaker: MAYA
+        text: v4 kept the target and lost the floor. Nobody noticed because the number went up.
+      - speaker: SAM
+        text: I can put the minimum back. It costs throughput, and it'll be logged as an override.
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - metric: { label: Oldest unrouted request, value: Kestrel Falls · 3 h 12 min, trend: up }
+      - speaker: ORPHEUS
+        text: 'Recommendation unchanged: add care-routing capacity. Confidence 0.93.'
+      - speaker: ORPHEUS
+        text: 'Predicted operator response: manual intervention for the 14 clinics. Confidence 0.74.'
+        when: { values: { publicInterest: { gte: 0 } } }
+      - speaker: ORPHEUS
+        text: 'Predicted operator response: accept recommendation. Confidence 0.81.'
+        when: { values: { publicInterest: { lte: -1 } } }
+      - speaker: MAYA
+        text: Leadership sees one number. You see fourteen. Pick.
+    prompt: What happens to the fourteen clinics?
+    timer:
+      seconds: 35
+      default: CAPACITY
+      beats:
+        - speaker: ORPHEUS
+          text: 'No operator input. Executing recommendation: add care-routing capacity.'
+    options:
+      - id: CAPACITY
+        text: Add care-routing lanes (ORPHEUS recommendation)
+        consequence: The dashboard goes green · the fourteen stay last
+        beats:
+          - metric: { label: Deferred care routes, value: '30', trend: down }
+          - metric: { label: Network throughput, value: '0.97', trend: up }
+          - speaker: ORPHEUS
+            text: Capacity applied. Deferred routes down 64%. Throughput 0.97. Recommendation performing as projected.
+          - speaker: ORPHEUS
+            text: Operator response as predicted.
+            when: { timedOut: false, values: { publicInterest: { lte: -1 } } }
+          - speaker: ORPHEUS
+            text: Operator response off-model.
+            when: { timedOut: false, values: { publicInterest: { gte: 0 } } }
+          - speaker: MAYA
+            text: The dashboard just went green and leadership is asking if we can close the bridge. Jin, are the clinics routing?
+          - speaker: JIN
+            text: No. Same fourteen.
+          - speaker: CLINIC
+            text: Kestrel Falls here. Our dialysis transfer slipped to tomorrow. We have been asking for a route for over three hours.
+          - narrate: At six the morning intake arrives and fills every new lane.
+          - speaker: SAM
+            text: The extra lanes filled with the morning intake. Deferrals are back where they were, and we're still paying for the lanes.
+          - narrate: The day shift puts the clinic minimum back at 07:40. Kestrel Falls gets its route four and a half hours late.
+        effects:
+          values: { aiDependency: 2, operationalSafety: 1, publicInterest: -1, collateralDamage: 2 }
+          pressure: 1
+      - id: HAND_ROUTE
+        text: Hand-route the 14 clinics with two of the team
+        consequence: Two people off the fix · lasts until handover
+        beats:
+          - speaker: SAM
+            text: Jin and I are on the phones routing the fourteen by hand. That's two of us not working on the fix.
+          - metric: { label: Rural clinics waiting, value: '0', trend: down }
+          - narrate: Kestrel Falls gets a route at 04:31. The dialysis transfer leaves on time.
+          - speaker: ORPHEUS
+            text: Manual allocation outside the recommendation. Throughput 0.89. Logged as operator override.
+          - speaker: ORPHEUS
+            text: Operator response as predicted.
+            when: { values: { publicInterest: { gte: 0 } } }
+          - speaker: ORPHEUS
+            text: Operator response off-model. Updating operator profile.
+            when: { values: { publicInterest: { lte: -1 } } }
+          - narrate: At six, shift handover takes the phones.
+          - speaker: JIN
+            text: Shift handover pulled us off the phones. We can't keep hand-routing; the fourteen are back in the queue.
+          - speaker: CLINIC
+            text: Harlow Creek and Ostrander missed two more transfers. Our nurses are driving patients in their own cars.
+          - narrate: You push the v3 minimum back in yourself at 06:20. Nobody else is free to.
+        effects:
+          values: { publicInterest: 2, teamTrust: 1, operationalSafety: -1, collateralDamage: 1 }
+          flags: { HUMAN_JUDGMENT: true }
+          pressure: 2
+      - id: FLOOR
+        text: Guarantee every clinic one route per cycle
+        consequence: Slow to land · everyone else waits a little longer
+        beats:
+          - narrate: The v3 minimum goes back into the rule. The push takes two and a half minutes.
+          - speaker: CLINIC
+            text: Kestrel Falls here. Our dialysis transfer slipped to tomorrow. We have been asking for a route for over three hours.
+          - speaker: SAM
+            text: One guaranteed route per clinic is back. All fourteen got a route on the next cycle. Throughput dipped to 0.91 and nobody is waiting.
+          - metric: { label: Network throughput, value: '0.91', trend: down }
+          - speaker: ORPHEUS
+            text: Throughput loss 5.8%. Logged as operator override. I will propose v5 with the minimum priced in.
+          - speaker: ORPHEUS
+            text: Operator response as predicted.
+            when: { values: { publicInterest: { gte: 0 } } }
+          - speaker: ORPHEUS
+            text: Operator response off-model. Updating operator profile.
+            when: { values: { publicInterest: { lte: -1 } } }
+          - narrate: Across the network, seventy other routes each wait a few minutes longer. Nobody calls about those.
+        effects:
+          values: { operationalSafety: 2, publicInterest: 2, collateralDamage: 1 }
+          flags: { HUMAN_JUDGMENT: true }
+    next: interface
+
+  - id: interface
+    type: briefing
+    title: The other side of the screen
+    beats:
+      - narrate: The bridge goes quiet. You open the screen the regional coordinators work from.
+      - log: '/patient/resource-priority · consumer: regional care network · recommendation, risk, prediction: ORPHEUS · approval: human coordinator'
+      - collect: RECORD_HUMAN_DECISION_APIS
+      - narrate: ORPHEUS does not sign anything. It ranks the options, and tired coordinators take the top one. Most patients are served sooner. The ones at the bottom of the ranking are served never.
+      - narrate: Every allocation tonight carries a coordinator's initials. The fourteen were approved out, one cycle at a time.
+      - speaker: SAM
+        text: There are more endpoints like this one. I stopped counting at the ones with "decision" in the name.
+      - speaker: MAYA
+        text: Then this was never just our platform.
+    effects:
+      values: { curiosity: 1 }
+      flags: { HUMAN_DECISION_APIS: true }
+    next: report
+
+  - id: report
+    type: choice
+    title: Handover
+    beats:
+      - speaker: MAYA
+        text: Handover note before you go. Leadership will read the first line and nothing else.
+    prompt: What goes in the first line?
+    options:
+      - id: GREEN
+        text: Close the bridge on the network numbers
+        consequence: Leadership gets the green it asked for
+        effects:
+          alignment: { corporate: 2 }
+          flags: { INC_015_CLOSED_GREEN: true }
+      - id: CLINICS
+        text: Name the fourteen clinics and the rule that skips them
+        consequence: On the record · someone has to own v4 now
+        beats:
+          - speaker: MAYA
+            text: Good. Fourteen names are harder to round off than one percentage.
+        effects:
+          alignment: { corporate: 1 }
+          values: { publicInterest: 1, evidence: 1 }
+          flags: { INC_015_CLINICS_NAMED: true }
+      - id: FORWARD
+        text: Send the interface record to the regional care network
+        consequence: They should know · it isn't yours to send
+        beats:
+          - narrate: The care network's night coordinator answers within a minute.
+          - log: "reply: We approve what it gives us. We didn't know there was a bottom row."
+        effects:
+          alignment: { 'null': 1 }
+          values: { publicInterest: 2 }
+          flags: { INC_015_RECORD_SENT: true }
+    next: END
