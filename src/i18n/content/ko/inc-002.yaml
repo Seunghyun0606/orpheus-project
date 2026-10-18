@@ -35,7 +35,7 @@ entries:
   - en: Open Identity API and verifier logs
     ko: 아이덴티티 API와 검증기 로그 열기
   - en: Inspect authorization and retry metrics
-    ko: 승인 및 재시도 메트릭 점검하기
+    ko: 승인 및 재시도 지표 점검하기
   - en: Trace a failed payment authorization
     ko: 실패한 결제 승인 추적하기
   - en: Compare build 1847 with the stable deployment
@@ -133,7 +133,7 @@ entries:
   - en: Team Capacity
     ko: 팀 가용 인력
   - en: Logs and metrics
-    ko: 로그와 메트릭
+    ko: 로그와 지표
   - en: Operational investigation
     ko: 운영 조사
   - en: Collect operational evidence before selecting a containment path. The displayed values reflect only observations actually revealed by accepted actions.

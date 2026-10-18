@@ -36,7 +36,7 @@ entries:
   - en: Open Payment API logs
     ko: 결제 API 로그 열기
   - en: Open service metrics
-    ko: 서비스 메트릭 열기
+    ko: 서비스 지표 열기
   - en: Restart Payment API
     ko: 결제 API 재시작하기
   - en: Scale Payment API

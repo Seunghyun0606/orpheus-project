@@ -17,6 +17,12 @@
   overflow-wrap: anywhere;
 }
 
+/* Tracked uppercase labels are a Latin terminal style; tracked Hangul reads
+   as broken words, so Korean keeps natural spacing everywhere. */
+:root:lang(ko) body * {
+  letter-spacing: normal !important;
+}
+
 :root {
   --bg: #050808;
   --surface: #08100f;
@@ -2516,7 +2522,24 @@ section[tabindex='-1']:focus-visible {
 }
 
 .onboarding-coach-actions button {
+  min-height: 2rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  background: var(--button-bg);
+  color: var(--text);
   font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.onboarding-coach-actions button:hover {
+  background: var(--button-hover);
+}
+
+.onboarding-coach-actions .onboarding-coach-off {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+  text-decoration: underline;
 }
 
 .onboarding-coach-off {

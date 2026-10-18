@@ -37,7 +37,7 @@ entries:
   - en: Open Receipt Worker logs
     ko: 영수증 워커 로그 열기
   - en: Inspect queue and worker metrics
-    ko: 큐와 워커 메트릭 점검하기
+    ko: 큐와 워커 지표 점검하기
   - en: Trace the repeatedly rejected receipt
     ko: 반복 거부된 영수증 추적하기
   - en: Compare partner batch 781 with accepted receipts
@@ -145,7 +145,7 @@ entries:
   - en: Root Cause Contained
     ko: 근본 원인 억제됨
   - en: Logs and metrics
-    ko: 로그와 메트릭
+    ko: 로그와 지표
   - en: Operational investigation
     ko: 운영 조사
   - en: Collect operational evidence before selecting a containment path. The displayed values reflect only observations actually revealed by accepted actions.

@@ -37,7 +37,7 @@ entries:
   - en: Open Payment API logs
     ko: 결제 API 로그 열기
   - en: Open service metrics
-    ko: 서비스 메트릭 열기
+    ko: 서비스 지표 열기
   - en: Restart Payment API
     ko: 결제 API 재시작하기
   - en: Scale Payment API
@@ -127,7 +127,7 @@ entries:
   - en: Root Cause Resolved
     ko: 근본 원인 해결됨
   - en: Logs and metrics
-    ko: 로그와 메트릭
+    ko: 로그와 지표
   - en: Operational investigation
     ko: 운영 조사
   - en: Collect operational evidence before selecting a containment path. The displayed values reflect only observations actually revealed by accepted actions.
