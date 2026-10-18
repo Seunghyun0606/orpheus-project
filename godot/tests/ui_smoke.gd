@@ -90,29 +90,87 @@ func _initialize() -> void:
 			print("final %s -> %s" % [option["id"], ending])
 		steps += 1
 	main.review_flags.clear()
-	# Real time: no skipping, the reveal and typing run frame by frame (as when
-	# a player just waits); every scene must offer its controls on its own.
+	# Real time: no skipping, the reveal, typing and timers run frame by frame
+	# (as when a player just waits), with the interruptions a player causes:
+	# leaving and resuming, opening settings and switching language while text
+	# types. Every scene must offer its controls on its own.
+	for strategy in ["first", "last+timeout", "middle"]:
+		var result: Array = _realtime(main, strategy)
+		steps += result[0]
+		failures += result[1]
+	main._show_title()
+	await process_frame
+	print("ui smoke: %d inputs, %d failures" % [steps, failures])
+	quit(1 if failures > 0 else 0)
+
+
+## Advances frames until the scene offers its controls (or ends).
+func _wait_ready(main: Control) -> bool:
+	for frame in 4000:
+		main._process(0.25)
+		if StoryRunner.current_scene(main.episode, main.state).is_empty():
+			return true
+		if main.pending.is_empty() and main.typing_label == null and (not main.option_actions.is_empty() or main.deduce_label != null):
+			return true
+	return false
+
+
+## Advances frames until something is being typed (or the reveal is over).
+func _until_typing(main: Control) -> void:
+	for frame in 400:
+		if main.typing_label != null or main.pending.is_empty():
+			return
+		main._process(0.05)
+
+
+func _realtime(main: Control, strategy: String) -> Array:
+	var steps := 0
+	var failures := 0
 	main.progress = Progress.empty()
 	for entry in Library.episode_index():
 		var id: String = entry["id"]
 		main._start_episode(id)
-		main._close_act_card()
+		if main.act_card != null:
+			# Shown for a new Act; the reveal waits until the player clicks it away.
+			main._process(1.0)
+			main._close_act_card()
 		var missed_once := false
 		for step in 200:
-			var ready := false
-			for frame in 4000:
-				main._process(0.25)
-				if main.pending.is_empty() and main.typing_label == null and (not main.option_actions.is_empty() or main.deduce_label != null):
-					ready = true
-					break
+			# Interruptions while text is still coming in.
+			if step % 6 == 4:
+				_until_typing(main)
+				main._open_settings()
+				main._process(5.0)
+				main._close_settings()
+			if step % 7 == 3:
+				_until_typing(main)
+				main._change_setting("language", "en")
+				main._change_setting("language", "ko")
+				main._close_settings()
+			if step % 5 == 2:
+				main._show_title()
+				main._start_episode(id)
+			if not _wait_ready(main):
+				failures += 1
+				printerr("%s (%s) stuck in real time at %s" % [id, strategy, main.state["sceneId"]])
+				break
 			var scene: Dictionary = StoryRunner.current_scene(main.episode, main.state)
 			if scene.is_empty():
 				break
-			if not ready:
-				failures += 1
-				printerr("%s stuck in real time at %s" % [id, scene["id"]])
-				break
-			var input := _input(scene, main.state, "first", step)
+			if strategy == "last+timeout" and scene.has("timer") and step % 2 == 0:
+				# Let the decision timer run out on its own.
+				var before: String = scene["id"]
+				for frame in 800:
+					main._process(0.25)
+					if main.state["sceneId"] != before:
+						break
+				if main.state["sceneId"] == before:
+					failures += 1
+					printerr("%s (%s) timer did not expire at %s" % [id, strategy, before])
+					break
+				steps += 1
+				continue
+			var input := _input(scene, main.state, "first" if strategy == "last+timeout" and scene["type"] == "deduction" else strategy, step)
 			if scene["type"] == "deduction" and not missed_once:
 				# Miss once so the hint plays and the retry must come back.
 				var wrong := []
@@ -130,11 +188,9 @@ func _initialize() -> void:
 				break
 		if not Progress.is_finished(main.progress, id):
 			failures += 1
-			printerr("%s did not finish in real time" % id)
-	main._show_title()
-	await process_frame
-	print("ui smoke: %d inputs, %d failures" % [steps, failures])
-	quit(1 if failures > 0 else 0)
+			printerr("%s (%s) did not finish in real time" % [id, strategy])
+	print("real time %s: %d inputs, %d failures" % [strategy, steps, failures])
+	return [steps, failures]
 
 
 func _input(scene: Dictionary, state: Dictionary, strategy: String, step: int) -> Dictionary:
