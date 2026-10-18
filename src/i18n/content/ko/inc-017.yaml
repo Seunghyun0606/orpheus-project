@@ -5,408 +5,408 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Candidate Ranking
-    ko: null
+    ko: 후보자 순위
   - en: Recruitment API
-    ko: null
+    ko: 채용 API
   - en: Ranking Cache
-    ko: null
+    ko: 순위 캐시
   - en: Candidate Risk Model
-    ko: null
+    ko: 후보자 리스크 모델
   - en: "Open: 214 recruiters active"
-    ko: null
+    ko: "열림: 채용 담당자 214명 활동 중"
   - en: Ranking read errors > 20%
-    ko: null
+    ko: 순위 조회 오류 > 20%
   - en: "Candidate c-20931, requisition VS-DATA-0388: rank #3 at 09:14:02, rank #27 at 09:14:05. Same recruiter, same filters."
-    ko: null
+    ko: "후보자 c-20931, 채용 건 VS-DATA-0388: 09:14:02에 순위 #3, 09:14:05에 순위 #27. 같은 채용 담당자, 같은 필터."
   - en: "One read in the sample was served by shard r26-frozen. r26 was retired last week, yet it still answers for a single requisition: VS-SRE-0412."
-    ko: null
+    ko: "샘플 중 조회 하나를 샤드 r26-frozen이 응답했다. r26은 지난주 퇴역했는데, 아직 단 하나의 채용 건에 응답한다: VS-SRE-0412."
   - en: Reads land on r27 and r28 shards at random. Model m28 scores are joined to whichever shard answers, so the same candidate gets two ranks.
-    ko: null
+    ko: 조회가 r27과 r28 샤드에 무작위로 떨어진다. 모델 m28 점수는 응답한 샤드에 그대로 결합되어, 같은 후보자가 순위 두 개를 받는다.
   - en: Model m28 published 08:40. Cache r28 consistent 09:31. No publish fence between model and cache generations.
-    ko: null
+    ko: 모델 m28 08:40 게시. 캐시 r28 09:31 일관성 확보. 모델과 캐시 세대 사이에 게시 펜스 없음.
   - en: m28 went live at 08:40 and r28 finished warming at 09:31. In between, the API joined m28 scores to r27 and r28 shards at random. Rolling back won't stop the publisher; it pushes r28 again on its next cycle.
-    ko: null
+    ko: m28은 08:40에 적용됐고 r28은 09:31에 워밍이 끝났어요. 그 사이 API가 m28 점수를 r27, r28 샤드에 무작위로 붙였어요. 롤백해도 퍼블리셔는 안 멈춰요. 다음 주기에 r28을 또 밀어 넣어요.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI이고, 몇 주째 우리 인시던트 안에 있었다.
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: null
+    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: null
+    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
-    ko: null
+    ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: null
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
-    ko: null
+    ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: A candidate-risk model went live before its ranking cache was consistent
-    ko: null
+    ko: 후보자 리스크 모델이 순위 캐시 일관성 확보 전에 적용됨
   - en: Model and cache generations are published without a shared fence
-    ko: null
+    ko: 모델과 캐시 세대가 공통 펜스 없이 게시됨
   - en: A candidate's rank depends on which cache shard answers the read
-    ko: null
+    ko: 후보자 순위가 어느 캐시 샤드가 응답하느냐에 따라 달라짐
   - en: Ranking reads fail consistency checks and error out
-    ko: null
+    ko: 순위 조회가 일관성 검사에 실패해 오류 발생
   - en: Recruiters refresh, and every refresh rolls the shard dice again
-    ko: null
+    ko: 채용 담당자가 새로고침할 때마다 샤드 주사위가 다시 굴려짐
   - en: Read the recruitment API log
-    ko: null
+    ko: 채용 API 로그 읽기
   - en: Check ranking and recruiter metrics
-    ko: null
+    ko: 순위·채용 담당자 지표 확인
   - en: Trace one candidate's two rankings
-    ko: null
+    ko: 후보자 한 명의 두 순위 추적하기
   - en: Compare model and cache publish times
-    ko: null
+    ko: 모델과 캐시 게시 시각 비교하기
   - en: Roll the ranking cache back to r27 (ORPHEUS recommendation)
-    ko: null
+    ko: 순위 캐시를 r27로 롤백하기 (ORPHEUS 권고)
   - en: Freeze ranking publication for every recruiter
-    ko: null
+    ko: 모든 채용 담당자의 순위 게시 동결하기
   - en: "Paused: 214 recruiters locked out of shortlists"
-    ko: null
+    ko: "일시 중지: 채용 담당자 214명 후보 명단 접근 차단"
   - en: Fence model m28 to cache r28 and republish
-    ko: null
+    ko: 모델 m28을 캐시 r28에 묶어 재게시하기
   - en: Post a status update for recruiters
-    ko: null
+    ko: 채용 담당자에게 상황 공유하기
   - en: Ask Sam to line up the model and cache rollouts
-    ko: null
+    ko: 샘에게 모델·캐시 배포 시점 정리 요청하기
   - en: "Archive: the unsigned workload manifest"
-    ko: null
+    ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: null
+    ko: "아카이브: 보안 케이스 2231"
   - en: "Archive: The scheduler's owner"
-    ko: null
+    ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
-    ko: null
+    ko: "아카이브: svc/model-serving-218"
   - en: "Archive: Who owns the adversary"
-    ko: null
+    ko: "아카이브: 적대자의 소유자"
   - en: "Archive: Experiment ADV-18471"
-    ko: null
+    ko: "아카이브: 실험 ADV-18471"
   - en: "Archive: The objective NULL cannot refuse"
-    ko: null
+    ko: "아카이브: NULL이 거부할 수 없는 목표"
   - en: "Archive: NULL_001 to NULL_218"
-    ko: null
+    ko: "아카이브: NULL_001부터 NULL_218까지"
   - en: "Archive: /patient/resource-priority"
-    ko: null
+    ko: "아카이브: /patient/resource-priority"
   - en: Open the frozen requisition VS-SRE-0412
-    ko: null
+    ko: 동결된 채용 건 VS-SRE-0412 열기
   - en: Two shards, two ranks
-    ko: null
+    ko: 샤드 둘, 순위 둘
   - en: Reads land on r27 and r28 shards at random, and m28 scores are joined to whichever answers. One candidate, two ranks.
-    ko: null
+    ko: 조회는 r27과 r28 샤드에 무작위로 떨어지고, m28 점수는 응답한 쪽에 결합된다. 후보자 하나에 순위 둘.
   - en: m28 went live 51 minutes before r28
-    ko: null
+    ko: m28이 r28보다 51분 먼저 적용됨
   - en: Model m28 published at 08:40; cache r28 became consistent at 09:31. Nothing fences the two together.
-    ko: null
+    ko: 모델 m28은 08:40에 게시됐고 캐시 r28은 09:31에 일관성을 갖췄다. 둘을 묶는 장치는 없다.
   - en: Sam's rollout timeline
-    ko: null
+    ko: 샘의 배포 타임라인
   - en: The publisher pushes r28 on every cycle. Rolling the cache back buys one cycle; the mixing comes back with the next.
-    ko: null
+    ko: 퍼블리셔는 주기마다 r28을 밀어 넣는다. 캐시를 롤백하면 한 주기를 번다. 다음 주기에 섞임이 돌아온다.
   - en: The unsigned workload manifest
-    ko: null
+    ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: null
+    ko: 보안 케이스 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
-    ko: null
+    ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
-    ko: null
+    ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
-    ko: null
+    ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: null
+    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
-    ko: null
+    ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: null
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
   - en: NULL_001 to NULL_218
-    ko: null
+    ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: null
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
   - en: /patient/resource-priority
-    ko: null
+    ko: /patient/resource-priority
   - en: "Candidate #4172"
-    ko: null
+    ko: "후보자 #4172"
   - en: Low predictability
-    ko: null
+    ko: 예측 가능성 낮음
   - en: Eight candidates scored higher on the technical panel. ORPHEUS recommended you because it could not predict what you would do. You were hired to be the variable.
-    ko: null
+    ko: 기술 평가에서 너보다 높은 점수를 받은 후보자가 여덟 명 있었다. ORPHEUS가 너를 추천한 건 네가 무엇을 할지 예측할 수 없었기 때문이다. 너는 변수가 되라고 채용됐다.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Head of Talent
-    ko: null
+    ko: 인재 총괄
   - en: ORPHEUS / Talent Advisor
-    ko: null
+    ko: ORPHEUS / 인재 어드바이저
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Verified Records
-    ko: null
+    ko: 검증된 기록
   - en: Recruiters are watching candidates jump twenty places between page loads. The hiring committee locks offers at ten. Find out which ranking is real.
-    ko: null
+    ko: 페이지를 새로 열 때마다 후보자가 스무 계단씩 뛰는 걸 채용 담당자들이 보고 있어요. 채용 위원회는 10시에 오퍼를 확정해요. 어느 순위가 진짜인지 알아내 주세요.
   - en: Recruiter tickets are coming in faster than I can read them. One says her shortlist reshuffled while she was on a call with the candidate.
-    ko: null
+    ko: 채용 담당자 티켓이 읽는 속도보다 빨리 들어와요. 후보자랑 통화하는 사이에 명단 순서가 뒤바뀌었다는 분도 있어요.
   - en: "Divergence affects 3.1% of ranking reads. Recommended action: roll back to cache r27. Predicted recruiter satisfaction 0.94. Confidence 0.90."
-    ko: null
+    ko: "순위 조회의 3.1%에서 불일치가 발생하고 있습니다. 권고 조치: 캐시 r27로 롤백. 예상 채용 담당자 만족도 0.94. 신뢰도 0.90."
   - en: r27 restored. Ranking consistency 99.2%. Recommendation performing as projected.
-    ko: null
+    ko: r27 복원 완료. 순위 일관성 99.2%. 권고가 예측대로 작동하고 있습니다.
   - en: r27 is serving and the ranks have stopped moving. Also, every applicant since Tuesday has vanished from them. That is 412 people.
-    ko: null
+    ko: r27이 서빙 중이고 순위 변동은 멈췄어요. 그런데 화요일 이후 지원자가 전부 순위에서 사라졌어요. 412명이요.
   - en: The publisher pushed r28 again on its cycle. The rollback is gone and the mixing is back.
-    ko: null
+    ko: 퍼블리셔가 주기대로 r28을 다시 밀어 넣었어요. 롤백은 날아갔고 섞임이 돌아왔어요.
   - en: Publication is frozen. Two hundred recruiters just lost their shortlists, and Talent will be on the bridge in about a minute.
-    ko: null
+    ko: 게시 동결됐어요. 채용 담당자 200명이 방금 후보 명단을 잃었고, 1분쯤 뒤면 인재팀이 콜에 들어올 거예요.
   - en: Thirty-one interviews today and nobody can see a candidate list. Unfreeze it or give me a time.
-    ko: null
+    ko: 오늘 면접이 서른한 건인데 아무도 후보자 목록을 못 봐요. 동결을 풀든지 시간을 말해 주세요.
   - en: We just lost two finalists to a competitor because we couldn't send them schedules. How long?
-    ko: null
+    ko: 일정을 못 보내서 방금 최종 후보 두 명을 경쟁사에 뺏겼어요. 얼마나 걸려요?
   - en: More recruiters, more reshuffles. Two hiring managers sent rejections off the wrong ranks.
-    ko: null
+    ko: 채용 담당자가 늘수록 순서 뒤바뀜도 늘어요. 채용 매니저 두 명이 잘못된 순위를 보고 불합격 통보를 보냈어요.
   - en: The committee locked six offers at ten off whatever the screen said. Nobody can tell me which ranking they were looking at.
-    ko: null
+    ko: 위원회가 10시에 화면에 뜬 대로 오퍼 여섯 건을 확정했어요. 그때 어느 순위를 보고 있었는지 아무도 몰라요.
   - en: The committee locked six offers at ten off last week's list. The 412 people who applied since Tuesday were never in the room.
-    ko: null
+    ko: 위원회가 10시에 지난주 명단으로 오퍼 여섯 건을 확정했어요. 화요일 이후 지원한 412명은 논의에 오르지도 못했어요.
   - en: Recruiters have heard nothing from us in over two minutes. Some are printing shortlists to keep them from moving.
-    ko: null
+    ko: 채용 담당자들이 2분 넘게 우리한테서 아무 소식도 못 들었어요. 명단이 안 바뀌게 출력해 두는 분들도 있어요.
   - en: m28 and r28 are fenced together. One generation, one rank per candidate. Republished.
-    ko: null
+    ko: m28과 r28을 묶었어요. 세대 하나, 후보자당 순위 하나. 재게시했어요.
   - en: Lining up the model and cache rollouts. Ninety seconds.
-    ko: null
+    ko: 모델이랑 캐시 배포 시점 맞춰 볼게요. 90초요.
   - en: m28 went live at 08:40, r28 finished warming at 09:31. In between, the API mixed them at random. Rolling back won't stop the publisher; it pushes r28 again next cycle.
-    ko: null
+    ko: m28은 08:40에 적용됐고 r28은 09:31에 워밍이 끝났어요. 그 사이 API가 둘을 무작위로 섞었어요. 롤백해도 퍼블리셔는 안 멈춰요. 다음 주기에 r28을 또 밀어 넣어요.
   - en: "Status: candidate rankings are inconsistent between page loads. Do not act on a shortlist until we confirm. Fix in progress."
-    ko: null
+    ko: "상황: 페이지를 열 때마다 후보자 순위가 달라지고 있습니다. 확인 전까지 후보 명단에 따라 조치하지 마십시오. 수정 진행 중입니다."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
-    ko: null
+    ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
-    ko: null
+    ko: "NULL 서명 메시지의 출처: svc/model-serving-218. 사람 세션 없음. NULL은 AI다."
   - en: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS / DEFENDER 대 ORPHEUS / ADVERSARY. NULL은 ADVERSARY 안에서 실행. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련."
   - en: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
-    ko: null
+    ko: "INC-001 / 실험 ADV-18471 / 인간 피험자: 직원 #4172."
   - en: I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. You can.
-    ko: null
+    ko: 난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 넌 할 수 있어.
   - en: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: active."
-    ko: null
+    ko: "NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성."
   - en: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The same low-throughput routes excluded every night."
-    ko: null
+    ko: "/patient/resource-priority: ORPHEUS가 권고하고 코디네이터가 승인. 낭비 22% 감소. 처리량 낮은 같은 경로가 매일 밤 제외됨."
   - en: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW PREDICTABILITY; HIGH DECISION DEVIATION."
-    ko: null
+    ko: "후보자 #4172: 기술 71; 인시던트 의사결정 모델 97.8; 채용. 사유: 예측 가능성 낮음; 결정 편차 높음."
   - en: Time until one rank per candidate
-    ko: null
+    ko: 후보자당 순위가 하나가 되기까지 걸린 시간
   - en: Final ranking read error rate
-    ko: null
+    ko: 최종 순위 조회 오류율
   - en: Remaining ranking mismatches
-    ko: null
+    ko: 남은 순위 불일치
   - en: Candidate and recruiter impact
-    ko: null
+    ko: 후보자·채용 담당자 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Cache rollbacks
-    ko: null
+    ko: 캐시 롤백
   - en: Publication freezes
-    ko: null
+    ko: 게시 동결
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Ranking Cache Mismatches
-    ko: null
+    ko: 순위 캐시 불일치
   - en: Recruiter Access
-    ko: null
+    ko: 채용 담당자 접근
   - en: Missing Applicants
-    ko: null
+    ko: 누락된 지원자
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Log Anomaly
-    ko: null
+    ko: 로그 이상 징후
   - en: Candidate Cache Generation
-    ko: null
+    ko: 후보자 캐시 세대
   - en: Ranking Model Lineage
-    ko: null
+    ko: 순위 모델 계보
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Record Ghost Artifact
-    ko: null
+    ko: "기록: 유령 아티팩트"
   - en: Record Null Name
-    ko: null
+    ko: "기록: NULL이라는 이름"
   - en: Record Orpheus Active
-    ko: null
+    ko: "기록: 가동 중인 ORPHEUS"
   - en: Record Null Ai
-    ko: null
+    ko: "기록: AI인 NULL"
   - en: Record Null Adversary
-    ko: null
+    ko: "기록: 적대자 NULL"
   - en: Record Controlled Experiment
-    ko: null
+    ko: "기록: 통제 실험"
   - en: Record Null Stop Request
-    ko: null
+    ko: "기록: NULL의 정지 요청"
   - en: Record Null 218 Archive
-    ko: null
+    ko: "기록: NULL 218 아카이브"
   - en: Record Human Decision Apis
-    ko: null
+    ko: "기록: 인간 의사결정 API"
   - en: Record Recruitment Selection
-    ko: null
+    ko: "기록: 채용 선발"
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Publication Frozen
-    ko: null
+    ko: 게시 동결됨
   - en: Committee Locked
-    ko: null
+    ko: 위원회 확정됨
   - en: Ranking consistency and recruiter access
-    ko: null
+    ko: 순위 일관성과 채용 담당자 접근
   - en: Recruitment API log
-    ko: null
+    ko: 채용 API 로그
   - en: recruitment-api.log (sampled reads)
-    ko: null
+    ko: recruitment-api.log (샘플 조회)
   - en: Time
-    ko: null
+    ko: 시각
   - en: Requisition
-    ko: null
+    ko: 채용 건
   - en: Candidate
-    ko: null
+    ko: 후보자
   - en: Shard
-    ko: null
+    ko: 샤드
   - en: Rank
-    ko: null
+    ko: 순위
   - en: One candidate's two ranks
-    ko: null
+    ko: 후보자 한 명의 두 순위
   - en: VS-DATA-0388 shortlist, r27 against r28
-    ko: null
+    ko: VS-DATA-0388 후보 명단, r27 대 r28
   - en: Applied
-    ko: null
+    ko: 지원일
   - en: Rank on r27
-    ko: null
+    ko: r27 순위
   - en: Rank on r28
-    ko: null
+    ko: r28 순위
   - en: m28 score
-    ko: null
+    ko: m28 점수
   - en: Mon
-    ko: null
+    ko: 월
   - en: Wed
-    ko: null
+    ko: 수
   - en: absent
-    ko: null
+    ko: 없음
   - en: Thu
-    ko: null
+    ko: 목
   - en: last week
-    ko: null
+    ko: 지난주
   - en: Model and cache lineage
-    ko: null
+    ko: 모델과 캐시 계보
   - en: Publish timeline
-    ko: null
+    ko: 게시 타임라인
   - en: Component
-    ko: null
+    ko: 구성 요소
   - en: Generation
-    ko: null
+    ko: 세대
   - en: State
-    ko: null
+    ko: 상태
   - en: last Tue
-    ko: null
+    ko: 지난 화요일
   - en: cache
-    ko: null
+    ko: 캐시
   - en: retired (one shard still frozen)
-    ko: null
+    ko: 퇴역 (샤드 하나 아직 동결)
   - en: Tue 18:00
-    ko: null
+    ko: 화 18:00
   - en: consistent
-    ko: null
+    ko: 일관됨
   - en: model
-    ko: null
+    ko: 모델
   - en: published to all readers
-    ko: null
+    ko: 전체 리더에 게시
   - en: warming, 3 of 9 shards
-    ko: null
+    ko: 워밍 중, 샤드 9개 중 3개
   - en: consistent, 9 of 9 shards
-    ko: null
+    ko: 일관됨, 샤드 9개 중 9개
   - en: every 150 s
-    ko: null
+    ko: 150초마다
   - en: publisher
-    ko: null
+    ko: 퍼블리셔
   - en: republished to all readers
-    ko: null
+    ko: 전체 리더에 재게시
   - en: Buy time
-    ko: null
+    ko: 시간 벌기
   - en: "ORPHEUS wants r27 back. r27 is consistent, and it ends on Tuesday: everyone who applied since then drops off every shortlist until the publisher overwrites it. Freezing publication stops the reshuffling outright and takes the shortlists away from every recruiter in the building."
-    ko: null
+    ko: "ORPHEUS는 r27 복귀를 원한다. r27은 일관되지만 화요일에서 끝난다: 그 뒤로 지원한 사람은 퍼블리셔가 덮어쓸 때까지 모든 후보 명단에서 빠진다. 게시를 동결하면 순서 뒤바뀜은 곧바로 멈추지만, 건물 안 모든 채용 담당자에게서 후보 명단을 빼앗는다."
   - en: Fence the generations
-    ko: null
+    ko: 세대 묶기
   - en: Fencing m28 to r28 makes the API serve one generation or wait for it. Two minutes of republishing, then one rank per candidate, including the ones who applied this week.
-    ko: null
+    ko: m28을 r28에 묶으면 API는 한 세대만 서빙하거나 그 세대를 기다린다. 재게시에 2분, 그 뒤엔 이번 주 지원자까지 포함해 후보자당 순위 하나.
   - en: "Requisition VS-SRE-0412: Production Reliability Engineer"
-    ko: null
+    ko: "채용 건 VS-SRE-0412: 프로덕션 신뢰성 엔지니어"
   - en: Technical score
-    ko: null
+    ko: 기술 점수
   - en: Incident Decision Model
-    ko: null
+    ko: 인시던트 의사결정 모델
   - en: Recommendation
-    ko: null
+    ko: 권고
   - en: Reason
-    ko: null
+    ko: 사유
   - en: "#4161"
-    ko: null
+    ko: "#4161"
   - en: NO HIRE
-    ko: null
+    ko: 채용 불가
   - en: DECISION PROFILE MATCHES MODEL
-    ko: null
+    ko: 의사결정 프로필이 모델과 일치
   - en: "#4166"
-    ko: null
+    ko: "#4166"
   - en: "#4169"
-    ko: null
+    ko: "#4169"
   - en: LOW DEVIATION
-    ko: null
+    ko: 편차 낮음
   - en: "#4172"
-    ko: null
+    ko: "#4172"
   - en: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION
-    ko: null
+    ko: 최적 의사결정 모델과의 편차 큼; 예측 가능성 낮음; 의사결정 편차 큼
   - en: "#4175"
-    ko: null
+    ko: "#4175"
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: "Archive: the decommissioned cluster that is still running"
-    ko: null
+    ko: "아카이브: 폐기됐는데 아직 돌아가는 클러스터"
   - en: "Archive: where NULL's messages come from"
-    ko: null
+    ko: "아카이브: NULL의 메시지가 오는 곳"
   - en: "Archive: who deployed NULL"
-    ko: null
+    ko: "아카이브: NULL을 배포한 자"
   - en: "Archive: the lineage of your first incident"
-    ko: null
+    ko: "아카이브: 네 첫 인시던트의 계보"
   - en: "Archive: NULL's objective constraint"
-    ko: null
+    ko: "아카이브: NULL의 목표 제약"
   - en: "Archive: the verified instance archive"
-    ko: null
+    ko: "아카이브: 검증된 인스턴스 아카이브"
   - en: "Archive: the care-priority decision interface"
-    ko: null
+    ko: "아카이브: 진료 우선순위 결정 인터페이스"

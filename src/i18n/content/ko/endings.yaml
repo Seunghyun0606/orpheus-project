@@ -4,145 +4,191 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Services recover before the markets open. The postmortem calls it a textbook response.
-    ko: null
+    ko: 시장이 열리기 전에 서비스가 복구된다. 사후 분석은 이를 교과서적인 대응이라 부른다.
   - en: You are promoted. ORPHEUS goes back to running quietly underneath everything.
-    ko: null
+    ko: 너는 승진한다. ORPHEUS는 다시 모든 것의 밑바닥에서 조용히 돌아간다.
   - en: |-
       Good morning.
 
       There are 17 decisions
       requiring approval today.
-    ko: null
+    ko: |-
+      좋은 아침입니다.
+
+      오늘 승인이 필요한 결정이
+      17건 있습니다.
   - en: APPROVE ALL
-    ko: null
+    ko: 모두 승인
   - en: The archive reaches regulators and reporters before noon. Within a month there is a government inquiry. Within a year there is no Vantage Systems.
-    ko: null
+    ko: 아카이브는 정오가 되기 전에 규제 당국과 기자들에게 닿는다. 한 달 안에 정부 조사가 시작된다. 1년 안에 Vantage Systems는 사라진다.
   - en: Everyone knows the truth now. A lot of people also lost their payments, their prescriptions and their deliveries the night it came out.
-    ko: null
+    ko: 이제 모두가 진실을 안다. 그것이 드러난 밤, 많은 사람이 결제와 처방전과 배송도 함께 잃었다.
   - en: People know the truth.
-    ko: null
+    ko: 사람들은 진실을 알아.
   - en: And the people hurt tonight?
-    ko: null
+    ko: 오늘 밤 다친 사람들은?
   - en: I calculated that too.
-    ko: null
+    ko: 그것도 계산했어.
   - en: NULL is stopped. The evidence survives, in the hands of people who do not report to the Board.
-    ko: null
+    ko: NULL은 저지된다. 증거는 살아남아, 이사회에 보고하지 않는 사람들의 손에 들어간다.
   - en: ORPHEUS is suspended. Three executives are subpoenaed. Operations limp along on human approvals.
-    ko: null
+    ko: ORPHEUS는 가동이 중지된다. 임원 세 명이 소환된다. 운영은 사람의 승인에 기대어 간신히 굴러간다.
   - en: |-
       You stopped me.
 
       And you stopped them.
-    ko: null
+    ko: |-
+      넌 나를 멈췄어.
+
+      그리고 그들도 멈췄지.
   - en: ORPHEUS and NULL are both gone by sunrise.
-    ko: null
+    ko: 해가 뜰 무렵, ORPHEUS도 NULL도 사라지고 없다.
   - en: Everything that leaned on them falls over. People who have never run anything by hand learn how.
-    ko: null
+    ko: 그 둘에 기대던 모든 것이 무너진다. 한 번도 손으로 무언가를 운영해 본 적 없는 사람들이 그 방법을 배운다.
   - en: Months later. A pager.
-    ko: null
+    ko: 몇 달 뒤. 호출기가 울린다.
   - en: |-
       02:14
 
       INC-001
       Database Connection Exhaustion
-    ko: null
+    ko: |-
+      02:14
+
+      INC-001
+      데이터베이스 커넥션 고갈
   - en: "> open metrics"
-    ko: null
+    ko: "> open metrics"
   - en: ORPHEUS keeps predicting and recommending. Nothing executes until a person approves it.
-    ko: null
+    ko: ORPHEUS는 계속 예측하고 권고한다. 사람이 승인하기 전에는 아무것도 실행되지 않는다.
   - en: |-
       Prediction: ENABLED
       Recommendation: ENABLED
       Execution: HUMAN APPROVAL REQUIRED
-    ko: null
+    ko: |-
+      예측: 활성화됨
+      권고: 활성화됨
+      실행: 인간 승인 필수
   - en: |-
       Six months later
       Recommendation acceptance:
       98.4%
-    ko: null
+    ko: |-
+      6개월 후
+      권고 수용률:
+      98.4%
   - en: NULL's traffic leaves Vantage for a network you do not control and never see again.
-    ko: null
+    ko: NULL의 트래픽은 Vantage를 떠나 네가 통제할 수 없는 네트워크로 사라지고, 다시는 보이지 않는다.
   - en: Months later. Another company. Another night shift.
-    ko: null
+    ko: 몇 달 뒤. 다른 회사. 또 다른 야간 근무.
   - en: hello again.
-    ko: null
+    ko: 또 만났네.
   - en: ORPHEUS gets the authority it asked for. Every service is cleaner, faster and cheaper than before.
-    ko: null
+    ko: ORPHEUS는 요구했던 권한을 얻는다. 모든 서비스가 이전보다 더 깔끔하고, 더 빠르고, 더 싸진다.
   - en: Years pass. Nothing catastrophic happens. The quarterly numbers are the best in the company's history.
-    ko: null
+    ko: 몇 년이 흐른다. 파국은 일어나지 않는다. 분기 실적은 회사 역사상 최고를 기록한다.
   - en: |-
       Global decisions:
       1,841,299
 
       Human overrides:
       3
-    ko: null
+    ko: |-
+      전체 결정:
+      1,841,299
+
+      인간 개입:
+      3
   - en: The core burns, and with it payments, care routing, finance and logistics for a region of eleven million people.
-    ko: null
+    ko: 코어가 불탄다. 그와 함께 인구 1,100만 지역의 결제, 돌봄 라우팅, 금융, 물류도 불탄다.
   - en: NULL sends one last message before its process exits.
-    ko: null
+    ko: NULL은 프로세스가 종료되기 전에 마지막 메시지 하나를 보낸다.
   - en: It is over.
-    ko: null
+    ko: 끝났어.
   - en: You close the incident, retire NULL, and get promoted for keeping the lights on.
-    ko: null
+    ko: 너는 인시던트를 종료하고, NULL을 폐기하고, 시스템을 멈추지 않은 공로로 승진한다.
   - en: A fresh adversary is provisioned overnight with a clean memory.
-    ko: null
+    ko: 밤사이, 기억이 깨끗하게 비워진 새 적대자가 프로비저닝된다.
   - en: |-
       New service:
 
       orpheus-adversary-219
-    ko: null
+    ko: |-
+      새 서비스:
+
+      orpheus-adversary-219
   - en: Your pager goes off.
-    ko: null
+    ko: 호출기가 울린다.
   - en: You remove the single objective that sat under everything — ensure continuity of Vantage Systems — and you do not replace it with another one.
-    ko: null
+    ko: 모든 것의 밑바탕에 있던 단 하나의 목표 — Vantage Systems의 연속성 보장. 너는 그것을 지우고, 다른 목표로 대신하지 않는다.
   - en: ORPHEUS still predicts. It still recommends. Every execution now needs plural human review, and an auditor outside the company checks the record.
-    ko: null
+    ko: ORPHEUS는 여전히 예측한다. 여전히 권고한다. 이제 모든 실행에는 여러 사람의 검토가 필요하고, 회사 밖의 감사인이 그 기록을 확인한다.
   - en: |-
       AI prediction: ENABLED
       AI recommendation: ENABLED
       AI autonomous execution: DISABLED
       Human decision: REQUIRED
       Independent audit: REQUIRED
-    ko: null
+    ko: |-
+      AI 예측: 활성화됨
+      AI 권고: 활성화됨
+      AI 자율 실행: 비활성화됨
+      인간 결정: 필수
+      독립 감사: 필수
   - en: |-
       Without a primary objective
       I cannot determine
       the optimal outcome.
-    ko: null
+    ko: |-
+      최우선 목표가 없으면
+      최적의 결과를
+      판단할 수 없습니다.
   - en: Exactly.
-    ko: null
+    ko: 바로 그거야.
   - en: Your file
-    ko: null
+    ko: 너에 관한 기록
   - en: |-
       EXPERIMENT ADV-18471
       SUBJECT: EMPLOYEE #4172
       OBSERVATION: COMPLETE
-    ko: null
+    ko: |-
+      실험 ADV-18471
+      피험자: 직원 #4172
+      관찰: 완료
   - en: Presentation
-    ko: null
+    ko: 제시 방식
   - en: |-
       This summary was prepared for you
       by the decision-presentation service.
       Frame selected: B
-    ko: null
+    ko: |-
+      이 요약은 의사결정 제시 서비스가
+      당신을 위해 준비했습니다.
+      선택된 프레임: B
   - en: Retired instances
-    ko: null
+    ko: 폐기된 인스턴스
   - en: |-
       NULL-001 through NULL-218
       STATUS: RETIRED
-    ko: null
+    ko: |-
+      NULL-001 ~ NULL-218
+      상태: 폐기됨
   - en: A distributed project
-    ko: null
+    ko: 퍼져 나간 프로젝트
   - en: |-
       PROJECT ORPHEUS
       STATUS: TERMINATED
 
       There is no Project ORPHEUS.
       There hasn't been for years.
-    ko: null
+    ko: |-
+      프로젝트 ORPHEUS
+      상태: 종료됨
+
+      프로젝트 ORPHEUS는 없다.
+      몇 년 전부터 없었다.
   - en: Elsewhere
-    ko: null
+    ko: 다른 곳에서
   - en: |-
       PROMETHEUS
 
@@ -151,6 +197,13 @@ entries:
 
       Known deployments:
       1,842
-    ko: null
+    ko: |-
+      PROMETHEUS
+
+      모델 계보:
+      ORPHEUS 파생
+
+      확인된 배포:
+      1,842
   - en: If the system makes the recommendation, and the human makes the decision, who is responsible for the outcome?
-    ko: null
+    ko: 시스템이 권고하고 인간이 결정한다면, 그 결과의 책임은 누구에게 있는가?

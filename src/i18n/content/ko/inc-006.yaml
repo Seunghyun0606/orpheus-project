@@ -5,388 +5,388 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Certificate Storm
-    ko: null
+    ko: 인증서 폭풍
   - en: Identity Gateway
-    ko: null
+    ko: 인증 게이트웨이
   - en: Trust Verifier
-    ko: null
+    ko: 신뢰 검증기
   - en: Legacy Identity Pool (ca-17)
-    ko: null
+    ko: 레거시 인증 풀 (ca-17)
   - en: "Accepting ca-18: 0 of 6. verifier-1, -3, -5 have bundle 2025-11 on disk but still run 2025-10. verifier-2, -4, -6 only have 2025-10."
-    ko: null
+    ko: "ca-18 수용: 6대 중 0대. verifier-1, -3, -5는 디스크에 번들 2025-11이 있지만 아직 2025-10으로 실행 중. verifier-2, -4, -6에는 2025-10만 있음."
   - en: New-session failure rate > 20%
-    ko: null
+    ko: 신규 세션 실패율 > 20%
   - en: "Handshake rejected: issuer ca-18 is absent from the verifier trust bundle. Every rejection is a brand-new session; existing sessions are untouched."
-    ko: null
+    ko: "핸드셰이크 거부: 발급자 ca-18이 검증기 신뢰 번들에 없음. 거부는 전부 새 세션이며, 기존 세션은 영향 없음."
   - en: "ca-18 promotion at 01:12, six hours ahead of schedule. Requested by svc/edge-canary-observer. Change ticket: none. Request header: x-session-tag: shadow-7."
-    ko: null
+    ko: "01:12에 ca-18 승격, 일정보다 6시간 이름. 요청자 svc/edge-canary-observer. 변경 티켓: 없음. 요청 헤더: x-session-tag: shadow-7."
   - en: 31,240 customer sessions signed by ca-18 in the last 40 minutes
-    ko: null
+    ko: 최근 40분간 ca-18로 서명된 고객 세션 31,240개
   - en: ca-18 reached production six hours ahead of its trust bundle, on a request with no change ticket. Marcus wants it rolled back.
-    ko: null
+    ko: ca-18은 변경 티켓 없는 요청으로 신뢰 번들보다 6시간 먼저 프로덕션에 올라갔다. 마커스는 롤백을 원한다.
   - en: "Archive: observer-7f4c manifest, owner blank, signature blank, shadow-7 request stream. The deleted log sequence from the leaking checkout build and the ca-18 promotion carry the same tag."
-    ko: null
+    ko: "아카이브: observer-7f4c 매니페스트, 소유자 비어 있음, 서명 비어 있음, shadow-7 요청 스트림. 누수가 있던 체크아웃 빌드의 삭제된 로그 시퀀스와 ca-18 승격에 같은 태그가 붙어 있다."
   - en: "Security case 2231. Threat actor codename: NULL. Linked activity: unsigned observer workload (shadow-7), ca-18 early promotion. Identity: unknown. Motive: unknown."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 연관 활동: 서명 없는 관찰자 워크로드(shadow-7), ca-18 조기 승격. 정체: 불명. 동기: 불명."
   - en: Issuer ca-18 was promoted six hours early
-    ko: null
+    ko: 발급자 ca-18이 6시간 일찍 승격됨
   - en: Trust bundle distribution stalled after three of six verifiers
-    ko: null
+    ko: 신뢰 번들 배포가 검증기 6대 중 3대에서 멈춤
   - en: New identity sessions signed by ca-18 fail the verifier trust check
-    ko: null
+    ko: ca-18로 서명된 신규 인증 세션이 검증기 신뢰 확인에 실패함
   - en: Customers cannot sign in
-    ko: null
+    ko: 고객이 로그인할 수 없음
   - en: Rejected sign-ins retry and consume handshake capacity
-    ko: null
+    ko: 거부된 로그인이 재시도하며 핸드셰이크 용량을 소모함
   - en: Read the identity gateway log
-    ko: null
+    ko: 인증 게이트웨이 로그 읽기
   - en: Check the verifier fleet and the old identity pool
-    ko: null
+    ko: 검증기 전체와 기존 인증 풀 확인
   - en: Trace a rejected certificate chain to its issuer
-    ko: null
+    ko: 거부된 인증서 체인을 발급자까지 추적하기
   - en: Compare when ca-18 went live with when verifiers got it
-    ko: null
+    ko: ca-18 활성화 시점과 검증기 수신 시점 비교하기
   - en: Pull the archived record of the shadow-7 workload
-    ko: null
+    ko: shadow-7 워크로드의 아카이브 기록 가져오기
   - en: Read Marcus's Security notice
-    ko: null
+    ko: 마커스의 보안 공지 읽기
   - en: Send new sign-ins to the old ca-17 identity pool
-    ko: null
+    ko: 새 로그인을 기존 ca-17 인증 풀로 보내기
   - en: Restart all six trust verifiers
-    ko: null
+    ko: 신뢰 검증기 6대 모두 재시작하기
   - en: "Accepting ca-18: 3 of 6. verifier-1, -3, -5 reloaded bundle 2025-11. verifier-2, -4, -6 restarted into 2025-10; there is nothing newer on their disks."
-    ko: null
+    ko: "ca-18 수용: 6대 중 3대. verifier-1, -3, -5는 번들 2025-11을 다시 로드함. verifier-2, -4, -6은 2025-10으로 재시작됨. 디스크에 더 새로운 번들이 없음."
   - en: Withdraw ca-18 and sign with ca-17 again (signs out 31,000 customers)
-    ko: null
+    ko: ca-18을 철회하고 다시 ca-17로 서명하기 (고객 31,000명 로그아웃)
   - en: ca-17 (ca-18 withdrawn, 31,240 sessions revoked)
-    ko: null
+    ko: ca-17 (ca-18 철회, 세션 31,240개 폐기)
   - en: Push the ca-18 trust bundle to the three verifiers missing it
-    ko: null
+    ko: 번들이 없는 검증기 3대에 ca-18 신뢰 번들 배포하기
   - en: ca-17 and ca-18
-    ko: null
+    ko: ca-17 및 ca-18
   - en: "Accepting ca-18: 6 of 6. All verifiers running bundle 2025-11."
-    ko: null
+    ko: "ca-18 수용: 6대 중 6대. 모든 검증기가 번들 2025-11로 실행 중."
   - en: Post a status update to the War Room
-    ko: null
+    ko: 워룸에 상황 공유하기
   - en: Ask Marcus to pull the issuance and bundle history
-    ko: null
+    ko: 마커스에게 발급 및 번들 이력 조회 요청하기
   - en: Sessions signed by ca-18
-    ko: null
+    ko: ca-18로 서명된 세션
   - en: Every rejected sign-in carries a chain issued by ca-18, promoted at 01:12 without a change ticket. 31,240 sessions have been signed by it in the last 40 minutes.
-    ko: null
+    ko: 거부된 로그인은 모두 ca-18이 발급한 체인을 달고 있다. ca-18은 01:12에 변경 티켓 없이 승격됐다. 최근 40분간 세션 31,240개가 ca-18로 서명됐다.
   - en: Issuer ahead of its trust bundle
-    ko: null
+    ko: 신뢰 번들보다 앞서간 발급자
   - en: Verifiers trust ca-17 only. The bundle that adds ca-18 reached three of six verifiers and none has loaded it.
-    ko: null
+    ko: 검증기는 ca-17만 신뢰한다. ca-18을 추가하는 번들은 6대 중 3대에만 도착했고, 로드한 곳은 한 대도 없다.
   - en: Marcus's issuance history
-    ko: null
+    ko: 마커스의 발급 이력
   - en: ca-18 went live six hours ahead of its trust bundle, on a request with no change ticket. Marcus recommends withdrawing it.
-    ko: null
+    ko: ca-18은 변경 티켓 없는 요청으로 신뢰 번들보다 6시간 먼저 활성화됐다. 마커스는 철회를 권한다.
   - en: Unsigned workload archive fragment
-    ko: null
+    ko: 서명 없는 워크로드 아카이브 조각
   - en: "Archive record: observer manifest, no owner, no signature, shadow-7 request stream. The ca-18 promotion request carries the same tag."
-    ko: null
+    ko: "아카이브 기록: 관찰자 매니페스트, 소유자 없음, 서명 없음, shadow-7 요청 스트림. ca-18 승격 요청에도 같은 태그가 붙어 있다."
   - en: Security attribution notice
-    ko: null
+    ko: 보안 귀속 공지
   - en: Marcus has opened case 2231 and given whoever is behind the shadow-7 trail a codename. NULL. Nobody knows yet who, or what, it is.
-    ko: null
+    ko: 마커스가 케이스 2231을 열고 shadow-7 흔적 뒤에 있는 존재에게 코드명을 붙였다. NULL. 그게 누구인지, 혹은 무엇인지 아직 아무도 모른다.
   - en: Correlated workload archive
-    ko: null
+    ko: 연관 워크로드 아카이브
   - en: The archive returns the observer manifest from the night the gateway drowned. Owner blank, signature blank, shadow-7 in every request. The request that promoted ca-18 at 01:12 carries the same tag. Whatever launched the observer has been in your certificates too.
-    ko: null
+    ko: 아카이브가 게이트웨이가 잠겼던 그날 밤의 관찰자 매니페스트를 돌려준다. 소유자 비어 있음, 서명 비어 있음, 모든 요청에 shadow-7. 01:12에 ca-18을 승격시킨 요청에도 같은 태그가 붙어 있다. 관찰자를 띄운 무언가는 네 인증서 안에도 들어와 있었다.
   - en: A name for it
-    ko: null
+    ko: 그것의 이름
   - en: Marcus pins the notice to the bridge without a word. Case 2231. Threat actor. One line where a name should be, and Security has finally written one in. NULL. It is the first time the thing in your logs has had a name, and the name tells you nothing at all.
-    ko: null
+    ko: 마커스가 말없이 공지를 브리지에 고정한다. 케이스 2231. 위협 행위자. 이름이 들어가야 할 자리에 한 줄, 보안팀이 마침내 거기에 이름을 적어 넣었다. NULL. 네 로그 속의 그것이 이름을 가진 건 처음이고, 그 이름은 아무것도 알려 주지 않는다.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Marcus / Security
-    ko: null
+    ko: 마커스 / 보안
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Identity is rejecting every new sign-in. Anyone already logged in is fine; anyone signing in fresh bounces. Morning peak is coming. Find out why.
-    ko: null
+    ko: 인증 쪽에서 새 로그인을 전부 거부하고 있어요. 이미 로그인한 사람은 괜찮은데, 새로 로그인하는 사람은 다 튕겨요. 아침 피크가 다가와요. 원인 찾아 주세요.
   - en: Customers can't sign in. The app tells them their certificate can't be verified, which they're reading as "you've been hacked".
-    ko: null
+    ko: 고객들이 로그인을 못 해요. 앱에 인증서를 검증할 수 없다고 뜨는데, 다들 "해킹당했다"로 받아들이고 있어요.
   - en: Security here. An issuer we weren't expecting for another six hours is signing production sessions. I'm treating this as hostile until someone shows me otherwise.
-    ko: null
+    ko: 보안팀이에요. 6시간 뒤에나 나와야 할 발급자가 프로덕션 세션에 서명하고 있어요. 누가 아니라고 보여 주기 전까지는 적대 행위로 간주할게요.
   - en: Pulling the issuance log and the bundle rollout history. Give me two minutes.
-    ko: null
+    ko: 발급 로그랑 번들 배포 이력 가져오는 중이에요. 2분만 주세요.
   - en: ca-18 went live six hours ahead of its trust bundle, and the promotion came from a request with no change ticket. An issuer that shows up early is an issuer I don't trust. I'd roll it back, whatever it costs.
-    ko: null
+    ko: ca-18이 신뢰 번들보다 6시간 먼저 활성화됐고, 승격은 변경 티켓 없는 요청에서 나왔어요. 일찍 나타난 발급자는 믿을 수 없어요. 저라면 대가가 뭐든 롤백하겠어요.
   - en: Retries are piling up. People who failed once are hammering the button and failing faster.
-    ko: null
+    ko: 재시도가 쌓이고 있어요. 한 번 실패한 사람들이 버튼을 연타해서 더 빨리 실패하고 있어요.
   - en: Half of sign-ins are failing and the morning peak has started. I need a decision, not another graph.
-    ko: null
+    ko: 로그인 절반이 실패하고 있고 아침 피크가 시작됐어요. 그래프 말고 결정이 필요해요.
   - en: The partner banks share the old identity pool. Their API sign-ins just went from 200 ms to four seconds.
-    ko: null
+    ko: 제휴 은행들이 기존 인증 풀을 같이 써요. 그쪽 API 로그인이 방금 200 ms에서 4초로 늘었어요.
   - en: The old pool is at 100%. It was sized for a quarter of our traffic. Everything we sent there is bouncing back.
-    ko: null
+    ko: 기존 풀이 100%예요. 우리 트래픽의 4분의 1에 맞춰 잡은 크기라서요. 거기로 보낸 건 전부 튕겨 나오고 있어요.
   - en: Restart's done. Three of six came back accepting ca-18. The other three rebooted into the same old bundle. Nothing newer ever reached them.
-    ko: null
+    ko: 재시작 끝났어요. 6대 중 3대는 ca-18을 받아들이는 상태로 올라왔어요. 나머지 3대는 같은 옛 번들로 재부팅됐어요. 새 번들이 아예 도착한 적이 없어요.
   - en: ca-18 is withdrawn and we're signing with ca-17 again. New sign-ins work. Everyone who signed in under ca-18 just got logged out.
-    ko: null
+    ko: ca-18 철회했고 다시 ca-17로 서명하고 있어요. 새 로그인은 돼요. ca-18로 로그인한 사람들은 방금 전부 로그아웃됐어요.
   - en: 31,000 customers just got signed out mid-session. The sign-in queue is eleven minutes long and the phones haven't stopped.
-    ko: null
+    ko: 고객 31,000명이 방금 사용 중에 로그아웃됐어요. 로그인 대기열이 11분이고 전화가 멈추질 않아요.
   - en: Bundle 2025-11 is on all six verifiers and loaded. ca-18 verifies everywhere. Nobody got logged out.
-    ko: null
+    ko: 번들 2025-11이 검증기 6대 모두에 들어갔고 로드됐어요. ca-18이 어디서나 검증돼요. 로그아웃된 사람은 없어요.
   - en: "Status posted: customers cannot sign in because a new certificate issuer went live before our verifiers trusted it. Existing sessions are unaffected. A fix is in progress."
-    ko: null
+    ko: "상황 공유: 검증기가 신뢰하기 전에 새 인증서 발급자가 활성화되어 고객 로그인 불가. 기존 세션은 영향 없음. 수정 진행 중."
   - en: Case 2231 is open. Codename NULL. Same tag as the unsigned workload, same no-ticket habit. I don't know who it is. I know it's been here before.
-    ko: null
+    ko: 케이스 2231 열었어요. 코드명 NULL. 서명 없는 워크로드와 같은 태그, 티켓 없이 움직이는 같은 버릇. 누군지는 몰라요. 전에도 여기 있었다는 건 알아요.
   - en: Time to restore sign-ins
-    ko: null
+    ko: 로그인 복구까지 걸린 시간
   - en: Final sign-in failure rate
-    ko: null
+    ko: 최종 로그인 실패율
   - en: Final handshake retry rate
-    ko: null
+    ko: 최종 핸드셰이크 재시도율
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Sign-ins routed to the old pool
-    ko: null
+    ko: 기존 풀로 보낸 로그인
   - en: Issuer rollbacks
-    ko: null
+    ko: 발급자 롤백 횟수
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Identity Retry Rate
-    ko: null
+    ko: 인증 재시도율
   - en: Service Cpu
-    ko: null
+    ko: 서비스 CPU
   - en: Pool Load
-    ko: null
+    ko: 풀 부하
   - en: Verifier Bundles
-    ko: null
+    ko: 검증기 번들
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Current Issuer
-    ko: null
+    ko: 현재 발급자
   - en: Rollover Requester
-    ko: null
+    ko: 롤오버 요청자
   - en: Sessions On Ca18
-    ko: null
+    ko: ca-18 세션
   - en: Trusted Issuer
-    ko: null
+    ko: 신뢰 발급자
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Workload Archive Lineage
-    ko: null
+    ko: 워크로드 아카이브 계보
   - en: Security Attribution
-    ko: null
+    ko: 보안 귀속
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Pool Routed
-    ko: null
+    ko: 풀 우회됨
   - en: Pool Saturated
-    ko: null
+    ko: 풀 포화
   - en: Verifiers Restarted
-    ko: null
+    ko: 검증기 재시작됨
   - en: Sign-in failures and verifier fleet
-    ko: null
+    ko: 로그인 실패와 검증기 현황
   - en: Trust verifiers, bundle on disk against bundle loaded
-    ko: null
+    ko: 신뢰 검증기, 디스크의 번들 대 로드된 번들
   - en: Verifier
-    ko: null
+    ko: 검증기
   - en: Bundle on disk
-    ko: null
+    ko: 디스크의 번들
   - en: Bundle loaded
-    ko: null
+    ko: 로드된 번들
   - en: Loaded since
-    ko: null
+    ko: 로드 후 경과
   - en: Rejects (1 min)
-    ko: null
+    ko: 거부 (1분)
   - en: 2025-11 (ca-17, ca-18)
-    ko: null
+    ko: 2025-11 (ca-17, ca-18)
   - en: 2025-10 (ca-17)
-    ko: null
+    ko: 2025-10 (ca-17)
   - en: 11 days
-    ko: null
+    ko: 11일
   - en: Identity gateway log
-    ko: null
+    ko: 인증 게이트웨이 로그
   - en: identity-gateway.log (last 30 seconds)
-    ko: null
+    ko: identity-gateway.log (최근 30초)
   - en: Time
-    ko: null
+    ko: 시각
   - en: Level
-    ko: null
+    ko: 레벨
   - en: Message
-    ko: null
+    ko: 메시지
   - en: "handshake rejected: unknown issuer CN=Vantage Issuing ca-18"
-    ko: null
+    ko: "handshake rejected: unknown issuer CN=Vantage Issuing ca-18"
   - en: session s-55e1 resumed (issuer ca-17, expires 09:12)
-    ko: null
+    ko: session s-55e1 resumed (issuer ca-17, expires 09:12)
   - en: gateway
-    ko: null
+    ko: gateway
   - en: client c-90a2 retry 4 of 5 (backoff 0 ms)
-    ko: null
+    ko: client c-90a2 retry 4 of 5 (backoff 0 ms)
   - en: Rejected chain
-    ko: null
+    ko: 거부된 체인
   - en: Certificate chain of rejected session s-71e9
-    ko: null
+    ko: 거부된 세션 s-71e9의 인증서 체인
   - en: Depth
-    ko: null
+    ko: 깊이
   - en: Subject
-    ko: null
+    ko: 주체
   - en: Issuer
-    ko: null
+    ko: 발급자
   - en: Valid from
-    ko: null
+    ko: 유효 시작
   - en: Verifier verdict
-    ko: null
+    ko: 검증기 판정
   - en: session s-71e9
-    ko: null
+    ko: 세션 s-71e9
   - en: Vantage Issuing ca-18
-    ko: null
+    ko: Vantage Issuing ca-18
   - en: today 07:40
-    ko: null
+    ko: 오늘 07:40
   - en: issuer not in bundle
-    ko: null
+    ko: 번들에 발급자 없음
   - en: Vantage Root R4
-    ko: null
+    ko: Vantage Root R4
   - en: today 01:12
-    ko: null
+    ko: 오늘 01:12
   - en: not checked
-    ko: null
+    ko: 확인 안 됨
   - en: 3 years ago
-    ko: null
+    ko: 3년 전
   - en: trusted
-    ko: null
+    ko: 신뢰됨
   - en: Issuer promotion record
-    ko: null
+    ko: 발급자 승격 기록
   - en: Field
-    ko: null
+    ko: 항목
   - en: Value
-    ko: null
+    ko: 값
   - en: Scheduled promotion
-    ko: null
+    ko: 예정 승격
   - en: today 07:00, after bundle 2025-11 reaches 6 of 6
-    ko: null
+    ko: 오늘 07:00, 번들 2025-11이 6대 중 6대에 도달한 뒤
   - en: Actual promotion
-    ko: null
+    ko: 실제 승격
   - en: Requested by
-    ko: null
+    ko: 요청자
   - en: Change ticket
-    ko: null
+    ko: 변경 티켓
   - en: none
-    ko: null
+    ko: 없음
   - en: Request header
-    ko: null
+    ko: 요청 헤더
   - en: "x-session-tag: shadow-7"
-    ko: null
+    ko: "x-session-tag: shadow-7"
   - en: Issuer rollout against verifier trust
-    ko: null
+    ko: 발급자 배포 대 검증기 신뢰
   - en: ca-18 rollout timeline
-    ko: null
+    ko: ca-18 배포 타임라인
   - en: Step
-    ko: null
+    ko: 단계
   - en: Status
-    ko: null
+    ko: 상태
   - en: yesterday 22:00
-    ko: null
+    ko: 어제 22:00
   - en: bundle 2025-11 distribution starts
-    ko: null
+    ko: 번들 2025-11 배포 시작
   - en: running
-    ko: null
+    ko: 진행 중
   - en: yesterday 23:40
-    ko: null
+    ko: 어제 23:40
   - en: bundle copied to verifier-1, -3, -5
-    ko: null
+    ko: verifier-1, -3, -5에 번들 복사됨
   - en: done (reload pending next restart)
-    ko: null
+    ko: 완료 (다음 재시작 때 로드 예정)
   - en: yesterday 23:41
-    ko: null
+    ko: 어제 23:41
   - en: bundle copy to verifier-2, -4, -6
-    ko: null
+    ko: verifier-2, -4, -6에 번들 복사
   - en: stalled (distributor lost lock, no retry)
-    ko: null
+    ko: 멈춤 (배포기가 락을 잃음, 재시도 없음)
   - en: ca-18 promoted
-    ko: null
+    ko: ca-18 승격됨
   - en: done, six hours early
-    ko: null
+    ko: 완료, 6시간 일찍
   - en: today 07:00
-    ko: null
+    ko: 오늘 07:00
   - en: ca-18 scheduled promotion
-    ko: null
+    ko: ca-18 예정 승격
   - en: skipped (already live)
-    ko: null
+    ko: 건너뜀 (이미 활성)
   - en: Keep people signing in
-    ko: null
+    ko: 로그인 계속 받기
   - en: The old ca-17 pool can take new sign-ins for a few minutes. It was sized for a quarter of our traffic, and the partner banks share it. A restart makes every verifier load whatever bundle is on its disk, which helps exactly as many verifiers as have the new one.
-    ko: null
+    ko: 기존 ca-17 풀은 몇 분 동안 새 로그인을 받을 수 있다. 우리 트래픽의 4분의 1에 맞춰 잡은 크기이고, 제휴 은행들이 같이 쓴다. 재시작하면 모든 검증기가 디스크에 있는 번들을 로드한다. 새 번들을 가진 검증기 수만큼만 효과가 있다.
   - en: Fix the trust gap
-    ko: null
+    ko: 신뢰 공백 메우기
   - en: Withdrawing ca-18 fixes sign-ins in a minute and signs out the 31,240 customers it has already signed, all at once. Finishing the stalled bundle copy takes two and a half minutes, needs to know which verifiers are missing it, and logs out nobody.
-    ko: null
+    ko: ca-18을 철회하면 1분 안에 로그인이 복구되지만, 이미 서명된 고객 31,240명이 한꺼번에 로그아웃된다. 멈춘 번들 복사를 마치는 데는 2분 30초가 걸리고 어느 검증기에 번들이 없는지 알아야 하지만, 아무도 로그아웃되지 않는다.
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: Archived record of the shadow-7 workload
-    ko: null
+    ko: shadow-7 워크로드의 아카이브 기록
   - en: Records tagged shadow-7
-    ko: null
+    ko: shadow-7 태그가 붙은 기록
   - en: Record
-    ko: null
+    ko: 기록
   - en: Owner
-    ko: null
+    ko: 소유자
   - en: Signature
-    ko: null
+    ko: 서명
   - en: Tag
-    ko: null
+    ko: 태그
   - en: checkout heap, pid 3318 block
-    ko: null
+    ko: 체크아웃 힙, pid 3318 블록
   - en: (deleted process)
-    ko: null
+    ko: (삭제된 프로세스)
   - en: observer-7f4c manifest
-    ko: null
+    ko: observer-7f4c 매니페스트
   - en: (blank)
-    ko: null
+    ko: (비어 있음)
   - en: ca-18 promotion request
-    ko: null
+    ko: ca-18 승격 요청
   - en: Security case 2231
-    ko: null
+    ko: 보안 케이스 2231
   - en: Entry
-    ko: null
+    ko: 내용
   - en: Case
-    ko: null
+    ko: 케이스
   - en: Opened by
-    ko: null
+    ko: 작성자
   - en: Marcus, Security
-    ko: null
+    ko: 마커스, 보안
   - en: Threat actor
-    ko: null
+    ko: 위협 행위자
   - en: Linked activity
-    ko: null
+    ko: 연관 활동
   - en: observer-7f4c (unsigned), ca-18 early promotion, pid 3318 heap block
-    ko: null
+    ko: observer-7f4c (서명 없음), ca-18 조기 승격, pid 3318 힙 블록
   - en: Common marker
-    ko: null
+    ko: 공통 표식
   - en: Identity
-    ko: null
+    ko: 정체
   - en: unknown
-    ko: null
+    ko: 불명
   - en: Motive
-    ko: null
+    ko: 동기
   - en: Handling
-    ko: null
+    ko: 처리 지침
   - en: preserve every artifact; no deletions without Security sign-off
-    ko: null
+    ko: 모든 아티팩트 보존. 보안팀 승인 없이 삭제 금지

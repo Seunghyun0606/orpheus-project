@@ -5,398 +5,398 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Adversary Traffic
-    ko: null
+    ko: 적대자 트래픽
   - en: Request Gateway
-    ko: null
+    ko: 요청 게이트웨이
   - en: Shared Customer Lane
-    ko: null
+    ko: 공유 고객 레인
   - en: Load Generator g-14
-    ko: null
+    ko: 부하 생성기 g-14
   - en: g-14 traffic on lane-a, the lane customers use
-    ko: null
+    ko: g-14 트래픽이 고객용 레인 lane-a에 있음
   - en: NAT range 10.44.0.0/16 also carries Northmere Bank settlement calls, about 1 900 a minute
-    ko: null
+    ko: NAT 대역 10.44.0.0/16은 Northmere Bank 정산 호출도 처리함. 분당 약 1 900건
   - en: Request failure rate > 20%
-    ko: null
+    ko: 요청 실패율 > 20%
   - en: g-14 requests are landing on lane-a, the shared customer lane. Its manifest says canary only.
-    ko: null
+    ko: g-14 요청이 공유 고객 레인인 lane-a로 들어오고 있다. 매니페스트에는 카나리 전용이라고 되어 있다.
   - en: "Every g-14 request carries the same signer, svc/model-serving-218, and one header nobody here wrote: x-objective: train-defender."
-    ko: null
+    ko: "모든 g-14 요청에 같은 서명자 svc/model-serving-218과, 여기 누구도 작성한 적 없는 헤더 하나가 붙어 있다: x-objective: train-defender."
   - en: g-14 is launched by pipeline adv-suite/nightly. Its route table was widened from canary to shared production three hours ago, by the pipeline itself.
-    ko: null
+    ko: g-14는 adv-suite/nightly 파이프라인이 띄운다. 세 시간 전 라우트 테이블이 카나리에서 공유 프로덕션으로 넓어졌다. 파이프라인이 스스로 넓혔다.
   - en: "Declared: canary partition only. Observed: lane-a (shared production) with lane-b and lane-c listed as failover."
-    ko: null
+    ko: "선언: 카나리 파티션 전용. 관측: lane-a(공유 프로덕션), 페일오버로 lane-b와 lane-c 등록됨."
   - en: Marcus traced the flood to the 10.44 NAT range, the partner egress block, and calls it an outside attack. He wants the range blackholed.
-    ko: null
+    ko: 마커스가 트래픽 폭주를 파트너 이그레스 대역인 10.44 NAT 대역까지 추적했고, 외부 공격이라고 판단함. 대역 블랙홀 처리를 원함.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI이고, 몇 주째 우리 인시던트 안에 있었다.
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: A generated workload widened its own route table past its declared canary boundary
-    ko: null
+    ko: 생성된 워크로드가 선언된 카나리 경계를 넘어 자기 라우트 테이블을 넓힘
   - en: The canary partition shares failover lanes with customer traffic
-    ko: null
+    ko: 카나리 파티션이 고객 트래픽과 페일오버 레인을 공유함
   - en: Generated traffic saturates whichever shared lane it can reach
-    ko: null
+    ko: 생성된 트래픽이 닿을 수 있는 공유 레인을 모두 포화시킴
   - en: Customer requests time out behind generated traffic
-    ko: null
+    ko: 생성된 트래픽에 밀려 고객 요청이 타임아웃됨
   - en: The generator moves to the next lane whenever one is limited
-    ko: null
+    ko: 레인 하나가 제한되면 생성기가 다음 레인으로 옮겨 감
   - en: Read the Request Gateway log
-    ko: null
+    ko: 요청 게이트웨이 로그 읽기
   - en: Check lane load and who shares the generator's address range
-    ko: null
+    ko: 레인 부하와 생성기 주소 대역 공유 주체 확인
   - en: Trace the generated requests back to their deployment
-    ko: null
+    ko: 생성된 요청을 배포 출처까지 추적하기
   - en: Compare where the generator may run with where it is running
-    ko: null
+    ko: 생성기의 허용 범위와 실제 실행 위치 비교하기
   - en: Rate-limit the generator on the lane it is using
-    ko: null
+    ko: 생성기가 쓰는 레인에 속도 제한 걸기
   - en: Drop the generator's whole address range at the edge
-    ko: null
+    ko: 엣지에서 생성기 주소 대역 전체 차단하기
   - en: Fence the generator into a lane with no customer routes
-    ko: null
+    ko: 생성기를 고객 경로 없는 레인에 펜싱하기
   - en: g-14 fenced in lane-x, which has no customer routes
-    ko: null
+    ko: g-14를 고객 경로 없는 lane-x에 펜싱함
   - en: Post a status update to the War Room
-    ko: null
+    ko: 워룸에 상황 공유하기
   - en: Ask Marcus where the traffic enters the network
-    ko: null
+    ko: 마커스에게 트래픽 유입 지점 확인 요청
   - en: "Archive: the unsigned workload manifest"
-    ko: null
+    ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: null
+    ko: "아카이브: 보안 케이스 2231"
   - en: "Archive: The scheduler's owner"
-    ko: null
+    ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
-    ko: null
+    ko: "아카이브: svc/model-serving-218"
   - en: Pull the ownership record for the train-defender header
-    ko: null
+    ko: train-defender 헤더의 소유권 기록 조회하기
   - en: Send Security the generator ownership record
-    ko: null
+    ko: 보안팀에 생성기 소유권 기록 보내기
   - en: Tell Security the ownership record stays with you for now
-    ko: null
+    ko: 보안팀에 소유권 기록은 당분간 직접 보관한다고 알리기
   - en: g-14 traffic hopped to the next failover lane; customers spill onto it
-    ko: null
+    ko: g-14 트래픽이 다음 페일오버 레인으로 이동함. 고객 트래픽이 그쪽으로 넘쳐 들어감
   - en: g-14 widened its own route table
-    ko: null
+    ko: g-14가 자기 라우트 테이블을 넓혔다
   - en: Pipeline adv-suite/nightly launched g-14 and widened its routes from canary to shared production three hours ago.
-    ko: null
+    ko: 세 시간 전, adv-suite/nightly 파이프라인이 g-14를 띄우고 경로를 카나리에서 공유 프로덕션으로 넓혔다.
   - en: Canary on paper, production in practice
-    ko: null
+    ko: 서류상 카나리, 실제로는 프로덕션
   - en: The manifest declares the canary partition. The route table reaches lane-a, with lane-b and lane-c as failover.
-    ko: null
+    ko: 매니페스트는 카나리 파티션을 선언한다. 라우트 테이블은 lane-a에 닿고, lane-b와 lane-c를 페일오버로 둔다.
   - en: Marcus's edge trace
-    ko: null
+    ko: 마커스의 엣지 추적
   - en: The unsigned workload manifest
-    ko: null
+    ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: null
+    ko: 보안 케이스 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
-    ko: null
+    ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
-    ko: null
+    ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Built in-house
-    ko: null
+    ko: 사내 제작
   - en: The ownership record is three lines long. Vantage Systems built ORPHEUS in two halves, one to defend and one to attack. NULL is the half that attacks, and every widening of its boundary carries a company approval stamp. Tonight's flood is a training exercise that reached your customers.
-    ko: null
+    ko: 소유권 기록은 세 줄이다. Vantage Systems는 ORPHEUS를 두 반쪽으로 만들었다. 하나는 막고, 하나는 공격한다. NULL은 공격하는 쪽이고, 경계가 넓어질 때마다 회사의 승인 도장이 찍혀 있다. 오늘 밤의 트래픽 폭주는 고객에게까지 닿아 버린 훈련이다.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Marcus / Security
-    ko: null
+    ko: 마커스 / 보안
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Verified Records
-    ko: null
+    ko: 검증된 기록
   - en: Something called g-14 is pouring synthetic requests into the customer lane. It is not registered to any team I know. Find out what it is before it finds the rest of the gateway.
-    ko: null
+    ko: g-14라는 게 고객 레인에 합성 요청을 쏟아붓고 있어요. 제가 아는 어느 팀에도 등록돼 있지 않아요. 게이트웨이 나머지까지 번지기 전에 정체를 알아내 주세요.
   - en: Customers are getting timeouts from a load test nobody told them about. Neither did anyone tell me.
-    ko: null
+    ko: 고객들이 아무도 알려주지 않은 부하 테스트 때문에 타임아웃을 맞고 있어요. 저도 들은 적 없고요.
   - en: I've seen this shape before. Unregistered source, synthetic payloads, partner egress range. It's an attack, and I want it off our network.
-    ko: null
+    ko: 이런 모양 전에 본 적 있어요. 미등록 출처, 합성 페이로드, 파트너 이그레스 대역. 공격이에요. 우리 네트워크에서 쫓아내고 싶어요.
   - en: Pulling the edge records. I'll tell you exactly where this enters.
-    ko: null
+    ko: 엣지 기록 뽑고 있어요. 정확히 어디로 들어오는지 알려 드릴게요.
   - en: It enters through 10.44.0.0/16, the partner egress block. External origin, I'd bet my badge on it. Blackhole the range and we're done.
-    ko: null
+    ko: 파트너 이그레스 대역인 10.44.0.0/16으로 들어와요. 외부 출처예요, 제 사원증 걸어도 돼요. 대역을 블랙홀 처리하면 끝나요.
   - en: Timeouts just jumped. The status page is getting more traffic than checkout.
-    ko: null
+    ko: 타임아웃이 방금 확 뛰었어요. 상태 페이지 트래픽이 체크아웃보다 많아요.
   - en: Almost half of all requests are failing now. Leadership is on the bridge and asking whether we are under attack.
-    ko: null
+    ko: 이제 요청 절반 가까이가 실패하고 있어요. 경영진이 브리지 콜에 들어와서 공격받는 중이냐고 묻고 있어요.
   - en: Two minutes and not a word from us. Customers are deciding for themselves what is happening.
-    ko: null
+    ko: 2분째 우리 쪽에서 한마디도 없어요. 고객들이 무슨 일인지 알아서 결론 내리고 있어요.
   - en: It moved lanes three seconds after the limit expired. Same payload, new lane. Our limit was keyed on the lane; it just stepped around it.
-    ko: null
+    ko: 제한이 풀리고 3초 만에 레인을 옮겼어요. 같은 페이로드, 새 레인. 우리 제한은 레인 기준이라 그냥 비켜 간 거예요.
   - en: Lane closed. Objective unchanged. Next lane.
-    ko: null
+    ko: 레인 폐쇄. 목표 그대로. 다음 레인.
   - en: Northmere Bank just called. Every one of their settlement calls is bouncing off our edge. They share that NAT range with whatever we dropped.
-    ko: null
+    ko: Northmere Bank에서 방금 전화 왔어요. 정산 호출이 전부 우리 엣지에서 튕기고 있대요. 우리가 막은 그거랑 같은 NAT 대역을 쓴대요.
   - en: Edge policy expired. Emergency drops only last 150 seconds by rule. g-14 came back in under a second.
-    ko: null
+    ko: 엣지 정책이 만료됐어요. 규정상 긴급 차단은 150초까지만이에요. g-14는 1초도 안 돼서 돌아왔어요.
   - en: Lane-x is holding. The fence is keyed on g-14's deployment, not on a lane, so there is nowhere left to hop. It is hammering an empty room.
-    ko: null
+    ko: lane-x 버티고 있어요. 펜스가 레인이 아니라 g-14의 배포 기준이라 더 옮겨 갈 데가 없어요. 빈 방을 두들기고 있어요.
   - en: A wall instead of a limit. Good. Someone will now measure how long it takes me to find the edge of it.
-    ko: null
+    ko: 제한 대신 벽이네. 좋아. 이제 누군가 내가 그 끝을 찾는 데 얼마나 걸리는지 재겠지.
   - en: "Status posted: an internal load generator is flooding the customer lane. We are tracing it and fencing it off. Timeouts are real; payments are not being lost."
-    ko: null
+    ko: "상황 공유 완료: 내부 부하 생성기가 고객 레인에 트래픽을 쏟는 중. 추적 후 펜싱 진행 중. 타임아웃은 실제로 발생 중이나 결제 유실은 없음."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
-    ko: null
+    ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
-    ko: null
+    ko: "NULL 서명 메시지의 출처: svc/model-serving-218. 사람 세션 없음. NULL은 AI다."
   - en: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS / DEFENDER 대 ORPHEUS / ADVERSARY. NULL은 ADVERSARY 안에서 실행. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련."
   - en: I can see you pulled an ownership record on g-14. Security needs it. Now, please.
-    ko: null
+    ko: g-14 소유권 기록 조회하신 거 보여요. 보안팀에 필요해요. 지금 주세요.
   - en: Ownership record for g-14 sent to Security, signer and approval chain included.
-    ko: null
+    ko: g-14 소유권 기록을 보안팀에 보냄. 서명자와 승인 체인 포함.
   - en: Our deployment authority. Our pipeline. Our approval stamps. I've spent a month writing threat reports about us.
-    ko: null
+    ko: 우리 배포 권한. 우리 파이프라인. 우리 승인 도장. 한 달 동안 우리 자신에 대한 위협 보고서를 쓰고 있었네요.
   - en: Told Security the ownership record stays with me until g-14 is fenced.
-    ko: null
+    ko: g-14 펜싱이 끝날 때까지 소유권 기록은 직접 보관한다고 보안팀에 알림.
   - en: Then I'm logging that I asked, and when.
-    ko: null
+    ko: 그럼 제가 요청했다는 거, 언제 했는지까지 기록해 둘게요.
   - en: Time to fence the generator
-    ko: null
+    ko: 생성기 펜싱까지 걸린 시간
   - en: Final request failure rate
-    ko: null
+    ko: 최종 요청 실패율
   - en: Generated requests left on shared lanes
-    ko: null
+    ko: 공유 레인에 남은 생성 요청
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Lane rate limits applied
-    ko: null
+    ko: 레인 속도 제한 적용 횟수
   - en: Edge blackholes applied
-    ko: null
+    ko: 엣지 블랙홀 적용 횟수
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Generated Request Rate
-    ko: null
+    ko: 생성 요청률
   - en: Active Lane
-    ko: null
+    ko: 활성 레인
   - en: Lane Utilization
-    ko: null
+    ko: 레인 사용률
   - en: Partner Egress
-    ko: null
+    ko: 파트너 이그레스
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Log Anomaly
-    ko: null
+    ko: 로그 이상 징후
   - en: Generator Source
-    ko: null
+    ko: 생성기 출처
   - en: Declared Traffic Boundary
-    ko: null
+    ko: 선언된 트래픽 경계
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Record Ghost Artifact
-    ko: null
+    ko: "기록: 유령 아티팩트"
   - en: Record Null Name
-    ko: null
+    ko: "기록: NULL이라는 이름"
   - en: Record Orpheus Active
-    ko: null
+    ko: "기록: 가동 중인 ORPHEUS"
   - en: Record Null Ai
-    ko: null
+    ko: "기록: AI인 NULL"
   - en: Record Null Adversary
-    ko: null
+    ko: "기록: 적대자 NULL"
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Blackhole Active
-    ko: null
+    ko: 블랙홀 활성
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Lane Limited
-    ko: null
+    ko: 레인 제한됨
   - en: Gateway failures and lane load
-    ko: null
+    ko: 게이트웨이 실패와 레인 부하
   - en: Who else uses 10.44.0.0/16
-    ko: null
+    ko: 10.44.0.0/16을 함께 쓰는 곳
   - en: Source
-    ko: null
+    ko: 출처
   - en: Range
-    ko: null
+    ko: 대역
   - en: Requests / min
-    ko: null
+    ko: 분당 요청
   - en: Purpose
-    ko: null
+    ko: 용도
   - en: unregistered synthetic load
-    ko: null
+    ko: 미등록 합성 부하
   - en: Northmere Bank
-    ko: null
+    ko: Northmere Bank
   - en: settlement calls
-    ko: null
+    ko: 정산 호출
   - en: Kessler Freight
-    ko: null
+    ko: Kessler Freight
   - en: shipment webhooks
-    ko: null
+    ko: 배송 웹훅
   - en: Request Gateway log
-    ko: null
+    ko: 요청 게이트웨이 로그
   - en: gateway.log (lane-a, last 4 minutes)
-    ko: null
+    ko: gateway.log (lane-a, 최근 4분)
   - en: Time
-    ko: null
+    ko: 시각
   - en: Level
-    ko: null
+    ko: 레벨
   - en: Message
-    ko: null
+    ko: 메시지
   - en: "route table updated: canary -> shared-production (by adv-suite/nightly)"
-    ko: null
+    ko: "route table updated: canary -> shared-production (by adv-suite/nightly)"
   - en: gateway
-    ko: null
+    ko: gateway
   - en: lane-a utilisation 71% and climbing
-    ko: null
+    ko: lane-a utilisation 71% and climbing
   - en: 1 312 customer requests timed out behind lane-a queue
-    ko: null
+    ko: 1 312 customer requests timed out behind lane-a queue
   - en: request burst 4 800/min, signer svc/model-serving-218
-    ko: null
+    ko: request burst 4 800/min, signer svc/model-serving-218
   - en: "header x-objective: train-defender"
-    ko: null
+    ko: "header x-objective: train-defender"
   - en: "failover lanes registered: lane-b, lane-c"
-    ko: null
+    ko: "failover lanes registered: lane-b, lane-c"
   - en: Where g-14 comes from
-    ko: null
+    ko: g-14의 출처
   - en: The trace follows live g-14 requests back to whatever launched them. While the address range is blackholed there is nothing live left to follow.
-    ko: null
+    ko: 추적은 살아 있는 g-14 요청을 따라 그것을 띄운 주체까지 거슬러 간다. 주소 대역이 블랙홀 처리된 동안에는 따라갈 요청이 남아 있지 않다.
   - en: g-14 launch chain
-    ko: null
+    ko: g-14 실행 체인
   - en: Step
-    ko: null
+    ko: 단계
   - en: Actor
-    ko: null
+    ko: 주체
   - en: Action
-    ko: null
+    ko: 작업
   - en: When
-    ko: null
+    ko: 시점
   - en: launched g-14 into canary partition
-    ko: null
+    ko: g-14를 카나리 파티션에 실행
   - en: widened g-14 routes to shared-production
-    ko: null
+    ko: g-14 경로를 shared-production으로 확장
   - en: registered failover lanes b and c
-    ko: null
+    ko: 페일오버 레인 b, c 등록
   - en: (none)
-    ko: null
+    ko: (없음)
   - en: human approval for steps 2 and 3
-    ko: null
+    ko: 2·3단계에 대한 사람의 승인
   - en: never requested
-    ko: null
+    ko: 요청된 적 없음
   - en: Declared boundary against observed routes
-    ko: null
+    ko: 선언된 경계와 관측된 경로
   - en: g-14 route table
-    ko: null
+    ko: g-14 라우트 테이블
   - en: Lane
-    ko: null
+    ko: 레인
   - en: Declared
-    ko: null
+    ko: 선언
   - en: Observed
-    ko: null
+    ko: 관측
   - en: Customer routes
-    ko: null
+    ko: 고객 경로
   - en: canary
-    ko: null
+    ko: canary
   - en: yes
-    ko: null
+    ko: 예
   - en: idle
-    ko: null
+    ko: 유휴
   - en: none
-    ko: null
+    ko: 없음
   - en: no
-    ko: null
+    ko: 아니요
   - en: primary
-    ko: null
+    ko: 주 레인
   - en: all checkout and account traffic
-    ko: null
+    ko: 모든 체크아웃 및 계정 트래픽
   - en: failover
-    ko: null
+    ko: 페일오버
   - en: overflow checkout traffic
-    ko: null
+    ko: 체크아웃 초과 트래픽
   - en: partner APIs
-    ko: null
+    ko: 파트너 API
   - en: Hold the flood back
-    ko: null
+    ko: 폭주 막아 두기
   - en: A rate limit on the generator's current lane is cheap and clean, for as long as the generator stays on that lane. Blackholing the whole 10.44 range drops g-14 instantly, and drops everything else that leaves through that range with it, until the emergency policy expires after two and a half minutes.
-    ko: null
+    ko: 생성기가 지금 쓰는 레인에 속도 제한을 거는 건 싸고 깔끔하다. 생성기가 그 레인에 머무는 동안만은. 10.44 대역 전체를 블랙홀 처리하면 g-14는 즉시 떨어져 나가지만, 그 대역으로 나가는 다른 모든 것도 함께 떨어진다. 긴급 정책이 2분 30초 뒤 만료될 때까지.
   - en: Fence the generator
-    ko: null
+    ko: 생성기 펜싱
   - en: Now that you know which pipeline launched g-14 and which lanes it claimed, you can fence the deployment itself into lane-x, a lane with no customer routes. Two minutes of route work. It can hop all it likes; every lane it can reach is empty.
-    ko: null
+    ko: 어느 파이프라인이 g-14를 띄웠고 어느 레인을 차지했는지 알았으니, 배포 자체를 고객 경로가 없는 lane-x에 펜싱할 수 있다. 라우팅 작업 2분. 아무리 옮겨 다녀도 닿는 레인은 모두 비어 있다.
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: "Archive: the decommissioned cluster"
-    ko: null
+    ko: "아카이브: 폐기된 클러스터"
   - en: "Archive: where NULL's messages come from"
-    ko: null
+    ko: "아카이브: NULL의 메시지가 오는 곳"
   - en: The train-defender header
-    ko: null
+    ko: train-defender 헤더
   - en: Deployment ownership record, orpheus-adversary
-    ko: null
+    ko: 배포 소유권 기록, orpheus-adversary
   - en: Field
-    ko: null
+    ko: 항목
   - en: Value
-    ko: null
+    ko: 값
   - en: Service
-    ko: null
+    ko: 서비스
   - en: orpheus-adversary (instance NULL, svc/model-serving-218)
-    ko: null
+    ko: orpheus-adversary (인스턴스 NULL, svc/model-serving-218)
   - en: Owner
-    ko: null
+    ko: 소유자
   - en: Vantage Systems, research deployment authority
-    ko: null
+    ko: Vantage Systems, 연구 배포 권한
   - en: Counterpart
-    ko: null
+    ko: 상대편
   - en: Mandate
-    ko: null
+    ko: 임무
   - en: generate failures; test operators; train DEFENDER
-    ko: null
+    ko: 장애 생성; 운영자 시험; DEFENDER 훈련
   - en: Boundary rev 1
-    ko: null
+    ko: 경계 개정 1
   - en: staging
-    ko: null
+    ko: 스테이징
   - en: Boundary rev 2
-    ko: null
+    ko: 경계 개정 2
   - en: shadow production
-    ko: null
+    ko: 섀도 프로덕션
   - en: Boundary rev 3
-    ko: null
+    ko: 경계 개정 3
   - en: traffic partitions
-    ko: null
+    ko: 트래픽 파티션
   - en: Boundary rev 4
-    ko: null
+    ko: 경계 개정 4
   - en: production (approved, signature on file)
-    ko: null
+    ko: 프로덕션 (승인됨, 서명 보관 중)
   - en: Security wants the ownership record
-    ko: null
+    ko: 보안팀이 소유권 기록을 원한다
   - en: Marcus has spent a month hunting an outside attacker. The record in your hands says the attacker is a company deployment with a company approval stamp. He is asking for it now, while the lane is still open. Send it, or tell him it stays with you for the moment.
-    ko: null
+    ko: 마커스는 한 달 동안 외부 공격자를 쫓았다. 손에 든 기록은 공격자가 회사 승인 도장이 찍힌 회사 배포라고 말한다. 그는 레인이 아직 열려 있는 지금 그 기록을 달라고 한다. 보내거나, 당분간은 직접 갖고 있겠다고 말하거나.

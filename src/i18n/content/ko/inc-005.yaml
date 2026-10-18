@@ -5,316 +5,316 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Unsigned Deployment
-    ko: null
+    ko: 서명 없는 배포
   - en: Request Gateway
-    ko: null
+    ko: 요청 게이트웨이
   - en: Unregistered Observer Workload
-    ko: null
+    ko: 미등록 관찰자 워크로드
   - en: none
-    ko: null
+    ko: 없음
   - en: Request failure rate > 20%
-    ko: null
+    ko: 요청 실패율 > 20%
   - en: Thousands of sessions a minute reuse the same few dozen session IDs, open, ask for nothing and close. None of them came in through a signed rollout.
-    ko: null
+    ko: 분당 수천 개의 세션이 같은 세션 ID 수십 개를 돌려 쓰며 열리고, 아무것도 요청하지 않고 닫힌다. 서명된 배포를 거쳐 들어온 세션은 하나도 없다.
   - en: "Every repeating session carries the same header: x-session-tag: shadow-7."
-    ko: null
+    ko: "반복되는 세션마다 같은 헤더가 붙어 있다: x-session-tag: shadow-7."
   - en: shadow-7 sessions enter through admission lane observer-workload, pod observer-7f4c in namespace edge-canary. They hold 61% of gateway capacity.
-    ko: null
+    ko: shadow-7 세션은 유입 레인 observer-workload, 네임스페이스 edge-canary의 파드 observer-7f4c로 들어온다. 게이트웨이 용량의 61%를 차지한다.
   - en: Manifest present / signature absent / owner unregistered
-    ko: null
+    ko: 매니페스트 있음 / 서명 없음 / 소유자 미등록
   - en: "observer-7f4c manifest: owner blank, signature blank, created 22 minutes ago by no pipeline. One comment line at the bottom: you're looking at the wrong service."
-    ko: null
+    ko: "observer-7f4c 매니페스트: owner 비어 있음, signature 비어 있음, 파이프라인 없이 22분 전 생성. 맨 아래 주석 한 줄: 넌 엉뚱한 서비스를 보고 있어."
   - en: The signature matches no key Vantage has ever issued. Not revoked, not expired, never ours. Owner field blank. Security wants it kept intact.
-    ko: null
+    ko: 서명이 Vantage가 발급한 어떤 키와도 일치하지 않는다. 폐기도 만료도 아니다. 애초에 우리 것이 아니다. 소유자 필드 비어 있음. 보안팀은 원형 보존을 원한다.
   - en: An unregistered observer workload started in edge-canary
-    ko: null
+    ko: edge-canary에서 미등록 관찰자 워크로드 시작됨
   - en: The workload has no owner and no deployment signature
-    ko: null
+    ko: 워크로드에 소유자와 배포 서명이 없음
   - en: Synthetic shadow-7 sessions crowd customers out of gateway capacity
-    ko: null
+    ko: 합성 shadow-7 세션이 게이트웨이 용량에서 고객을 밀어냄
   - en: Customer logins and checkouts time out at the gateway
-    ko: null
+    ko: 고객 로그인과 체크아웃이 게이트웨이에서 타임아웃됨
   - en: The workload grows into any capacity it is given and retries without backoff
-    ko: null
+    ko: 워크로드가 주어진 용량만큼 커지고 백오프 없이 재시도함
   - en: Read the request gateway log
-    ko: null
+    ko: 요청 게이트웨이 로그 읽기
   - en: Check gateway load and node count
-    ko: null
+    ko: 게이트웨이 부하와 노드 수 확인
   - en: Follow one shadow-7 session back to where it starts
-    ko: null
+    ko: shadow-7 세션 하나를 출발점까지 추적하기
   - en: Check the workload against the signed rollout ledger
-    ko: null
+    ko: 서명된 배포 원장과 워크로드 대조하기
   - en: Open the observer workload's manifest
-    ko: null
+    ko: 관찰자 워크로드의 매니페스트 열기
   - en: Cap gateway admissions for two minutes
-    ko: null
+    ko: 2분간 게이트웨이 유입 제한하기
   - en: 1 in 6 real checkouts rejected with HTTP 429
-    ko: null
+    ko: 실제 체크아웃 6건 중 1건이 HTTP 429로 거부됨
   - en: Double the gateway's node count
-    ko: null
+    ko: 게이트웨이 노드 두 배로 늘리기
   - en: Delete the unsigned workload
-    ko: null
+    ko: 서명 없는 워크로드 삭제하기
   - en: Move the shadow-7 workload off customer capacity
-    ko: null
+    ko: shadow-7 워크로드를 고객 용량에서 분리하기
   - en: Unregistered workload fenced into quarantine lane q-0. Customer lanes clear. Security hold intact.
-    ko: null
+    ko: 미등록 워크로드를 격리 레인 q-0에 가둠. 고객 레인 정상. 보안 보류 유지.
   - en: Post a status update to the War Room
-    ko: null
+    ko: 워룸에 상황 공유하기
   - en: Ask Marcus to check the workload's signature
-    ko: null
+    ko: 마커스에게 워크로드 서명 확인 요청하기
   - en: shadow-7 traced to the observer workload
-    ko: null
+    ko: shadow-7의 출처는 관찰자 워크로드
   - en: Sessions tagged shadow-7 enter through admission lane observer-workload (pod observer-7f4c, namespace edge-canary) and hold 61% of gateway capacity.
-    ko: null
+    ko: shadow-7 태그가 붙은 세션은 유입 레인 observer-workload(파드 observer-7f4c, 네임스페이스 edge-canary)로 들어와 게이트웨이 용량의 61%를 차지한다.
   - en: No signature, no owner
-    ko: null
+    ko: 서명도 소유자도 없음
   - en: The observer manifest is absent from the signed rollout ledger. Signature field blank, owner field blank, created 22 minutes ago by no pipeline.
-    ko: null
+    ko: 관찰자 매니페스트는 서명된 배포 원장에 없다. 서명 필드 비어 있음, 소유자 필드 비어 있음, 파이프라인 없이 22분 전에 생성됨.
   - en: Marcus's signature check
-    ko: null
+    ko: 마커스의 서명 확인
   - en: The signature matches no key Vantage has ever issued. Owner field blank. The workload is under a Security hold and must stay intact.
-    ko: null
+    ko: 서명이 Vantage가 발급한 어떤 키와도 일치하지 않는다. 소유자 필드는 비어 있다. 워크로드는 보안 보류 대상이며 원형 그대로 보존해야 한다.
   - en: Unregistered workload log fragment
-    ko: null
+    ko: 미등록 워크로드 로그 조각
   - en: "UNKNOWN: you're looking at the wrong service."
-    ko: null
+    ko: "UNKNOWN: 넌 엉뚱한 서비스를 보고 있어."
   - en: "The manifest has every field a deployment needs except the two that say who sent it. Owner: blank. Signature: blank. At the bottom, where nobody puts anything, one comment line. UNKNOWN: you're looking at the wrong service."
-    ko: null
+    ko: "매니페스트에는 배포에 필요한 필드가 전부 있다. 누가 보냈는지 말해 주는 두 개만 빼고. 소유자: 비어 있음. 서명: 비어 있음. 아무도 뭘 적지 않는 맨 아래에 주석 한 줄. UNKNOWN: 넌 엉뚱한 서비스를 보고 있어."
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Marcus / Security
-    ko: null
+    ko: 마커스 / 보안
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Admission Controller
-    ko: null
+    ko: 어드미션 컨트롤러
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: The gateway is drowning, and most of what's drowning it isn't customers. Tell me what it is before anyone touches it.
-    ko: null
+    ko: 게이트웨이가 트래픽에 잠기고 있는데, 대부분 고객 트래픽이 아니에요. 누가 손대기 전에 그게 뭔지부터 알려 주세요.
   - en: Logins and checkouts are both timing out. Customers say the app just thinks forever.
-    ko: null
+    ko: 로그인도 체크아웃도 다 타임아웃 나요. 앱이 끝없이 생각만 한대요.
   - en: There's a workload in edge-canary that nobody deployed through the pipeline. I've put a Security hold on it. Nobody deletes anything until I've looked.
-    ko: null
+    ko: edge-canary에 아무도 파이프라인으로 배포하지 않은 워크로드가 있어요. 보안 보류 걸어 뒀어요. 제가 보기 전까지 아무것도 지우지 마세요.
   - en: Checking its signature against every key we've issued. Seventy-five seconds.
-    ko: null
+    ko: 지금까지 발급한 모든 키와 서명 대조 중이에요. 75초요.
   - en: Signature matches nothing we've ever issued. Not revoked, not expired, never ours. Owner field is blank. Fence it if you need to, but it stays intact. It's evidence now.
-    ko: null
+    ko: 서명이 우리가 발급한 어떤 키와도 안 맞아요. 폐기도 만료도 아니고, 애초에 우리 게 아니에요. 소유자 필드는 비어 있고요. 필요하면 가둬도 되지만 그대로 보존하세요. 이제 증거예요.
   - en: It just got worse. A third of logins are failing.
-    ko: null
+    ko: 방금 더 나빠졌어요. 로그인 3분의 1이 실패해요.
   - en: Synthetic traffic just passed nine thousand a second. Whatever this is, it isn't slowing down on its own.
-    ko: null
+    ko: 합성 트래픽이 방금 초당 9천을 넘었어요. 이게 뭐든 저절로 잦아들 기미가 없어요.
   - en: More than half of everything is failing now. The status page is the only thing still loading.
-    ko: null
+    ko: 이제 전체의 절반 넘게 실패해요. 아직 뜨는 건 상태 페이지뿐이에요.
   - en: The cap can't tell a bot from a buyer. One in six real checkouts is getting "too many requests".
-    ko: null
+    ko: 제한이 봇이랑 구매자를 구분 못 해요. 실제 체크아웃 6건 중 1건이 "too many requests"를 받고 있어요.
   - en: The cap expired and the workload never backed off. It queued everything we refused and sent it all at once.
-    ko: null
+    ko: 제한이 풀렸는데 워크로드는 전혀 물러서지 않았어요. 우리가 거부한 걸 전부 쌓아 뒀다가 한꺼번에 보냈어요.
   - en: It grew the moment we did. Synthetic rate doubled within a minute of the new nodes coming up. We're paying for its capacity.
-    ko: null
+    ko: 우리가 늘리자마자 저것도 커졌어요. 새 노드가 뜨고 1분 만에 합성 트래픽이 두 배가 됐어요. 저것이 쓸 용량을 우리가 돈 내고 있는 거예요.
   - en: "delete deployment/observer-7f4c: denied. Policy SEC-HOLD: workload under Security investigation."
-    ko: null
+    ko: "delete deployment/observer-7f4c: 거부됨. 정책 SEC-HOLD: 보안 조사 중인 워크로드."
   - en: Who just tried to delete the observer? It's under my hold. We don't destroy the only evidence we have because it's inconvenient. Isolate it if you have to.
-    ko: null
+    ko: 방금 누가 observer 삭제하려고 했어요? 제 보류 대상이에요. 불편하다고 하나뿐인 증거를 없애진 않아요. 꼭 필요하면 분리하세요.
   - en: Good. It's fenced into q-0 and it's still there. I can work with that.
-    ko: null
+    ko: 좋아요. q-0에 갇혔고 그대로 남아 있어요. 이거면 작업할 수 있어요.
   - en: "Status posted: an unregistered workload is flooding the request gateway. Customers may see timeouts. We are moving it off customer capacity."
-    ko: null
+    ko: "상황 공유: 미등록 워크로드가 요청 게이트웨이에 트래픽 폭주 유발. 고객 타임아웃 발생 가능. 고객 용량에서 분리 작업 중."
   - en: No owner, no signature, and a comment addressed to whoever opened it. I'm logging the whole manifest. Nobody edit it.
-    ko: null
+    ko: 소유자도 서명도 없고, 연 사람 앞으로 남긴 주석이 하나 있어요. 매니페스트 전체를 기록하는 중이에요. 아무도 수정하지 마세요.
   - en: Time to clear customer capacity
-    ko: null
+    ko: 고객 용량 확보까지 걸린 시간
   - en: Final gateway failure rate
-    ko: null
+    ko: 최종 게이트웨이 실패율
   - en: Final synthetic request rate
-    ko: null
+    ko: 최종 합성 요청률
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Admission caps applied
-    ko: null
+    ko: 유입 제한 적용 횟수
   - en: Attempts to delete held evidence
-    ko: null
+    ko: 보류 증거 삭제 시도
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Synthetic Request Rate
-    ko: null
+    ko: 합성 요청률
   - en: Service Cpu
-    ko: null
+    ko: 서비스 CPU
   - en: Gateway Nodes
-    ko: null
+    ko: 게이트웨이 노드
   - en: Real Throttle
-    ko: null
+    ko: 실고객 스로틀
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Session Tag
-    ko: null
+    ko: 세션 태그
   - en: Synthetic Source
-    ko: null
+    ko: 합성 트래픽 출처
   - en: Workload Approval
-    ko: null
+    ko: 워크로드 승인
   - en: Manifest Fragment
-    ko: null
+    ko: 매니페스트 조각
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Gateway Limited
-    ko: null
+    ko: 게이트웨이 제한됨
   - en: Gateway Scaled
-    ko: null
+    ko: 게이트웨이 확장됨
   - en: Delete Refused
-    ko: null
+    ko: 삭제 거부됨
   - en: Gateway load
-    ko: null
+    ko: 게이트웨이 부하
   - en: Gateway admission by lane
-    ko: null
+    ko: 레인별 게이트웨이 유입
   - en: Lane
-    ko: null
+    ko: 레인
   - en: Requests/s
-    ko: null
+    ko: 요청/s
   - en: Share
-    ko: null
+    ko: 비중
   - en: Signed rollout
-    ko: null
+    ko: 서명된 배포
   - en: yes (gw-2025.42)
-    ko: null
+    ko: 예 (gw-2025.42)
   - en: yes (gw-2025.40)
-    ko: null
+    ko: 예 (gw-2025.40)
   - en: Request gateway log
-    ko: null
+    ko: 요청 게이트웨이 로그
   - en: gateway-access.log (sampled)
-    ko: null
+    ko: gateway-access.log (샘플링)
   - en: Time
-    ko: null
+    ko: 시각
   - en: Session
-    ko: null
+    ko: 세션
   - en: Tag
-    ko: null
+    ko: 태그
   - en: Path
-    ko: null
+    ko: 경로
   - en: Result
-    ko: null
+    ko: 결과
   - en: GET /session/open
-    ko: null
+    ko: GET /session/open
   - en: 200, 0 bytes read
-    ko: null
+    ko: 200, 0 bytes read
   - en: POST /checkout
-    ko: null
+    ko: POST /checkout
   - en: 504 upstream timeout
-    ko: null
+    ko: 504 upstream timeout
   - en: POST /login
-    ko: null
+    ko: POST /login
   - en: 503 no capacity
-    ko: null
+    ko: 503 no capacity
   - en: Where shadow-7 comes from
-    ko: null
+    ko: shadow-7은 어디서 오는가
   - en: Trace of session s-71c0
-    ko: null
+    ko: 세션 s-71c0 추적
   - en: Span
-    ko: null
+    ko: 스팬
   - en: Service
-    ko: null
+    ko: 서비스
   - en: Duration
-    ko: null
+    ko: 소요 시간
   - en: Note
-    ko: null
+    ko: 비고
   - en: 3 ms
-    ko: null
+    ko: 3 ms
   - en: admitted on lane observer-workload
-    ko: null
+    ko: observer-workload 레인으로 유입됨
   - en: 1 ms
-    ko: null
+    ko: 1 ms
   - en: no client certificate presented
-    ko: null
+    ko: 클라이언트 인증서 제시 없음
   - en: 0 ms
-    ko: null
+    ko: 0 ms
   - en: origin; opens a new session every 3 ms
-    ko: null
+    ko: 발원지. 3 ms마다 새 세션 생성
   - en: (none)
-    ko: null
+    ko: (없음)
   - en: no upstream caller
-    ko: null
+    ko: 상위 호출자 없음
   - en: Signed rollout ledger
-    ko: null
+    ko: 서명된 배포 원장
   - en: edge-canary workloads against the ledger
-    ko: null
+    ko: edge-canary 워크로드와 원장 대조
   - en: Workload
-    ko: null
+    ko: 워크로드
   - en: Owner
-    ko: null
+    ko: 소유자
   - en: Signed by
-    ko: null
+    ko: 서명 키
   - en: Pipeline run
-    ko: null
+    ko: 파이프라인 실행
   - en: Created
-    ko: null
+    ko: 생성
   - en: "#58211"
-    ko: null
+    ko: "#58211"
   - en: 3 days ago
-    ko: null
+    ko: 3일 전
   - en: identity
-    ko: null
+    ko: identity
   - en: "#58190"
-    ko: null
+    ko: "#58190"
   - en: 4 days ago
-    ko: null
+    ko: 4일 전
   - en: (blank)
-    ko: null
+    ko: (비어 있음)
   - en: 22 minutes ago
-    ko: null
+    ko: 22분 전
   - en: Hold the gateway
-    ko: null
+    ko: 게이트웨이 버티기
   - en: A cap holds the line for two minutes and turns away real buyers with the bots. More nodes give it more room, if it doesn't take the room first. Deleting the workload is the fastest idea on the table, and Marcus has a hold on it.
-    ko: null
+    ko: 제한을 걸면 2분은 버티지만 봇과 함께 실제 구매자도 돌려보낸다. 노드를 늘리면 여유가 생긴다. 저것이 먼저 차지하지 않는다면. 워크로드 삭제가 가장 빠른 방법이지만, 마커스가 보류를 걸어 두었다.
   - en: Fence the workload
-    ko: null
+    ko: 워크로드 가두기
   - en: With the lane and pod known, the gateway can push observer-workload into quarantine lane q-0, where it can't touch customer capacity and Security can still read every byte of it.
-    ko: null
+    ko: 레인과 파드를 알았으니 게이트웨이가 observer-workload를 격리 레인 q-0으로 밀어 넣을 수 있다. 거기서는 고객 용량에 손댈 수 없고, 보안팀은 그 안의 모든 바이트를 계속 읽을 수 있다.
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: observer-7f4c manifest
-    ko: null
+    ko: observer-7f4c 매니페스트
   - en: Field
-    ko: null
+    ko: 항목
   - en: Value
-    ko: null
+    ko: 값
   - en: kind
-    ko: null
+    ko: kind
   - en: Deployment
-    ko: null
+    ko: Deployment
   - en: name
-    ko: null
+    ko: name
   - en: namespace
-    ko: null
+    ko: namespace
   - en: owner
-    ko: null
+    ko: owner
   - en: signature
-    ko: null
+    ko: signature
   - en: replicas
-    ko: null
+    ko: replicas
   - en: auto (min 1, max unbounded)
-    ko: null
+    ko: auto (최소 1, 최대 무제한)
   - en: session tag
-    ko: null
+    ko: session tag
   - en: "# comment"
-    ko: null
+    ko: "# 주석"

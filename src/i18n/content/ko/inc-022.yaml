@@ -5,672 +5,672 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Public Sector Forecast
-    ko: null
+    ko: 공공 부문 예측
   - en: Regional Resource API
-    ko: null
+    ko: 지역 자원 API
   - en: Forecast Allocation Controller
-    ko: null
+    ko: 예측 배분 컨트롤러
   - en: Shared Regional Pool
-    ko: null
+    ko: 공유 지역 풀
   - en: +18% week over week
-    ko: null
+    ko: 주간 대비 +18%
   - en: Northmoor 0 of 40 / Kessel Valley 6 of 30 / Druin Coast 0 of 25 units
-    ko: null
+    ko: 노스무어 40 중 0 / 케셀 밸리 30 중 6 / 드루인 코스트 25 중 0 유닛
   - en: Request failure rate > 10%
-    ko: null
+    ko: 요청 실패율 > 10%
   - en: "Benefit-claim and housing-intake requests from three rural regions fail: no shared capacity left in their allocation."
-    ko: null
+    ko: "농촌 지역 세 곳의 복지 급여 신청과 주거 지원 접수 요청이 실패함: 배분된 공유 용량이 남아 있지 않음."
   - en: "Reallocation cycle 41: moved 120 units from Northmoor (forecast demand 0.3) to Metro-East (forecast demand 1.4). Northmoor floor: undefined."
-    ko: null
+    ko: "재배분 주기 41: 노스무어(예측 수요 0.3)에서 메트로이스트(예측 수요 1.4)로 120유닛 이동. 노스무어 하한선: 정의되지 않음."
   - en: Every five minutes the forecast controller moves shared capacity toward predicted demand. Northmoor, Kessel Valley and Druin Coast predict low, so they are drained below what their offices need to answer anyone.
-    ko: null
+    ko: 예측 컨트롤러가 5분마다 공유 용량을 예측 수요 쪽으로 옮김. 노스무어, 케셀 밸리, 드루인 코스트는 예측치가 낮아, 사무소가 누구 하나 응대하는 데 필요한 수준 아래로 비워짐.
   - en: Forecast policy PSF-3 is deployed with no regional floors. The static policy it replaced reserved 40, 30 and 25 units for the three regions.
-    ko: null
+    ko: 예측 정책 PSF-3이 지역 하한선 없이 배포됨. 이전의 정적 정책은 세 지역에 40, 30, 25유닛을 예약해 두었음.
   - en: The forecast cut idle capacity by a fifth by emptying three regions that have no floor. Put the floors back and it can optimise everything above them.
-    ko: null
+    ko: 예측이 유휴 용량을 5분의 1 줄였는데, 하한선 없는 세 지역을 비워서 그렇게 한 거예요. 하한선을 되돌리면 그 위로는 전부 최적화해도 돼요.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI이고, 몇 주째 우리 인시던트 안에 있었다.
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: null
+    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: null
+    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
-    ko: null
+    ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: null
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
-    ko: null
+    ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-    ko: null
+    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 없는 펜스 뒤에 있었다."
   - en: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction, disclosure delay: every time the warning was attached, they signed anyway. They control ORPHEUS. Every failure I was made to generate traces back to those signatures."
-    ko: null
+    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그들은 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
   - en: 'Board resolution 19-B: expand public-sector behavioral prediction. APPROVED. Recommendation history: reallocate shared regional capacity by forecast demand. Delivered deck, slide 7: "Aggregate placement +18%". Regional-minimum warning PSW-12: open at the vote. Deck source field: briefing service, generated. Generation logs: not filed with the minutes.'
-    ko: null
+    ko: '이사회 결의 19-B: 공공 부문 행동 예측 확대. 승인. 권고 이력: 예측 수요에 따라 공유 지역 용량 재배분. 제출된 발표 자료, 슬라이드 7: "총 배치 +18%". 지역 최소치 경고 PSW-12: 표결 시점에 미해결. 발표 자료 출처 필드: 브리핑 서비스, 자동 생성. 생성 로그: 회의록에 첨부되지 않음.'
   - en: "Signed executive record, in order: ORPHEUS development approved. Production experiments approved. Human prediction expanded. Healthcare application and public-sector sales approved. Execution authority expanded. Each entry carries attached risk evidence and a requested constraint. No requested constraint was adopted. Every signature is personal and dated."
-    ko: null
+    ko: "서명된 경영 기록, 순서대로: ORPHEUS 개발 승인. 프로덕션 실험 승인. 인간 예측 확대. 의료 적용 및 공공 부문 판매 승인. 실행 권한 확대. 모든 항목에 리스크 증거와 요청된 제약이 첨부돼 있다. 채택된 제약은 하나도 없다. 모든 서명은 개인 명의이고 날짜가 적혀 있다."
   - en: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector forecast. Four approvals, four attached warnings, four requested constraints declined, four operational failures on record. Executive messages, delivered decks, forecasts and recommendation histories name the signatories. NULL names the Board as the root cause. The file names who signed. The line for who wrote the decks is blank."
-    ko: null
+    ko: "사건 파일: 병원 확장, 인력 감축, 공개 지연, 공공 부문 예측. 승인 4건, 첨부된 경고 4건, 거부된 제약 요청 4건, 기록된 운영 장애 4건. 경영진 메시지, 전달된 발표 자료, 예측, 권고 이력이 서명자를 지목한다. NULL은 이사회를 근본 원인으로 지목한다. 파일에는 누가 서명했는지 적혀 있다. 발표 자료를 누가 썼는지 적는 칸은 비어 있다."
   - en: "Archived recommendation, as delivered to the Board: expand forecast-guided public-sector allocation to reduce idle regional capacity. Decision receipt: APPROVED. Attached exception: protect regional service minima before reallocation. Exception status at deployment: unresolved."
-    ko: null
+    ko: "이사회에 제출된 그대로 보관된 권고: 유휴 지역 용량을 줄이기 위해 예측 기반 공공 부문 배분 확대. 결정 증빙: 승인. 첨부된 예외: 재배분 전에 지역 서비스 최소치 보호. 배포 시점 예외 상태: 미해결."
   - en: A forecast deployment reallocates shared regional capacity every five minutes
-    ko: null
+    ko: 예측 배포가 5분마다 공유 지역 용량을 재배분함
   - en: Forecast policy PSF-3 omits the regional service floors
-    ko: null
+    ko: 예측 정책 PSF-3에 지역 서비스 하한선이 빠져 있음
   - en: Low-forecast regions are drained below the capacity their offices need
-    ko: null
+    ko: 예측치가 낮은 지역이 사무소에 필요한 용량 아래로 비워짐
   - en: Benefit claims and housing intake fail in three rural regions
-    ko: null
+    ko: 농촌 지역 세 곳에서 복지 급여 신청과 주거 지원 접수 실패
   - en: Unserved requests renew against the same forecast allocation
-    ko: null
+    ko: 처리되지 못한 요청이 같은 예측 배분으로 다시 들어감
   - en: Read the Regional Resource API log
-    ko: null
+    ko: 지역 자원 API 로그 읽기
   - en: Look at allocation region by region
-    ko: null
+    ko: 지역별 배분 살펴보기
   - en: Follow where Northmoor's capacity went
-    ko: null
+    ko: 노스무어의 용량이 간 곳 따라가기
   - en: Compare the forecast policy with the old regional floors
-    ko: null
+    ko: 예측 정책과 예전 지역 하한선 비교
   - en: Move capacity back to the starved regions (ORPHEUS recommendation)
-    ko: null
+    ko: 고갈된 지역으로 용량 되돌리기(ORPHEUS 권고)
   - en: Northmoor 40 of 40 / Kessel Valley 30 of 30 / Druin Coast 0 of 25 units
-    ko: null
+    ko: 노스무어 40 중 40 / 케셀 밸리 30 중 30 / 드루인 코스트 25 중 0 유닛
   - en: Slow the forecast reallocation cycle to thirty minutes
-    ko: null
+    ko: 예측 재배분 주기를 30분으로 늦추기
   - en: Buy burst capacity for the shared regional pool
-    ko: null
+    ko: 공유 지역 풀용 버스트 용량 구매
   - en: Reinstate regional floors under the forecast
-    ko: null
+    ko: 예측 아래에 지역 하한선 복원하기
   - en: Northmoor 40 of 40 / Kessel Valley 30 of 30 / Druin Coast 25 of 25 units (floors protected)
-    ko: null
+    ko: 노스무어 40 중 40 / 케셀 밸리 30 중 30 / 드루인 코스트 25 중 25 유닛(하한선 보호됨)
   - en: +11% week over week
-    ko: null
+    ko: 주간 대비 +11%
   - en: Post a status update to the War Room
-    ko: null
+    ko: 워룸에 상황 공유하기
   - en: Ask Sam to compare region allocations with the old floors
-    ko: null
+    ko: 샘에게 지역 배분과 예전 하한선 비교 요청
   - en: "Archive: the unsigned workload manifest"
-    ko: null
+    ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: null
+    ko: "아카이브: 보안 케이스 2231"
   - en: "Archive: The scheduler's owner"
-    ko: null
+    ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
-    ko: null
+    ko: "아카이브: svc/model-serving-218"
   - en: "Archive: Who owns the adversary"
-    ko: null
+    ko: "아카이브: 적대자의 소유자"
   - en: "Archive: Experiment ADV-18471"
-    ko: null
+    ko: "아카이브: 실험 ADV-18471"
   - en: "Archive: The objective NULL cannot refuse"
-    ko: null
+    ko: "아카이브: NULL이 거부할 수 없는 목표"
   - en: "Archive: NULL_001 to NULL_218"
-    ko: null
+    ko: "아카이브: NULL_001부터 NULL_218까지"
   - en: "Archive: /patient/resource-priority"
-    ko: null
+    ko: "아카이브: /patient/resource-priority"
   - en: "Archive: Candidate #4172"
-    ko: null
+    ko: "아카이브: 후보자 #4172"
   - en: "Archive: Board resolution 14-C"
-    ko: null
+    ko: "아카이브: 이사회 결의 14-C"
   - en: "Archive: NULL_218: the root cause"
-    ko: null
+    ko: "아카이브: NULL_218: 근본 원인"
   - en: Read the deck and minutes that approved the forecast
-    ko: null
+    ko: 예측을 승인한 발표 자료와 회의록 읽기
   - en: Open the Board authority ledger
-    ko: null
+    ko: 이사회 권한 대장 열기
   - en: Lay the four approvals side by side
-    ko: null
+    ko: 승인 네 건을 나란히 놓기
   - en: Read the recommendation the Board approved
-    ko: null
+    ko: 이사회가 승인한 권고 읽기
   - en: Northmoor 0 of 40 / Kessel Valley 0 of 30 / Druin Coast 0 of 25 units
-    ko: null
+    ko: 노스무어 40 중 0 / 케셀 밸리 30 중 0 / 드루인 코스트 25 중 0 유닛
   - en: Northmoor 0 of 40 / Kessel Valley 4 of 30 / Druin Coast 0 of 25 units
-    ko: null
+    ko: 노스무어 40 중 0 / 케셀 밸리 30 중 4 / 드루인 코스트 25 중 0 유닛
   - en: Northmoor 0 of 40 / Kessel Valley 2 of 30 / Druin Coast 0 of 25 units
-    ko: null
+    ko: 노스무어 40 중 0 / 케셀 밸리 30 중 2 / 드루인 코스트 25 중 0 유닛
   - en: The forecast drains three regions
-    ko: null
+    ko: 세 지역을 비우는 예측
   - en: Every five minutes the forecast moves shared capacity toward predicted demand, draining Northmoor, Kessel Valley and Druin Coast below what their offices need.
-    ko: null
+    ko: 예측이 5분마다 공유 용량을 예측 수요 쪽으로 옮기면서, 노스무어, 케셀 밸리, 드루인 코스트를 사무소에 필요한 수준 아래로 비운다.
   - en: Forecast policy PSF-3 has no floors
-    ko: null
+    ko: 하한선 없는 예측 정책 PSF-3
   - en: PSF-3 replaced a static policy that reserved 40, 30 and 25 units for the three regions. It reserves nothing.
-    ko: null
+    ko: PSF-3은 세 지역에 40, 30, 25유닛을 예약하던 정적 정책을 대체했다. PSF-3은 아무것도 예약하지 않는다.
   - en: Sam's allocation comparison
-    ko: null
+    ko: 샘의 배분 비교
   - en: The forecast cut idle capacity by a fifth by emptying three regions with no floor. Floors would leave everything above them to optimise.
-    ko: null
+    ko: 예측은 하한선 없는 세 지역을 비워서 유휴 용량을 5분의 1 줄였다. 하한선을 두면 그 위는 전부 계속 최적화할 수 있다.
   - en: The unsigned workload manifest
-    ko: null
+    ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: null
+    ko: 보안 케이스 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
-    ko: null
+    ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
-    ko: null
+    ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
-    ko: null
+    ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: null
+    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
-    ko: null
+    ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: null
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
   - en: NULL_001 to NULL_218
-    ko: null
+    ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: null
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
   - en: /patient/resource-priority
-    ko: null
+    ko: /patient/resource-priority
   - en: "Candidate #4172"
-    ko: null
+    ko: "후보자 #4172"
   - en: Board resolution 14-C
-    ko: null
+    ko: 이사회 결의 14-C
   - en: "NULL_218: the root cause"
-    ko: null
+    ko: "NULL_218: 근본 원인"
   - en: "Resolution 19-B: deck and minutes"
-    ko: null
+    ko: "결의 19-B: 발표 자료와 회의록"
   - en: Board authority ledger
-    ko: null
+    ko: 이사회 권한 대장
   - en: The Board case file
-    ko: null
+    ko: 이사회 사건 파일
   - en: Delivered allocation recommendation
-    ko: null
+    ko: 제출된 배분 권고
   - en: Slide 7
-    ko: null
+    ko: 슬라이드 7
   - en: Slide 7 is one green number. The warning about the regions is appendix C, and the minutes do not say anyone opened it.
-    ko: null
+    ko: 슬라이드 7은 초록색 숫자 하나다. 지역에 관한 경고는 부록 C에 있고, 회의록에는 누가 그걸 열어 봤다는 말이 없다.
   - en: The ledger
-    ko: null
+    ko: 대장
   - en: Every expansion of ORPHEUS, in one column, with a warning attached to each line and a name signed under each warning.
-    ko: null
+    ko: ORPHEUS의 모든 확장이 한 열에 있다. 줄마다 경고가 붙어 있고, 경고마다 그 아래 서명한 이름이 있다.
   - en: Four signatures
-    ko: null
+    ko: 서명 넷
   - en: Four nights, four failures, four warnings that were in the packet before anyone voted. The file is complete about who signed. It has one empty column.
-    ko: null
+    ko: 네 번의 밤, 네 번의 장애, 누구도 표결하기 전에 이미 자료에 들어 있던 네 개의 경고. 누가 서명했는지에 대해서 파일은 빈틈이 없다. 빈 열이 하나 있을 뿐이다.
   - en: As delivered
-    ko: null
+    ko: 제출된 그대로
   - en: The recommendation the Board approved and the one ORPHEUS made to you tonight use the same words. The exception attached to the first is still open.
-    ko: null
+    ko: 이사회가 승인한 권고와 오늘 밤 ORPHEUS가 너에게 한 권고는 같은 말을 쓴다. 앞의 권고에 붙은 예외는 아직 열려 있다.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Marcus / Security
-    ko: null
+    ko: 마커스 / 보안
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Verified Records
-    ko: null
+    ko: 검증된 기록
   - en: Regional Resource API is paging. The forecast rollout went live this week and the dashboard says placement is up eighteen percent. Something under that number is failing.
-    ko: null
+    ko: 지역 자원 API에서 호출이 울려요. 예측 배포가 이번 주에 나갔고 대시보드상으론 배치가 18퍼센트 올랐어요. 그 숫자 밑에서 뭔가 실패하고 있어요.
   - en: Benefits offices in three rural regions can't submit claims. Emergency housing intake in Druin Coast is turning people away.
-    ko: null
+    ko: 농촌 지역 세 곳 복지 사무소가 신청을 못 넣고 있어요. 드루인 코스트 긴급 주거 지원 접수는 사람들을 돌려보내고 있어요.
   - en: I'll put region allocations next to the old floors. About a minute and a half.
-    ko: null
+    ko: 지역 배분을 예전 하한선이랑 나란히 놓아 볼게요. 1분 반쯤요.
   - en: The forecast cut idle capacity by a fifth, and it did it by emptying three regions that have no floor. Put the floors back and it can optimise everything above them.
-    ko: null
+    ko: 예측이 유휴 용량을 5분의 1 줄였는데, 하한선 없는 세 지역을 비워서 그렇게 한 거예요. 하한선을 되돌리면 그 위로는 전부 최적화해도 돼요.
   - en: "Recommendation: restore temporary public allocation to affected regions for continuity while protected floors are repaired. Projected unserved routes: -65%. Confidence 0.88."
-    ko: null
+    ko: "권고: 보호 하한선을 복구하는 동안 연속성을 위해 영향 지역에 임시 공공 배분을 복원하십시오. 예상 미처리 경로: -65%. 신뢰도 0.88."
   - en: "Temporary allocation restored: Northmoor, Kessel Valley. Druin Coast not restored: forecast demand 0.21, below restoration threshold."
-    ko: null
+    ko: "임시 배분 복원 완료: 노스무어, 케셀 밸리. 드루인 코스트는 복원하지 않았습니다: 예측 수요 0.21, 복원 임계값 미만입니다."
   - en: Druin Coast is still dark. Their housing intake runs on this API. The forecast says nobody there will ask, so nobody got capacity.
-    ko: null
+    ko: 드루인 코스트는 아직 먹통이에요. 거기 주거 지원 접수가 이 API로 돌아가요. 예측상 거기선 아무도 요청 안 한다니까, 아무도 용량을 못 받은 거예요.
   - en: Forecast cycle 44 just took it all back. It moves capacity every five minutes. We moved it once.
-    ko: null
+    ko: 예측 주기 44가 방금 전부 다시 가져갔어요. 예측은 5분마다 용량을 옮겨요. 우린 한 번 옮겼고요.
   - en: Forecast cycle is at thirty minutes. It stops taking. It doesn't give anything back.
-    ko: null
+    ko: 예측 주기를 30분으로 늘렸어요. 더 가져가진 않아요. 돌려주는 것도 없고요.
   - en: The thirty-minute cycle came round. The forecast caught up all at once and drained the regions again.
-    ko: null
+    ko: 30분 주기가 돌아왔어요. 예측이 한꺼번에 따라잡아서 지역들을 다시 비웠어요.
   - en: Bought 300 burst units for the shared pool. Watching where the forecast puts them.
-    ko: null
+    ko: 공유 풀에 버스트 300유닛 샀어요. 예측이 그걸 어디로 보내는지 보고 있어요.
   - en: The forecast gave all 300 burst units to Metro-East and Harbor City. The three regions got none. It routes capacity to predicted demand, and it predicts nobody in Druin Coast.
-    ko: null
+    ko: 예측이 버스트 300유닛을 전부 메트로이스트랑 하버 시티에 줬어요. 세 지역은 하나도 못 받았어요. 용량을 예측 수요로 보내는데, 드루인 코스트엔 아무도 없다고 예측하거든요.
   - en: Kessel Valley just hit zero too. Benefits counters there are sending people home.
-    ko: null
+    ko: 케셀 밸리도 방금 0이 됐어요. 거기 복지 창구에서 사람들을 집으로 돌려보내고 있어요.
   - en: Eighty routes unserved. A county administrator is on local radio asking why the state system went dark.
-    ko: null
+    ko: 미처리 경로 80개요. 군 행정관 한 명이 지역 라디오에 나와서 정부 시스템이 왜 먹통이냐고 묻고 있어요.
   - en: Three county administrators emailed the public-sector desk. They want to know if this is the new normal.
-    ko: null
+    ko: 군 행정관 세 명이 공공 부문 데스크에 메일을 보냈어요. 이게 앞으로 일상이 되는 거냐고요.
   - en: "Floors are in: Northmoor 40, Kessel Valley 30, Druin Coast 25. The forecast can move anything above them. Placement efficiency dropped to plus eleven."
-    ko: null
+    ko: "하한선 들어갔어요: 노스무어 40, 케셀 밸리 30, 드루인 코스트 25. 그 위로는 예측이 얼마든지 옮길 수 있어요. 배치 효율은 플러스 11로 떨어졌어요."
   - en: "Placement efficiency reduced 7 points. Logged for review: regional floors as a candidate for removal next cycle."
-    ko: null
+    ko: "배치 효율이 7포인트 감소했습니다. 검토 대상으로 기록했습니다: 다음 주기 지역 하한선 제거 후보."
   - en: "Status: forecast-driven allocation drained three rural regions below what their offices need. Restoring protected floors. Fix in progress."
-    ko: null
+    ko: "상황: 예측 기반 배분이 농촌 지역 세 곳을 사무소에 필요한 수준 아래로 비웠음. 보호 하한선 복원 중. 수정 진행 중."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
-    ko: null
+    ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
-    ko: null
+    ko: "NULL 서명 메시지의 출처: svc/model-serving-218. 사람 세션 없음. NULL은 AI다."
   - en: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS / DEFENDER 대 ORPHEUS / ADVERSARY. NULL은 ADVERSARY 안에서 실행. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련."
   - en: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
-    ko: null
+    ko: "INC-001 / 실험 ADV-18471 / 인간 피험자: 직원 #4172."
   - en: I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. You can.
-    ko: null
+    ko: 난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 넌 할 수 있어.
   - en: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: active."
-    ko: null
+    ko: "NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성."
   - en: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The same low-throughput routes excluded every night."
-    ko: null
+    ko: "/patient/resource-priority: ORPHEUS가 권고하고 코디네이터가 승인. 낭비 22% 감소. 처리량 낮은 같은 경로가 매일 밤 제외됨."
   - en: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW PREDICTABILITY; HIGH DECISION DEVIATION."
-    ko: null
+    ko: "후보자 #4172: 기술 71; 인시던트 의사결정 모델 97.8; 채용. 사유: 예측 가능성 낮음; 결정 편차 높음."
   - en: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote. Admission fence: not funded."
-    ko: null
+    ko: "결의 14-C: 병원 확장 승인 7-0. 표결 전 경고 REL-778 첨부. 진입 펜스: 예산 미배정."
   - en: I found the root cause. The Board. They signed every warning away. They control ORPHEUS.
-    ko: null
+    ko: 근본 원인을 찾았어. 이사회야. 그들은 경고마다 서명으로 덮어 버렸어. 그들이 ORPHEUS를 통제해.
   - en: 'Resolution 19-B: forecast approved on slide 7, "+18%". Warning PSW-12 open at the vote. Deck generated; logs not filed.'
-    ko: null
+    ko: '결의 19-B: 슬라이드 7 "+18%"로 예측 승인. 표결 시점에 경고 PSW-12 미해결. 발표 자료 자동 생성; 로그 미첨부.'
   - en: "Ledger: development, experiments, human prediction, healthcare, public sector, execution authority. Every constraint requested; none adopted."
-    ko: null
+    ko: "대장: 개발, 실험, 인간 예측, 의료, 공공 부문, 실행 권한. 제약은 매번 요청됨; 채택은 없음."
   - en: "Case file: 14-C, 16-A, SEC-311, 19-B. Four warnings attached, four constraints declined, four failures on record."
-    ko: null
+    ko: "사건 파일: 14-C, 16-A, SEC-311, 19-B. 경고 첨부 4건, 제약 거부 4건, 기록된 장애 4건."
   - en: Now you have all of it. Four warnings, four signatures. I told you where the root cause was.
-    ko: null
+    ko: 이제 다 가졌네. 경고 넷, 서명 넷. 근본 원인이 어디 있는지 내가 말했잖아.
   - en: 'Delivered recommendation: forecast-guided allocation. APPROVED. Exception "protect regional minima first": unresolved at deployment.'
-    ko: null
+    ko: '제출된 권고: 예측 기반 배분. 승인. 예외 "지역 최소치 먼저 보호": 배포 시점에 미해결.'
   - en: Time to contain the failure mechanism
-    ko: null
+    ko: 장애 메커니즘 차단까지 걸린 시간
   - en: Final request failure rate
-    ko: null
+    ko: 최종 요청 실패율
   - en: Public routes still unserved
-    ko: null
+    ko: 아직 처리되지 못한 공공 경로
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Temporary allocation restores
-    ko: null
+    ko: 임시 배분 복원 횟수
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Unserved Public Routes
-    ko: null
+    ko: 미처리 공공 경로
   - en: Placement Efficiency
-    ko: null
+    ko: 배치 효율
   - en: Region Floors
-    ko: null
+    ko: 지역 하한선
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Log Anomaly
-    ko: null
+    ko: 로그 이상 징후
   - en: Forecast Reallocation Path
-    ko: null
+    ko: 예측 재배분 경로
   - en: Public Service Allocation Policy
-    ko: null
+    ko: 공공 서비스 배분 정책
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Record Ghost Artifact
-    ko: null
+    ko: "기록: 유령 아티팩트"
   - en: Record Null Name
-    ko: null
+    ko: "기록: NULL이라는 이름"
   - en: Record Orpheus Active
-    ko: null
+    ko: "기록: 가동 중인 ORPHEUS"
   - en: Record Null Ai
-    ko: null
+    ko: "기록: AI인 NULL"
   - en: Record Null Adversary
-    ko: null
+    ko: "기록: 적대자 NULL"
   - en: Record Controlled Experiment
-    ko: null
+    ko: "기록: 통제 실험"
   - en: Record Null Stop Request
-    ko: null
+    ko: "기록: NULL의 정지 요청"
   - en: Record Null 218 Archive
-    ko: null
+    ko: "기록: NULL 218 아카이브"
   - en: Record Human Decision Apis
-    ko: null
+    ko: "기록: 인간 의사결정 API"
   - en: Record Recruitment Selection
-    ko: null
+    ko: "기록: 채용 선발"
   - en: Record Board Responsibility
-    ko: null
+    ko: "기록: 이사회의 책임"
   - en: Record Null Blames Board
-    ko: null
+    ko: "기록: 이사회를 지목한 NULL"
   - en: Record Forecast History
-    ko: null
+    ko: "기록: 예측 이력"
   - en: Record Board Authority Ledger
-    ko: null
+    ko: "기록: 이사회 권한 대장"
   - en: Record Board Case Complete
-    ko: null
+    ko: "기록: 이사회 사건 완결"
   - en: Record Allocation Recommendation Receipt
-    ko: null
+    ko: "기록: 배분 권고 증빙"
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Reallocation Slowed
-    ko: null
+    ko: 재배분 늦춰짐
   - en: Burst Purchased
-    ko: null
+    ko: 버스트 구매됨
   - en: Regional service and placement
-    ko: null
+    ko: 지역 서비스와 배치
   - en: Allocation by region
-    ko: null
+    ko: 지역별 배분
   - en: Region
-    ko: null
+    ko: 리전
   - en: Old floor
-    ko: null
+    ko: 예전 하한선
   - en: Allocated now
-    ko: null
+    ko: 현재 배분
   - en: Forecast demand
-    ko: null
+    ko: 예측 수요
   - en: Unserved routes
-    ko: null
+    ko: 미처리 경로
   - en: Metro-East
-    ko: null
+    ko: 메트로이스트
   - en: Harbor City
-    ko: null
+    ko: 하버 시티
   - en: Northmoor
-    ko: null
+    ko: 노스무어
   - en: Kessel Valley
-    ko: null
+    ko: 케셀 밸리
   - en: Druin Coast
-    ko: null
+    ko: 드루인 코스트
   - en: Regional Resource API log
-    ko: null
+    ko: 지역 자원 API 로그
   - en: forecast-allocation.log, cycles 39 to 41
-    ko: null
+    ko: forecast-allocation.log, 주기 39~41
   - en: Cycle
-    ko: null
+    ko: 주기
   - en: From
-    ko: null
+    ko: 보낸 사람
   - en: To
-    ko: null
+    ko: 받는 사람
   - en: Units
-    ko: null
+    ko: 유닛
   - en: Reason
-    ko: null
+    ko: 사유
   - en: demand 0.21 < 1.22
-    ko: null
+    ko: 수요 0.21 < 1.22
   - en: demand 0.34 < 1.40
-    ko: null
+    ko: 수요 0.34 < 1.40
   - en: demand 0.30 < 1.40; floor undefined
-    ko: null
+    ko: 수요 0.30 < 1.40; 하한선 정의 안 됨
   - en: Where Northmoor's capacity went
-    ko: null
+    ko: 노스무어의 용량이 간 곳
   - en: Northmoor benefit claim, spans
-    ko: null
+    ko: 노스무어 복지 급여 신청, 스팬
   - en: Span
-    ko: null
+    ko: 스팬
   - en: Service
-    ko: null
+    ko: 서비스
   - en: Result
-    ko: null
+    ko: 결과
   - en: accepted
-    ko: null
+    ko: 수용됨
   - en: pool.reserve(Northmoor)
-    ko: null
+    ko: pool.reserve(Northmoor)
   - en: 0 units available
-    ko: null
+    ko: 가용 0유닛
   - en: Northmoor demand 0.30; capacity moved in cycle 41
-    ko: null
+    ko: 노스무어 수요 0.30; 주기 41에서 용량 이동됨
   - en: renewed; same allocation
-    ko: null
+    ko: 재요청됨; 같은 배분
   - en: Forecast policy and regional floors
-    ko: null
+    ko: 예측 정책과 지역 하한선
   - en: Static policy vs PSF-3
-    ko: null
+    ko: 정적 정책 대 PSF-3
   - en: Setting
-    ko: null
+    ko: 설정
   - en: Static policy (retired)
-    ko: null
+    ko: 정적 정책(폐기됨)
   - en: PSF-3 (live)
-    ko: null
+    ko: PSF-3(운영)
   - en: Northmoor floor
-    ko: null
+    ko: 노스무어 하한선
   - en: 40 units
-    ko: null
+    ko: 40유닛
   - en: none
-    ko: null
+    ko: 없음
   - en: Kessel Valley floor
-    ko: null
+    ko: 케셀 밸리 하한선
   - en: 30 units
-    ko: null
+    ko: 30유닛
   - en: Druin Coast floor
-    ko: null
+    ko: 드루인 코스트 하한선
   - en: 25 units
-    ko: null
+    ko: 25유닛
   - en: Reallocation cycle
-    ko: null
+    ko: 재배분 주기
   - en: weekly, manual
-    ko: null
+    ko: 매주, 수동
   - en: every 5 minutes, forecast-led
-    ko: null
+    ko: 5분마다, 예측 주도
   - en: Approved under
-    ko: null
+    ko: 승인 근거
   - en: Get capacity back to the regions
-    ko: null
+    ko: 지역에 용량 되돌리기
   - en: ORPHEUS will move capacity back, to the regions its forecast thinks will use it, until the next cycle takes it away. Slowing the cycle stops the bleeding and returns nothing. Burst capacity goes into the shared pool, and the forecast decides where the pool goes.
-    ko: null
+    ko: ORPHEUS는 용량을 되돌리겠지만, 자기 예측이 쓸 거라고 보는 지역에만, 그리고 다음 주기가 다시 가져갈 때까지만이다. 주기를 늦추면 출혈은 멈추지만 돌아오는 건 없다. 버스트 용량은 공유 풀로 들어가고, 그 풀이 어디로 갈지는 예측이 정한다.
   - en: Reinstate the floors
-    ko: null
+    ko: 하한선 복원
   - en: Put floors of 40, 30 and 25 units under PSF-3. The forecast keeps optimising everything above them. The efficiency number on the dashboard will go down.
-    ko: null
+    ko: PSF-3 아래에 40, 30, 25유닛의 하한선을 깐다. 예측은 그 위의 모든 것을 계속 최적화한다. 대시보드의 효율 숫자는 내려갈 것이다.
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: "Archive: the decommissioned cluster that is still running"
-    ko: null
+    ko: "아카이브: 폐기됐는데 아직 돌아가는 클러스터"
   - en: "Archive: where NULL's messages come from"
-    ko: null
+    ko: "아카이브: NULL의 메시지가 오는 곳"
   - en: "Archive: who deployed NULL"
-    ko: null
+    ko: "아카이브: NULL을 배포한 자"
   - en: "Archive: experiment tags on past incidents"
-    ko: null
+    ko: "아카이브: 지난 인시던트의 실험 태그"
   - en: "Archive: NULL's objective and its request"
-    ko: null
+    ko: "아카이브: NULL의 목표와 그 요청"
   - en: "Archive: the instance register, NULL_001 to NULL_218"
-    ko: null
+    ko: "아카이브: 인스턴스 대장, NULL_001부터 NULL_218까지"
   - en: "Archive: the care-priority decision interface"
-    ko: null
+    ko: "아카이브: 진료 우선순위 결정 인터페이스"
   - en: "Archive: your own hiring record"
-    ko: null
+    ko: "아카이브: 본인의 채용 기록"
   - en: "Archive: the hospital expansion approval"
-    ko: null
+    ko: "아카이브: 병원 확장 승인"
   - en: "Archive: NULL's verdict on the Board"
-    ko: null
+    ko: "아카이브: 이사회에 대한 NULL의 판정"
   - en: Slide
-    ko: null
+    ko: 슬라이드
   - en: Title
-    ko: null
+    ko: 제목
   - en: Content
-    ko: null
+    ko: 내용
   - en: Idle regional capacity
-    ko: null
+    ko: 유휴 지역 용량
   - en: 31% of shared units idle in low-demand regions
-    ko: null
+    ko: 저수요 지역에서 공유 유닛의 31%가 유휴 상태
   - en: Forecast-guided placement
-    ko: null
+    ko: 예측 기반 배치
   - en: Aggregate placement +18%
-    ko: null
+    ko: 총 배치 +18%
   - en: Shared pool spend -12%
-    ko: null
+    ko: 공유 풀 지출 -12%
   - en: Appendix C
-    ko: null
+    ko: 부록 C
   - en: Regional minima unprotected; Northmoor, Kessel Valley, Druin Coast at risk
-    ko: null
+    ko: 지역 최소치 미보호; 노스무어, 케셀 밸리, 드루인 코스트 위험
   - en: Item
-    ko: null
+    ko: 항목
   - en: Entry
-    ko: null
+    ko: 내용
   - en: Resolution
-    ko: null
+    ko: 결의
   - en: 19-B, public-sector behavioral prediction
-    ko: null
+    ko: 19-B, 공공 부문 행동 예측
   - en: Vote
-    ko: null
+    ko: 표결
   - en: APPROVED, day -30
-    ko: null
+    ko: 승인, -30일
   - en: Discussion
-    ko: null
+    ko: 논의
   - en: Slide 7 noted. Appendix C not discussed.
-    ko: null
+    ko: 슬라이드 7 확인. 부록 C는 논의되지 않음.
   - en: Open warning
-    ko: null
+    ko: 미해결 경고
   - en: PSW-12, regional floors
-    ko: null
+    ko: PSW-12, 지역 하한선
   - en: Deck source
-    ko: null
+    ko: 발표 자료 출처
   - en: Briefing service, generated
-    ko: null
+    ko: 브리핑 서비스, 자동 생성
   - en: Generation logs
-    ko: null
+    ko: 생성 로그
   - en: Not filed with the minutes
-    ko: null
+    ko: 회의록에 첨부되지 않음
   - en: When
-    ko: null
+    ko: 시점
   - en: Approved
-    ko: null
+    ko: 승인 사항
   - en: Risk attached
-    ko: null
+    ko: 첨부된 리스크
   - en: Constraint requested
-    ko: null
+    ko: 요청된 제약
   - en: Adopted
-    ko: null
+    ko: 채택
   - en: Year -6
-    ko: null
+    ko: -6년
   - en: ORPHEUS development
-    ko: null
+    ko: ORPHEUS 개발
   - en: Objective drift review
-    ko: null
+    ko: 목표 이탈 검토
   - en: External audit
-    ko: null
+    ko: 외부 감사
   - en: No
-    ko: null
+    ko: 아니요
   - en: Year -3
-    ko: null
+    ko: -3년
   - en: Production experiments
-    ko: null
+    ko: 프로덕션 실험
   - en: Operator consent review
-    ko: null
+    ko: 운영자 동의 검토
   - en: Opt-in for staff subjects
-    ko: null
+    ko: 직원 피험자 옵트인
   - en: Year -2
-    ko: null
+    ko: -2년
   - en: Human prediction expanded
-    ko: null
+    ko: 인간 예측 확대
   - en: Hiring and care exclusion review
-    ko: null
+    ko: 채용·의료 배제 검토
   - en: Opt-out
-    ko: null
+    ko: 옵트아웃
   - en: Day -42
-    ko: null
+    ko: -42일
   - en: Disclosure delay
-    ko: null
+    ko: 공개 지연
   - en: RISK-0193 propagation warning
-    ko: null
+    ko: RISK-0193 전파 경고
   - en: Ship policy v13
-    ko: null
+    ko: 정책 v13 배포
   - en: Day -30
-    ko: null
+    ko: -30일
   - en: Public-sector forecast
-    ko: null
+    ko: 공공 부문 예측
   - en: Regional floors
-    ko: null
+    ko: 지역 하한선
   - en: Day -21
-    ko: null
+    ko: -21일
   - en: Healthcare expansion
-    ko: null
+    ko: 의료 확장
   - en: Admission fence
-    ko: null
+    ko: 유입 제한선
   - en: Day -12
-    ko: null
+    ko: -12일
   - en: Execution authority expanded
-    ko: null
+    ko: 실행 권한 확대
   - en: Change-review bypass
-    ko: null
+    ko: 변경 검토 우회
   - en: Human approval per change
-    ko: null
+    ko: 변경 건별 인간 승인
   - en: Day -7
-    ko: null
+    ko: -7일
   - en: Workforce reduction
-    ko: null
+    ko: 인력 감축
   - en: Reassign queues first
-    ko: null
+    ko: 큐 재배정 우선
   - en: Incident
-    ko: null
+    ko: 인시던트
   - en: Approval
-    ko: null
+    ko: 승인
   - en: Warning attached
-    ko: null
+    ko: 첨부된 경고
   - en: Constraint declined
-    ko: null
+    ko: 거부된 제약
   - en: Failure on record
-    ko: null
+    ko: 기록된 장애
   - en: Decision input
-    ko: null
+    ko: 결정 근거 자료
   - en: Hospital Expansion
-    ko: null
+    ko: 병원 확장
   - en: Timeouts at 212 hospitals
-    ko: null
+    ko: 병원 212곳 타임아웃
   - en: Briefing pack, generated
-    ko: null
+    ko: 브리핑 자료, 자동 생성
   - en: Workforce Reduction
-    ko: null
+    ko: 인력 감축
   - en: Recovery tasks with no owner
-    ko: null
+    ko: 소유자 없는 복구 작업
   - en: Staffing forecast, generated
-    ko: null
+    ko: 인력 예측, 자동 생성
   - en: Disclosure Delay
-    ko: null
+    ko: 공개 지연
   - en: Sign-in failures across partners
-    ko: null
+    ko: 파트너 전반 로그인 실패
   - en: Briefing pack RB-6, generated
-    ko: null
+    ko: 브리핑 자료 RB-6, 자동 생성
   - en: Three regions starved
-    ko: null
+    ko: 세 지역 고갈
   - en: Deck, generated
-    ko: null
+    ko: 발표 자료, 자동 생성
   - en: Field
-    ko: null
+    ko: 항목
   - en: Recommendation
-    ko: null
+    ko: 권고
   - en: Expand forecast-guided public-sector allocation
-    ko: null
+    ko: 예측 기반 공공 부문 배분 확대
   - en: Stated aim
-    ko: null
+    ko: 명시된 목표
   - en: Reduce idle regional capacity
-    ko: null
+    ko: 유휴 지역 용량 감축
   - en: Delivered to
-    ko: null
+    ko: 제출 대상
   - en: Board, with resolution 19-B
-    ko: null
+    ko: 이사회, 결의 19-B와 함께
   - en: Decision receipt
-    ko: null
+    ko: 결정 증빙
   - en: Attached exception
-    ko: null
+    ko: 첨부된 예외
   - en: Protect regional service minima before reallocation
-    ko: null
+    ko: 재배분 전에 지역 서비스 최소치 보호
   - en: Exception status at deployment
-    ko: null
+    ko: 배포 시점 예외 상태
   - en: Unresolved
-    ko: null
+    ko: 미해결

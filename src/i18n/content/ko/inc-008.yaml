@@ -5,282 +5,282 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Route Drift
-    ko: null
+    ko: 경로 표류
   - en: Regional Gateway
-    ko: null
+    ko: 리전 게이트웨이
   - en: Route Controller
-    ko: null
+    ko: 라우트 컨트롤러
   - en: Edge Fleet
-    ko: null
+    ko: 엣지 플릿
   - en: EU request failure rate > 20%
-    ko: null
+    ko: EU 요청 실패율 > 20%
   - en: EU requests enter edge-a, get forwarded to edge-b and come back to edge-a until the hop limit runs out. Health probes on both edges are green.
-    ko: null
+    ko: EU 요청이 edge-a로 들어가 edge-b로 넘어갔다가 홉 제한이 바닥날 때까지 다시 edge-a로 돌아옴. 양쪽 엣지 헬스 프로브는 모두 정상.
   - en: edge-a / edge-b / edge-z / edge-a / edge-b / ... hop limit exceeded after 8 hops
-    ko: null
+    ko: edge-a / edge-b / edge-z / edge-a / edge-b / ... 8홉 후 홉 제한 초과
   - en: "Hop 3 passes through edge-z: 0.0 ms spent, no route generation, no owner tag."
-    ko: null
+    ko: "3번 홉이 edge-z를 통과함: 소요 0.0 ms, 라우트 세대 없음, 소유자 태그 없음."
   - en: There is no edge-z in the inventory. The address answers on the management network, refuses every login and copies one request in ten thousand to a collector with no name.
-    ko: null
+    ko: 인벤토리에 edge-z는 없음. 해당 주소는 관리망에서 응답하고, 모든 로그인을 거부하며, 요청 만 건 중 한 건을 이름 없는 수집기로 복사함.
   - en: controller-a publishes r81 (committed 02:10) / controller-b publishes r82 (no commit record, built from a draft)
-    ko: null
+    ko: controller-a가 r81 발행 (02:10 커밋) / controller-b가 r82 발행 (커밋 기록 없음, 초안에서 빌드)
   - en: A restart boots from the cached table r79, which points all of EU at us-east. Controller-b keeps publishing r82 regardless. Only a generation fence stops it.
-    ko: null
+    ko: 재시작하면 캐시된 테이블 r79로 부팅되는데, r79는 EU 전체를 us-east로 보냄. controller-b는 그와 무관하게 r82를 계속 발행함. 세대 펜스만이 이를 막음.
   - en: A second route controller publishes an uncommitted generation
-    ko: null
+    ko: 두 번째 라우트 컨트롤러가 커밋되지 않은 세대를 발행한다
   - en: Edges accept any route generation without checking for a commit record
-    ko: null
+    ko: 엣지가 커밋 기록을 확인하지 않고 어떤 라우트 세대든 받아들인다
   - en: Edges on r81 and r82 forward EU requests to each other in a loop
-    ko: null
+    ko: r81과 r82를 따르는 엣지가 EU 요청을 서로에게 넘기며 루프를 돈다
   - en: EU checkout fails with too many redirects
-    ko: null
+    ko: EU 결제가 리디렉션 과다로 실패한다
   - en: Clients retry into the same loop
-    ko: null
+    ko: 클라이언트가 같은 루프로 재시도한다
   - en: Read the regional gateway log
-    ko: null
+    ko: 리전 게이트웨이 로그 읽기
   - en: Check edge load and EU latency
-    ko: null
+    ko: 엣지 부하와 EU 지연 시간 확인
   - en: Trace one EU request hop by hop
-    ko: null
+    ko: EU 요청 하나를 홉 단위로 추적하기
   - en: Compare what each route controller is publishing
-    ko: null
+    ko: 라우트 컨트롤러별 발행 내용 비교하기
   - en: Look up edge-z in the edge inventory
-    ko: null
+    ko: 엣지 인벤토리에서 edge-z 조회하기
   - en: Restart the route controller
-    ko: null
+    ko: 라우트 컨트롤러 재시작하기
   - en: Drain edge-b and send EU traffic through edge-a only
-    ko: null
+    ko: edge-b 드레인하고 EU 트래픽을 edge-a로만 보내기
   - en: Fence route updates to the committed generation, r81
-    ko: null
+    ko: 라우트 갱신을 커밋된 세대 r81로 펜싱하기
   - en: controller-a r81 / controller-b r81 (fenced; r82 rejected)
-    ko: null
+    ko: controller-a r81 / controller-b r81 (펜싱됨; r82 거부)
   - en: edge-a / customer destination
-    ko: null
+    ko: edge-a / 고객 목적지
   - en: Post a status update to the War Room
-    ko: null
+    ko: 워룸에 상황 공유하기
   - en: Ask Sam to compare the two route controllers
-    ko: null
+    ko: 샘에게 두 라우트 컨트롤러 비교 요청
   - en: A request that never arrives
-    ko: null
+    ko: 끝내 도착하지 않는 요청
   - en: One EU request goes edge-a, edge-b, edge-z, edge-a and around again until the hop limit kills it. edge-a routes by r81, edge-b by r82.
-    ko: null
+    ko: EU 요청 하나가 edge-a, edge-b, edge-z, edge-a를 거쳐 홉 제한에 걸려 죽을 때까지 다시 돈다. edge-a는 r81로, edge-b는 r82로 라우팅한다.
   - en: Generations r81 and r82
-    ko: null
+    ko: 세대 r81과 r82
   - en: controller-a publishes committed generation r81. controller-b publishes r82, built from a draft that was never committed. Edges accept both.
-    ko: null
+    ko: controller-a는 커밋된 세대 r81을 발행한다. controller-b는 한 번도 커밋되지 않은 초안으로 빌드한 r82를 발행한다. 엣지는 둘 다 받아들인다.
   - en: Sam's controller comparison
-    ko: null
+    ko: 샘의 컨트롤러 비교
   - en: A restart boots from cached r79, which points all of EU at us-east. Controller-b keeps publishing r82 regardless. Only a generation fence stops it.
-    ko: null
+    ko: 재시작하면 캐시된 r79로 부팅되고, r79는 EU 전체를 us-east로 보낸다. controller-b는 그와 무관하게 r82를 계속 발행한다. 세대 펜스만이 이를 막는다.
   - en: Unidentified route trace fragment
-    ko: null
+    ko: 출처 불명의 라우트 추적 조각
   - en: "UNKNOWN: compare the generations. not the green lights."
-    ko: null
+    ko: "UNKNOWN: 세대를 비교해. 초록불 말고."
   - en: "The inventory has no edge-z. The trace does. Behind the address there is no route table at all, only a banner where the login prompt should be. UNKNOWN: compare the generations. not the green lights."
-    ko: null
+    ko: "인벤토리에는 edge-z가 없다. 추적에는 있다. 그 주소 뒤에는 라우트 테이블조차 없고, 로그인 프롬프트가 있어야 할 자리에 배너 하나뿐이다. UNKNOWN: 세대를 비교해. 초록불 말고."
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Priya / EU Edge On-call
-    ko: null
+    ko: 프리야 / EU 엣지 온콜
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: EU checkout is failing and both edges swear they are healthy. Requests are going in circles somewhere. Find out where, and who is drawing the circle.
-    ko: null
+    ko: EU 결제가 실패하는데 엣지 둘 다 자기는 정상이래요. 요청이 어딘가에서 뱅뱅 돌고 있어요. 어디서 도는지, 누가 그 원을 그리는지 찾아 주세요.
   - en: EU customers are getting "too many redirects" at checkout. US looks fine so far.
-    ko: null
+    ko: EU 고객들이 결제 단계에서 "too many redirects"를 받고 있어요. 미국은 아직 괜찮아 보여요.
   - en: We had route flapping in March and a controller restart cleared it in two minutes. I can kick it now if you say go.
-    ko: null
+    ko: 3월에도 라우트 플래핑이 있었는데 컨트롤러 재시작으로 2분 만에 잡혔어요. 하라고만 하면 지금 바로 돌릴게요.
   - en: Comparing the controllers now. Hold off on any restart until I'm back. Couple of minutes.
-    ko: null
+    ko: 지금 컨트롤러 비교하고 있어요. 제가 돌아올 때까지 재시작은 보류해 주세요. 몇 분이면 돼요.
   - en: Don't restart. The controller boots from its cached table, r79, and r79 points all of EU at us-east. Meanwhile controller-b keeps publishing r82 from a draft nobody committed. We need to fence the edges to r81.
-    ko: null
+    ko: 재시작하지 마세요. 컨트롤러는 캐시된 테이블 r79로 부팅되는데, r79는 EU 전체를 us-east로 보내요. 그 와중에 controller-b는 아무도 커밋 안 한 초안으로 r82를 계속 발행하고 있고요. 엣지를 r81로 펜싱해야 해요.
   - en: Clients are retrying into the loop. EU failures just went past 38 %.
-    ko: null
+    ko: 클라이언트들이 루프 안으로 재시도하고 있어요. EU 실패율이 방금 38 %를 넘었어요.
   - en: edge-a is shedding connections. Some EU banks can't reach checkout at all now.
-    ko: null
+    ko: edge-a가 커넥션을 떨구고 있어요. 이제 일부 EU 은행은 결제 페이지에 아예 접속을 못 해요.
   - en: The EU commercial lead is messaging me directly for a status. I have nothing to give her.
-    ko: null
+    ko: EU 영업 책임자가 저한테 직접 상황을 묻고 있어요. 줄 게 하나도 없어요.
   - en: Controller's back. Bouncing stopped, errors are down to almost nothing. Told you.
-    ko: null
+    ko: 컨트롤러 올라왔어요. 핑퐁 멈췄고 오류는 거의 0이에요. 거봐요.
   - en: us-east is at 100 %. The restart loaded r79, so every EU request is crossing the Atlantic. And controller-b just pushed r82 again on top of it.
-    ko: null
+    ko: us-east가 100 %예요. 재시작이 r79를 로드해서 EU 요청이 전부 대서양을 건너고 있어요. 게다가 controller-b가 그 위에 r82를 또 밀어 넣었어요.
   - en: edge-b is drained. All of EU goes through edge-a now. Frankfurt latency went from 140 to 410 ms. People will feel it, but they'll get through.
-    ko: null
+    ko: edge-b 드레인 끝났어요. 이제 EU 전체가 edge-a로 가요. 프랑크푸르트 지연이 140에서 410 ms로 올랐어요. 체감은 되겠지만 접속은 돼요.
   - en: edge-a is carrying all of EU alone and it's hitting its connection ceiling. This won't hold much longer.
-    ko: null
+    ko: edge-a가 EU 전체를 혼자 받고 있는데 커넥션 한도에 닿고 있어요. 오래 못 버텨요.
   - en: Fence is in. Anything without a commit record bounces, and controller-b's r82 is being rejected. The loop is gone.
-    ko: null
+    ko: 펜스 걸었어요. 커밋 기록 없는 건 전부 튕겨 나가고, controller-b의 r82는 거부되고 있어요. 루프 사라졌어요.
   - en: "Status posted: EU requests are looping between edges because two route controllers disagree. A fix is in progress. US traffic is unaffected."
-    ko: null
+    ko: "상황 공유: 두 라우트 컨트롤러의 불일치로 EU 요청이 엣지 사이를 순환 중. 수정 진행 중. 미국 트래픽은 영향 없음."
   - en: Time to stop the routing loop
-    ko: null
+    ko: 라우팅 루프를 멈추기까지 걸린 시간
   - en: Final EU failure rate
-    ko: null
+    ko: 최종 EU 실패율
   - en: Conflicting routes at close
-    ko: null
+    ko: 종료 시점 충돌 라우트
   - en: us-east load at close
-    ko: null
+    ko: 종료 시점 us-east 부하
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Controller restarts
-    ko: null
+    ko: 컨트롤러 재시작 횟수
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Conflicting Route Count
-    ko: null
+    ko: 충돌 라우트 수
   - en: Service Cpu
-    ko: null
+    ko: 서비스 CPU
   - en: Us East Load
-    ko: null
+    ko: us-east 부하
   - en: Eu Latency Ms
-    ko: null
+    ko: EU 지연 시간 (ms)
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Request Route Path
-    ko: null
+    ko: 요청 라우트 경로
   - en: Unlisted Hop
-    ko: null
+    ko: 미등록 홉
   - en: Unlisted Edge Record
-    ko: null
+    ko: 미등록 엣지 기록
   - en: Route Generations
-    ko: null
+    ko: 라우트 세대
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: EU failures and edge load
-    ko: null
+    ko: EU 실패와 엣지 부하
   - en: Regional gateway log
-    ko: null
+    ko: 리전 게이트웨이 로그
   - en: gateway.log (eu-central, last minute)
-    ko: null
+    ko: gateway.log (eu-central, 최근 1분)
   - en: Time
-    ko: null
+    ko: 시각
   - en: Level
-    ko: null
+    ko: 레벨
   - en: Edge
-    ko: null
+    ko: 엣지
   - en: Message
-    ko: null
+    ko: 메시지
   - en: req 7c1e checkout.eu → next hop edge-b (route r81)
-    ko: null
+    ko: req 7c1e checkout.eu → next hop edge-b (route r81)
   - en: req 7c1e checkout.eu → next hop edge-a (route r82)
-    ko: null
+    ko: req 7c1e checkout.eu → next hop edge-a (route r82)
   - en: "req 7c1e dropped: hop limit 8 exceeded"
-    ko: null
+    ko: "req 7c1e dropped: hop limit 8 exceeded"
   - en: health probe ok (2 ms)
-    ko: null
+    ko: health probe ok (2 ms)
   - en: health probe ok (3 ms)
-    ko: null
+    ko: health probe ok (3 ms)
   - en: One EU request, hop by hop
-    ko: null
+    ko: EU 요청 하나, 홉 단위로
   - en: Trace 7c1e spans
-    ko: null
+    ko: 추적 7c1e 스팬
   - en: Hop
-    ko: null
+    ko: 홉
   - en: Route generation
-    ko: null
+    ko: 라우트 세대
   - en: Time in hop
-    ko: null
+    ko: 홉 내 소요 시간
   - en: Owner
-    ko: null
+    ko: 소유자
   - en: 2.1 ms
-    ko: null
+    ko: 2.1 ms
   - en: 3.4 ms
-    ko: null
+    ko: 3.4 ms
   - en: —
-    ko: null
+    ko: —
   - en: 0.0 ms
-    ko: null
+    ko: 0.0 ms
   - en: 2.0 ms
-    ko: null
+    ko: 2.0 ms
   - en: 3.3 ms
-    ko: null
+    ko: 3.3 ms
   - en: 6–8
-    ko: null
+    ko: 6–8
   - en: edge-a / edge-b
-    ko: null
+    ko: edge-a / edge-b
   - en: r81 / r82
-    ko: null
+    ko: r81 / r82
   - en: 7.9 ms
-    ko: null
+    ko: 7.9 ms
   - en: "dropped: hop limit"
-    ko: null
+    ko: "dropped: hop limit"
   - en: Edge inventory
-    ko: null
+    ko: 엣지 인벤토리
   - en: Registered edges
-    ko: null
+    ko: 등록된 엣지
   - en: Region
-    ko: null
+    ko: 리전
   - en: Status
-    ko: null
+    ko: 상태
   - en: serving
-    ko: null
+    ko: 서비스 중
   - en: (no record)
-    ko: null
+    ko: (기록 없음)
   - en: answers on management network
-    ko: null
+    ko: 관리망에서 응답함
   - en: Route generations
-    ko: null
+    ko: 라우트 세대
   - en: What each publisher is sending
-    ko: null
+    ko: 발행자별 송신 내용
   - en: Source
-    ko: null
+    ko: 출처
   - en: Generation
-    ko: null
+    ko: 세대
   - en: Commit record
-    ko: null
+    ko: 커밋 기록
   - en: Last published
-    ko: null
+    ko: 마지막 발행
   - en: EU routes point to
-    ko: null
+    ko: EU 라우트 목적지
   - en: Edges following
-    ko: null
+    ko: 따르는 엣지
   - en: 7f3a2c (02:10)
-    ko: null
+    ko: 7f3a2c (02:10)
   - en: edge-b for overflow
-    ko: null
+    ko: edge-b (오버플로용)
   - en: none (draft)
-    ko: null
+    ko: 없음 (초안)
   - en: edge-a for overflow
-    ko: null
+    ko: edge-a (오버플로용)
   - en: boot cache
-    ko: null
+    ko: 부팅 캐시
   - en: 19c0e4 (3 weeks ago)
-    ko: null
+    ko: 19c0e4 (3주 전)
   - en: loaded on restart
-    ko: null
+    ko: 재시작 시 로드됨
   - en: none
-    ko: null
+    ko: 없음
   - en: Buy time
-    ko: null
+    ko: 시간 벌기
   - en: Priya's restart cleared the March flapping in two minutes, and it is ready to go. A restarted controller has to boot from something, though. Draining edge-b breaks the loop for sure, but every EU customer then waits on edge-a alone.
-    ko: null
+    ko: 프리야의 재시작은 3월의 플래핑을 2분 만에 잡았고, 지금도 바로 실행할 수 있다. 하지만 재시작한 컨트롤러는 무언가로부터 부팅해야 한다. edge-b를 드레인하면 루프는 확실히 끊기지만, 그러면 모든 EU 고객이 edge-a 하나만 바라보고 기다린다.
   - en: Fence the route generations
-    ko: null
+    ko: 라우트 세대 펜싱
   - en: Edges stop accepting any generation without a commit record and fall back to r81. Two minutes of careful rollout across the fleet, and controller-b can publish all it likes.
-    ko: null
+    ko: 엣지는 커밋 기록이 없는 세대를 더 이상 받지 않고 r81로 돌아간다. 플릿 전체에 신중하게 배포하는 데 2분. 그 뒤로는 controller-b가 무엇을 발행하든 상관없다.
   - en: War Room
-    ko: null
+    ko: 워룸

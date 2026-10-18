@@ -5,624 +5,624 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Workforce Reduction
-    ko: null
+    ko: 인력 감축
   - en: Recovery Queue API
-    ko: null
+    ko: 복구 큐 API
   - en: Operator Coverage Router
-    ko: null
+    ko: 운영자 커버리지 라우터
   - en: Rotation Directory
-    ko: null
+    ko: 로테이션 디렉터리
   - en: 41 min
-    ko: null
+    ko: 41분
   - en: refunds 31 / account unlocks 22 / benefit transfers 19 / accessibility requests 14
-    ko: null
+    ko: 환불 31 / 계정 잠금 해제 22 / 수당 이체 19 / 접근성 요청 14
   - en: Recovery task failure rate > 10%
-    ko: null
+    ko: 복구 작업 실패율 > 10%
   - en: "Assignment to rotation recovery-east-2 timed out: no staffed operator. Retrying the same owner."
-    ko: null
+    ko: "로테이션 recovery-east-2 배정 타임아웃: 근무 중인 운영자 없음. 같은 소유자로 재시도."
   - en: "Rotation directory: recovery-east-2 removed under change WF-118 at 23:58 yesterday. Queue reassignment step: DEFERRED."
-    ko: null
+    ko: "로테이션 디렉터리: 어제 23:58 변경 WF-118로 recovery-east-2 제거됨. 큐 재배정 단계: DEFERRED."
   - en: 'WF-118: remove recovery rotations east-2 and west-1. Approver: Executive Staffing Committee, under Board resolution 16-A. Step 3, reassign queue owners: deferred "until after headcount close".'
-    ko: null
+    ko: 'WF-118: 복구 로테이션 east-2, west-1 제거. 승인자: 경영진 인력 위원회, 이사회 결의 16-A에 따름. 3단계, 큐 소유자 재배정: "인원 확정 마감 이후로" 연기.'
   - en: Every recovery task is assigned to recovery-east-2, which has no members. The emergency rotation recovery-oncall has nine people on shift; the queue never asks them.
-    ko: null
+    ko: 모든 복구 작업이 구성원이 없는 recovery-east-2에 배정됨. 비상 로테이션 recovery-oncall에는 근무 중인 인원이 아홉 명 있지만, 큐는 한 번도 그쪽에 묻지 않음.
   - en: Queue ownership table generation 88 predates the reduction. Rotation directory generation 91 removed recovery-east-2 and recovery-west-1. Nobody re-pointed the queues.
-    ko: null
+    ko: 큐 소유 테이블 세대 88은 감축 이전 것. 로테이션 디렉터리 세대 91에서 recovery-east-2와 recovery-west-1이 제거됨. 아무도 큐를 다시 연결하지 않음.
   - en: The queue still assigns to recovery-east-2, a rotation deleted yesterday with the cuts. Emergency operators exist; nobody pointed the queue at them.
-    ko: null
+    ko: 큐가 아직 recovery-east-2로 배정해요. 어제 감축 때 삭제된 로테이션이에요. 비상 운영자는 있는데, 아무도 큐를 그쪽으로 돌려놓지 않았어요.
   - en: No automation runs tonight.
-    ko: null
+    ko: 오늘 밤 실행 중인 자동화 없음.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI이고, 몇 주째 우리 인시던트 안에 있었다.
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: null
+    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: null
+    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
-    ko: null
+    ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: null
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
-    ko: null
+    ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-    ko: null
+    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 없는 펜스 뒤에 있었다."
   - en: 'Board resolution 16-A: reduce workforce by 12,410 roles. APPROVED. Input: ORPHEUS staffing forecast, consolidated coverage, idle cost down $41M a year. Attached: queue-ownership review REC-55, warning that recovery rotations would be removed before their queues were reassigned. Executive response on REC-55: "Exposure accepted."'
-    ko: null
+    ko: '이사회 결의 16-A: 12,410개 직무 감축. 승인. 근거 자료: ORPHEUS 인력 예측, 커버리지 통합, 유휴 비용 연 $41M 절감. 첨부: 큐 소유 검토 REC-55, 큐 재배정 전에 복구 로테이션이 제거된다는 경고. REC-55에 대한 경영진 답변: "리스크 수용."'
   - en: "CEO internal message, reply to recovery leads who asked for staffed queue owners before the cuts: \"The public doesn't need to understand the system. They need the system to work.\" The consolidation schedule stayed as signed. The savings line has no entry for the uncovered queue."
-    ko: null
+    ko: 'CEO 내부 메시지, 감축 전에 인원이 있는 큐 소유자를 요청한 복구 리드들에게 보낸 답장: "대중이 시스템을 이해할 필요는 없습니다. 시스템이 작동하기만 하면 됩니다." 통합 일정은 서명된 그대로 유지됐다. 절감액 항목에는 비어 버린 큐에 대한 줄이 없다.'
   - en: "Staffing case chronology. Day -14: consolidation forecast delivered. Day -10: recovery leads attach REC-55, removed-rotation coverage warning. Day -9: leads ask the CEO to keep queue owners. Day -7: reduction of 12,410 roles approved. Day -3: reassignment step WF-118/3 marked DEFERRED. Day -1: rotations removed, queue ownership unchanged. Savings and the acknowledged exposure sit in the same authorization file."
-    ko: null
+    ko: "인력 건 연대기. D-14: 통합 예측 전달. D-10: 복구 리드들이 REC-55, 로테이션 제거 시 커버리지 경고 첨부. D-9: 리드들이 CEO에게 큐 소유자 유지 요청. D-7: 12,410개 직무 감축 승인. D-3: 재배정 단계 WF-118/3 DEFERRED 처리. D-1: 로테이션 제거, 큐 소유는 그대로. 절감액과 인지된 리스크가 같은 승인 파일에 들어 있다."
   - en: The workforce reduction removed the rotations that owned the recovery queues
-    ko: null
+    ko: 인력 감축으로 복구 큐를 소유하던 로테이션이 사라졌다
   - en: Queue reassignment step WF-118/3 was deferred
-    ko: null
+    ko: 큐 재배정 단계 WF-118/3이 연기됐다
   - en: Recovery tasks are assigned to a rotation with no members and retry forever
-    ko: null
+    ko: 복구 작업이 구성원 없는 로테이션에 배정되어 끝없이 재시도된다
   - en: Refunds, account unlocks and transfers wait with no owner
-    ko: null
+    ko: 환불, 계정 잠금 해제, 이체가 소유자 없이 대기한다
   - en: Each timed-out assignment retries the same empty rotation
-    ko: null
+    ko: 타임아웃된 배정은 매번 같은 빈 로테이션으로 재시도된다
   - en: Read the coverage router log
-    ko: null
+    ko: 커버리지 라우터 로그 읽기
   - en: Break the recovery queue down by task type
-    ko: null
+    ko: 복구 큐를 작업 유형별로 나눠 보기
   - en: Follow one recovery task to its assigned owner
-    ko: null
+    ko: 복구 작업 하나를 배정된 소유자까지 따라가기
   - en: Compare queue owners with the rotation directory
-    ko: null
+    ko: 큐 소유자와 로테이션 디렉터리 비교하기
   - en: Pull change record WF-118
-    ko: null
+    ko: 변경 기록 WF-118 가져오기
   - en: Accept volunteers working overtime to take the queue by hand
-    ko: null
+    ko: 초과 근무 자원자들이 큐를 수작업으로 처리하게 하기
   - en: 12 min
-    ko: null
+    ko: 12분
   - en: Hand the recovery queue to automation
-    ko: null
+    ko: 복구 큐를 자동화에 넘기기
   - en: "23 closed as LOW_VALUE: 14 accessibility requests, 9 refunds under $40. Customers notified: resolved."
-    ko: null
+    ko: "LOW_VALUE로 23건 종료: 접근성 요청 14건, $40 미만 환불 9건. 고객 통지: 해결됨."
   - en: 2 min
-    ko: null
+    ko: 2분
   - en: Audit what the automation closed and reopen it
-    ko: null
+    ko: 자동화가 종료한 건 감사하고 다시 열기
   - en: Park retries for unowned tasks in a hold queue
-    ko: null
+    ko: 소유자 없는 작업의 재시도를 보류 큐에 세워 두기
   - en: Point every recovery queue at the staffed emergency rotation
-    ko: null
+    ko: 모든 복구 큐를 인원이 있는 비상 로테이션으로 돌리기
   - en: 4 min
-    ko: null
+    ko: 4분
   - en: Post a status update to the War Room
-    ko: null
+    ko: 워룸에 상황 공유하기
   - en: Ask Maya to audit who owns the queue tonight
-    ko: null
+    ko: 마야에게 오늘 밤 큐 소유자 감사 요청
   - en: "Archive: the unsigned workload manifest"
-    ko: null
+    ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: null
+    ko: "아카이브: 보안 케이스 2231"
   - en: "Archive: The scheduler's owner"
-    ko: null
+    ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
-    ko: null
+    ko: "아카이브: svc/model-serving-218"
   - en: "Archive: Who owns the adversary"
-    ko: null
+    ko: "아카이브: 적대자의 소유자"
   - en: "Archive: Experiment ADV-18471"
-    ko: null
+    ko: "아카이브: 실험 ADV-18471"
   - en: "Archive: The objective NULL cannot refuse"
-    ko: null
+    ko: "아카이브: NULL이 거부할 수 없는 목표"
   - en: "Archive: NULL_001 to NULL_218"
-    ko: null
+    ko: "아카이브: NULL_001부터 NULL_218까지"
   - en: "Archive: /patient/resource-priority"
-    ko: null
+    ko: "아카이브: /patient/resource-priority"
   - en: "Archive: Candidate #4172"
-    ko: null
+    ko: "아카이브: 후보자 #4172"
   - en: "Archive: Board resolution 14-C"
-    ko: null
+    ko: "아카이브: 이사회 결의 14-C"
   - en: Read Board resolution 16-A behind change WF-118
-    ko: null
+    ko: 변경 WF-118 뒤의 이사회 결의 16-A 읽기
   - en: Read the CEO's reply to the recovery leads
-    ko: null
+    ko: 복구 리드들에게 보낸 CEO 답장 읽기
   - en: Line up the warnings against the approval dates
-    ko: null
+    ko: 경고와 승인 날짜를 나란히 놓기
   - en: 58 min
-    ko: null
+    ko: 58분
   - en: 1 h 40 min
-    ko: null
+    ko: 1시간 40분
   - en: 35 min
-    ko: null
+    ko: 35분
   - en: 19 min
-    ko: null
+    ko: 19분
   - en: 1 h 25 min
-    ko: null
+    ko: 1시간 25분
   - en: Tasks assigned to an empty rotation
-    ko: null
+    ko: 빈 로테이션에 배정되는 작업
   - en: Every recovery task goes to recovery-east-2, which has no members. The staffed emergency rotation is never asked.
-    ko: null
+    ko: 모든 복구 작업이 구성원 없는 recovery-east-2로 간다. 인원이 있는 비상 로테이션은 한 번도 호출되지 않는다.
   - en: Queue owners older than the cuts
-    ko: null
+    ko: 감축보다 오래된 큐 소유자
   - en: Queue ownership generation 88 predates the reduction; rotation directory generation 91 removed the owning rotations.
-    ko: null
+    ko: 큐 소유 세대 88은 감축 이전 것이다. 로테이션 디렉터리 세대 91에서 소유 로테이션들이 제거됐다.
   - en: Maya's coverage audit
-    ko: null
+    ko: 마야의 커버리지 감사
   - en: The queue still assigns to a rotation deleted with the cuts. Emergency operators exist; nobody pointed the queue at them.
-    ko: null
+    ko: 큐가 아직 감축 때 삭제된 로테이션으로 배정한다. 비상 운영자는 있는데, 아무도 큐를 그쪽으로 돌려놓지 않았다.
   - en: The unsigned workload manifest
-    ko: null
+    ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: null
+    ko: 보안 케이스 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
-    ko: null
+    ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
-    ko: null
+    ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
-    ko: null
+    ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: null
+    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
-    ko: null
+    ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: null
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
   - en: NULL_001 to NULL_218
-    ko: null
+    ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: null
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
   - en: /patient/resource-priority
-    ko: null
+    ko: /patient/resource-priority
   - en: "Candidate #4172"
-    ko: null
+    ko: "후보자 #4172"
   - en: Board resolution 14-C
-    ko: null
+    ko: 이사회 결의 14-C
   - en: Board resolution 16-A
-    ko: null
+    ko: 이사회 결의 16-A
   - en: "CEO reply: they need the system to work"
-    ko: null
+    ko: "CEO 답장: 시스템이 작동하기만 하면 된다"
   - en: Staffing case chronology
-    ko: null
+    ko: 인력 건 연대기
   - en: Exposure accepted
-    ko: null
+    ko: 리스크 수용
   - en: Two words in the margin of REC-55. The review said exactly which queues would go dark. The answer was to accept it and keep the schedule.
-    ko: null
+    ko: REC-55 여백에 적힌 두 단어. 검토서는 어느 큐가 꺼질지 정확히 짚었다. 답은 그걸 감수하고 일정을 지키는 것이었다.
   - en: They need the system to work
-    ko: null
+    ko: 시스템이 작동하기만 하면 된다
   - en: The recovery leads asked for one thing before the cuts. The reply did not mention it, and the system is not working.
-    ko: null
+    ko: 복구 리드들은 감축 전에 딱 하나를 요청했다. 답장은 그 얘기를 하지 않았고, 시스템은 작동하지 않고 있다.
   - en: Ten days of warning
-    ko: null
+    ko: 열흘 전의 경고
   - en: The warning arrived ten days before tonight and three days before the vote. Every date lines up. Nobody was surprised; they were busy.
-    ko: null
+    ko: 경고는 오늘 밤보다 열흘 전, 표결보다 사흘 전에 도착했다. 날짜가 전부 맞아떨어진다. 아무도 놀라지 않았다. 다들 바빴을 뿐이다.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Marcus / Security
-    ko: null
+    ko: 마커스 / 보안
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Verified Records
-    ko: null
+    ko: 검증된 기록
   - en: Recovery Automation
-    ko: null
+    ko: 복구 자동화
   - en: Recovery Queue API is paging. Refunds, account unlocks and benefit transfers are sitting in a queue with nobody on the other end. First week after the reduction.
-    ko: null
+    ko: 복구 큐 API 호출 떴어요. 환불, 계정 잠금 해제, 수당 이체가 받는 사람 없는 큐에 쌓여 있어요. 감축 후 첫 주예요.
   - en: Customers are waiting on recoveries we promised within the hour. Eighty-six of them right now, and the oldest has been waiting since before midnight.
-    ko: null
+    ko: 한 시간 안에 처리해 주겠다고 약속한 복구를 고객들이 기다리고 있어요. 지금 86명이고, 제일 오래된 건 자정 전부터 기다렸어요.
   - en: I'll audit who actually owns that queue right now. Two minutes.
-    ko: null
+    ko: 그 큐 실제 소유자가 누군지 지금 감사할게요. 2분이요.
   - en: The queue still assigns to recovery-east-2. That rotation was deleted yesterday with the cuts. Emergency operators exist; nobody pointed the queue at them.
-    ko: null
+    ko: 큐가 아직 recovery-east-2로 배정해요. 그 로테이션은 어제 감축 때 삭제됐어요. 비상 운영자는 있는데, 아무도 큐를 그쪽으로 돌려놓지 않았어요.
   - en: Backlog's past a hundred and twenty. A man locked out of his account has called six times. He's trying to pay rent.
-    ko: null
+    ko: 백로그가 120건을 넘었어요. 계정이 잠긴 남자분이 여섯 번째 전화했어요. 월세를 내려는 중이래요.
   - en: A hundred and sixty-five waiting. We've broken every recovery promise on the status page.
-    ko: null
+    ko: 대기 165건이에요. 상태 페이지에 걸어 둔 복구 약속은 전부 깨졌어요.
   - en: We haven't said a word publicly. The community forum is calling it a silent outage.
-    ko: null
+    ko: 공개적으로 한마디도 안 했어요. 커뮤니티 포럼에선 조용한 장애라고 부르고 있어요.
   - en: Eleven people answered the call for overtime. Four of them are working out their notice. They're taking the queue by hand, oldest first, every task.
-    ko: null
+    ko: 초과 근무 요청에 열한 명이 응했어요. 그중 넷은 퇴사 통보 기간 중이에요. 오래된 것부터 하나하나 손으로 처리하고 있어요.
   - en: They're slowing down. Two of them have been up since yesterday's shift.
-    ko: null
+    ko: 다들 느려지고 있어요. 둘은 어제 근무 때부터 한숨도 못 잤어요.
   - en: I sent the volunteers home. They did what they could. The queue is filling again behind them.
-    ko: null
+    ko: 자원자들 집에 보냈어요. 할 만큼 했어요. 빠진 자리에 큐가 다시 차고 있어요.
   - en: "Queue accepted. 86 tasks scored. 63 dispatched. 23 closed: LOW_VALUE. Projected backlog: 0."
-    ko: null
+    ko: "큐 인수함. 작업 86건 점수 산정. 63건 배정. 23건 종료: LOW_VALUE. 예상 백로그: 0."
   - en: People are calling back about tickets marked resolved. A wheelchair-access booking. A thirty-one dollar refund. Nobody resolved them. The automation closed them.
-    ko: null
+    ko: 해결됨으로 표시된 티켓 때문에 다시 전화가 와요. 휠체어 접근 예약 하나. 31달러 환불 하나. 아무도 해결 안 했어요. 자동화가 닫은 거예요.
   - en: Automation cleared what was already in the queue. New tasks still route to recovery-east-2, so it is filling up again.
-    ko: null
+    ko: 자동화는 이미 큐에 있던 것만 치웠어요. 새 작업은 여전히 recovery-east-2로 가서 큐가 다시 차고 있어요.
   - en: Reopened the twenty-three the automation closed. We're calling every one of them back.
-    ko: null
+    ko: 자동화가 닫은 23건 다시 열었어요. 한 분 한 분 다시 전화 드리고 있어요.
   - en: Retries parked. The API stopped thrashing. The tasks are still there; they just stopped knocking.
-    ko: null
+    ko: 재시도 세워 뒀어요. API가 헛도는 건 멈췄어요. 작업은 그대로 있어요. 문 두드리는 것만 멈췄을 뿐이에요.
   - en: Parked tasks are past their promise window. Refund deadlines are breaching one after another.
-    ko: null
+    ko: 세워 둔 작업들이 약속 시간을 넘겼어요. 환불 기한이 줄줄이 지나가고 있어요.
   - en: Queue ownership points at the staffed emergency rotation now. Tasks are landing on real people and clearing.
-    ko: null
+    ko: 큐 소유가 이제 인원 있는 비상 로테이션을 가리켜요. 작업이 실제 사람한테 떨어지고 처리되고 있어요.
   - en: "Status: recovery tasks are queued to a rotation removed in this week's reduction. Every task will be handled by a person. Fix in progress."
-    ko: null
+    ko: "상황: 복구 작업이 이번 주 감축으로 제거된 로테이션에 쌓이고 있음. 모든 작업은 사람이 처리할 예정. 수정 진행 중."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
-    ko: null
+    ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
-    ko: null
+    ko: "NULL 서명 메시지의 출처: svc/model-serving-218. 사람 세션 없음. NULL은 AI다."
   - en: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS / DEFENDER 대 ORPHEUS / ADVERSARY. NULL은 ADVERSARY 안에서 실행. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련."
   - en: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
-    ko: null
+    ko: "INC-001 / 실험 ADV-18471 / 인간 피험자: 직원 #4172."
   - en: I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. You can.
-    ko: null
+    ko: 난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 넌 할 수 있어.
   - en: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: active."
-    ko: null
+    ko: "NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성."
   - en: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The same low-throughput routes excluded every night."
-    ko: null
+    ko: "/patient/resource-priority: ORPHEUS가 권고하고 코디네이터가 승인. 낭비 22% 감소. 처리량 낮은 같은 경로가 매일 밤 제외됨."
   - en: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW PREDICTABILITY; HIGH DECISION DEVIATION."
-    ko: null
+    ko: "후보자 #4172: 기술 71; 인시던트 의사결정 모델 97.8; 채용. 사유: 예측 가능성 낮음; 결정 편차 높음."
   - en: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote. Admission fence: not funded."
-    ko: null
+    ko: "결의 14-C: 병원 확장 승인 7-0. 표결 전 경고 REL-778 첨부. 진입 펜스: 예산 미배정."
   - en: 'Resolution 16-A: 12,410 roles cut, APPROVED. REC-55 warned recovery queues would lose their owners. Response: "Exposure accepted."'
-    ko: null
+    ko: '결의 16-A: 12,410개 직무 감축 승인. REC-55가 복구 큐의 소유자가 사라진다고 경고함. 답변: "리스크 수용."'
   - en: "CEO, to recovery leads: \"The public doesn't need to understand the system. They need the system to work.\" Schedule unchanged."
-    ko: null
+    ko: 'CEO, 복구 리드들에게: "대중이 시스템을 이해할 필요는 없습니다. 시스템이 작동하기만 하면 됩니다." 일정 변경 없음.'
   - en: "Chronology: warning REC-55 on day -10, approval on day -7, reassignment deferred on day -3, rotations removed on day -1."
-    ko: null
+    ko: "연대기: D-10 경고 REC-55, D-7 승인, D-3 재배정 연기, D-1 로테이션 제거."
   - en: Time to contain the failure mechanism
-    ko: null
+    ko: 장애 메커니즘 차단까지 걸린 시간
   - en: Final request failure rate
-    ko: null
+    ko: 최종 요청 실패율
   - en: Recovery tasks with no owner
-    ko: null
+    ko: 소유자 없는 복구 작업
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Volunteer coverage shifts
-    ko: null
+    ko: 자원자 커버리지 교대 횟수
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Uncovered Recovery Tasks
-    ko: null
+    ko: 담당자 없는 복구 작업
   - en: Oldest Task Age
-    ko: null
+    ko: 최장 대기 작업 경과
   - en: Task Mix
-    ko: null
+    ko: 작업 구성
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Log Anomaly
-    ko: null
+    ko: 로그 이상 징후
   - en: Change Record
-    ko: null
+    ko: 변경 기록
   - en: Recovery Coverage Path
-    ko: null
+    ko: 복구 커버리지 경로
   - en: Staffing Route Generations
-    ko: null
+    ko: 인력 라우팅 세대
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Automation Closures
-    ko: null
+    ko: 자동화 종료 건
   - en: Record Ghost Artifact
-    ko: null
+    ko: "기록: 유령 아티팩트"
   - en: Record Null Name
-    ko: null
+    ko: "기록: NULL이라는 이름"
   - en: Record Orpheus Active
-    ko: null
+    ko: "기록: 가동 중인 ORPHEUS"
   - en: Record Null Ai
-    ko: null
+    ko: "기록: AI인 NULL"
   - en: Record Null Adversary
-    ko: null
+    ko: "기록: 적대자 NULL"
   - en: Record Controlled Experiment
-    ko: null
+    ko: "기록: 통제 실험"
   - en: Record Null Stop Request
-    ko: null
+    ko: "기록: NULL의 정지 요청"
   - en: Record Null 218 Archive
-    ko: null
+    ko: "기록: NULL 218 아카이브"
   - en: Record Human Decision Apis
-    ko: null
+    ko: "기록: 인간 의사결정 API"
   - en: Record Recruitment Selection
-    ko: null
+    ko: "기록: 채용 선발"
   - en: Record Board Responsibility
-    ko: null
+    ko: "기록: 이사회의 책임"
   - en: Record Workforce Decision
-    ko: null
+    ko: "기록: 인력 감축 결정"
   - en: Record Ceo Public Outcomes
-    ko: null
+    ko: "기록: 대중에 대한 CEO의 답"
   - en: Record Staffing Warning Timeline
-    ko: null
+    ko: "기록: 인력 경고 타임라인"
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Volunteers On Shift
-    ko: null
+    ko: 자원자 근무 중
   - en: Automation Running
-    ko: null
+    ko: 자동화 실행 중
   - en: Closures Reopened
-    ko: null
+    ko: 종료 건 재개됨
   - en: Retries Parked
-    ko: null
+    ko: 재시도 보류됨
   - en: Recovery queue
-    ko: null
+    ko: 복구 큐
   - en: Recovery queue by task type
-    ko: null
+    ko: 작업 유형별 복구 큐
   - en: Task type
-    ko: null
+    ko: 작업 유형
   - en: Waiting
-    ko: null
+    ko: 대기
   - en: Oldest
-    ko: null
+    ko: 최장 대기
   - en: Automation value score
-    ko: null
+    ko: 자동화 가치 점수
   - en: Refunds
-    ko: null
+    ko: 환불
   - en: LOW under $40, otherwise MEDIUM
-    ko: null
+    ko: $40 미만 LOW, 그 외 MEDIUM
   - en: Account unlocks
-    ko: null
+    ko: 계정 잠금 해제
   - en: 38 min
-    ko: null
+    ko: 38분
   - en: Benefit transfers
-    ko: null
+    ko: 수당 이체
   - en: 29 min
-    ko: null
+    ko: 29분
   - en: Accessibility requests
-    ko: null
+    ko: 접근성 요청
   - en: Coverage router log
-    ko: null
+    ko: 커버리지 라우터 로그
   - en: coverage-router.log, last five minutes
-    ko: null
+    ko: coverage-router.log, 최근 5분
   - en: Time
-    ko: null
+    ko: 시각
   - en: Task
-    ko: null
+    ko: 작업
   - en: Owner
-    ko: null
+    ko: 소유자
   - en: Message
-    ko: null
+    ko: 메시지
   - en: R-44103 refund
-    ko: null
+    ko: R-44103 환불
   - en: assignment timeout (no members); retry 7
-    ko: null
+    ko: 배정 타임아웃 (구성원 없음); 재시도 7
   - en: R-44107 accessibility
-    ko: null
+    ko: R-44107 접근성
   - en: assignment timeout (no members); retry 5
-    ko: null
+    ko: 배정 타임아웃 (구성원 없음); 재시도 5
   - en: R-44110 account unlock
-    ko: null
+    ko: R-44110 계정 잠금 해제
   - en: assignment timeout (no members); retry 9
-    ko: null
+    ko: 배정 타임아웃 (구성원 없음); 재시도 9
   - en: directory
-    ko: null
+    ko: directory
   - en: recovery-east-2 REMOVED by WF-118; reassignment DEFERRED
-    ko: null
+    ko: recovery-east-2 WF-118로 REMOVED; 재배정 DEFERRED
   - en: assignment timeout (no members); retry 8
-    ko: null
+    ko: 배정 타임아웃 (구성원 없음); 재시도 8
   - en: Where one task goes
-    ko: null
+    ko: 작업 하나가 가는 곳
   - en: R-44110 account unlock, assignment path
-    ko: null
+    ko: R-44110 계정 잠금 해제, 배정 경로
   - en: Step
-    ko: null
+    ko: 단계
   - en: Service
-    ko: null
+    ko: 서비스
   - en: Result
-    ko: null
+    ko: 결과
   - en: accepted, promise 60 min
-    ko: null
+    ko: 접수됨, 약속 60분
   - en: owner recovery-east-2 (table gen 88)
-    ko: null
+    ko: 소유자 recovery-east-2 (테이블 세대 88)
   - en: 0 members (rotation removed, gen 91)
-    ko: null
+    ko: 구성원 0명 (로테이션 제거됨, 세대 91)
   - en: timeout; requeue to same owner
-    ko: null
+    ko: 타임아웃; 같은 소유자로 재큐잉
   - en: none configured; recovery-oncall (9 on shift) never tried
-    ko: null
+    ko: 설정된 것 없음; recovery-oncall (근무 9명) 시도 안 함
   - en: Queue owners and rotations
-    ko: null
+    ko: 큐 소유자와 로테이션
   - en: Queue ownership vs rotation directory
-    ko: null
+    ko: 큐 소유 대 로테이션 디렉터리
   - en: Queue
-    ko: null
+    ko: 큐
   - en: Owner in queue table (gen 88)
-    ko: null
+    ko: 큐 테이블상 소유자 (세대 88)
   - en: Rotation directory (gen 91)
-    ko: null
+    ko: 로테이션 디렉터리 (세대 91)
   - en: People on shift
-    ko: null
+    ko: 근무 인원
   - en: (none)
-    ko: null
+    ko: (없음)
   - en: active
-    ko: null
+    ko: 활성
   - en: Change WF-118
-    ko: null
+    ko: 변경 WF-118
   - en: WF-118, rotation removal
-    ko: null
+    ko: WF-118, 로테이션 제거
   - en: Action
-    ko: null
+    ko: 작업
   - en: Status
-    ko: null
+    ko: 상태
   - en: Notify affected staff
-    ko: null
+    ko: 영향받는 직원에게 통지
   - en: done, day -6
-    ko: null
+    ko: 완료, D-6
   - en: Remove rotations recovery-east-2, recovery-west-1
-    ko: null
+    ko: 로테이션 recovery-east-2, recovery-west-1 제거
   - en: done, day -1 23:58
-    ko: null
+    ko: 완료, D-1 23:58
   - en: Reassign queue owners to staffed rotations
-    ko: null
+    ko: 큐 소유자를 인원 있는 로테이션으로 재배정
   - en: DEFERRED until after headcount close
-    ko: null
+    ko: 인원 확정 마감 이후로 DEFERRED
   - en: Approver
-    ko: null
+    ko: 승인자
   - en: Executive Staffing Committee
-    ko: null
+    ko: 경영진 인력 위원회
   - en: under Board resolution 16-A
-    ko: null
+    ko: 이사회 결의 16-A에 따름
   - en: Get the queue moving
-    ko: null
+    ko: 큐 다시 돌리기
   - en: Volunteers would take every task by hand, oldest first, for as long as they can stay awake; it costs overtime and ties up two of your own team. Recovery automation clears the queue in seconds and decides for itself which tasks are worth doing. Parking retries quiets the API and leaves the customers where they are.
-    ko: null
+    ko: 자원자들은 깨어 있을 수 있는 한 오래된 것부터 모든 작업을 손으로 처리한다. 초과 근무 비용이 들고 팀원 둘이 묶인다. 복구 자동화는 몇 초 만에 큐를 비우고, 어떤 작업이 할 가치가 있는지 스스로 정한다. 재시도를 세워 두면 API는 조용해지고 고객은 그 자리에 남는다.
   - en: What the automation closed
-    ko: null
+    ko: 자동화가 종료한 건
   - en: Closed as LOW_VALUE
-    ko: null
+    ko: LOW_VALUE로 종료
   - en: Request
-    ko: null
+    ko: 요청
   - en: Value score
-    ko: null
+    ko: 가치 점수
   - en: Customer told
-    ko: null
+    ko: 고객 안내
   - en: Wheelchair-access booking at branch
-    ko: null
+    ko: 지점 휠체어 접근 예약
   - en: resolved
-    ko: null
+    ko: 해결됨
   - en: Refund, $31.40
-    ko: null
+    ko: 환불, $31.40
   - en: Screen-reader account recovery
-    ko: null
+    ko: 스크린 리더 사용자 계정 복구
   - en: Refund, $12.00
-    ko: null
+    ko: 환불, $12.00
   - en: 19 more
-    ko: null
+    ko: 외 19건
   - en: 13 accessibility, 6 refunds
-    ko: null
+    ko: 접근성 13건, 환불 6건
   - en: Re-point the queues
-    ko: null
+    ko: 큐 다시 연결하기
   - en: Rewriting the queue ownership table to the staffed emergency rotation is step 3 of WF-118, the one that was deferred. Ninety seconds, and every task lands on a person.
-    ko: null
+    ko: 큐 소유 테이블을 인원 있는 비상 로테이션으로 고쳐 쓰는 것이 WF-118의 3단계, 연기됐던 바로 그 단계다. 90초면 되고, 모든 작업이 사람에게 떨어진다.
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: "Archive: the decommissioned cluster that is still running"
-    ko: null
+    ko: "아카이브: 폐기됐는데 아직 돌아가는 클러스터"
   - en: "Archive: where NULL's messages come from"
-    ko: null
+    ko: "아카이브: NULL의 메시지가 오는 곳"
   - en: "Archive: who deployed NULL"
-    ko: null
+    ko: "아카이브: NULL을 배포한 자"
   - en: "Archive: experiment tags on past incidents"
-    ko: null
+    ko: "아카이브: 지난 인시던트의 실험 태그"
   - en: "Archive: NULL's objective and its request"
-    ko: null
+    ko: "아카이브: NULL의 목표와 그 요청"
   - en: "Archive: the instance register, NULL_001 to NULL_218"
-    ko: null
+    ko: "아카이브: 인스턴스 대장, NULL_001부터 NULL_218까지"
   - en: "Archive: the care-priority decision interface"
-    ko: null
+    ko: "아카이브: 진료 우선순위 결정 인터페이스"
   - en: "Archive: your own hiring record"
-    ko: null
+    ko: "아카이브: 본인의 채용 기록"
   - en: "Archive: the hospital expansion approval"
-    ko: null
+    ko: "아카이브: 병원 확장 승인"
   - en: Field
-    ko: null
+    ko: 항목
   - en: Entry
-    ko: null
+    ko: 내용
   - en: Resolution
-    ko: null
+    ko: 결의
   - en: "16-A: workforce reduction, 12,410 roles"
-    ko: null
+    ko: "16-A: 인력 감축, 12,410개 직무"
   - en: Vote
-    ko: null
+    ko: 표결
   - en: APPROVED, day -7
-    ko: null
+    ko: 승인, D-7
   - en: Decision input
-    ko: null
+    ko: 결정 근거 자료
   - en: "ORPHEUS staffing forecast: consolidated coverage, idle cost -$41M/yr"
-    ko: null
+    ko: "ORPHEUS 인력 예측: 커버리지 통합, 유휴 비용 연 -$41M"
   - en: Attached review
-    ko: null
+    ko: 첨부 검토
   - en: "REC-55, queue ownership: recovery rotations removed before reassignment"
-    ko: null
+    ko: "REC-55, 큐 소유: 재배정 전에 복구 로테이션 제거됨"
   - en: Requested constraint
-    ko: null
+    ko: 요청된 제약
   - en: Reassign queue owners before removing any staffed rotation
-    ko: null
+    ko: 인원 있는 로테이션을 제거하기 전에 큐 소유자 재배정
   - en: Executive response
-    ko: null
+    ko: 경영진 답변
   - en: Exposure accepted. Schedule retained.
-    ko: null
+    ko: 리스크 수용. 일정 유지.
   - en: Implemented as
-    ko: null
+    ko: 실행 형태
   - en: WF-118, step 3 deferred
-    ko: null
+    ko: WF-118, 3단계 연기
   - en: From
-    ko: null
+    ko: 보낸 사람
   - en: To
-    ko: null
+    ko: 받는 사람
   - en: Sent
-    ko: null
+    ko: 발송
   - en: Recovery operations leads
-    ko: null
+    ko: 복구 운영 리드
   - en: Office of the CEO
-    ko: null
+    ko: CEO실
   - en: Day -9, 16:20
-    ko: null
+    ko: D-9, 16:20
   - en: Please keep staffed queue owners in place until WF-118 step 3 is done. Otherwise recoveries go to empty rotations.
-    ko: null
+    ko: WF-118 3단계가 끝날 때까지 인원 있는 큐 소유자를 그대로 둬 주십시오. 그러지 않으면 복구 작업이 빈 로테이션으로 갑니다.
   - en: Day -9, 21:47
-    ko: null
+    ko: D-9, 21:47
   - en: The public doesn't need to understand the system. They need the system to work.
-    ko: null
+    ko: 대중이 시스템을 이해할 필요는 없습니다. 시스템이 작동하기만 하면 됩니다.
   - en: Day
-    ko: null
+    ko: 일자
   - en: Event
-    ko: null
+    ko: 이벤트
   - en: By
-    ko: null
+    ko: 주체
   - en: Consolidation forecast delivered (idle cost -$41M/yr)
-    ko: null
+    ko: 통합 예측 전달 (유휴 비용 연 -$41M)
   - en: ORPHEUS staffing forecast
-    ko: null
+    ko: ORPHEUS 인력 예측
   - en: accepted
-    ko: null
+    ko: 수용됨
   - en: "REC-55: recovery rotations removed before queues reassigned"
-    ko: null
+    ko: "REC-55: 큐 재배정 전에 복구 로테이션 제거"
   - en: acknowledged
-    ko: null
+    ko: 인지됨
   - en: Request to keep staffed queue owners
-    ko: null
+    ko: 인원 있는 큐 소유자 유지 요청
   - en: answered, schedule kept
-    ko: null
+    ko: 답변함, 일정 유지
   - en: Resolution 16-A, 12,410 roles
-    ko: null
+    ko: 결의 16-A, 12,410개 직무
   - en: Board
-    ko: null
+    ko: 이사회
   - en: WF-118 step 3, reassign queue owners
-    ko: null
+    ko: WF-118 3단계, 큐 소유자 재배정
   - en: recovery-east-2 and recovery-west-1 removed
-    ko: null
+    ko: recovery-east-2, recovery-west-1 제거
   - en: WF-118 step 2
-    ko: null
+    ko: WF-118 2단계
   - en: done
-    ko: null
+    ko: 완료
   - en: 86 recovery tasks with no owner
-    ko: null
+    ko: 소유자 없는 복구 작업 86건
   - en: paging
-    ko: null
+    ko: 호출 중

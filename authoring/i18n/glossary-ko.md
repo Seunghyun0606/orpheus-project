@@ -53,23 +53,23 @@ Example: `observer-7f4c manifest: owner blank, ... One comment line at the botto
 
 ## Names
 
-| English                                        | Korean                                                         |
-| ---------------------------------------------- | -------------------------------------------------------------- |
-| Maya / SRE Lead                                | 마야 / SRE 리드                                                |
-| Jin / Support                                  | 진 / 고객지원                                                  |
-| Sam / Platform                                 | 샘 / 플랫폼                                                    |
-| Marcus / Security                              | 마커스 / 보안                                                  |
-| Alex / DBA                                     | 알렉스 / DBA                                                   |
-| Priya / EU Edge On-call                        | 프리야 / EU 엣지 온콜                                          |
-| Nadia / Treasury Operations                    | 나디아 / 자금 운영                                             |
-| Dana / Legal                                   | 다나 / 법무                                                    |
-| Operator                                       | 운영자                                                         |
-| Operator 4172                                  | 운영자 4172                                                    |
-| Employee #4172 / Subject 4172                  | 직원 #4172 / 피험자 4172                                       |
-| the Board                                      | 이사회                                                         |
-| ORPHEUS / Care Advisor (and other "X Advisor") | ORPHEUS / 돌봄 어드바이저 (X 어드바이저)                       |
-| Operations advisor / Remediation Advisor       | 운영 어드바이저 / 복구 어드바이저                              |
-| "Name: message" prefixes                       | Translate the name per this table, keep the colon: "마커스: …" |
+| English                                        | Korean                                                          |
+| ---------------------------------------------- | --------------------------------------------------------------- |
+| Maya / SRE Lead                                | 마야 / SRE 리드                                                 |
+| Jin / Support                                  | 진 / 고객지원                                                   |
+| Sam / Platform                                 | 샘 / 플랫폼                                                     |
+| Marcus / Security                              | 마커스 / 보안                                                   |
+| Alex / DBA                                     | 알렉스 / DBA                                                    |
+| Priya / EU Edge On-call                        | 프리야 / EU 엣지 온콜                                           |
+| Nadia / Treasury Operations                    | 나디아 / 자금 운영                                              |
+| Dana / Legal                                   | 다나 / 법무                                                     |
+| Operator                                       | 운영자                                                          |
+| Operator 4172                                  | 운영자 4172                                                     |
+| Employee #4172 / Subject 4172                  | 직원 #4172 / 피험자 4172                                        |
+| the Board                                      | 이사회                                                          |
+| ORPHEUS / Care Advisor (and other "X Advisor") | ORPHEUS / 의료 어드바이저 (X 어드바이저: 리스크·인재·물류·용량) |
+| Operations advisor / Remediation Advisor       | 운영 어드바이저 / 복구 어드바이저                               |
+| "Name: message" prefixes                       | Translate the name per this table, keep the colon: "마커스: …"  |
 
 ## Core terms
 
@@ -115,6 +115,41 @@ Example: `observer-7f4c manifest: owner blank, ... One comment line at the botto
 | delegate / ask X to …         | 위임 / X에게 … 요청   |                                                                        |
 | severity                      | 심각도                | SEV1 stays                                                             |
 | Act 1 … Act 9                 | 1막 … 9막             |                                                                        |
+
+## Settled after the first translation pass
+
+These were coined independently by several translators; this column is now
+the only form to use.
+
+| English                                        | Korean                                                  |
+| ---------------------------------------------- | ------------------------------------------------------- |
+| care (care routing, care network, care route)  | 의료 (의료 라우팅, 의료 네트워크, 의료 경로)            |
+| clinic                                         | 진료소                                                  |
+| admission fence / fence / generation fence     | 진입 펜스 / 펜스 / 세대 펜스 (verb: 펜스를 치다)        |
+| admission (gateway admission, admission lane)  | 유입 (게이트웨이 유입, 유입 레인)                       |
+| Attribution: none                              | 배후 특정: 없음                                         |
+| Security case NNNN                             | 보안 사건 NNNN                                          |
+| Threat-actor codename                          | 위협 행위자 코드명                                      |
+| Archive rerun                                  | 아카이브 재실행                                         |
+| Archive: X (action titles) / Record X (labels) | 아카이브: X / 기록: X                                   |
+| Verified Records                               | 검증된 기록                                             |
+| Asset register / Live inventory                | 자산 대장 / 실가동 목록                                 |
+| Deployment authority                           | 배포 권한                                               |
+| Mandate                                        | 임무                                                    |
+| Lineage / lineage record                       | 계보 / 계보 기록                                        |
+| Human subject                                  | 인간 피험자                                             |
+| Candidate #4172                                | 후보자 #4172                                            |
+| Board resolution                               | 이사회 결의                                             |
+| retired (NULL instances) / decommission        | 폐기됨 / 폐기                                           |
+| replica / read replica                         | 복제본 / 읽기 복제본                                    |
+| lease                                          | 리스                                                    |
+| Pager Service / Pager Threshold                | 호출 서비스 / 호출 임계값                               |
+| Root Cause Contained / contain                 | 근본 원인 억제됨 / 봉쇄                                 |
+| Error Rate / Response cost                     | 오류율 / 대응 비용                                      |
+| Post a status update to the War Room           | 워룸에 상황 공유하기                                    |
+| War Room updates                               | 워룸 상황 공유                                          |
+| Project ORPHEUS (prose)                        | ORPHEUS 프로젝트 (record token `PROJECT ORPHEUS` stays) |
+| DEFENDER, ADVERSARY, SOFT CONTROL (codenames)  | unchanged                                               |
 
 ## Ending names
 

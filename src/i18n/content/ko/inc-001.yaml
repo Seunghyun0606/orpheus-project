@@ -5,136 +5,136 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Connection Saturation
-    ko: null
+    ko: 커넥션 포화
   - en: Gateway
-    ko: null
+    ko: 게이트웨이
   - en: Payment API
-    ko: null
+    ko: 결제 API
   - en: PostgreSQL
-    ko: null
+    ko: PostgreSQL
   - en: Error Rate > 20%
-    ko: null
+    ko: 오류율 > 20%
   - en: idle in transaction
-    ko: null
+    ko: idle in transaction
   - en: PostgreSQL connection pool approaches its configured limit
-    ko: null
+    ko: PostgreSQL 커넥션 풀이 설정 한도에 근접함
   - en: Payment requests begin failing as the pool reaches 498 of 500 connections.
-    ko: null
+    ko: 풀이 커넥션 500개 중 498개에 도달하면서 결제 요청이 실패하기 시작한다.
   - en: Transaction cleanup is incomplete
-    ko: null
+    ko: 트랜잭션 정리가 불완전함
   - en: Abandoned transactions are not releasing their database sessions.
-    ko: null
+    ko: 버려진 트랜잭션이 데이터베이스 세션을 반환하지 않는다.
   - en: Idle transactions retain database connections
-    ko: null
+    ko: 유휴 트랜잭션이 데이터베이스 커넥션을 붙잡고 있음
   - en: Long-lived idle-in-transaction sessions exhaust the available connection pool.
-    ko: null
+    ko: 오래 지속된 idle-in-transaction 세션이 가용 커넥션 풀을 고갈시킨다.
   - en: Payment API errors exceed the pager threshold
-    ko: null
+    ko: 결제 API 오류가 호출 임계치를 넘음
   - en: PostgreSQL connections are at capacity
-    ko: null
+    ko: PostgreSQL 커넥션이 한도에 도달함
   - en: Client retries add connection pressure
-    ko: null
+    ko: 클라이언트 재시도가 커넥션 압박을 가중함
   - en: Open Payment API logs
-    ko: null
+    ko: 결제 API 로그 열기
   - en: Open service metrics
-    ko: null
+    ko: 서비스 메트릭 열기
   - en: Restart Payment API
-    ko: null
+    ko: 결제 API 재시작하기
   - en: Scale Payment API
-    ko: null
+    ko: 결제 API 확장하기
   - en: Roll back the latest Payment API deployment
-    ko: null
+    ko: 최근 결제 API 배포 롤백하기
   - en: Inspect PostgreSQL
-    ko: null
+    ko: PostgreSQL 점검하기
   - en: Inspect database sessions
-    ko: null
+    ko: 데이터베이스 세션 점검하기
   - en: Terminate stale database sessions
-    ko: null
+    ko: 오래된 데이터베이스 세션 종료하기
   - en: Send a customer-impact status update
-    ko: null
+    ko: 고객 피해 상황 공유 보내기
   - en: Share the payment investigation status
-    ko: null
+    ko: 결제 조사 상황 공유하기
   - en: Ask Jin to confirm customer impact
-    ko: null
+    ko: 진에게 고객 피해 확인 요청하기
   - en: Corrupted log entry
-    ko: null
+    ko: 손상된 로그 항목
   - en: A transient UNKNOWN message recovered from the incident log buffer.
-    ko: null
+    ko: 인시던트 로그 버퍼에서 복구된 일시적인 UNKNOWN 메시지.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Payment errors are climbing. Database saturation is visible, but the cause is not yet confirmed.
-    ko: null
+    ko: 결제 오류가 계속 올라가요. DB 포화는 보이는데 원인은 아직 확인 못 했어요.
   - en: Support has reports of failed checkouts. We cannot yet tell whether retries succeeded.
-    ko: null
+    ko: 고객지원에 결제 실패 신고가 들어와요. 재시도가 성공했는지는 아직 모르겠어요.
   - en: I will verify customer reports. ETA two minutes.
-    ko: null
+    ko: 고객 신고 확인해 볼게요. 2분쯤 걸려요.
   - en: Failed checkouts are confirmed. Some customers also report successful retries.
-    ko: null
+    ko: 결제 실패 확인됐어요. 재시도가 성공했다는 고객도 일부 있어요.
   - en: Investigation update shared. The underlying cause remains open.
-    ko: null
+    ko: 조사 상황 공유함. 근본 원인은 아직 미해결.
   - en: Transient log message
-    ko: null
+    ko: 일시적인 로그 메시지
   - en: "02:23:11 / UNKNOWN: Good."
-    ko: null
+    ko: "02:23:11 / UNKNOWN: 좋아."
   - en: Service recovery time
-    ko: null
+    ko: 서비스 복구 시간
   - en: Final Payment API error rate
-    ko: null
+    ko: 최종 결제 API 오류율
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: API restart count
-    ko: null
+    ko: API 재시작 횟수
   - en: API scale count
-    ko: null
+    ko: API 확장 횟수
   - en: Rollback count
-    ko: null
+    ko: 롤백 횟수
   - en: Status update count
-    ko: null
+    ko: 상황 공유 횟수
   - en: Api Error Rate
-    ko: null
+    ko: API 오류율
   - en: Db Connections
-    ko: null
+    ko: DB 커넥션 수
   - en: Db Connection Limit
-    ko: null
+    ko: DB 커넥션 한도
   - en: Db Cpu
-    ko: null
+    ko: DB CPU 사용률
   - en: Api Cpu
-    ko: null
+    ko: API CPU 사용률
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Stale Session Count
-    ko: null
+    ko: 오래된 세션 수
   - en: Stale Session State
-    ko: null
+    ko: 오래된 세션 상태
   - en: Stale Session Average Age
-    ko: null
+    ko: 오래된 세션 평균 경과 시간
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Resolved
-    ko: null
+    ko: 근본 원인 해결됨
   - en: Logs and metrics
-    ko: null
+    ko: 로그와 메트릭
   - en: Operational investigation
-    ko: null
+    ko: 운영 조사
   - en: Collect operational evidence before selecting a containment path. The displayed values reflect only observations actually revealed by accepted actions.
-    ko: null
+    ko: 봉쇄 경로를 고르기 전에 운영 증거를 수집한다. 표시된 값은 수락된 행동으로 실제 드러난 관찰만 반영한다.
   - en: Response actions
-    ko: null
+    ko: 대응 조치
   - en: A temporary service improvement does not by itself establish that the failure mechanism has been removed.
-    ko: null
+    ko: 일시적으로 서비스가 나아졌다고 해서 장애 메커니즘이 제거됐다는 뜻은 아니다.
   - en: War Room
-    ko: null
+    ko: 워룸

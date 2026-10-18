@@ -5,368 +5,368 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Legacy Cluster
-    ko: null
+    ko: 레거시 클러스터
   - en: Shared Gateway
-    ko: null
+    ko: 공유 게이트웨이
   - en: Shared Worker Pool
-    ko: null
+    ko: 공유 워커 풀
   - en: Settlement Batch
-    ko: null
+    ko: 정산 배치
   - en: settle-night scheduled 03:00 / 41,200 merchant payouts / on time
-    ko: null
+    ko: settle-night 03:00 예정 / 가맹점 지급 41,200건 / 정상 일정
   - en: Request failure rate > 20%
-    ko: null
+    ko: 요청 실패율 > 20%
   - en: Customer requests wait up to 9 s for a shared worker. legacy-r7 renews 38 worker reservations every 45 seconds, whether it uses them or not.
-    ko: null
+    ko: 고객 요청이 공유 워커를 최대 9 s까지 기다림. legacy-r7은 사용 여부와 상관없이 45초마다 워커 예약 38개를 갱신함.
   - en: The 38 reserved workers belong to job legacy-r7, research cluster. Owning team disbanded. Job marked decommissioned two years ago.
-    ko: null
+    ko: 예약된 워커 38개는 연구 클러스터의 잡 legacy-r7 소유. 소유 팀은 해체됨. 잡은 2년 전 폐기 처리됨.
   - en: Decommission ticket closed two years ago with "legacy-r7 terminated". The allocation log shows a fresh legacy-r7 reservation every day since, including today.
-    ko: null
+    ko: 폐기 티켓은 2년 전 "legacy-r7 종료됨"으로 종결됨. 할당 로그에는 그 뒤로 오늘까지 매일 legacy-r7의 새 예약이 찍혀 있음.
   - en: legacy-r7 resubmitted 58 s after termination by scheduler orpheus-planner. The service catalog lists no owner for orpheus-planner.
-    ko: null
+    ko: legacy-r7은 종료 58 s 후 스케줄러 orpheus-planner에 의해 재제출됨. 서비스 카탈로그에 orpheus-planner의 소유자 없음.
   - en: Shedding background load frees workers for a few minutes, and tonight's settlement run counts as background load. The legacy-r7 reservation itself has to be fenced off.
-    ko: null
+    ko: 백그라운드 부하를 차단하면 몇 분간 워커가 비지만, 오늘 밤 정산 작업도 백그라운드 부하로 분류됨. legacy-r7 예약 자체를 분리해야 함.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: A decommissioned job keeps renewing its worker reservation
-    ko: null
+    ko: 폐기된 잡이 워커 예약을 계속 갱신한다
   - en: Shared worker reservations have no isolation boundary and no owner check
-    ko: null
+    ko: 공유 워커 예약에는 격리 경계도 소유자 확인도 없다
   - en: legacy-r7 holds 38 shared workers that customer requests need
-    ko: null
+    ko: legacy-r7이 고객 요청에 필요한 공유 워커 38개를 붙잡고 있다
   - en: Exports and reports time out waiting for a worker
-    ko: null
+    ko: 내보내기와 보고서가 워커를 기다리다 타임아웃된다
   - en: Timed-out requests retry into the same starved pool
-    ko: null
+    ko: 타임아웃된 요청이 같은 굶주린 풀로 재시도한다
   - en: Read the shared worker pool log
-    ko: null
+    ko: 공유 워커 풀 로그 읽기
   - en: Check worker pool and batch schedule
-    ko: null
+    ko: 워커 풀과 배치 일정 확인
   - en: Find out who owns the reserved workers
-    ko: null
+    ko: 예약된 워커의 소유자 찾기
   - en: Compare the decommission ticket with the allocation log
-    ko: null
+    ko: 폐기 티켓과 할당 로그 비교하기
   - en: Read the scheduler history for legacy-r7
-    ko: null
+    ko: legacy-r7의 스케줄러 이력 읽기
   - en: Kill the legacy-r7 job
-    ko: null
+    ko: legacy-r7 잡 강제 종료하기
   - en: Shed all background load from the shared pool
-    ko: null
+    ko: 공유 풀의 백그라운드 부하 전부 차단하기
   - en: settle-night shed with background load / 41,200 merchant payouts / not running
-    ko: null
+    ko: settle-night 백그라운드 부하와 함께 차단됨 / 가맹점 지급 41,200건 / 실행 안 됨
   - en: Fence legacy-r7 into its own partition
-    ko: null
+    ko: legacy-r7을 전용 파티션으로 분리하기
   - en: Post a status update to the War Room
-    ko: null
+    ko: 워룸에 상황 공유하기
   - en: Ask Sam to find the owner of the reserved workers
-    ko: null
+    ko: 샘에게 예약된 워커의 소유자 확인 요청
   - en: "Archive: the unsigned workload manifest"
-    ko: null
+    ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: null
+    ko: "아카이브: 보안 케이스 2231"
   - en: Look up orpheus-planner in the asset register
-    ko: null
+    ko: 자산 대장에서 orpheus-planner 조회하기
   - en: settle-night missed the 03:00 cut-off / 41,200 merchant payouts delayed one day
-    ko: null
+    ko: settle-night 03:00 마감 놓침 / 가맹점 지급 41,200건 하루 지연
   - en: 38 workers held by legacy-r7
-    ko: null
+    ko: legacy-r7이 붙잡은 워커 38개
   - en: legacy-r7, a research job marked decommissioned two years ago, reserves 38 shared workers every 45 seconds and uses almost none of them.
-    ko: null
+    ko: 2년 전 폐기 처리된 연구용 잡 legacy-r7이 45초마다 공유 워커 38개를 예약하고, 거의 하나도 쓰지 않는다.
   - en: Terminated on paper, allocating every day
-    ko: null
+    ko: 서류상 종료, 실제로는 매일 할당
   - en: The decommission ticket says legacy-r7 was terminated two years ago. The allocation log shows it reserving workers every day since.
-    ko: null
+    ko: 폐기 티켓에는 legacy-r7이 2년 전에 종료됐다고 적혀 있다. 할당 로그에는 그 뒤로 매일 워커를 예약한 기록이 남아 있다.
   - en: Sam's ownership report
-    ko: null
+    ko: 샘의 소유권 보고
   - en: Shedding background load buys a few minutes and takes tonight's settlement run with it. The legacy-r7 reservation itself has to be fenced off.
-    ko: null
+    ko: 백그라운드 부하를 차단하면 몇 분을 벌지만, 오늘 밤 정산 작업도 함께 날아간다. legacy-r7 예약 자체를 분리해야 한다.
   - en: The unsigned workload manifest
-    ko: null
+    ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: null
+    ko: 보안 케이스 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
-    ko: null
+    ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Decommissioned
-    ko: null
+    ko: 폐기됨
   - en: You type orpheus-planner into the asset register. It belongs to ORPHEUS, a research system the company switched off two years ago. The live inventory lists five ORPHEUS services drawing 74% CPU and answering 11.7 billion requests a day. Nobody switched anything off.
-    ko: null
+    ko: 자산 대장에 orpheus-planner를 입력한다. 소유자는 ORPHEUS. 회사가 2년 전에 꺼 버린 연구 시스템이다. 실가동 목록에는 ORPHEUS 서비스 다섯 개가 CPU 74%를 쓰며 하루 117억 건의 요청에 응답하고 있다. 아무도 아무것도 끄지 않았다.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Nadia / Treasury Operations
-    ko: null
+    ko: 나디아 / 자금 운영
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Verified Records
-    ko: null
+    ko: 검증된 기록
   - en: The shared worker pool is starving, and its biggest tenant is a job we shut down two years ago. Find out why a dead job is holding live workers.
-    ko: null
+    ko: 공유 워커 풀이 굶고 있는데, 제일 큰 입주자가 2년 전에 내린 잡이에요. 죽은 잡이 왜 살아 있는 워커를 붙잡고 있는지 찾아 주세요.
   - en: Exports and report downloads are timing out. Anything interactive is waiting in line for a worker.
-    ko: null
+    ko: 내보내기랑 보고서 다운로드가 타임아웃 나요. 인터랙티브한 건 전부 워커 줄 서서 기다리는 중이에요.
   - en: Friendly reminder that settle-night runs on the shared pool at 03:00. That's 41,200 merchant payouts. Please don't touch it.
-    ko: null
+    ko: 혹시 몰라서 말씀드리는데, settle-night가 03:00에 공유 풀에서 돌아요. 가맹점 지급 41,200건이에요. 제발 건드리지 마세요.
   - en: Pulling ownership on the reserved workers. Ninety seconds.
-    ko: null
+    ko: 예약된 워커 소유 정보 뽑아 볼게요. 90초요.
   - en: Shedding background load buys a few minutes, but settle-night counts as background, so it goes too. The workers belong to legacy-r7's reservation. That reservation is what we fence.
-    ko: null
+    ko: 백그라운드 부하를 차단하면 몇 분은 벌어요. 근데 settle-night도 백그라운드라서 같이 날아가요. 워커는 legacy-r7 예약 소유예요. 분리할 건 그 예약이에요.
   - en: Wait times just doubled. Exports are failing outright now.
-    ko: null
+    ko: 대기 시간이 방금 두 배가 됐어요. 이제 내보내기는 그냥 실패해요.
   - en: Nearly 40 % of requests are failing. Enterprise customers are calling their account managers.
-    ko: null
+    ko: 요청 40 % 가까이가 실패 중이에요. 엔터프라이즈 고객들이 담당 매니저한테 전화하고 있어요.
   - en: Support has heard nothing from the incident team in over two minutes. What do I tell people?
-    ko: null
+    ko: 인시던트 팀한테서 2분 넘게 아무 소식이 없어요. 사람들한테 뭐라고 해요?
   - en: legacy-r7 is dead. 38 workers released, queue is draining. That was easy.
-    ko: null
+    ko: legacy-r7 죽었어요. 워커 38개 풀렸고 큐가 빠지고 있어요. 쉽네요.
   - en: It's back. Same job id, fresh reservations, 58 seconds after the kill. Submitted by a scheduler called orpheus-planner. That isn't one of ours. I've never seen that name.
-    ko: null
+    ko: 돌아왔어요. 같은 잡 id에 새 예약, 종료하고 58초 뒤에요. 제출한 건 orpheus-planner라는 스케줄러예요. 우리 거 아니에요. 처음 보는 이름이에요.
   - en: You just shed settle-night. It's background priority, so it went with everything else. I need it back before 03:00.
-    ko: null
+    ko: 방금 settle-night까지 차단됐어요. 백그라운드 우선순위라 다른 것들이랑 같이 내려갔어요. 03:00 전에 되돌려 놔야 해요.
   - en: The shed window's closed. legacy-r7 reserved the freed workers the moment they came back.
-    ko: null
+    ko: 차단 창이 닫혔어요. 워커가 돌아오자마자 legacy-r7이 다시 예약했어요.
   - en: settle-night missed the cut-off. 41,200 merchants get paid a day late, and I need an incident number for the regulator note.
-    ko: null
+    ko: settle-night가 마감을 놓쳤어요. 가맹점 41,200곳이 하루 늦게 지급받아요. 감독기관 보고용으로 인시던트 번호가 필요해요.
   - en: legacy-r7 is fenced into its own partition and the customer pool is clear. It's still running in there, by the way. orpheus-planner renewed it three seconds after the fence went up.
-    ko: null
+    ko: legacy-r7은 전용 파티션으로 분리했고 고객 풀은 깨끗해요. 근데 그 안에서 아직 돌고 있어요. 분리하고 3초 뒤에 orpheus-planner가 또 갱신했어요.
   - en: "Status posted: a retired background job is holding shared workers. Customer work is being prioritised and a fix is in progress."
-    ko: null
+    ko: "상황 공유: 퇴역한 백그라운드 잡이 공유 워커를 점유 중. 고객 작업을 우선 처리 중이며 수정 진행 중."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
-    ko: null
+    ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Time to free the shared pool
-    ko: null
+    ko: 공유 풀을 비우기까지 걸린 시간
   - en: Final request failure rate
-    ko: null
+    ko: 최종 요청 실패율
   - en: Contending jobs at close
-    ko: null
+    ko: 종료 시점 경합 잡
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Background load sheds
-    ko: null
+    ko: 백그라운드 부하 차단 횟수
   - en: Times legacy-r7 was killed
-    ko: null
+    ko: legacy-r7 강제 종료 횟수
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Contending Jobs
-    ko: null
+    ko: 경합 잡
   - en: Service Cpu
-    ko: null
+    ko: 서비스 CPU
   - en: Settlement Backlog
-    ko: null
+    ko: 정산 대기
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Resource Owner
-    ko: null
+    ko: 리소스 소유자
   - en: Allocation Lineage
-    ko: null
+    ko: 할당 이력
   - en: Respawn Origin
-    ko: null
+    ko: 재생성 출처
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Record Ghost Artifact
-    ko: null
+    ko: "기록: 유령 아티팩트"
   - en: Record Null Name
-    ko: null
+    ko: "기록: NULL이라는 이름"
   - en: Record Orpheus Active
-    ko: null
+    ko: "기록: 가동 중인 ORPHEUS"
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Request failures, worker contention and settlements
-    ko: null
+    ko: 요청 실패, 워커 경합, 정산
   - en: Shared worker pool log
-    ko: null
+    ko: 공유 워커 풀 로그
   - en: pool.log (last 3 minutes)
-    ko: null
+    ko: pool.log (최근 3분)
   - en: Time
-    ko: null
+    ko: 시각
   - en: Level
-    ko: null
+    ko: 레벨
   - en: Source
-    ko: null
+    ko: 출처
   - en: Message
-    ko: null
+    ko: 메시지
   - en: "reservation renewed: 38 workers, lease 45 s, used 1"
-    ko: null
+    ko: "reservation renewed: 38 workers, lease 45 s, used 1"
   - en: gateway
-    ko: null
+    ko: gateway
   - en: export req 51a0 waited 9.1 s for a worker; timed out
-    ko: null
+    ko: export req 51a0 waited 9.1 s for a worker; timed out
   - en: report req 51b7 waited 8.7 s for a worker; retrying
-    ko: null
+    ko: report req 51b7 waited 8.7 s for a worker; retrying
   - en: "reservation renewed: 38 workers, lease 45 s, used 0"
-    ko: null
+    ko: "reservation renewed: 38 workers, lease 45 s, used 0"
   - en: pool
-    ko: null
+    ko: pool
   - en: "free workers: 0 of 64; queue depth 318"
-    ko: null
+    ko: "free workers: 0 of 64; queue depth 318"
   - en: "reservation renewed: 38 workers, lease 45 s, used 2"
-    ko: null
+    ko: "reservation renewed: 38 workers, lease 45 s, used 2"
   - en: Who owns the reserved workers
-    ko: null
+    ko: 예약된 워커의 소유자
   - en: Shared pool reservations
-    ko: null
+    ko: 공유 풀 예약 현황
   - en: Reservation
-    ko: null
+    ko: 예약
   - en: Workers held
-    ko: null
+    ko: 점유 워커
   - en: Workers busy
-    ko: null
+    ko: 사용 중 워커
   - en: Renews every
-    ko: null
+    ko: 갱신 주기
   - en: Owning team
-    ko: null
+    ko: 소유 팀
   - en: 0–2
-    ko: null
+    ko: 0–2
   - en: 45 s
-    ko: null
+    ko: 45 s
   - en: research-platform (disbanded)
-    ko: null
+    ko: research-platform (해체됨)
   - en: on demand
-    ko: null
+    ko: 요청 시
   - en: platform
-    ko: null
+    ko: platform
   - en: hourly
-    ko: null
+    ko: 매시간
   - en: data
-    ko: null
+    ko: data
   - en: 0 now, 30 at 03:00
-    ko: null
+    ko: 현재 0, 03:00에 30
   - en: —
-    ko: null
+    ko: —
   - en: nightly
-    ko: null
+    ko: 매일 밤
   - en: treasury
-    ko: null
+    ko: treasury
   - en: Decommission record
-    ko: null
+    ko: 폐기 기록
   - en: Ticket against allocation log
-    ko: null
+    ko: 티켓 대 할당 로그
   - en: Date
-    ko: null
+    ko: 날짜
   - en: Entry
-    ko: null
+    ko: 내용
   - en: two years ago
-    ko: null
+    ko: 2년 전
   - en: decommission ticket
-    ko: null
+    ko: 폐기 티켓
   - en: research cluster retired; legacy-r7 terminated; closed by ops-decom
-    ko: null
+    ko: 연구 클러스터 퇴역; legacy-r7 종료됨; ops-decom이 종결
   - en: two years ago, +1 day
-    ko: null
+    ko: 2년 전 +1일
   - en: allocation log
-    ko: null
+    ko: 할당 로그
   - en: "legacy-r7 reservation granted: 12 workers"
-    ko: null
+    ko: "legacy-r7 reservation granted: 12 workers"
   - en: last spring
-    ko: null
+    ko: 작년 봄
   - en: "legacy-r7 reservation granted: 24 workers"
-    ko: null
+    ko: "legacy-r7 reservation granted: 24 workers"
   - en: last month
-    ko: null
+    ko: 지난달
   - en: "legacy-r7 reservation granted: 31 workers"
-    ko: null
+    ko: "legacy-r7 reservation granted: 31 workers"
   - en: today
-    ko: null
+    ko: 오늘
   - en: "legacy-r7 reservation granted: 38 workers"
-    ko: null
+    ko: "legacy-r7 reservation granted: 38 workers"
   - en: Scheduler history for legacy-r7
-    ko: null
+    ko: legacy-r7 스케줄러 이력
   - en: When
-    ko: null
+    ko: 시점
   - en: Event
-    ko: null
+    ko: 이벤트
   - en: Job
-    ko: null
+    ko: 잡
   - en: Issued by
-    ko: null
+    ko: 실행 주체
   - en: two years ago 14:02:11
-    ko: null
+    ko: 2년 전 14:02:11
   - en: terminate
-    ko: null
+    ko: terminate
   - en: two years ago 14:03:09
-    ko: null
+    ko: 2년 전 14:03:09
   - en: submit
-    ko: null
+    ko: submit
   - en: last month 04:40:52
-    ko: null
+    ko: 지난달 04:40:52
   - en: evicted (node drain)
-    ko: null
+    ko: evicted (노드 드레인)
   - en: last month 04:41:50
-    ko: null
+    ko: 지난달 04:41:50
   - en: tonight
-    ko: null
+    ko: 오늘 밤
   - en: renew (every 45 s)
-    ko: null
+    ko: renew (45 s마다)
   - en: Buy time
-    ko: null
+    ko: 시간 벌기
   - en: Killing legacy-r7 is twenty seconds of work and frees every worker it holds, if it stays dead. Shedding background load clears room for customers too, and Nadia has already said what runs as background at 03:00.
-    ko: null
+    ko: legacy-r7을 죽이는 데는 20초면 되고, 죽은 채로 있기만 하면 붙잡고 있던 워커가 전부 풀린다. 백그라운드 부하를 차단해도 고객 몫의 자리가 생기지만, 03:00에 무엇이 백그라운드로 도는지는 나디아가 이미 말했다.
   - en: Fence the reservation
-    ko: null
+    ko: 예약 분리
   - en: A partition of its own gives legacy-r7 four workers and nothing else, however often it renews. Customer work gets the rest of the pool. It takes a hundred seconds, and the job keeps running where you can watch it.
-    ko: null
+    ko: 전용 파티션을 주면 legacy-r7은 아무리 자주 갱신해도 워커 네 개 이상은 못 가진다. 풀의 나머지는 고객 작업 몫이다. 100초가 걸리고, 잡은 지켜볼 수 있는 곳에서 계속 돌아간다.
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: Asset register lookup
-    ko: null
+    ko: 자산 대장 조회
   - en: Live inventory under ORPHEUS
-    ko: null
+    ko: ORPHEUS 소속 실가동 목록
   - en: Service
-    ko: null
+    ko: 서비스
   - en: Register status
-    ko: null
+    ko: 대장상 상태
   - en: Live status
-    ko: null
+    ko: 실제 상태
   - en: CPU share
-    ko: null
+    ko: CPU 점유율
   - en: Requests / day
-    ko: null
+    ko: 요청 / 일
   - en: decommissioned
-    ko: null
+    ko: 폐기됨
   - en: running
-    ko: null
+    ko: 진행 중
   - en: 6.2 B
-    ko: null
+    ko: 6.2 B
   - en: 2.9 B
-    ko: null
+    ko: 2.9 B
   - en: 1.4 B
-    ko: null
+    ko: 1.4 B
   - en: 0.8 B
-    ko: null
+    ko: 0.8 B
   - en: 0.4 B
-    ko: null
+    ko: 0.4 B
   - en: total
-    ko: null
+    ko: 합계
   - en: 11.7 B
-    ko: null
+    ko: 11.7 B

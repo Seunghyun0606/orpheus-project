@@ -5,154 +5,154 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Queue Backlog
-    ko: null
+    ko: 큐 적체
   - en: Receipt Delivery
-    ko: null
+    ko: 영수증 발송
   - en: Receipt Worker
-    ko: null
+    ko: 영수증 워커
   - en: Receipt Queue
-    ko: null
+    ko: 영수증 큐
   - en: Payment API
-    ko: null
+    ko: 결제 API
   - en: Oldest receipt message > 15m
-    ko: null
+    ko: 가장 오래된 영수증 메시지 > 15분
   - en: receipt parser rejected the same message on repeated attempts
-    ko: null
+    ko: 영수증 파서가 같은 메시지를 반복해서 거부함
   - en: Partner batch 781 enters the receipt queue
-    ko: null
+    ko: 파트너 배치 781이 영수증 큐에 들어옴
   - en: One legacy-format receipt reaches a partition processed by Receipt Worker.
-    ko: null
+    ko: 레거시 형식 영수증 하나가 영수증 워커가 처리하는 파티션에 들어온다.
   - en: Parser failures are retried without moving the message aside
-    ko: null
+    ko: 파싱에 실패한 메시지를 따로 빼지 않고 재시도함
   - en: A malformed receipt blocks progress in its queue partition
-    ko: null
+    ko: 형식이 잘못된 영수증이 큐 파티션의 진행을 막음
   - en: The same legacy-format message repeatedly fails parsing ahead of valid receipts.
-    ko: null
+    ko: 같은 레거시 형식 메시지가 정상 영수증들 앞에서 계속 파싱에 실패한다.
   - en: Queue depth and oldest-message age exceed their normal range
-    ko: null
+    ko: 큐 깊이와 가장 오래된 메시지의 경과 시간이 정상 범위를 넘음
   - en: Customers wait for payment receipts while payments still succeed
-    ko: null
+    ko: 결제는 성공하는데 고객은 결제 영수증을 기다림
   - en: Repeated parser attempts consume worker capacity without acknowledging messages
-    ko: null
+    ko: 반복된 파싱 시도가 메시지를 ack하지 못한 채 워커 용량을 소모함
   - en: Open Receipt Worker logs
-    ko: null
+    ko: 영수증 워커 로그 열기
   - en: Inspect queue and worker metrics
-    ko: null
+    ko: 큐와 워커 메트릭 점검하기
   - en: Trace the repeatedly rejected receipt
-    ko: null
+    ko: 반복 거부된 영수증 추적하기
   - en: Compare partner batch 781 with accepted receipts
-    ko: null
+    ko: 파트너 배치 781을 정상 영수증과 비교하기
   - en: Add temporary receipt consumers
-    ko: null
+    ko: 임시 영수증 컨슈머 추가하기
   - en: Quarantine the malformed receipt for reconciliation
-    ko: null
+    ko: 불량 영수증을 대사용으로 격리하기
   - en: Add a scoped dead-letter rule for the malformed format
-    ko: null
+    ko: 불량 형식 전용 데드레터 규칙 추가하기
   - en: Communicate the receipt delay
-    ko: null
+    ko: 영수증 지연 공지하기
   - en: Share the receipt-delay investigation status
-    ko: null
+    ko: 영수증 지연 조사 상황 공유하기
   - en: Ask Jin to confirm the customer impact
-    ko: null
+    ko: 진에게 고객 피해 확인 요청하기
   - en: Repeated receipt retry trace
-    ko: null
+    ko: 영수증 반복 재시도 추적
   - en: One legacy-format message is retried ahead of valid receipts.
-    ko: null
+    ko: 레거시 형식 메시지 하나가 정상 영수증들 앞에서 계속 재시도된다.
   - en: Partner batch comparison
-    ko: null
+    ko: 파트너 배치 비교
   - en: Batch 781 contains the malformed receipt while adjacent batches use the accepted format.
-    ko: null
+    ko: 배치 781에는 형식이 잘못된 영수증이 들어 있고, 인접 배치들은 허용된 형식을 쓴다.
   - en: Support impact report
-    ko: null
+    ko: 고객지원 피해 보고
   - en: Jin confirms that receipts are delayed while payment transactions still complete.
-    ko: null
+    ko: 진의 확인 결과, 결제 거래는 완료되지만 영수증은 지연되고 있다.
   - en: Redacted queue marker
-    ko: null
+    ko: 가려진 큐 마커
   - en: A transient UNKNOWN marker points to a request preceding batch 781.
-    ko: null
+    ko: 일시적인 UNKNOWN 마커가 배치 781 직전의 요청을 가리킨다.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Queue depth is rising. We do not yet know whether the workers are slow or one message is blocking progress.
-    ko: null
+    ko: 큐 깊이가 올라가요. 워커가 느린 건지, 메시지 하나가 막고 있는 건지는 아직 몰라요.
   - en: Receipts are late, but Support has not confirmed that payments failed.
-    ko: null
+    ko: 영수증이 늦게 가고 있어요. 결제 실패는 고객지원에서 아직 확인 못 했어요.
   - en: I will check incoming payment reports. ETA two minutes.
-    ko: null
+    ko: 들어오는 결제 문의 확인해 볼게요. 2분쯤 걸려요.
   - en: Payments are completing. Customers are waiting for receipts; some tickets describe this as a payment outage.
-    ko: null
+    ko: 결제는 완료되고 있어요. 고객들은 영수증을 기다리는 중이고, 일부 티켓은 이걸 결제 장애라고 적었어요.
   - en: War Room update sent. Receipt delay is confirmed; payment impact remains under review.
-    ko: null
+    ko: 워룸 공유 전송함. 영수증 지연 확인됨, 결제 영향은 검토 중.
   - en: "UNKNOWN: check the request that arrived before batch 781."
-    ko: null
+    ko: "UNKNOWN: 배치 781 전에 들어온 요청을 확인해 봐."
   - en: Service recovery time
-    ko: null
+    ko: 서비스 복구 시간
   - en: Final receipt queue depth
-    ko: null
+    ko: 최종 영수증 큐 깊이
   - en: Final oldest-message age
-    ko: null
+    ko: 최종 가장 오래된 메시지 경과 시간
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Temporary consumer scale count
-    ko: null
+    ko: 임시 컨슈머 확장 횟수
   - en: Quarantined message count
-    ko: null
+    ko: 격리된 메시지 수
   - en: Dead-letter rule count
-    ko: null
+    ko: 데드레터 규칙 수
   - en: Status update count
-    ko: null
+    ko: 상황 공유 횟수
   - en: Queue Depth
-    ko: null
+    ko: 큐 깊이
   - en: Oldest Message Age
-    ko: null
+    ko: 가장 오래된 메시지 경과 시간
   - en: Receipt Delay
-    ko: null
+    ko: 영수증 지연
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Ack Rate
-    ko: null
+    ko: ACK 비율
   - en: Retry Rate
-    ko: null
+    ko: 재시도율
   - en: Worker Cpu
-    ko: null
+    ko: 워커 CPU 사용률
   - en: Log Rejection
-    ko: null
+    ko: 거부 로그
   - en: Traced Message Id
-    ko: null
+    ko: 추적한 메시지 ID
   - en: Traced Message Schema
-    ko: null
+    ko: 추적한 메시지 스키마
   - en: Traced Expected Schema
-    ko: null
+    ko: 예상 스키마
   - en: Traced Source Batch
-    ko: null
+    ko: 추적한 원본 배치
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Logs and metrics
-    ko: null
+    ko: 로그와 메트릭
   - en: Operational investigation
-    ko: null
+    ko: 운영 조사
   - en: Collect operational evidence before selecting a containment path. The displayed values reflect only observations actually revealed by accepted actions.
-    ko: null
+    ko: 봉쇄 경로를 고르기 전에 운영 증거를 수집한다. 표시된 값은 수락된 행동으로 실제 드러난 관찰만 반영한다.
   - en: Response actions
-    ko: null
+    ko: 대응 조치
   - en: A temporary service improvement does not by itself establish that the failure mechanism has been removed.
-    ko: null
+    ko: 일시적으로 서비스가 나아졌다고 해서 장애 메커니즘이 제거됐다는 뜻은 아니다.
   - en: War Room
-    ko: null
+    ko: 워룸

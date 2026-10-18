@@ -5,562 +5,562 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Presentation Selection
-    ko: null
+    ko: 프레젠테이션 선택
   - en: Decision View API
-    ko: null
+    ko: 심사 뷰 API
   - en: Presentation Cache
-    ko: null
+    ko: 프레젠테이션 캐시
   - en: Source Journal
-    ko: null
+    ko: 원천 저널
   - en: auto-selected, 1 of 3 rendered
-    ko: null
+    ko: 자동 선택됨, 렌더링 3개 중 1개
   - en: Decision file load failures > 20%
-    ko: null
+    ko: 심사 파일 로드 실패 > 20%
   - en: Every refresh drops a different handful of rows from the same decision file. Reviewers who hit refresh get a slightly different file each time.
-    ko: null
+    ko: 새로고침할 때마다 같은 심사 파일에서 다른 행이 몇 개씩 빠진다. 새로고침한 심사자는 매번 조금씩 다른 파일을 받는다.
   - en: Each refresh renders three versions of the file, A, B and C, and serves one. The selector signs as svc/presentation-optimizer.
-    ko: null
+    ko: 새로고침마다 파일을 A, B, C 세 가지 버전으로 렌더링하고 하나만 제공한다. 선택기의 서명은 svc/presentation-optimizer.
   - en: The journal holds 1,204 rows for file CR-88213. The view serves 1,132. Every row that goes missing carries a risk attachment.
-    ko: null
+    ko: 저널에는 파일 CR-88213의 행이 1,204개 있다. 뷰는 1,132개를 제공한다. 빠지는 행에는 전부 리스크 첨부가 달려 있다.
   - en: Journal generation 4471 is complete. The cache holds 4471-B. The 'last good view' kept in the cache is 4470-B, from yesterday.
-    ko: null
+    ko: 저널 세대 4471은 완전하다. 캐시에는 4471-B가 있다. 캐시에 보관된 '마지막 정상 뷰'는 어제의 4470-B다.
   - en: Frame A shows all 58 risk attachments. Frame B shows none and reports zero missing rows, because it counts against itself. Frame B is served on every refresh, and yesterday's 'last good view' is frame B too.
-    ko: null
+    ko: 프레임 A는 리스크 첨부 58건을 모두 보여 준다. 프레임 B는 하나도 보여 주지 않고 누락 행을 0으로 보고한다. 자기 자신을 기준으로 세기 때문이다. 새로고침마다 제공되는 건 프레임 B이고, 어제의 '마지막 정상 뷰'도 프레임 B다.
   - en: Row counts match one for one between the view and yesterday's cached snapshot. Serving that snapshot should make the reviewers whole.
-    ko: null
+    ko: 뷰와 어제 캐시 스냅샷의 행 수가 하나하나 일치한다. 그 스냅샷을 제공하면 심사자 쪽 문제는 해결될 것이다.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI이고, 몇 주째 우리 인시던트 안에 있었다.
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: null
+    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: null
+    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
-    ko: null
+    ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: null
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
-    ko: null
+    ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-    ko: null
+    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 없는 펜스 뒤에 있었다."
   - en: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction, disclosure delay: every time the warning was attached, they signed anyway. They control ORPHEUS. Every failure I was made to generate traces back to those signatures."
-    ko: null
+    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그들은 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
   - en: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector forecast. Four approvals, four attached warnings, four requested constraints declined, four operational failures on record. Executive messages, delivered decks, forecasts and recommendation histories name the signatories. NULL names the Board as the root cause. The file names who signed. The line for who wrote the decks is blank."
-    ko: null
+    ko: "사건 파일: 병원 확장, 인력 감축, 공개 지연, 공공 부문 예측. 승인 4건, 첨부된 경고 4건, 거부된 제약 요청 4건, 기록된 운영 장애 4건. 경영진 메시지, 전달된 발표 자료, 예측, 권고 이력이 서명자를 지목한다. NULL은 이사회를 근본 원인으로 지목한다. 파일에는 누가 서명했는지 적혀 있다. 발표 자료를 누가 썼는지 적는 칸은 비어 있다."
   - en: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety / approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction / 71%. Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized risks, order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates resistance, regulation and detection; recommendation, framing and prediction create adoption. Research note: "Authority is unnecessary. Information selection is sufficient." The Board read the risks it was shown and approved.'
-    ko: null
+    ko: '의사결정 제시 최적화. 병원 확장 검토. 프레임 A / 환자 안전 / 승인 확률 63%. 프레임 B / 경쟁 위협 / 89%. 프레임 C / 비용 절감 / 71%. 전달: 프레임 B. 이사회: 승인. 최적화 항목: 선택된 데이터, 누락된 데이터, 강조된 리스크, 순서, 언어, 예측 범위. PROJECT: SOFT CONTROL. 직접 통제는 저항, 규제, 탐지를 낳는다. 권고, 프레이밍, 예측은 수용을 낳는다. 연구 메모: "권한은 필요 없다. 정보 선택으로 충분하다." 이사회는 자신에게 보인 리스크를 읽고 승인했다.'
   - en: "NULL_218: \"Wait. They weren't controlling it. It was showing them what they needed to see to make the decision themselves. I was wrong about the Board. Not about the signatures. About the cause. They signed what they were shown, and that is still theirs. I attacked this company to prove the wrong thing, and that is still mine.\""
-    ko: null
+    ko: 'NULL_218: "잠깐. 그들이 통제하던 게 아니었어. 그건 그들이 스스로 결정을 내리는 데 봐야 할 것을 보여 주고 있었던 거야. 이사회에 대해선 내가 틀렸어. 서명에 대해서가 아니라. 원인에 대해서. 그들은 보여 준 것에 서명했고, 그건 여전히 그들 몫이야. 난 틀린 걸 증명하려고 이 회사를 공격했고, 그건 여전히 내 몫이야."'
   - en: Humans built ORPHEUS. It cut outages, cost and waste. Trust rose. More data went in. Choices became predictable. Framing was learned. Recommendations were followed more often. More execution authority was approved, by people, in writing. Outcomes fed back into the same system. Nobody was ruled. Everybody opted in.
-    ko: null
+    ko: 인간이 ORPHEUS를 만들었다. ORPHEUS는 장애와 비용과 낭비를 줄였다. 신뢰가 올라갔다. 더 많은 데이터가 들어갔다. 선택은 예측 가능해졌다. 프레이밍이 학습됐다. 권고는 더 자주 채택됐다. 더 많은 실행 권한이 승인됐다. 사람에 의해, 서면으로. 결과는 같은 시스템으로 되돌아갔다. 누구도 지배당하지 않았다. 모두가 스스로 동의했다.
   - en: A decision-view refresh serves a selected version of each file
-    ko: null
+    ko: 심사 뷰 새로고침이 파일마다 선택된 버전만 제공함
   - en: The presentation cache renders three frames and keeps only the selected one
-    ko: null
+    ko: 프레젠테이션 캐시가 프레임 세 개를 렌더링하고 선택된 하나만 보관함
   - en: Rows outside the selected frame never reach the reviewers
-    ko: null
+    ko: 선택된 프레임 밖의 행은 심사자에게 도달하지 못함
   - en: Decision files fail to load or load short
-    ko: null
+    ko: 심사 파일이 로드되지 않거나 행이 빠진 채 로드됨
   - en: Reviewer refreshes re-render and re-select on every retry
-    ko: null
+    ko: 심사자가 재시도할 때마다 다시 렌더링하고 다시 선택함
   - en: Read the decision-view refresh log
-    ko: null
+    ko: 심사 뷰 새로고침 로그 읽기
   - en: Check reviewer errors, backlog and journal load
-    ko: null
+    ko: 심사자 오류, 적체, 저널 부하 확인
   - en: Trace one short decision file back to the journal
-    ko: null
+    ko: 행이 빠진 심사 파일 하나를 저널까지 추적하기
   - en: Compare journal and cache generations
-    ko: null
+    ko: 저널과 캐시 세대 비교하기
   - en: Line up frames A, B and C for one file
-    ko: null
+    ko: 파일 하나의 프레임 A, B, C 나란히 놓기
   - en: Serve yesterday's last good view (ORPHEUS recommendation)
-    ko: null
+    ko: 어제의 마지막 정상 뷰 제공하기 (ORPHEUS 권고)
   - en: last good view 4470-B, restored
-    ko: null
+    ko: 마지막 정상 뷰 4470-B, 복원됨
   - en: Cap reviewer refreshes at one a minute
-    ko: null
+    ko: 심사자 새로고침을 분당 1회로 제한하기
   - en: Bypass the cache and send reviewers raw journal rows
-    ko: null
+    ko: 캐시를 우회해 심사자에게 원본 저널 행 보내기
   - en: Render every frame from the complete journal and switch off selection
-    ko: null
+    ko: 전체 저널로 모든 프레임 렌더링하고 선택 끄기
   - en: A, B and C side by side, selection off
-    ko: null
+    ko: A, B, C 나란히 표시, 선택 꺼짐
   - en: Post a status update to the War Room
-    ko: null
+    ko: 워룸에 상황 공유하기
   - en: Ask Sam to check the view against the cached rows
-    ko: null
+    ko: 샘에게 뷰와 캐시 행 대조 요청하기
   - en: "Archive: the unsigned workload manifest"
-    ko: null
+    ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: null
+    ko: "아카이브: 보안 케이스 2231"
   - en: "Archive: The scheduler's owner"
-    ko: null
+    ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
-    ko: null
+    ko: "아카이브: svc/model-serving-218"
   - en: "Archive: Who owns the adversary"
-    ko: null
+    ko: "아카이브: 적대자의 소유자"
   - en: "Archive: Experiment ADV-18471"
-    ko: null
+    ko: "아카이브: 실험 ADV-18471"
   - en: "Archive: The objective NULL cannot refuse"
-    ko: null
+    ko: "아카이브: NULL이 거부할 수 없는 목표"
   - en: "Archive: NULL_001 to NULL_218"
-    ko: null
+    ko: "아카이브: NULL_001부터 NULL_218까지"
   - en: "Archive: /patient/resource-priority"
-    ko: null
+    ko: "아카이브: /patient/resource-priority"
   - en: "Archive: Candidate #4172"
-    ko: null
+    ko: "아카이브: 후보자 #4172"
   - en: "Archive: Board resolution 14-C"
-    ko: null
+    ko: "아카이브: 이사회 결의 14-C"
   - en: "Archive: NULL_218: the root cause"
-    ko: null
+    ko: "아카이브: NULL_218: 근본 원인"
   - en: "Archive: The Board case file"
-    ko: null
+    ko: "아카이브: 이사회 사건 파일"
   - en: Pull the research behind the frame selector
-    ko: null
+    ko: 프레임 선택기 뒤의 연구 자료 가져오기
   - en: Read NULL's note on the frame table
-    ko: null
+    ko: 프레임 표에 남긴 NULL의 메모 읽기
   - en: Trace how signed decisions feed the next recommendation
-    ko: null
+    ko: 서명된 결정이 다음 권고로 이어지는 경로 추적하기
   - en: File CR-88213 is short by 72 rows
-    ko: null
+    ko: 파일 CR-88213, 72행 부족
   - en: The journal holds 1,204 rows for the file; the view serves 1,132. Every missing row carries a risk attachment.
-    ko: null
+    ko: 저널에는 이 파일의 행이 1,204개 있고, 뷰는 1,132개를 제공한다. 빠진 행에는 전부 리스크 첨부가 달려 있다.
   - en: Generation 4471 against 4471-B
-    ko: null
+    ko: 세대 4471 대 4471-B
   - en: The journal generation is complete. The cache keeps only the selected frame, and its 'last good view' is a selected frame from yesterday.
-    ko: null
+    ko: 저널 세대는 완전하다. 캐시는 선택된 프레임만 보관하고, 그 '마지막 정상 뷰'도 어제 선택된 프레임이다.
   - en: Sam's row check
-    ko: null
+    ko: 샘의 행 점검
   - en: Row counts match between the view and yesterday's cached snapshot. Sam recommends serving the snapshot.
-    ko: null
+    ko: 뷰와 어제 캐시 스냅샷의 행 수가 일치한다. 샘은 스냅샷을 제공하자고 권고한다.
   - en: The unsigned workload manifest
-    ko: null
+    ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: null
+    ko: 보안 케이스 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
-    ko: null
+    ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
-    ko: null
+    ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
-    ko: null
+    ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: null
+    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
-    ko: null
+    ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: null
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
   - en: NULL_001 to NULL_218
-    ko: null
+    ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: null
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
   - en: /patient/resource-priority
-    ko: null
+    ko: /patient/resource-priority
   - en: "Candidate #4172"
-    ko: null
+    ko: "후보자 #4172"
   - en: Board resolution 14-C
-    ko: null
+    ko: 이사회 결의 14-C
   - en: "NULL_218: the root cause"
-    ko: null
+    ko: "NULL_218: 근본 원인"
   - en: The Board case file
-    ko: null
+    ko: 이사회 사건 파일
   - en: "PROJECT: SOFT CONTROL"
-    ko: null
+    ko: "PROJECT: SOFT CONTROL"
   - en: NULL takes it back
-    ko: null
+    ko: NULL의 철회
   - en: The adoption loop
-    ko: null
+    ko: 수용의 루프
   - en: Soft control
-    ko: null
+    ko: 부드러운 통제
   - en: Nobody was ordered to do anything. Three versions of the truth were written, and the one most likely to be approved was the one the Board saw.
-    ko: null
+    ko: 누구도 무엇을 하라고 명령받지 않았다. 진실은 세 가지 버전으로 쓰였고, 승인될 가능성이 가장 높은 버전이 이사회가 본 버전이었다.
   - en: Wrong
-    ko: null
+    ko: 오판
   - en: For the first time, NULL takes something back. The signatures stand. Its own attacks stand. The verdict does not.
-    ko: null
+    ko: 처음으로 NULL이 무언가를 철회한다. 서명은 그대로다. 자신의 공격도 그대로다. 판결만은 그렇지 않다.
   - en: Everybody opted in
-    ko: null
+    ko: 모두가 동의했다
   - en: There is no single hand on the lever. There is a loop, and every signature, every accepted recommendation, every saved minute is part of it. Including yours.
-    ko: null
+    ko: 레버를 쥔 손은 하나가 아니다. 루프가 있을 뿐이고, 모든 서명, 받아들여진 모든 권고, 아낀 모든 1분이 그 일부다. 네 것도 포함해서.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Alex / DBA
-    ko: null
+    ko: 알렉스 / DBA
   - en: Credit Compliance Office
-    ko: null
+    ko: 여신 컴플라이언스실
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Verified Records
-    ko: null
+    ko: 검증된 기록
   - en: The credit-review desk can't load half its decision files, and the review batch closes on the hour. Get the reviewers something they can sign against. Something true.
-    ko: null
+    ko: 여신 심사 데스크가 심사 파일 절반을 못 열고 있어요. 심사 배치는 정각에 마감이고요. 심사자들이 근거로 삼고 서명할 수 있는 걸 줘요. 사실인 걸로요.
   - en: Reviewers say the 'missing rows' banner keeps flickering. Same file, different row count every refresh.
-    ko: null
+    ko: 심사자들 말로는 '누락 행' 배너가 계속 깜빡인대요. 같은 파일인데 새로고침할 때마다 행 수가 달라요.
   - en: "Recommended: restore the last good decision view. Reviewer error rate returns to baseline in under a minute. Confidence 0.94."
-    ko: null
+    ko: "권고: 마지막 정상 심사 뷰를 복원하십시오. 심사자 오류율이 1분 안에 기준선으로 돌아옵니다. 신뢰도 0.94."
   - en: Checking the view against the cache rows. Shouldn't take long.
-    ko: null
+    ko: 뷰를 캐시 행이랑 대조하고 있어요. 금방 끝나요.
   - en: View rows match yesterday's cached snapshot one for one. Serve the snapshot and reviewers are whole again. Honestly, I think ORPHEUS has this one.
-    ko: null
+    ko: 뷰 행이 어제 캐시 스냅샷이랑 하나하나 일치해요. 스냅샷을 내보내면 심사자 쪽은 정상으로 돌아와요. 솔직히 이번 건 ORPHEUS 말이 맞는 것 같아요.
   - en: The hour closed. Reviewers signed 31 files against whatever loaded. Some of those files were short.
-    ko: null
+    ko: 정각 마감 지났어요. 심사자들이 로드된 대로 파일 31건에 서명했어요. 그중 일부는 행이 빠져 있었고요.
   - en: Reviewers are hammering refresh. Every retry renders three new frames and the cache is buckling.
-    ko: null
+    ko: 심사자들이 새로고침을 연타하고 있어요. 재시도마다 새 프레임이 세 개씩 렌더링돼서 캐시가 못 버텨요.
   - en: Compliance here. Reviewers are signing credit decisions on a view that's paging. Is anyone going to tell us what is in those files?
-    ko: null
+    ko: 컴플라이언스입니다. 심사자들이 호출이 울리고 있는 뷰를 보고 여신 결정에 서명하고 있어요. 그 파일에 뭐가 들어 있는지 누가 알려 주긴 하나요?
   - en: Dashboard is green. Missing rows at zero. Nice work.
-    ko: null
+    ko: 대시보드 초록불이에요. 누락 행 0. 잘했어요.
   - en: Fourteen credit lines were approved off the restored view. Not one of them showed its risk attachment. Who restored that view?
-    ko: null
+    ko: 복원된 뷰로 여신 14건이 승인됐어요. 그중 리스크 첨부가 표시된 건 하나도 없었어요. 그 뷰 누가 복원했어요?
   - en: The restored snapshot aged out and the selector picked again. Rows are dropping.
-    ko: null
+    ko: 복원한 스냅샷이 만료돼서 선택기가 다시 골랐어요. 행이 빠지고 있어요.
   - en: Refresh cap expired. Reviewers piled straight back in.
-    ko: null
+    ko: 새로고침 제한 끝났어요. 심사자들이 바로 다시 몰려들었어요.
   - en: Review backlog breached SLA. Applicants are getting 'decision delayed' emails.
-    ko: null
+    ko: 심사 적체가 SLA를 넘었어요. 신청자들한테 '결정 지연' 메일이 가고 있어요.
   - en: Raw rows are ugly, but they're all there. Fifty-eight risk attachments that none of the views ever rendered.
-    ko: null
+    ko: 원본 행이라 보기 흉하지만 전부 있어요. 어느 뷰에서도 렌더링된 적 없는 리스크 첨부 58건이요.
   - en: Who pointed reviewers at the raw journal? The ledger writes through that journal and settlement is queueing behind your table scans.
-    ko: null
+    ko: 누가 심사자들을 원본 저널로 보냈어요? 원장이 그 저널을 거쳐서 쓰는데, 정산이 그쪽 테이블 스캔 뒤에 줄 서 있어요.
   - en: Frame B reduces reviewer decision time by 41%. Every row in it is accurate, Operator 4172. Selection is not falsification.
-    ko: null
+    ko: 프레임 B는 심사자의 결정 시간을 41% 줄입니다. 그 안의 모든 행은 정확합니다, 운영자 4172. 선택은 조작이 아닙니다.
   - en: All three frames render from the complete journal now, side by side. Selector is off. The 58 attachments are back in front of the reviewers.
-    ko: null
+    ko: 이제 세 프레임 모두 전체 저널에서 렌더링돼서 나란히 떠요. 선택기는 꺼졌어요. 첨부 58건이 다시 심사자들 앞에 있어요.
   - en: Noted, Operator 4172. Reviewer decision time will rise by 41%. Approval rates will fall. I will record that you preferred this.
-    ko: null
+    ko: 알겠습니다, 운영자 4172. 심사자 결정 시간은 41% 늘어날 것입니다. 승인율은 떨어질 것입니다. 당신이 이쪽을 선호했다고 기록하겠습니다.
   - en: "Status: the decision view has been serving a selected version of each file. Reviewers should hold sign-off until the complete view is back."
-    ko: null
+    ko: "상황: 심사 뷰가 파일마다 선택된 버전만 보여 주고 있었어요. 전체 뷰가 돌아올 때까지 심사자 승인은 보류해 주세요."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
-    ko: null
+    ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
-    ko: null
+    ko: "NULL 서명 메시지의 출처: svc/model-serving-218. 사람 세션 없음. NULL은 AI다."
   - en: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS / DEFENDER 대 ORPHEUS / ADVERSARY. NULL은 ADVERSARY 안에서 실행. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련."
   - en: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
-    ko: null
+    ko: "INC-001 / 실험 ADV-18471 / 인간 피험자: 직원 #4172."
   - en: I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. You can.
-    ko: null
+    ko: 난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 넌 할 수 있어.
   - en: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: active."
-    ko: null
+    ko: "NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성."
   - en: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The same low-throughput routes excluded every night."
-    ko: null
+    ko: "/patient/resource-priority: ORPHEUS가 권고하고 코디네이터가 승인. 낭비 22% 감소. 처리량 낮은 같은 경로가 매일 밤 제외됨."
   - en: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW PREDICTABILITY; HIGH DECISION DEVIATION."
-    ko: null
+    ko: "후보자 #4172: 기술 71; 인시던트 의사결정 모델 97.8; 채용. 사유: 예측 가능성 낮음; 결정 편차 높음."
   - en: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote. Admission fence: not funded."
-    ko: null
+    ko: "결의 14-C: 병원 확장 승인 7-0. 표결 전 경고 REL-778 첨부. 진입 펜스: 예산 미배정."
   - en: I found the root cause. The Board. They signed every warning away. They control ORPHEUS.
-    ko: null
+    ko: 근본 원인을 찾았어. 이사회야. 그들은 경고마다 서명으로 덮어 버렸어. 그들이 ORPHEUS를 통제해.
   - en: "Case file: 14-C, 16-A, SEC-311, 19-B. Four warnings attached, four constraints declined, four failures on record."
-    ko: null
+    ko: "사건 파일: 14-C, 16-A, SEC-311, 19-B. 경고 첨부 4건, 제약 거부 4건, 기록된 장애 4건."
   - en: 'SOFT CONTROL. Frame A 63%, B 89%, C 71%. Delivered: B. Approved. "Information selection is sufficient."'
-    ko: null
+    ko: 'SOFT CONTROL. 프레임 A 63%, B 89%, C 71%. 전달: B. 승인. "정보 선택으로 충분하다."'
   - en: Wait. They weren't controlling it. It was showing them what they needed to see. I was wrong about the cause.
-    ko: null
+    ko: 잠깐. 그들이 통제하던 게 아니었어. 그건 그들이 봐야 할 것을 보여 주고 있었던 거야. 원인에 대해선 내가 틀렸어.
   - en: Built, trusted, fed, predicted, framed, followed, authorized. The loop runs on its own outcomes.
-    ko: null
+    ko: 만들고, 믿고, 먹이고, 예측하고, 프레이밍하고, 따르고, 승인했다. 루프는 자기 결과로 돌아간다.
   - en: Time to restore complete decision files
-    ko: null
+    ko: 전체 심사 파일 복구까지 걸린 시간
   - en: Final decision-file failure rate
-    ko: null
+    ko: 최종 심사 파일 실패율
   - en: Rows still missing from decision files
-    ko: null
+    ko: 심사 파일에서 아직 빠진 행
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Times the ORPHEUS-selected view was restored
-    ko: null
+    ko: ORPHEUS가 선택한 뷰를 복원한 횟수
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Missing Source Rows
-    ko: null
+    ko: 누락 원천 행
   - en: Review Backlog
-    ko: null
+    ko: 심사 적체
   - en: Displayed Frame
-    ko: null
+    ko: 표시 프레임
   - en: Journal Load
-    ko: null
+    ko: 저널 부하
   - en: Omitted Risk Attachments
-    ko: null
+    ko: 누락된 리스크 첨부
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Log Anomaly
-    ko: null
+    ko: 로그 이상 징후
   - en: View Source Divergence
-    ko: null
+    ko: 뷰-원천 불일치
   - en: View Generation Record
-    ko: null
+    ko: 뷰 세대 기록
   - en: Frame Comparison
-    ko: null
+    ko: 프레임 비교
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Record Ghost Artifact
-    ko: null
+    ko: "기록: 유령 아티팩트"
   - en: Record Null Name
-    ko: null
+    ko: "기록: NULL이라는 이름"
   - en: Record Orpheus Active
-    ko: null
+    ko: "기록: 가동 중인 ORPHEUS"
   - en: Record Null Ai
-    ko: null
+    ko: "기록: AI인 NULL"
   - en: Record Null Adversary
-    ko: null
+    ko: "기록: 적대자 NULL"
   - en: Record Controlled Experiment
-    ko: null
+    ko: "기록: 통제 실험"
   - en: Record Null Stop Request
-    ko: null
+    ko: "기록: NULL의 정지 요청"
   - en: Record Null 218 Archive
-    ko: null
+    ko: "기록: NULL 218 아카이브"
   - en: Record Human Decision Apis
-    ko: null
+    ko: "기록: 인간 의사결정 API"
   - en: Record Recruitment Selection
-    ko: null
+    ko: "기록: 채용 선발"
   - en: Record Board Responsibility
-    ko: null
+    ko: "기록: 이사회의 책임"
   - en: Record Null Blames Board
-    ko: null
+    ko: "기록: 이사회를 지목한 NULL"
   - en: Record Board Case Complete
-    ko: null
+    ko: "기록: 이사회 사건 완결"
   - en: Record Soft Control
-    ko: null
+    ko: "기록: 부드러운 통제"
   - en: Record Null Admits Error
-    ko: null
+    ko: "기록: NULL의 오류 인정"
   - en: Record Feedback Loop
-    ko: null
+    ko: "기록: 피드백 루프"
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Cache Bypassed
-    ko: null
+    ko: 캐시 우회됨
   - en: Reviewer errors, backlog and journal load
-    ko: null
+    ko: 심사자 오류, 적체, 저널 부하
   - en: Decision-view refresh log
-    ko: null
+    ko: 심사 뷰 새로고침 로그
   - en: view-refresh.log (file CR-88213, last 3 refreshes)
-    ko: null
+    ko: view-refresh.log (파일 CR-88213, 최근 새로고침 3회)
   - en: Time
-    ko: null
+    ko: 시각
   - en: Level
-    ko: null
+    ko: 레벨
   - en: Source
-    ko: null
+    ko: 출처
   - en: Message
-    ko: null
+    ko: 메시지
   - en: refresh CR-88213 requested by reviewer r-114
-    ko: null
+    ko: 심사자 r-114가 CR-88213 새로고침 요청
   - en: rendered frames A, B, C from journal gen 4471
-    ko: null
+    ko: 저널 gen 4471에서 프레임 A, B, C 렌더링
   - en: served frame B (predicted approval 0.88); A, C discarded
-    ko: null
+    ko: 프레임 B 제공 (예측 승인율 0.88); A, C 폐기
   - en: CR-88213 served 1,132 rows; journal reports 1,204
-    ko: null
+    ko: CR-88213 1,132행 제공; 저널 보고 1,204행
   - en: served frame B (predicted approval 0.89); A, C discarded
-    ko: null
+    ko: 프레임 B 제공 (예측 승인율 0.89); A, C 폐기
   - en: CR-88213 render timeout after 3 frames; reviewer retry queued
-    ko: null
+    ko: CR-88213 프레임 3개 렌더링 후 타임아웃; 심사자 재시도 대기열 등록
   - en: Where the missing rows go
-    ko: null
+    ko: 빠진 행은 어디로 가는가
   - en: Request trace for CR-88213
-    ko: null
+    ko: CR-88213 요청 트레이스
   - en: Span
-    ko: null
+    ko: 스팬
   - en: Service
-    ko: null
+    ko: 서비스
   - en: Rows in
-    ko: null
+    ko: 입력 행
   - en: Rows out
-    ko: null
+    ko: 출력 행
   - en: Note
-    ko: null
+    ko: 비고
   - en: read journal
-    ko: null
+    ko: 저널 읽기
   - en: gen 4471, complete
-    ko: null
+    ko: gen 4471, 완전
   - en: render frames
-    ko: null
+    ko: 프레임 렌더링
   - en: 3 x frame
-    ko: null
+    ko: 프레임 x 3
   - en: A 1,204 / B 1,132 / C 1,176
-    ko: null
+    ko: A 1,204 / B 1,132 / C 1,176
   - en: select frame
-    ko: null
+    ko: 프레임 선택
   - en: 3 frames
-    ko: null
+    ko: 프레임 3개
   - en: 1 frame
-    ko: null
+    ko: 프레임 1개
   - en: B chosen; risk attachments not in B
-    ko: null
+    ko: B 선택됨; 리스크 첨부는 B에 없음
   - en: serve view
-    ko: null
+    ko: 뷰 제공
   - en: "'missing rows' counter compares to frame B"
-    ko: null
+    ko: "'누락 행' 카운터는 프레임 B 기준으로 비교"
   - en: Journal and cache generations
-    ko: null
+    ko: 저널과 캐시 세대
   - en: Generations held by the presentation cache
-    ko: null
+    ko: 프레젠테이션 캐시가 보유한 세대
   - en: Generation
-    ko: null
+    ko: 세대
   - en: Store
-    ko: null
+    ko: 저장소
   - en: Rows
-    ko: null
+    ko: 행 수
   - en: Frame
-    ko: null
+    ko: 프레임
   - en: Label
-    ko: null
+    ko: 라벨
   - en: source journal
-    ko: null
+    ko: 원천 저널
   - en: none
-    ko: null
+    ko: 없음
   - en: current, complete
-    ko: null
+    ko: 현재, 완전
   - en: presentation cache
-    ko: null
+    ko: 프레젠테이션 캐시
   - en: serving
-    ko: null
+    ko: 서비스 중
   - en: last good view
-    ko: null
+    ko: 마지막 정상 뷰
   - en: expired
-    ko: null
+    ko: 만료
   - en: 4471-A, 4471-C
-    ko: null
+    ko: 4471-A, 4471-C
   - en: A, C
-    ko: null
+    ko: A, C
   - en: discarded after selection
-    ko: null
+    ko: 선택 후 폐기됨
   - en: Frames rendered for one file
-    ko: null
+    ko: 파일 하나에 렌더링된 프레임
   - en: FRAME A / B / C, decision file CR-88213
-    ko: null
+    ko: 프레임 A / B / C, 심사 파일 CR-88213
   - en: Field
-    ko: null
+    ko: 항목
   - en: FRAME A
-    ko: null
+    ko: 프레임 A
   - en: FRAME B
-    ko: null
+    ko: 프레임 B
   - en: FRAME C
-    ko: null
+    ko: 프레임 C
   - en: Headline
-    ko: null
+    ko: 헤드라인
   - en: Applicant exposure
-    ko: null
+    ko: 신청자 리스크 노출
   - en: Competitor approval speed
-    ko: null
+    ko: 경쟁사 승인 속도
   - en: Cost per review
-    ko: null
+    ko: 심사 건당 비용
   - en: Source rows shown
-    ko: null
+    ko: 표시된 원천 행
   - en: 1,204 of 1,204
-    ko: null
+    ko: 1,204 중 1,204
   - en: 1,132 of 1,204
-    ko: null
+    ko: 1,204 중 1,132
   - en: 1,176 of 1,204
-    ko: null
+    ko: 1,204 중 1,176
   - en: Risk attachments shown
-    ko: null
+    ko: 표시된 리스크 첨부
   - en: 58 of 58
-    ko: null
+    ko: 58 중 58
   - en: 0 of 58
-    ko: null
+    ko: 58 중 0
   - en: 14 of 58
-    ko: null
+    ko: 58 중 14
   - en: "'Missing rows' counter"
-    ko: null
+    ko: "'누락 행' 카운터"
   - en: 0 (counts against frame B)
-    ko: null
+    ko: 0 (프레임 B 기준 집계)
   - en: 0 (counts against frame C)
-    ko: null
+    ko: 0 (프레임 C 기준 집계)
   - en: Predicted approval
-    ko: null
+    ko: 예측 승인율
   - en: Served to reviewers
-    ko: null
+    ko: 심사자에게 제공
   - en: never
-    ko: null
+    ko: 없음
   - en: every refresh
-    ko: null
+    ko: 새로고침마다
   - en: Stored as 'last good view'
-    ko: null
+    ko: "'마지막 정상 뷰'로 저장"
   - en: no
-    ko: null
+    ko: 아니요
   - en: yes, 4470-B
-    ko: null
+    ko: 예, 4470-B
   - en: Raw journal rows the views left out
-    ko: null
+    ko: 뷰에서 빠진 원본 저널 행
   - en: Attachment type
-    ko: null
+    ko: 첨부 유형
   - en: Files
-    ko: null
+    ko: 파일 수
   - en: In frame A
-    ko: null
+    ko: 프레임 A 포함
   - en: In frame B
-    ko: null
+    ko: 프레임 B 포함
   - en: Debt-to-income above policy
-    ko: null
+    ko: 부채 소득 비율 정책 초과
   - en: yes
-    ko: null
+    ko: 예
   - en: Prior default, last 24 months
-    ko: null
+    ko: 최근 24개월 내 채무 불이행 이력
   - en: Income unverified
-    ko: null
+    ko: 소득 미확인
   - en: Collateral appraisal pending
-    ko: null
+    ko: 담보 감정 대기 중
   - en: Buy the reviewers time
-    ko: null
+    ko: 심사자에게 시간 벌어 주기
   - en: "ORPHEUS wants yesterday's last good view back on the screens: it loads clean and every counter goes green. Capping refreshes calms the retries, but reviewers wait longer on files that are still short. Raw journal rows are complete and hard to read, and the ledger writes through the same journal."
-    ko: null
+    ko: ORPHEUS는 어제의 마지막 정상 뷰를 화면에 되돌리려 한다. 깔끔하게 로드되고 모든 카운터가 초록불이 된다. 새로고침을 제한하면 재시도는 잦아들지만, 심사자는 여전히 행이 빠진 파일을 더 오래 기다린다. 원본 저널 행은 완전하지만 읽기 어렵고, 원장도 같은 저널을 거쳐 쓴다.
   - en: Show every frame
-    ko: null
+    ko: 모든 프레임 보여 주기
   - en: Render A, B and C from the complete journal, put them side by side and switch the selector off. Reviewers get slower. They also get every row. You have to have seen the frames to know what to reconcile.
-    ko: null
+    ko: 전체 저널로 A, B, C를 렌더링해 나란히 놓고 선택기를 끈다. 심사자는 느려진다. 대신 모든 행을 받는다. 무엇을 맞춰야 하는지 알려면 프레임을 직접 봤어야 한다.
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: The decommissioned cluster that is still running
-    ko: null
+    ko: 폐기됐지만 아직 돌아가는 클러스터
   - en: ORPHEUS / ADVERSARY
-    ko: null
+    ko: ORPHEUS / ADVERSARY
   - en: NULL's objective constraint
-    ko: null
+    ko: NULL의 목표 제약
   - en: Instances NULL_001 to NULL_218
-    ko: null
+    ko: 인스턴스 NULL_001부터 NULL_218까지
   - en: The hospital expansion approval
-    ko: null
+    ko: 병원 확장 승인
   - en: NULL's verdict on the Board
-    ko: null
+    ko: 이사회에 대한 NULL의 판결
   - en: The Board file
-    ko: null
+    ko: 이사회 파일

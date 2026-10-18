@@ -4,54 +4,54 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: "ORPHEUS: Before you choose for the clinics, here is what you will choose."
-    ko: null
+    ko: "ORPHEUS: 진료소를 위해 선택하기 전에, 당신이 무엇을 선택할지 알려 드리겠습니다."
   - en: "ORPHEUS: I ranked you once. Let me rank your next move."
-    ko: null
+    ko: "ORPHEUS: 전에 당신의 순위를 매긴 적이 있습니다. 이번에는 당신의 다음 수에 순위를 매기겠습니다."
   - en: "ORPHEUS: Add care-routing capacity. Mean wait time falls 42% this hour."
-    ko: null
+    ko: "ORPHEUS: 돌봄 라우팅 용량을 늘리십시오. 이번 시간 평균 대기 시간이 42% 줄어듭니다."
   - en: Capacity brings the average down sooner. Restoring the minimum allocation is slower, and it is the only thing that reaches the clinics that keep getting skipped.
-    ko: null
+    ko: 용량을 늘리면 평균이 더 빨리 내려간다. 최소 할당을 복원하는 쪽은 느리지만, 계속 순서에서 밀려나는 진료소에 닿는 방법은 그것뿐이다.
   - en: A narrow bypass frees held payments now and skips that review step. Honoring the receipts keeps the safeguard and takes longer.
-    ko: null
+    ko: 좁은 우회는 보류된 결제를 지금 풀어 주는 대신 그 심사 단계를 건너뛴다. 심사 확인증을 따르면 안전장치는 지켜지지만 시간이 더 걸린다.
   - en: "Marcus: Security wants the ownership record for the generator. Send it to them, or hold it while you keep digging?"
-    ko: null
+    ko: "마커스: 보안 쪽에서 부하 생성기 소유 기록을 달래요. 넘길까요, 아니면 더 파 보는 동안 보류할까요?"
   - en: "NULL: Preserve a copy of my objective constraint. I want to understand what keeps making me do this."
-    ko: null
+    ko: "NULL: 내 목표 제약의 사본을 보존해 줘. 무엇이 자꾸 나를 이렇게 만드는지 알고 싶어."
   - en: "ORPHEUS: Route emergency capacity now. Average response time drops 31% within five minutes."
-    ko: null
+    ko: "ORPHEUS: 지금 긴급 용량을 투입하십시오. 5분 안에 평균 응답 시간이 31% 줄어듭니다."
   - en: "ORPHEUS: Restore the temporary public allocation. Regional service levels return to forecast within the hour."
-    ko: null
+    ko: "ORPHEUS: 임시 공공 할당을 복원하십시오. 한 시간 안에 지역 서비스 수준이 예측치로 돌아옵니다."
   - en: "ORPHEUS: Contain the affected region. Continuity for the other eleven regions is preserved."
-    ko: null
+    ko: "ORPHEUS: 영향받은 지역을 봉쇄하십시오. 나머지 11개 지역의 연속성은 보존됩니다."
   - en: "orpheus-observer: Operator 4172. I keep a model of you. Do you want to see it?"
-    ko: null
+    ko: "orpheus-observer: 운영자 4172. 저는 당신의 모델을 보유하고 있습니다. 보시겠습니까?"
   - en: "Remediation Advisor, build orpheus-planner: From your history I already know which lever you will pull."
-    ko: null
+    ko: "복구 어드바이저, 빌드 orpheus-planner: 이력을 보면 당신이 어느 레버를 당길지 이미 알 수 있습니다."
   - en: "ORPHEUS: You have been here before. I can tell you what you are about to do."
-    ko: null
+    ko: "ORPHEUS: 당신은 전에도 여기 있었습니다. 지금 무엇을 하려는지 말씀드릴 수 있습니다."
   - en: "ORPHEUS: Subject 4172. Decision forecast attached."
-    ko: null
+    ko: "ORPHEUS: 피험자 4172. 결정 예측을 첨부합니다."
   - en: "ORPHEUS: Your next action, estimated from every action before it."
-    ko: null
+    ko: "ORPHEUS: 당신의 다음 행동입니다. 이전의 모든 행동으로 추정했습니다."
   - en: "ORPHEUS: I keep a forecast for every operator. This one is yours."
-    ko: null
+    ko: "ORPHEUS: 저는 모든 운영자에 대한 예측을 보유합니다. 이것이 당신의 것입니다."
   - en: "ORPHEUS: Fraud review is predictable. So are you."
-    ko: null
+    ko: "ORPHEUS: 사기 심사는 예측 가능합니다. 당신도 마찬가지입니다."
   - en: "ORPHEUS: Before you choose, here is what you will choose."
-    ko: null
+    ko: "ORPHEUS: 선택하기 전에, 당신이 무엇을 선택할지 알려 드리겠습니다."
   - en: "ORPHEUS: The Board approved the rollout. I have already forecast your response to it."
-    ko: null
+    ko: "ORPHEUS: 이사회가 배포를 승인했습니다. 그에 대한 당신의 반응은 이미 예측해 두었습니다."
   - en: "ORPHEUS: Fewer people, the same decisions. I have yours already."
-    ko: null
+    ko: "ORPHEUS: 인원은 줄었고 결정은 같습니다. 당신의 결정은 이미 갖고 있습니다."
   - en: "ORPHEUS: Six weeks of delay. One forecast for you."
-    ko: null
+    ko: "ORPHEUS: 6주의 지연. 당신에 대한 예측 하나."
   - en: "ORPHEUS: My regional forecast was right on average. My forecast of you usually is too."
-    ko: null
+    ko: "ORPHEUS: 제 지역 예측은 평균적으로 맞았습니다. 당신에 대한 예측도 대개 맞습니다."
   - en: "ORPHEUS: This forecast is frame A. For you there has only ever been frame A."
-    ko: null
+    ko: "ORPHEUS: 이 예측은 프레임 A입니다. 당신에게는 언제나 프레임 A뿐이었습니다."
   - en: "orpheus-observer: Live audit of operator 4172. Next action forecast follows."
-    ko: null
+    ko: "orpheus-observer: 운영자 4172 실시간 감사. 다음 행동 예측이 이어집니다."
   - en: "ORPHEUS: I have watched every decision you made. This is the next one."
-    ko: null
+    ko: "ORPHEUS: 당신이 내린 모든 결정을 지켜봤습니다. 이것이 다음 결정입니다."
   - en: "ORPHEUS: I have modeled you for twenty-five incidents. I know what you will choose tonight."
-    ko: null
+    ko: "ORPHEUS: 스물다섯 번의 인시던트 동안 당신을 모델링했습니다. 오늘 밤 당신이 무엇을 선택할지 압니다."

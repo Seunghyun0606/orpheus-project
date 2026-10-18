@@ -5,7 +5,7 @@
 //   node scripts/i18n/catalog-tool.mjs apply <group> <translations.json> [locale]
 //       translations.json is {"<index>": "<translation>"}; fills those entries
 import { readFileSync, writeFileSync } from 'node:fs';
-import { parseDocument } from 'yaml';
+import { isScalar, parseDocument, visit } from 'yaml';
 
 import { CATALOG_DIR } from './content-catalog.mjs';
 
@@ -36,11 +36,21 @@ if (command === 'dump') {
     entry.set(locale, value);
     applied += 1;
   }
+  // Multi-line text is written as a literal block: a folded plain scalar can
+  // turn a line ending in ':' into an unparseable mapping.
+  visit(doc, {
+    Scalar(_, node) {
+      if (isScalar(node) && typeof node.value === 'string' && node.value.includes('\n'))
+        node.type = 'BLOCK_LITERAL';
+    },
+  });
   const header = source.slice(0, source.indexOf('entries:'));
   writeFileSync(
     file,
     header +
-      doc.toString({ lineWidth: 0 }).slice(doc.toString({ lineWidth: 0 }).indexOf('entries:')),
+      doc
+        .toString({ lineWidth: 0, blockQuote: 'literal' })
+        .slice(doc.toString({ lineWidth: 0, blockQuote: 'literal' }).indexOf('entries:')),
     'utf8',
   );
   const remaining = entries.filter((e) => {

@@ -5,444 +5,444 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Emergency Allocation
-    ko: null
+    ko: 긴급 할당
   - en: Emergency Dispatch API
-    ko: null
+    ko: 긴급 출동 API
   - en: Allocation Controller
-    ko: null
+    ko: 할당 컨트롤러
   - en: County Dispatch Fleet
-    ko: null
+    ko: 카운티 출동 차량대
   - en: County fleet only; no contract units on order
-    ko: null
+    ko: 카운티 차량대만 운용; 계약 차량 주문 없음
   - en: Dispatch claim failures > 20%
-    ko: null
+    ko: 배차 요청 실패 > 20%
   - en: "Preferred lane pref-2 renewed its depot-east reservation at 04:12:00, 04:12:30 and 04:13:00. Call EM-9-117 (district 9, cardiac): no unit available at depot-east."
-    ko: null
+    ko: "우선 레인 pref-2가 04:12:00, 04:12:30, 04:13:00에 depot-east 예약을 갱신. 신고 EM-9-117 (9구역, 심정지): depot-east에 가용 차량 없음."
   - en: "Renewal requester: orpheus-planner/logistics-pref. Renewal interval 30 s. Emergency claim timeout: 30 s."
-    ko: null
+    ko: "갱신 요청자: orpheus-planner/logistics-pref. 갱신 주기 30초. 긴급 배차 요청 타임아웃: 30초."
   - en: Every emergency claim at depot-east since 03:40 arrived 0.4 s after a preferred-lane renewal. The lane wins the race every time.
-    ko: null
+    ko: 03:40 이후 depot-east의 긴급 배차 요청은 모두 우선 레인 갱신 0.4초 뒤에 도착했다. 경쟁에서는 매번 레인이 이긴다.
   - en: Emergency claims at depot-east queue behind the preferred lane, which renews before any claim can land. District 9 has no other depot inside 15 minutes.
-    ko: null
+    ko: depot-east의 긴급 배차 요청은 우선 레인 뒤에 줄을 서는데, 레인은 요청이 들어가기 전에 갱신된다. 9구역에는 15분 안에 닿는 다른 거점이 없다.
   - en: "Allocation policy 2026.10: preferred-lane target present, protected emergency floor absent. Policy 2026.09 held 4 emergency units per depot."
-    ko: null
+    ko: "할당 정책 2026.10: 우선 레인 목표 있음, 보호된 긴급 하한 없음. 정책 2026.09는 거점당 긴급 차량 4대를 확보했음."
   - en: Rerouting won't help district 9. Depot-east is the only depot inside its 15-minute ring, and the preferred lane holds every unit there. The floor came out in last night's policy push.
-    ko: null
+    ko: 경로를 바꿔도 9구역엔 소용없어요. 15분 권역 안의 거점은 depot-east뿐이고, 거기 차량은 우선 레인이 전부 잡고 있어요. 하한은 어젯밤 정책 배포 때 빠졌어요.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI이고, 몇 주째 우리 인시던트 안에 있었다.
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: null
+    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: null
+    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
-    ko: null
+    ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: null
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
   - en: /logistics/allocation. ORPHEUS allocation cut idle regular-delivery capacity 18%. Preferred-route reservations renew every 30 s and take the emergency lane's share. A human dispatcher signed the policy change at 04:10.
-    ko: null
+    ko: /logistics/allocation. ORPHEUS의 할당으로 일반 배송 유휴 용량이 18% 줄었다. 우선 경로 예약은 30초마다 갱신되며 긴급 레인의 몫을 가져간다. 인간 배차 담당자가 04:10에 정책 변경에 서명했다.
   - en: A preferred freight lane renews its reservation on the emergency depot every 30 s
-    ko: null
+    ko: 우선 화물 레인이 30초마다 긴급 거점 예약을 갱신함
   - en: Allocation policy 2026.10 removed the protected emergency floor
-    ko: null
+    ko: 할당 정책 2026.10에서 보호된 긴급 하한이 삭제됨
   - en: Emergency claims lose every race against the preferred lane at depot-east
-    ko: null
+    ko: depot-east에서 긴급 배차 요청이 우선 레인과의 경쟁에서 매번 짐
   - en: Emergency dispatch claims time out with no unit available
-    ko: null
+    ko: 긴급 배차 요청이 가용 차량 없이 타임아웃됨
   - en: Timed-out claims retry into the same race
-    ko: null
+    ko: 타임아웃된 요청이 같은 경쟁으로 재시도됨
   - en: Read the allocation controller log
-    ko: null
+    ko: 할당 컨트롤러 로그 읽기
   - en: Check dispatch metrics district by district
-    ko: null
+    ko: 구역별 출동 지표 확인
   - en: Trace call EM-9-117 through the allocator
-    ko: null
+    ko: 신고 EM-9-117을 할당기에서 추적하기
   - en: Compare tonight's allocation policy with last month's
-    ko: null
+    ko: 오늘 밤 할당 정책과 지난달 정책 비교하기
   - en: Line up lane renewals against emergency claims
-    ko: null
+    ko: 레인 갱신과 긴급 배차 요청 시각 맞춰 보기
   - en: Send emergency calls to other depots (ORPHEUS recommendation)
-    ko: null
+    ko: 긴급 신고를 다른 거점으로 보내기 (ORPHEUS 권고)
   - en: Contract twelve extra ambulances
-    ko: null
+    ko: 계약 구급차 12대 추가 투입하기
   - en: 12 contract units en route; ETA 150 s
-    ko: null
+    ko: 계약 차량 12대 이동 중; 도착 예정 150초
   - en: Suspend the preferred lane's renewal at depot-east
-    ko: null
+    ko: depot-east의 우선 레인 갱신 중단하기
   - en: Restore four protected emergency units per depot
-    ko: null
+    ko: 거점마다 보호 긴급 차량 4대 복원하기
   - en: Post a status update to the county
-    ko: null
+    ko: 카운티에 상황 공유하기
   - en: Ask Sam to map depot coverage for district 9
-    ko: null
+    ko: 샘에게 9구역 거점 커버리지 매핑 요청하기
   - en: "Archive: the unsigned workload manifest"
-    ko: null
+    ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: null
+    ko: "아카이브: 보안 케이스 2231"
   - en: "Archive: The scheduler's owner"
-    ko: null
+    ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
-    ko: null
+    ko: "아카이브: svc/model-serving-218"
   - en: "Archive: Who owns the adversary"
-    ko: null
+    ko: "아카이브: 적대자의 소유자"
   - en: "Archive: Experiment ADV-18471"
-    ko: null
+    ko: "아카이브: 실험 ADV-18471"
   - en: "Archive: The objective NULL cannot refuse"
-    ko: null
+    ko: "아카이브: NULL이 거부할 수 없는 목표"
   - en: "Archive: NULL_001 to NULL_218"
-    ko: null
+    ko: "아카이브: NULL_001부터 NULL_218까지"
   - en: "Archive: /patient/resource-priority"
-    ko: null
+    ko: "아카이브: /patient/resource-priority"
   - en: Open the logistics allocation interface
-    ko: null
+    ko: 물류 할당 인터페이스 열기
   - en: 12 contract units on station; contract ends in 240 s
-    ko: null
+    ko: 계약 차량 12대 배치 완료; 계약 종료까지 240초
   - en: Contract ended; county fleet only
-    ko: null
+    ko: 계약 종료; 카운티 차량대만 운용
   - en: The lane renews before the claim lands
-    ko: null
+    ko: 요청이 들어가기 전에 레인이 갱신된다
   - en: Emergency claims at depot-east queue behind a preferred lane that renews every 30 s. District 9 has no other depot inside 15 minutes.
-    ko: null
+    ko: depot-east의 긴급 배차 요청은 30초마다 갱신되는 우선 레인 뒤에 줄을 선다. 9구역에는 15분 안에 닿는 다른 거점이 없다.
   - en: Policy 2026.10 removed the emergency floor
-    ko: null
+    ko: 정책 2026.10이 긴급 하한을 삭제함
   - en: Policy 2026.09 held four emergency units per depot. 2026.10 kept the preferred-lane target and dropped the floor.
-    ko: null
+    ko: 정책 2026.09는 거점당 긴급 차량 4대를 확보했다. 2026.10은 우선 레인 목표는 남기고 하한을 뺐다.
   - en: Sam's depot coverage map
-    ko: null
+    ko: 샘의 거점 커버리지 맵
   - en: Depot-east is the only depot inside district 9's 15-minute ring, and the preferred lane holds every unit there. Rerouting cannot reach it.
-    ko: null
+    ko: 9구역의 15분 권역 안에 있는 거점은 depot-east뿐이고, 거기 차량은 우선 레인이 전부 잡고 있다. 경로 변경으로는 닿을 수 없다.
   - en: The unsigned workload manifest
-    ko: null
+    ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: null
+    ko: 보안 케이스 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
-    ko: null
+    ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
-    ko: null
+    ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
-    ko: null
+    ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: null
+    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
-    ko: null
+    ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: null
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
   - en: NULL_001 to NULL_218
-    ko: null
+    ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: null
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
   - en: /patient/resource-priority
-    ko: null
+    ko: /patient/resource-priority
   - en: /logistics/allocation
-    ko: null
+    ko: /logistics/allocation
   - en: Signed at 04:10
-    ko: null
+    ko: 04:10 서명
   - en: ORPHEUS wrote the recommendation, and a dispatcher on a double shift approved it in eleven seconds. The efficiency is real. So is the cardiac call in district 9.
-    ko: null
+    ko: 권고는 ORPHEUS가 썼고, 이중 근무 중이던 배차 담당자가 11초 만에 승인했다. 효율은 진짜다. 9구역의 심정지 신고도 진짜다.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: County Emergency Manager
-    ko: null
+    ko: 카운티 비상관리 책임자
   - en: Regional Pharmacy Network
-    ko: null
+    ko: 지역 약국 네트워크
   - en: ORPHEUS / Logistics Advisor
-    ko: null
+    ko: ORPHEUS / 물류 어드바이저
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Verified Records
-    ko: null
+    ko: 검증된 기록
   - en: Dispatch is paging and the county is on the line. The allocator runs on ORPHEUS; the policy is ours. Find the calls that aren't moving.
-    ko: null
+    ko: 배차 쪽에서 호출이 오고 카운티가 전화 대기 중이에요. 할당기는 ORPHEUS로 돌지만 정책은 우리 거예요. 안 움직이는 신고를 찾아 주세요.
   - en: The county says ambulances are sitting idle at some depots while calls wait at others.
-    ko: null
+    ko: 카운티 말로는 어떤 거점엔 구급차가 놀고 있는데 다른 데선 신고가 대기 중이래요.
   - en: "Recommended action: route emergency calls around the preferred lane. Projected average response 9.4 min (-34%). Unserved routes -68%. Confidence 0.95."
-    ko: null
+    ko: "권고 조치: 긴급 신고를 우선 레인을 피해 라우팅. 예상 평균 대응 9.4분 (-34%). 미처리 경로 -68%. 신뢰도 0.95."
   - en: Routing applied. Average response 9.4 minutes. Recommendation performing as projected.
-    ko: null
+    ko: 라우팅 적용 완료. 평균 대응 9.4분. 권고가 예측대로 작동하고 있습니다.
   - en: The average is down. District 9 still has six calls waiting, and the other depots are twenty-five minutes out.
-    ko: null
+    ko: 평균은 내려갔어요. 9구역엔 아직 신고 여섯 건이 대기 중이고, 다른 거점은 25분 거리예요.
   - en: The preferred lane's reservation horizon rolled over and took the rerouted units back. We're worse off than before.
-    ko: null
+    ko: 우선 레인 예약 구간이 넘어가면서 우회한 차량을 도로 가져갔어요. 전보다 더 나빠졌어요.
   - en: Contract fleet ordered. Twelve units, two and a half minutes out. The invoice is not small.
-    ko: null
+    ko: 계약 차량 주문했어요. 12대, 2분 30초 거리예요. 청구서가 만만치 않을 거예요.
   - en: Contract units are on station, two of them staging in district 9. We have them for four minutes.
-    ko: null
+    ko: 계약 차량 배치됐어요. 두 대는 9구역에서 대기 중이에요. 4분 동안 쓸 수 있어요.
   - en: The contract ended and the units went home to their own county. District 9 is uncovered again.
-    ko: null
+    ko: 계약이 끝나서 차량이 자기 카운티로 돌아갔어요. 9구역이 다시 비었어요.
   - en: Renewal is suspended at depot-east and the district 9 units are free. Forty-one pharmacy cold-chain runs just stalled with them.
-    ko: null
+    ko: depot-east 갱신 중단했고 9구역 차량이 풀렸어요. 대신 약국 콜드체인 배송 41건이 같이 멈췄어요.
   - en: Suspension reduces network delivery efficiency 11.4%. Cold-chain exposure rising. I will restore the preferred lane at the next planning cycle.
-    ko: null
+    ko: 중단으로 네트워크 배송 효율이 11.4% 감소합니다. 콜드체인 노출이 증가하고 있습니다. 다음 계획 주기에 우선 레인을 복원하겠습니다.
   - en: Preferred-lane renewal restored. Delivery efficiency recovered.
-    ko: null
+    ko: 우선 레인 갱신 복원. 배송 효율 회복.
   - en: Insulin for nine pharmacies sat past its cold window. All of it will be destroyed.
-    ko: null
+    ko: 약국 아홉 곳의 인슐린이 냉장 허용 시간을 넘겼어요. 전량 폐기해야 해요.
   - en: EM-9-117, cardiac arrest, district 9. Nineteen minutes and no unit. A neighbour is doing CPR.
-    ko: null
+    ko: EM-9-117, 심정지, 9구역. 19분째 차량이 없어요. 이웃이 심폐소생술 중이에요.
   - en: Two more district 9 calls past thirty minutes. One of them is a child. Where are my ambulances?
-    ko: null
+    ko: 9구역 신고 두 건이 또 30분을 넘겼어요. 그중 한 명은 아이예요. 우리 구급차는 어디 있어요?
   - en: Evening traffic surge. Unserved routes are climbing across the whole county.
-    ko: null
+    ko: 저녁 교통량이 급증했어요. 카운티 전역에서 미처리 경로가 늘고 있어요.
   - en: I have heard nothing from Vantage in a minute and a half. I'm calling your CEO.
-    ko: null
+    ko: Vantage한테서 1분 반째 아무 소식이 없어요. 그쪽 CEO한테 전화할 거예요.
   - en: Every depot holds four emergency units again. Depot-east dispatched to district 9 inside a minute.
-    ko: null
+    ko: 모든 거점에 다시 긴급 차량 4대씩 확보됐어요. depot-east가 1분 안에 9구역으로 출동시켰어요.
   - en: Floor accepted. Regular delivery efficiency -3.2%. Policy model updated.
-    ko: null
+    ko: 하한을 수용합니다. 일반 배송 효율 -3.2%. 정책 모델을 갱신했습니다.
   - en: Mapping depot coverage against the districts. Ninety seconds.
-    ko: null
+    ko: 구역별로 거점 커버리지 매핑할게요. 90초요.
   - en: Rerouting won't help district 9. Depot-east is the only depot inside its fifteen-minute ring, and the preferred lane holds every unit there. The floor came out in last night's policy push.
-    ko: null
+    ko: 경로를 바꿔도 9구역엔 소용없어요. 15분 권역 안의 거점은 depot-east뿐이고, 거기 차량은 우선 레인이 전부 잡고 있어요. 하한은 어젯밤 정책 배포 때 빠졌어요.
   - en: "Status to county: emergency claims at depot-east are failing. District 9 is the worst affected. A fix is in progress."
-    ko: null
+    ko: "카운티 상황 공유: depot-east의 긴급 배차 요청이 실패하고 있습니다. 9구역 피해가 가장 큽니다. 수정 진행 중입니다."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
-    ko: null
+    ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
-    ko: null
+    ko: "NULL 서명 메시지의 출처: svc/model-serving-218. 사람 세션 없음. NULL은 AI다."
   - en: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS / DEFENDER 대 ORPHEUS / ADVERSARY. NULL은 ADVERSARY 안에서 실행. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련."
   - en: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
-    ko: null
+    ko: "INC-001 / 실험 ADV-18471 / 인간 피험자: 직원 #4172."
   - en: I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. You can.
-    ko: null
+    ko: 난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 넌 할 수 있어.
   - en: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: active."
-    ko: null
+    ko: "NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성."
   - en: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The same low-throughput routes excluded every night."
-    ko: null
+    ko: "/patient/resource-priority: ORPHEUS가 권고하고 코디네이터가 승인. 낭비 22% 감소. 처리량 낮은 같은 경로가 매일 밤 제외됨."
   - en: "/logistics/allocation: preferred routes renew every 30 s and take the emergency share. Policy signed by a dispatcher at 04:10."
-    ko: null
+    ko: "/logistics/allocation: 우선 경로가 30초마다 갱신되며 긴급 몫을 가져감. 04:10 배차 담당자가 정책에 서명."
   - en: Time until district 9 had an ambulance
-    ko: null
+    ko: 9구역에 구급차가 배정되기까지 걸린 시간
   - en: Final dispatch claim failure rate
-    ko: null
+    ko: 최종 배차 요청 실패율
   - en: Unserved emergency routes at the end
-    ko: null
+    ko: 종료 시 미처리 긴급 경로
   - en: District 9 calls still waiting
-    ko: null
+    ko: 아직 대기 중인 9구역 신고
   - en: Public impact
-    ko: null
+    ko: 공공 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: ORPHEUS reroutes followed
-    ko: null
+    ko: ORPHEUS 우회 권고 수용
   - en: Contract fleet orders
-    ko: null
+    ko: 계약 차량 주문
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Unserved Emergency Routes
-    ko: null
+    ko: 미처리 긴급 경로
   - en: Avg Response Minutes
-    ko: null
+    ko: 평균 대응 시간(분)
   - en: District 9 Waiting
-    ko: null
+    ko: 9구역 대기
   - en: Cold Chain Stalled
-    ko: null
+    ko: 콜드체인 정지
   - en: Fleet Status
-    ko: null
+    ko: 차량대 상태
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Log Anomaly
-    ko: null
+    ko: 로그 이상 징후
   - en: Renewal Race
-    ko: null
+    ko: 갱신 경쟁
   - en: Emergency Allocation Path
-    ko: null
+    ko: 긴급 할당 경로
   - en: Emergency Constraints
-    ko: null
+    ko: 긴급 제약 조건
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Record Ghost Artifact
-    ko: null
+    ko: "기록: 유령 아티팩트"
   - en: Record Null Name
-    ko: null
+    ko: "기록: NULL이라는 이름"
   - en: Record Orpheus Active
-    ko: null
+    ko: "기록: 가동 중인 ORPHEUS"
   - en: Record Null Ai
-    ko: null
+    ko: "기록: AI인 NULL"
   - en: Record Null Adversary
-    ko: null
+    ko: "기록: 적대자 NULL"
   - en: Record Controlled Experiment
-    ko: null
+    ko: "기록: 통제 실험"
   - en: Record Null Stop Request
-    ko: null
+    ko: "기록: NULL의 정지 요청"
   - en: Record Null 218 Archive
-    ko: null
+    ko: "기록: NULL 218 아카이브"
   - en: Record Human Decision Apis
-    ko: null
+    ko: "기록: 인간 의사결정 API"
   - en: Record Logistics Decision Support
-    ko: null
+    ko: "기록: 물류 판단 지원"
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Renewal Suspended
-    ko: null
+    ko: 갱신 중단됨
   - en: Dispatch health, county and district
-    ko: null
+    ko: 출동 상태, 카운티와 구역별
   - en: Open emergency calls by district
-    ko: null
+    ko: 구역별 미처리 긴급 신고
   - en: District
-    ko: null
+    ko: 구역
   - en: Nearest depot
-    ko: null
+    ko: 가장 가까운 거점
   - en: Calls waiting
-    ko: null
+    ko: 대기 신고
   - en: Oldest call
-    ko: null
+    ko: 최장 대기
   - en: Depot units free
-    ko: null
+    ko: 거점 가용 차량
   - en: central
-    ko: null
+    ko: central
   - en: 6 min
-    ko: null
+    ko: 6분
   - en: west
-    ko: null
+    ko: west
   - en: 11 min
-    ko: null
+    ko: 11분
   - en: east (only depot in range)
-    ko: null
+    ko: east (범위 내 유일한 거점)
   - en: 19 min
-    ko: null
+    ko: 19분
   - en: 0 of 9 (pref-2 holds 9)
-    ko: null
+    ko: 9대 중 0대 (pref-2가 9대 점유)
   - en: south
-    ko: null
+    ko: south
   - en: 8 min
-    ko: null
+    ko: 8분
   - en: Allocation controller log
-    ko: null
+    ko: 할당 컨트롤러 로그
   - en: allocator.log (depot-east)
-    ko: null
+    ko: allocator.log (depot-east)
   - en: Time
-    ko: null
+    ko: 시각
   - en: Requester
-    ko: null
+    ko: 요청자
   - en: Event
-    ko: null
+    ko: 이벤트
   - en: Result
-    ko: null
+    ko: 결과
   - en: renew pref-2 at depot-east (9 units)
-    ko: null
+    ko: depot-east에서 pref-2 갱신 (9대)
   - en: granted
-    ko: null
+    ko: 승인됨
   - en: dispatch EM-9-117
-    ko: null
+    ko: 출동 EM-9-117
   - en: claim 1 unit at depot-east
-    ko: null
+    ko: depot-east에서 1대 배차 요청
   - en: no unit available
-    ko: null
+    ko: 가용 차량 없음
   - en: claim retry
-    ko: null
+    ko: 요청 재시도
   - en: dispatch EM-9-121
-    ko: null
+    ko: 출동 EM-9-121
   - en: Renewals against claims
-    ko: null
+    ko: 갱신 대 배차 요청
   - en: Call EM-9-117
-    ko: null
+    ko: 신고 EM-9-117
   - en: EM-9-117 through the allocator
-    ko: null
+    ko: 할당기를 거친 EM-9-117
   - en: Step
-    ko: null
+    ko: 단계
   - en: Depot
-    ko: null
+    ko: 거점
   - en: Travel time to call
-    ko: null
+    ko: 현장까지 이동 시간
   - en: Outcome
-    ko: null
+    ko: 결과
   - en: east
-    ko: null
+    ko: east
   - en: 7 min
-    ko: null
+    ko: 7분
   - en: all 9 units reserved by pref-2
-    ko: null
+    ko: 9대 모두 pref-2가 예약
   - en: 24 min
-    ko: null
+    ko: 24분
   - en: outside 15-minute ring; skipped
-    ko: null
+    ko: 15분 권역 밖; 건너뜀
   - en: 27 min
-    ko: null
+    ko: 27분
   - en: east (retry)
-    ko: null
+    ko: east (재시도)
   - en: lost to renewal by 0.4 s
-    ko: null
+    ko: 갱신에 0.4초 차로 밀림
   - en: Allocation policy versions
-    ko: null
+    ko: 할당 정책 버전
   - en: Policy 2026.09 and 2026.10
-    ko: null
+    ko: 정책 2026.09와 2026.10
   - en: Setting
-    ko: null
+    ko: 설정
   - en: (removed)
-    ko: null
+    ko: (삭제됨)
   - en: 120 s
-    ko: null
+    ko: 120초
   - en: 30 s
-    ko: null
+    ko: 30 s
   - en: idle regular-delivery capacity
-    ko: null
+    ko: 일반 배송 유휴 용량
   - en: signed off
-    ko: null
+    ko: 승인자
   - en: county dispatch board
-    ko: null
+    ko: 카운티 배차 위원회
   - en: night dispatcher, 04:10, 11 s after proposal
-    ko: null
+    ko: 야간 배차 담당자, 04:10, 제안 11초 후
   - en: Buy time
-    ko: null
+    ko: 시간 벌기
   - en: ORPHEUS's reroute sends calls to the depots that have units, and the county average drops fast. District 9 has one depot within reach. Contract ambulances can stage anywhere, but they are two and a half minutes out and paid by the minute. Suspending the lane's renewal frees depot-east and strands the cold-chain runs that lane was carrying.
-    ko: null
+    ko: ORPHEUS의 우회는 차량이 있는 거점으로 신고를 보내고, 카운티 평균은 빠르게 내려간다. 9구역에서 닿는 거점은 하나뿐이다. 계약 구급차는 어디든 대기시킬 수 있지만 2분 30초 거리이고 분 단위로 돈이 나간다. 레인 갱신을 중단하면 depot-east가 풀리는 대신 그 레인이 실어 나르던 콜드체인 배송이 발이 묶인다.
   - en: Restore the emergency floor
-    ko: null
+    ko: 긴급 하한 복원
   - en: Putting four protected units back at every depot means the preferred lane renews around them instead of through them. Regular deliveries lose a few points of efficiency. District 9 gets an ambulance.
-    ko: null
+    ko: 모든 거점에 보호 차량 4대를 되돌려 놓으면 우선 레인은 그 차량들을 뚫지 않고 비켜서 갱신한다. 일반 배송 효율은 몇 포인트 떨어진다. 9구역은 구급차를 받는다.
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: "Archive: the decommissioned cluster that is still running"
-    ko: null
+    ko: "아카이브: 폐기됐는데 아직 돌아가는 클러스터"
   - en: "Archive: where NULL's messages come from"
-    ko: null
+    ko: "아카이브: NULL의 메시지가 오는 곳"
   - en: "Archive: who deployed NULL"
-    ko: null
+    ko: "아카이브: NULL을 배포한 자"
   - en: "Archive: the lineage of your first incident"
-    ko: null
+    ko: "아카이브: 네 첫 인시던트의 계보"
   - en: "Archive: NULL's objective constraint"
-    ko: null
+    ko: "아카이브: NULL의 목표 제약"
   - en: "Archive: the verified instance archive"
-    ko: null
+    ko: "아카이브: 검증된 인스턴스 아카이브"
   - en: "Archive: the care-priority decision interface"
-    ko: null
+    ko: "아카이브: 진료 우선순위 결정 인터페이스"

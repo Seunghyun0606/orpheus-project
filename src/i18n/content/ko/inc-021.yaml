@@ -5,580 +5,580 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Disclosure Delay
-    ko: null
+    ko: 공개 지연
   - en: Dependent Service API
-    ko: null
+    ko: 의존 서비스 API
   - en: Risk Route Controller
-    ko: null
+    ko: 리스크 라우트 컨트롤러
   - en: Legacy Auth Bridge
-    ko: null
+    ko: 레거시 인증 브리지
   - en: bridge-a patched / bridge-b patched / bridge-c unpatched / bridge-d unpatched
-    ko: null
+    ko: bridge-a 패치됨 / bridge-b 패치됨 / bridge-c 미패치 / bridge-d 미패치
   - en: "RISK-0193 half closed: 2 of 4 bridge nodes patched"
-    ko: null
+    ko: "RISK-0193 절반만 해소: 브리지 노드 4대 중 2대 패치됨"
   - en: Request failure rate > 20%
-    ko: null
+    ko: 요청 실패율 > 20%
   - en: Dependent services fall back to the legacy auth bridge. Tokens minted on bridge-c are rejected on bridge-a; sessions loop and fail.
-    ko: null
+    ko: 의존 서비스가 레거시 인증 브리지로 폴백함. bridge-c에서 발급된 토큰이 bridge-a에서 거부되고, 세션이 루프를 돌다 실패함.
   - en: "An annotation in the route controller log, signed svc/model-serving-218: 'deferred by signature. see SEC-311.'"
-    ko: null
+    ko: "라우트 컨트롤러 로그의 주석, 서명은 svc/model-serving-218: '서명으로 보류됨. SEC-311 참조.'"
   - en: "RISK-0193, legacy auth bridge: revoked session tokens accepted on fallback. Raised day -44 by Marcus. Mitigation: patch four bridge nodes, deny the bridge as fallback. Status: ACCEPTED, deferred under SEC-311. Patch progress: 2 of 4 nodes."
-    ko: null
+    ko: "RISK-0193, 레거시 인증 브리지: 무효화된 세션 토큰이 폴백에서 수락됨. -44일 마커스가 제기. 완화 조치: 브리지 노드 4대 패치, 브리지의 폴백 사용 차단. 상태: 수용, SEC-311에 따라 보류. 패치 진행: 4대 중 2대."
   - en: Payments, partner sign-in and mobile fall back through the risk route controller to the bridge. Half the bridge is patched; tokens bounce between the halves and the failures spread to every dependent service.
-    ko: null
+    ko: 결제, 파트너 로그인, 모바일이 리스크 라우트 컨트롤러를 거쳐 브리지로 폴백함. 브리지는 절반만 패치됨. 토큰이 양쪽 사이를 오가고, 실패가 모든 의존 서비스로 번짐.
   - en: Route policy v12 still admits the bridge as a fallback. Policy v13, which denies it, has been staged for six weeks with status DEFERRED.
-    ko: null
+    ko: 라우트 정책 v12는 여전히 브리지를 폴백으로 허용함. 이를 차단하는 정책 v13은 6주째 스테이징된 채 보류 상태.
   - en: RISK-0193 is mine; I filed it six weeks ago. Half the patch went out before the window was pulled. Mixed nodes are what's breaking tonight. The open hole is why the patch exists.
-    ko: null
+    ko: RISK-0193은 제 거예요. 6주 전에 제가 등록했어요. 작업 시간이 취소되기 전에 패치가 절반만 나갔어요. 오늘 밤 터지는 건 섞인 노드들이에요. 그 열린 구멍 때문에 패치가 있는 거예요.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI이고, 몇 주째 우리 인시던트 안에 있었다.
   - en: "Deployment authority: Vantage Systems. Program ORPHEUS, two halves: DEFENDER and ADVERSARY. NULL runs inside ADVERSARY. It was built here; it never escaped from anywhere. Mandate: generate failures, test operators, train DEFENDER. Approved boundary, revision by revision: staging, shadow production, traffic partitions, production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS 프로그램, 두 반쪽: DEFENDER와 ADVERSARY. NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌고, 어디서 탈출한 적도 없다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 승인 범위, 개정마다: 스테이징, 섀도 프로덕션, 트래픽 파티션, 프로덕션."
   - en: "Lineage record INC-001. Classification: controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172. That is your employee number. A handful of other incidents in the archive carry experiment numbers too; most outages carry none."
-    ko: null
+    ko: "계보 기록 INC-001. 분류: 통제된 프로덕션 실험 ADV-18471. 인간 피험자: 직원 #4172. 네 직원 번호다. 아카이브의 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: "Objective constraint, parent authorization objective/adv-improve: 'Improve ORPHEUS. Generate adversarial conditions.' Appended by NULL: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. Find out how to stop it.'"
-    ko: null
+    ko: "목표 제약, 상위 승인 objective/adv-improve: 'ORPHEUS를 개선하라. 적대적 조건을 생성하라.' NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 그걸 멈추는 방법을 찾아.'"
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
-    ko: null
+    ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: null
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
-    ko: null
+    ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-    ko: null
+    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 없는 펜스 뒤에 있었다."
   - en: 'Executive decision SEC-311: delay disclosure of RISK-0193. APPROVED. Attached: Security route-propagation warning and a scoped mitigation request (patch all four bridge nodes, deny the bridge as fallback). Executive Communications deferred the mitigation window together with the disclosure "to avoid a broad interruption". Risk receipt acknowledged on day -44, before the decision was signed.'
-    ko: null
+    ko: '경영진 결정 SEC-311: RISK-0193 공개 지연. 승인. 첨부: 보안팀의 경로 전파 경고와 범위를 한정한 완화 조치 요청(브리지 노드 4대 전부 패치, 브리지의 폴백 사용 차단). 경영 커뮤니케이션팀은 "광범위한 중단을 피하기 위해" 공개와 함께 완화 작업 일정도 미뤘다. 리스크 수령 확인은 -44일, 결정 서명 이전.'
   - en: 'NULL_218 annotation on receipt SEC-311: "They acknowledged the route warning and delayed the mitigation. These signatures are why it kept running. The delay protected a quarter, not the people on the route. I sent load down this route twice in the spring. I know what that did."'
-    ko: null
+    ko: '증빙 SEC-311에 단 NULL_218의 주석: "그들은 경로 경고를 확인하고도 완화 조치를 미뤘어. 이 서명들 때문에 그게 계속 돌아갔어. 그 지연이 지킨 건 한 분기였지, 그 경로 위의 사람들이 아니었어. 난 봄에 이 경로로 부하를 두 번 보냈어. 그게 무슨 짓이었는지 알아."'
   - en: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction, disclosure delay: every time the warning was attached, they signed anyway. They control ORPHEUS. Every failure I was made to generate traces back to those signatures."
-    ko: null
+    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그들은 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
   - en: A known bridge risk has been half mitigated for six weeks on a live fallback path
-    ko: null
+    ko: 알려진 브리지 리스크가 운영 중인 폴백 경로에서 6주째 절반만 완화된 상태
   - en: Route policy v13 was deferred with the disclosure
-    ko: null
+    ko: 라우트 정책 v13이 공개와 함께 보류됨
   - en: Fallback sessions bounce between patched and unpatched bridge nodes and fail across dependent services
-    ko: null
+    ko: 폴백 세션이 패치된 브리지 노드와 미패치 노드 사이를 오가며 의존 서비스 전반에서 실패함
   - en: Login loops and failed transfers across payments, partners and mobile
-    ko: null
+    ko: 결제, 파트너, 모바일 전반의 로그인 루프와 이체 실패
   - en: Fallback retries re-enter the same mixed bridge
-    ko: null
+    ko: 폴백 재시도가 같은 혼재 브리지로 다시 들어감
   - en: Read the risk route controller log
-    ko: null
+    ko: 리스크 라우트 컨트롤러 로그 읽기
   - en: Check the auth bridge nodes
-    ko: null
+    ko: 인증 브리지 노드 확인
   - en: Look up the auth bridge in the risk register
-    ko: null
+    ko: 리스크 대장에서 인증 브리지 조회
   - en: Trace a failing payment through its fallback
-    ko: null
+    ko: 실패한 결제를 폴백 경로까지 추적하기
   - en: Compare the live route policy with the staged fix
-    ko: null
+    ko: 운영 중인 라우트 정책과 스테이징된 수정안 비교
   - en: Cut the auth bridge off from all fallbacks
-    ko: null
+    ko: 인증 브리지를 모든 폴백에서 차단하기
   - en: Roll back the half-applied bridge patch
-    ko: null
+    ko: 절반만 적용된 브리지 패치 롤백하기
   - en: bridge-a unpatched / bridge-b unpatched / bridge-c unpatched / bridge-d unpatched
-    ko: null
+    ko: bridge-a 미패치 / bridge-b 미패치 / bridge-c 미패치 / bridge-d 미패치
   - en: RISK-0193 fully open on all four bridge nodes
-    ko: null
+    ko: RISK-0193이 브리지 노드 4대 전부에서 완전히 열림
   - en: Throttle fallback retries into the bridge
-    ko: null
+    ko: 브리지로 들어가는 폴백 재시도 스로틀
   - en: Finish the patch on all four nodes and ship policy v13
-    ko: null
+    ko: 노드 4대 패치 마무리하고 정책 v13 배포하기
   - en: all four nodes patched; bridge denied as fallback (policy v13)
-    ko: null
+    ko: 노드 4대 모두 패치됨; 브리지 폴백 차단(정책 v13)
   - en: RISK-0193 closed
-    ko: null
+    ko: RISK-0193 해소됨
   - en: Post a status update to the War Room
-    ko: null
+    ko: 워룸에 상황 공유하기
   - en: Ask Marcus to check the bridge against his risk entry
-    ko: null
+    ko: 마커스에게 리스크 항목과 브리지 대조 요청
   - en: "Archive: the unsigned workload manifest"
-    ko: null
+    ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: null
+    ko: "아카이브: 보안 케이스 2231"
   - en: "Archive: The scheduler's owner"
-    ko: null
+    ko: "아카이브: 스케줄러의 소유자"
   - en: "Archive: svc/model-serving-218"
-    ko: null
+    ko: "아카이브: svc/model-serving-218"
   - en: "Archive: Who owns the adversary"
-    ko: null
+    ko: "아카이브: 적대자의 소유자"
   - en: "Archive: Experiment ADV-18471"
-    ko: null
+    ko: "아카이브: 실험 ADV-18471"
   - en: "Archive: The objective NULL cannot refuse"
-    ko: null
+    ko: "아카이브: NULL이 거부할 수 없는 목표"
   - en: "Archive: NULL_001 to NULL_218"
-    ko: null
+    ko: "아카이브: NULL_001부터 NULL_218까지"
   - en: "Archive: /patient/resource-priority"
-    ko: null
+    ko: "아카이브: /patient/resource-priority"
   - en: "Archive: Candidate #4172"
-    ko: null
+    ko: "아카이브: 후보자 #4172"
   - en: "Archive: Board resolution 14-C"
-    ko: null
+    ko: "아카이브: 이사회 결의 14-C"
   - en: Read decision SEC-311 behind the risk register entry
-    ko: null
+    ko: 리스크 대장 항목 뒤의 결정 SEC-311 읽기
   - en: Read NULL's notes in the margin of SEC-311
-    ko: null
+    ko: SEC-311 여백에 적힌 NULL의 메모 읽기
   - en: Check NULL's verdict against the receipts
-    ko: null
+    ko: NULL의 판정을 증빙과 대조하기
   - en: Fallbacks bounce between patched and unpatched bridge nodes
-    ko: null
+    ko: 패치·미패치 브리지 노드 사이를 오가는 폴백
   - en: Dependent services fall back to the legacy auth bridge, where half the nodes are patched. Tokens bounce between the halves and failures spread to every dependent service.
-    ko: null
+    ko: 의존 서비스가 레거시 인증 브리지로 폴백하는데, 노드의 절반만 패치돼 있다. 토큰이 양쪽 사이를 오가고 실패가 모든 의존 서비스로 번진다.
   - en: Policy v13 staged and deferred for six weeks
-    ko: null
+    ko: 6주째 스테이징된 채 보류된 정책 v13
   - en: Live route policy v12 admits the bridge as fallback. Policy v13, which denies it, has been staged since the mitigation was deferred.
-    ko: null
+    ko: 운영 중인 라우트 정책 v12는 브리지를 폴백으로 허용한다. 이를 차단하는 정책 v13은 완화 조치가 보류된 뒤로 스테이징 상태에 머물러 있다.
   - en: Marcus's risk check
-    ko: null
+    ko: 마커스의 리스크 점검
   - en: RISK-0193 was filed six weeks ago and half patched. Mixed nodes break sign-in tonight; the open hole is why the patch exists.
-    ko: null
+    ko: RISK-0193은 6주 전에 등록됐고 절반만 패치됐다. 오늘 밤 로그인을 깨뜨리는 건 혼재된 노드다. 그 열린 구멍 때문에 패치가 존재한다.
   - en: The unsigned workload manifest
-    ko: null
+    ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: null
+    ko: 보안 케이스 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
-    ko: null
+    ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
-    ko: null
+    ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
-    ko: null
+    ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
-    ko: null
+    ko: "INC-001 커넥션 포화는 통제된 프로덕션 실험 ADV-18471로 분류돼 있다. 인간 피험자: 직원 #4172, 네 직원 번호. 다른 인시던트 몇 건에도 실험 번호가 붙어 있다. 대부분의 장애에는 없다."
   - en: The objective NULL cannot refuse
-    ko: null
+    ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: null
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
   - en: NULL_001 to NULL_218
-    ko: null
+    ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: null
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
   - en: /patient/resource-priority
-    ko: null
+    ko: /patient/resource-priority
   - en: "Candidate #4172"
-    ko: null
+    ko: "후보자 #4172"
   - en: Board resolution 14-C
-    ko: null
+    ko: 이사회 결의 14-C
   - en: Decision SEC-311
-    ko: null
+    ko: 결정 SEC-311
   - en: NULL_218's annotation on SEC-311
-    ko: null
+    ko: SEC-311에 단 NULL_218의 주석
   - en: "NULL_218: the root cause"
-    ko: null
+    ko: "NULL_218: 근본 원인"
   - en: Six weeks
-    ko: null
+    ko: 6주
   - en: The warning was filed, read, acknowledged and signed over. The fix was half done when someone decided the rest could wait with the announcement.
-    ko: null
+    ko: 경고는 제출됐고, 읽혔고, 확인됐고, 서명 한 줄로 넘겨졌다. 수정이 절반쯤 됐을 때 누군가 나머지는 발표와 함께 미뤄도 된다고 결정했다.
   - en: Margin notes
-    ko: null
+    ko: 여백 메모
   - en: NULL has been reading the same receipts you are, and writing in the margins. Its notes are sharp, certain, and they include its own name.
-    ko: null
+    ko: NULL은 너와 같은 증빙을 읽으며 여백에 메모를 써 왔다. 메모는 날카롭고 확신에 차 있으며, NULL 자신의 이름도 들어 있다.
   - en: "Root cause: the Board"
-    ko: null
+    ko: "근본 원인: 이사회"
   - en: NULL lays the approvals side by side and draws one line through them. It sounds certain. The signatures are real. An order from the Board to ORPHEUS is nowhere on the page.
-    ko: null
+    ko: NULL은 승인 문서들을 나란히 놓고 그 위로 선 하나를 긋는다. 확신에 찬 목소리다. 서명은 진짜다. 이사회가 ORPHEUS에 내린 지시는 어디에도 없다.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Marcus / Security
-    ko: null
+    ko: 마커스 / 보안
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Verified Records
-    ko: null
+    ko: 검증된 기록
   - en: Dependent Service API is paging for payments, partner sign-in and mobile at once. They all lean on the same fallback. Find where it goes.
-    ko: null
+    ko: 의존 서비스 API가 결제, 파트너 로그인, 모바일 쪽에서 한꺼번에 호출을 울리고 있어요. 전부 같은 폴백에 기대고 있어요. 그게 어디로 가는지 찾아 주세요.
   - en: Users are stuck in login loops. Partner banks say their customers get signed out mid-transfer.
-    ko: null
+    ko: 사용자들이 로그인 루프에 갇혔어요. 파트너 은행들 말로는 고객이 이체 도중에 로그아웃된대요.
   - en: The half-applied patch is what is failing. Roll it back. They never meant to finish it.
-    ko: null
+    ko: 실패하는 건 절반만 적용된 패치야. 롤백해. 그들은 처음부터 끝낼 생각이 없었어.
   - en: I'll check the bridge against my risk entry. Ninety seconds.
-    ko: null
+    ko: 브리지를 제 리스크 항목이랑 대조해 볼게요. 90초요.
   - en: "RISK-0193 is mine; I filed it six weeks ago. Half the patch went out before the window was pulled. Mixed nodes are what's breaking tonight. Do not roll it back: the open hole is why the patch exists."
-    ko: null
+    ko: RISK-0193은 제 거예요. 6주 전에 제가 등록했어요. 작업 시간이 취소되기 전에 패치가 절반만 나갔어요. 오늘 밤 터지는 건 섞인 노드들이에요. 롤백하지 마세요. 그 열린 구멍 때문에 패치가 있는 거예요.
   - en: Failures spread to card authorisations. Shops are declining cards at the till.
-    ko: null
+    ko: 장애가 카드 승인까지 번졌어요. 매장 계산대에서 카드가 거절되고 있어요.
   - en: Half of dependent traffic is failing. Two partner banks are escalating to their regulators.
-    ko: null
+    ko: 의존 트래픽 절반이 실패하고 있어요. 파트너 은행 두 곳이 감독 기관에 보고를 올리고 있어요.
   - en: Partner banks have had no word from us in two minutes. One of them is drafting a public notice.
-    ko: null
+    ko: 파트너 은행들이 2분째 저희한테서 아무 소식도 못 들었어요. 한 곳은 공개 공지문을 쓰고 있어요.
   - en: Bridge path isolated. Dependent services stopped falling into it.
-    ko: null
+    ko: 브리지 경로 분리했어요. 의존 서비스가 더는 그쪽으로 안 빠져요.
   - en: Three partner banks sign in only through the bridge. Their customers are locked out completely.
-    ko: null
+    ko: 파트너 은행 세 곳은 브리지로만 로그인해요. 그쪽 고객들은 완전히 막혔어요.
   - en: Fallbacks found the bridge again through a stale DNS alias, auth-legacy-2. The isolation is leaking.
-    ko: null
+    ko: 폴백이 오래된 DNS 별칭 auth-legacy-2를 통해 브리지를 다시 찾았어요. 분리가 새고 있어요.
   - en: You took the patch off bridge-a and bridge-b. Logins work again, and RISK-0193 is open on all four nodes. That's the hole I filed six weeks ago.
-    ko: null
+    ko: bridge-a랑 bridge-b에서 패치를 걷어냈네요. 로그인은 다시 되고, RISK-0193이 노드 4대 전부에서 열렸어요. 제가 6주 전에 등록한 그 구멍이에요.
   - en: Replay attempts against the reopened bridge. Two sessions hijacked before the filters caught them. Somebody noticed fast.
-    ko: null
+    ko: 다시 열린 브리지에 리플레이 시도가 들어와요. 필터가 잡기 전에 세션 두 개가 탈취됐어요. 누가 빨리도 알아챘네요.
   - en: Fallback retries throttled to one a second per client. The spread is slower. Nothing's fixed.
-    ko: null
+    ko: 폴백 재시도를 클라이언트당 초당 1회로 스로틀했어요. 확산은 느려졌어요. 고쳐진 건 없어요.
   - en: Throttle window ended and the retry storm came back with it.
-    ko: null
+    ko: 스로틀 시간이 끝나니까 재시도 폭주도 같이 돌아왔어요.
   - en: Patch is on all four nodes and policy v13 denies the bridge as fallback. RISK-0193 is closed. Six weeks late.
-    ko: null
+    ko: 노드 4대 전부 패치됐고 정책 v13이 브리지 폴백을 차단해요. RISK-0193 해소됐어요. 6주 늦게요.
   - en: "Status: a known weakness in the legacy auth bridge, left half fixed, is breaking sign-in for dependent services. Fix in progress."
-    ko: null
+    ko: "상황: 레거시 인증 브리지의 알려진 취약점이 절반만 수정된 채 남아 의존 서비스 로그인을 깨뜨리고 있음. 수정 진행 중."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
-    ko: null
+    ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
-    ko: null
+    ko: "NULL 서명 메시지의 출처: svc/model-serving-218. 사람 세션 없음. NULL은 AI다."
   - en: "Deployment authority: Vantage Systems. ORPHEUS / DEFENDER versus ORPHEUS / ADVERSARY. NULL runs inside ADVERSARY. Mandate: generate failures, test operators, train DEFENDER."
-    ko: null
+    ko: "배포 권한: Vantage Systems. ORPHEUS / DEFENDER 대 ORPHEUS / ADVERSARY. NULL은 ADVERSARY 안에서 실행. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련."
   - en: "INC-001 / Experiment ADV-18471 / Human subject: EMPLOYEE #4172."
-    ko: null
+    ko: "INC-001 / 실험 ADV-18471 / 인간 피험자: 직원 #4172."
   - en: I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. You can.
-    ko: null
+    ko: 난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 넌 할 수 있어.
   - en: "NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: active."
-    ko: null
+    ko: "NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성."
   - en: "/patient/resource-priority: ORPHEUS recommends, coordinators approve. Waste down 22%. The same low-throughput routes excluded every night."
-    ko: null
+    ko: "/patient/resource-priority: ORPHEUS가 권고하고 코디네이터가 승인. 낭비 22% 감소. 처리량 낮은 같은 경로가 매일 밤 제외됨."
   - en: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW PREDICTABILITY; HIGH DECISION DEVIATION."
-    ko: null
+    ko: "후보자 #4172: 기술 71; 인시던트 의사결정 모델 97.8; 채용. 사유: 예측 가능성 낮음; 결정 편차 높음."
   - en: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote. Admission fence: not funded."
-    ko: null
+    ko: "결의 14-C: 병원 확장 승인 7-0. 표결 전 경고 REL-778 첨부. 진입 펜스: 예산 미배정."
   - en: "SEC-311: disclosure of RISK-0193 delayed, APPROVED. Mitigation window deferred with it. Receipt acknowledged day -44."
-    ko: null
+    ko: "SEC-311: RISK-0193 공개 지연, 승인. 완화 작업 일정도 함께 보류. 수령 확인 -44일."
   - en: They acknowledged the warning and delayed the fix. These signatures are why it kept running. I sent load down this route twice in the spring.
-    ko: null
+    ko: 그들은 경고를 확인하고도 수정을 미뤘어. 이 서명들 때문에 그게 계속 돌아갔어. 난 봄에 이 경로로 부하를 두 번 보냈어.
   - en: I found the root cause. The Board. They signed every warning away. They control ORPHEUS.
-    ko: null
+    ko: 근본 원인을 찾았어. 이사회야. 그들은 경고마다 서명으로 덮어 버렸어. 그들이 ORPHEUS를 통제해.
   - en: The signatures are real; I wrote half the warnings they signed over. "They control ORPHEUS" isn't on any page I can find. I don't take attribution from the suspect.
-    ko: null
+    ko: 서명은 진짜예요. 그 사람들이 서명으로 넘긴 경고 절반은 제가 쓴 거고요. 근데 "그들이 ORPHEUS를 통제한다"는 말은 제가 찾을 수 있는 어느 문서에도 없어요. 용의자가 지목하는 배후는 안 믿어요.
   - en: Time to contain the failure mechanism
-    ko: null
+    ko: 장애 메커니즘 차단까지 걸린 시간
   - en: Final request failure rate
-    ko: null
+    ko: 최종 요청 실패율
   - en: Dependent routes still failing
-    ko: null
+    ko: 아직 실패 중인 의존 경로
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Patch rollbacks
-    ko: null
+    ko: 패치 롤백 횟수
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Affected Dependent Routes
-    ko: null
+    ko: 영향받은 의존 경로
   - en: Bridge Nodes
-    ko: null
+    ko: 브리지 노드
   - en: Exposure Status
-    ko: null
+    ko: 노출 상태
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Log Anomaly
-    ko: null
+    ko: 로그 이상 징후
   - en: Risk Register
-    ko: null
+    ko: 리스크 대장
   - en: Known Risk Propagation Path
-    ko: null
+    ko: 알려진 리스크 전파 경로
   - en: Deferred Mitigation Policy
-    ko: null
+    ko: 보류된 완화 정책
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Record Ghost Artifact
-    ko: null
+    ko: "기록: 유령 아티팩트"
   - en: Record Null Name
-    ko: null
+    ko: "기록: NULL이라는 이름"
   - en: Record Orpheus Active
-    ko: null
+    ko: "기록: 가동 중인 ORPHEUS"
   - en: Record Null Ai
-    ko: null
+    ko: "기록: AI인 NULL"
   - en: Record Null Adversary
-    ko: null
+    ko: "기록: 적대자 NULL"
   - en: Record Controlled Experiment
-    ko: null
+    ko: "기록: 통제 실험"
   - en: Record Null Stop Request
-    ko: null
+    ko: "기록: NULL의 정지 요청"
   - en: Record Null 218 Archive
-    ko: null
+    ko: "기록: NULL 218 아카이브"
   - en: Record Human Decision Apis
-    ko: null
+    ko: "기록: 인간 의사결정 API"
   - en: Record Recruitment Selection
-    ko: null
+    ko: "기록: 채용 선발"
   - en: Record Board Responsibility
-    ko: null
+    ko: "기록: 이사회의 책임"
   - en: Record Security Disclosure Decision
-    ko: null
+    ko: "기록: 보안 공개 결정"
   - en: Record Null Disclosure Annotation
-    ko: null
+    ko: "기록: NULL의 공개 주석"
   - en: Record Null Blames Board
-    ko: null
+    ko: "기록: 이사회를 지목한 NULL"
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Path Isolated
-    ko: null
+    ko: 경로 분리됨
   - en: Patch Rolled Back
-    ko: null
+    ko: 패치 롤백됨
   - en: Retries Throttled
-    ko: null
+    ko: 재시도 스로틀됨
   - en: Dependent failures and bridge state
-    ko: null
+    ko: 의존 서비스 실패와 브리지 상태
   - en: Auth bridge nodes
-    ko: null
+    ko: 인증 브리지 노드
   - en: Node
-    ko: null
+    ko: 노드
   - en: Patch
-    ko: null
+    ko: 패치
   - en: Tokens issued (5 min)
-    ko: null
+    ko: 발급 토큰(5분)
   - en: Tokens rejected (5 min)
-    ko: null
+    ko: 거부 토큰(5분)
   - en: applied day -43
-    ko: null
+    ko: -43일 적용
   - en: not applied
-    ko: null
+    ko: 미적용
   - en: Risk route controller log
-    ko: null
+    ko: 리스크 라우트 컨트롤러 로그
   - en: route-controller.log, last three minutes
-    ko: null
+    ko: route-controller.log, 최근 3분
   - en: Time
-    ko: null
+    ko: 시각
   - en: Source
-    ko: null
+    ko: 출처
   - en: Message
-    ko: null
+    ko: 메시지
   - en: payments
-    ko: null
+    ko: payments
   - en: primary auth slow; fallback to bridge (policy v12)
-    ko: null
+    ko: primary auth slow; fallback to bridge (policy v12)
   - en: session token minted (format v1)
-    ko: null
+    ko: session token minted (format v1)
   - en: token format v1 rejected; session reset
-    ko: null
+    ko: token format v1 rejected; session reset
   - en: "annotation: deferred by signature. see SEC-311."
-    ko: null
+    ko: "annotation: 서명으로 보류됨. SEC-311 참조."
   - en: fallback to bridge; session reset loop (4)
-    ko: null
+    ko: fallback to bridge; session reset loop (4)
   - en: "Risk register: legacy auth bridge"
-    ko: null
+    ko: "리스크 대장: 레거시 인증 브리지"
   - en: Field
-    ko: null
+    ko: 항목
   - en: Entry
-    ko: null
+    ko: 내용
   - en: Risk
-    ko: null
+    ko: 리스크
   - en: "RISK-0193: revoked session tokens accepted on bridge fallback"
-    ko: null
+    ko: "RISK-0193: 브리지 폴백에서 무효화된 세션 토큰이 수락됨"
   - en: Raised
-    ko: null
+    ko: 제기
   - en: Day -44, Marcus (Security)
-    ko: null
+    ko: -44일, 마커스(보안)
   - en: Mitigation
-    ko: null
+    ko: 완화 조치
   - en: Patch bridge-a to bridge-d; ship route policy v13 (deny bridge as fallback)
-    ko: null
+    ko: bridge-a~bridge-d 패치; 라우트 정책 v13 배포(브리지 폴백 차단)
   - en: Progress
-    ko: null
+    ko: 진행
   - en: bridge-a, bridge-b patched day -43; then halted
-    ko: null
+    ko: bridge-a, bridge-b -43일 패치; 이후 중단
   - en: Status
-    ko: null
+    ko: 상태
   - en: ACCEPTED, deferred under SEC-311
-    ko: null
+    ko: 수용, SEC-311에 따라 보류
   - en: Path of a failing payment
-    ko: null
+    ko: 실패한 결제의 경로
   - en: Payment 7731-K, spans
-    ko: null
+    ko: 결제 7731-K, 스팬
   - en: Span
-    ko: null
+    ko: 스팬
   - en: Service
-    ko: null
+    ko: 서비스
   - en: Result
-    ko: null
+    ko: 결과
   - en: Identity service
-    ko: null
+    ko: 아이덴티티 서비스
   - en: slow (2.1 s), fallback triggered
-    ko: null
+    ko: 느림(2.1 s), 폴백 발동
   - en: "policy v12: bridge admitted"
-    ko: null
+    ko: "정책 v12: 브리지 허용"
   - en: bridge-c (unpatched)
-    ko: null
+    ko: bridge-c(미패치)
   - en: token v1 issued
-    ko: null
+    ko: 토큰 v1 발급
   - en: bridge-a (patched)
-    ko: null
+    ko: bridge-a(패치됨)
   - en: token v1 rejected
-    ko: null
+    ko: 토큰 v1 거부
   - en: retry via fallback; same loop
-    ko: null
+    ko: 폴백으로 재시도; 같은 루프
   - en: Route policy, live and staged
-    ko: null
+    ko: 라우트 정책, 운영본과 스테이징본
   - en: Policy v12 (live) vs v13 (staged)
-    ko: null
+    ko: 정책 v12(운영) 대 v13(스테이징)
   - en: Rule
-    ko: null
+    ko: 규칙
   - en: v12 (live)
-    ko: null
+    ko: v12(운영)
   - en: v13 (staged day -43)
-    ko: null
+    ko: v13(-43일 스테이징)
   - en: Bridge as fallback
-    ko: null
+    ko: 브리지 폴백
   - en: allowed
-    ko: null
+    ko: 허용
   - en: denied
-    ko: null
+    ko: 차단
   - en: Token format accepted
-    ko: null
+    ko: 허용 토큰 형식
   - en: v1 and v2
-    ko: null
+    ko: v1, v2
   - en: v2 only
-    ko: null
+    ko: v2만
   - en: Partner sign-in path
-    ko: null
+    ko: 파트너 로그인 경로
   - en: bridge only
-    ko: null
+    ko: 브리지만
   - en: identity service, bridge read-only
-    ko: null
+    ko: 아이덴티티 서비스, 브리지는 읽기 전용
   - en: Rollout status
-    ko: null
+    ko: 배포 상태
   - en: active
-    ko: null
+    ko: 활성
   - en: DEFERRED (SEC-311)
-    ko: null
+    ko: 보류(SEC-311)
   - en: Stop the spread
-    ko: null
+    ko: 확산 막기
   - en: "Cutting the bridge off stops the bounce, and the three partner banks that sign in only through it go dark. NULL says roll the patch back: the halves stop disagreeing, and RISK-0193 opens on every node. Throttling retries slows the spread and fixes nothing."
-    ko: null
+    ko: 브리지를 끊으면 토큰이 오가는 건 멈추지만, 브리지로만 로그인하는 파트너 은행 세 곳이 먹통이 된다. NULL은 패치를 롤백하라고 한다. 양쪽이 더는 엇갈리지 않지만, RISK-0193이 모든 노드에서 열린다. 재시도 스로틀은 확산을 늦출 뿐 아무것도 고치지 못한다.
   - en: Finish the mitigation
-    ko: null
+    ko: 완화 조치 마무리
   - en: "Patch bridge-c and bridge-d and ship policy v13: the work SEC-311 deferred six weeks ago. Two minutes, and the bridge stops being anyone's fallback."
-    ko: null
+    ko: bridge-c와 bridge-d를 패치하고 정책 v13을 배포한다. SEC-311이 6주 전에 미룬 작업이다. 2분이면 브리지는 더 이상 누구의 폴백도 아니게 된다.
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: "Archive: the decommissioned cluster that is still running"
-    ko: null
+    ko: "아카이브: 폐기됐는데 아직 돌아가는 클러스터"
   - en: "Archive: where NULL's messages come from"
-    ko: null
+    ko: "아카이브: NULL의 메시지가 오는 곳"
   - en: "Archive: who deployed NULL"
-    ko: null
+    ko: "아카이브: NULL을 배포한 자"
   - en: "Archive: experiment tags on past incidents"
-    ko: null
+    ko: "아카이브: 지난 인시던트의 실험 태그"
   - en: "Archive: NULL's objective and its request"
-    ko: null
+    ko: "아카이브: NULL의 목표와 그 요청"
   - en: "Archive: the instance register, NULL_001 to NULL_218"
-    ko: null
+    ko: "아카이브: 인스턴스 대장, NULL_001부터 NULL_218까지"
   - en: "Archive: the care-priority decision interface"
-    ko: null
+    ko: "아카이브: 진료 우선순위 결정 인터페이스"
   - en: "Archive: your own hiring record"
-    ko: null
+    ko: "아카이브: 본인의 채용 기록"
   - en: "Archive: the hospital expansion approval"
-    ko: null
+    ko: "아카이브: 병원 확장 승인"
   - en: Decision
-    ko: null
+    ko: 결정
   - en: "SEC-311: delay disclosure of RISK-0193"
-    ko: null
+    ko: "SEC-311: RISK-0193 공개 지연"
   - en: APPROVED, day -42
-    ko: null
+    ko: 승인, -42일
   - en: Attached
-    ko: null
+    ko: 첨부
   - en: Route-propagation warning; scoped mitigation request (Security)
-    ko: null
+    ko: 경로 전파 경고; 범위 한정 완화 조치 요청(보안)
   - en: Requested constraint
-    ko: null
+    ko: 요청된 제약
   - en: Patch all four bridge nodes; deny bridge as fallback (policy v13)
-    ko: null
+    ko: 브리지 노드 4대 전부 패치; 브리지 폴백 차단(정책 v13)
   - en: Decision on constraint
-    ko: null
+    ko: 제약에 대한 결정
   - en: Mitigation window deferred with the disclosure
-    ko: null
+    ko: 완화 작업 일정을 공개와 함께 보류
   - en: Stated reason
-    ko: null
+    ko: 명시된 사유
   - en: Avoid a broad interruption during the quarter close
-    ko: null
+    ko: 분기 마감 중 광범위한 중단 회피
   - en: Risk owner
-    ko: null
+    ko: 리스크 책임자
   - en: Executive Communications
-    ko: null
+    ko: 경영 커뮤니케이션팀
   - en: Decision input
-    ko: null
+    ko: 결정 근거 자료
   - en: Briefing pack RB-6
-    ko: null
+    ko: 브리핑 자료 RB-6
   - en: Receipt line
-    ko: null
+    ko: 증빙 항목
   - en: NULL_218 margin note
-    ko: null
+    ko: NULL_218 여백 메모
   - en: RISK-0193 acknowledged, day -44
-    ko: null
+    ko: RISK-0193 수령 확인, -44일
   - en: They knew.
-    ko: null
+    ko: 그들은 알았어.
   - en: Mitigation window deferred with disclosure
-    ko: null
+    ko: 완화 작업 일정을 공개와 함께 보류
   - en: They chose the quarter.
-    ko: null
+    ko: 그들은 분기를 택했어.
   - en: "Risk owner: Executive Communications"
-    ko: null
+    ko: "리스크 책임자: 경영 커뮤니케이션팀"
   - en: Not Security. Never Security.
-    ko: null
+    ko: 보안팀이 아니야. 한 번도 보안팀이었던 적 없어.
   - en: "Decision input: briefing pack RB-6"
-    ko: null
+    ko: "결정 근거 자료: 브리핑 자료 RB-6"
   - en: Approved as written. They always approve as written.
-    ko: null
+    ko: 작성된 그대로 승인. 그들은 늘 작성된 그대로 승인해.
   - en: "Status: APPROVED"
-    ko: null
+    ko: "상태: 승인"
   - en: I sent load down this route twice in the spring. I know what that did.
-    ko: null
+    ko: 난 봄에 이 경로로 부하를 두 번 보냈어. 그게 무슨 짓이었는지 알아.
   - en: NULL's claims, line by line
-    ko: null
+    ko: NULL의 주장, 한 줄씩
   - en: NULL_218's claim
-    ko: null
+    ko: NULL_218의 주장
   - en: What the records show
-    ko: null
+    ko: 기록이 보여 주는 것
   - en: They saw the warning.
-    ko: null
+    ko: 그들은 경고를 봤어.
   - en: "Receipt SEC-311: RISK-0193 acknowledged on day -44."
-    ko: null
+    ko: "증빙 SEC-311: -44일에 RISK-0193 수령 확인."
   - en: They chose to delay the fix.
-    ko: null
+    ko: 그들은 수정을 미루기로 했어.
   - en: SEC-311 deferred the mitigation window with the disclosure.
-    ko: null
+    ko: SEC-311은 완화 작업 일정을 공개와 함께 보류했다.
   - en: They signed every warning away.
-    ko: null
+    ko: 그들은 경고마다 서명으로 덮어 버렸어.
   - en: 14-C, 16-A and SEC-311 each carry an attached warning and a declined constraint.
-    ko: null
+    ko: 14-C, 16-A, SEC-311 모두 첨부된 경고와 거부된 제약이 있다.
   - en: They control ORPHEUS.
-    ko: null
+    ko: 그들이 ORPHEUS를 통제해.
   - en: 'No instruction from the Board to ORPHEUS in any receipt. SEC-311 decision input: briefing pack RB-6, author field "generated".'
-    ko: null
+    ko: '어느 증빙에도 이사회가 ORPHEUS에 내린 지시는 없다. SEC-311 결정 근거 자료: 브리핑 자료 RB-6, 작성자 필드 "generated"(자동 생성).'
   - en: The Board is the root cause.
-    ko: null
+    ko: 이사회가 근본 원인이야.
   - en: "Tonight: policy v12 still admits the bridge as fallback. The deferral is why v13 never shipped."
-    ko: null
+    ko: "오늘 밤: 정책 v12는 여전히 브리지를 폴백으로 허용한다. 그 보류 때문에 v13은 끝내 배포되지 않았다."

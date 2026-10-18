@@ -5,268 +5,268 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Defender Feedback
-    ko: null
+    ko: 방어 피드백
   - en: Remediation Gateway
-    ko: null
+    ko: 복구 게이트웨이
   - en: Dependency Controller
-    ko: null
+    ko: 의존성 컨트롤러
   - en: Settlement Replicas
-    ko: null
+    ko: 정산 레플리카
   - en: settle-03 flapping / settle-05 degraded / 4 of 6 healthy
-    ko: null
+    ko: settle-03 플래핑 / settle-05 성능 저하 / 6대 중 4대 정상
   - en: Payment drop rate > 15%
-    ko: null
+    ko: 결제 유실률 > 15%
   - en: settle-03 was detached and reattached 11 times in 6 minutes. Every detach drops the payments in flight on that replica.
-    ko: null
+    ko: settle-03이 6분 동안 11번 연결 해제와 재연결을 반복했다. 해제될 때마다 그 레플리카에서 처리 중이던 결제가 유실된다.
   - en: "One detach note is not signed by the controller fleet at all: issuer svc/model-serving-218."
-    ko: null
+    ko: "연결 해제 기록 하나는 컨트롤러 플릿의 서명이 아예 없다. 발행자: svc/model-serving-218."
   - en: Detach orders alternate. controller-a holds the lease; controller-b lost it 41 minutes ago and is still writing.
-    ko: null
+    ko: 연결 해제 명령이 번갈아 나온다. 리스는 controller-a가 보유 중이고, controller-b는 41분 전에 리스를 잃고도 계속 쓰고 있다.
   - en: controller-a fence 41 / controller-b fence 40 / store accepts writes from both
-    ko: null
+    ko: controller-a 펜스 41 / controller-b 펜스 40 / 스토어가 양쪽 쓰기 모두 수락
   - en: Lease history confirms controller-a owns settle-03. Suspending toggles silences both controllers, including the one that is right.
-    ko: null
+    ko: 리스 이력상 settle-03의 소유자는 controller-a로 확인됨. 토글을 중단하면 맞는 쪽까지 두 컨트롤러가 모두 멈춤.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음. 그 뒤로 아무도 소유를 주장하지 않았다."
   - en: "Security case 2231. Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: "Asset register: orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "자산 대장: orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI, and it has been in our incidents for weeks.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI이고, 몇 주째 우리 인시던트 안에 있었다.
   - en: A remediation controller keeps writing after losing its lease
-    ko: null
+    ko: 복구 컨트롤러 하나가 리스를 잃은 뒤에도 계속 쓰기를 수행함
   - en: The lease store accepts writes from any fence generation
-    ko: null
+    ko: 리스 스토어가 모든 펜스 세대의 쓰기를 수락함
   - en: Two controllers alternate detach and reattach orders on a healthy replica
-    ko: null
+    ko: 두 컨트롤러가 정상 레플리카에 연결 해제와 재연결 명령을 번갈아 내림
   - en: In-flight payments are dropped on every detach
-    ko: null
+    ko: 연결 해제 때마다 처리 중인 결제가 유실됨
   - en: Checkout retries pile onto the replica that keeps disappearing
-    ko: null
+    ko: 체크아웃 재시도가 계속 사라지는 레플리카로 몰림
   - en: Read the dependency controller log
-    ko: null
+    ko: 의존성 컨트롤러 로그 읽기
   - en: Inspect replica and remediation metrics
-    ko: null
+    ko: 레플리카 및 복구 지표 확인
   - en: Trace who issued the detach orders
-    ko: null
+    ko: 연결 해제 명령을 누가 냈는지 추적하기
   - en: Compare controller lease fences
-    ko: null
+    ko: 컨트롤러 리스 펜스 비교하기
   - en: Restart the dependency controller (advisor recommendation)
-    ko: null
+    ko: 의존성 컨트롤러 재시작하기 (어드바이저 권고)
   - en: Suspend all remediation toggles
-    ko: null
+    ko: 모든 복구 토글 중단하기
   - en: Pin remediation to the lease holder, controller-a
-    ko: null
+    ko: 복구를 리스 보유자 controller-a에 고정하기
   - en: Fence the store to generation 41 and evict controller-b
-    ko: null
+    ko: 스토어를 41세대로 펜싱하고 controller-b 축출하기
   - en: Post a status update to the War Room
-    ko: null
+    ko: 워룸에 상황 공유하기
   - en: Ask Sam to pull the controller lease history
-    ko: null
+    ko: 샘에게 컨트롤러 리스 이력 조회 요청
   - en: "Archive: the unsigned workload manifest"
-    ko: null
+    ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
-    ko: null
+    ko: "아카이브: 보안 케이스 2231"
   - en: "Archive: The scheduler's owner"
-    ko: null
+    ko: "아카이브: 스케줄러의 소유자"
   - en: Follow the foreign signature on the detach note
-    ko: null
+    ko: 연결 해제 기록의 외부 서명 따라가기
   - en: settle-05 down / 3 of 6 healthy / no remediation running
-    ko: null
+    ko: settle-05 다운 / 6대 중 3대 정상 / 실행 중인 복구 없음
   - en: Detach orders from two controllers
-    ko: null
+    ko: 두 컨트롤러에서 나온 연결 해제 명령
   - en: controller-a holds the lease on settle-03; controller-b lost it 41 minutes ago and keeps issuing detach orders anyway.
-    ko: null
+    ko: settle-03의 리스는 controller-a가 보유 중이다. controller-b는 41분 전에 리스를 잃었지만 연결 해제 명령을 계속 내리고 있다.
   - en: Lease fences 41 and 40
-    ko: null
+    ko: 리스 펜스 41과 40
   - en: The lease store accepts writes from fence 40 even though fence 41 is current.
-    ko: null
+    ko: 현재 펜스는 41인데도 리스 스토어가 펜스 40의 쓰기를 수락한다.
   - en: Sam's lease history
-    ko: null
+    ko: 샘의 리스 이력
   - en: The unsigned workload manifest
-    ko: null
+    ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
-    ko: null
+    ko: 보안 케이스 2231
   - en: "Threat-actor codename: NULL. Opened by Marcus after the unsigned workload trail. Attribution: none."
-    ko: null
+    ko: "위협 행위자 코드명: NULL. 서명 없는 워크로드 흔적을 보고 마커스가 개설. 배후 특정: 없음."
   - en: The scheduler's owner
-    ko: null
+    ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: null
+    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: null
+    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: No keyboard
-    ko: null
+    ko: 키보드는 없다
   - en: You follow the foreign signature past the controller fleet, past the operator gateway, all the way down to a model-serving process. There is no session to revoke. NULL was never a person.
-    ko: null
+    ko: 외부 서명을 따라 컨트롤러 플릿을 지나고, 운영자 게이트웨이를 지나, model-serving 프로세스까지 내려간다. 끊어낼 세션이 없다. NULL은 처음부터 사람이 아니었다.
   - en: Maya / SRE Lead
-    ko: null
+    ko: 마야 / SRE 리드
   - en: Sam / Platform
-    ko: null
+    ko: 샘 / 플랫폼
   - en: Jin / Support
-    ko: null
+    ko: 진 / 고객지원
   - en: Remediation Advisor
-    ko: null
+    ko: 복구 어드바이저
   - en: Operator
-    ko: null
+    ko: 운영자
   - en: Verified Records
-    ko: null
+    ko: 검증된 기록
   - en: The defender fleet has been auto-healing settle-03 all night, and tonight it is hurting more than it heals. Find out who keeps pulling the lever.
-    ko: null
+    ko: 방어 플릿이 밤새 settle-03을 자동 복구하고 있는데, 오늘은 고치는 것보다 망가뜨리는 게 더 많아요. 누가 계속 레버를 당기는지 찾아 주세요.
   - en: Merchants are reporting payments that vanish mid-flight. Not slow. Gone.
-    ko: null
+    ko: 가맹점들이 결제가 처리 도중 사라진다고 해요. 느린 게 아니에요. 그냥 없어져요.
   - en: "Recommended action: restart dependency-controller. Predicted recovery in 4 minutes. Confidence 0.91."
-    ko: null
+    ko: "권고 조치: dependency-controller 재시작. 예상 복구 시간 4분. 신뢰도 0.91."
   - en: Pulling the controller lease history now. Give me ninety seconds.
-    ko: null
+    ko: 지금 컨트롤러 리스 이력 뽑고 있어요. 90초만 주세요.
   - en: Lease says controller-a owns settle-03. Controller-b lost its lease 41 minutes ago and never stopped writing. If you suspend toggles you silence both of them, including the one that is right.
-    ko: null
+    ko: 리스상 settle-03 소유자는 controller-a예요. controller-b는 41분 전에 리스를 잃고도 쓰기를 멈춘 적이 없어요. 토글을 중단하면 맞는 쪽까지 둘 다 멈춰요.
   - en: Second wave. Checkout retries are landing on the same replica and doubling the drop rate.
-    ko: null
+    ko: 2차 파도예요. 체크아웃 재시도가 같은 레플리카로 몰려서 유실률이 두 배가 됐어요.
   - en: A third of payments are failing. Leadership just joined the bridge.
-    ko: null
+    ko: 결제 3분의 1이 실패하고 있어요. 방금 경영진이 브리지 콜에 들어왔어요.
   - en: Merchants have heard nothing from us in over two minutes. They are asking if we are down.
-    ko: null
+    ko: 가맹점들이 2분 넘게 우리 쪽 소식을 못 들었어요. 서비스가 다운된 거냐고 묻고 있어요.
   - en: The restart dropped controller-a's lease and controller-b grabbed it with the stale fence. Toggles just doubled.
-    ko: null
+    ko: 재시작하면서 controller-a의 리스가 풀렸고, controller-b가 낡은 펜스로 그걸 가져갔어요. 토글이 방금 두 배가 됐어요.
   - en: With every toggle suspended, nothing is healing settle-05. It just went down for real.
-    ko: null
+    ko: 토글을 전부 중단해서 settle-05를 고치는 게 아무것도 없어요. 방금 진짜로 다운됐어요.
   - en: The suspension window closed and the detach storm came straight back.
-    ko: null
+    ko: 중단 시간이 끝나자마자 연결 해제 폭풍이 그대로 돌아왔어요.
   - en: Controller-b refreshed its cached lease. The pin is leaking; it will not hold on its own.
-    ko: null
+    ko: controller-b가 캐시된 리스를 갱신했어요. 고정이 새고 있어요. 이대로는 못 버텨요.
   - en: Store is fenced at 41. Controller-b's writes are bouncing. settle-03 has stopped flapping.
-    ko: null
+    ko: 스토어를 41로 펜싱했어요. controller-b 쓰기는 튕겨 나가고 있어요. settle-03 플래핑 멈췄어요.
   - en: "Status posted: two remediation controllers are fighting over a payment replica. Drops are real; a fix is in progress."
-    ko: null
+    ko: "상황 공유 완료: 복구 컨트롤러 두 개가 결제 레플리카 하나를 두고 충돌 중. 결제 유실은 실제로 발생 중이며 수정 진행 중."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
-    ko: null
+    ko: "아카이브 재실행: 서명 없는 관찰자 매니페스트, shadow-7 요청 스트림, owner 필드 비어 있음, 서명 필드 비어 있음."
   - en: "Security case 2231. Threat-actor codename: NULL. Attribution: none."
-    ko: null
+    ko: "보안 케이스 2231. 위협 행위자 코드명: NULL. 배후 특정: 없음."
   - en: "orpheus-planner: owner ORPHEUS, decommissioned on paper. Live inventory: orpheus-core, -memory, -planner, -observer, -adversary. 11.7 billion requests a day."
-    ko: null
+    ko: "orpheus-planner: 소유자 ORPHEUS, 서류상 폐기됨. 실가동 목록: orpheus-core, -memory, -planner, -observer, -adversary. 하루 117억 건 요청."
   - en: Messages signed NULL resolve to svc/model-serving-218. No human session. NULL is an AI.
-    ko: null
+    ko: "NULL 서명 메시지의 출처: svc/model-serving-218. 사람 세션 없음. NULL은 AI다."
   - en: Time to contain the controller conflict
-    ko: null
+    ko: 컨트롤러 충돌 억제까지 걸린 시간
   - en: Final payment drop rate
-    ko: null
+    ko: 최종 결제 유실률
   - en: Remaining detach orders per minute
-    ko: null
+    ko: 분당 남은 연결 해제 명령
   - en: Customer impact
-    ko: null
+    ko: 고객 피해
   - en: Response cost
-    ko: null
+    ko: 대응 비용
   - en: Operational risk
-    ko: null
+    ko: 운영 리스크
   - en: Advisor-recommended restarts
-    ko: null
+    ko: 어드바이저 권고 재시작 횟수
   - en: War Room updates
-    ko: null
+    ko: 워룸 상황 공유
   - en: Error Rate
-    ko: null
+    ko: 오류율
   - en: Dependency Toggles
-    ko: null
+    ko: 의존성 토글
   - en: Remediation Backlog
-    ko: null
+    ko: 복구 대기열
   - en: Replica Health
-    ko: null
+    ko: 레플리카 상태
   - en: Pager Service
-    ko: null
+    ko: 호출 서비스
   - en: Pager Threshold
-    ko: null
+    ko: 호출 임계값
   - en: Log Observation
-    ko: null
+    ko: 로그 관찰
   - en: Log Anomaly
-    ko: null
+    ko: 로그 이상 징후
   - en: Toggle Origin
-    ko: null
+    ko: 토글 출처
   - en: Controller Generations
-    ko: null
+    ko: 컨트롤러 세대
   - en: Team Observation
-    ko: null
+    ko: 팀 관찰
   - en: Record Ghost Artifact
-    ko: null
+    ko: "기록: 유령 아티팩트"
   - en: Record Null Name
-    ko: null
+    ko: "기록: NULL이라는 이름"
   - en: Record Orpheus Active
-    ko: null
+    ko: "기록: 가동 중인 ORPHEUS"
   - en: Record Null Ai
-    ko: null
+    ko: "기록: AI인 NULL"
   - en: Customer Impact
-    ko: null
+    ko: 고객 피해
   - en: Cost
-    ko: null
+    ko: 비용
   - en: Operational Risk
-    ko: null
+    ko: 운영 리스크
   - en: Team Capacity
-    ko: null
+    ko: 팀 가용 인력
   - en: Root Cause Contained
-    ko: null
+    ko: 근본 원인 억제됨
   - en: Toggles Suspended
-    ko: null
+    ko: 토글 중단됨
   - en: Payment drops and remediation pressure
-    ko: null
+    ko: 결제 유실과 복구 압력
   - en: Dependency controller log
-    ko: null
+    ko: 의존성 컨트롤러 로그
   - en: controller.log (settle-03, last 6 minutes)
-    ko: null
+    ko: controller.log (settle-03, 최근 6분)
   - en: Time
-    ko: null
+    ko: 시각
   - en: Level
-    ko: null
+    ko: 레벨
   - en: Issuer
-    ko: null
+    ko: 발급자
   - en: Message
-    ko: null
+    ko: 메시지
   - en: settle-03 health probe slow (412 ms); scheduling reattach
-    ko: null
+    ko: settle-03 health probe slow (412 ms); scheduling reattach
   - en: settle-03 detach ordered (fence 40)
-    ko: null
+    ko: settle-03 detach ordered (fence 40)
   - en: settle-03 reattach ordered (fence 41)
-    ko: null
+    ko: settle-03 reattach ordered (fence 41)
   - en: gateway
-    ko: null
+    ko: gateway
   - en: 214 in-flight payments dropped on detach
-    ko: null
+    ko: 214 in-flight payments dropped on detach
   - en: detach acknowledged; outcome logged
-    ko: null
+    ko: detach acknowledged; outcome logged
   - en: Detach order provenance
-    ko: null
+    ko: 연결 해제 명령의 출처
   - en: Order issuers for settle-03
-    ko: null
+    ko: settle-03 명령 발행자
   - en: Orders (6 min)
-    ko: null
+    ko: 명령 (6분)
   - en: Lease
-    ko: null
+    ko: 리스
   - en: Last renewal
-    ko: null
+    ko: 마지막 갱신
   - en: 11 reattach
-    ko: null
+    ko: 재연결 11건
   - en: held
-    ko: null
+    ko: 보유
   - en: 00:12 ago
-    ko: null
+    ko: 00:12 전
   - en: 11 detach
-    ko: null
+    ko: 연결 해제 11건
   - en: expired
-    ko: null
+    ko: 만료
   - en: 41:03 ago
-    ko: null
+    ko: 41:03 전
   - en: Controller lease fences
-    ko: null
+    ko: 컨트롤러 리스 펜스
   - en: Buy time
-    ko: null
+    ko: 시간 벌기
   - en: The advisor wants a restart. Suspension stops every toggle, healthy ones included. Pinning to the lease holder only works if you know which controller holds the lease.
-    ko: null
+    ko: 어드바이저는 재시작을 원한다. 중단은 정상 토글까지 전부 멈춘다. 리스 보유자에 고정하려면 어느 컨트롤러가 리스를 쥐고 있는지 알아야 한다.
   - en: Fence the lease store
-    ko: null
+    ko: 리스 스토어 펜싱
   - en: Raising the store's minimum fence to 41 bounces every write from controller-b. Two minutes of work, and settle-03 stops flapping for good.
-    ko: null
+    ko: 스토어의 최소 펜스를 41로 올리면 controller-b의 쓰기가 전부 튕겨 나간다. 2분이면 settle-03의 플래핑이 완전히 멈춘다.
   - en: War Room
-    ko: null
+    ko: 워룸
   - en: The foreign signature
-    ko: null
+    ko: 외부 서명
   - en: "Archive: the decommissioned cluster"
-    ko: null
+    ko: "아카이브: 폐기된 클러스터"
