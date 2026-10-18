@@ -33,6 +33,9 @@ const TEXT_KEYS = new Set([
   'rows',
   'unit',
 ]);
+// Story episodes (DEC-072) speak through their own keys.
+const STORY_TEXT_KEYS = new Set([...TEXT_KEYS, 'narrate', 'log', 'prompt', 'consequence']);
+const STORY = 'src/story/data/';
 
 // Identifiers, numbers, timestamps and machine tokens read the same in every language.
 const NOT_TEXT = [
@@ -52,13 +55,13 @@ export const humanize = (id) =>
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');
 
-function collect(node, key, out) {
+function collect(node, key, out, keys = TEXT_KEYS) {
   if (typeof node === 'string') {
-    if (TEXT_KEYS.has(key) && isText(node)) out.push(node);
+    if (keys.has(key) && isText(node)) out.push(node);
   } else if (Array.isArray(node)) {
-    for (const item of node) collect(item, key, out);
+    for (const item of node) collect(item, key, out, keys);
   } else if (node !== null && typeof node === 'object') {
-    for (const [k, v] of Object.entries(node)) collect(v, k, out);
+    for (const [k, v] of Object.entries(node)) collect(v, k, out, keys);
   }
 }
 
@@ -93,7 +96,8 @@ function findVersioned(dir, match) {
 }
 
 // One catalog per content group: the desk training Incidents, each campaign
-// Incident (scenario + investigation presentation), the campaign and its endings.
+// Incident (scenario + investigation presentation), the campaign, its endings
+// and each story episode.
 export function contentGroups() {
   const groups = [];
   for (const f of readdirSync(DATA + 'incidents').sort()) {
@@ -135,10 +139,20 @@ export function contentGroups() {
       ),
     ],
   });
+  if (existsSync(STORY))
+    for (const f of readdirSync(STORY).sort()) {
+      if (!/\.ya?ml$/.test(f)) continue;
+      const doc = load(STORY + f);
+      groups.push({
+        name: 'story-' + doc.id.toLowerCase(),
+        story: true,
+        sources: [{ file: STORY + f, doc }],
+      });
+    }
   for (const group of groups) {
     const strings = [];
     for (const { doc } of group.sources) {
-      collect(doc, '', strings);
+      collect(doc, '', strings, group.story ? STORY_TEXT_KEYS : TEXT_KEYS);
       if (doc.initialState) humanizedIds(doc, strings);
     }
     group.strings = [...new Set(strings)];

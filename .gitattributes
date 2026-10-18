@@ -1,3 +1,6 @@
+# Prettier and the hash-pinned content both expect LF; keep it on every checkout,
+# whatever core.autocrlf says.
+* text=auto eol=lf
 # Hash-pinned content authorities must stay byte-exact (LF) on every checkout.
 src/scenario/data/** text eol=lf
 src/scenario/legacy/** text eol=lf

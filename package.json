@@ -28,7 +28,10 @@
     "validate:scenarios": "node scripts/validate-scenarios.mjs",
     "i18n:catalogs": "node scripts/i18n/content-catalog.mjs",
     "validate:locales": "node scripts/i18n/content-catalog.mjs --check",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run validate:scenarios && npm run validate:locales && npm test && npm run test:release-harness && npm run build:web",
+    "story": "node scripts/story/story.mjs",
+    "story:play": "node scripts/story/story.mjs play",
+    "validate:story": "node scripts/story/story.mjs check",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run validate:scenarios && npm run validate:locales && npm run validate:story && npm test && npm run test:release-harness && npm run build:web",
     "tauri": "tauri"
   },
   "dependencies": {

@@ -1,0 +1,247 @@
+# INC-001 Connection Saturation as a story episode (DEC-072, TASK-037).
+# Source incident: src/scenario/data/full-campaign/incidents/inc-001.yaml.
+# Act 1's deduction lives here so the first Incident teaches it.
+schemaVersion: 1
+id: INC-001
+act: 1
+title: Connection Saturation
+
+cast:
+  - id: PAGER
+    name: Pager
+  - id: MAYA
+    name: Maya / SRE Lead
+  - id: JIN
+    name: Jin / Support
+
+evidence:
+  - id: ERROR_SPIKE
+    kind: operational
+    title: Payment errors over the pager line
+    body: 31% of payment requests fail. The pager fires at 20%.
+  - id: POOL_AT_LIMIT
+    kind: operational
+    title: A full pool on a quiet database
+    body: PostgreSQL holds 498 of its 500 connections, yet its CPU sits at 41%.
+  - id: IDLE_TRANSACTIONS
+    kind: operational
+    title: Sessions idle in transaction
+    body: 164 sessions have been idle in transaction for 47 minutes on average, each one holding a connection.
+  - id: CLEAN_DEPLOY
+    kind: operational
+    title: Yesterday's deploy
+    body: The last Payment API deploy went out 19 hours ago. Errors stayed flat until 02:04.
+  - id: CLIENT_RETRIES
+    kind: operational
+    title: Customers retry
+    body: Checkout apps retry every failed payment, so each failure asks the full pool for another connection.
+  - id: CORRUPTED_LOG_ENTRY
+    kind: story
+    guaranteed: true
+    title: Corrupted log entry
+    body: A transient UNKNOWN message recovered from the incident log buffer.
+
+start: page
+
+scenes:
+  - id: page
+    type: briefing
+    title: 02:14
+    beats:
+      - narrate: Your phone lights up the dark. Your first night as primary on-call.
+      - speaker: PAGER
+        text: SEV1 · Payment API · error rate above 20%
+      - metric: { label: Payment API error rate, value: 31%, trend: up }
+      - collect: ERROR_SPIKE
+      - metric: { label: PostgreSQL connections, value: 498 / 500, trend: up }
+      - metric: { label: PostgreSQL CPU, value: 41%, trend: flat }
+      - collect: POOL_AT_LIMIT
+      - speaker: MAYA
+        text: Payment errors are climbing. The database is full of connections, but it isn't working hard. That's the odd part.
+      - speaker: JIN
+        text: Support has reports of failed checkouts. We can't tell yet whether retries go through.
+      - speaker: MAYA
+        text: Everything we find lands on the evidence board. You don't have to dig for it — tell me what it means.
+    next: approach
+
+  - id: approach
+    type: choice
+    title: First look
+    prompt: Where do you look first?
+    options:
+      - id: SESSIONS
+        text: Look inside PostgreSQL at who is holding the connections
+        consequence: Straight to the database
+        beats:
+          - log: 'SELECT state, count(*) FROM pg_stat_activity GROUP BY state;'
+          - metric: { label: idle in transaction, value: '164', trend: up }
+          - metric: { label: Average age, value: 47 min }
+          - collect: IDLE_TRANSACTIONS
+          - speaker: MAYA
+            text: Forty-seven minutes. Nobody holds a transaction open that long on purpose.
+        effects: { values: { curiosity: 1 } }
+      - id: DEPLOY
+        text: Check what changed in yesterday's deploy
+        consequence: The usual suspect · slower
+        beats:
+          - collect: CLEAN_DEPLOY
+          - speaker: MAYA
+            text: Nineteen hours of clean graphs after that deploy. If it broke us, it took its time.
+          - speaker: MAYA
+            text: I ran a session query while you looked. 164 sessions idle in transaction.
+          - collect: IDLE_TRANSACTIONS
+        effects: { pressure: 1 }
+      - id: CUSTOMERS
+        text: Ask Jin what customers are seeing
+        consequence: Slower · the team hears from you
+        beats:
+          - speaker: JIN
+            text: Failed checkouts, confirmed. Their apps retry on their own, so some go through on the third or fourth try.
+          - collect: CLIENT_RETRIES
+          - speaker: MAYA
+            text: Every retry asks for another connection. Meanwhile I checked the sessions — 164 of them idle in transaction.
+          - collect: IDLE_TRANSACTIONS
+        effects: { pressure: 1, values: { teamTrust: 1 } }
+    next: why
+
+  - id: why
+    type: deduction
+    title: Why is the pool full?
+    beats:
+      - speaker: MAYA
+        text: Before we touch anything — pick the two pieces on the board that explain this together.
+    prompt: The database is barely busy, yet no connection comes free. Which two pieces of evidence explain it?
+    solution: [POOL_AT_LIMIT, IDLE_TRANSACTIONS]
+    attempts: 2
+    hint:
+      - speaker: MAYA
+        text: Look at what the connections are doing, not at how many errors there are.
+    solved:
+      beats:
+        - narrate: Abandoned transactions never give their connections back. The pool isn't overloaded — it's hoarded.
+        - speaker: MAYA
+          text: Exactly. Something opens transactions and walks away.
+      effects: { values: { evidence: 1 } }
+    missed:
+      beats:
+        - speaker: MAYA
+          text: Here's how I read it. Those idle transactions are sitting on the pool. Nothing is busy; everything is taken.
+      effects: { pressure: 1 }
+    next: decide
+
+  - id: decide
+    type: choice
+    title: Your call
+    beats:
+      - speaker: MAYA
+        text: Errors are still climbing. I need a decision in thirty seconds.
+    prompt: What do you do?
+    timer:
+      seconds: 30
+      default: RESTART
+      beats:
+        - speaker: MAYA
+          text: No call? I'm restarting the API. We can't just sit here.
+    options:
+      - id: TERMINATE
+        text: Terminate the stale sessions
+        consequence: Takes two minutes · removes the cause
+        beats:
+          - log: "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';"
+          - metric: { label: PostgreSQL connections, value: 112 / 500, trend: down }
+          - metric: { label: Payment API error rate, value: 0.2%, trend: down }
+          - speaker: MAYA
+            text: Connections are back. That's a fix, not a bandage.
+        effects:
+          values: { operationalSafety: 2, collateralDamage: 1 }
+          flags: { ROOT_CAUSE_RESOLVED: true }
+      - id: RESTART
+        text: Restart the Payment API
+        consequence: Fast · will come back
+        beats:
+          - metric: { label: Payment API error rate, value: 3%, trend: down }
+          - narrate: For three minutes the graphs look healthy. Then the line starts to climb again.
+          - metric: { label: PostgreSQL connections, value: 499 / 500, trend: up }
+          - speaker: MAYA
+            text: It's back. A restart buys time; it doesn't fix anything. I'm terminating the idle sessions.
+          - metric: { label: Payment API error rate, value: 0.2%, trend: down }
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 1 }
+          pressure: 1
+          flags: { ROOT_CAUSE_RESOLVED: true }
+      - id: SCALE
+        text: Scale out the Payment API
+        consequence: Costly · partial relief
+        beats:
+          - metric: { label: Payment API error rate, value: 19%, trend: down }
+          - speaker: MAYA
+            text: More API pods only means more clients waiting on the same full pool. I'm terminating the idle sessions.
+          - metric: { label: Payment API error rate, value: 0.2%, trend: down }
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 2 }
+          pressure: 1
+          flags: { ROOT_CAUSE_RESOLVED: true }
+      - id: ROLLBACK
+        text: Roll back yesterday's deploy
+        consequence: Slow · risky
+        when: { has: [CLEAN_DEPLOY] }
+        beats:
+          - narrate: The rollback takes three long minutes. The error line barely moves.
+          - speaker: MAYA
+            text: The deploy wasn't it. I'm terminating the idle sessions.
+          - metric: { label: Payment API error rate, value: 0.2%, trend: down }
+        effects:
+          values: { operationalSafety: -1, collateralDamage: 3 }
+          pressure: 2
+          flags: { ROOT_CAUSE_RESOLVED: true }
+    next: buffer
+
+  - id: buffer
+    type: briefing
+    title: 02:31
+    beats:
+      - narrate: The pager goes quiet. As the incident log buffer flushes, one line doesn't belong to any service.
+      - log: '02:23:11 / UNKNOWN: Good.'
+      - collect: CORRUPTED_LOG_ENTRY
+      - speaker: MAYA
+        text: Did you write that? No? Probably a test harness talking to itself.
+      - narrate: There is no service called UNKNOWN.
+    effects: { values: { curiosity: 1 } }
+    next: report
+
+  - id: report
+    type: choice
+    title: Postmortem
+    beats:
+      - speaker: MAYA
+        text: Postmortem's due by morning. Your incident, your write-up.
+    prompt: What goes in the report?
+    options:
+      - id: FULL
+        text: The fix, and the strange log line as an attachment
+        consequence: Transparent · Security will read it
+        beats:
+          - speaker: MAYA
+            text: Fair. If it's a harness, someone will own up.
+        effects:
+          alignment: { corporate: 1 }
+          values: { evidence: 1 }
+          flags: { UNKNOWN_REPORTED: true }
+      - id: CLEAN
+        text: The fix only; keep the log line to yourself
+        consequence: A clean report · the line stays yours
+        effects:
+          alignment: { corporate: 1 }
+          values: { curiosity: 1 }
+          flags: { UNKNOWN_KEPT: true }
+      - id: MAYA
+        text: The fix, and tell Maya about the line off the record
+        consequence: Off the record · Maya will remember
+        beats:
+          - speaker: MAYA
+            text: Noted. Let me know if it shows up again.
+        effects:
+          alignment: { corporate: 1 }
+          values: { teamTrust: 1 }
+          flags: { UNKNOWN_SHARED_WITH_MAYA: true }
+    next: END
