@@ -31,7 +31,11 @@
     "story": "node scripts/story/story.mjs",
     "story:play": "node scripts/story/story.mjs play",
     "validate:story": "node scripts/story/story.mjs check",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run validate:scenarios && npm run validate:locales && npm run validate:story && npm test && npm run test:release-harness && npm run build:web",
+    "godot:export": "node scripts/story/export-godot.mjs",
+    "godot:play": "node scripts/story/godot.mjs play",
+    "godot:parity": "node scripts/story/godot.mjs parity",
+    "godot:editor": "node scripts/story/godot.mjs editor",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run validate:scenarios && npm run validate:locales && npm run validate:story && node scripts/story/export-godot.mjs --check && npm test && npm run test:release-harness && npm run build:web",
     "tauri": "tauri"
   },
   "dependencies": {

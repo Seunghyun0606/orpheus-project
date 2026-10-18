@@ -12,6 +12,7 @@ human_decision:
     incident_count: 인시던트수 유지 — all 26 incidents stay; Acts 1–2 are kept short.
     decision_timer: 기본 켜짐 — decision scenes are timed by default; the timer can be turned off in accessibility settings.
     deduction: 추론 장면 넣기 — one deduction scene per Act; a miss never blocks progress.
+    ui_first: 시작해줘 — after reviewing the INC-001 terminal build, build the Godot UI on INC-001 before writing INC-002/003 (TASK-038 now depends on TASK-036; TASK-037 continues alongside).
     branches: main에 merge — review-fixes and korean-onboarding fast-forwarded into main (local only, no push).
 supersedes:
   - PROJECT.md Core Experience loop of per-action operation (관찰과 가설 → 조치 또는 위임) as the player's main activity.

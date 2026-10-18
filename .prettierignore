@@ -14,3 +14,5 @@ src/scenario/data/full-campaign/
 authoring/campaign-1.0/
 # Translation catalogs are written by scripts/i18n (yaml library layout).
 src/i18n/content/
+# Godot project: GDScript and generated story data
+godot/

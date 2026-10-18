@@ -77,3 +77,18 @@ scenes: [...]
 - 어떤 경로에서 정답 증거를 아직 모으지 못한 추론, 오답이 불가능한 추론 보드
 - 선택지가 하나도 없는 상태, 한 번도 고를 수 없는 선택지, 한 번도 모을 수 없는 증거, 도달할 수 없는 장면
 - 어떤 경로에서 빠지는 `guaranteed` 증거
+
+## Godot Runtime (TASK-038)
+
+| 경로                                     | 역할                                                              |
+| ---------------------------------------- | ----------------------------------------------------------------- |
+| `godot/data/episodes/*.json`, `index.json` | `npm run godot:export`가 만드는 에피소드 데이터 (스키마 기본값 포함) |
+| `godot/locale/ko.po`                     | `story-*` 카탈로그에서 만든 gettext 번역. Godot `tr()`가 읽는다   |
+| `godot/scripts/story/story_runner.gd`    | 참조 실행기의 GDScript 이식                                       |
+| `godot/tests/parity.gd`                  | 검증기가 탐색한 모든 경로를 두 실행기로 돌려 최종 상태를 비교    |
+| `godot/scripts/ui/main.gd`               | 타이틀, 에피소드 화면, 설정. 실행기의 `feed`만 그린다             |
+
+- `npm run godot:play`: 데이터를 내보내고 게임 창을 연다. `npm run godot:editor`: 에디터로 연다.
+- `npm run godot:parity`: 일치 검사. Godot 바이너리는 `GODOT_BIN` → PATH의 `godot` → `../_basic_tool` 순으로 찾는다.
+- `npm run check`는 내보낸 데이터가 최신인지 확인한다(Godot 없이도 실행 가능).
+- 화면 검수용 인자: `godot --path godot -- --episode=INC-001 --play=c,SESSIONS --shot=out.png` (자세한 형식은 `main.gd` 머리말).

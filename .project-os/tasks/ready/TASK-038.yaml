@@ -5,7 +5,7 @@ milestone: M6
 priority: P0
 status: ready
 
-objective: 'Play Act 1 end to end in a Godot 4 desktop build, in Korean and English, from exported episode JSON.'
+objective: 'Starting with INC-001 (human decision 2026-10-18: UI before the rest of Act 1), play Act 1 end to end in a Godot 4 desktop build, in Korean and English, from exported episode JSON.'
 why: 'Validates the shipping engine and the fun of the loop before converting the rest.'
 
 scope:
@@ -18,7 +18,7 @@ scope:
     - 'Store publishing, signing, installers.'
 
 depends_on:
-  - TASK-037
+  - TASK-036
 specs:
   - specs/product/03-choice-driven-story.md
 relevant_files:
