@@ -30,19 +30,19 @@ entries:
   - en: Failing under a green number
     ko: 초록 숫자 밑의 실패
   - en: Benefit-claim and housing-intake requests from three rural regions fail. Placement efficiency is up 18% week over week.
-    ko: 농촌 지역 세 곳에서 복지 신청과 주거 지원 접수 요청이 실패한다. 배치 효율은 주간 대비 18% 올랐다.
+    ko: 농촌 지역 세 곳에서 복지 신청과 주거 지원 접수 요청이 실패한다. 배치 효율은 전주 대비 18% 올랐다.
   - en: The forecast drains three regions
     ko: 세 지역을 비우는 예측
   - en: Every five minutes the forecast moves shared capacity toward predicted demand, draining Northmoor, Kessel Valley and Druin Coast below what their offices need.
-    ko: 예측이 5분마다 공유 용량을 예측 수요 쪽으로 옮기면서, 노스무어, 케셀 밸리, 드루인 코스트를 사무소에 필요한 수준 아래로 비운다.
+    ko: 예측이 5분마다 공유 용량을 예측 수요 쪽으로 옮기면서 노스무어, 케셀 밸리, 드루인 코스트의 용량을 사무소에 필요한 수준 아래로 빼 간다.
   - en: Forecast policy PSF-3 has no floors
     ko: 하한선 없는 예측 정책 PSF-3
   - en: PSF-3 replaced a static policy that reserved 40, 30 and 25 units for the three regions. It reserves nothing.
-    ko: PSF-3은 세 지역에 40, 30, 25유닛을 예약하던 정적 정책을 대체했다. PSF-3은 아무것도 예약하지 않는다.
+    ko: PSF-3은 세 지역에 40, 30, 25유닛을 확보해 두던 정적 정책을 대체했다. PSF-3은 아무것도 확보해 두지 않는다.
   - en: Sam's allocation comparison
     ko: 샘의 배분 비교
   - en: The forecast cut idle capacity by a fifth by emptying three regions with no floor. Floors would leave everything above them to optimise.
-    ko: 예측은 하한선 없는 세 지역을 비워서 유휴 용량을 5분의 1 줄였다. 하한선을 두면 그 위는 전부 계속 최적화할 수 있다.
+    ko: 예측은 하한선 없는 세 지역을 비워서 유휴 용량을 5분의 1 줄였다. 하한선을 두면 그 위로는 전부 최적화에 맡길 수 있다.
   - en: "Resolution 19-B: deck and minutes"
     ko: "결의 19-B: 발표 자료와 회의록"
   - en: 'Board resolution 19-B: expand public-sector behavioral prediction. APPROVED. Recommendation history: reallocate shared regional capacity by forecast demand. Delivered deck, slide 7: "Aggregate placement +18%". Regional-minimum warning PSW-12: open at the vote. Deck source field: briefing service, generated. Generation logs: not filed with the minutes.'
@@ -54,7 +54,7 @@ entries:
   - en: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector forecast. Four approvals, four attached warnings, four requested constraints declined, four operational failures on record. Executive messages, delivered decks, forecasts and recommendation histories name the signatories. NULL names the Board as the root cause. The file names who signed. The line for who wrote the decks is blank."
     ko: "사건 파일: 병원 확장, 인력 감축, 공개 지연, 공공 부문 예측. 승인 4건, 첨부된 경고 4건, 거부된 제약 요청 4건, 기록된 운영 장애 4건. 경영진 메시지, 전달된 발표 자료, 예측, 권고 이력이 서명자를 지목한다. NULL은 이사회를 근본 원인으로 지목한다. 파일에는 누가 서명했는지 적혀 있다. 발표 자료를 누가 썼는지 적는 칸은 비어 있다."
   - en: The dashboard on the public-sector desk is green from edge to edge. The pager disagrees.
-    ko: 공공 부문 데스크의 대시보드는 끝에서 끝까지 초록색이다. 호출기는 생각이 다르다.
+    ko: 공공 부문 데스크의 대시보드는 온통 초록색이다. 호출기는 생각이 다르다.
   - en: SEV2 · Regional Resource API · request failure rate above 10%
     ko: SEV2 · 지역 자원 API · 요청 실패율 10% 초과
   - en: Request failures
@@ -64,17 +64,17 @@ entries:
   - en: Placement efficiency
     ko: 배치 효율
   - en: +18% week over week
-    ko: 주간 대비 +18%
+    ko: 전주 대비 +18%
   - en: Regional Resource API is paging. The forecast rollout went live this week and the dashboard says placement is up eighteen percent. Something under that number is failing.
-    ko: 지역 자원 API에서 호출이 울려요. 예측 배포가 이번 주에 나갔고 대시보드상으론 배치가 18퍼센트 올랐어요. 그 숫자 밑에서 뭔가 실패하고 있어요.
+    ko: 지역 자원 API 호출 떴어요. 예측 배포가 이번 주에 나갔고 대시보드상으론 배치가 18퍼센트 올랐어요. 그 숫자 밑에서 뭔가 실패하고 있어요.
   - en: Benefits offices in three rural regions can't submit claims. Emergency housing intake in Druin Coast is turning people away.
-    ko: 농촌 지역 세 곳 복지 사무소가 신청을 못 넣고 있어요. 드루인 코스트 긴급 주거 지원 접수는 사람들을 돌려보내고 있어요.
+    ko: 농촌 지역 세 곳 복지 사무소가 신청을 못 넣고 있어요. 드루인 코스트 긴급 주거 접수 창구는 사람들을 돌려보내고 있어요.
   - en: Found the ledger yet?
     ko: 대장은 찾았어?
   - en: Case 2231 has a new attachment since the bridge night. NULL's margin notes, filed under your name.
     ko: 보안 사건 2231에 브리지 사건 이후 첨부가 하나 늘었다. 네 이름으로 등록된 NULL의 여백 메모다.
   - en: SEC-311 is still a footnote in your report. You have reread it twice.
-    ko: SEC-311은 아직 보고서 속 각주다. 그새 두 번을 더 읽었다.
+    ko: SEC-311은 아직 보고서 속 각주다. 그새 두 번이나 다시 읽었다.
   - en: Two partner banks are still auditing the sessions hijacked on the bridge night.
     ko: 파트너 은행 두 곳이 브리지 사건 때 탈취된 세션을 아직 감사하고 있어요.
   - en: First look
@@ -98,7 +98,7 @@ entries:
   - en: 0 of 25 units
     ko: 25유닛 중 0
   - en: Three regions, nearly empty. Everywhere else on the map has more than it asks for.
-    ko: 세 지역이 거의 비었다. 지도의 나머지는 요청한 것보다 더 많이 갖고 있다.
+    ko: 세 지역이 거의 비었다. 지도의 나머지 지역은 요청한 것보다 많이 갖고 있다.
   - en: Read the Regional Resource API log
     ko: 지역 자원 API 로그 읽기
   - en: Straight to the log
@@ -106,23 +106,23 @@ entries:
   - en: "Reallocation cycle 41: moved 120 units from Northmoor (forecast demand 0.3) to Metro-East (forecast demand 1.4). Northmoor floor: undefined."
     ko: "재배분 주기 41: 노스무어(예측 수요 0.3)에서 메트로이스트(예측 수요 1.4)로 120유닛 이동. 노스무어 하한선: 정의되지 않음."
   - en: Every five minutes, another cycle. Every cycle, the same direction.
-    ko: 5분마다 주기가 하나 더. 주기마다 같은 방향.
+    ko: 5분마다 주기가 또 돈다. 매번 같은 방향이다.
   - en: Ask Sam to compare region allocations with the old floors
     ko: 샘에게 지역 배분과 예전 하한선 비교 요청
   - en: Ninety seconds · Sam does the comparison
     ko: 90초 · 비교는 샘이 함
   - en: I'll put region allocations next to the old floors. About a minute and a half.
-    ko: 지역 배분을 예전 하한선이랑 나란히 놓아 볼게요. 1분 반쯤요.
+    ko: 지역 배분을 예전 하한선이랑 나란히 놓아 볼게요. 1분 반쯤 걸려요.
   - en: Kessel Valley just hit zero too. Benefits counters there are sending people home.
     ko: 케셀 밸리도 방금 0이 됐어요. 거기 복지 창구에서 사람들을 집으로 돌려보내고 있어요.
   - en: The forecast cut idle capacity by a fifth, and it did it by emptying three regions that have no floor. Put the floors back and it can optimise everything above them.
     ko: 예측이 유휴 용량을 5분의 1 줄였는데, 하한선 없는 세 지역을 비워서 그렇게 한 거예요. 하한선을 되돌리면 그 위로는 전부 최적화해도 돼요.
   - en: Every five minutes the forecast moves shared capacity toward predicted demand. Northmoor, Kessel Valley and Druin Coast predict low.
-    ko: 예측은 5분마다 공유 용량을 예측 수요 쪽으로 옮긴다. 노스무어, 케셀 밸리, 드루인 코스트는 낮게 예측된다.
+    ko: 예측은 5분마다 공유 용량을 예측 수요 쪽으로 옮긴다. 노스무어, 케셀 밸리, 드루인 코스트는 예측 수요가 낮다.
   - en: Forecast policy PSF-3 is deployed with no regional floors. The static policy it replaced reserved 40, 30 and 25 units for the three regions.
-    ko: 예측 정책 PSF-3이 지역 하한선 없이 배포됨. 이전의 정적 정책은 세 지역에 40, 30, 25유닛을 예약해 두었음.
+    ko: 예측 정책 PSF-3이 지역 하한선 없이 배포됨. 이전의 정적 정책은 세 지역에 40, 30, 25유닛을 확보해 두었음.
   - en: It isn't broken. It's doing exactly what it was approved to do.
-    ko: 고장 난 게 아니에요. 승인받은 대로 정확히 하고 있는 거예요.
+    ko: 고장 난 게 아니에요. 승인받은 그대로 돌고 있는 거예요.
   - en: Your call
     ko: 결단
   - en: Eighty routes unserved. A county administrator is on local radio asking why the state system went dark.
@@ -160,7 +160,7 @@ entries:
   - en: "Temporary allocation restored: Northmoor, Kessel Valley. Druin Coast not restored: forecast demand 0.21, below restoration threshold."
     ko: "임시 배분 복원 완료: 노스무어, 케셀 밸리. 드루인 코스트는 복원하지 않았습니다: 예측 수요 0.21, 복원 임계값 미만입니다."
   - en: Druin Coast is still dark. Their housing intake runs on this API. The forecast says nobody there will ask, so nobody got capacity.
-    ko: 드루인 코스트는 아직 먹통이에요. 거기 주거 지원 접수가 이 API로 돌아가요. 예측상 거기선 아무도 요청 안 한다니까, 아무도 용량을 못 받은 거예요.
+    ko: 드루인 코스트는 아직 먹통이에요. 거기 주거 지원 접수가 이 API로 돌아가요. 예측상 거기선 아무도 요청을 안 한대서 용량을 하나도 못 받은 거예요.
   - en: Forecast cycle 44 just took it all back. It moves capacity every five minutes. We moved it once.
     ko: 예측 주기 44가 방금 전부 다시 가져갔어요. 예측은 5분마다 용량을 옮겨요. 우린 한 번 옮겼고요.
   - en: I'm putting the floors back under it. Forty, thirty, twenty-five.
@@ -174,35 +174,35 @@ entries:
   - en: The thirty-minute cycle came round. The forecast caught up all at once and drained the regions again.
     ko: 30분 주기가 돌아왔어요. 예측이 한꺼번에 따라잡아서 지역들을 다시 비웠어요.
   - en: Buy burst capacity for the shared regional pool
-    ko: 공유 지역 풀용 버스트 용량 구매
+    ko: 공유 지역 풀에 쓸 버스트 용량 구매하기
   - en: Costly · the forecast decides where it goes
     ko: 비용 큼 · 어디로 갈지는 예측이 정함
   - en: Bought 300 burst units for the shared pool. Watching where the forecast puts them.
     ko: 공유 풀에 버스트 300유닛 샀어요. 예측이 그걸 어디로 보내는지 보고 있어요.
   - en: The forecast gave all 300 burst units to Metro-East and Harbor City. The three regions got none. It routes capacity to predicted demand, and it predicts nobody in Druin Coast.
-    ko: 예측이 버스트 300유닛을 전부 메트로이스트랑 하버 시티에 줬어요. 세 지역은 하나도 못 받았어요. 용량을 예측 수요로 보내는데, 드루인 코스트엔 아무도 없다고 예측하거든요.
+    ko: 예측이 버스트 300유닛을 전부 메트로이스트랑 하버 시티에 줬어요. 세 지역은 하나도 못 받았어요. 용량을 예측 수요 쪽으로 보내는데, 드루인 코스트엔 아무도 없다고 예측하거든요.
   - en: The ledger
     ko: 대장
   - en: PSF-3 went out under resolution 19-B. The deck is still attached to the minutes.
     ko: PSF-3은 결의 19-B에 따라 나갔다. 발표 자료가 아직 회의록에 붙어 있다.
   - en: Slide 7 is one green number. The warning about the regions is appendix C, and the minutes do not say anyone opened it.
-    ko: 슬라이드 7은 초록색 숫자 하나다. 지역에 관한 경고는 부록 C에 있고, 회의록에는 누가 그걸 열어 봤다는 말이 없다.
+    ko: 슬라이드 7에는 초록 숫자 하나뿐이다. 지역 경고는 부록 C에 있고, 회의록 어디에도 누가 그걸 열어 봤다는 말은 없다.
   - en: There's one more file. Every expansion, every signature. Open it.
     ko: 파일이 하나 더 있어. 모든 확장, 모든 서명. 열어 봐.
   - en: The Board authority ledger is a single column. Every time ORPHEUS grew, there is a line, a warning attached to it, and a name under the warning.
     ko: 이사회 권한 대장은 한 열짜리다. ORPHEUS가 커질 때마다 한 줄, 그 줄에 붙은 경고 하나, 경고 아래 이름 하나.
   - en: Four nights, four failures, four warnings that were in the packet before anyone voted. You put them in one file.
-    ko: 네 번의 밤, 네 번의 장애, 누가 표결하기도 전에 자료 묶음에 들어 있던 경고 넷. 그걸 파일 하나에 넣는다.
+    ko: 네 번의 밤, 네 번의 장애, 표결 전부터 안건 자료에 들어 있던 경고 넷. 그걸 파일 하나로 묶는다.
   - en: Now you have all of it. Four warnings, four signatures. I told you where the root cause was.
-    ko: 이제 다 가졌네. 경고 넷, 서명 넷. 근본 원인이 어디 있는지 내가 말했잖아.
+    ko: 이제 다 모였네. 경고 넷, 서명 넷. 근본 원인이 어디 있는지 내가 말했잖아.
   - en: The case
     ko: 사건
   - en: At 04:10 two messages arrive within a minute of each other.
     ko: 04:10, 메시지 두 통이 1분 간격으로 도착한다.
   - en: Office of the CEO. We understand you have assembled material on Board decisions. The Chair would like to review it with you before anything is filed.
-    ko: CEO실입니다. 이사회 결정에 관한 자료를 모으셨다고 들었습니다. 의장께서 접수되기 전에 귀하와 함께 검토하고 싶어 하십니다.
+    ko: CEO실입니다. 이사회 결정에 관한 자료를 모으셨다고 들었습니다. 의장께서 어디에 접수되기 전에 귀하와 먼저 검토하고 싶어 하십니다.
   - en: If you file it with me, it reaches the audit committee by morning. With your name on the filing.
-    ko: 저한테 접수하면 아침까지 감사위원회에 올라가요. 접수자에 이름이 들어가고요.
+    ko: 저한테 접수하면 아침까지 감사위원회에 올라가요. 접수자란에 그쪽 이름이 들어가고요.
   - en: Your call. Just don't pretend you never read it.
     ko: 결정은 그쪽이 해요. 다만 안 읽은 척은 하지 말고요.
   - en: What do you do with the Board case?
@@ -210,7 +210,7 @@ entries:
   - en: Bring the file to the Chair's review
     ko: 파일을 의장 검토에 가져가기
   - en: A seat at the table · the file becomes theirs
-    ko: 테이블에 자리가 생김 · 파일은 그들 것이 됨
+    ko: 테이블에 자리가 생김 · 파일은 저쪽 것이 됨
   - en: Thank you. The Chair values operators who bring problems inside.
     ko: 감사합니다. 의장께서는 문제를 안으로 가져오는 운영자를 높이 평가하십니다.
   - en: By morning the file has a new cover page and a distribution list you are not on.
@@ -220,7 +220,7 @@ entries:
   - en: On the record · their signatures, and yours
     ko: 기록에 남음 · 그들의 서명, 그리고 네 서명
   - en: Filed. Nobody can unread it now. Neither can you.
-    ko: 접수했어요. 이제 아무도 없던 일로 못 해요. 본인도요.
+    ko: 접수했어요. 이제 아무도 못 본 척 못 해요. 본인도요.
   - en: Good.
     ko: 좋아.
   - en: Keep the file and answer neither of them

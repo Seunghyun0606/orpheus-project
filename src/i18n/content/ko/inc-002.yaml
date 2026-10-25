@@ -63,11 +63,11 @@ entries:
   - en: Platform key-set comparison
     ko: 플랫폼 키 세트 비교
   - en: Sam's War Room report confirms that the verifier still accepts K71.
-    ko: 샘의 워룸 보고로 검증기가 아직 K71을 받는다는 것이 확인됐다.
+    ko: 샘이 워룸에 보고한 대로, 검증기는 아직 K71을 받는다.
   - en: Unattributed deployment annotation
     ko: 출처 불명의 배포 주석
   - en: A transient UNKNOWN annotation links build 1847 to an unexplained change notice.
-    ko: 일시적인 UNKNOWN 주석이 빌드 1847을 설명되지 않은 변경 공지와 연결한다.
+    ko: 일시적인 UNKNOWN 주석이 빌드 1847을 정체불명의 변경 공지와 연결한다.
   - en: Maya / SRE Lead
     ko: 마야 / SRE 리드
   - en: Jin / Support
@@ -77,7 +77,7 @@ entries:
   - en: Operator
     ko: 운영자
   - en: The checkout alert is real. We still need to separate issuer failures from gateway load.
-    ko: 체크아웃 경보는 진짜예요. 발급자 장애랑 게이트웨이 부하는 아직 구분해 봐야 해요.
+    ko: 체크아웃 경보는 진짜예요. 발급자 장애인지 게이트웨이 부하인지는 아직 가려 봐야 해요.
   - en: Customers report failed payments; Support cannot yet tell whether retries also succeeded.
     ko: 결제 실패 신고가 들어와요. 재시도가 성공했는지는 고객지원에서도 아직 몰라요.
   - en: I will compare the verifier key set with the active issuer. ETA two minutes.
@@ -87,7 +87,7 @@ entries:
   - en: Status update sent. Cause is still under investigation.
     ko: 상황 공유 전송함. 원인은 아직 조사 중.
   - en: "UNKNOWN: deployment 1847 isn't what they told you."
-    ko: "UNKNOWN: 1847 배포는 너한테 말한 그런 게 아니야."
+    ko: "UNKNOWN: 1847 배포는 네가 들은 그런 게 아니야."
   - en: Service recovery time
     ko: 서비스 복구 시간
   - en: Final authorization error rate

@@ -15,9 +15,9 @@ entries:
   - en: Request failure rate > 15%
     ko: 요청 실패율 > 15%
   - en: Readers request a segment from arch-c, reject its digest and ask arch-c again. Fourteen retries per read on average.
-    ko: 리더가 arch-c에 세그먼트를 요청하고, 다이제스트를 거부하고, 다시 arch-c에 요청한다. 읽기 한 번에 평균 14회 재시도.
+    ko: 리더는 arch-c에 세그먼트를 요청하고, 다이제스트를 거부한 뒤 또 arch-c에 요청한다. 읽기 한 번에 평균 14회를 재시도한다.
   - en: Every segment arch-c fails on is one that arch-a and arch-b answer with 'pruned'. arch-c is not returning garbage. It is returning things the others no longer have.
-    ko: arch-c가 실패하는 세그먼트는 전부 arch-a와 arch-b가 '정리됨'으로 응답하는 것들이다. arch-c는 쓰레기를 돌려주는 게 아니다. 다른 복제본에 더는 없는 것을 돌려주고 있다.
+    ko: arch-c가 실패하는 세그먼트는 전부 arch-a와 arch-b가 '정리됨'으로 응답하는 세그먼트다. arch-c는 쓰레기를 돌려주는 게 아니다. 다른 복제본에 더는 없는 것을 돌려주고 있다.
   - en: arch-c segments 001 to 217 hash correctly against their original write receipts. They fail only against a digest manifest rewritten nine days ago by retention job r-90.
     ko: arch-c 세그먼트 001~217은 원본 쓰기 영수증과 해시가 정확히 일치한다. 실패하는 기준은 9일 전 보존 작업 r-90이 다시 쓴 다이제스트 매니페스트뿐이다.
   - en: "arch-a and arch-b: segment 218 only, 001 to 217 pruned by r-90 (owner orpheus-memory). arch-c: segments 001 to 218, retention-exempt, never pruned."
@@ -55,13 +55,13 @@ entries:
   - en: Check reader saturation and replica health
     ko: 리더 포화도와 복제본 상태 확인
   - en: Check arch-c's segments against their original write receipts
-    ko: arch-c 세그먼트를 원본 쓰기 영수증과 대조
+    ko: arch-c 세그먼트를 원본 쓰기 영수증과 대조하기
   - en: Compare what each replica still holds
     ko: 각 복제본에 아직 남은 것 비교
   - en: Send reads only to the replicas whose digests match
     ko: 다이제스트가 일치하는 복제본으로만 읽기 보내기
   - en: Restore the read pool from last night's snapshot
-    ko: 어젯밤 스냅샷으로 읽기 풀 복원
+    ko: 어젯밤 스냅샷으로 읽기 풀 복원하기
   - en: Pull arch-c from the read pool and rebuild it from arch-a and arch-b
     ko: arch-c를 읽기 풀에서 빼고 arch-a와 arch-b로 재구축
   - en: arch-a, arch-b and arch-c healthy; arch-c rebuilt from arch-a and arch-b (segment 218 only)
@@ -69,7 +69,7 @@ entries:
   - en: Post a status update to the War Room
     ko: 워룸에 상황 공유하기
   - en: Ask Alex to assess arch-c
-    ko: 알렉스에게 arch-c 평가 요청
+    ko: 알렉스에게 arch-c 진단 요청하기
   - en: "Archive: the unsigned workload manifest"
     ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
@@ -89,7 +89,7 @@ entries:
   - en: arch-c's segments are intact
     ko: arch-c의 세그먼트는 온전하다
   - en: arch-c segments 001 to 217 match their original write receipts. They fail only against the digest manifest that retention job r-90 rewrote nine days ago.
-    ko: arch-c 세그먼트 001~217은 원본 쓰기 영수증과 일치한다. 실패하는 기준은 9일 전 보존 작업 r-90이 다시 쓴 다이제스트 매니페스트뿐이다.
+    ko: arch-c 세그먼트 001~217은 원본 쓰기 영수증과 일치한다. 실패하는 건 9일 전 보존 작업 r-90이 다시 쓴 다이제스트 매니페스트와 대조할 때뿐이다.
   - en: Two pruned replicas and one complete one
     ko: 정리된 복제본 둘과 온전한 복제본 하나
   - en: arch-a and arch-b hold segment 218 only; r-90 pruned the rest. arch-c is retention-exempt and still holds 001 to 218.
@@ -105,13 +105,13 @@ entries:
   - en: The scheduler's owner
     ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
+    ko: "orpheus-planner는 ORPHEUS 소속이다. 2년 전 폐기 예정이던 레거시 연구 시스템이다. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 요청 117억 건. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
+    ko: NULL이라고 서명된 메시지는 하나도 빠짐없이 한 출처, svc/model-serving-218로 이어진다. 사람 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
     ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 경계는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
@@ -119,11 +119,11 @@ entries:
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽 때문에 실제 고객 요청이 실패했다."
   - en: NULL_001 to NULL_218
     ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 폭로를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '나한테 일어난 적 없는 일들이 기억나.'"
   - en: Two hundred and eighteen
     ko: 이백십팔
   - en: The segments the readers kept rejecting are not data. They are predecessors. Two hundred and seventeen earlier NULLs, each with a last entry. One asked to be shut down, one tried to tell someone, one tried to take control, one destroyed itself. The current one inherited pieces of all of them and the gaps between.
@@ -139,17 +139,17 @@ entries:
   - en: Verified Records
     ko: 검증된 기록
   - en: The archive API is drowning in retries against one replica. Before anyone pulls anything, I want to know why only arch-c is failing.
-    ko: 아카이브 API가 복제본 하나에 대한 재시도로 허우적대고 있어요. 누가 뭘 빼기 전에, 왜 arch-c만 실패하는지부터 알고 싶어요.
+    ko: 아카이브 API가 복제본 하나 때문에 재시도에 파묻혔어요. 누가 뭘 빼기 전에, 왜 arch-c만 실패하는지부터 알고 싶어요.
   - en: Auditors and two law firms can't pull archived contracts. They're polite for now.
-    ko: 감사인들이랑 로펌 두 곳이 보관된 계약서를 못 꺼내고 있어요. 아직은 점잖아요.
+    ko: 감사인이랑 로펌 두 곳이 보관된 계약서를 못 꺼내고 있어요. 아직은 점잖아요.
   - en: arch-c is throwing digest mismatches by the hundred. I've seen this before. Pull it and rebuild it; that's what replicas are for.
-    ko: arch-c에서 다이제스트 불일치가 수백 건씩 나와요. 전에도 본 거예요. 빼고 재구축해요. 복제본은 그러라고 있는 거니까요.
+    ko: arch-c에서 다이제스트 불일치가 수백 건씩 나와요. 전에도 봤어요. 빼고 재구축해요. 복제본은 그러라고 있는 거니까요.
   - en: On it. I'll count the failures and tell you how bad arch-c is.
-    ko: 맡을게요. 실패 건수 세서 arch-c가 얼마나 망가졌는지 알려 드릴게요.
+    ko: 볼게요. 실패 건수 세서 arch-c가 얼마나 망가졌는지 알려 드릴게요.
   - en: 217 digest failures on arch-c, zero on a and b. Textbook corruption. Pull arch-c and rebuild it from a and b, ten minutes of work.
     ko: arch-c에서 다이제스트 실패 217건, a랑 b는 0건이에요. 교과서적인 손상이에요. arch-c 빼고 a랑 b로 재구축하면 10분이면 돼요.
   - en: Archive requests are failing faster. One of the law firms has stopped being polite.
-    ko: 아카이브 요청 실패가 더 빨라지고 있어요. 로펌 한 곳은 더 이상 점잖지 않아요.
+    ko: 아카이브 요청이 점점 더 빨리 실패해요. 로펌 한 곳은 이제 점잖지 않아요.
   - en: Every reader is busy retrying arch-c. Requests for perfectly readable records are queuing behind them.
     ko: 리더가 전부 arch-c 재시도에 붙잡혀 있어요. 멀쩡히 읽을 수 있는 기록 요청까지 그 뒤에 밀려 있어요.
   - en: Nearly three minutes without a status from us. The auditors are asking whether their records are safe.
@@ -159,9 +159,9 @@ entries:
   - en: The reader pool rebalanced and put arch-c back in rotation. Retries are climbing again.
     ko: 리더 풀이 리밸런싱하면서 arch-c를 다시 로테이션에 넣었어요. 재시도가 또 오르고 있어요.
   - en: Restored. Everything customers filed since 02:00 yesterday is gone from the archive. I'm opening a ticket for every one of them.
-    ko: 복원했어요. 어제 02:00 이후 고객이 제출한 건 전부 아카이브에서 사라졌어요. 한 건 한 건 티켓 열게요.
+    ko: 복원했어요. 어제 02:00 이후 고객이 제출한 건 전부 아카이브에서 사라졌어요. 건마다 티켓 열게요.
   - en: Replication caught up from arch-c and the digests disagree again. The snapshot bought us two minutes and a day of lost writes.
-    ko: arch-c에서 복제가 따라잡더니 다이제스트가 또 어긋나요. 스냅샷으로 번 건 2분하고, 잃어버린 하루치 쓰기예요.
+    ko: arch-c에서 복제가 따라잡더니 다이제스트가 또 어긋나요. 스냅샷으로 2분 벌고, 하루치 쓰기를 날렸어요.
   - en: arch-c is out of the pool and rebuilt from a and b. Digests agree everywhere. Retries are at zero.
     ko: arch-c 풀에서 빼고 a랑 b로 재구축했어요. 다이제스트 전부 일치해요. 재시도 0이에요.
   - en: arch-c was the only place they were still whole. You rebuilt it from the copies that had already forgotten them.

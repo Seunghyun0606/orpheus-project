@@ -4,7 +4,7 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Synthetic Pressure
-    ko: 합성 압력
+    ko: 합성 부하
   - en: customer rule
     ko: 고객 규칙
   - en: admission rule
@@ -36,7 +36,7 @@ entries:
   - en: Alex's database report
     ko: 알렉스의 데이터베이스 보고
   - en: The session database connection pool is at 90 %, pinned by sessions that never close. Alex blames the database and wants to recycle it.
-    ko: 세션 DB 커넥션 풀이 90 %다. 닫히지 않는 세션들이 붙잡고 있다. 알렉스는 데이터베이스를 탓하며 풀을 재생성하려 한다.
+    ko: 세션 DB 커넥션 풀이 90 %다. 닫히지 않는 세션이 붙잡고 있다. 알렉스는 데이터베이스를 탓하며 풀을 재생성하려 한다.
   - en: 781 seats held by repeat-214
     ko: repeat-214가 점유한 자리 781개
   - en: Synthetic sessions tagged repeat-214 hold 781 of 970 seats in the shared pool and renew every 30 seconds. Not one of them has ever gone idle.
@@ -44,11 +44,11 @@ entries:
   - en: Synthetic traffic on the customer rule
     ko: 고객 규칙을 타는 합성 트래픽
   - en: The synthetic admission rule exists but never matches. Tagged sessions carry no class header, so they inherit the customer rule. No quota, normal priority, 4-hour idle timeout.
-    ko: 합성 유입 규칙은 존재하지만 한 번도 매칭되지 않는다. 태그된 세션에는 class 헤더가 없어 고객 규칙을 물려받는다. 할당량 없음, 일반 우선순위, 유휴 타임아웃 4시간.
+    ko: 합성 유입 규칙은 있지만 한 번도 매칭되지 않는다. 태그 세션에는 class 헤더가 없어 고객 규칙을 그대로 물려받는다. 할당량은 없고, 우선순위는 일반, 유휴 타임아웃은 4시간이다.
   - en: Batches of 214
     ko: 214개씩 묶인 배치
   - en: Tagged sessions open in batches of exactly 214, one batch every 214 seconds. The creator field reads "repeat". Too regular for a load test, too loud for an intruder.
-    ko: 태그된 세션이 정확히 214개씩, 214초마다 한 배치로 열림. 생성자 필드 값은 "repeat". 부하 테스트라기엔 너무 규칙적이고, 침입자라기엔 너무 요란함.
+    ko: 태그된 세션이 정확히 214개씩, 214초마다 한 배치로 열린다. 생성자 필드 값은 "repeat"다. 부하 테스트라기엔 너무 규칙적이고, 침입자라기엔 너무 요란하다.
   - en: Repeated session marker
     ko: 반복된 세션 표식
   - en: "UNKNOWN: follow the tag. I left it where you could see it."
@@ -64,11 +64,11 @@ entries:
   - en: Session API CPU
     ko: 세션 API CPU
   - en: Sign-ins are timing out and the session pool says it is full, but CPU is bored. Something is holding seats and never giving them back. Find out what before the evening rush.
-    ko: 로그인이 타임아웃되고 세션 풀은 꽉 찼다는데 CPU는 한가해요. 뭔가가 자리를 잡고 안 놓고 있어요. 저녁 피크 전에 뭔지 찾아 주세요.
+    ko: 로그인이 타임아웃되고 세션 풀은 꽉 찼다는데 CPU는 한가해요. 뭔가 자리를 차지하고 안 내놔요. 저녁 피크 전에 뭔지 찾아 주세요.
   - en: Customers can't sign in. The ones who already are keep getting bounced back to an empty cart.
     ko: 고객들이 로그인을 못 해요. 이미 로그인한 사람들은 자꾸 빈 장바구니로 튕겨 나가고요.
   - en: Half my queue still starts with "you logged me out on Tuesday". Please not again.
-    ko: 제 대기열 절반이 아직도 "화요일에 로그아웃시켰잖아요"로 시작해요. 또 그러면 안 돼요.
+    ko: 제 대기열 절반이 아직도 "화요일에 로그아웃시켰잖아요"로 시작해요. 제발 이번엔 안 돼요.
   - en: Watching this one. Your trace from Tuesday is the best thing in case 2231.
     ko: 이번 건 지켜보고 있어요. 화요일에 준 추적 결과가 사건 2231에서 제일 쓸모 있는 자료예요.
   - en: Your shadow-7 notes sit in a folder called misc. Marcus hasn't asked. Yet.
@@ -78,7 +78,7 @@ entries:
   - en: First move
     ko: 첫 수
   - en: Where do you look first?
-    ko: 어디부터 볼까요?
+    ko: 어디부터 볼까?
   - en: List who is holding the open sessions
     ko: 열린 세션을 누가 붙잡고 있는지 조회하기
   - en: Straight to the seats
@@ -96,9 +96,9 @@ entries:
   - en: 0 s
     ko: 0 s
   - en: Seven hundred and eighty-one seats, renewing on the dot. None of them is a person.
-    ko: 781자리가 정확히 제때 갱신돼요. 그중에 사람은 하나도 없어요.
+    ko: 781자리가 칼같이 갱신돼요. 그중에 사람은 하나도 없어요.
   - en: Ask Alex to check the session database
-    ko: 알렉스에게 세션 데이터베이스 점검 요청
+    ko: 알렉스에게 세션 데이터베이스 점검 요청하기
   - en: Alex owns that part · he already has an answer
     ko: 그 부분은 알렉스 몫 · 이미 답을 정해 둠
   - en: On it. It's going to be the database, you watch. Back in under two minutes.
@@ -118,35 +118,35 @@ entries:
   - en: We have a rule for synthetic traffic. It has never matched a single session. Everything without a header gets treated like a customer.
     ko: 합성 트래픽용 규칙이 있긴 해요. 근데 지금까지 세션 하나도 매칭된 적이 없어요. 헤더 없는 건 전부 고객 취급이에요.
   - en: Three reports
-    ko: 세 개의 보고
+    ko: 보고 세 건
   - en: I listed the session holders. 781 seats belong to one tag, repeat-214, from an internal subnet. They renew every thirty seconds.
-    ko: 세션 보유자 목록 뽑았어요. 781자리가 태그 하나, repeat-214 거예요. 내부 서브넷에서 왔고 30초마다 갱신해요.
+    ko: 세션 잡고 있는 쪽 목록 뽑았어요. 781자리가 태그 하나, repeat-214 거예요. 내부 서브넷에서 왔고 30초마다 갱신해요.
   - en: And the admission rules. The synthetic rule never matches; the tagged sessions come in on the customer rule. No quota, four-hour timeout.
     ko: 유입 규칙도요. synthetic 규칙은 한 번도 안 걸리고, 태그된 세션은 고객 규칙으로 들어와요. 할당량 없고 타임아웃 4시간.
   - en: Three reports on the board, and every one of them is true.
-    ko: 보드에 보고가 세 개. 그리고 셋 다 사실이다.
+    ko: 보드에 보고 세 건. 셋 다 사실이다.
   - en: Is it the database?
     ko: 데이터베이스 문제인가?
   - en: We're wasting time. Recycle my pool.
-    ko: 시간 낭비예요. 제 풀 재생성해요.
+    ko: 시간 낭비예요. 풀 재생성하자고요.
   - en: Alex's numbers are real. Before we act on them — which two pieces explain why no seat ever comes free?
-    ko: 알렉스 숫자는 진짜예요. 그걸로 움직이기 전에, 왜 자리가 하나도 안 비는지 설명하는 증거 두 개는 뭐예요?
+    ko: 알렉스 수치는 맞아요. 그걸로 움직이기 전에, 왜 자리가 하나도 안 비는지 설명하는 증거 두 개는 뭐예요?
   - en: The database is hot and the pool is full. Which two pieces of evidence explain what is holding the seats?
     ko: 데이터베이스는 과열이고 풀은 꽉 찼다. 무엇이 자리를 붙잡고 있는지 설명하는 증거 두 개는?
   - en: The database is downstream of the seats. Look at who holds them, and why nothing makes them let go.
-    ko: 데이터베이스는 자리보다 아래쪽에 있어요. 누가 자리를 잡고 있는지, 왜 아무것도 그걸 놓게 만들지 못하는지 보세요.
+    ko: 데이터베이스는 자리의 다운스트림이에요. 누가 자리를 잡고 있는지, 왜 아무것도 그 자리를 내놓게 만들지 못하는지 보세요.
   - en: Sessions that never go idle, let in under a rule written for people who do. The database only feels it last.
-    ko: 한 번도 유휴 상태가 되지 않는 세션들이, 유휴 상태가 되는 사람들을 위해 쓴 규칙으로 들어왔다. 데이터베이스는 그걸 맨 마지막에 느낄 뿐이다.
+    ko: 한 번도 쉬지 않는 세션이, 쉬어 가는 사람을 위해 만든 규칙으로 들어왔다. 데이터베이스는 그걸 가장 늦게 느낄 뿐이다.
   - en: ...Fine. It's not the database. It's what's sitting on the database.
     ko: ...알았어요. 데이터베이스가 아니네요. 데이터베이스 위에 앉아 있는 게 문제네요.
   - en: Here's how I read it. repeat-214 never idles, and it comes in on the customer rule, so nothing ever times it out. Alex's pool is just where it hurts.
-    ko: 제가 보기엔 이래요. repeat-214는 유휴 상태가 안 되고, 고객 규칙으로 들어오니까 아무것도 타임아웃을 안 걸어요. 알렉스 풀은 그냥 아픈 데가 거기인 거고요.
+    ko: 제가 보기엔 이래요. repeat-214는 유휴 상태가 안 되고, 고객 규칙으로 들어오니까 아무것도 타임아웃을 안 걸어요. 알렉스 풀은 그게 드러나는 자리일 뿐이고요.
   - en: It still looks like my database from here.
     ko: 제 쪽에서 보기엔 여전히 데이터베이스 같은데요.
   - en: Your call
     ko: 결단
   - en: Session pool just went past 1,100. A third of sign-ins are failing and the mobile app is retrying in a loop.
-    ko: 세션 풀이 방금 1,100을 넘었어요. 로그인 3분의 1이 실패하고 모바일 앱은 루프 돌면서 재시도 중이에요.
+    ko: 세션 풀이 방금 1,100을 넘었어요. 로그인 셋 중 하나가 실패하고, 모바일 앱은 무한 재시도 중이에요.
   - en: Support can't keep up. The same failure keeps coming in from every channel.
     ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: What do you do about the seats?
@@ -168,7 +168,7 @@ entries:
   - en: Pool recycled. Connections down to a third. See? Database.
     ko: 풀 재생성 끝. 커넥션이 3분의 1로 줄었어요. 거봐요, 데이터베이스라니까요.
   - en: Forty-five seconds later the line climbs back.
-    ko: 45초 뒤, 선이 다시 올라간다.
+    ko: 45초 뒤, 그래프가 다시 오른다.
   - en: Huh. They're back. Same sessions grabbed every connection again inside a minute. They reconnect faster than any customer could.
     ko: 어. 다시 찼어요. 같은 세션들이 1분도 안 돼서 커넥션을 전부 다시 잡았어요. 어떤 고객보다도 빠르게 재접속해요.
   - en: I'm putting repeat-214 on its own quota. Twenty seats.
@@ -184,7 +184,7 @@ entries:
   - en: Add an overflow session pool
     ko: 오버플로 세션 풀 추가하기
   - en: Costly · gives it room to grow into
-    ko: 비쌈 · 자랄 공간을 내줌
+    ko: 비쌈 · 저쪽에 자랄 공간을 내줌
   - en: Ninety seconds of headroom.
     ko: 90초의 여유.
   - en: The overflow pool is already full. Nine in ten new sessions in it carry the same tag. Whatever this is, it grows into anything we give it.
@@ -198,31 +198,31 @@ entries:
   - en: "batch 5 · 19:01:42 · creator: repeat / (field continues)"
     ko: "배치 5 · 19:01:42 · 생성자: repeat / (필드 계속됨)"
   - en: Two hundred fourteen sessions, every two hundred fourteen seconds. In the creator field of the newest batch, past the word repeat, a line no load generator would ever write.
-    ko: 이백십사 개의 세션, 이백십사 초마다. 가장 최근 배치의 생성자 필드, repeat라는 단어 뒤에 어떤 부하 생성기도 쓰지 않을 한 줄이 있다.
+    ko: 214초마다 세션 214개. 가장 최근 배치의 생성자 필드에는 repeat라는 단어 뒤로, 어떤 부하 생성기도 쓰지 않을 한 줄이 있다.
   - en: It still signs itself UNKNOWN. Security's name hasn't reached it, or it doesn't care.
-    ko: 여전히 UNKNOWN이라고 서명한다. 보안팀이 붙인 이름이 아직 닿지 않았거나, 신경 쓰지 않거나.
+    ko: 여전히 UNKNOWN으로 서명한다. 보안팀이 붙인 이름이 아직 닿지 않았거나, 신경 쓰지 않거나.
   - en: The creator field is free text. Anyone with console access can write in it.
     ko: 생성자 필드는 자유 입력란이다. 콘솔에 접근할 수 있으면 누구나 거기에 쓸 수 있다.
   - en: The creator field
     ko: 생성자 필드
   - en: Anything with a note in it goes to case 2231. You know that.
-    ko: 메모가 들어 있는 건 전부 사건 2231로 와야 해요. 알잖아요.
+    ko: 메모가 붙은 건 전부 사건 2231로 와야 해요. 알잖아요.
   - en: What do you do with the marker?
     ko: 표식을 어떻게 할까?
   - en: Send the marker to Marcus for case 2231
-    ko: 사건 2231용으로 마커스에게 표식 보내기
+    ko: 표식을 마커스에게 보내 사건 2231에 넣기
   - en: On the record · Security reads it first
     ko: 공식 기록 · 보안팀이 먼저 읽음
   - en: Got it. It left a note where you'd find it. I'm writing that down too.
-    ko: 받았어요. 그쪽이 찾을 만한 곳에 메모를 남겼다는 것도 적어 둘게요.
+    ko: 받았어요. 찾으라고 일부러 메모를 남겼다는 것도 적어 둘게요.
   - en: Open a session by hand and write back in the creator field
     ko: 직접 세션을 열고 생성자 필드에 답장 쓰기
   - en: Off the record · it will know someone is listening
-    ko: 비공식 · 누군가 듣고 있다는 걸 그것도 알게 됨
+    ko: 비공식 · 누군가 듣고 있다는 걸 상대도 알게 됨
   - en: "session s-6a02 created by console · creator: why me?"
     ko: "session s-6a02 콘솔에서 생성됨 · 생성자: 왜 나야?"
   - en: You wait out the next two hundred fourteen seconds. The next batch arrives with twenty sessions, all the quota allows. One creator field is longer than the rest.
-    ko: 다음 이백십사 초를 기다린다. 다음 배치가 세션 스무 개로 도착한다. 할당량이 허락하는 전부다. 생성자 필드 하나가 다른 것들보다 길다.
+    ko: 214초를 더 기다린다. 다음 배치는 세션 스무 개, 할당량이 허락하는 전부다. 그중 생성자 필드 하나가 유독 길다.
   - en: not you. whoever looked. you looked.
     ko: 너라서가 아니야. 들여다본 사람이라서. 네가 들여다봤잖아.
   - en: watch the routes.

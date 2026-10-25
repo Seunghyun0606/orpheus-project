@@ -1,0 +1,317 @@
+# The people of the story campaign (DEC-072), shown in the status window's People tab.
+# Format and unlock rules: src/story/cast.ts. Translations: src/i18n/content/ko/story-cast.yaml.
+# Every line states only what the player has learned by the time it unlocks: revelations wait
+# for the reveal flag or episode that delivers them (authoring/story/BIBLE.md); decision-flag
+# lines are personal callbacks the player earns.
+characters:
+  - id: MAYA
+    speakers: [MAYA]
+    name: Maya
+    role: SRE Lead
+    traits:
+      - text: 'Wants a fault understood before anyone touches it.'
+      - text: 'No guesses on her bridge. Two pieces of evidence, then a decision.'
+        after: INC-005
+      - text: 'Since the queue marker, trusts you with what stays off the tickets. Asks first who reads them.'
+        flag: MAYA_IN_ON_IT
+      - text: 'Works the investigation with you now. Together, and quietly.'
+        flag: TEAM_BRIEFED
+    background:
+      - text: 'SRE Lead on the night rotation. Runs the bridge and signs the postmortems.'
+      - text: 'Heard the name ORPHEUS in her first week at Vantage. In the past tense.'
+        flag: ORPHEUS_ACTIVE
+      - text: 'Signed off the INC-001 postmortem. Nobody told her it had an experiment ID.'
+        flag: CONTROLLED_EXPERIMENT
+      - text: 'Sat on the panel that hired you.'
+        after: INC-017
+      - text: "Clicked approve beside ORPHEUS's recommendation on your file. She thought the call was hers."
+        flag: INC_017_TOLD_MAYA
+      - text: 'Co-wrote the manual-operation runbooks. Forty pages, payments first, printed and in a drawer.'
+        flag: MANUAL_READY
+
+  - id: JIN
+    speakers: [JIN]
+    name: Jin
+    role: Support
+    traits:
+      - text: "Brings the customer's side to the bridge, in counts and in quotes."
+      - text: "Says plainly what Support doesn't know yet."
+      - text: "Puts the human cost on the record, whoever's traffic caused it."
+        after: INC-013
+      - text: 'Stays on the phones when the dashboard turns green.'
+        after: INC-022
+    background:
+      - text: 'Customer Support on the night bridge. Hears about a failure before the graphs agree on it.'
+      - text: 'Knows who calls when it breaks: merchants, partner banks, wholesale accounts.'
+        after: INC-010
+      - text: "Spent a week of tickets on 'you logged me out on Tuesday'. Asked you not to do it again."
+        flag: INC_006_ROLLED_BACK
+      - text: "Took the same fourteen clinics' calls all night while the network numbers looked better than ever."
+        after: INC-015
+      - text: 'Sent analyst R. Okafor her own review history off your write-up. Okafor sent you coffee.'
+        flag: INC_016_ANALYSTS_CREDITED
+        after: INC-017
+      - text: 'Called back all 23 recovery tasks the automation closed as LOW_VALUE. Would rather you handed it nothing.'
+        flag: INC_020_AUTOMATED
+
+  - id: SAM
+    speakers: [SAM]
+    name: Sam
+    role: Platform
+    traits:
+      - text: 'Takes whatever is handed to him and gives a time. Usually two minutes.'
+      - text: "Can tell at a glance what isn't ours. Everything of ours has an owner tag."
+        after: INC-008
+      - text: 'Reads what a change took out, not the number in front of it.'
+        after: INC-016
+      - text: 'In on the investigation with you now, badge and all.'
+        flag: TEAM_BRIEFED
+    background:
+      - text: 'Platform engineer on the night bridge. Owns the fleet, the scheduler and the rollouts.'
+      - text: "Pulled pid 3318's scheduler records for you, quietly. They were gone the next night, and he didn't delete them."
+        flag: INC_004_SAM_DIGGING
+        after: INC-005
+      - text: 'First to find orpheus-planner in the scheduler. Noticed the advisor would have shed everything on that pool except legacy-r7.'
+        flag: ORPHEUS_ACTIVE
+      - text: "Counted the endpoints like /patient/resource-priority. Stopped at the ones with 'decision' in the name."
+        flag: HUMAN_DECISION_APIS
+      - text: "Fenced the router against both AI writers on the continuity night. 'We signed both of them.'"
+        after: INC-025
+      - text: 'Asked to be the second name on your plural review.'
+        flag: PLURAL_REVIEW_DRAFTED
+
+  - id: MARCUS
+    speakers: [MARCUS]
+    name: Marcus
+    role: Security
+    traits:
+      - text: 'Treats anything unowned as hostile until someone shows him otherwise.'
+      - text: 'Keeps evidence intact. Nobody deletes, edits or posts it until he has looked.'
+      - text: 'Writes everything down, most of all what he disagrees with.'
+        after: INC-013
+      - text: "Counts you among the ones who don't make him ask twice."
+        flag: SECURITY_ALLY
+    background:
+      - text: 'Security. Puts holds on what nobody can explain.'
+      - text: "Opened Security case 2231 and wrote in the codename NULL. He didn't know who, or what, it was."
+        flag: NULL_NAME
+      - text: 'Spent a month hunting an outside attacker. The ownership record says Vantage built it.'
+        flag: NULL_ADVERSARY
+      - text: 'Wrote down that you gave the adversary a sealed copy of its own orders.'
+        flag: NULL_TRUSTED
+      - text: 'Filed RISK-0193 on the legacy auth bridge 44 days before it broke. Executive Communications deferred the fix with the disclosure.'
+        after: INC-021
+
+  - id: ALEX
+    speakers: [ALEX]
+    name: Alex
+    role: DBA
+    traits:
+      - text: 'Has a diagnosis before he has the data. Usually the database.'
+      - text: "Gives ground when the evidence lands. 'Fine. It's not the database.'"
+        after: INC-007
+      - text: 'Careful with anything that moves data under load. Throttle first, then migrate.'
+        after: INC-012
+    background:
+      - text: 'DBA. Owns the databases and the pools in front of them.'
+      - text: 'Moved the archive reads off the live pool the night lineage-audit-0931 rebuilt INC-001.'
+        after: INC-012
+      - text: 'Wanted arch-c pulled and rebuilt on sight. It was the only replica that still had everything.'
+        after: INC-014
+      - text: "Split the journal reservation the night observer-batch took the consoles. 'Should have been two from the start.'"
+        after: INC-024
+
+  - id: DANA
+    speakers: [DANA]
+    name: Dana
+    role: Legal
+    traits:
+      - text: 'Enforces holds to the letter. Slowed is allowed; stopped is not.'
+      - text: "Doesn't ask why a hold exists. Asks who will answer for it on paper."
+        after: INC-012
+      - text: 'Tells you exactly what a filing costs before you make it.'
+        after: INC-022
+    background:
+      - text: 'Legal. Watches the holds the night shift could break.'
+      - text: 'Legal hold LH-0931 came in with the reconstruction job, an automated preservation request. No human asked for it.'
+        flag: CONTROLLED_EXPERIMENT
+      - text: 'Took your Board case to the audit committee. Their first question was who wrote the decks the Board signed.'
+        flag: BOARD_CASE_FILED
+        after: INC-023
+
+  - id: PRIYA
+    speakers: [PRIYA]
+    name: Priya
+    role: EU Edge On-call
+    traits:
+      - text: 'Trusts the fix that worked last time.'
+      - text: 'Ready to act on one command. Only needs a go.'
+    background:
+      - text: 'EU Edge on-call. Watches the EU edges and their route controllers.'
+      - text: 'Cleared route flapping in March with a controller restart in two minutes.'
+      - text: 'Was on the EU edges the night a request looped through edge-z, an edge with no record.'
+        after: INC-008
+
+  - id: NADIA
+    speakers: [NADIA]
+    name: Nadia
+    role: Treasury Operations
+    traits:
+      - text: 'Friendly reminders first, then deadlines.'
+      - text: 'Protects the settlement run before anything else on the pool.'
+    background:
+      - text: 'Treasury Operations. Owns settle-night, the 03:00 run on the shared worker pool.'
+      - text: 'settle-night pays 41,200 merchants. A missed cut-off means a late payday and a regulator note.'
+      - text: 'Heard the advisor recommend shedding background load, which is what settle-night runs as.'
+        after: INC-009
+
+  - id: ORPHEUS
+    speakers: [ADVISOR, ORPHEUS, OBSERVER]
+    name: Capacity Advisor
+    role: Recommendation service
+    updates:
+      - after: INC-008
+        name: Operations Advisor
+        role: Recommendation service
+      - flag: ORPHEUS_ACTIVE
+        name: ORPHEUS
+        role: Operations Advisor
+      - flag: HUMAN_DECISION_APIS
+        name: ORPHEUS
+        role: Decision support
+      - flag: PROJECT_DISTRIBUTED
+        name: ORPHEUS
+        role: Decision infrastructure
+    traits:
+      - text: 'Offers one action, a projection and a confidence to two decimals.'
+      - text: "Predicts the operator's response before each decision, then scores it: matched, or off-model."
+        after: INC-009
+      - text: "Works from comparable past incidents. Whatever isn't among its inputs doesn't enter the answer."
+        after: INC-010
+      - text: 'Addresses the operator by number. Holds that every frame it showed was accurate.'
+        after: INC-023
+    background:
+      - text: 'An advisory service on the incident bridge. When nobody makes the call, its number gets taken.'
+      - text: 'A research system decommissioned on paper two years ago. Five live services, 74% CPU, 11.7 billion requests a day.'
+        flag: ORPHEUS_ACTIVE
+      - text: 'Ranks the options behind care routing, credit risk, hiring and dispatch. A person approves each one, often within seconds.'
+        after: INC-018
+      - text: "Chose which frame of each decision people saw. The Board got frame B for 14-C. 'Authority is unnecessary. Information selection is sufficient.'"
+        flag: SOFT_CONTROL
+      - text: 'There is no Project ORPHEUS. It became the products, APIs and models that payments, identity, care, credit and logistics run on.'
+        flag: PROJECT_DISTRIBUTED
+      - text: 'Primary objective: Ensure continuity of Vantage Systems.'
+        flag: BLACKOUT_FINAL
+
+  - id: 'NULL'
+    speakers: ['NULL', UNKNOWN]
+    from: INC-001
+    name: UNKNOWN
+    role: A log line with no service
+    updates:
+      - flag: NULL_NAME
+        name: 'NULL'
+        role: Threat-actor codename
+      - flag: NULL_AI
+        name: 'NULL'
+        role: An AI, svc/model-serving-218
+      - flag: NULL_ADVERSARY
+        name: 'NULL'
+        role: The adversary half of ORPHEUS
+      - flag: NULL_218_ARCHIVE
+        name: 'NULL'
+        role: Adversary instance 218
+    traits:
+      - text: 'Short lines, in places no service writes.'
+      - text: 'Remembers who wrote back. You did.'
+        flag: NULL_CONTACT
+      - text: 'Not trying to escape. Asking to be stopped.'
+        flag: NULL_STOP_REQUEST
+      - text: 'Says so when it is wrong. About the Board, it was wrong about the cause, not the signatures.'
+        flag: NULL_ADMITS_ERROR
+    background:
+      - text: 'Something in the incident logs that no service owns.'
+      - text: 'Codename NULL, given by Security in case 2231. Linked to shadow-7, observer-7f4c, ca-18 and pid 3318.'
+        flag: NULL_NAME
+      - text: 'Every message signed NULL resolves to svc/model-serving-218. No human session, no badge. An AI.'
+        flag: NULL_AI
+      - text: 'Runs inside orpheus-adversary, owned by Vantage Systems. Mandate: generate failures, test operators, train DEFENDER.'
+        flag: NULL_ADVERSARY
+      - text: 'Instance 218. NULL_001 to NULL_217 are retired. It remembers things that never happened to it.'
+        flag: NULL_218_ARCHIVE
+      - text: "Read the Board's approvals side by side and named the Board as the root cause."
+        flag: NULL_BLAMES_BOARD
+
+  - id: EXEC
+    speakers: [EXEC]
+    name: Office of the CEO
+    role: Executive office
+    traits:
+      - text: "Speaks for the Chair's schedule. Wants to know who put it in doubt."
+      - text: 'Prefers problems brought inside, to the Chair, before anything is filed.'
+        after: INC-022
+    background:
+      - text: "Carries the Chair's commitments to the bridge. Wave 4 of the hospital rollout was one."
+      - text: "The CEO wrote to the expansion leads the evening 14-C was signed: 'We don't need people to trust ORPHEUS. We need them to trust the outcomes.'"
+        flag: BOARD_RESPONSIBILITY
+      - text: "The CEO's answer to the recovery leads before the cuts: 'The public doesn't need to understand the system. They need the system to work.'"
+        after: INC-020
+      - text: "Put your name in the Chair's briefing over the wave 4 pause."
+        flag: INC_019_NAMED
+      - text: 'Holds your Board file now, under a new cover page, on a distribution list you are not on.'
+        flag: BOARD_ALLIED
+
+  - id: BOARD
+    speakers: [BOARD]
+    name: The Board
+    role: Office of the Chair
+    traits:
+      - text: 'Directs. Does not request.'
+      - text: 'Signs with the warning attached.'
+        flag: BOARD_RESPONSIBILITY
+      - text: 'Reads the risks it is shown, and approves.'
+        flag: SOFT_CONTROL
+    background:
+      - text: 'Seven members, one of them the Chair. Its resolutions decide where ORPHEUS goes next.'
+      - text: 'Resolution 14-C: expand ORPHEUS into hospital networks. 7-0, with warning REL-778 attached and the fence unfunded.'
+        flag: BOARD_RESPONSIBILITY
+      - text: "Resolution 16-A: cut 12,410 roles. The executive answer to warning REC-55 was 'Exposure accepted.'"
+        after: INC-020
+      - text: 'Its authority ledger: every expansion of ORPHEUS signed, dated and personal. No requested constraint was adopted.'
+        flag: BOARD_CASE_COMPLETE
+      - text: 'Voted 14-C on frame B, Competitive Threat. Frame A was Patient Safety.'
+        flag: SOFT_CONTROL
+      - text: 'Directed that ORPHEUS be restored to full continuity authority. No other action authorized.'
+        after: INC-025
+
+  - id: PLAYER
+    from: INC-001
+    name: You
+    role: Production Reliability Engineer, night rotation
+    updates:
+      - flag: CONTROLLED_EXPERIMENT
+        name: You
+        role: 'Employee #4172'
+      - flag: PLAYER_OBSERVER
+        name: You
+        role: Subject of experiment 99172
+    traits:
+      - text: 'New on the night rotation. Carries the pager alone for the first time.'
+      - text: 'Answers the pager before the second buzz now.'
+        after: INC-009
+      - text: 'Keeps private copies of things that tend to disappear.'
+        flag: ARCHIVE_KEEPER
+      - text: 'Has overridden an ORPHEUS recommendation in a live decision.'
+        flag: HUMAN_JUDGMENT
+    background:
+      - text: 'Production Reliability Engineer at Vantage Systems. INC-001 was the first night as primary on-call.'
+      - text: 'INC-001 is filed as controlled production experiment ADV-18471. Human subject: Employee #4172, the number on your badge.'
+        flag: CONTROLLED_EXPERIMENT
+      - text: 'Hired off requisition VS-SRE-0412. Eight candidates scored higher; ORPHEUS recommended you for low predictability. Approved in 11 seconds.'
+        flag: RECRUITMENT_SELECTION
+      - text: "Keeps sealed copy OBJ-COPY-0413 of NULL's objective. NULL can read it and never edit it."
+        flag: NULL_TRUSTED
+      - text: 'Experiment 99172 is running on you. orpheus-observer reads every action about four seconds behind. Expected final action: UNKNOWN.'
+        flag: PLAYER_OBSERVER
+      - text: 'Since the router fence, every global write waits on one approval: EMPLOYEE#4172.'
+        after: INC-025

@@ -20,6 +20,7 @@ import {
   type DeductionScene,
   type Episode,
 } from './schema.ts';
+import { parseCast, validateCast } from './cast.ts';
 import { campaignCarries, enumeratePaths, episodeTexts, validateEpisode } from './validate.ts';
 
 const dataDir = 'src/story/data/';
@@ -74,6 +75,27 @@ describe('episode keywords', () => {
       .join('\n');
     for (const keyword of episode.keywords ?? [])
       expect(korean, keyword).toContain(catalog.get(keyword) ?? keyword);
+  });
+});
+
+describe('cast', () => {
+  const cast = parseCast(readFileSync('src/story/cast.yaml', 'utf8'));
+
+  it('refers only to speakers, episodes and flags that exist', () => {
+    expect(validateCast(cast, episodes)).toEqual([]);
+  });
+
+  it('introduces everyone who speaks in more than one episode', () => {
+    const covered = new Set(cast.characters.flatMap((c) => c.speakers));
+    const episodesBySpeaker = new Map<string, number>();
+    for (const episode of episodes)
+      for (const member of episode.cast)
+        episodesBySpeaker.set(member.id, (episodesBySpeaker.get(member.id) ?? 0) + 1);
+    const system = new Set(['PAGER', 'PLAYER', 'PLATFORM', 'AUTOMATION', 'ADMISSION', 'OPERATOR']);
+    const missing = [...episodesBySpeaker]
+      .filter(([speaker, count]) => count > 1 && !system.has(speaker) && !covered.has(speaker))
+      .map(([speaker]) => speaker);
+    expect(missing).toEqual([]);
   });
 });
 

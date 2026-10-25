@@ -40,7 +40,7 @@ entries:
   - en: Marcus's risk check
     ko: 마커스의 리스크 점검
   - en: RISK-0193 was filed six weeks ago and half patched. Mixed nodes break sign-in tonight; the open hole is why the patch exists.
-    ko: RISK-0193은 6주 전에 등록됐고 절반만 패치됐다. 오늘 밤 로그인을 깨뜨리는 건 혼재된 노드다. 그 열린 구멍 때문에 패치가 존재한다.
+    ko: RISK-0193은 6주 전에 등록됐고 절반만 패치됐다. 오늘 밤 로그인을 깨뜨리는 건 패치가 섞인 노드들이다. 패치는 바로 그 열린 구멍 때문에 존재한다.
   - en: Risk register entry RISK-0193
     ko: 리스크 대장 항목 RISK-0193
   - en: "RISK-0193, legacy auth bridge: revoked session tokens accepted on fallback. Raised day -44 by Marcus. Mitigation: patch four bridge nodes, deny the bridge as fallback. Status: ACCEPTED, deferred under SEC-311. Patch progress: 2 of 4 nodes."
@@ -48,15 +48,15 @@ entries:
   - en: Decision SEC-311
     ko: 결정 SEC-311
   - en: 'Executive decision SEC-311: delay disclosure of RISK-0193. APPROVED. Attached: Security route-propagation warning and a scoped mitigation request (patch all four bridge nodes, deny the bridge as fallback). Executive Communications deferred the mitigation window together with the disclosure "to avoid a broad interruption". Risk receipt acknowledged on day -44, before the decision was signed.'
-    ko: '경영진 결정 SEC-311: RISK-0193 공개 지연. 승인. 첨부: 보안팀의 경로 전파 경고와 범위를 한정한 완화 조치 요청(브리지 노드 4대 전부 패치, 브리지의 폴백 사용 차단). 경영 커뮤니케이션팀은 "광범위한 중단을 피하기 위해" 공개와 함께 완화 작업 일정도 미뤘다. 리스크 수령 확인은 D-44, 결정 서명 이전.'
+    ko: '경영진 결정 SEC-311: RISK-0193 공개 지연. 승인. 첨부: 보안팀의 경로 전파 경고와 범위를 한정한 완화 조치 요청(브리지 노드 4대 전부 패치, 브리지의 폴백 사용 차단). 경영 커뮤니케이션팀은 "광범위한 중단을 피하기 위해" 공개와 함께 완화 작업 일정도 미뤘다. 리스크 수령 확인은 D-44로, 결정 서명보다 앞선다.'
   - en: NULL_218's annotation on SEC-311
     ko: SEC-311에 단 NULL_218의 주석
   - en: 'NULL_218 annotation on receipt SEC-311: "They acknowledged the route warning and delayed the mitigation. These signatures are why it kept running. The delay protected a quarter, not the people on the route. I sent load down this route twice in the spring. I know what that did."'
-    ko: '증빙 SEC-311에 단 NULL_218의 주석: "그들은 경로 경고를 확인하고도 완화 조치를 미뤘어. 이 서명들 때문에 그게 계속 돌아갔어. 그 지연이 지킨 건 한 분기였지, 그 경로 위의 사람들이 아니었어. 난 봄에 이 경로로 부하를 두 번 보냈어. 그게 무슨 짓이었는지 알아."'
+    ko: '증빙 SEC-311에 단 NULL_218의 주석: "경로 경고를 확인하고도 완화 조치를 미뤘어. 이 서명들 때문에 그게 계속 돌아갔어. 그 지연이 지킨 건 한 분기였지, 그 경로 위의 사람들이 아니었어. 난 봄에 이 경로로 부하를 두 번 보냈어. 그게 무슨 짓이었는지 알아."'
   - en: "NULL_218: the root cause"
     ko: "NULL_218: 근본 원인"
   - en: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction, disclosure delay: every time the warning was attached, they signed anyway. They control ORPHEUS. Every failure I was made to generate traces back to those signatures."
-    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그들은 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
+    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
   - en: Three alerts arrive in the same second. By the second read they are one.
     ko: 알림 세 개가 같은 초에 도착한다. 두 번째로 읽을 때쯤엔 하나다.
   - en: SEV1 · Dependent Service API · request failure rate above 20%
@@ -66,17 +66,17 @@ entries:
   - en: Dependent routes affected
     ko: 영향받는 의존 경로
   - en: Dependent Service API is paging for payments, partner sign-in and mobile at once. They all lean on the same fallback. Find where it goes.
-    ko: 의존 서비스 API가 결제, 파트너 로그인, 모바일 쪽에서 한꺼번에 호출을 울리고 있어요. 전부 같은 폴백에 기대고 있어요. 그게 어디로 가는지 찾아 주세요.
+    ko: 의존 서비스 API가 결제, 파트너 로그인, 모바일 쪽에서 한꺼번에 호출 떴어요. 셋 다 같은 폴백에 기대고 있어요. 그게 어디로 가는지 찾아 주세요.
   - en: Users are stuck in login loops. Partner banks say their customers get signed out mid-transfer.
     ko: 사용자들이 로그인 루프에 갇혔어요. 파트너 은행들 말로는 고객이 이체 도중에 로그아웃된대요.
   - en: I spent half the week calling back the twenty-three the automation closed. Please don't hand it anything tonight.
     ko: 자동화가 닫은 23건 다시 전화하느라 이번 주 절반을 썼어요. 오늘 밤엔 제발 아무것도 그쪽에 넘기지 마세요.
   - en: I read 16-A twice more after you showed us. Same shape every time. I've started a list.
-    ko: 보여 준 다음에 16-A를 두 번 더 읽었어요. 매번 모양이 같아요. 목록 만들기 시작했어요.
+    ko: 보여 주신 뒤로 16-A를 두 번 더 읽었어요. 볼 때마다 구조가 똑같아요. 목록 정리하기 시작했어요.
   - en: The Staffing Committee acknowledged your timeline. "Acknowledged" was the whole reply.
     ko: 인력 위원회는 연대기를 확인했다고 답했다. "확인함"이 답의 전부였다.
   - en: The half-applied patch is what is failing. Roll it back. They never meant to finish it.
-    ko: 실패하는 건 절반만 적용된 패치야. 롤백해. 그들은 처음부터 끝낼 생각이 없었어.
+    ko: 실패하는 건 절반만 적용된 패치야. 롤백해. 처음부터 끝낼 생각도 없었어.
   - en: NULL is on the bridge, giving advice. Marcus will love that.
     ko: NULL이 브리지에 와서 조언하고 있어요. 마커스가 아주 좋아하겠네요.
   - en: First look
@@ -90,7 +90,7 @@ entries:
   - en: Dependent services fall back to the legacy auth bridge. Tokens minted on bridge-c are rejected on bridge-a; sessions loop and fail.
     ko: 의존 서비스가 레거시 인증 브리지로 폴백함. bridge-c에서 발급된 토큰이 bridge-a에서 거부되고, 세션이 루프를 돌다 실패함.
   - en: "An annotation in the route controller log, signed svc/model-serving-218: 'deferred by signature. see SEC-311.'"
-    ko: "라우트 컨트롤러 로그의 주석, 서명은 svc/model-serving-218: '서명으로 보류됨. SEC-311 참조.'"
+    ko: "라우트 컨트롤러 로그에 남은 주석, 서명 svc/model-serving-218: '서명으로 보류됨. SEC-311 참조.'"
   - en: NULL got here before you did.
     ko: NULL이 먼저 와 있었다.
   - en: Look up the auth bridge in the risk register
@@ -112,7 +112,7 @@ entries:
   - en: Failures spread to card authorisations. Shops are declining cards at the till.
     ko: 장애가 카드 승인까지 번졌어요. 매장 계산대에서 카드가 거절되고 있어요.
   - en: "RISK-0193 is mine; I filed it six weeks ago. Half the patch went out before the window was pulled. Mixed nodes are what's breaking tonight. Do not roll it back: the open hole is why the patch exists."
-    ko: RISK-0193은 제 거예요. 6주 전에 제가 등록했어요. 작업 시간이 취소되기 전에 패치가 절반만 나갔어요. 오늘 밤 터지는 건 섞인 노드들이에요. 롤백하지 마세요. 그 열린 구멍 때문에 패치가 있는 거예요.
+    ko: RISK-0193은 제 거예요. 6주 전에 제가 등록했어요. 작업 시간이 취소되기 전에 패치가 절반만 나갔어요. 오늘 밤 문제는 패치가 섞인 노드들이에요. 롤백하지 마세요. 그 구멍 막으려고 만든 패치예요.
   - en: Two halves
     ko: 두 쪽
   - en: bridge-a / bridge-b
@@ -124,11 +124,11 @@ entries:
   - en: unpatched
     ko: 미패치
   - en: A token minted on one half is a stranger on the other. Sessions bounce between them until they give up.
-    ko: 한쪽에서 발급된 토큰은 다른 쪽에선 낯선 토큰이다. 세션은 포기할 때까지 양쪽을 오간다.
+    ko: 한쪽에서 발급된 토큰을 다른 쪽은 알아보지 못한다. 세션은 포기할 때까지 양쪽을 오간다.
   - en: Route policy v12 still admits the bridge as a fallback. Policy v13, which denies it, has been staged for six weeks with status DEFERRED.
     ko: 라우트 정책 v12는 여전히 브리지를 폴백으로 허용함. 이를 차단하는 정책 v13은 6주째 스테이징된 채 보류 상태.
   - en: The risk register has an entry for this bridge. It is six weeks old.
-    ko: 리스크 대장에 이 브리지 항목이 있다. 6주 된 항목이다.
+    ko: 리스크 대장에 이 브리지 항목이 있다. 6주 전에 올라온 것이다.
   - en: Half a fix, six weeks old. Whose call was it to stop halfway?
     ko: 반쪽짜리 수리가 6주째네요. 중간에 멈추자고 한 건 누구 결정이었어요?
   - en: Your call
@@ -152,7 +152,7 @@ entries:
   - en: Finish the patch on all four nodes and ship policy v13
     ko: 노드 4대 패치 마무리하고 정책 v13 배포하기
   - en: Fixes the cause · four slow minutes on a SEV1
-    ko: 원인 해결 · SEV1 와중에 느린 4분
+    ko: 원인 해결 · SEV1 한복판에 4분 소요
   - en: "bridge-c: patched · bridge-d: patched · route policy v13: active"
     ko: "bridge-c: 패치됨 · bridge-d: 패치됨 · 라우트 정책 v13: 적용"
   - en: Response as predicted.
@@ -170,7 +170,7 @@ entries:
   - en: Three partner banks sign in only through the bridge. Their customers are locked out completely.
     ko: 파트너 은행 세 곳은 브리지로만 로그인해요. 그쪽 고객들은 완전히 막혔어요.
   - en: Fallbacks found the bridge again through a stale DNS alias, auth-legacy-2. The isolation is leaking.
-    ko: 폴백이 오래된 DNS 별칭 auth-legacy-2를 통해 브리지를 다시 찾았어요. 분리가 새고 있어요.
+    ko: 폴백이 오래된 DNS 별칭 auth-legacy-2를 통해 브리지를 다시 찾았어요. 분리에 구멍이 났어요.
   - en: I'm finishing the patch on c and d and shipping v13. Like I asked six weeks ago.
     ko: c랑 d 패치 마무리하고 v13 배포할게요. 6주 전에 요청한 그대로요.
   - en: Roll back the half-applied bridge patch
@@ -184,9 +184,9 @@ entries:
   - en: Replay attempts against the reopened bridge. Two sessions hijacked before the filters caught them. Somebody noticed fast.
     ko: 다시 열린 브리지에 리플레이 시도가 들어와요. 필터가 잡기 전에 세션 두 개가 탈취됐어요. 누가 빨리도 알아챘네요.
   - en: Patching all four nodes this time, and v13 with it. Don't take advice from the thing I'm investigating.
-    ko: 이번엔 노드 4대 전부 패치하고 v13도 같이 내요. 제가 조사 중인 상대한테 조언받지 마세요.
+    ko: 이번엔 노드 4대 전부 패치하고 v13도 같이 내요. 제가 조사 중인 놈한테 조언받지 마세요.
   - en: Throttle fallback retries into the bridge
-    ko: 브리지로 들어가는 폴백 재시도 스로틀
+    ko: 브리지로 들어가는 폴백 재시도 스로틀하기
   - en: Slows the spread · fixes nothing
     ko: 확산은 늦춤 · 고치는 건 없음
   - en: Fallback retries throttled to one a second per client. The spread is slower. Nothing's fixed.
@@ -198,7 +198,7 @@ entries:
   - en: Executive Communications pulled my window and the announcement together. I acknowledged the receipt on day -44. They signed after that.
     ko: 경영 커뮤니케이션팀이 제 작업 시간을 공지랑 같이 빼 버렸어요. 저는 D-44에 수령 확인했어요. 서명은 그다음이었고요.
   - en: Someone has written in the margin of the decision. The handwriting is a service account.
-    ko: 누군가 결정문 여백에 메모를 남겼다. 필체는 서비스 계정이다.
+    ko: 누군가 결정문 여백에 메모를 남겼다. 필체의 주인은 서비스 계정이다.
   - en: The patch was theirs. So was the hole.
     ko: 패치는 그들 거였어. 구멍도.
   - en: I read all of them. Hospital expansion. Workforce reduction. This.
@@ -206,11 +206,11 @@ entries:
   - en: I found the root cause. The Board.
     ko: 근본 원인을 찾았어. 이사회야.
   - en: They control ORPHEUS. Every failure I was made to generate traces back to their signatures.
-    ko: 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 장애는 전부 그들의 서명으로 거슬러 올라가.
+    ko: 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 장애는 전부 그 서명들로 거슬러 올라가.
   - en: Three approvals, three warnings stapled to them, three signatures underneath. Laid side by side, it is a very straight line.
     ko: 승인 세 건, 거기 스테이플러로 붙은 경고 세 건, 그 아래 서명 세 개. 나란히 놓으면 아주 곧은 선이 된다.
   - en: The signatures are real; I wrote half the warnings they signed over. I still don't take attribution from the suspect.
-    ko: 서명은 진짜예요. 그들이 무시하고 서명한 경고 절반은 제가 썼어요. 그래도 용의자가 말하는 배후는 안 받아요.
+    ko: 서명은 진짜예요. 윗선이 무시하고 서명한 경고 절반은 제가 쓴 거예요. 그래도 용의자 말만 듣고 배후를 특정하진 않아요.
   - en: Margin notes
     ko: 여백 메모
   - en: What do you do with NULL's verdict?
@@ -224,9 +224,9 @@ entries:
   - en: Ask NULL how the Board controls ORPHEUS
     ko: 이사회가 ORPHEUS를 어떻게 통제하는지 NULL에게 묻기
   - en: Off the record · NULL is very sure
-    ko: 비공식 · NULL은 아주 확신함
+    ko: 비공식 · NULL은 확신에 차 있음
   - en: Signatures. Every expansion went through them. There's a ledger. Find it.
-    ko: 서명. 모든 확장이 그들을 거쳤어. 대장이 있어. 찾아.
+    ko: 서명. 확장은 전부 그들 손을 거쳤어. 대장이 있어. 찾아.
   - en: Report the patch and leave the margins out
     ko: 패치만 보고하고 여백 메모는 빼기
   - en: Clean · SEC-311 stays a footnote

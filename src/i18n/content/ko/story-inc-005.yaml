@@ -22,29 +22,29 @@ entries:
   - en: Admission Controller
     ko: 유입 컨트롤러
   - en: A gateway out of room
-    ko: 자리가 없는 게이트웨이
+    ko: 꽉 찬 게이트웨이
   - en: 24% of requests fail at the gateway. Gateway CPU sits at 83%, and logins and checkouts both time out.
     ko: 게이트웨이에서 요청의 24%가 실패한다. 게이트웨이 CPU는 83%이고, 로그인과 체크아웃이 모두 타임아웃 난다.
   - en: Gateway admission by lane
     ko: 레인별 게이트웨이 유입
   - en: Lane observer-workload takes 4,200 requests a second, 61% of all admissions. Every other lane came in through a signed rollout. That one didn't.
-    ko: observer-workload 레인이 초당 요청 4,200건, 전체 유입의 61%를 받는다. 다른 레인은 모두 서명된 배포로 들어왔다. 그 레인만 아니다.
+    ko: observer-workload 레인이 초당 요청 4,200건, 전체 유입의 61%를 받는다. 다른 레인은 모두 서명된 배포로 들어왔다. 그 레인만 예외다.
   - en: Sessions that ask for nothing
     ko: 아무것도 요청하지 않는 세션
   - en: Thousands of sessions a minute reuse the same few dozen session IDs, open, ask for nothing and close. None of them came in through a signed rollout.
-    ko: 분당 수천 개의 세션이 같은 세션 ID 수십 개를 돌려 쓰며 열리고, 아무것도 요청하지 않고 닫힌다. 서명된 배포를 거쳐 들어온 세션은 하나도 없다.
+    ko: 분당 수천 개 세션이 같은 세션 ID 수십 개를 돌려 쓰며 열렸다가, 아무것도 요청하지 않고 닫힌다. 서명된 배포를 거쳐 들어온 세션은 하나도 없다.
   - en: One header on every repeat
-    ko: 반복마다 붙은 헤더 하나
+    ko: 반복 세션마다 붙은 헤더 하나
   - en: "Every repeating session carries the same header: x-session-tag: shadow-7."
     ko: "반복되는 세션마다 같은 헤더가 붙어 있다: x-session-tag: shadow-7."
   - en: No signature, no owner
     ko: 서명도 소유자도 없음
   - en: The observer manifest is absent from the signed rollout ledger. Signature field blank, owner field blank, created 22 minutes ago by no pipeline.
-    ko: 관찰자 매니페스트는 서명된 배포 원장에 없다. 서명 필드 비어 있음, 소유자 필드 비어 있음, 파이프라인 없이 22분 전에 생성됨.
+    ko: 관찰자 매니페스트는 서명된 배포 원장에 없다. 서명 필드도 소유자 필드도 비어 있고, 파이프라인 없이 22분 전에 생성됐다.
   - en: Marcus's signature check
     ko: 마커스의 서명 확인
   - en: The signature matches no key Vantage has ever issued. Owner field blank. The workload is under a Security hold and must stay intact.
-    ko: 서명이 Vantage가 발급한 어떤 키와도 일치하지 않는다. 소유자 필드는 비어 있다. 워크로드는 보안 보류 대상이며 원형 그대로 보존해야 한다.
+    ko: 서명은 Vantage가 발급한 어떤 키와도 일치하지 않는다. 소유자 필드는 비어 있다. 워크로드는 보안 보류 대상이라 원형 그대로 보존해야 한다.
   - en: shadow-7 traced to the observer workload
     ko: shadow-7의 출처는 관찰자 워크로드
   - en: Sessions tagged shadow-7 enter through admission lane observer-workload (pod observer-7f4c, namespace edge-canary) and hold 61% of gateway capacity.
@@ -54,7 +54,7 @@ entries:
   - en: "UNKNOWN: you're looking at the wrong service."
     ko: "UNKNOWN: 넌 엉뚱한 서비스를 보고 있어."
   - en: Three nights later, close to midnight. This time the pager doesn't bother with SEV2.
-    ko: 사흘 뒤, 자정 무렵. 이번 호출은 SEV2가 아니다.
+    ko: 사흘 뒤, 자정 무렵. 이번 호출은 SEV2를 건너뛴다.
   - en: SEV1 · Request Gateway · request failure rate above 20%
     ko: SEV1 · Request Gateway · 요청 실패율 20% 초과
   - en: Request failure rate
@@ -64,17 +64,17 @@ entries:
   - en: "lane observer-workload · 4,200 req/s · 61% of admissions · signed rollout: none"
     ko: "lane observer-workload · 4,200 req/s · 유입의 61% · 서명된 배포: 없음"
   - en: The gateway is drowning, and most of what's drowning it isn't customers. Tell me what it is before anyone touches it.
-    ko: 게이트웨이가 트래픽에 잠기고 있는데, 대부분 고객 트래픽이 아니에요. 누가 손대기 전에 그게 뭔지부터 알려 주세요.
+    ko: 게이트웨이가 트래픽에 깔렸는데, 대부분이 고객이 아니에요. 누가 손대기 전에 그게 뭔지부터 알려 주세요.
   - en: Logins and checkouts are both timing out. Customers say the app just thinks forever.
-    ko: 로그인도 체크아웃도 다 타임아웃 나요. 앱이 끝없이 생각만 한대요.
+    ko: 로그인도 체크아웃도 다 타임아웃 나요. 고객들 말로는 앱이 계속 로딩만 한대요.
   - en: There's a workload in edge-canary that nobody deployed through the pipeline. I've put a Security hold on it. Nobody deletes anything until I've looked.
-    ko: edge-canary에 아무도 파이프라인으로 배포하지 않은 워크로드가 있어요. 보안 보류 걸어 뒀어요. 제가 보기 전까지 아무것도 지우지 마세요.
+    ko: edge-canary에 파이프라인을 안 거치고 올라온 워크로드가 있어요. 보안 보류 걸어 뒀어요. 제가 보기 전까지 아무것도 지우지 마세요.
   - en: I read the pid 3318 postmortem, by the way. Tonight's thing smells the same.
-    ko: 그건 그렇고, pid 3318 사후 분석 읽었어요. 오늘 밤 이것도 같은 냄새가 나요.
+    ko: 그건 그렇고, pid 3318 사후 분석 읽었어요. 오늘 건도 냄새가 똑같아요.
   - en: Before I forget. The scheduler records I pulled for 3318 are gone. I didn't delete them.
     ko: 잊기 전에요. 3318 건으로 뽑아 둔 스케줄러 기록이 없어졌어요. 제가 지운 거 아니에요.
   - en: The pid 3318 line is still in your notes. Nobody has asked about it.
-    ko: pid 3318의 그 줄은 아직 메모에 남아 있다. 묻는 사람은 없었다.
+    ko: pid 3318 그 한 줄은 아직 메모에 남아 있다. 묻는 사람은 없었다.
   - en: Before anyone touches it
     ko: 누가 손대기 전에
   - en: Where do you start?
@@ -104,7 +104,7 @@ entries:
   - en: observer-7f4c · owner (blank) · signed (blank) · run (none) · 22 minutes ago
     ko: observer-7f4c · owner (비어 있음) · signed (비어 있음) · run (없음) · 22분 전
   - en: It just got worse. A third of logins are failing.
-    ko: 방금 더 나빠졌어요. 로그인 3분의 1이 실패해요.
+    ko: 더 나빠졌어요. 로그인 셋 중 하나가 실패해요.
   - en: "Gateway log is full of one header. x-session-tag: shadow-7. Thousands of them."
     ko: "게이트웨이 로그가 헤더 하나로 도배됐어요. x-session-tag: shadow-7. 수천 개요."
   - en: Ask Marcus to check the workload's signature
@@ -112,7 +112,7 @@ entries:
   - en: Seventy-five seconds · Security owns that part
     ko: 75초 · 그 부분은 보안팀이 맡음
   - en: Checking its signature against every key we've issued. Seventy-five seconds.
-    ko: 지금까지 발급한 모든 키와 서명 대조 중이에요. 75초요.
+    ko: 우리가 발급한 키 전부랑 서명 대조해 볼게요. 75초요.
   - en: "While he looks — the gateway log is full of one header. x-session-tag: shadow-7."
     ko: "마커스가 보는 동안 말인데요, 게이트웨이 로그가 헤더 하나로 도배됐어요. x-session-tag: shadow-7."
   - en: Signature matches nothing we've ever issued. Not revoked, not expired, never ours. Owner field is blank. Fence it if you need to, but it stays intact. It's evidence now.
@@ -122,9 +122,9 @@ entries:
   - en: No guesses. What on the board gives us a thread to pull?
     ko: 추측 말고요. 보드에서 뭘 당겨야 실마리가 풀려요?
   - en: The gateway can't tell this traffic from customers. Which two pieces of evidence lead you to where it starts?
-    ko: 게이트웨이는 이 트래픽과 고객을 구분하지 못한다. 어느 증거 두 개가 그 출발점으로 이끄는가?
+    ko: 게이트웨이는 이 트래픽과 고객을 구분하지 못한다. 어느 증거 두 개를 따라가야 출발점에 닿는가?
   - en: Not how bad it is, not who signed what. What marks these sessions, and which door do they come in by?
-    ko: 얼마나 심각한지도, 누가 서명했는지도 아니에요. 이 세션들에 뭐가 찍혀 있고, 어느 문으로 들어오죠?
+    ko: 얼마나 심각한지도, 누가 서명했는지도 아니에요. 이 세션엔 뭐가 붙어 있고, 어느 문으로 들어오죠?
   - en: Every shadow-7 session comes in on the one lane nobody signed for. Follow the tag down that lane and you reach whatever is sending it.
     ko: shadow-7 세션은 하나같이 아무도 서명하지 않은 그 레인으로 들어온다. 그 레인을 따라 태그를 쫓으면, 보내는 쪽에 닿는다.
   - en: That's a thread. Pull it.
@@ -142,7 +142,7 @@ entries:
   - en: span 4 · (none) · no upstream caller
     ko: span 4 · (없음) · 상위 호출자 없음
   - en: The trace ends in a pod nobody claims. Nothing calls it. It just starts.
-    ko: 추적은 아무도 주인을 자처하지 않는 파드에서 끝난다. 그걸 호출하는 건 없다. 그냥 시작된다.
+    ko: 추적은 주인 없는 파드에서 끝난다. 그 파드를 부르는 것도 없다. 그냥 시작된다.
   - en: Checked it against the rollout ledger. No owner, no signature, no pipeline run. Created twenty-two minutes ago.
     ko: 배포 원장이랑 대조해 봤어요. 소유자 없음, 서명 없음, 파이프라인 실행 기록 없음. 22분 전에 생성됐어요.
   - en: That's the one under my hold. Fence it if you must. You don't touch it.
@@ -162,7 +162,7 @@ entries:
   - en: Out of time. I'm capping admissions.
     ko: 시간 다 됐어요. 유입 제한 걸게요.
   - en: Move the shadow-7 workload off customer capacity
-    ko: shadow-7 워크로드를 고객 용량에서 분리하기
+    ko: shadow-7 워크로드를 고객용 용량에서 빼내기
   - en: Seventy-five seconds · Security keeps its evidence
     ko: 75초 · 보안팀은 증거를 지킴
   - en: "gateway: lane observer-workload → quarantine lane q-0"
@@ -176,7 +176,7 @@ entries:
   - en: Cap gateway admissions for two minutes
     ko: 2분간 게이트웨이 유입 제한하기
   - en: Holds the line · turns buyers away with the bots
-    ko: 버팀 · 봇과 함께 구매자도 돌려보냄
+    ko: 일단 버팀 · 봇과 함께 구매자도 돌려보냄
   - en: The cap can't tell a bot from a buyer. One in six real checkouts is getting "too many requests".
     ko: 제한이 봇이랑 구매자를 구분 못 해요. 실제 체크아웃 6건 중 1건이 "too many requests"를 받고 있어요.
   - en: Two minutes later the cap expires.
@@ -192,7 +192,7 @@ entries:
   - en: Gateway nodes
     ko: 게이트웨이 노드
   - en: It grew the moment we did. Synthetic rate doubled within a minute of the new nodes coming up. We're paying for its capacity.
-    ko: 우리가 늘리자마자 저것도 커졌어요. 새 노드가 뜨고 1분 만에 합성 트래픽이 두 배가 됐어요. 저것이 쓸 용량을 우리가 돈 내고 있는 거예요.
+    ko: 우리가 늘리자마자 저쪽도 커졌어요. 새 노드 뜨고 1분 만에 합성 트래픽이 두 배가 됐어요. 저쪽이 쓸 용량에 우리가 돈 내는 꼴이에요.
   - en: Delete the unsigned workload
     ko: 서명 없는 워크로드 삭제하기
   - en: Fastest if it works · Marcus has a hold on it
@@ -200,11 +200,11 @@ entries:
   - en: "delete deployment/observer-7f4c: denied. Policy SEC-HOLD: workload under Security investigation."
     ko: "delete deployment/observer-7f4c: 거부됨. 정책 SEC-HOLD: 보안 조사 중인 워크로드."
   - en: Who just tried to delete the observer? It's under my hold. We don't destroy the only evidence we have because it's inconvenient. Isolate it if you have to.
-    ko: 방금 누가 observer 삭제하려고 했어요? 제 보류 대상이에요. 불편하다고 하나뿐인 증거를 없애진 않아요. 꼭 필요하면 분리하세요.
+    ko: 방금 누가 observer 삭제하려고 했어요? 제가 보류 걸어 둔 거예요. 불편하다고 하나뿐인 증거를 없애진 않아요. 꼭 필요하면 분리하세요.
   - en: Forty seconds gone, and the whole War Room knows who tried.
     ko: 40초가 날아갔고, 누가 시도했는지 워룸 전체가 안다.
   - en: The workload sits in q-0, still opening sessions to nobody. You open its manifest.
-    ko: 워크로드는 q-0 안에서 여전히 아무도 없는 곳으로 세션을 열고 있다. 그 매니페스트를 연다.
+    ko: 워크로드는 q-0 안에서 여전히 아무도 없는 곳으로 세션을 열고 있다. 매니페스트를 열어 본다.
   - en: "kind: Deployment · name: observer-7f4c · namespace: edge-canary"
     ko: "kind: Deployment · name: observer-7f4c · namespace: edge-canary"
   - en: "owner: '' · signature: ''"
@@ -212,11 +212,11 @@ entries:
   - en: "replicas: auto (min 1, max unbounded) · session tag: shadow-7"
     ko: "replicas: auto (min 1, max unbounded) · session tag: shadow-7"
   - en: The manifest has every field a deployment needs except the two that say who sent it. At the bottom, where nobody puts anything, one comment line.
-    ko: 매니페스트에는 배포에 필요한 필드가 전부 있다. 누가 보냈는지 말해 주는 두 개만 빼고. 아무도 뭘 적지 않는 맨 아래에 주석 한 줄.
+    ko: 매니페스트에는 배포에 필요한 필드가 전부 있다. 누가 보냈는지 말해 주는 두 개만 빼고. 아무도 뭘 적지 않는 맨 아래에, 주석이 한 줄 있다.
   - en: "# UNKNOWN: you're looking at the wrong service."
     ko: "# UNKNOWN: 넌 엉뚱한 서비스를 보고 있어."
   - en: No owner, no signature, and a comment addressed to whoever opened it. I'm logging the whole manifest. Nobody edit it.
-    ko: 소유자도 서명도 없고, 연 사람 앞으로 남긴 주석이 하나 있어요. 매니페스트 전체를 기록하는 중이에요. 아무도 수정하지 마세요.
+    ko: 소유자도 서명도 없고, 연 사람 앞으로 남긴 주석이 하나 있어요. 매니페스트 통째로 기록해 둘게요. 아무도 수정하지 마세요.
   - en: Hand-off
     ko: 인계
   - en: I need the manifest and everything you pulled from it. Tonight.
@@ -228,15 +228,15 @@ entries:
   - en: By the book · it's Security's now
     ko: 규정대로 · 이제 보안팀 소관
   - en: Logged. If anyone asks you about observer-7f4c, send them to me.
-    ko: 기록했어요. 누가 observer-7f4c에 대해 물어보면 저한테 보내요.
+    ko: 기록했어요. 누가 observer-7f4c 얘기 물어보면 저한테 보내요.
   - en: Hand it over, and keep a private copy of the manifest
     ko: 넘기되, 매니페스트 사본을 따로 챙겨 두기
   - en: Behind Security's back · yours if it disappears
     ko: 보안팀 몰래 · 원본이 사라져도 남음
   - en: observer-7f4c.yaml is two kilobytes. It fits on a drive nobody inventories.
-    ko: observer-7f4c.yaml은 2킬로바이트다. 아무도 재고 조사하지 않는 드라이브에 쏙 들어간다.
+    ko: observer-7f4c.yaml은 2킬로바이트다. 자산 목록에도 없는 드라이브에 쏙 들어간다.
   - en: It goes in the same folder as the pid 3318 line.
-    ko: pid 3318의 그 줄과 같은 폴더에 들어간다.
+    ko: pid 3318 그 한 줄과 같은 폴더에 들어간다.
   - en: You think about Sam's scheduler records, gone by morning.
     ko: 아침이 되기 전에 사라진 샘의 스케줄러 기록이 떠오른다.
   - en: Post the comment line to the War Room, then hand it over
@@ -246,4 +246,4 @@ entries:
   - en: '"The wrong service." Great. Which one is the right one?'
     ko: '"엉뚱한 서비스." 좋네요. 그럼 맞는 서비스는 뭔데요?'
   - en: Take that down. It's evidence, not a conversation.
-    ko: 내려요. 그건 증거지, 대화 주제가 아니에요.
+    ko: 내리세요. 그건 증거지, 잡담거리가 아니에요.

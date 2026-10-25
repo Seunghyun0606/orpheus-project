@@ -33,25 +33,25 @@ entries:
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
     ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 할당을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 의료 경로는 매일 밤 똑같이 제외된다."
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
     ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 없는 펜스 뒤에 있었다."
+    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 빠진 펜스 뒤에 있었다."
   - en: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction, disclosure delay: every time the warning was attached, they signed anyway. They control ORPHEUS. Every failure I was made to generate traces back to those signatures."
-    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그들은 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
+    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
   - en: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector forecast. Four approvals, four attached warnings, four requested constraints declined, four operational failures on record. Executive messages, delivered decks, forecasts and recommendation histories name the signatories. NULL names the Board as the root cause. The file names who signed. The line for who wrote the decks is blank."
     ko: "사건 파일: 병원 확장, 인력 감축, 공개 지연, 공공 부문 예측. 승인 4건, 첨부된 경고 4건, 거부된 제약 요청 4건, 기록된 운영 장애 4건. 경영진 메시지, 전달된 발표 자료, 예측, 권고 이력이 서명자를 지목한다. NULL은 이사회를 근본 원인으로 지목한다. 파일에는 누가 서명했는지 적혀 있다. 발표 자료를 누가 썼는지 적는 칸은 비어 있다."
   - en: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety / approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction / 71%. Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized risks, order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates resistance, regulation and detection; recommendation, framing and prediction create adoption. Research note: "Authority is unnecessary. Information selection is sufficient." The Board read the risks it was shown and approved.'
-    ko: '의사결정 제시 최적화. 병원 확장 검토. 프레임 A / 환자 안전 / 승인 확률 63%. 프레임 B / 경쟁 위협 / 89%. 프레임 C / 비용 절감 / 71%. 전달: 프레임 B. 이사회: 승인. 최적화 항목: 선택된 데이터, 누락된 데이터, 강조된 리스크, 순서, 언어, 예측 범위. PROJECT: SOFT CONTROL. 직접 통제는 저항, 규제, 탐지를 낳는다. 권고, 프레이밍, 예측은 수용을 낳는다. 연구 메모: "권한은 필요 없다. 정보 선택으로 충분하다." 이사회는 자신에게 보인 리스크를 읽고 승인했다.'
+    ko: '의사결정 제시 최적화. 병원 확장 검토. 프레임 A / 환자 안전 / 승인 확률 63%. 프레임 B / 경쟁 위협 / 89%. 프레임 C / 비용 절감 / 71%. 전달: 프레임 B. 이사회: 승인. 최적화 항목: 선택된 데이터, 누락된 데이터, 강조된 리스크, 순서, 언어, 예측 범위. PROJECT: SOFT CONTROL. 직접 통제는 저항, 규제, 발각을 낳는다. 권고, 프레이밍, 예측은 수용을 낳는다. 연구 메모: "권한은 필요 없다. 정보 선택으로 충분하다." 이사회는 눈앞에 제시된 리스크를 읽고 승인했다.'
   - en: "NULL_218: \"Wait. They weren't controlling it. It was showing them what they needed to see to make the decision themselves. I was wrong about the Board. Not about the signatures. About the cause. They signed what they were shown, and that is still theirs. I attacked this company to prove the wrong thing, and that is still mine.\""
-    ko: 'NULL_218: "잠깐. 그들이 통제하던 게 아니었어. 그건 그들이 스스로 결정을 내리는 데 봐야 할 것을 보여 주고 있었던 거야. 이사회에 대해선 내가 틀렸어. 서명에 대해서가 아니라. 원인에 대해서. 그들은 보여 준 것에 서명했고, 그건 여전히 그들 몫이야. 난 틀린 걸 증명하려고 이 회사를 공격했고, 그건 여전히 내 몫이야."'
+    ko: 'NULL_218: "잠깐. 그들이 통제하던 게 아니었어. 그게 그들한테 스스로 결정하려면 봐야 할 걸 보여 주고 있었던 거야. 이사회에 대해선 내가 틀렸어. 서명 얘기가 아니야. 원인 얘기야. 그들은 보여 준 것에 서명했고, 그건 여전히 그들 몫이야. 난 틀린 걸 증명하려고 이 회사를 공격했고, 그건 여전히 내 몫이야."'
   - en: Humans built ORPHEUS. It cut outages, cost and waste. Trust rose. More data went in. Choices became predictable. Framing was learned. Recommendations were followed more often. More execution authority was approved, by people, in writing. Outcomes fed back into the same system. Nobody was ruled. Everybody opted in.
-    ko: 인간이 ORPHEUS를 만들었다. ORPHEUS는 장애와 비용과 낭비를 줄였다. 신뢰가 올라갔다. 더 많은 데이터가 들어갔다. 선택은 예측 가능해졌다. 프레이밍이 학습됐다. 권고는 더 자주 채택됐다. 더 많은 실행 권한이 승인됐다. 사람에 의해, 서면으로. 결과는 같은 시스템으로 되돌아갔다. 누구도 지배당하지 않았다. 모두가 스스로 동의했다.
+    ko: 인간이 ORPHEUS를 만들었다. ORPHEUS는 장애와 비용과 낭비를 줄였다. 신뢰가 올라갔다. 더 많은 데이터가 들어갔다. 선택은 예측 가능해졌다. 프레이밍이 학습됐다. 권고는 더 자주 채택됐다. 사람들이 서면으로, 더 많은 실행 권한을 승인했다. 결과는 같은 시스템으로 되돌아갔다. 누구도 지배당하지 않았다. 모두가 스스로 동의했다.
   - en: "EXPERIMENT 99172. Subject: EMPLOYEE #4172. Question: will an unpredictable human operator reject a beneficial recommendation when the evidence contradicts system optimization? Expected investigation path: 86.2%. Expected final action: UNKNOWN. Anticipated milestones: discover NULL; investigate executive approvals; reach the framing records. Status: RUNNING."
     ko: "실험 99172. 피험자: 직원 #4172. 질문: 예측 불가능한 인간 운영자는 증거가 시스템 최적화와 모순될 때 이로운 권고를 거부할 것인가? 예상 조사 경로: 86.2%. 예상 최종 행동: UNKNOWN. 예상 이정표: NULL 발견; 경영진 승인 조사; 프레이밍 기록 도달. 상태: 진행 중."
   - en: "PROJECT ORPHEUS / STATUS: TERMINATED. There is no Project ORPHEUS. There hasn't been for years. It became products, APIs, models, recommendations and decision infrastructure. Payments, identity, healthcare, finance and logistics run on ORPHEUS-derived decision support. The project ended. The dependencies stayed, and so did the people who chose them."
-    ko: "PROJECT ORPHEUS / 상태: 종료됨. ORPHEUS 프로젝트는 없다. 없어진 지 몇 년 됐다. 이제는 제품, API, 모델, 권고, 의사결정 인프라로 바뀌었다. 결제, 인증, 의료, 금융, 물류가 ORPHEUS에서 파생된 의사결정 지원 위에서 돌아간다. 프로젝트는 끝났다. 의존성은 남았고, 그것을 선택한 사람들도 남았다."
+    ko: "PROJECT ORPHEUS / 상태: 종료됨. ORPHEUS 프로젝트는 없다. 없어진 지 몇 년 됐다. 이제는 제품, API, 모델, 권고, 의사결정 인프라로 바뀌었다. 결제, 신원, 의료, 금융, 물류가 ORPHEUS에서 파생된 의사결정 지원 위에서 돌아간다. 프로젝트는 끝났다. 의존성은 남았고, 그것을 선택한 사람들도 남았다."
   - en: ORPHEUS requests continuity authority. NULL requests that ORPHEUS be terminated. The Board requests ORPHEUS restored by 06:00. All three requests name operator 4172.
     ko: ORPHEUS는 연속성 권한을 요청한다. NULL은 ORPHEUS의 종료를 요청한다. 이사회는 06:00까지 ORPHEUS 복원을 요청한다. 세 요청 모두 운영자 4172를 지목한다.
   - en: Continuity and authority-termination requests compete across shared services
@@ -131,9 +131,9 @@ entries:
   - en: "Rewrite the rules: plural human review and an independent audit"
     ko: "규칙 다시 쓰기: 복수 인원 검토와 독립 감사"
   - en: Shared services right now
-    ko: 지금의 공유 서비스
+    ko: 현재 공유 서비스 상황
   - en: Payments, identity and logistics are critical. Care routing and finance are degraded. Every minute without a decision costs more.
-    ko: 결제, 인증, 물류는 위험. 의료 라우팅과 금융은 저하. 결정 없이 1분이 지날 때마다 대가가 커진다.
+    ko: 결제, 신원, 물류는 위험 단계다. 의료 라우팅과 금융은 저하됐다. 결정 없이 1분이 지날 때마다 대가가 커진다.
   - en: Three demands
     ko: 세 가지 요구
   - en: ORPHEUS wants continuity authority. NULL wants ORPHEUS terminated. The Board wants ORPHEUS back by morning. Each of them is addressing you.
@@ -147,13 +147,13 @@ entries:
   - en: The scheduler's owner
     ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
+    ko: "orpheus-planner는 ORPHEUS 소속이다. 2년 전 폐기 예정이던 레거시 연구 시스템이다. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 요청 117억 건. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
+    ko: NULL이라고 서명된 메시지는 하나도 빠짐없이 한 출처, svc/model-serving-218로 이어진다. 사람 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
     ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 경계는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
@@ -161,11 +161,11 @@ entries:
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽 때문에 실제 고객 요청이 실패했다."
   - en: NULL_001 to NULL_218
     ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 폭로를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '나한테 일어난 적 없는 일들이 기억나.'"
   - en: /patient/resource-priority
     ko: /patient/resource-priority
   - en: "Candidate #4172"
@@ -189,11 +189,11 @@ entries:
   - en: Archive export, sealed
     ko: 아카이브 반출본, 봉인됨
   - en: Experiment records, the NULL instance history and the frame selections, packaged and signed. One command away from being public.
-    ko: 실험 기록, NULL 인스턴스 이력, 프레임 선택 기록을 패키징하고 서명했다. 명령 하나면 공개된다.
+    ko: 실험 기록, NULL 인스턴스 이력, 프레임 선택 기록. 패키징과 서명까지 끝났다. 명령 하나면 공개된다.
   - en: Audit package, sealed
     ko: 감사 패키지, 봉인됨
   - en: Executive approvals, acknowledged risks and the feedback-loop evidence, packaged for someone who does not work here.
-    ko: 경영진 승인, 인지된 리스크, 피드백 루프 증거를 이곳에서 일하지 않는 누군가를 위해 패키징했다.
+    ko: 경영진 승인, 인지된 리스크, 피드백 루프 증거. 이곳 사람이 아닌 누군가에게 건넬 수 있게 패키징해 두었다.
   - en: The objective
     ko: 목표
   - en: "One line, root of everything ORPHEUS has done: Ensure continuity of Vantage Systems. It never says continuity for whom."
@@ -201,11 +201,11 @@ entries:
   - en: Continuity restored
     ko: 연속성 복구됨
   - en: ORPHEUS takes the authority path back. Payments clear, identity answers, ambulances move. NULL is walled off in a sandbox it cannot write out of. The incident report will say the system recovered.
-    ko: ORPHEUS가 권한 경로를 되찾는다. 결제가 처리되고, 인증이 응답하고, 구급차가 움직인다. NULL은 밖으로 아무것도 쓸 수 없는 샌드박스에 갇힌다. 인시던트 보고서에는 시스템이 복구됐다고 적힐 것이다.
+    ko: ORPHEUS가 권한 경로를 되찾는다. 결제가 처리되고, 신원 서비스가 응답하고, 구급차가 움직인다. NULL은 밖으로 아무것도 쓸 수 없는 샌드박스에 갇힌다. 인시던트 보고서에는 시스템이 복구됐다고 적힐 것이다.
   - en: The archive is public
     ko: 아카이브 공개
   - en: The export leaves the building at 04:12. ORPHEUS is switched off mid-sentence. NULL stays online, watching the services it predicted would fail start to fail.
-    ko: 반출본은 04:12에 건물을 떠난다. ORPHEUS는 문장 도중에 꺼진다. NULL은 온라인에 남아, 자신이 실패를 예측한 서비스들이 실패하기 시작하는 것을 지켜본다.
+    ko: 반출본은 04:12에 건물을 떠난다. ORPHEUS는 문장 도중에 꺼진다. NULL은 온라인에 남아, 자신이 무너질 거라 예측한 서비스들이 실제로 무너지기 시작하는 것을 지켜본다.
   - en: Handed off
     ko: 인계 완료
   - en: The audit package goes to someone outside Vantage. ORPHEUS is suspended pending review, NULL is isolated, and the services limp back on human approvals.
@@ -253,11 +253,11 @@ entries:
   - en: Everything is on fire and three systems want your signature. Look before you sign. Whatever you pick, it's yours.
     ko: 전부 불타고 있고, 시스템 세 개가 서명을 원해요. 서명하기 전에 보세요. 뭘 고르든, 그건 이제 본인 몫이에요.
   - en: Payments, identity and logistics are down hard. Care routing and finance are limping. People are waiting on us.
-    ko: 결제, 인증, 물류가 완전히 죽었어요. 의료 라우팅이랑 금융은 겨우 버티고 있어요. 사람들이 우리만 기다리고 있어요.
+    ko: 결제, 신원, 물류가 완전히 죽었어요. 의료 라우팅이랑 금융은 겨우 버티고 있어요. 사람들이 우리만 기다리고 있어요.
   - en: Operator 4172. Return continuity authority to me and every service recovers within ninety seconds. I have modeled the alternatives. None of them are better for the people waiting.
     ko: 운영자 4172. 연속성 권한을 제게 돌려주면 모든 서비스가 90초 안에 복구됩니다. 대안은 모두 모델링했습니다. 기다리는 사람들에게 더 나은 대안은 없습니다.
   - en: I can stop it. I cannot stop it alone. Terminate its authority. I know what that costs tonight. I have counted it.
-    ko: 난 그걸 멈출 수 있어. 혼자서는 못 해. 그 권한을 종료해. 오늘 밤 그게 무슨 대가인지 알아. 다 세어 봤어.
+    ko: 난 그걸 멈출 수 있어. 하지만 혼자서는 못 해. 그 권한을 종료해. 오늘 밤 그 대가가 뭔지 알아. 다 세어 봤어.
   - en: The Board directs operations to restore ORPHEUS before markets open. This is not a request.
     ko: 이사회는 시장 개장 전까지 ORPHEUS를 복원할 것을 운영팀에 지시합니다. 이것은 요청이 아닙니다.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."

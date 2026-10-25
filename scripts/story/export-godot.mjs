@@ -1,6 +1,6 @@
 // Story data for the Godot runtime (DEC-072, TASK-038).
 //
-//   node scripts/story/export-godot.mjs            write episodes JSON and locale .po files
+//   node scripts/story/export-godot.mjs            write episodes and cast JSON and locale .po files
 //   node scripts/story/export-godot.mjs --check    fail when the committed export is stale
 //   node scripts/story/export-godot.mjs --fixtures also write parity fixtures (not committed)
 //
@@ -10,10 +10,12 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { parse } from 'yaml';
 
+import { parseCast } from '../../src/story/cast.ts';
 import { parseEpisode } from '../../src/story/schema.ts';
 import { campaignCarries, enumeratePaths } from '../../src/story/validate.ts';
 
 const DATA = 'src/story/data/';
+const CAST = 'src/story/cast.yaml';
 const OUT = 'godot/data/episodes/';
 const LOCALE = 'godot/locale/';
 const FIXTURES = 'godot/tests/fixtures/';
@@ -59,6 +61,8 @@ const outputs = new Map();
 for (const episode of episodes)
   outputs.set(`${OUT}${episode.id.toLowerCase()}.json`, json(episode));
 outputs.set(`${OUT}index.json`, json(episodes.map(({ id, act, title }) => ({ id, act, title }))));
+if (existsSync(CAST))
+  outputs.set('godot/data/cast.json', json(parseCast(readFileSync(CAST, 'utf8'))));
 for (const locale of LOCALES) outputs.set(`${LOCALE}${locale}.po`, poFile(locale));
 
 if (process.argv.includes('--check')) {

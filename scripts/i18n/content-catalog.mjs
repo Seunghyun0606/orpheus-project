@@ -44,6 +44,10 @@ const STORY_TEXT_KEYS = new Set([
   'keywords',
 ]);
 const STORY = 'src/story/data/';
+// Profiles also show each person's role.
+const CAST_TEXT_KEYS = new Set([...STORY_TEXT_KEYS, 'role']);
+// People the status window introduces (src/story/cast.ts).
+const CAST = 'src/story/cast.yaml';
 
 // Identifiers, numbers, timestamps and machine tokens read the same in every language.
 const NOT_TEXT = [
@@ -165,10 +169,16 @@ export function contentGroups() {
         sources: [{ file: STORY + f, doc }],
       });
     }
+  if (existsSync(CAST))
+    groups.push({
+      name: 'story-cast',
+      keys: CAST_TEXT_KEYS,
+      sources: [{ file: CAST, doc: load(CAST) }],
+    });
   for (const group of groups) {
     const strings = [];
     for (const { doc } of group.sources) {
-      collect(doc, '', strings, group.story ? STORY_TEXT_KEYS : TEXT_KEYS);
+      collect(doc, '', strings, group.keys ?? (group.story ? STORY_TEXT_KEYS : TEXT_KEYS));
       if (doc.initialState) humanizedIds(doc, strings);
     }
     group.strings = [...new Set(strings)];

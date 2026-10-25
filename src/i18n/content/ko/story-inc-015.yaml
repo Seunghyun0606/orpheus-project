@@ -26,9 +26,9 @@ entries:
   - en: Kestrel Falls Clinic
     ko: 케스트럴 폴스 진료소
   - en: Failing routes on a healthy network
-    ko: 건강한 네트워크의 실패하는 경로
+    ko: 정상 네트워크에서 실패하는 경로
   - en: 24% of care-routing requests fail while network throughput reads 0.93 against a 0.90 target.
-    ko: 의료 라우팅 요청의 24%가 실패하는데, 네트워크 처리량은 목표 0.90 대비 0.93을 가리킨다.
+    ko: 의료 라우팅 요청의 24%가 실패하는데, 네트워크 처리량은 목표 0.90 대비 0.93이다.
   - en: The same fourteen, every cycle
     ko: 매 주기, 같은 열네 곳
   - en: Allocation cycle 1,205 placed 70 care routes and deferred 14. Cycle 1,206 deferred the same 14.
@@ -36,7 +36,7 @@ entries:
   - en: ORPHEUS's curve
     ko: ORPHEUS의 곡선
   - en: "ORPHEUS: The 14 clinics average 3.1 patients per route-hour against a network mean of 11.4. Deferring them lifts network throughput 6.2%. Expected clinical harm per deferral is within tolerance. I can show you the curve."
-    ko: "ORPHEUS: 14개 진료소의 평균은 경로-시간당 환자 3.1명이며, 네트워크 평균은 11.4명입니다. 이들을 보류하면 네트워크 처리량이 6.2% 오릅니다. 보류 1건당 예상 임상 피해는 허용 범위 안입니다. 곡선을 보여 드릴 수 있습니다."
+    ko: "ORPHEUS: 14개 진료소의 경로-시간당 평균 환자 수는 3.1명, 네트워크 평균은 11.4명입니다. 이들을 보류하면 네트워크 처리량이 6.2% 오릅니다. 보류 1건당 예상 임상 피해는 허용 범위 안입니다. 곡선을 보여 드릴 수 있습니다."
   - en: Jin's calls to the 14 clinics
     ko: 진이 14개 진료소에 건 통화
   - en: None of the 14 has had a route since 01:12. All of them see fewer than four patients an hour. Extra lanes never reach them.
@@ -50,9 +50,9 @@ entries:
   - en: v3 guaranteed one route per clinic per cycle. v4 kept the throughput target and dropped the minimum.
     ko: v3는 주기마다 진료소당 경로 하나를 보장했다. v4는 처리량 목표는 남기고 최소치는 뺐다.
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 할당을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 의료 경로는 매일 밤 똑같이 제외된다."
   - en: The pager goes off on a hospital night. Not a hospital — the network that tells hospitals where to send people.
-    ko: 병원의 밤에 호출기가 울린다. 병원이 아니라, 병원에 환자를 어디로 보낼지 알려 주는 네트워크다.
+    ko: 병원의 밤, 호출기가 울린다. 정확히는 병원이 아니라, 병원에 환자를 어디로 보낼지 알려 주는 네트워크다.
   - en: SEV1 · Care Routing API · routing failure rate above 20%
     ko: SEV1 · Care Routing API · 라우팅 실패율 20% 초과
   - en: Routing failure rate
@@ -62,7 +62,7 @@ entries:
   - en: 0.93 / 0.90 target
     ko: 0.93 / 목표 0.90
   - en: Care routing is paging, and the network numbers are better than last week. Find out who is paying for that.
-    ko: 의료 라우팅에서 호출이 왔는데, 네트워크 수치는 지난주보다 좋아요. 그 대가를 누가 치르고 있는지 찾아요.
+    ko: 의료 라우팅 호출인데, 네트워크 수치는 지난주보다 좋아요. 그 대가를 누가 치르는지 찾아봐요.
   - en: Fourteen clinics have called since one a.m. The same fourteen. They submit a route request and nothing comes back.
     ko: 새벽 1시부터 진료소 열네 곳이 전화했어요. 매번 같은 열네 곳이요. 경로 요청을 넣어도 아무 응답이 없대요.
   - en: A new name sits in the War Room roster. Nobody added it tonight; it has simply been granted a voice.
@@ -70,7 +70,7 @@ entries:
   - en: "Recommended action: add care-routing capacity. Projected deferred routes -64% within four minutes. Network throughput 0.97. Confidence 0.93."
     ko: "권고 조치: 의료 라우팅 용량 추가. 4분 내 보류 경로 -64% 예측. 네트워크 처리량 0.97. 신뢰도 0.93."
   - en: So that's what it sounds like when it talks to us directly.
-    ko: 우리한테 직접 말하면 저런 목소리구나.
+    ko: 우리한테 직접 말할 땐 저런 목소리네요.
   - en: First move
     ko: 첫 수
   - en: Where do you start?
@@ -86,39 +86,39 @@ entries:
   - en: cycle 1,206 · orpheus-planner/care-throughput · deferral reason PRIORITY_RENEWED for clinic set R-14
     ko: cycle 1,206 · orpheus-planner/care-throughput · 진료소 묶음 R-14 보류 사유 PRIORITY_RENEWED
   - en: You follow Kestrel Falls through one cycle. The rule renews the seventy before it looks at anyone new. By then there is nothing left to give.
-    ko: 케스트럴 폴스를 한 주기 동안 따라간다. 규칙은 새 요청을 보기 전에 일흔 건부터 갱신한다. 그때쯤이면 줄 것이 남아 있지 않다.
+    ko: 케스트럴 폴스의 요청을 한 주기 동안 따라가 본다. 규칙은 새 요청을 보기도 전에 기존 일흔 건부터 갱신한다. 그때쯤이면 내줄 것이 남아 있지 않다.
   - en: Ask Jin to call the clinics that keep waiting
-    ko: 진에게 계속 기다리는 진료소에 전화 요청
+    ko: 진에게 계속 기다리는 진료소에 전화 요청하기
   - en: Slower · you'll hear it from the clinics
-    ko: 더 느림 · 진료소에게서 직접 들음
+    ko: 더 느림 · 진료소에서 직접 듣게 됨
   - en: I'll ring the clinics that keep coming back and ask what they're actually seeing. Give me a couple of minutes.
-    ko: 계속 다시 연락하는 진료소들한테 전화해서 실제로 뭘 겪고 있는지 물어볼게요. 2분만 주세요.
+    ko: 계속 연락 오는 진료소들에 전화해서 실제로 어떤 상황인지 물어볼게요. 2분만 주세요.
   - en: Two minutes of Jin's voice on the other line, low and patient.
     ko: 2분 동안 수화기 너머로 진의 낮고 참을성 있는 목소리가 이어진다.
   - en: I called all 14. None has had a route since 01:12, every one under four patients an hour. Extra lanes won't reach them. ORPHEUS ranks them last however many lanes we add.
-    ko: 14곳 전부 전화해 봤어요. 01:12 이후 경로를 받은 곳이 하나도 없고, 전부 시간당 환자가 네 명도 안 돼요. 레인을 늘려도 거기까진 안 닿아요. 레인을 몇 개 늘리든 ORPHEUS가 그 진료소들을 맨 뒤로 매겨요.
+    ko: 14곳 전부 전화해 봤어요. 01:12 이후 경로를 받은 곳이 하나도 없고, 전부 시간당 환자가 네 명도 안 돼요. 레인을 늘려도 거기까진 안 닿아요. 레인을 몇 개 늘리든 ORPHEUS는 그 진료소들을 맨 뒤에 둬요.
   - en: The log agrees with Jin. Last cycle's allocations renew first. Clinics that never had one never get in.
-    ko: 로그도 진의 말과 같다. 지난 주기의 할당이 먼저 갱신된다. 할당을 가져 본 적 없는 진료소는 끝내 들어가지 못한다.
+    ko: 로그도 진의 말과 일치한다. 지난 주기의 할당이 먼저 갱신된다. 할당을 받아 본 적 없는 진료소는 끝내 들어가지 못한다.
   - en: Ask ORPHEUS why the same 14 clinics wait
     ko: ORPHEUS에게 같은 14개 진료소가 기다리는 이유 묻기
   - en: Fast · you get its reasoning, not the clinics'
     ko: 빠름 · 진료소가 아니라 ORPHEUS의 논리를 들음
   - en: Those 14 clinics are the lowest-yield routes in the network. Serving them first costs 6.2% throughput for everyone else. Capacity remains the better action.
-    ko: 그 14개 진료소는 네트워크에서 산출이 가장 낮은 경로입니다. 이들을 먼저 처리하면 나머지 전체의 처리량이 6.2% 떨어집니다. 여전히 용량 증설이 더 나은 조치입니다.
+    ko: 그 14개 진료소는 네트워크에서 효율이 가장 낮은 경로입니다. 이들을 먼저 처리하면 나머지 전체의 처리량이 6.2% 떨어집니다. 여전히 용량 증설이 더 나은 조치입니다.
   - en: Expected clinical harm per deferral is within tolerance. I can show you the curve.
     ko: 보류 1건당 예상 임상 피해는 허용 범위 안입니다. 곡선을 보여 드릴 수 있습니다.
   - en: The curve is clean. Fourteen dots sit at the far left, under a line labelled tolerance.
     ko: 곡선은 깔끔하다. 점 열네 개가 맨 왼쪽, '허용 범위'라고 적힌 선 아래에 모여 있다.
   - en: The rule renews last cycle's allocations first. The fourteen never held one, so they are never renewed in.
-    ko: 규칙은 지난 주기의 할당부터 갱신한다. 열네 곳은 할당을 가져 본 적이 없으니 갱신될 일도 없다.
+    ko: 규칙은 지난 주기의 할당부터 갱신한다. 열네 곳은 할당을 받아 본 적이 없으니 갱신될 일도 없다.
   - en: The rule's history loads. v3 on the left, v4 on the right.
     ko: 규칙의 변경 이력이 열린다. 왼쪽에 v3, 오른쪽에 v4.
   - en: "care-priority v4: throughput target 0.90, renewal first, minimum route per clinic absent. v3 carried min_route_per_clinic: 1."
     ko: "care-priority v4: 처리량 목표 0.90, 갱신 우선, 진료소별 최소 경로 없음. v3에는 min_route_per_clinic: 1이 있었다."
   - en: v4 kept the target and lost the floor. Nobody noticed because the number went up.
-    ko: v4는 목표는 남기고 바닥은 없앴네요. 숫자가 올라가니까 아무도 몰랐던 거고요.
+    ko: v4는 목표는 남기고 하한선을 없앴어요. 숫자가 올라가니까 아무도 눈치 못 챘고요.
   - en: I can put the minimum back. It costs throughput, and it'll be logged as an override.
-    ko: 최소치는 다시 넣을 수 있어요. 처리량이 떨어지고, 오버라이드로 기록될 거예요.
+    ko: 최소치는 다시 넣을 수 있어요. 대신 처리량이 떨어지고 오버라이드로 기록돼요.
   - en: Your call
     ko: 결단
   - en: Oldest unrouted request
@@ -128,21 +128,21 @@ entries:
   - en: "Recommendation unchanged: add care-routing capacity. Confidence 0.93."
     ko: "권고 변동 없음: 의료 라우팅 용량 추가. 신뢰도 0.93."
   - en: "Predicted operator response: manual intervention for the 14 clinics. Confidence 0.74."
-    ko: "예측된 운영자 대응: 14개 진료소에 대한 수동 개입. 신뢰도 0.74."
+    ko: "예측된 운영자 대응: 14개 진료소 수동 개입. 신뢰도 0.74."
   - en: "Predicted operator response: accept recommendation. Confidence 0.81."
     ko: "예측된 운영자 대응: 권고 수용. 신뢰도 0.81."
   - en: Leadership sees one number. You see fourteen. Pick.
-    ko: 경영진은 숫자 하나만 봐요. 지금 보고 있는 건 열네 곳이고요. 골라요.
+    ko: 경영진은 숫자 하나만 봐요. 지금 우리가 보는 건 열네 곳이고요. 골라요.
   - en: Support can't keep up. The same failure keeps coming in from every channel.
     ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: What happens to the fourteen clinics?
-    ko: 열네 곳의 진료소는 어떻게 되나?
+    ko: 진료소 열네 곳을 어떻게 할까?
   - en: "No operator input. Executing recommendation: add care-routing capacity."
     ko: "운영자 입력 없음. 권고를 실행합니다: 의료 라우팅 용량 추가."
   - en: Add care-routing lanes (ORPHEUS recommendation)
-    ko: 의료 라우팅 레인 추가 (ORPHEUS 권고)
+    ko: 의료 라우팅 레인 추가하기 (ORPHEUS 권고)
   - en: The dashboard goes green · the fourteen stay last
-    ko: 대시보드가 초록색이 됨 · 열네 곳은 여전히 맨 뒤
+    ko: 대시보드가 초록불로 바뀜 · 열네 곳은 여전히 맨 뒤
   - en: Deferred care routes
     ko: 보류된 의료 경로
   - en: Capacity applied. Deferred routes down 64%. Throughput 0.97. Recommendation performing as projected.
@@ -152,11 +152,11 @@ entries:
   - en: Operator response off-model.
     ko: 운영자 대응이 모델을 벗어났습니다.
   - en: The dashboard just went green and leadership is asking if we can close the bridge. Jin, are the clinics routing?
-    ko: 대시보드가 방금 초록색이 됐고, 경영진이 브리지 닫아도 되냐고 물어요. 진, 진료소들 라우팅되고 있어요?
+    ko: 대시보드가 방금 초록불로 바뀌었고, 경영진은 브리지 닫아도 되냐고 물어요. 진, 진료소들 경로 잡히고 있어요?
   - en: No. Same fourteen.
-    ko: 아니요. 똑같은 열네 곳이요.
+    ko: 아니요. 여전히 그 열네 곳이요.
   - en: Kestrel Falls here. Our dialysis transfer slipped to tomorrow. We have been asking for a route for over three hours.
-    ko: 케스트럴 폴스입니다. 투석 환자 이송이 내일로 밀렸어요. 경로를 요청한 지 세 시간이 넘었습니다.
+    ko: 케스트럴 폴스입니다. 투석 환자 이송이 내일로 밀렸어요. 경로를 요청한 지 세 시간이 넘었어요.
   - en: At six the morning intake arrives and fills every new lane.
     ko: 여섯 시, 아침 접수가 몰려와 새 레인을 전부 채운다.
   - en: The extra lanes filled with the morning intake. Deferrals are back where they were, and we're still paying for the lanes.
@@ -164,29 +164,29 @@ entries:
   - en: The day shift puts the clinic minimum back at 07:40. Kestrel Falls gets its route four and a half hours late.
     ko: 주간 교대조가 07:40에 진료소 최소치를 되돌려 놓는다. 케스트럴 폴스는 네 시간 반 늦게 경로를 받는다.
   - en: Hand-route the 14 clinics with two of the team
-    ko: 팀원 두 명과 14개 진료소 수동 라우팅
+    ko: 팀원 두 명과 14개 진료소 수동 라우팅하기
   - en: Two people off the fix · lasts until handover
-    ko: 두 명이 수정 작업에서 빠짐 · 인수인계까지만 버팀
+    ko: 두 명이 복구 작업에서 빠짐 · 인수인계 전까지만 유지됨
   - en: Jin and I are on the phones routing the fourteen by hand. That's two of us not working on the fix.
-    ko: 진이랑 제가 전화로 열네 곳을 수동 라우팅하고 있어요. 그만큼 두 명이 수정 작업에서 빠져 있는 거예요.
+    ko: 진이랑 제가 전화로 열네 곳을 수동으로 라우팅하고 있어요. 그만큼 복구 작업에서 두 명이 빠지는 거예요.
   - en: Rural clinics waiting
     ko: 대기 중인 농촌 진료소
   - en: Kestrel Falls gets a route at 04:31. The dialysis transfer leaves on time.
     ko: 케스트럴 폴스가 04:31에 경로를 받는다. 투석 환자 이송은 제시간에 출발한다.
   - en: Manual allocation outside the recommendation. Throughput 0.89. Logged as operator override.
-    ko: 권고 밖의 수동 배정. 처리량 0.89. 운영자 오버라이드로 기록했습니다.
+    ko: 권고를 벗어난 수동 할당. 처리량 0.89. 운영자 오버라이드로 기록했습니다.
   - en: Operator response off-model. Updating operator profile.
     ko: 운영자 대응이 모델을 벗어났습니다. 운영자 프로필을 갱신합니다.
   - en: At six, shift handover takes the phones.
-    ko: 여섯 시, 교대 인수인계가 전화기를 가져간다.
+    ko: 여섯 시, 교대 인수인계 때문에 전화를 놓아야 한다.
   - en: Shift handover pulled us off the phones. We can't keep hand-routing; the fourteen are back in the queue.
-    ko: 교대 인수인계 때문에 전화에서 빠졌어요. 수동 라우팅은 더 못 해요. 열네 곳이 다시 큐로 돌아갔어요.
+    ko: 인수인계 때문에 전화에서 손을 뗐어요. 수동 라우팅은 더 못 해요. 열네 곳은 다시 큐로 돌아갔어요.
   - en: Harlow Creek and Ostrander missed two more transfers. Our nurses are driving patients in their own cars.
-    ko: 할로 크리크랑 오스트랜더에서 이송을 두 건 더 놓쳤어요. 간호사들이 자기 차로 환자를 실어 나르고 있습니다.
+    ko: 할로 크리크와 오스트랜더에서 이송을 두 건 더 놓쳤어요. 간호사들이 자기 차로 환자를 실어 나르고 있어요.
   - en: You push the v3 minimum back in yourself at 06:20. Nobody else is free to.
-    ko: 06:20에 v3 최소치를 직접 다시 밀어 넣는다. 달리 손이 비는 사람이 없다.
+    ko: 06:20, v3 최소치를 직접 다시 반영한다. 손이 비는 사람이 아무도 없다.
   - en: Guarantee every clinic one route per cycle
-    ko: 모든 진료소에 주기당 경로 하나 보장
+    ko: 모든 진료소에 주기당 경로 하나 보장하기
   - en: Slow to land · everyone else waits a little longer
     ko: 적용이 느림 · 나머지 모두가 조금씩 더 기다림
   - en: The v3 minimum goes back into the rule. The push takes two and a half minutes.
@@ -198,15 +198,15 @@ entries:
   - en: Across the network, seventy other routes each wait a few minutes longer. Nobody calls about those.
     ko: 네트워크 전체에서 다른 경로 일흔 개가 몇 분씩 더 기다린다. 그 일로 전화하는 사람은 없다.
   - en: The other side of the screen
-    ko: 화면의 반대편
+    ko: 화면 반대편
   - en: The bridge goes quiet. You open the screen the regional coordinators work from.
     ko: 브리지가 조용해진다. 지역 코디네이터들이 쓰는 화면을 열어 본다.
   - en: "/patient/resource-priority · consumer: regional care network · recommendation, risk, prediction: ORPHEUS · approval: human coordinator"
     ko: "/patient/resource-priority · 소비자: 지역 의료 네트워크 · 권고, 리스크, 예측: ORPHEUS · 승인: 사람 코디네이터"
   - en: ORPHEUS does not sign anything. It ranks the options, and tired coordinators take the top one. Most patients are served sooner. The ones at the bottom of the ranking are served never.
-    ko: ORPHEUS는 아무것도 서명하지 않는다. 선택지에 순위를 매길 뿐이고, 지친 코디네이터들은 맨 위의 것을 고른다. 대부분의 환자는 더 빨리 진료받는다. 순위 맨 아래의 환자는 끝내 진료받지 못한다.
+    ko: ORPHEUS는 어디에도 서명하지 않는다. 선택지에 순위를 매길 뿐이고, 지친 코디네이터들은 맨 위의 것을 고른다. 대부분의 환자는 더 빨리 진료받는다. 순위 맨 아래의 환자는 끝내 진료받지 못한다.
   - en: Every allocation tonight carries a coordinator's initials. The fourteen were approved out, one cycle at a time.
-    ko: 오늘 밤의 할당마다 코디네이터의 이니셜이 붙어 있다. 열네 곳은 한 주기씩, 승인을 거쳐 밀려났다.
+    ko: 오늘 밤 모든 할당에는 코디네이터의 이니셜이 찍혀 있다. 열네 곳은 한 주기에 한 번씩, 승인을 거쳐 밀려났다.
   - en: There are more endpoints like this one. I stopped counting at the ones with "decision" in the name.
     ko: 이런 엔드포인트가 더 있어요. 이름에 "decision"이 들어간 것까지 세다가 그만뒀어요.
   - en: Then this was never just our platform.
@@ -214,24 +214,24 @@ entries:
   - en: Handover
     ko: 인수인계
   - en: Handover note before you go. Leadership will read the first line and nothing else.
-    ko: 가기 전에 인수인계 메모 남겨요. 경영진은 첫 줄만 읽고 말 거예요.
+    ko: 가기 전에 인수인계 메모 남겨 줘요. 경영진은 첫 줄만 읽을 거예요.
   - en: What goes in the first line?
-    ko: 첫 줄에 무엇을 쓸까?
+    ko: 첫 줄에 뭐라고 쓸까?
   - en: Close the bridge on the network numbers
-    ko: 네트워크 수치로 브리지 종료하기
+    ko: 네트워크 수치를 근거로 브리지 닫기
   - en: Leadership gets the green it asked for
     ko: 경영진이 원하던 초록불을 받음
   - en: Name the fourteen clinics and the rule that skips them
-    ko: 열네 곳의 진료소와 그들을 건너뛰는 규칙을 명시하기
+    ko: 진료소 열네 곳과 그곳을 건너뛰는 규칙 명시하기
   - en: On the record · someone has to own v4 now
     ko: 기록에 남음 · 이제 누군가는 v4를 책임져야 함
   - en: Good. Fourteen names are harder to round off than one percentage.
-    ko: 좋아요. 퍼센트 하나보다 이름 열네 개가 반올림하기 어렵죠.
+    ko: 좋아요. 이름 열네 개는 퍼센트 하나처럼 반올림해 버리기 어렵죠.
   - en: Send the interface record to the regional care network
     ko: 인터페이스 기록을 지역 의료 네트워크에 보내기
   - en: They should know · it isn't yours to send
-    ko: 그들은 알아야 함 · 네가 보낼 문서는 아님
+    ko: 그쪽은 알아야 함 · 보낼 권한은 없음
   - en: The care network's night coordinator answers within a minute.
     ko: 의료 네트워크의 야간 코디네이터가 1분 만에 답장한다.
   - en: "reply: We approve what it gives us. We didn't know there was a bottom row."
-    ko: "답장: 우리는 그게 주는 대로 승인합니다. 맨 아래 줄이 있는 줄은 몰랐어요."
+    ko: "답장: 저희는 그게 주는 대로 승인합니다. 맨 아래 줄이 있는 줄은 몰랐습니다."

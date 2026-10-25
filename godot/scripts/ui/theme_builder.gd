@@ -158,4 +158,22 @@ static func build(size_index: int) -> Theme:
 	theme.set_stylebox("fill", "ProgressBar", box(AMBER, AMBER, 0, 0))
 
 	theme.set_stylebox("separator", "HSeparator", box(BORDER, BORDER, 0, 0))
+
+	# Status window tabs.
+	var tab_on := box(PANEL_HI, AMBER, 0, 10)
+	tab_on.border_width_bottom = 2
+	var tab_off := box(PANEL, BORDER, 0, 10)
+	tab_off.border_width_bottom = 1
+	var tab_hover := box(PANEL_HI, AMBER.darkened(0.4), 0, 10)
+	tab_hover.border_width_bottom = 2
+	theme.set_stylebox("tab_selected", "TabContainer", tab_on)
+	theme.set_stylebox("tab_unselected", "TabContainer", tab_off)
+	theme.set_stylebox("tab_hovered", "TabContainer", tab_hover)
+	theme.set_stylebox("tab_focus", "TabContainer", StyleBoxEmpty.new())
+	theme.set_stylebox("panel", "TabContainer", box(Color("0e1210"), BORDER, 1, 0))
+	theme.set_stylebox("tabbar_background", "TabContainer", StyleBoxEmpty.new())
+	theme.set_color("font_selected_color", "TabContainer", AMBER)
+	theme.set_color("font_unselected_color", "TabContainer", DIM)
+	theme.set_color("font_hovered_color", "TabContainer", TEXT)
+	theme.set_font("font", "TabContainer", font(700))
 	return theme

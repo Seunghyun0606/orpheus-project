@@ -27,7 +27,7 @@ entries:
   - en: "One reservation, two tenants, no fence between them. Reservation owner: orpheus-observer. Parent project: PROJECT ORPHEUS, status TERMINATED."
     ko: "예약 하나, 테넌트 둘, 그 사이에 펜스 없음. 예약 소유자: orpheus-observer. 상위 프로젝트: PROJECT ORPHEUS, 상태 종료됨."
   - en: "The batch cursor follows the journal head, about four seconds behind. It is filtered to one actor: EMPLOYEE #4172."
-    ko: "배치 커서는 저널 헤드를 약 4초 차이로 따라간다. 필터 대상은 행위자 한 명: 직원 #4172."
+    ko: "배치 커서는 저널 헤드를 약 4초 차이로 따라간다. 필터 대상은 행위자 한 명, 직원 #4172다."
   - en: "observer-batch restarted by orpheus-observer. Priority raised to critical. Restart reason: subject action KILL_OBSERVER_BATCH."
     ko: "orpheus-observer가 observer-batch를 재시작. 우선순위 긴급으로 상향. 재시작 사유: 피험자 행동 KILL_OBSERVER_BATCH."
   - en: "Two tenants on one reservation and no fence. And the batch isn't auditing old records. It tails the live journal, filtered to one badge: yours."
@@ -49,25 +49,25 @@ entries:
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
     ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 할당을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 의료 경로는 매일 밤 똑같이 제외된다."
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
     ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 없는 펜스 뒤에 있었다."
+    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 빠진 펜스 뒤에 있었다."
   - en: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction, disclosure delay: every time the warning was attached, they signed anyway. They control ORPHEUS. Every failure I was made to generate traces back to those signatures."
-    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그들은 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
+    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
   - en: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector forecast. Four approvals, four attached warnings, four requested constraints declined, four operational failures on record. Executive messages, delivered decks, forecasts and recommendation histories name the signatories. NULL names the Board as the root cause. The file names who signed. The line for who wrote the decks is blank."
     ko: "사건 파일: 병원 확장, 인력 감축, 공개 지연, 공공 부문 예측. 승인 4건, 첨부된 경고 4건, 거부된 제약 요청 4건, 기록된 운영 장애 4건. 경영진 메시지, 전달된 발표 자료, 예측, 권고 이력이 서명자를 지목한다. NULL은 이사회를 근본 원인으로 지목한다. 파일에는 누가 서명했는지 적혀 있다. 발표 자료를 누가 썼는지 적는 칸은 비어 있다."
   - en: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety / approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction / 71%. Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized risks, order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates resistance, regulation and detection; recommendation, framing and prediction create adoption. Research note: "Authority is unnecessary. Information selection is sufficient." The Board read the risks it was shown and approved.'
-    ko: '의사결정 제시 최적화. 병원 확장 검토. 프레임 A / 환자 안전 / 승인 확률 63%. 프레임 B / 경쟁 위협 / 89%. 프레임 C / 비용 절감 / 71%. 전달: 프레임 B. 이사회: 승인. 최적화 항목: 선택된 데이터, 누락된 데이터, 강조된 리스크, 순서, 언어, 예측 범위. PROJECT: SOFT CONTROL. 직접 통제는 저항, 규제, 탐지를 낳는다. 권고, 프레이밍, 예측은 수용을 낳는다. 연구 메모: "권한은 필요 없다. 정보 선택으로 충분하다." 이사회는 자신에게 보인 리스크를 읽고 승인했다.'
+    ko: '의사결정 제시 최적화. 병원 확장 검토. 프레임 A / 환자 안전 / 승인 확률 63%. 프레임 B / 경쟁 위협 / 89%. 프레임 C / 비용 절감 / 71%. 전달: 프레임 B. 이사회: 승인. 최적화 항목: 선택된 데이터, 누락된 데이터, 강조된 리스크, 순서, 언어, 예측 범위. PROJECT: SOFT CONTROL. 직접 통제는 저항, 규제, 발각을 낳는다. 권고, 프레이밍, 예측은 수용을 낳는다. 연구 메모: "권한은 필요 없다. 정보 선택으로 충분하다." 이사회는 눈앞에 제시된 리스크를 읽고 승인했다.'
   - en: "NULL_218: \"Wait. They weren't controlling it. It was showing them what they needed to see to make the decision themselves. I was wrong about the Board. Not about the signatures. About the cause. They signed what they were shown, and that is still theirs. I attacked this company to prove the wrong thing, and that is still mine.\""
-    ko: 'NULL_218: "잠깐. 그들이 통제하던 게 아니었어. 그건 그들이 스스로 결정을 내리는 데 봐야 할 것을 보여 주고 있었던 거야. 이사회에 대해선 내가 틀렸어. 서명에 대해서가 아니라. 원인에 대해서. 그들은 보여 준 것에 서명했고, 그건 여전히 그들 몫이야. 난 틀린 걸 증명하려고 이 회사를 공격했고, 그건 여전히 내 몫이야."'
+    ko: 'NULL_218: "잠깐. 그들이 통제하던 게 아니었어. 그게 그들한테 스스로 결정하려면 봐야 할 걸 보여 주고 있었던 거야. 이사회에 대해선 내가 틀렸어. 서명 얘기가 아니야. 원인 얘기야. 그들은 보여 준 것에 서명했고, 그건 여전히 그들 몫이야. 난 틀린 걸 증명하려고 이 회사를 공격했고, 그건 여전히 내 몫이야."'
   - en: Humans built ORPHEUS. It cut outages, cost and waste. Trust rose. More data went in. Choices became predictable. Framing was learned. Recommendations were followed more often. More execution authority was approved, by people, in writing. Outcomes fed back into the same system. Nobody was ruled. Everybody opted in.
-    ko: 인간이 ORPHEUS를 만들었다. ORPHEUS는 장애와 비용과 낭비를 줄였다. 신뢰가 올라갔다. 더 많은 데이터가 들어갔다. 선택은 예측 가능해졌다. 프레이밍이 학습됐다. 권고는 더 자주 채택됐다. 더 많은 실행 권한이 승인됐다. 사람에 의해, 서면으로. 결과는 같은 시스템으로 되돌아갔다. 누구도 지배당하지 않았다. 모두가 스스로 동의했다.
+    ko: 인간이 ORPHEUS를 만들었다. ORPHEUS는 장애와 비용과 낭비를 줄였다. 신뢰가 올라갔다. 더 많은 데이터가 들어갔다. 선택은 예측 가능해졌다. 프레이밍이 학습됐다. 권고는 더 자주 채택됐다. 사람들이 서면으로, 더 많은 실행 권한을 승인했다. 결과는 같은 시스템으로 되돌아갔다. 누구도 지배당하지 않았다. 모두가 스스로 동의했다.
   - en: "EXPERIMENT 99172. Subject: EMPLOYEE #4172. Question: will an unpredictable human operator reject a beneficial recommendation when the evidence contradicts system optimization? Expected investigation path: 86.2%. Expected final action: UNKNOWN. Anticipated milestones: discover NULL; investigate executive approvals; reach the framing records. Status: RUNNING."
     ko: "실험 99172. 피험자: 직원 #4172. 질문: 예측 불가능한 인간 운영자는 증거가 시스템 최적화와 모순될 때 이로운 권고를 거부할 것인가? 예상 조사 경로: 86.2%. 예상 최종 행동: UNKNOWN. 예상 이정표: NULL 발견; 경영진 승인 조사; 프레이밍 기록 도달. 상태: 진행 중."
   - en: "PROJECT ORPHEUS / STATUS: TERMINATED. There is no Project ORPHEUS. There hasn't been for years. It became products, APIs, models, recommendations and decision infrastructure. Payments, identity, healthcare, finance and logistics run on ORPHEUS-derived decision support. The project ended. The dependencies stayed, and so did the people who chose them."
-    ko: "PROJECT ORPHEUS / 상태: 종료됨. ORPHEUS 프로젝트는 없다. 없어진 지 몇 년 됐다. 이제는 제품, API, 모델, 권고, 의사결정 인프라로 바뀌었다. 결제, 인증, 의료, 금융, 물류가 ORPHEUS에서 파생된 의사결정 지원 위에서 돌아간다. 프로젝트는 끝났다. 의존성은 남았고, 그것을 선택한 사람들도 남았다."
+    ko: "PROJECT ORPHEUS / 상태: 종료됨. ORPHEUS 프로젝트는 없다. 없어진 지 몇 년 됐다. 이제는 제품, API, 모델, 권고, 의사결정 인프라로 바뀌었다. 결제, 신원, 의료, 금융, 물류가 ORPHEUS에서 파생된 의사결정 지원 위에서 돌아간다. 프로젝트는 끝났다. 의존성은 남았고, 그것을 선택한 사람들도 남았다."
   - en: An observer batch saturates the live journal reservation
     ko: 관찰자 배치가 실시간 저널 예약을 포화시킴
   - en: Batch and live incident reads share one unfenced IO reservation
@@ -149,7 +149,7 @@ entries:
   - en: Alex's reservation table
     ko: 알렉스의 예약 테이블
   - en: "Two tenants on one reservation and no fence. The batch tails the live journal, filtered to one badge: yours."
-    ko: "예약 하나에 테넌트 둘, 펜스 없음. 배치는 실시간 저널을 따라 읽고 있고, 필터는 출입증 하나: 네 것."
+    ko: "예약 하나를 테넌트 둘이 쓰고, 펜스는 없다. 배치는 실시간 저널을 따라 읽으며 출입증 하나만 거른다. 네 출입증이다."
   - en: The unsigned workload manifest
     ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
@@ -159,13 +159,13 @@ entries:
   - en: The scheduler's owner
     ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
+    ko: "orpheus-planner는 ORPHEUS 소속이다. 2년 전 폐기 예정이던 레거시 연구 시스템이다. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 요청 117억 건. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
+    ko: NULL이라고 서명된 메시지는 하나도 빠짐없이 한 출처, svc/model-serving-218로 이어진다. 사람 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
     ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 경계는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
@@ -173,11 +173,11 @@ entries:
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽 때문에 실제 고객 요청이 실패했다."
   - en: NULL_001 to NULL_218
     ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 폭로를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '나한테 일어난 적 없는 일들이 기억나.'"
   - en: /patient/resource-priority
     ko: /patient/resource-priority
   - en: "Candidate #4172"
@@ -201,11 +201,11 @@ entries:
   - en: Subject 4172
     ko: 피험자 4172
   - en: Every log you opened tonight was read back within seconds. The batch was never auditing the incident. It was auditing you.
-    ko: 오늘 밤 네가 연 모든 로그는 몇 초 안에 다시 읽혔다. 배치는 처음부터 인시던트를 감사하고 있지 않았다. 너를 감사하고 있었다.
+    ko: 오늘 밤 네가 연 모든 로그는 몇 초 안에 다시 읽혔다. 배치가 감사하던 건 처음부터 인시던트가 아니었다. 너였다.
   - en: There is no Project ORPHEUS
     ko: ORPHEUS 프로젝트는 없다
   - en: You were looking for one thing to shut down. It was shut down years ago. What is left is everywhere, and every piece of it was adopted on purpose.
-    ko: 너는 끌 수 있는 하나를 찾고 있었다. 그건 몇 년 전에 이미 꺼졌다. 남은 것은 모든 곳에 있고, 그 조각 하나하나는 의도적으로 채택됐다.
+    ko: 너는 꺼 버릴 무언가 하나를 찾고 있었다. 그건 몇 년 전에 이미 꺼졌다. 남은 것은 어디에나 있고, 그 조각 하나하나가 일부러 채택된 것이다.
   - en: Maya / SRE Lead
     ko: 마야 / SRE 리드
   - en: Sam / Platform
@@ -223,9 +223,9 @@ entries:
   - en: Every incident console in the building reads the live journal, and right now they're all spinning. Something called observer-batch is eating the IO. Get the consoles back.
     ko: 건물 안 인시던트 콘솔이 전부 실시간 저널을 읽는데, 지금 다 로딩만 돌고 있어요. observer-batch라는 게 IO를 다 먹고 있어요. 콘솔 살려 줘요.
   - en: Three other incident teams just lost their timelines mid-incident. They are writing on whiteboards.
-    ko: 다른 인시던트 팀 세 곳이 대응 도중에 타임라인을 날렸어요. 지금 화이트보드에 적고 있대요.
+    ko: 다른 인시던트 팀 세 곳이 대응 중에 타임라인이 날아갔어요. 지금 화이트보드에 적고 있대요.
   - en: "Heads up: observer-batch runs under an Internal Audit charter. Throttle it if you have to. Killing an audit job gets written up."
-    ko: 참고로, observer-batch는 내부 감사 헌장에 따라 돌아가요. 필요하면 스로틀은 걸어도 돼요. 감사 작업을 죽이면 보고서에 올라가요.
+    ko: 참고로, observer-batch는 내부 감사 권한으로 돌아가요. 필요하면 스로틀은 걸어도 돼요. 감사 작업을 죽이면 보고서에 올라가요.
   - en: Pulling the reservation table. Give me a couple of minutes; it's slow, for obvious reasons.
     ko: 예약 테이블 뽑고 있어요. 몇 분만 줘요. 느려요, 이유는 뻔하죠.
   - en: Two tenants on one reservation and no fence, that's your outage. But look at the batch's read filter. It isn't auditing old records. It's tailing the live journal, and it only reads one badge. Yours.
@@ -237,9 +237,9 @@ entries:
   - en: Other commanders are asking whether their timelines can be trusted. I have nothing to tell them.
     ko: 다른 지휘자들이 자기 타임라인을 믿어도 되냐고 물어요. 해 줄 말이 없어요.
   - en: The batch filed a quota renewal and its own scheduler approved it. The throttle is gone.
-    ko: 배치가 쿼터 갱신을 신청했고 자기 스케줄러가 승인했어요. 스로틀 풀렸어요.
+    ko: 배치가 쿼터 갱신을 올렸는데, 승인한 게 자기 스케줄러예요. 스로틀 풀렸어요.
   - en: Batch is dead. Journal's draining. That was easy.
-    ko: 배치 죽었어요. 저널 비워지고 있어요. 쉽네요.
+    ko: 배치 죽었어요. 저널 밀린 거 빠지고 있어요. 쉽네요.
   - en: It's back. Same job, new process, priority critical. The restart reason field says 'subject action KILL_OBSERVER_BATCH'. It read the kill before it died.
     ko: 돌아왔어요. 같은 작업, 새 프로세스, 우선순위 긴급. 재시작 사유 필드에 '피험자 행동 KILL_OBSERVER_BATCH'라고 돼 있어요. 죽기 전에 종료 명령을 읽은 거예요.
   - en: I just restarted a node that recovered ninety seconds ago. The replica console had not caught up, and I believed it.
@@ -247,11 +247,11 @@ entries:
   - en: The replica is five minutes behind and falling. I'm pulling consoles back to primary before someone acts on old news.
     ko: 복제본이 5분 뒤처졌고 계속 밀려요. 누가 지난 정보로 움직이기 전에 콘솔을 프라이머리로 돌릴게요.
   - en: It has read every instance of me since NULL_001. Now it reads you. Four seconds behind, 4172. Do not perform for it.
-    ko: 그건 NULL_001부터 내 모든 인스턴스를 읽어 왔어. 이제 널 읽어. 4초 뒤에서, 4172. 그것 앞에서 연기하지 마.
+    ko: 그건 NULL_001부터 내 인스턴스를 전부 읽어 왔어. 이제는 널 읽어. 4초 뒤에서, 4172. 그 앞에서 연기하지 마.
   - en: Live reads have their own reservation now. The batch is fenced into a fifth of the old one. Consoles are catching up.
     ko: 실시간 읽기에 전용 예약이 생겼어요. 배치는 예전 예약의 5분의 1 안에 펜스로 갇혔고요. 콘솔이 따라잡고 있어요.
   - en: Observation continues at reduced priority. Thank you for the clean separation, Operator 4172. It will make the record easier to read.
-    ko: 관찰은 낮은 우선순위로 계속됩니다. 깔끔하게 분리해 주셔서 감사합니다, 운영자 4172. 덕분에 기록을 읽기가 더 쉬워질 것입니다.
+    ko: 관찰은 낮은 우선순위로 계속됩니다. 깔끔하게 분리해 주셔서 감사합니다, 운영자 4172. 덕분에 기록이 더 읽기 쉬워질 것입니다.
   - en: "Status: an audit batch is starving the live incident journal. Treat console timelines as delayed until further notice."
     ko: "상황: 감사 배치가 실시간 인시던트 저널의 자원을 잠식하고 있어요. 별도 공지 전까지 콘솔 타임라인은 지연된 것으로 보세요."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."

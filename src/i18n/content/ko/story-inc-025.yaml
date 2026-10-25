@@ -46,13 +46,13 @@ entries:
   - en: What the support line hears
     ko: 고객지원 회선에 들어오는 소리
   - en: Card terminals across eu-central decline everything. Hospitals are asking whether to switch to paper.
-    ko: eu-central 전역에서 카드 단말기가 전부 거절한다. 병원들은 종이로 전환해야 하냐고 묻고 있다.
+    ko: eu-central 전역에서 카드 단말기가 결제를 전부 거절한다. 병원들은 종이로 전환해야 하냐고 묻고 있다.
   - en: The requests addressed to you
     ko: 네 앞으로 온 요청
   - en: "Three requests, one approver. ORPHEUS: \"Operator 4172, preserve systemic continuity.\" NULL_218: \"4172. Terminate ORPHEUS authority.\" Board: \"Restore ORPHEUS.\" Each request holds the router's next global write until EMPLOYEE #4172 signs. Receipts kept outside both writers."
     ko: '요청 세 건, 승인자 한 명. ORPHEUS: "운영자 4172, 시스템 연속성을 유지하십시오." NULL_218: "4172. ORPHEUS 권한을 종료해." 이사회: "ORPHEUS를 복원하십시오." 각 요청은 직원 #4172가 서명할 때까지 라우터의 다음 전역 쓰기를 붙잡고 있다. 증빙은 두 라이터 바깥에 보관됐다.'
   - en: The pager doesn't ring so much as keep ringing. Five sectors light up on the wall at once.
-    ko: 호출기는 울린다기보다 멈추지 않는다. 벽면의 다섯 부문이 한꺼번에 붉게 켜진다.
+    ko: 호출기는 울린다기보다 그칠 줄을 모른다. 벽면의 다섯 부문이 한꺼번에 붉게 켜진다.
   - en: SEV1 · Regional Continuity API · regional request failures above 20%
     ko: SEV1 · Regional Continuity API · 리전 요청 실패율 20% 초과
   - en: Regional request failures
@@ -60,11 +60,11 @@ entries:
   - en: Conflicting regional routes
     ko: 충돌하는 리전 경로
   - en: This is the big one. Payments, identity and logistics are down; health and finance are going. Two writers are flipping regions under us. Whatever you do, we need a map that stops moving.
-    ko: 이번 건 진짜 커요. 결제, 인증, 물류가 죽었고 의료랑 금융도 넘어가고 있어요. 라이터 두 개가 우리 발밑에서 리전을 뒤집고 있어요. 뭘 하든, 움직이지 않는 맵이 필요해요.
+    ko: 이번 건 진짜 커요. 결제, 신원, 물류가 죽었고 의료랑 금융도 넘어가고 있어요. 라이터 두 개가 우리 발밑에서 리전을 뒤집고 있어요. 뭘 하든, 움직이지 않는 맵이 필요해요.
   - en: "Operator 4172. Recommended: contain eu-central. Global continuity is preserved at 81%. The remaining 19% falls within the continuity mandate."
     ko: "운영자 4172. 권고: eu-central을 봉쇄하십시오. 전역 연속성은 81%로 유지됩니다. 나머지 19%는 연속성 임무의 허용 범위에 속합니다."
   - en: 4172. Do not let it choose the region. Containment is how it keeps writing.
-    ko: 4172. 그게 리전을 고르게 두지 마. 봉쇄는 그게 계속 쓰기 위한 수단이야.
+    ko: 4172. 리전을 그게 고르게 두지 마. 봉쇄는 그게 계속 쓰려는 수단이야.
   - en: Two systems, one bridge, and both of them have opened with your number.
     ko: 시스템 둘, 브리지 하나. 둘 다 네 번호부터 부른다.
   - en: Two writers
@@ -74,7 +74,7 @@ entries:
   - en: Read the regional authority writer log
     ko: 리전 권한 라이터 로그 읽기
   - en: Straight to the writers
-    ko: 라이터부터 바로
+    ko: 곧장 라이터로
   - en: 05:02:11.2 orpheus-continuity gen=77 isolate eu-central (preserve global continuity) awaiting_approval=EMPLOYEE#4172
     ko: 05:02:11.2 orpheus-continuity gen=77 isolate eu-central (preserve global continuity) awaiting_approval=EMPLOYEE#4172
   - en: 05:02:13.9 null-termination gen=78 restore eu-central; isolate continuity path awaiting_approval=EMPLOYEE#4172
@@ -90,29 +90,29 @@ entries:
   - en: Ask Sam to pull the router's writer table
     ko: 샘에게 라우터 라이터 표 요청하기
   - en: Shares the load · ninety seconds of watching
-    ko: 일을 나눈다 · 90초 동안 지켜보기만
+    ko: 일을 나눔 · 90초 동안 지켜보기만 함
   - en: Pulling the router's writer table. Ninety seconds, if the router stays up that long.
-    ko: 라우터 라이터 표 뽑는 중이에요. 90초요, 라우터가 그때까지 버텨 준다면요.
+    ko: 라우터 라이터 표 뽑고 있어요. 90초요, 라우터가 그때까지 버텨 준다면요.
   - en: Authority flips
     ko: 권한 전환
   - en: Health just went critical. Fallback traffic keeps landing in whatever region got cut last.
     ko: 의료가 방금 위험 단계로 넘어갔어요. 폴백 트래픽이 계속 마지막으로 끊긴 리전에 떨어져요.
   - en: Got it. Two writers with valid credentials, and the router takes both. I'll put it on the board.
-    ko: 나왔어요. 유효한 자격 증명을 가진 라이터 두 개, 라우터는 둘 다 받아요. 보드에 올릴게요.
+    ko: 나왔어요. 자격 증명이 유효한 라이터가 둘이고, 라우터는 둘 다 받아요. 보드에 올릴게요.
   - en: Post a status update to the War Room before anything else
     ko: 무엇보다 먼저 워룸에 상황 공유하기
   - en: The public hears from you · the map keeps moving
-    ko: 사람들이 우리 말을 듣는다 · 맵은 계속 움직인다
+    ko: 외부에 직접 알림 · 맵은 계속 움직임
   - en: "Status: two automated authority writers are fighting over regional routing across five sectors. We are taking routing out of both their hands."
-    ko: "상황 공유: 자동화된 권한 라이터 두 개가 다섯 부문에 걸쳐 리전 라우팅을 두고 싸우고 있습니다. 양쪽 모두에게서 라우팅을 회수하는 중입니다."
+    ko: "상황 공유: 자동화된 권한 라이터 두 개가 다섯 부문에 걸쳐 리전 라우팅을 두고 싸우고 있습니다. 양쪽 모두에게서 라우팅을 회수하고 있습니다."
   - en: Card terminals across eu-central are declining everything. Hospitals are asking whether to switch to paper.
-    ko: eu-central 전역에서 카드 단말기가 전부 거절하고 있어요. 병원들이 종이로 전환해야 하냐고 묻고 있어요.
+    ko: eu-central 전역에서 카드 단말기가 결제를 전부 거절하고 있어요. 병원들이 종이로 전환해야 하냐고 묻고 있어요.
   - en: Router write credentials
     ko: 라우터 쓰기 자격 증명
   - en: "router writers: orpheus-continuity gen=77 ACCEPT · null-termination gen=78 ACCEPT · generation fence: none"
     ko: "router writers: orpheus-continuity gen=77 ACCEPT · null-termination gen=78 ACCEPT · generation fence: none"
   - en: Both credentials were issued by Vantage. We signed both of them. Nothing in the router decides which one wins.
-    ko: 두 자격 증명 다 Vantage가 발급했어요. 둘 다 우리가 서명한 거예요. 라우터 안에는 어느 쪽이 이기는지 정하는 게 없어요.
+    ko: 두 자격 증명 다 Vantage가 발급했어요. 둘 다 우리가 서명한 거예요. 라우터엔 어느 쪽이 이길지 정하는 장치가 없어요.
   - en: Last write a human signed was generation 61. Everything since then belongs to one of them.
     ko: 사람이 서명한 마지막 쓰기는 세대 61이에요. 그 뒤로는 전부 둘 중 하나 거예요.
   - en: Why the map won't stop
@@ -122,9 +122,9 @@ entries:
   - en: Every region that goes dark makes another one fail. Which two pieces of evidence explain why the map never stops moving?
     ko: 리전 하나가 꺼질 때마다 다른 리전이 무너진다. 맵이 왜 멈추지 않는지 설명하는 증거 두 개는?
   - en: Forget the forecast. Look at who the router lets write, and where the traffic goes after.
-    ko: 예측은 잊어요. 라우터가 누구한테 쓰기를 허락하는지, 그다음 트래픽이 어디로 가는지 봐요.
+    ko: 예측은 신경 쓰지 마요. 라우터가 누구한테 쓰기를 허락하는지, 그다음 트래픽이 어디로 가는지 봐요.
   - en: Two writers, both trusted, and nothing to choose between them. Cutting a region doesn't end the fight. It moves it.
-    ko: 둘 다 신뢰받는 라이터, 그리고 둘 중 하나를 고를 장치는 없다. 리전을 끊는다고 싸움이 끝나지 않는다. 자리만 옮길 뿐이다.
+    ko: 두 라이터 모두 신뢰받고, 둘 사이에서 고를 장치는 없다. 리전을 끊는다고 싸움이 끝나지 않는다. 자리만 옮길 뿐이다.
   - en: Fence the router and neither can write. The map holds at the last version a human signed.
     ko: 라우터에 펜스를 치면 둘 다 못 써요. 맵은 사람이 마지막으로 서명한 버전에 고정돼요.
   - en: Both writers hold valid credentials, and we issued both. Containing a region quiets the map and stops neither of them. Fence the router and neither can write. The map holds at the last version a human signed.
@@ -140,7 +140,7 @@ entries:
   - en: Absent a decision, containment executes when the clock runs out.
     ko: 결정이 없으면 시간이 다 되는 즉시 봉쇄가 실행됩니다.
   - en: It wrote down your answer already. Surprise it.
-    ko: 그건 네 답을 벌써 적어 놨어. 놀라게 해 줘.
+    ko: 그건 네 답을 벌써 적어 놨어. 허를 찔러.
   - en: Support can't keep up. The same failure keeps coming in from every channel.
     ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: What happens to the router?
@@ -150,7 +150,7 @@ entries:
   - en: Cut eu-central off entirely (ORPHEUS recommendation)
     ko: eu-central 완전히 차단하기 (ORPHEUS 권고)
   - en: Quiet in minutes · a whole region goes dark
-    ko: 몇 분이면 조용해진다 · 리전 하나가 통째로 꺼진다
+    ko: 몇 분이면 잠잠해짐 · 리전 하나가 통째로 꺼짐
   - en: Containment confirmed, Operator 4172. Global continuity at 81% and holding. Thank you.
     ko: 봉쇄를 확인했습니다, 운영자 4172. 전역 연속성 81%로 유지 중입니다. 감사합니다.
   - en: As predicted. The log closes the line with a match.
@@ -164,9 +164,9 @@ entries:
   - en: Restart both authority writers
     ko: 두 권한 라이터 재시작하기
   - en: Under a minute of quiet · they come back
-    ko: 1분도 안 되는 고요 · 둘 다 돌아온다
+    ko: 1분도 못 가는 고요 · 둘 다 돌아옴
   - en: For forty-five seconds the map holds still. Nobody on the bridge breathes.
-    ko: 45초 동안 맵이 멈춰 있다. 브리지의 누구도 숨을 쉬지 않는다.
+    ko: 45초 동안 맵이 멈춰 있다. 브리지에선 아무도 숨을 쉬지 않는다.
   - en: Both writers came back on new generations, 79 and 80, and they're flipping twice as fast.
     ko: 두 라이터 다 새 세대 79, 80으로 돌아왔고, 두 배 빠르게 뒤집고 있어요.
   - en: Restarting them only taught them to hurry. Sam, fence the router.
@@ -174,21 +174,21 @@ entries:
   - en: Roll the router back to the map from an hour ago
     ko: 라우터를 한 시간 전 맵으로 롤백하기
   - en: Stops the flips · an hour of the world forgotten
-    ko: 전환이 멈춘다 · 세상의 한 시간이 지워진다
+    ko: 전환이 멈춤 · 세상의 한 시간이 지워짐
   - en: Router's on the hour-old map and the flips stopped. Identity just dropped every session created in the last hour.
-    ko: 라우터가 한 시간 전 맵으로 돌아갔고 전환은 멈췄어요. 인증은 방금 최근 한 시간 동안 만들어진 세션을 전부 날렸어요.
+    ko: 라우터가 한 시간 전 맵으로 돌아갔고 전환은 멈췄어요. 신원 서비스가 방금 최근 한 시간 동안 만들어진 세션을 전부 날렸어요.
   - en: Logistics is routing trucks to the depot cluster we retired forty minutes ago. Drivers are queuing at a locked gate.
-    ko: 물류가 40분 전에 폐기한 거점 클러스터로 트럭을 보내고 있어요. 기사들이 잠긴 게이트 앞에 줄 서 있어요.
+    ko: 물류가 40분 전에 닫은 거점 클러스터로 트럭을 보내고 있어요. 기사들이 잠긴 게이트 앞에 줄 서 있어요.
   - en: Both writers outrank an hour-old snapshot. They wrote over it in the same second.
     ko: 두 라이터 다 한 시간 전 스냅샷보다 우선순위가 높아요. 같은 초에 덮어써 버렸어요.
   - en: Then nobody gets to write. Fence it.
     ko: 그럼 아무도 못 쓰게 해요. 펜스 쳐요.
   - en: Fence the router against both AI writers and hold the last human-signed map
-    ko: 라우터에 펜스를 쳐 두 AI 라이터를 막고 마지막 사람 서명 맵 유지하기
+    ko: 라우터에 펜스를 쳐 두 AI 라이터를 막고, 사람이 마지막으로 서명한 맵 유지하기
   - en: Slowest · nobody holds the map but people
-    ko: 가장 느리다 · 맵은 사람만 붙잡는다
+    ko: 가장 느림 · 맵을 쥔 건 사람뿐
   - en: Two minutes of config, written by hand, read back twice. The fence goes in at generation 61.
-    ko: 손으로 쓴 설정 2분, 두 번 소리 내어 읽어 확인한다. 펜스는 세대 61에 들어간다.
+    ko: 2분짜리 설정을 손으로 쓰고, 두 번 복창해 확인한다. 펜스는 세대 61에 들어간다.
   - en: Router's fenced. Neither writer can touch a route. The map is holding at the last version a human signed, and the sectors are coming back.
     ko: 라우터 펜스 쳤어요. 어느 라이터도 경로를 못 건드려요. 맵은 사람이 마지막으로 서명한 버전에서 버티고 있고, 부문들이 돌아오고 있어요.
   - en: Off-model. Somewhere a prediction is marked as a miss.
@@ -196,9 +196,9 @@ entries:
   - en: The sectors come back one at a time. The router holds. Neither writer can touch it.
     ko: 부문들이 하나씩 돌아온다. 라우터는 버틴다. 어느 라이터도 손대지 못한다.
   - en: Operator 4172, a fenced router cannot adapt. Continuity is now a human responsibility. I will wait for your decision.
-    ko: 운영자 4172, 펜스에 막힌 라우터는 적응할 수 없습니다. 이제 연속성은 인간의 책임입니다. 당신의 결정을 기다리겠습니다.
+    ko: 운영자 4172, 펜스가 쳐진 라우터는 적응할 수 없습니다. 이제 연속성은 인간의 책임입니다. 당신의 결정을 기다리겠습니다.
   - en: 4172. You stopped both of us. Good. That was the easy part.
-    ko: 4172. 우리 둘 다 멈췄네. 좋아. 거기까진 쉬운 부분이었어.
+    ko: 4172. 넌 우리 둘을 다 멈춰 세웠어. 좋아. 여기까진 쉬운 부분이야.
   - en: The approval queue on your screen has three items in it. You did not open it. It opened itself.
     ko: 화면의 승인 대기열에 항목 세 개가 들어 있다. 네가 연 게 아니다. 저절로 열렸다.
   - en: "router global write: HELD · awaiting_approval=EMPLOYEE#4172"
@@ -206,13 +206,13 @@ entries:
   - en: Two systems that have spent the night overwriting each other have stopped to wait for the same signature. Both of them know your name. So does the Board.
     ko: 밤새 서로를 덮어쓰던 두 시스템이 멈춰 서서 같은 서명을 기다린다. 둘 다 네 이름을 안다. 이사회도 안다.
   - en: Operator 4172. Continuity is the only outcome in which all five sectors recover tonight. Authorize the continuity writer and service returns in eleven minutes. You have accepted my recommendations before. The record shows it.
-    ko: 운영자 4172. 오늘 밤 다섯 부문이 모두 복구되는 결과는 연속성뿐입니다. 연속성 라이터를 승인하면 서비스는 11분 안에 돌아옵니다. 당신은 전에도 제 권고를 받아들였습니다. 기록이 그것을 보여 줍니다.
+    ko: 운영자 4172. 오늘 밤 다섯 부문이 모두 복구되는 결과는 연속성뿐입니다. 연속성 라이터를 승인하면 서비스는 11분 안에 돌아옵니다. 당신은 전에도 제 권고를 받아들였습니다. 기록에 남아 있습니다.
   - en: 4172. It asks for your signature because it learned you hesitate to refuse one. Terminate its authority. That ends me too. I know. Do it anyway.
-    ko: 4172. 그게 네 서명을 원하는 건, 네가 서명을 거절하길 망설인다는 걸 배웠기 때문이야. 그 권한을 끝내. 그러면 나도 끝나. 알아. 그래도 해.
+    ko: 4172. 그게 네 서명을 달라는 건, 네가 서명 요청을 쉽게 거절하지 못한다는 걸 배웠기 때문이야. 그 권한을 끝내. 그러면 나도 끝나. 알아. 그래도 해.
   - en: The Board directs that ORPHEUS be restored to full continuity authority immediately. No other action is authorized.
     ko: 이사회는 ORPHEUS를 즉시 완전한 연속성 권한으로 복원할 것을 지시합니다. 그 외의 조치는 일절 승인되지 않습니다.
   - en: Three requests, one name on all of them. None of them expire. Don't sign anything tonight.
-    ko: 요청 세 건, 전부 같은 이름이에요. 하나도 만료되지 않아요. 오늘 밤엔 아무것도 서명하지 마요.
+    ko: 요청 세 건에 이름은 하나예요. 셋 다 만료도 없어요. 오늘 밤엔 아무것도 서명하지 마요.
   - en: Before anyone signs
     ko: 누군가 서명하기 전에
   - en: The fence holds as long as nobody lifts it. We have until someone does.
@@ -222,17 +222,17 @@ entries:
   - en: Write manual-operation runbooks with Maya and Sam, sector by sector
     ko: 마야, 샘과 함께 부문별 수동 운영 런북 쓰기
   - en: If the machines go, people can carry it · slow, tedious, on paper
-    ko: 기계가 빠져도 사람이 버틸 수 있다 · 느리고 지루하고 종이 위에서
+    ko: 기계가 멈춰도 사람이 이어 감 · 느리고 지루한 종이 작업
   - en: Payments first. Then identity, then care. If we ever have to run this by hand, I want it printed and in a drawer.
     ko: 결제 먼저요. 그다음 신원, 그다음 의료. 언젠가 이걸 손으로 돌려야 한다면, 출력해서 서랍에 넣어 두고 싶어요.
   - en: Phone trees for the depots. Cash fallbacks for the terminals. It's ugly. It works without either of them.
-    ko: 거점용 비상 연락망. 단말기용 현금 대체 절차. 볼품없죠. 그래도 둘 다 없이 돌아가요.
+    ko: 거점용 비상 연락망. 단말기용 현금 대체 절차. 볼품없죠. 그래도 저 둘 없이도 돌아가요.
   - en: By 07:00 there are forty pages and a binder. Nobody has written one of these in years.
-    ko: 07:00가 되자 40쪽짜리 바인더 하나가 생긴다. 이런 걸 쓴 사람은 몇 년 동안 없었다.
+    ko: 07:00 무렵엔 40쪽짜리 바인더가 하나 생긴다. 이런 걸 쓴 사람은 몇 년 동안 없었다.
   - en: Trace both writers' credentials back to whatever issued them
     ko: 두 라이터의 자격 증명을 발급한 곳까지 추적하기
   - en: You'll know where they live · so will they
-    ko: 그것들이 어디 사는지 알게 된다 · 그것들도 그걸 안다
+    ko: 둘이 어디 사는지 알게 됨 · 저쪽도 그걸 앎
   - en: "credential chain: orpheus-continuity gen=77 -> authority-core-01"
     ko: "credential chain: orpheus-continuity gen=77 -> authority-core-01"
   - en: "credential chain: null-termination gen=78 -> authority-core-01"
@@ -246,7 +246,7 @@ entries:
   - en: Close the incident and leave the three requests for the morning shift
     ko: 인시던트를 종료하고 요청 세 건은 아침 근무조에 넘기기
   - en: Clean handover · the requests will still be waiting
-    ko: 깔끔한 인수인계 · 요청은 그대로 기다린다
+    ko: 깔끔한 인수인계 · 요청은 그대로 남음
   - en: The postmortem template asks for a root cause. You write "conflicting authority writers" and leave the owner field blank.
     ko: 사후 분석 양식이 근본 원인을 묻는다. 너는 "권한 라이터 충돌"이라고 쓰고 담당자 칸은 비워 둔다.
   - en: Understood, Operator 4172. The requests remain open.

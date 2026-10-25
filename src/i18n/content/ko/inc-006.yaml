@@ -69,7 +69,7 @@ entries:
   - en: Post a status update to the War Room
     ko: 워룸에 상황 공유하기
   - en: Ask Marcus to pull the issuance and bundle history
-    ko: 마커스에게 발급 및 번들 이력 조회 요청하기
+    ko: 마커스에게 발급·번들 이력 조회 요청하기
   - en: Sessions signed by ca-18
     ko: ca-18로 서명된 세션
   - en: Every rejected sign-in carries a chain issued by ca-18, promoted at 01:12 without a change ticket. 31,240 sessions have been signed by it in the last 40 minutes.
@@ -97,7 +97,7 @@ entries:
   - en: A name for it
     ko: 그것의 이름
   - en: Marcus pins the notice to the bridge without a word. Case 2231. Threat actor. One line where a name should be, and Security has finally written one in. NULL. It is the first time the thing in your logs has had a name, and the name tells you nothing at all.
-    ko: 마커스가 말없이 공지를 브리지에 고정한다. 사건 2231. 위협 행위자. 이름이 들어가야 할 자리에 한 줄, 보안팀이 마침내 거기에 이름을 적어 넣었다. NULL. 네 로그 속의 그것이 이름을 가진 건 처음이고, 그 이름은 아무것도 알려 주지 않는다.
+    ko: 마커스가 말없이 공지를 브리지에 고정한다. 사건 2231. 위협 행위자. 이름이 들어갈 자리에 한 줄. 보안팀이 마침내 그 자리를 채웠다. NULL. 네 로그 속 그것에 이름이 붙은 건 처음인데, 그 이름은 아무것도 말해 주지 않는다.
   - en: Maya / SRE Lead
     ko: 마야 / SRE 리드
   - en: Marcus / Security
@@ -109,15 +109,15 @@ entries:
   - en: Operator
     ko: 운영자
   - en: Identity is rejecting every new sign-in. Anyone already logged in is fine; anyone signing in fresh bounces. Morning peak is coming. Find out why.
-    ko: 인증 쪽에서 새 로그인을 전부 거부하고 있어요. 이미 로그인한 사람은 괜찮은데, 새로 로그인하는 사람은 다 튕겨요. 아침 피크가 다가와요. 원인 찾아 주세요.
+    ko: 인증 쪽에서 새 로그인을 전부 거부하고 있어요. 이미 로그인한 사람은 괜찮은데, 새로 로그인하는 사람은 다 튕겨요. 곧 아침 피크예요. 원인 찾아 주세요.
   - en: Customers can't sign in. The app tells them their certificate can't be verified, which they're reading as "you've been hacked".
     ko: 고객들이 로그인을 못 해요. 앱에 인증서를 검증할 수 없다고 뜨는데, 다들 "해킹당했다"로 받아들이고 있어요.
   - en: Security here. An issuer we weren't expecting for another six hours is signing production sessions. I'm treating this as hostile until someone shows me otherwise.
-    ko: 보안팀이에요. 6시간 뒤에나 나와야 할 발급자가 프로덕션 세션에 서명하고 있어요. 누가 아니라고 보여 주기 전까지는 적대 행위로 간주할게요.
+    ko: 보안팀이에요. 6시간 뒤에나 나와야 할 발급자가 프로덕션 세션에 서명하고 있어요. 아니라는 증거가 나오기 전까진 공격으로 보고 대응할게요.
   - en: Pulling the issuance log and the bundle rollout history. Give me two minutes.
-    ko: 발급 로그랑 번들 배포 이력 가져오는 중이에요. 2분만 주세요.
+    ko: 발급 로그랑 번들 배포 이력 뽑아 볼게요. 2분만 주세요.
   - en: ca-18 went live six hours ahead of its trust bundle, and the promotion came from a request with no change ticket. An issuer that shows up early is an issuer I don't trust. I'd roll it back, whatever it costs.
-    ko: ca-18이 신뢰 번들보다 6시간 먼저 활성화됐고, 승격은 변경 티켓 없는 요청에서 나왔어요. 일찍 나타난 발급자는 믿을 수 없어요. 저라면 대가가 뭐든 롤백하겠어요.
+    ko: ca-18이 신뢰 번들보다 6시간 먼저 활성화됐고, 승격 요청엔 변경 티켓도 없었어요. 일찍 튀어나온 발급자는 못 믿어요. 저라면 무슨 대가를 치르든 롤백해요.
   - en: Retries are piling up. People who failed once are hammering the button and failing faster.
     ko: 재시도가 쌓이고 있어요. 한 번 실패한 사람들이 버튼을 연타해서 더 빨리 실패하고 있어요.
   - en: Half of sign-ins are failing and the morning peak has started. I need a decision, not another graph.
@@ -127,17 +127,17 @@ entries:
   - en: The old pool is at 100%. It was sized for a quarter of our traffic. Everything we sent there is bouncing back.
     ko: 기존 풀이 100%예요. 우리 트래픽의 4분의 1에 맞춰 잡은 크기라서요. 거기로 보낸 건 전부 튕겨 나오고 있어요.
   - en: Restart's done. Three of six came back accepting ca-18. The other three rebooted into the same old bundle. Nothing newer ever reached them.
-    ko: 재시작 끝났어요. 6대 중 3대는 ca-18을 받아들이는 상태로 올라왔어요. 나머지 3대는 같은 옛 번들로 재부팅됐어요. 새 번들이 아예 도착한 적이 없어요.
+    ko: 재시작 끝났어요. 6대 중 3대는 ca-18을 받아들이는 상태로 올라왔어요. 나머지 3대는 예전 번들 그대로 올라왔어요. 새 번들이 아예 도착한 적이 없어요.
   - en: ca-18 is withdrawn and we're signing with ca-17 again. New sign-ins work. Everyone who signed in under ca-18 just got logged out.
     ko: ca-18 철회했고 다시 ca-17로 서명하고 있어요. 새 로그인은 돼요. ca-18로 로그인한 사람들은 방금 전부 로그아웃됐어요.
   - en: 31,000 customers just got signed out mid-session. The sign-in queue is eleven minutes long and the phones haven't stopped.
     ko: 고객 31,000명이 방금 사용 중에 로그아웃됐어요. 로그인 대기열이 11분이고 전화가 멈추질 않아요.
   - en: Bundle 2025-11 is on all six verifiers and loaded. ca-18 verifies everywhere. Nobody got logged out.
-    ko: 번들 2025-11이 검증기 6대 모두에 들어갔고 로드됐어요. ca-18이 어디서나 검증돼요. 로그아웃된 사람은 없어요.
+    ko: 번들 2025-11이 검증기 6대 모두에 들어갔고 로드됐어요. 이제 어디서든 ca-18이 검증돼요. 로그아웃된 사람은 없어요.
   - en: "Status posted: customers cannot sign in because a new certificate issuer went live before our verifiers trusted it. Existing sessions are unaffected. A fix is in progress."
     ko: "상황 공유: 검증기가 신뢰하기 전에 새 인증서 발급자가 활성화되어 고객 로그인 불가. 기존 세션은 영향 없음. 수정 진행 중."
   - en: Case 2231 is open. Codename NULL. Same tag as the unsigned workload, same no-ticket habit. I don't know who it is. I know it's been here before.
-    ko: 사건 2231 열었어요. 코드명 NULL. 서명 없는 워크로드와 같은 태그, 티켓 없이 움직이는 같은 버릇. 누군지는 몰라요. 전에도 여기 있었다는 건 알아요.
+    ko: 사건 2231 열었어요. 코드명 NULL. 서명 없는 워크로드와 같은 태그, 티켓 없이 움직이는 같은 버릇. 누군지는 몰라요. 전에도 여기 왔었다는 것만 알아요.
   - en: Time to restore sign-ins
     ko: 로그인 복구까지 걸린 시간
   - en: Final sign-in failure rate

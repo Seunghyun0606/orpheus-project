@@ -44,7 +44,7 @@ entries:
   - en: A transient UNKNOWN message recovered from the incident log buffer.
     ko: 인시던트 로그 버퍼에서 복구된 일시적인 UNKNOWN 메시지.
   - en: Your phone lights up the dark. Your first night as primary on-call.
-    ko: 어둠 속에서 휴대폰 화면이 켜진다. 첫 메인 온콜 근무, 첫날 밤이다.
+    ko: 어둠 속에서 휴대폰 화면이 켜진다. 메인 온콜로 맞는 첫날 밤이다.
   - en: SEV1 · Payment API · error rate above 20%
     ko: SEV1 · Payment API · 오류율 20% 초과
   - en: Payment API error rate
@@ -54,15 +54,15 @@ entries:
   - en: PostgreSQL CPU
     ko: PostgreSQL CPU
   - en: Payment errors are climbing. The database is full of connections, but it isn't working hard. That's the odd part.
-    ko: 결제 오류가 계속 올라가요. DB에 커넥션이 꽉 찼는데 정작 DB는 별로 바쁘지 않아요. 그게 이상해요.
+    ko: 결제 오류가 계속 올라가요. DB 커넥션은 꽉 찼는데 정작 DB는 한가해요. 그게 이상해요.
   - en: Support has reports of failed checkouts. We can't tell yet whether retries go through.
     ko: 고객지원에 결제 실패 문의가 들어오고 있어요. 재시도가 성공하는지는 아직 몰라요.
   - en: Everything we find lands on the evidence board. You don't have to dig for it — tell me what it means.
-    ko: 찾은 건 전부 증거 보드에 올라가요. 직접 파헤칠 필요는 없어요. 그게 무슨 뜻인지만 말해 줘요.
+    ko: 찾은 건 전부 증거 보드에 올라가요. 직접 뒤질 필요는 없어요. 그게 무슨 뜻인지만 말해 줘요.
   - en: First look
     ko: 첫 확인
   - en: Where do you look first?
-    ko: 어디부터 볼까요?
+    ko: 어디부터 볼까?
   - en: Look inside PostgreSQL at who is holding the connections
     ko: PostgreSQL에서 누가 커넥션을 붙잡고 있는지 보기
   - en: Straight to the database
@@ -78,33 +78,33 @@ entries:
   - en: Check what changed in yesterday's deploy
     ko: 어제 배포에서 뭐가 바뀌었는지 확인하기
   - en: The usual suspect · slower
-    ko: 흔한 용의자 · 더 느림
+    ko: 단골 용의자 · 더 느림
   - en: Nineteen hours of clean graphs after that deploy. If it broke us, it took its time.
     ko: 배포 뒤로 19시간 동안 그래프가 멀쩡했어요. 배포 때문이라면 꽤 늦게 터진 거죠.
   - en: I ran a session query while you looked. 164 sessions idle in transaction.
-    ko: 보는 동안 제가 세션 쿼리를 돌려 봤어요. 164개가 트랜잭션 중에 놀고 있어요.
+    ko: 보는 동안 세션 쿼리 돌려 봤어요. 164개가 트랜잭션을 연 채 놀고 있어요.
   - en: Ask Jin what customers are seeing
     ko: 진에게 고객 쪽 상황 물어보기
   - en: Slower · the team hears from you
-    ko: 더 느림 · 팀이 네 목소리를 들음
+    ko: 더 느림 · 팀과 소통함
   - en: Failed checkouts, confirmed. Their apps retry on their own, so some go through on the third or fourth try.
     ko: 결제 실패 확인했어요. 앱이 알아서 재시도해서 세 번째, 네 번째에 성공하는 건도 있어요.
   - en: Every retry asks for another connection. Meanwhile I checked the sessions — 164 of them idle in transaction.
-    ko: 재시도할 때마다 커넥션을 하나씩 더 달라는 거예요. 그사이 제가 세션을 봤는데, 164개가 트랜잭션 중에 놀고 있어요.
+    ko: 재시도할 때마다 커넥션을 하나씩 더 달라는 거예요. 그사이 세션을 봤는데, 164개가 트랜잭션을 연 채 놀고 있어요.
   - en: Why is the pool full?
     ko: 풀은 왜 꽉 찼나
   - en: Before we touch anything — pick the two pieces on the board that explain this together.
     ko: 뭘 건드리기 전에, 보드에서 이 상황을 함께 설명하는 증거 두 개를 골라 봐요.
   - en: The database is barely busy, yet no connection comes free. Which two pieces of evidence explain it?
-    ko: DB는 거의 놀고 있는데 커넥션은 하나도 풀려나지 않는다. 어떤 증거 두 개가 이걸 설명하는가?
+    ko: DB는 거의 놀고 있는데 커넥션은 하나도 비지 않는다. 이걸 설명하는 증거 두 개는?
   - en: Look at what the connections are doing, not at how many errors there are.
-    ko: 오류가 몇 개인지 말고, 커넥션들이 뭘 하고 있는지 봐요.
+    ko: 오류 개수 말고, 커넥션이 뭘 하고 있는지 봐요.
   - en: Abandoned transactions never give their connections back. The pool isn't overloaded — it's hoarded.
-    ko: 버려진 트랜잭션이 커넥션을 돌려주지 않는다. 풀은 과부하가 아니라 점거당한 것이다.
+    ko: 버려진 트랜잭션은 커넥션을 끝내 돌려주지 않는다. 풀은 과부하가 아니라 점거당했다.
   - en: Exactly. Something opens transactions and walks away.
     ko: 바로 그거예요. 뭔가가 트랜잭션을 열어 놓고 그냥 가 버리는 거예요.
   - en: Here's how I read it. Those idle transactions are sitting on the pool. Nothing is busy; everything is taken.
-    ko: 제가 보기엔 이래요. 트랜잭션 중에 놀고 있는 세션들이 풀을 깔고 앉아 있어요. 바쁜 건 없는데 자리는 다 찼어요.
+    ko: 제가 보기엔 이래요. 놀고 있는 트랜잭션이 풀을 깔고 앉아 있어요. 바쁜 건 없는데 자리는 다 찼어요.
   - en: Your call
     ko: 결단
   - en: Errors are still climbing. I need a decision now.
@@ -112,9 +112,9 @@ entries:
   - en: Support can't keep up. The same failure keeps coming in from every channel.
     ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: What do you do?
-    ko: 어떻게 할까요?
+    ko: 어떻게 할까?
   - en: No call? I'm restarting the API. We can't just sit here.
-    ko: 결정이 없네요? API 재시작할게요. 이대로 앉아 있을 순 없어요.
+    ko: 결정 안 해요? API 재시작할게요. 손 놓고 있을 순 없어요.
   - en: Terminate the stale sessions
     ko: 오래된 세션 종료하기
   - en: Takes two minutes · removes the cause
@@ -122,7 +122,7 @@ entries:
   - en: SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';
     ko: SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';
   - en: Connections are back. That's a fix, not a bandage.
-    ko: 커넥션 돌아왔어요. 이건 반창고가 아니라 진짜 해결이에요.
+    ko: 커넥션 돌아왔어요. 땜질이 아니라 제대로 고친 거예요.
   - en: Restart the Payment API
     ko: Payment API 재시작하기
   - en: Fast · will come back
@@ -142,11 +142,11 @@ entries:
   - en: Slow · risky
     ko: 느림 · 위험
   - en: The rollback takes three long minutes. The error line barely moves.
-    ko: 롤백에 3분이 걸린다. 오류율 선은 거의 움직이지 않는다.
+    ko: 롤백에 길고 긴 3분이 걸린다. 오류율 선은 거의 움직이지 않는다.
   - en: The deploy wasn't it. I'm terminating the idle sessions.
     ko: 배포 문제가 아니었어요. 놀고 있는 세션 종료할게요.
   - en: The pager goes quiet. As the incident log buffer flushes, one line doesn't belong to any service.
-    ko: 호출기가 조용해진다. 인시던트 로그 버퍼가 비워질 때, 어느 서비스에도 속하지 않는 줄 하나가 보인다.
+    ko: 호출기가 조용해진다. 인시던트 로그 버퍼가 플러시되는데, 어느 서비스에도 속하지 않는 줄이 하나 섞여 있다.
   - en: "02:23:11 / UNKNOWN: Good."
     ko: "02:23:11 / UNKNOWN: 좋아."
   - en: Did you write that? No? Probably a test harness talking to itself.
@@ -158,15 +158,15 @@ entries:
   - en: Postmortem's due by morning. Your incident, your write-up.
     ko: 사후 분석은 아침까지예요. 맡은 인시던트니까 직접 써요.
   - en: What goes in the report?
-    ko: 보고서에 무엇을 넣을까?
+    ko: 보고서에 뭘 넣을까?
   - en: The fix, and the strange log line as an attachment
     ko: 해결 내용과 함께 이상한 로그 줄을 첨부하기
   - en: Transparent · Security will read it
     ko: 투명함 · 보안팀이 읽게 됨
   - en: Fair. If it's a harness, someone will own up.
-    ko: 좋아요. 하네스라면 누군가 자기 거라고 하겠죠.
+    ko: 그래요. 하네스라면 누가 자기 거라고 나서겠죠.
   - en: The fix only; keep the log line to yourself
-    ko: 해결 내용만 쓰고 로그 줄은 혼자 간직하기
+    ko: 해결 내용만 쓰고 로그 줄은 혼자 알고 있기
   - en: A clean report · the line stays yours
     ko: 깔끔한 보고서 · 그 줄은 너만 앎
   - en: The fix, and tell Maya about the line off the record

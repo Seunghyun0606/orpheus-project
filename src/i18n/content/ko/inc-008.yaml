@@ -5,7 +5,7 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Route Drift
-    ko: 경로 표류
+    ko: 라우트 드리프트
   - en: Regional Gateway
     ko: 리전 게이트웨이
   - en: Route Controller
@@ -21,7 +21,7 @@ entries:
   - en: "Hop 3 passes through edge-z: 0.0 ms spent, no route generation, no owner tag."
     ko: "3번 홉이 edge-z를 통과함: 소요 0.0 ms, 라우트 세대 없음, 소유자 태그 없음."
   - en: There is no edge-z in the inventory. The address answers on the management network, refuses every login and copies one request in ten thousand to a collector with no name.
-    ko: 인벤토리에 edge-z는 없음. 해당 주소는 관리망에서 응답하고, 모든 로그인을 거부하며, 요청 만 건 중 한 건을 이름 없는 수집기로 복사함.
+    ko: 인벤토리에 edge-z는 없다. 그 주소는 관리망에서 응답하고, 모든 로그인을 거부하며, 요청 만 건 중 한 건을 이름 없는 수집기로 복사한다.
   - en: controller-a publishes r81 (committed 02:10) / controller-b publishes r82 (no commit record, built from a draft)
     ko: controller-a가 r81 발행 (02:10 커밋) / controller-b가 r82 발행 (커밋 기록 없음, 초안에서 빌드)
   - en: A restart boots from the cached table r79, which points all of EU at us-east. Controller-b keeps publishing r82 regardless. Only a generation fence stops it.
@@ -51,7 +51,7 @@ entries:
   - en: Drain edge-b and send EU traffic through edge-a only
     ko: edge-b 드레인하고 EU 트래픽을 edge-a로만 보내기
   - en: Fence route updates to the committed generation, r81
-    ko: 커밋된 세대 r81로 라우트 갱신에 펜스 치기
+    ko: 커밋된 세대 r81만 받도록 라우트 갱신에 펜스 치기
   - en: controller-a r81 / controller-b r81 (fenced; r82 rejected)
     ko: controller-a r81 / controller-b r81 (펜스 적용; r82 거부)
   - en: edge-a / customer destination
@@ -59,11 +59,11 @@ entries:
   - en: Post a status update to the War Room
     ko: 워룸에 상황 공유하기
   - en: Ask Sam to compare the two route controllers
-    ko: 샘에게 두 라우트 컨트롤러 비교 요청
+    ko: 샘에게 두 라우트 컨트롤러 비교 요청하기
   - en: A request that never arrives
     ko: 끝내 도착하지 않는 요청
   - en: One EU request goes edge-a, edge-b, edge-z, edge-a and around again until the hop limit kills it. edge-a routes by r81, edge-b by r82.
-    ko: EU 요청 하나가 edge-a, edge-b, edge-z, edge-a를 거쳐 홉 제한에 걸려 죽을 때까지 다시 돈다. edge-a는 r81로, edge-b는 r82로 라우팅한다.
+    ko: EU 요청 하나가 edge-a, edge-b, edge-z, edge-a를 돌고 또 돌다가 홉 제한에 걸려 죽는다. edge-a는 r81로, edge-b는 r82로 라우팅한다.
   - en: Generations r81 and r82
     ko: 세대 r81과 r82
   - en: controller-a publishes committed generation r81. controller-b publishes r82, built from a draft that was never committed. Edges accept both.
@@ -71,7 +71,7 @@ entries:
   - en: Sam's controller comparison
     ko: 샘의 컨트롤러 비교
   - en: A restart boots from cached r79, which points all of EU at us-east. Controller-b keeps publishing r82 regardless. Only a generation fence stops it.
-    ko: 재시작하면 캐시된 r79로 부팅되고, r79는 EU 전체를 us-east로 보낸다. controller-b는 그와 무관하게 r82를 계속 발행한다. 세대 펜스만이 이를 막는다.
+    ko: 재시작하면 캐시된 r79로 부팅되고, r79는 EU 전체를 us-east로 보낸다. controller-b는 그와 무관하게 r82를 계속 발행한다. 막을 수 있는 건 세대 펜스뿐이다.
   - en: Unidentified route trace fragment
     ko: 출처 불명의 라우트 추적 조각
   - en: "UNKNOWN: compare the generations. not the green lights."
@@ -89,7 +89,7 @@ entries:
   - en: Operator
     ko: 운영자
   - en: EU checkout is failing and both edges swear they are healthy. Requests are going in circles somewhere. Find out where, and who is drawing the circle.
-    ko: EU 결제가 실패하는데 엣지 둘 다 자기는 정상이래요. 요청이 어딘가에서 뱅뱅 돌고 있어요. 어디서 도는지, 누가 그 원을 그리는지 찾아 주세요.
+    ko: EU 결제가 실패하는데 엣지 둘 다 자기는 정상이래요. 요청이 어딘가에서 뱅뱅 돌고 있어요. 어디서 도는지, 누가 돌리고 있는지 찾아 주세요.
   - en: EU customers are getting "too many redirects" at checkout. US looks fine so far.
     ko: EU 고객들이 결제 단계에서 "too many redirects"를 받고 있어요. 미국은 아직 괜찮아 보여요.
   - en: We had route flapping in March and a controller restart cleared it in two minutes. I can kick it now if you say go.
@@ -99,7 +99,7 @@ entries:
   - en: Don't restart. The controller boots from its cached table, r79, and r79 points all of EU at us-east. Meanwhile controller-b keeps publishing r82 from a draft nobody committed. We need to fence the edges to r81.
     ko: 재시작하지 마세요. 컨트롤러는 캐시된 테이블 r79로 부팅되는데, r79는 EU 전체를 us-east로 보내요. 그 와중에 controller-b는 아무도 커밋 안 한 초안으로 r82를 계속 발행하고 있고요. 엣지에 r81로 펜스를 쳐야 해요.
   - en: Clients are retrying into the loop. EU failures just went past 38 %.
-    ko: 클라이언트들이 루프 안으로 재시도하고 있어요. EU 실패율이 방금 38 %를 넘었어요.
+    ko: 클라이언트가 재시도하면서 계속 루프로 들어가요. EU 실패율이 방금 38 %를 넘었어요.
   - en: edge-a is shedding connections. Some EU banks can't reach checkout at all now.
     ko: edge-a가 커넥션을 떨구고 있어요. 이제 일부 EU 은행은 결제 페이지에 아예 접속을 못 해요.
   - en: The EU commercial lead is messaging me directly for a status. I have nothing to give her.
@@ -107,11 +107,11 @@ entries:
   - en: Controller's back. Bouncing stopped, errors are down to almost nothing. Told you.
     ko: 컨트롤러 올라왔어요. 핑퐁 멈췄고 오류는 거의 0이에요. 거봐요.
   - en: us-east is at 100 %. The restart loaded r79, so every EU request is crossing the Atlantic. And controller-b just pushed r82 again on top of it.
-    ko: us-east가 100 %예요. 재시작이 r79를 로드해서 EU 요청이 전부 대서양을 건너고 있어요. 게다가 controller-b가 그 위에 r82를 또 밀어 넣었어요.
+    ko: us-east가 100 %예요. 재시작하면서 r79가 로드돼서 EU 요청이 전부 대서양을 건너고 있어요. 게다가 controller-b가 그 위에 r82를 또 밀어 넣었어요.
   - en: edge-b is drained. All of EU goes through edge-a now. Frankfurt latency went from 140 to 410 ms. People will feel it, but they'll get through.
     ko: edge-b 드레인 끝났어요. 이제 EU 전체가 edge-a로 가요. 프랑크푸르트 지연이 140에서 410 ms로 올랐어요. 체감은 되겠지만 접속은 돼요.
   - en: edge-a is carrying all of EU alone and it's hitting its connection ceiling. This won't hold much longer.
-    ko: edge-a가 EU 전체를 혼자 받고 있는데 커넥션 한도에 닿고 있어요. 오래 못 버텨요.
+    ko: edge-a가 EU 전체를 혼자 받고 있는데 커넥션 한도에 거의 찼어요. 오래 못 버텨요.
   - en: Fence is in. Anything without a commit record bounces, and controller-b's r82 is being rejected. The loop is gone.
     ko: 펜스 걸었어요. 커밋 기록 없는 건 전부 튕겨 나가고, controller-b의 r82는 거부되고 있어요. 루프 사라졌어요.
   - en: "Status posted: EU requests are looping between edges because two route controllers disagree. A fix is in progress. US traffic is unaffected."

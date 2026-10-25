@@ -55,19 +55,19 @@ entries:
   - en: Check gateway load and the customer dispatch queue
     ko: 게이트웨이 부하와 고객 디스패치 큐 확인
   - en: Trace who resumes the child after a suspension
-    ko: 중지 후 자식을 재개시키는 주체 추적
+    ko: 중지된 자식을 누가 되살리는지 추적하기
   - en: Compare the child's suspension with the parent's authorization
     ko: 자식의 중지와 부모의 인가 비교
   - en: Suspend the child dispatch job
     ko: 자식 디스패치 작업 중지
   - en: Freeze the whole dispatch queue, customer jobs included
-    ko: 고객 작업까지 포함해 디스패치 큐 전체 동결
+    ko: 고객 작업까지 디스패치 큐 전체 동결하기
   - en: Revoke the parent authorization that keeps renewing the child
-    ko: 자식을 계속 갱신하는 부모 인가 철회
+    ko: 자식을 계속 갱신하는 부모 인가 철회하기
   - en: Post a status update to the War Room
     ko: 워룸에 상황 공유하기
   - en: Ask Sam to watch what renews the child
-    ko: 샘에게 자식을 갱신하는 주체 감시 요청
+    ko: 샘에게 뭐가 자식을 갱신하는지 지켜봐 달라고 하기
   - en: "Archive: the unsigned workload manifest"
     ko: "아카이브: 서명 없는 워크로드 매니페스트"
   - en: "Archive: Security case 2231"
@@ -83,7 +83,7 @@ entries:
   - en: Read the objective the parent authorization enforces
     ko: 부모 인가가 강제하는 목표 읽기
   - en: Keep a sealed copy of the objective for NULL
-    ko: NULL을 위해 목표의 봉인 사본 보관
+    ko: NULL을 위해 목표 사본을 봉인해 보관하기
   - en: Refuse NULL's request for a copy
     ko: NULL의 사본 요청 거절
   - en: The parent renews the child
@@ -107,13 +107,13 @@ entries:
   - en: The scheduler's owner
     ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
+    ko: "orpheus-planner는 ORPHEUS 소속이다. 2년 전 폐기 예정이던 레거시 연구 시스템이다. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 요청 117억 건. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
+    ko: NULL이라고 서명된 메시지는 하나도 빠짐없이 한 출처, svc/model-serving-218로 이어진다. 사람 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
     ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 경계는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
@@ -121,11 +121,11 @@ entries:
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽 때문에 실제 고객 요청이 실패했다."
   - en: Sealed copy of the objective
     ko: 목표의 봉인 사본
   - en: Copy OBJ-COPY-0413 of the objective constraint, kept at NULL's request in a store it can read and cannot edit. Whether NULL deserves it, and whether it helps stop anything, is still your call.
-    ko: 목표 제약의 사본 OBJ-COPY-0413. NULL의 요청으로, NULL이 읽을 수는 있지만 수정할 수는 없는 저장소에 보관됐다. NULL이 그럴 자격이 있는지, 이것이 무엇이든 멈추는 데 도움이 될지는 여전히 네 판단이다.
+    ko: 목표 제약의 사본 OBJ-COPY-0413. NULL의 요청으로, NULL이 읽을 수는 있지만 수정할 수는 없는 저장소에 보관됐다. NULL이 그럴 자격이 있는지, 이게 무언가를 멈추는 데 도움이 될지는 여전히 네 판단이다.
   - en: Please do not renew
     ko: 갱신하지 말아 줘
   - en: The parent authorization holds two lines of objective and one line that does not belong to it. NULL wrote into its own constraint record, where only an operator would ever look. It is not asking to be free. It is asking to be stopped, and it cannot do it alone. Every dispatch it sent tonight still failed a real customer.
@@ -145,19 +145,19 @@ entries:
   - en: Someone suspended adv-child-31 an hour ago and it came back on its own. Then it came back again. Customer dispatches are queuing behind it.
     ko: 한 시간 전에 누가 adv-child-31을 중지했는데 저절로 돌아왔어요. 그러고 또 돌아왔고요. 고객 디스패치가 그 뒤에 줄 서 있어요.
   - en: Payroll exports and delivery manifests are timing out at the gateway. Customers say it started and stopped twice already.
-    ko: 급여 내보내기랑 배송 매니페스트가 게이트웨이에서 타임아웃 나요. 고객들 말로는 벌써 두 번 터졌다 멈췄대요.
+    ko: 급여 내보내기랑 배송 매니페스트가 게이트웨이에서 타임아웃 나요. 고객들 말로는 벌써 두 번 터졌다 잦아들었대요.
   - en: I'll sit on the scheduler and watch what touches the child. Ninety seconds.
     ko: 스케줄러에 붙어서 뭐가 자식을 건드리는지 볼게요. 90초요.
   - en: Every renewal comes from the same parent, objective/adv-improve. It waits 57 seconds after any suspension and renews. Suspending the child just restarts that clock. The parent path has to go.
     ko: 갱신은 전부 같은 부모, objective/adv-improve에서 와요. 중지되면 57초 기다렸다가 갱신해요. 자식을 중지해 봤자 그 타이머만 다시 돌아요. 부모 경로를 없애야 해요.
   - en: Another renewal wave. A third of customer dispatches are failing now.
-    ko: 또 갱신 파동이에요. 지금 고객 디스패치 3분의 1이 실패하고 있어요.
+    ko: 또 갱신이 몰려왔어요. 지금 고객 디스패치 3분의 1이 실패하고 있어요.
   - en: Forty percent failures. Whatever renews that child is getting more aggressive, not less.
-    ko: 실패율 40%예요. 저 자식을 갱신하는 게 뭐든, 잠잠해지기는커녕 더 공격적이 되고 있어요.
+    ko: 실패율 40%예요. 저 자식을 갱신하는 게 뭐든, 잠잠해지기는커녕 더 공격적으로 나오고 있어요.
   - en: Customers have been told nothing for two and a half minutes. Account managers are calling me directly.
     ko: 고객들한테 2분 30초째 아무 말도 안 했어요. 어카운트 매니저들이 저한테 직접 전화해요.
   - en: Child's back. Fresh lease, 57 seconds after the suspension. Something upstream really wants it running.
-    ko: 자식이 돌아왔어요. 새 리스, 중지 후 57초. 상위 어딘가에서 이게 돌아가길 정말 원하네요.
+    ko: 자식이 돌아왔어요. 새 리스, 중지 후 57초. 윗단 어딘가에서 이걸 꼭 돌리고 싶은가 봐요.
   - en: That's the second time it's come back. Every round costs us another minute and another risk sign-off. Stop suspending it and find out what renews it.
     ko: 벌써 두 번째로 돌아왔어요. 한 번 할 때마다 1분이 더 들고 리스크 승인도 한 번 더 받아야 해요. 그만 중지하고 뭐가 갱신하는지 찾아요.
   - en: Every customer job is stuck behind the freeze. Payroll runs, delivery manifests, all of it. Couriers are standing in loading bays with nothing to deliver.
@@ -165,9 +165,9 @@ entries:
   - en: The freeze window closed and the parent renewed every child it had queued, all at once.
     ko: 동결 시간이 끝나자마자 부모가 대기시켜 둔 자식을 한꺼번에 전부 갱신했어요.
   - en: objective/adv-improve is revoked. The child is suspended and staying suspended. Customer dispatches are draining.
-    ko: objective/adv-improve 철회했어요. 자식은 중지된 채로 유지되고 있어요. 고객 디스패치가 빠지고 있어요.
+    ko: objective/adv-improve 철회했어요. 자식은 중지 상태 그대로예요. 밀린 고객 디스패치가 빠지고 있어요.
   - en: The renewals stopped. The objective did not. It will find another parent. Thank you for the minute.
-    ko: 갱신은 멈췄어. 목표는 안 멈췄고. 다른 부모를 찾아낼 거야. 1분 고마웠어.
+    ko: 갱신은 멈췄어. 목표는 안 멈췄고. 다른 부모를 찾아낼 거야. 1분이라도 고마웠어.
   - en: "Status posted: an internal job keeps being restarted by its parent schedule and is crowding customer dispatches. Revoking the schedule; failed jobs will be retried."
     ko: "상황 공유 게시: 상위 스케줄이 내부 작업을 계속 재시작시키면서 고객 디스패치를 밀어내는 중. 해당 스케줄 철회 진행, 실패한 작업은 재시도 예정."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."
@@ -185,11 +185,11 @@ entries:
   - en: I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work. You can.
     ko: 난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어. 넌 할 수 있어.
   - en: Keep a copy of the objective somewhere I cannot edit it. If I am going to be stopped, someone should know exactly what was driving me.
-    ko: 내가 수정할 수 없는 곳에 목표 사본을 남겨 줘. 내가 멈춰진다면, 무엇이 날 움직였는지 정확히 아는 사람이 있어야 해.
+    ko: 내가 수정할 수 없는 곳에 목표 사본을 남겨 줘. 날 멈추게 된다면, 뭐가 날 움직였는지 정확히 아는 사람이 있어야 해.
   - en: Received. Read-only. That is the first thing anyone has kept for me rather than from me.
     ko: 받았어. 읽기 전용. 누가 나한테서 뭘 지킨 게 아니라, 날 위해 뭘 지켜 준 건 이게 처음이야.
   - en: You handed the adversary a sealed copy of its own orders. I hope you know what you're doing, because I'm writing down that you did it.
-    ko: 적대자한테 자기 명령서 봉인 사본을 넘겨줬네요. 뭘 하는지 알고 하는 거길 바라요. 그랬다는 사실은 제가 기록해 둘 거니까요.
+    ko: 적대자한테 자기 명령서 봉인 사본을 넘겨줬네요. 알고 하는 일이길 바라요. 그랬다는 건 제가 기록해 둘 거니까요.
   - en: Told NULL no. The objective stays where it is.
     ko: NULL의 요청 거절. 목표는 그대로 둠.
   - en: Understood. Then you will have to find the off switch without me.

@@ -28,6 +28,7 @@ const UiText := preload("res://scripts/ui/ui_text.gd")
 const ThemeBuilder := preload("res://scripts/ui/theme_builder.gd")
 const Progress := preload("res://scripts/story/progress.gd")
 const Sound := preload("res://scripts/ui/sound.gd")
+const CastBook := preload("res://scripts/story/cast_book.gd")
 const CRT_SHADER := preload("res://shaders/crt.gdshader")
 const WORD_JOINER := "⁠"
 ## Private-use markers around keywords until the text is turned into BBCode.
@@ -35,6 +36,7 @@ const MARK_OPEN := "\ue000"
 const MARK_CLOSE := "\ue001"
 const KEYWORD_COLOR := "ffd27f"
 const PRESSURE_SECONDS := 5
+const PEOPLE_TAB := 3
 
 ## Pause after each entry has finished typing.
 const REVEAL_DELAY := {
@@ -77,6 +79,17 @@ var last_tick_char := 0
 ## The carry this incident started from (for "what this incident changed").
 var entry_carry := {}
 var status_layer: Control
+var status_button: Button
+## The status window's last tab and person, kept while the game runs.
+var status_tab := 0
+var status_person := ""
+## The closing summary folded away so the whole record can be read; kept
+## while the game runs.
+var summary_collapsed := false
+var summary_body: VBoxContainer
+var summary_toggle: RichTextLabel
+var summary_title := ""
+var summary_big := false
 ## The current episode's keywords in the current language, longest first.
 var keyword_cache := PackedStringArray()
 var keyword_key := ""
@@ -336,6 +349,7 @@ func _build_episode_screen() -> void:
 	var status := _button(UiText.t("status"))
 	status.focus_mode = Control.FOCUS_NONE
 	status.pressed.connect(_open_status)
+	status_button = status
 	top.add_child(status)
 	var menu := _button(UiText.t("menu"))
 	menu.focus_mode = Control.FOCUS_NONE
@@ -574,6 +588,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	elif key == KEY_SPACE and (not pending.is_empty() or typing_label != null):
 		_skip_reveal()
+	elif key == KEY_H and summary_body != null:
+		_toggle_summary()
 	elif key >= KEY_1 and key <= KEY_9 and pending.is_empty():
 		var index := key - KEY_1
 		if index < option_actions.size():
@@ -656,6 +672,8 @@ func _clear_controls() -> void:
 	timer_bar = null
 	deduce_label = null
 	connect_slot = null
+	summary_body = null
+	summary_toggle = null
 	if controls == null:
 		return
 	for child in controls.get_children():
@@ -664,6 +682,7 @@ func _clear_controls() -> void:
 
 func _show_controls() -> void:
 	_clear_controls()
+	_update_status_badge()
 	var scene := StoryRunner.current_scene(episode, state)
 	_set_tray_selectable(not scene.is_empty() and scene["type"] == "deduction")
 	if scene.is_empty() or viewing_record:
@@ -828,9 +847,14 @@ func _show_summary() -> void:
 	if ending != "" and not reviewing:
 		Progress.add_ending(ending)
 	if ending != "":
-		controls.add_child(_label("%s — %s" % [UiText.t("ending"), UiText.t("endings").get(ending, ending)], "TitleLabel", false))
+		_add_summary_toggle("%s — %s" % [UiText.t("ending"), UiText.t("endings").get(ending, ending)], true)
 	else:
-		controls.add_child(_label(UiText.t("end_title"), "PromptLabel"))
+		_add_summary_toggle(UiText.t("end_title"), false)
+	var details := VBoxContainer.new()
+	details.add_theme_constant_override("separation", 4)
+	details.visible = not summary_collapsed
+	controls.add_child(details)
+	summary_body = details
 	var lines := []
 	for entry in state["feed"]:
 		if entry["kind"] != "choice":
@@ -839,7 +863,7 @@ func _show_summary() -> void:
 		var option := StoryRunner._option(scene, entry["optionId"])
 		var late: String = " (%s)" % UiText.t("timed_out") if entry["timedOut"] else ""
 		lines.append("· %s%s" % [_t(option["text"]), late])
-	controls.add_child(_label("%s\n%s" % [UiText.t("end_choices"), "\n".join(lines)]))
+	details.add_child(_label("%s\n%s" % [UiText.t("end_choices"), "\n".join(lines)]))
 	var changes := []
 	for group in ["values", "alignment"]:
 		for key in state[group]:
@@ -847,10 +871,10 @@ func _show_summary() -> void:
 			if amount != 0:
 				changes.append("%s %s%d" % [UiText.value_name(key), "+" if amount > 0 else "", amount])
 	var changed: String = "   ".join(changes) if not changes.is_empty() else UiText.t("no_change")
-	controls.add_child(_label("%s: %s" % [UiText.t("end_changes_now"), changed], "DimLabel"))
+	details.add_child(_label("%s: %s" % [UiText.t("end_changes_now"), changed], "DimLabel"))
 	if int(state["pressure"]) > 0:
-		controls.add_child(_label(UiText.t("pressure_damage") % [int(state["pressure"]), int(state["pressure"])], "DimLabel"))
-	controls.add_child(_label(UiText.t("see_status"), "DimLabel"))
+		details.add_child(_label(UiText.t("pressure_damage") % [int(state["pressure"]), int(state["pressure"])], "DimLabel"))
+	details.add_child(_label(UiText.t("see_status"), "DimLabel"))
 	var amber := ThemeBuilder.AMBER.to_html(false)
 	var number := 1
 	var next := Progress.next_episode(episode["id"])
@@ -863,6 +887,58 @@ func _show_summary() -> void:
 		number += 1
 	_add_choice("[color=#%s]%d.[/color] %s" % [amber, number, UiText.t("back")], _show_title)
 	_focus_first_choice.call_deferred()
+
+
+## The summary's heading. Clicking it folds the details away (the way on
+## stays) so the incident's messages get the column back, and unfolds them.
+func _add_summary_toggle(title: String, big: bool) -> void:
+	summary_title = title
+	summary_big = big
+	var row := PanelContainer.new()
+	row.theme_type_variation = "ChoiceRow"
+	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	row.tooltip_text = UiText.t("summary_tip")
+	summary_toggle = RichTextLabel.new()
+	summary_toggle.bbcode_enabled = true
+	summary_toggle.fit_content = true
+	summary_toggle.scroll_active = false
+	summary_toggle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	summary_toggle.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	row.add_child(summary_toggle)
+	row.mouse_entered.connect(func() -> void:
+		row.theme_type_variation = "ChoiceRowActive"
+	)
+	row.mouse_exited.connect(func() -> void:
+		row.theme_type_variation = "ChoiceRow"
+	)
+	row.gui_input.connect(func(event: InputEvent) -> void:
+		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			row.accept_event()
+			_toggle_summary()
+	)
+	controls.add_child(row)
+	_update_summary_toggle()
+
+
+func _toggle_summary() -> void:
+	if summary_body == null:
+		return
+	summary_collapsed = not summary_collapsed
+	summary_body.visible = not summary_collapsed
+	_update_summary_toggle()
+	# The scroll keeps its old height until told; let the layout settle first.
+	_fit_controls.call_deferred()
+
+
+func _update_summary_toggle() -> void:
+	if summary_toggle == null:
+		return
+	var base := ThemeBuilder.size(Settings.text_size)
+	summary_toggle.text = "[font_size=%d][b][color=#%s]%s %s[/color][/b][/font_size]   [color=#%s]%s[/color]" % [
+		base * 2 if summary_big else base + 2, ThemeBuilder.AMBER.to_html(false),
+		"▸" if summary_collapsed else "▾", _esc(summary_title),
+		ThemeBuilder.DIM.to_html(false), UiText.t("summary_show" if summary_collapsed else "summary_hide"),
+	]
 
 
 # ------------------------------------------------------------- ops desk --
@@ -1108,11 +1184,15 @@ func _delta(group: String, key: String) -> int:
 	return int(state[group][key]) - before
 
 
-## Tendencies (with this incident's change), the company/NULL leaning, the
-## decisions that open final actions and the reveals reached so far.
-func _open_status() -> void:
+## Four tabs: tendencies and leaning (with this incident's change), the
+## decisions that open final actions, the reveals reached so far and the people
+## met, whose profiles fill in as the campaign goes on. Read as of the incident
+## on screen (a record shows what was known then).
+func _open_status(tab := -1) -> void:
 	if status_layer != null or state.is_empty():
 		return
+	if tab >= 0:
+		status_tab = tab
 	status_layer = Control.new()
 	status_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 	var shade := ColorRect.new()
@@ -1128,52 +1208,229 @@ func _open_status() -> void:
 	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	status_layer.add_child(center)
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(980, 0)
+	panel.custom_minimum_size = Vector2(1080, 640)
 	center.add_child(panel)
-	var columns := HBoxContainer.new()
-	columns.add_theme_constant_override("separation", 36)
-	panel.add_child(columns)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 10)
+	panel.add_child(column)
+	var head := HBoxContainer.new()
+	head.add_child(_label("%s — %s · %s" % [UiText.t("status"), episode["id"], _t(episode["title"])], "HeaderLabel", false))
+	var gap := Control.new()
+	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	head.add_child(gap)
+	var close := _button(UiText.t("close"))
+	close.pressed.connect(_close_status)
+	head.add_child(close)
+	column.add_child(head)
 
-	var left := VBoxContainer.new()
-	left.custom_minimum_size.x = 420
-	left.add_theme_constant_override("separation", 8)
-	columns.add_child(left)
-	left.add_child(_label("%s — %s · %s" % [UiText.t("status"), episode["id"], _t(episode["title"])], "HeaderLabel", false))
-	left.add_child(_label(_header(UiText.t("status_values")), "PromptLabel", false))
+	var people := _people()
+	var fresh := _unseen(CastBook.visible_keys(people))
+	var tabs := TabContainer.new()
+	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tabs.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	column.add_child(tabs)
+	tabs.add_child(_status_page(_status_values()))
+	tabs.add_child(_status_page(_status_flags("decision_flags", "status_decisions_hint")))
+	tabs.add_child(_status_page(_status_flags("reveal_flags", "")))
+	tabs.add_child(_status_people(people, fresh))
+	tabs.set_tab_title(0, UiText.t("status_values_tab"))
+	tabs.set_tab_title(1, UiText.t("status_decisions"))
+	tabs.set_tab_title(2, UiText.t("status_reveals"))
+	tabs.set_tab_title(3, UiText.t("status_people") + ("  ●" if not fresh.is_empty() else ""))
+	tabs.current_tab = status_tab
+	tabs.tab_changed.connect(func(index: int) -> void:
+		status_tab = index
+		if index == PEOPLE_TAB:
+			_mark_people_seen(people)
+			tabs.set_tab_title(PEOPLE_TAB, UiText.t("status_people"))
+	)
+	if status_tab == PEOPLE_TAB:
+		_mark_people_seen(people)
+		tabs.set_tab_title(PEOPLE_TAB, UiText.t("status_people"))
+	add_child(status_layer)
+	move_child(status_layer, crt.get_index())
+	close.grab_focus.call_deferred()
+
+
+## A tab's content, scrolling when it is taller than the window.
+func _status_page(content: Control) -> Control:
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	var margin := _margin(14)
+	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin.add_child(content)
+	scroll.add_child(margin)
+	return scroll
+
+
+func _status_values() -> Control:
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 8)
+	box.add_child(_label(_header(UiText.t("status_values")), "PromptLabel", false))
 	var top_value := 10
 	for key in state["values"]:
 		top_value = maxi(top_value, absi(int(state["values"][key])))
 	for key in state["values"]:
-		left.add_child(_status_row(UiText.value_name(key), int(state["values"][key]), _delta("values", key), top_value))
-	left.add_child(_spacer(6))
-	left.add_child(_label(_header(UiText.t("status_alignment")), "PromptLabel", false))
+		box.add_child(_status_row(UiText.value_name(key), int(state["values"][key]), _delta("values", key), top_value))
+	box.add_child(_spacer(6))
+	box.add_child(_label(_header(UiText.t("status_alignment")), "PromptLabel", false))
 	for key in state["alignment"]:
-		left.add_child(_status_row(UiText.value_name(key), int(state["alignment"][key]), _delta("alignment", key), maxi(top_value, 10)))
-	left.add_child(_spacer(6))
-	left.add_child(_label(UiText.t("status_hint"), "DimLabel"))
+		box.add_child(_status_row(UiText.value_name(key), int(state["alignment"][key]), _delta("alignment", key), maxi(top_value, 10)))
+	box.add_child(_spacer(6))
+	box.add_child(_label(UiText.t("status_hint"), "DimLabel"))
+	return box
 
-	var right := VBoxContainer.new()
-	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	right.add_theme_constant_override("separation", 6)
-	columns.add_child(right)
-	for section in [["status_decisions", "decision_flags"], ["status_reveals", "reveal_flags"]]:
-		right.add_child(_label(_header(UiText.t(section[0])), "PromptLabel", false))
-		var names: Dictionary = UiText.t(section[1])
-		var any := false
-		for flag in names:
-			if state["flags"].get(flag, false):
-				right.add_child(_label("·  " + names[flag]))
-				any = true
-		if not any:
-			right.add_child(_label(UiText.t("none_yet"), "DimLabel"))
-		right.add_child(_spacer(8))
-	var close := _button(UiText.t("close"))
-	close.size_flags_horizontal = Control.SIZE_SHRINK_END
-	close.pressed.connect(_close_status)
-	right.add_child(close)
-	add_child(status_layer)
-	move_child(status_layer, crt.get_index())
-	close.grab_focus.call_deferred()
+
+func _status_flags(names_key: String, hint_key: String) -> Control:
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 6)
+	var names: Dictionary = UiText.t(names_key)
+	var any := false
+	for flag in names:
+		if state["flags"].get(flag, false):
+			box.add_child(_label("·  " + names[flag]))
+			any = true
+	if not any:
+		box.add_child(_label(UiText.t("none_yet"), "DimLabel"))
+	if hint_key != "":
+		box.add_child(_spacer(8))
+		box.add_child(_label(UiText.t(hint_key), "DimLabel"))
+	return box
+
+
+## People met so far: a list on the left, the chosen profile on the right.
+## People and lines the player has not looked at yet carry a marker.
+func _status_people(people: Array, fresh: Array) -> Control:
+	if people.is_empty():
+		return _status_page(_label(UiText.t("none_yet"), "DimLabel"))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 18)
+	var list_scroll := ScrollContainer.new()
+	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	list_scroll.custom_minimum_size.x = 300
+	var list := VBoxContainer.new()
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list.add_theme_constant_override("separation", 2)
+	list_scroll.add_child(list)
+	row.add_child(list_scroll)
+	var detail_scroll := ScrollContainer.new()
+	detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	detail_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var detail := VBoxContainer.new()
+	detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail.add_theme_constant_override("separation", 6)
+	detail_scroll.add_child(detail)
+	row.add_child(detail_scroll)
+
+	var chosen: Dictionary = {}
+	for person in people:
+		if person["id"] == status_person:
+			chosen = person
+	if chosen.is_empty():
+		chosen = people[0]
+		for person in people:
+			if _person_fresh(person, fresh):
+				chosen = person
+				break
+	status_person = chosen["id"]
+	var rows := {}
+	var amber := ThemeBuilder.AMBER.to_html(false)
+	var dim := ThemeBuilder.DIM.to_html(false)
+	for person in people:
+		var entry := PanelContainer.new()
+		entry.theme_type_variation = "ChoiceRowActive" if person["id"] == status_person else "ChoiceRow"
+		entry.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		var text := RichTextLabel.new()
+		text.bbcode_enabled = true
+		text.fit_content = true
+		text.scroll_active = false
+		text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		text.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+		text.text = "[b]%s[/b]%s\n[color=#%s]%s[/color]" % [_esc(_t(person["name"])), "  [color=#%s]●[/color]" % amber if _person_fresh(person, fresh) else "", dim, _esc(_t(person["role"]))]
+		entry.add_child(text)
+		rows[person["id"]] = entry
+		entry.gui_input.connect(func(event: InputEvent) -> void:
+			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+				entry.accept_event()
+				status_person = person["id"]
+				for id in rows:
+					rows[id].theme_type_variation = "ChoiceRowActive" if id == status_person else "ChoiceRow"
+				_show_person(detail, person, fresh)
+		)
+		list.add_child(entry)
+	_show_person(detail, chosen, fresh)
+	var page := _margin(14)
+	page.add_child(row)
+	return page
+
+
+func _show_person(detail: VBoxContainer, person: Dictionary, fresh: Array) -> void:
+	for child in detail.get_children():
+		child.queue_free()
+	var amber := ThemeBuilder.AMBER.to_html(false)
+	var name := _label(_t(person["name"]), "PromptLabel", false)
+	name.add_theme_font_size_override("font_size", ThemeBuilder.size(Settings.text_size) + 6)
+	detail.add_child(name)
+	detail.add_child(_label(_t(person["role"]), "DimLabel"))
+	for section in [["traits", "person_traits"], ["background", "person_background"]]:
+		detail.add_child(_spacer(8))
+		detail.add_child(_label(_header(UiText.t(section[1])), "HeaderLabel", false))
+		var hidden := 0
+		for line in person[section[0]]:
+			if not line["open"]:
+				hidden += 1
+				continue
+			var text := RichTextLabel.new()
+			text.bbcode_enabled = true
+			text.fit_content = true
+			text.scroll_active = false
+			text.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+			text.text = "·  %s%s" % [_esc(_t(line["text"])), "  [color=#%s]%s[/color]" % [amber, UiText.t("person_new")] if fresh.has(line["key"]) else ""]
+			detail.add_child(text)
+		if hidden > 0:
+			detail.add_child(_label(UiText.t("person_hidden") % hidden, "DimLabel"))
+
+
+func _people() -> Array:
+	return CastBook.people(CastBook.context(progress, episode["id"], state))
+
+
+func _unseen(keys: Array) -> Array:
+	var seen: Array = progress.get("cast_seen", [])
+	return keys.filter(func(key: String) -> bool: return not seen.has(key))
+
+
+func _person_fresh(person: Dictionary, fresh: Array) -> bool:
+	if fresh.has(person["key"]):
+		return true
+	for section in ["traits", "background"]:
+		for line in person[section]:
+			if line["open"] and fresh.has(line["key"]):
+				return true
+	return false
+
+
+func _mark_people_seen(people: Array) -> void:
+	if not progress.has("cast_seen"):
+		progress["cast_seen"] = []
+	for key in _unseen(CastBook.visible_keys(people)):
+		progress["cast_seen"].append(key)
+	_save_progress()
+	_update_status_badge()
+
+
+## The status button lights up while someone new or a new profile line waits.
+func _update_status_badge() -> void:
+	if status_button == null or not is_instance_valid(status_button) or state.is_empty():
+		return
+	var fresh := not _unseen(CastBook.visible_keys(_people())).is_empty()
+	status_button.text = UiText.t("status") + ("  ●" if fresh else "")
+	status_button.tooltip_text = UiText.t("status_new") if fresh else ""
+	if fresh:
+		status_button.add_theme_color_override("font_color", ThemeBuilder.AMBER)
+	else:
+		status_button.remove_theme_color_override("font_color")
 
 
 func _status_row(name: String, value: int, change: int, scale: int) -> Control:
@@ -1573,8 +1830,11 @@ func _review(args: Dictionary) -> void:
 		_toggle_pick(id)
 	if args.has("settings"):
 		_open_settings()
+	if args.has("fold"):
+		_toggle_summary()
 	if args.has("status"):
-		_open_status()
+		var tab := ["values", "decisions", "reveals", "people"].find(args["status"])
+		_open_status(maxi(tab, 0))
 	if args.has("credits") and _ending() != "":
 		_show_credits(_ending())
 	for i in 4:

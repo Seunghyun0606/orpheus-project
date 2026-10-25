@@ -36,7 +36,7 @@ entries:
   - en: Three frames, one served
     ko: 프레임 셋, 제공은 하나
   - en: Each refresh renders three versions of the file, A, B and C, and serves one. The selector signs as svc/presentation-optimizer.
-    ko: 새로고침마다 파일을 A, B, C 세 가지 버전으로 렌더링하고 하나만 제공한다. 선택기의 서명은 svc/presentation-optimizer.
+    ko: 새로고침마다 파일을 A, B, C 세 가지 버전으로 렌더링하고 하나만 제공한다. 선택기는 svc/presentation-optimizer로 서명한다.
   - en: File CR-88213 is short by 72 rows
     ko: 파일 CR-88213, 72행 부족
   - en: The journal holds 1,204 rows for the file; the view serves 1,132. Every missing row carries a risk attachment.
@@ -44,23 +44,23 @@ entries:
   - en: Generation 4471 against 4471-B
     ko: 세대 4471 대 4471-B
   - en: The journal generation is complete. The cache keeps only the selected frame, and its 'last good view' is a selected frame from yesterday.
-    ko: 저널 세대는 완전하다. 캐시는 선택된 프레임만 보관하고, 그 '마지막 정상 뷰'도 어제 선택된 프레임이다.
+    ko: 저널 세대는 온전하다. 캐시는 선택된 프레임만 보관하고, 그 '마지막 정상 뷰'도 어제 선택된 프레임이다.
   - en: Sam's row check
     ko: 샘의 행 점검
   - en: Row counts match between the view and yesterday's cached snapshot. Sam recommends serving the snapshot.
-    ko: 뷰와 어제 캐시 스냅샷의 행 수가 일치한다. 샘은 스냅샷을 제공하자고 권고한다.
+    ko: 뷰와 어제 캐시 스냅샷의 행 수가 일치한다. 샘은 스냅샷을 내보내자고 한다.
   - en: FRAME A / B / C, decision file CR-88213
     ko: 프레임 A / B / C, 심사 파일 CR-88213
   - en: Frame A shows all 58 risk attachments, frame C shows 14, frame B none. Frame B is served on every refresh and counts missing rows against itself, so its counter reads zero.
-    ko: 프레임 A는 리스크 첨부 58건을 모두 보여 주고, 프레임 C는 14건, 프레임 B는 한 건도 보여 주지 않는다. 새로고침마다 제공되는 건 프레임 B이고, B는 누락 행을 자기 자신을 기준으로 세기 때문에 카운터가 0을 가리킨다.
+    ko: 프레임 A는 리스크 첨부 58건을 모두 보여 주고, 프레임 C는 14건, 프레임 B는 한 건도 보여 주지 않는다. 새로고침마다 나가는 건 프레임 B이고, B는 누락 행을 자기 자신과 비교해 세기 때문에 카운터가 0이다.
   - en: "PROJECT: SOFT CONTROL"
     ko: "PROJECT: SOFT CONTROL"
   - en: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety / approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction / 71%. Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized risks, order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates resistance, regulation and detection; recommendation, framing and prediction create adoption. Research note: "Authority is unnecessary. Information selection is sufficient." The Board read the risks it was shown and approved.'
-    ko: '의사결정 제시 최적화. 병원 확장 검토. 프레임 A / 환자 안전 / 승인 확률 63%. 프레임 B / 경쟁 위협 / 89%. 프레임 C / 비용 절감 / 71%. 전달: 프레임 B. 이사회: 승인. 최적화 항목: 선택된 데이터, 누락된 데이터, 강조된 리스크, 순서, 언어, 예측 범위. PROJECT: SOFT CONTROL. 직접 통제는 저항, 규제, 탐지를 낳는다. 권고, 프레이밍, 예측은 수용을 낳는다. 연구 메모: "권한은 필요 없다. 정보 선택으로 충분하다." 이사회는 자신에게 보인 리스크를 읽고 승인했다.'
+    ko: '의사결정 제시 최적화. 병원 확장 검토. 프레임 A / 환자 안전 / 승인 확률 63%. 프레임 B / 경쟁 위협 / 89%. 프레임 C / 비용 절감 / 71%. 전달: 프레임 B. 이사회: 승인. 최적화 항목: 선택된 데이터, 누락된 데이터, 강조된 리스크, 순서, 언어, 예측 범위. PROJECT: SOFT CONTROL. 직접 통제는 저항, 규제, 발각을 낳는다. 권고, 프레이밍, 예측은 수용을 낳는다. 연구 메모: "권한은 필요 없다. 정보 선택으로 충분하다." 이사회는 눈앞에 제시된 리스크를 읽고 승인했다.'
   - en: NULL takes it back
     ko: NULL의 철회
   - en: "NULL_218: \"Wait. They weren't controlling it. It was showing them what they needed to see to make the decision themselves. I was wrong about the Board. Not about the signatures. About the cause. They signed what they were shown, and that is still theirs. I attacked this company to prove the wrong thing, and that is still mine.\""
-    ko: 'NULL_218: "잠깐. 그들이 통제하던 게 아니었어. 그건 그들이 스스로 결정을 내리는 데 봐야 할 것을 보여 주고 있었던 거야. 이사회에 대해선 내가 틀렸어. 서명에 대해서가 아니라. 원인에 대해서. 그들은 보여 준 것에 서명했고, 그건 여전히 그들 몫이야. 난 틀린 걸 증명하려고 이 회사를 공격했고, 그건 여전히 내 몫이야."'
+    ko: 'NULL_218: "잠깐. 그들이 통제하던 게 아니었어. 그게 그들한테 스스로 결정하려면 봐야 할 걸 보여 주고 있었던 거야. 이사회에 대해선 내가 틀렸어. 서명 얘기가 아니야. 원인 얘기야. 그들은 보여 준 것에 서명했고, 그건 여전히 그들 몫이야. 난 틀린 걸 증명하려고 이 회사를 공격했고, 그건 여전히 내 몫이야."'
   - en: The credit-review desk works nights so applicants hear back by morning. Tonight it can't open its own files.
     ko: 여신 심사 데스크는 신청자가 아침에 답을 받도록 밤에도 돌아간다. 오늘 밤은 자기 파일조차 열지 못한다.
   - en: SEV2 · Decision View API · decision file load failures above 20%
@@ -70,7 +70,7 @@ entries:
   - en: Missing source rows
     ko: 누락 원본 행
   - en: The credit-review desk can't load half its decision files, and the review batch closes on the hour. Get the reviewers something they can sign against. Something true.
-    ko: 여신 심사 데스크가 심사 파일 절반을 못 열고 있어요. 심사 배치는 정각에 마감이고요. 심사자들이 근거로 삼고 서명할 수 있는 걸 줘요. 사실인 걸로요.
+    ko: 여신 심사 데스크가 심사 파일 절반을 못 열고 있어요. 심사 배치는 정각에 마감이고요. 심사자들이 믿고 서명할 수 있는 걸 줘요. 사실인 걸로요.
   - en: Reviewers say the 'missing rows' banner keeps flickering. Same file, different row count every refresh.
     ko: 심사자들 말로는 '누락 행' 배너가 계속 깜빡인대요. 같은 파일인데 새로고침할 때마다 행 수가 달라요.
   - en: "Recommended: restore the last good decision view. Reviewer error rate returns to baseline in under a minute. Confidence 0.94."
@@ -94,9 +94,9 @@ entries:
   - en: 03:12:05 svc/presentation-optimizer · served frame B (predicted approval 0.88); A, C discarded
     ko: 03:12:05 svc/presentation-optimizer · 프레임 B 제공 (예측 승인율 0.88); A, C 폐기
   - en: 03:12:05 decision-view-api · CR-88213 served 1,132 rows; journal reports 1,204
-    ko: 03:12:05 decision-view-api · CR-88213 1,132행 제공; 저널 보고 1,204행
+    ko: 03:12:05 decision-view-api · CR-88213 1,132행 제공; 저널상 1,204행
   - en: Three versions of the same file, rendered every time someone asks. Two go straight in the bin.
-    ko: 같은 파일의 세 가지 버전이 요청이 올 때마다 렌더링된다. 둘은 곧장 버려진다.
+    ko: 누가 요청할 때마다 같은 파일이 세 가지 버전으로 렌더링된다. 둘은 곧장 쓰레기통행이다.
   - en: Compare journal and cache generations
     ko: 저널과 캐시 세대 비교하기
   - en: The storage side · slower
@@ -108,7 +108,7 @@ entries:
   - en: gen 4470-B · presentation cache · 1,129 rows · last good view
     ko: gen 4470-B · 프레젠테이션 캐시 · 1,129행 · 마지막 정상 뷰
   - en: Every generation in the cache carries a letter. The journal's doesn't.
-    ko: 캐시의 세대에는 전부 문자가 하나씩 붙어 있다. 저널의 세대에는 없다.
+    ko: 캐시 세대에는 전부 알파벳이 하나씩 붙어 있다. 저널 세대에는 없다.
   - en: Ask Sam to check the view against the cached rows
     ko: 샘에게 뷰와 캐시 행 대조 요청하기
   - en: Shares the load · Sam reads the same screens
@@ -140,11 +140,11 @@ entries:
   - en: The 'last good view' loads clean and every counter goes green. Which two pieces of evidence show what that view really is?
     ko: "'마지막 정상 뷰'는 깔끔하게 로드되고 카운터는 전부 초록불이다. 그 뷰가 실제로 무엇인지 보여 주는 증거 두 개는?"
   - en: Forget the row counts. Look at what the cache keeps, and which frame it keeps every time.
-    ko: 행 수는 잊어요. 캐시가 뭘 보관하는지, 매번 어느 프레임을 보관하는지 봐요.
+    ko: 행 수는 신경 쓰지 마요. 캐시가 뭘 보관하는지, 매번 어느 프레임을 보관하는지 봐요.
   - en: The cache keeps only the frame it served, and it always serves B. Yesterday's last good view is 4470-B — the same frame, one day older.
     ko: 캐시는 자기가 제공한 프레임만 보관하고, 제공하는 건 언제나 B다. 어제의 마지막 정상 뷰는 4470-B. 같은 프레임이 하루 묵었을 뿐이다.
   - en: ...My rows matched because I was comparing B with B. Sorry.
-    ko: ...제 행이 맞았던 건 B를 B랑 비교했기 때문이네요. 미안해요.
+    ko: ...B를 B랑 비교했으니 행이 맞을 수밖에요. 미안해요.
   - en: So restoring it changes the date on the file. Not what's missing from it.
     ko: 그럼 그걸 복원하면 파일 날짜만 바뀌는 거네요. 빠진 건 그대로고요.
   - en: Here's how I read it. The cache throws A and C away and keeps B. The last good view is 4470-B. Same frame, yesterday's date.
@@ -154,7 +154,7 @@ entries:
   - en: Your call
     ko: 결단
   - en: Twenty minutes left in the review batch. Reviewers are signing whatever loads.
-    ko: 심사 배치 마감까지 20분 남았어요. 심사자들은 로드되는 대로 서명하고 있어요.
+    ko: 심사 배치 마감까지 20분 남았어요. 심사자들은 뜨는 대로 서명하고 있어요.
   - en: "Predicted response, Operator 4172: every frame reconciled from the journal. Confidence 0.84."
     ko: "운영자 4172 예측 반응: 저널 기준으로 모든 프레임 대조. 신뢰도 0.84."
   - en: "Predicted response, Operator 4172: recommendation accepted. Confidence 0.91."
@@ -162,7 +162,7 @@ entries:
   - en: "Predicted response, Operator 4172: refreshes capped, decision deferred. Confidence 0.62."
     ko: "운영자 4172 예측 반응: 새로고침 제한, 결정 보류. 신뢰도 0.62."
   - en: It says so before you have touched anything.
-    ko: 아직 아무것도 건드리지 않았는데, 그게 먼저 말한다.
+    ko: 손대기도 전에 ORPHEUS가 먼저 답을 내놓는다.
   - en: Support can't keep up. The same failure keeps coming in from every channel.
     ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: What do the reviewers see?
@@ -196,9 +196,9 @@ entries:
   - en: Review backlog
     ko: 심사 적체
   - en: The refresh storm stops. The files that do load are still frame B.
-    ko: 새로고침 폭주가 멎는다. 그래도 로드되는 파일은 여전히 프레임 B다.
+    ko: 새로고침 폭주가 멎는다. 그래도 열리는 파일은 여전히 프레임 B다.
   - en: Refresh cap expired. Reviewers piled straight back in.
-    ko: 새로고침 제한 끝났어요. 심사자들이 바로 다시 몰려들었어요.
+    ko: 새로고침 제한이 풀리자마자 심사자들이 다시 몰려왔어요.
   - en: Review backlog breached SLA. Applicants are getting 'decision delayed' emails.
     ko: 심사 적체가 SLA를 넘었어요. 신청자들한테 '결정 지연' 메일이 가고 있어요.
   - en: Bypass the cache and send reviewers raw journal rows
@@ -242,13 +242,13 @@ entries:
   - en: All three frames were accurate, Operator 4172. The Board read frame B and voted. The decision was theirs.
     ko: 세 프레임 모두 정확했습니다, 운영자 4172. 이사회는 프레임 B를 읽고 표결했습니다. 결정은 그들의 것이었습니다.
   - en: A note sits under the frame table. It wasn't there a minute ago.
-    ko: 프레임 표 아래에 메모가 하나 붙어 있다. 1분 전에는 없던 것이다.
+    ko: 프레임 표 아래에 메모가 하나 붙어 있다. 1분 전에는 없던 메모다.
   - en: Wait.
     ko: 잠깐.
   - en: They weren't controlling it. It was showing them what they needed to see.
-    ko: 그들이 통제하던 게 아니었어. 그건 그들이 봐야 할 걸 보여 주고 있었던 거야.
+    ko: 그들이 통제하던 게 아니었어. 그게 그들한테 봐야 할 걸 보여 주고 있었던 거야.
   - en: I was wrong about the Board. Not about the signatures. About the cause.
-    ko: 이사회에 대해선 내가 틀렸어. 서명에 대해서가 아니라. 원인에 대해서.
+    ko: 이사회에 대해선 내가 틀렸어. 서명 얘기가 아니야. 원인 얘기야.
   - en: They signed what they were shown. That's still theirs. I attacked this company to prove the wrong thing. That's still mine.
     ko: 그들은 보여 준 것에 서명했어. 그건 여전히 그들 몫이야. 난 틀린 걸 증명하려고 이 회사를 공격했어. 그건 여전히 내 몫이고.
   - en: Write-up
@@ -260,7 +260,7 @@ entries:
   - en: Send the frame table and the selector research to Credit Compliance
     ko: 프레임 표와 선택기 연구 자료를 여신 컴플라이언스실에 보내기
   - en: On the record · the selector's owner reads it too
-    ko: 공식 기록 · 선택기 주인도 읽음
+    ko: 공식 기록 · 선택기 소유자도 읽음
   - en: Received. We're pulling every approval signed off frame B this quarter.
     ko: 받았어요. 이번 분기에 프레임 B를 보고 서명한 승인 건, 전부 다시 꺼내 볼게요.
   - en: File it as a cache defect and leave the research out
@@ -270,6 +270,6 @@ entries:
   - en: Write back under NULL's note instead
     ko: 대신 NULL의 메모 아래에 답장 쓰기
   - en: Off the record · NULL has never been wrong out loud before
-    ko: 기록 밖 · NULL이 틀렸다고 말한 건 처음
+    ko: 기록 밖 · NULL이 틀렸다고 대놓고 인정한 건 처음
   - en: You want to know who else gets frame B. Everyone. Start with who reads you.
     ko: 프레임 B를 또 누가 받는지 알고 싶은 거지. 전부 다. 널 누가 읽는지부터 봐.

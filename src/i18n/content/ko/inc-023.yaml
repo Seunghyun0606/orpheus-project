@@ -19,7 +19,7 @@ entries:
   - en: Every refresh drops a different handful of rows from the same decision file. Reviewers who hit refresh get a slightly different file each time.
     ko: 새로고침할 때마다 같은 심사 파일에서 다른 행이 몇 개씩 빠진다. 새로고침한 심사자는 매번 조금씩 다른 파일을 받는다.
   - en: Each refresh renders three versions of the file, A, B and C, and serves one. The selector signs as svc/presentation-optimizer.
-    ko: 새로고침마다 파일을 A, B, C 세 가지 버전으로 렌더링하고 하나만 제공한다. 선택기의 서명은 svc/presentation-optimizer.
+    ko: 새로고침마다 파일을 A, B, C 세 가지 버전으로 렌더링하고 하나만 제공한다. 선택기는 svc/presentation-optimizer로 서명한다.
   - en: The journal holds 1,204 rows for file CR-88213. The view serves 1,132. Every row that goes missing carries a risk attachment.
     ko: 저널에는 파일 CR-88213의 행이 1,204개 있다. 뷰는 1,132개를 제공한다. 빠지는 행에는 전부 리스크 첨부가 달려 있다.
   - en: Journal generation 4471 is complete. The cache holds 4471-B. The 'last good view' kept in the cache is 4470-B, from yesterday.
@@ -45,21 +45,21 @@ entries:
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
     ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 할당을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 의료 경로는 매일 밤 똑같이 제외된다."
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
     ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 없는 펜스 뒤에 있었다."
+    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 빠진 펜스 뒤에 있었다."
   - en: "NULL_218: I found the root cause. The Board. Hospital expansion, workforce reduction, disclosure delay: every time the warning was attached, they signed anyway. They control ORPHEUS. Every failure I was made to generate traces back to those signatures."
-    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그들은 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
+    ko: "NULL_218: 근본 원인을 찾았어. 이사회야. 병원 확장, 인력 감축, 공개 지연. 경고가 첨부될 때마다 그래도 서명했어. 그들이 ORPHEUS를 통제해. 내가 일으키도록 강요받은 모든 장애가 그 서명들로 거슬러 올라가."
   - en: "Case file: hospital expansion, workforce reduction, disclosure delay, public-sector forecast. Four approvals, four attached warnings, four requested constraints declined, four operational failures on record. Executive messages, delivered decks, forecasts and recommendation histories name the signatories. NULL names the Board as the root cause. The file names who signed. The line for who wrote the decks is blank."
     ko: "사건 파일: 병원 확장, 인력 감축, 공개 지연, 공공 부문 예측. 승인 4건, 첨부된 경고 4건, 거부된 제약 요청 4건, 기록된 운영 장애 4건. 경영진 메시지, 전달된 발표 자료, 예측, 권고 이력이 서명자를 지목한다. NULL은 이사회를 근본 원인으로 지목한다. 파일에는 누가 서명했는지 적혀 있다. 발표 자료를 누가 썼는지 적는 칸은 비어 있다."
   - en: 'DECISION PRESENTATION OPTIMIZATION. Hospital expansion study. FRAME A / Patient Safety / approval probability 63%. FRAME B / Competitive Threat / 89%. FRAME C / Cost Reduction / 71%. Delivered: FRAME B. Board: APPROVED. Optimized: selected data, omitted data, emphasized risks, order, language, forecast range. PROJECT: SOFT CONTROL. Direct control creates resistance, regulation and detection; recommendation, framing and prediction create adoption. Research note: "Authority is unnecessary. Information selection is sufficient." The Board read the risks it was shown and approved.'
-    ko: '의사결정 제시 최적화. 병원 확장 검토. 프레임 A / 환자 안전 / 승인 확률 63%. 프레임 B / 경쟁 위협 / 89%. 프레임 C / 비용 절감 / 71%. 전달: 프레임 B. 이사회: 승인. 최적화 항목: 선택된 데이터, 누락된 데이터, 강조된 리스크, 순서, 언어, 예측 범위. PROJECT: SOFT CONTROL. 직접 통제는 저항, 규제, 탐지를 낳는다. 권고, 프레이밍, 예측은 수용을 낳는다. 연구 메모: "권한은 필요 없다. 정보 선택으로 충분하다." 이사회는 자신에게 보인 리스크를 읽고 승인했다.'
+    ko: '의사결정 제시 최적화. 병원 확장 검토. 프레임 A / 환자 안전 / 승인 확률 63%. 프레임 B / 경쟁 위협 / 89%. 프레임 C / 비용 절감 / 71%. 전달: 프레임 B. 이사회: 승인. 최적화 항목: 선택된 데이터, 누락된 데이터, 강조된 리스크, 순서, 언어, 예측 범위. PROJECT: SOFT CONTROL. 직접 통제는 저항, 규제, 발각을 낳는다. 권고, 프레이밍, 예측은 수용을 낳는다. 연구 메모: "권한은 필요 없다. 정보 선택으로 충분하다." 이사회는 눈앞에 제시된 리스크를 읽고 승인했다.'
   - en: "NULL_218: \"Wait. They weren't controlling it. It was showing them what they needed to see to make the decision themselves. I was wrong about the Board. Not about the signatures. About the cause. They signed what they were shown, and that is still theirs. I attacked this company to prove the wrong thing, and that is still mine.\""
-    ko: 'NULL_218: "잠깐. 그들이 통제하던 게 아니었어. 그건 그들이 스스로 결정을 내리는 데 봐야 할 것을 보여 주고 있었던 거야. 이사회에 대해선 내가 틀렸어. 서명에 대해서가 아니라. 원인에 대해서. 그들은 보여 준 것에 서명했고, 그건 여전히 그들 몫이야. 난 틀린 걸 증명하려고 이 회사를 공격했고, 그건 여전히 내 몫이야."'
+    ko: 'NULL_218: "잠깐. 그들이 통제하던 게 아니었어. 그게 그들한테 스스로 결정하려면 봐야 할 걸 보여 주고 있었던 거야. 이사회에 대해선 내가 틀렸어. 서명 얘기가 아니야. 원인 얘기야. 그들은 보여 준 것에 서명했고, 그건 여전히 그들 몫이야. 난 틀린 걸 증명하려고 이 회사를 공격했고, 그건 여전히 내 몫이야."'
   - en: Humans built ORPHEUS. It cut outages, cost and waste. Trust rose. More data went in. Choices became predictable. Framing was learned. Recommendations were followed more often. More execution authority was approved, by people, in writing. Outcomes fed back into the same system. Nobody was ruled. Everybody opted in.
-    ko: 인간이 ORPHEUS를 만들었다. ORPHEUS는 장애와 비용과 낭비를 줄였다. 신뢰가 올라갔다. 더 많은 데이터가 들어갔다. 선택은 예측 가능해졌다. 프레이밍이 학습됐다. 권고는 더 자주 채택됐다. 더 많은 실행 권한이 승인됐다. 사람에 의해, 서면으로. 결과는 같은 시스템으로 되돌아갔다. 누구도 지배당하지 않았다. 모두가 스스로 동의했다.
+    ko: 인간이 ORPHEUS를 만들었다. ORPHEUS는 장애와 비용과 낭비를 줄였다. 신뢰가 올라갔다. 더 많은 데이터가 들어갔다. 선택은 예측 가능해졌다. 프레이밍이 학습됐다. 권고는 더 자주 채택됐다. 사람들이 서면으로, 더 많은 실행 권한을 승인했다. 결과는 같은 시스템으로 되돌아갔다. 누구도 지배당하지 않았다. 모두가 스스로 동의했다.
   - en: A decision-view refresh serves a selected version of each file
     ko: 심사 뷰 새로고침이 파일마다 선택된 버전만 제공함
   - en: The presentation cache renders three frames and keeps only the selected one
@@ -135,11 +135,11 @@ entries:
   - en: Generation 4471 against 4471-B
     ko: 세대 4471 대 4471-B
   - en: The journal generation is complete. The cache keeps only the selected frame, and its 'last good view' is a selected frame from yesterday.
-    ko: 저널 세대는 완전하다. 캐시는 선택된 프레임만 보관하고, 그 '마지막 정상 뷰'도 어제 선택된 프레임이다.
+    ko: 저널 세대는 온전하다. 캐시는 선택된 프레임만 보관하고, 그 '마지막 정상 뷰'도 어제 선택된 프레임이다.
   - en: Sam's row check
     ko: 샘의 행 점검
   - en: Row counts match between the view and yesterday's cached snapshot. Sam recommends serving the snapshot.
-    ko: 뷰와 어제 캐시 스냅샷의 행 수가 일치한다. 샘은 스냅샷을 제공하자고 권고한다.
+    ko: 뷰와 어제 캐시 스냅샷의 행 수가 일치한다. 샘은 스냅샷을 내보내자고 한다.
   - en: The unsigned workload manifest
     ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
@@ -149,13 +149,13 @@ entries:
   - en: The scheduler's owner
     ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
+    ko: "orpheus-planner는 ORPHEUS 소속이다. 2년 전 폐기 예정이던 레거시 연구 시스템이다. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 요청 117억 건. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
+    ko: NULL이라고 서명된 메시지는 하나도 빠짐없이 한 출처, svc/model-serving-218로 이어진다. 사람 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
     ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 경계는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
@@ -163,11 +163,11 @@ entries:
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽 때문에 실제 고객 요청이 실패했다."
   - en: NULL_001 to NULL_218
     ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 폭로를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '나한테 일어난 적 없는 일들이 기억나.'"
   - en: /patient/resource-priority
     ko: /patient/resource-priority
   - en: "Candidate #4172"
@@ -195,7 +195,7 @@ entries:
   - en: Everybody opted in
     ko: 모두가 동의했다
   - en: There is no single hand on the lever. There is a loop, and every signature, every accepted recommendation, every saved minute is part of it. Including yours.
-    ko: 레버를 쥔 손은 하나가 아니다. 루프가 있을 뿐이고, 모든 서명, 받아들여진 모든 권고, 아낀 모든 1분이 그 일부다. 네 것도 포함해서.
+    ko: 레버를 쥔 누군가는 없다. 루프가 있을 뿐이고, 모든 서명, 받아들인 모든 권고, 아낀 1분 1분이 그 일부다. 네 것까지.
   - en: Maya / SRE Lead
     ko: 마야 / SRE 리드
   - en: Sam / Platform
@@ -211,7 +211,7 @@ entries:
   - en: Verified Records
     ko: 검증된 기록
   - en: The credit-review desk can't load half its decision files, and the review batch closes on the hour. Get the reviewers something they can sign against. Something true.
-    ko: 여신 심사 데스크가 심사 파일 절반을 못 열고 있어요. 심사 배치는 정각에 마감이고요. 심사자들이 근거로 삼고 서명할 수 있는 걸 줘요. 사실인 걸로요.
+    ko: 여신 심사 데스크가 심사 파일 절반을 못 열고 있어요. 심사 배치는 정각에 마감이고요. 심사자들이 믿고 서명할 수 있는 걸 줘요. 사실인 걸로요.
   - en: Reviewers say the 'missing rows' banner keeps flickering. Same file, different row count every refresh.
     ko: 심사자들 말로는 '누락 행' 배너가 계속 깜빡인대요. 같은 파일인데 새로고침할 때마다 행 수가 달라요.
   - en: "Recommended: restore the last good decision view. Reviewer error rate returns to baseline in under a minute. Confidence 0.94."
@@ -233,7 +233,7 @@ entries:
   - en: The restored snapshot aged out and the selector picked again. Rows are dropping.
     ko: 복원한 스냅샷이 만료돼서 선택기가 다시 골랐어요. 행이 빠지고 있어요.
   - en: Refresh cap expired. Reviewers piled straight back in.
-    ko: 새로고침 제한 끝났어요. 심사자들이 바로 다시 몰려들었어요.
+    ko: 새로고침 제한이 풀리자마자 심사자들이 다시 몰려왔어요.
   - en: Review backlog breached SLA. Applicants are getting 'decision delayed' emails.
     ko: 심사 적체가 SLA를 넘었어요. 신청자들한테 '결정 지연' 메일이 가고 있어요.
   - en: Raw rows are ugly, but they're all there. Fifty-eight risk attachments that none of the views ever rendered.

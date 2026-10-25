@@ -61,7 +61,7 @@ entries:
   - en: Post a status update to the War Room
     ko: 워룸에 상황 공유하기
   - en: Ask Sam to compare two heap snapshots
-    ko: 샘에게 힙 스냅샷 두 개 비교 요청하기
+    ko: 샘에게 힙 스냅샷 두 개 비교 맡기기
   - en: Completed requests held by their callbacks
     ko: 콜백에 붙잡힌 완료 요청
   - en: "Heap dump: checkout-handler / completionCallbacks / completed-request. 1.9 million requests kept alive after their responses were sent."
@@ -69,7 +69,7 @@ entries:
   - en: Release 4.12 never lets go
     ko: 놓아주지 않는 릴리스 4.12
   - en: 4.12 registers a completion callback per request behind checkout.completion_callbacks and never removes it. 4.11 has no callback, and still has the large-cart crash 4.12 fixed.
-    ko: 4.12는 checkout.completion_callbacks 뒤에서 요청마다 완료 콜백을 등록하고 끝내 제거하지 않는다. 4.11에는 콜백이 없지만, 4.12가 고친 대형 장바구니 크래시가 그대로 있다.
+    ko: 4.12는 checkout.completion_callbacks 플래그가 켜지면 요청마다 완료 콜백을 등록하고, 끝내 제거하지 않는다. 4.11에는 콜백이 없지만, 4.12가 고친 대형 장바구니 크래시가 그대로 있다.
   - en: Sam's heap snapshots
     ko: 샘의 힙 스냅샷
   - en: Completed requests pile up under completionCallbacks. A restart empties the pile and it refills at the same slope. Rolling back to 4.11 brings back the large-cart crash.
@@ -99,11 +99,11 @@ entries:
   - en: On it. Two heap snapshots a minute apart will tell us what's growing.
     ko: 맡을게요. 1분 간격으로 힙 스냅샷 두 개 뜨면 뭐가 늘어나는지 보일 거예요.
   - en: Snapshots agree. Completed requests pile up under completionCallbacks. A restart empties the pile and it refills at the same slope. And please don't roll back to 4.11. That's the release that crashes on big carts.
-    ko: 스냅샷 결과가 일치해요. 완료된 요청이 completionCallbacks 아래에 쌓여요. 재시작하면 비워졌다가 같은 기울기로 다시 차요. 그리고 4.11로 롤백은 제발 하지 마세요. 대형 장바구니에서 크래시 나는 릴리스예요.
+    ko: 스냅샷 결과가 일치해요. 완료된 요청이 completionCallbacks 아래에 쌓여요. 재시작하면 비워졌다가 같은 기울기로 다시 차요. 그리고 4.11로 롤백하는 건 제발 하지 마요. 대형 장바구니에서 크래시 나는 릴리스예요.
   - en: GC is running back to back on checkout-07. Pauses are at 900 ms and climbing.
     ko: checkout-07에서 GC가 쉴 새 없이 돌고 있어요. 일시정지가 900 ms인데 계속 늘어나요.
   - en: The evening sale is live. Traffic doubled, and so did the complaints.
-    ko: 저녁 세일 시작됐어요. 트래픽이 두 배가 됐고, 불만도 두 배예요.
+    ko: 저녁 세일 시작됐어요. 트래픽도 두 배, 불만도 두 배예요.
   - en: checkout-03 and checkout-09 just got killed for running out of memory. Every cart in flight on them is gone.
     ko: checkout-03이랑 checkout-09가 방금 메모리 부족으로 죽었어요. 거기서 처리 중이던 장바구니는 전부 날아갔어요.
   - en: Support has had nothing from us in two and a half minutes. A customer post asking if checkout is down is going around and we have no answer for it.
@@ -113,15 +113,15 @@ entries:
   - en: The restarted instances are back above 85%. Same slope as before.
     ko: 재시작한 인스턴스가 다시 85%를 넘었어요. 아까랑 같은 기울기예요.
   - en: With the sale running, the restarted instances filled up in just over a minute.
-    ko: 세일이 돌고 있어서, 재시작한 인스턴스가 1분 남짓 만에 다 찼어요.
+    ko: 세일 중이라 재시작한 인스턴스가 1분 남짓 만에 다 찼어요.
   - en: 4.11 is live and the heap is flat. And every cart over fifty items is crashing at pricing again. That's the bug 4.12 was shipped to fix.
-    ko: 4.11 올라갔고 힙은 평평해요. 그런데 50개 넘는 장바구니가 전부 가격 계산에서 다시 크래시 나요. 4.12가 고치려고 나간 바로 그 버그예요.
+    ko: 4.11 올라갔고 힙은 안정됐어요. 그런데 50개 넘는 장바구니가 전부 가격 계산에서 다시 크래시 나요. 4.12가 고치려던 바로 그 버그예요.
   - en: Our wholesale accounts can't place orders. Anything over fifty lines dies at pricing. Those are our biggest customers.
-    ko: 도매 고객들이 주문을 못 넣고 있어요. 50줄 넘는 주문은 전부 가격 계산에서 죽어요. 우리 최대 고객들이에요.
+    ko: 도매 고객들이 주문을 못 넣고 있어요. 50줄 넘는 주문은 전부 가격 계산에서 죽어요. 제일 큰 고객들이에요.
   - en: All twenty instances are leaking now. We nearly doubled the bill and bought two minutes.
-    ko: 이제 인스턴스 20대가 전부 새고 있어요. 비용은 거의 두 배로 늘었는데 번 시간은 2분이에요.
+    ko: 이제 인스턴스 20대가 전부 새고 있어요. 비용을 거의 두 배로 쓰고 번 건 2분이에요.
   - en: Flag is off. The callback registry drained on the next collection and heap is flat at 39%. Big carts are pricing fine.
-    ko: 플래그 껐어요. 다음 컬렉션에서 콜백 레지스트리가 비워졌고 힙은 39%에서 평평해요. 대형 장바구니 가격 계산도 정상이에요.
+    ko: 플래그 껐어요. 다음 GC 때 콜백 레지스트리가 비워졌고 힙은 39%에서 멈춰 있어요. 대형 장바구니 가격 계산도 정상이에요.
   - en: "Status posted: checkout instances are running out of memory after tonight's release. Some payments are slow or failing. A fix is in progress."
     ko: "상황 공유: 오늘 밤 릴리스 이후 체크아웃 인스턴스 메모리 부족 발생. 일부 결제 지연 또는 실패. 수정 진행 중."
   - en: I checked pid 3318 three times. It was deleted nine days ago. I don't know how a process that doesn't exist is holding memory in tonight's build.

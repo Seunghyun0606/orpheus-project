@@ -42,15 +42,15 @@ entries:
   - en: Sam's lease history
     ko: 샘의 리스 이력
   - en: Lease history confirms controller-a owns settle-03. Suspending toggles silences both controllers, including the one that is right.
-    ko: 리스 이력상 settle-03의 소유자는 controller-a로 확인됨. 토글을 중단하면 맞는 쪽까지 두 컨트롤러가 모두 멈춤.
+    ko: 리스 이력상 settle-03의 소유자는 controller-a다. 토글을 중단하면 맞는 쪽까지 두 컨트롤러가 모두 멈춘다.
   - en: A note from outside the fleet
     ko: 플릿 바깥에서 온 기록
   - en: "One detach note is not signed by the controller fleet at all: issuer svc/model-serving-218."
-    ko: "연결 해제 기록 하나는 컨트롤러 플릿의 서명이 아예 없다. 발행자: svc/model-serving-218."
+    ko: "연결 해제 기록 하나에는 컨트롤러 플릿의 서명이 아예 없다. 발행자: svc/model-serving-218."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
+    ko: NULL이라고 서명된 메시지는 하나도 빠짐없이 한 출처, svc/model-serving-218로 이어진다. 사람 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Two nights later. The worker pool is fine. The payments aren't.
-    ko: 이틀 뒤. 워커 풀은 멀쩡하다. 결제는 아니다.
+    ko: 이틀 뒤. 워커 풀은 멀쩡하다. 결제는 그렇지 않다.
   - en: SEV2 · Remediation Gateway · payment drop rate above 15%
     ko: SEV2 · Remediation Gateway · 결제 유실률 15% 초과
   - en: Payment drop rate
@@ -62,21 +62,21 @@ entries:
   - en: Your ORPHEUS ticket was closed overnight. Resolution "working as intended". No name on the closure.
     ko: 그 ORPHEUS 티켓, 밤사이에 닫혔어요. 처리 결과는 "의도된 동작". 닫은 사람 이름은 없어요.
   - en: Your postmortem calls legacy-r7 a stale reservation. It renewed itself all week anyway.
-    ko: 사후 분석에는 legacy-r7이 오래된 예약으로 적혀 있다. 그 잡은 일주일 내내 알아서 갱신됐다.
+    ko: 사후 분석에는 legacy-r7이 오래된 예약으로 적혀 있다. 그래도 그 잡은 일주일 내내 스스로 갱신했다.
   - en: The inventory snapshot is still in your notes. You have read it four times. You haven't shown it to anyone.
     ko: 실가동 목록 사본은 아직 메모에 있다. 네 번 읽었다. 아무에게도 보여 주지 않았다.
   - en: The defender fleet has been auto-healing settle-03 all night, and tonight it is hurting more than it heals. Find out who keeps pulling the lever.
-    ko: 방어 플릿이 밤새 settle-03을 자동 복구하고 있는데, 오늘은 고치는 것보다 망가뜨리는 게 더 많아요. 누가 계속 레버를 당기는지 찾아 주세요.
+    ko: 방어 플릿이 밤새 settle-03을 자동 복구하고 있는데, 오늘은 고치는 것보다 망가뜨리는 게 더 많아요. 누가 자꾸 레버를 당기는지 찾아 주세요.
   - en: Merchants are reporting payments that vanish mid-flight. Not slow. Gone.
     ko: 가맹점들이 결제가 처리 도중 사라진다고 해요. 느린 게 아니에요. 그냥 없어져요.
   - en: "Recommended action: restart dependency-controller. Predicted recovery in 4 minutes. Confidence 0.91."
     ko: "권고 조치: dependency-controller 재시작. 예상 복구 시간 4분. 신뢰도 0.91."
   - en: Ninety-one percent. It's usually right. That's the annoying part.
-    ko: 91퍼센트. 대개 맞아요. 그게 짜증 나는 부분이고요.
+    ko: 91퍼센트. 보통은 맞아요. 그래서 더 짜증 나요.
   - en: First move
     ko: 첫 수
   - en: How do you start?
-    ko: 어떻게 시작할까요?
+    ko: 어떻게 시작할까?
   - en: Trace who issued the detach orders
     ko: 연결 해제 명령을 누가 냈는지 추적하기
   - en: Slow · you read every line
@@ -94,13 +94,13 @@ entries:
   - en: Two controllers taking turns on one replica. And one line from something that isn't a controller at all.
     ko: 복제본 하나를 두고 컨트롤러 둘이 번갈아 명령한다. 그리고 컨트롤러가 아닌 무언가가 남긴 줄 하나.
   - en: Ask Sam to pull the controller lease history
-    ko: 샘에게 컨트롤러 리스 이력 조회 요청
+    ko: 샘에게 컨트롤러 리스 이력 조회 요청하기
   - en: Shares the load · Sam owns that part
     ko: 일을 나눔 · 그 부분은 샘이 맡음
   - en: Pulling the controller lease history now. Give me ninety seconds.
     ko: 지금 컨트롤러 리스 이력 뽑고 있어요. 90초만 주세요.
   - en: Second wave. Checkout retries are landing on the same replica and doubling the drop rate.
-    ko: 2차 파도예요. 체크아웃 재시도가 같은 복제본으로 몰려서 유실률이 두 배가 됐어요.
+    ko: 2차로 터졌어요. 체크아웃 재시도가 같은 복제본으로 몰려서 유실률이 두 배가 됐어요.
   - en: Lease says controller-a owns settle-03. Controller-b lost its lease 41 minutes ago and never stopped writing. If you suspend toggles you silence both of them, including the one that is right.
     ko: 리스상 settle-03 소유자는 controller-a예요. controller-b는 41분 전에 리스를 잃고도 쓰기를 멈춘 적이 없어요. 토글을 중단하면 맞는 쪽까지 둘 다 멈춰요.
   - en: Ask the advisor what its restart is based on
@@ -118,9 +118,9 @@ entries:
   - en: controller-a fence 41 / controller-b fence 40 / store accepts writes from both
     ko: controller-a 펜스 41 / controller-b 펜스 40 / 스토어가 양쪽 쓰기 모두 수락
   - en: The store still takes orders from a controller that lost its lease. One says detach, the other says reattach, and settle-03 pays for the argument.
-    ko: 스토어가 리스를 잃은 컨트롤러의 명령을 아직도 받아요. 한쪽은 해제하라, 한쪽은 다시 붙이라. 그 싸움값은 settle-03이 치르고요.
+    ko: 스토어가 리스를 잃은 컨트롤러의 명령을 아직도 받아요. 한쪽은 떼라 하고 한쪽은 다시 붙이라 하고, 그 싸움 값은 settle-03이 치르고 있어요.
   - en: In the controller log, between two orders, a line that belongs to neither.
-    ko: 컨트롤러 로그, 두 명령 사이에 어느 쪽 것도 아닌 줄이 하나 있다.
+    ko: 컨트롤러 로그의 두 명령 사이에, 어느 쪽 것도 아닌 줄이 하나 있다.
   - en: That issuer isn't in the controller fleet. Park it. Payments first.
     ko: 그 발행자는 컨트롤러 플릿 소속이 아니에요. 일단 미뤄 둬요. 결제가 먼저예요.
   - en: Your call
@@ -160,7 +160,7 @@ entries:
   - en: Silence on settle-03. For a minute and a half it looks like a fix.
     ko: settle-03이 조용해진다. 1분 30초 동안은 해결된 것처럼 보인다.
   - en: With every toggle suspended, nothing is healing settle-05. It just went down for real.
-    ko: 토글을 전부 중단해서 settle-05를 고치는 게 아무것도 없어요. 방금 진짜로 다운됐어요.
+    ko: 토글을 전부 멈추니까 settle-05를 고쳐 줄 게 없어요. 방금 진짜로 죽었어요.
   - en: Healthy replicas
     ko: 정상 복제본
   - en: 3 of 6
@@ -178,7 +178,7 @@ entries:
   - en: No keyboard
     ko: 키보드는 없다
   - en: settle-03 holds. You go back to the line that didn't belong.
-    ko: settle-03이 버틴다. 어울리지 않던 그 줄로 돌아간다.
+    ko: settle-03이 버틴다. 있어서는 안 될 그 줄로 돌아간다.
   - en: "remediation log, settle-03: 11 detach orders · 11 outcomes logged by svc/model-serving-218"
     ko: "복구 로그, settle-03: 연결 해제 명령 11건 · 결과 11건을 svc/model-serving-218이 기록함"
   - en: "model record: svc/model-serving-218 · kind: model-serving · human sessions: 0 · badge events: 0"
@@ -202,15 +202,15 @@ entries:
   - en: On the record · Marcus will chase it his way
     ko: 기록에 남음 · 마커스는 자기 방식대로 쫓을 것
   - en: A model-serving process. Fine. Processes have owners. I'll find this one's.
-    ko: model-serving 프로세스라. 좋아요. 프로세스에도 주인은 있죠. 이건 제가 찾을게요.
+    ko: model-serving 프로세스라. 좋아요. 프로세스에도 주인은 있죠. 그 주인은 제가 찾을게요.
   - en: Tell Maya and Sam on the bridge and keep it out of writing
     ko: 브리지에서 마야와 샘에게만 말하고 문서에는 남기지 않기
   - en: Three people know · no ticket
     ko: 세 사람만 앎 · 티켓 없음
   - en: So the thing writing in our logs runs on our own hardware.
-    ko: 그러니까 우리 로그에 글 쓰는 그게 우리 하드웨어에서 돌고 있다는 거네요.
+    ko: 그러니까 우리 로그에 뭘 적고 다니는 그게 우리 하드웨어에서 돈다는 거네요.
   - en: Nobody types this into a ticket yet.
-    ko: 아직은 아무도 이걸 티켓에 쓰지 않는 거예요.
+    ko: 이건 아직 아무도 티켓에 안 쓰는 걸로 해요.
   - en: Leave svc/model-serving-218 out of the write-up
     ko: 보고서에서 svc/model-serving-218 빼기
   - en: The fix only · the signature stays yours

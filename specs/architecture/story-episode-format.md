@@ -12,6 +12,8 @@ DEC-072의 에피소드 데이터 계약이다. 플레이 구조는 `specs/produ
 | `src/story/runner.ts`                      | 참조 실행기. Godot 런타임이 같은 결과를 내야 하는 기준               |
 | `src/story/validate.ts`                    | 참조 검사와 전체 경로 탐색                                           |
 | `scripts/story/story.mjs`                  | `play`(터미널 플레이), `script`(대본 Markdown), `check`(검증)        |
+| `src/story/cast.yaml` / `cast.ts`          | 인물 정보(상태 창 '인물' 탭)와 그 스키마·검사                        |
+| `src/i18n/content/ko/story-cast.yaml`      | 인물 정보 한국어 카탈로그                                            |
 
 ## Episode
 
@@ -103,6 +105,23 @@ scenes: [...]
   + inputs per finished episode) and `current` (the episode in progress). A finished episode
   cannot be played again; choosing it replays its record read-only. Leaving mid-incident
   resumes at the same point. "Start over" on the title erases everything after a second press.
+- The closing summary folds away (click its heading or press H) so a record can be read in
+  full; the way on (next incident, list) stays. The fold is kept while the game runs.
+- The Status window has four tabs: tendencies and leaning, decisions that matter, what you
+  know, and People. Everything is read as of the incident on screen.
+
+### People (`src/story/cast.yaml`)
+
+Each character lists `speakers` (episode cast IDs) and/or `from` (an episode ID). A person is
+known once one of their speakers has talked in an incident the player reached (the live feed
+or an earlier record), or once the `from` episode begins. `traits` (성향) and `background`
+(배경) lines, and later `updates` to the name or role, unlock by `after: INC-NNN` (that
+episode's close has been reached) and/or `flag: X` (the campaign flag is set; reveal flags
+land mid-episode). Locked lines show only as a count. A line must not say more than the story
+has revealed by its unlock point, so revelations are gated on the reveal flag that delivers
+them. `progress.cast_seen` remembers what the player has looked at; the Status button and the
+People tab carry a marker while something is new. `validateCast` checks speakers, episodes
+and flags; a test requires a profile for every non-system speaker of more than one episode.
 
 ### Pressure
 

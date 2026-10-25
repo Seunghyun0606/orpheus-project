@@ -50,7 +50,7 @@ entries:
   - en: Release 4.12 never lets go
     ko: 놓아주지 않는 릴리스 4.12
   - en: 4.12 registers a completion callback per request behind checkout.completion_callbacks and never removes it. 4.11 has no callback, and still has the large-cart crash 4.12 fixed.
-    ko: 4.12는 checkout.completion_callbacks 뒤에서 요청마다 완료 콜백을 등록하고 끝내 제거하지 않는다. 4.11에는 콜백이 없지만, 4.12가 고친 대형 장바구니 크래시가 그대로 있다.
+    ko: 4.12는 checkout.completion_callbacks 플래그가 켜지면 요청마다 완료 콜백을 등록하고, 끝내 제거하지 않는다. 4.11에는 콜백이 없지만, 4.12가 고친 대형 장바구니 크래시가 그대로 있다.
   - en: Deleted allocation log fragment
     ko: 삭제된 할당 로그 조각
   - en: "UNKNOWN: the objects are gone. the references are not."
@@ -74,7 +74,7 @@ entries:
   - en: "Recommended action: scale checkout pool from 12 to 20 instances. Projected heap per instance: 61%. Confidence 0.88."
     ko: "권고 조치: 체크아웃 풀을 인스턴스 12대에서 20대로 확장하십시오. 인스턴스당 예상 힙: 61%. 신뢰도 0.88."
   - en: Your ticket about the redacted request came back this afternoon. "Redaction performed by system account." It doesn't say which one.
-    ko: 가려진 요청에 대해 열었던 티켓이 오늘 오후에 돌아왔다. "시스템 계정이 가림 처리함." 어느 계정인지는 적혀 있지 않다.
+    ko: 가려진 요청 건으로 열었던 티켓에 오늘 오후 답이 왔다. "시스템 계정이 가림 처리함." 어느 계정인지는 적혀 있지 않다.
   - en: The timestamp from before batch 781 is still on a sticky note under your monitor. Nobody has claimed that request.
     ko: 배치 781 직전의 타임스탬프는 아직 모니터 아래 포스트잇에 적혀 있다. 그 요청의 주인은 여태 나서지 않았다.
   - en: About the marker. I asked around without asking. Nobody admits redacting anything. Keep it off the tickets.
@@ -102,7 +102,7 @@ entries:
   - en: The last row of the dump is a single 4 KB block. Its owner is listed as a deleted process. Later.
     ko: 덤프 마지막 줄은 4 KB짜리 블록 하나다. 소유자는 삭제된 프로세스로 나와 있다. 나중에 보자.
   - en: Ask Sam to compare two heap snapshots
-    ko: 샘에게 힙 스냅샷 두 개 비교 요청하기
+    ko: 샘에게 힙 스냅샷 두 개 비교 맡기기
   - en: A minute and a half · Sam owns that part
     ko: 1분 반 · 그 부분은 샘이 맡음
   - en: On it. Two heap snapshots a minute apart will tell us what's growing.
@@ -114,13 +114,13 @@ entries:
   - en: GC is running back to back on checkout-07. Pauses are at 900 ms and climbing.
     ko: checkout-07에서 GC가 쉴 새 없이 돌고 있어요. 일시정지가 900 ms인데 계속 늘어나요.
   - en: Snapshots agree. Completed requests pile up under completionCallbacks. A restart empties the pile and it refills at the same slope. And please don't roll back to 4.11. That's the release that crashes on big carts.
-    ko: 스냅샷 결과가 일치해요. 완료된 요청이 completionCallbacks 아래에 쌓여요. 재시작하면 비워졌다가 같은 기울기로 다시 차요. 그리고 4.11로 롤백은 제발 하지 마세요. 대형 장바구니에서 크래시 나는 릴리스예요.
+    ko: 스냅샷 결과가 일치해요. 완료된 요청이 completionCallbacks 아래에 쌓여요. 재시작하면 비워졌다가 같은 기울기로 다시 차요. 그리고 4.11로 롤백하는 건 제발 하지 마요. 대형 장바구니에서 크래시 나는 릴리스예요.
   - en: Ask Jin who is actually failing
-    ko: 진에게 실제로 누가 실패하는지 물어보기
+    ko: 진에게 실제로 실패하는 게 누군지 물어보기
   - en: Slower · you'll know who gets hurt
     ko: 더 느림 · 누가 피해를 보는지 알게 됨
   - en: Spinners everywhere, no pattern by region. One thing — six percent of tonight's carts are wholesale reorders, fifty items and up. Those customers call.
-    ko: 어디서나 로딩만 돌아요. 지역별 패턴은 없어요. 하나 있다면, 오늘 밤 장바구니의 6%가 상품 50개 넘는 도매 재주문이에요. 전화하는 건 그분들이에요.
+    ko: 어디서나 로딩만 돌아요. 지역별 패턴은 없어요. 다만, 오늘 밤 장바구니의 6%가 상품 50개 넘는 도매 재주문이에요. 전화하는 건 그 고객들이에요.
   - en: Took a heap dump while you two talked. 1.9 million finished checkouts, all held under completionCallbacks.
     ko: 두 분 얘기하는 동안 힙 덤프 떴어요. 끝난 체크아웃 190만 건이 전부 completionCallbacks 아래에 잡혀 있어요.
   - en: The release diff loads. Last week's 4.11 on the left, tonight's 4.12 on the right.
@@ -134,7 +134,7 @@ entries:
   - en: Tonight's release registers a callback for every checkout and never takes it back. And the release before it can't price a big cart.
     ko: 오늘 밤 릴리스는 체크아웃마다 콜백을 등록하고 끝내 회수하지 않아요. 그리고 그 전 릴리스는 큰 장바구니 가격을 못 매기고요.
   - en: The callbacks sit behind a flag. Turning it off is a redeploy. Ninety seconds.
-    ko: 콜백은 플래그 뒤에 있어요. 끄려면 재배포해야 해요. 90초요.
+    ko: 콜백은 플래그로 켜져 있어요. 끄려면 재배포해야 해요. 90초요.
   - en: Your call
     ko: 결단
   - en: The sale opens in a minute. Support still has nothing to tell anyone.
@@ -144,17 +144,17 @@ entries:
   - en: What do you do about the leak?
     ko: 누수를 어떻게 할까?
   - en: No call? I'm taking the advisor's eight instances. It's a number, at least.
-    ko: 결정 없어요? 어드바이저가 말한 인스턴스 8대 넣을게요. 적어도 숫자는 있잖아요.
+    ko: 결정 안 해요? 어드바이저 말대로 인스턴스 8대 넣을게요. 숫자라도 있으니까요.
   - en: Turn off the completion-callback flag on tonight's release
     ko: 오늘 밤 릴리스의 완료 콜백 플래그 끄기
   - en: Ninety seconds of redeploy · the sale opens halfway through
-    ko: 90초 재배포 · 도중에 세일이 열림
+    ko: 재배포 90초 · 도중에 세일이 열림
   - en: checkout.completion_callbacks = off · redeploying 12 instances
     ko: checkout.completion_callbacks = off · 인스턴스 12대 재배포 중
   - en: The sale opens halfway through the redeploy. For thirty seconds, checkouts stall on the instances still waiting their turn.
-    ko: 재배포가 절반쯤 됐을 때 세일이 열린다. 30초 동안, 아직 차례를 기다리는 인스턴스에서 체크아웃이 멈춘다.
+    ko: 재배포가 절반쯤 진행됐을 때 세일이 열린다. 아직 차례를 기다리는 인스턴스에서 30초 동안 체크아웃이 멈춘다.
   - en: Flag is off. The callback registry drained on the next collection and heap is flat at 39%. Big carts are pricing fine.
-    ko: 플래그 껐어요. 다음 컬렉션에서 콜백 레지스트리가 비워졌고 힙은 39%에서 평평해요. 대형 장바구니 가격 계산도 정상이에요.
+    ko: 플래그 껐어요. 다음 GC 때 콜백 레지스트리가 비워졌고 힙은 39%에서 멈춰 있어요. 대형 장바구니 가격 계산도 정상이에요.
   - en: Restart the checkout instances to empty the heap
     ko: 체크아웃 인스턴스를 재시작해 힙 비우기
   - en: Fast · the same handler fills them again
@@ -162,35 +162,35 @@ entries:
   - en: Rolling restart finished. Heap is down to 41% on every instance. Same build, same handler.
     ko: 롤링 재시작 끝났어요. 모든 인스턴스에서 힙이 41%로 내려갔어요. 빌드도 핸들러도 그대로예요.
   - en: The evening sale is live. Traffic doubled, and so did the complaints.
-    ko: 저녁 세일 시작됐어요. 트래픽이 두 배가 됐고, 불만도 두 배예요.
+    ko: 저녁 세일 시작됐어요. 트래픽도 두 배, 불만도 두 배예요.
   - en: With the sale running, the restarted instances filled up in just over a minute.
-    ko: 세일이 돌고 있어서, 재시작한 인스턴스가 1분 남짓 만에 다 찼어요.
+    ko: 세일 중이라 재시작한 인스턴스가 1분 남짓 만에 다 찼어요.
   - en: checkout-03 and checkout-09 just got killed for running out of memory. Every cart in flight on them is gone.
     ko: checkout-03이랑 checkout-09가 방금 메모리 부족으로 죽었어요. 거기서 처리 중이던 장바구니는 전부 날아갔어요.
   - en: Enough. Turn the callbacks off.
-    ko: 그만. 콜백 꺼요.
+    ko: 됐어요. 콜백 꺼요.
   - en: Roll checkout back to last week's release (4.11)
     ko: 체크아웃을 지난주 릴리스(4.11)로 롤백하기
   - en: Stops the leak · brings back last week's bug
     ko: 누수는 멈춤 · 지난주 버그가 돌아옴
   - en: 4.11 is live and the heap is flat. And every cart over fifty items is crashing at pricing again. That's the bug 4.12 was shipped to fix.
-    ko: 4.11 올라갔고 힙은 평평해요. 그런데 50개 넘는 장바구니가 전부 가격 계산에서 다시 크래시 나요. 4.12가 고치려고 나간 바로 그 버그예요.
+    ko: 4.11 올라갔고 힙은 안정됐어요. 그런데 50개 넘는 장바구니가 전부 가격 계산에서 다시 크래시 나요. 4.12가 고치려던 바로 그 버그예요.
   - en: Large-cart failures
     ko: 대형 장바구니 실패
   - en: Our wholesale accounts can't place orders. Anything over fifty lines dies at pricing. Those are our biggest customers.
-    ko: 도매 고객들이 주문을 못 넣고 있어요. 50줄 넘는 주문은 전부 가격 계산에서 죽어요. 우리 최대 고객들이에요.
+    ko: 도매 고객들이 주문을 못 넣고 있어요. 50줄 넘는 주문은 전부 가격 계산에서 죽어요. 제일 큰 고객들이에요.
   - en: Roll forward. 4.12, flag off.
     ko: 다시 올려요. 4.12로, 플래그는 끄고.
   - en: Add eight checkout instances (Capacity Advisor)
     ko: 체크아웃 인스턴스 8대 추가하기 (용량 어드바이저)
   - en: Costly · the advisor is 0.88 sure
-    ko: 비쌈 · 어드바이저의 확신은 0.88
+    ko: 비용 큼 · 어드바이저 확신도 0.88
   - en: Checkout instances
     ko: 체크아웃 인스턴스
   - en: For two minutes the advisor's number holds. Then the new instances start to look like the old ones.
     ko: 2분 동안은 어드바이저의 숫자가 맞는다. 그러다 새 인스턴스들이 기존 인스턴스를 닮아 가기 시작한다.
   - en: All twenty instances are leaking now. We nearly doubled the bill and bought two minutes.
-    ko: 이제 인스턴스 20대가 전부 새고 있어요. 비용은 거의 두 배로 늘었는데 번 시간은 2분이에요.
+    ko: 이제 인스턴스 20대가 전부 새고 있어요. 비용을 거의 두 배로 쓰고 번 건 2분이에요.
   - en: Turn the callbacks off. Then scale us back down.
     ko: 콜백 꺼요. 그다음에 인스턴스 다시 줄이고요.
   - en: The heap is quiet. Sam takes one last dump to close the incident, and one row refuses to drain.
@@ -198,11 +198,11 @@ entries:
   - en: completionCallbacks · (unnamed block) · 1 · 4 KB · owner pid 3318 (process deleted)
     ko: completionCallbacks · (이름 없는 블록) · 1 · 4 KB · 소유자 pid 3318 (프로세스 삭제됨)
   - en: You look up pid 3318. The scheduler says it ran for two minutes, nine days ago, from an image with no deploy record. Then its entry was deleted.
-    ko: pid 3318을 조회한다. 스케줄러에 따르면 9일 전에 2분 동안 돌았다. 배포 기록이 없는 이미지였다. 그 뒤 항목이 삭제됐다.
+    ko: pid 3318을 조회한다. 스케줄러 기록상 9일 전, 배포 기록이 없는 이미지로 2분 동안 돌았다. 그 뒤 항목이 삭제됐다.
   - en: "9 days ago 03:15 · cold log store · pid 3318: UNKNOWN: the objects are gone. the references are not."
     ko: "9일 전 03:15 · 콜드 로그 저장소 · pid 3318: UNKNOWN: 객체는 사라졌어. 참조는 남았어."
   - en: The line was written a minute after the process stopped existing.
-    ko: 프로세스가 존재하지 않게 된 지 1분 뒤에 쓰인 줄이다.
+    ko: 프로세스가 사라지고 1분 뒤에 쓰인 줄이다.
   - en: I checked pid 3318 three times. It was deleted nine days ago. I don't know how a process that doesn't exist is holding memory in tonight's build.
     ko: pid 3318 세 번 확인했어요. 9일 전에 삭제된 프로세스예요. 존재하지도 않는 프로세스가 어떻게 오늘 밤 빌드에서 메모리를 잡고 있는지 모르겠어요.
   - en: Write down the date. I want to know what else happened that night.
@@ -218,13 +218,13 @@ entries:
   - en: On the record · Security will read it
     ko: 공식 기록 · 보안팀이 읽게 됨
   - en: Then it's on the record. Good luck finding an owner for a process that doesn't exist.
-    ko: 그럼 공식 기록이네요. 존재하지도 않는 프로세스의 소유자, 잘 찾아보시라고 해요.
+    ko: 그럼 공식 기록에 남겠네요. 존재하지도 않는 프로세스 주인을 무슨 수로 찾을지 모르겠지만요.
   - en: Ask Sam to quietly pull everything pid 3318 ever touched
     ko: 샘에게 pid 3318이 건드린 걸 전부 조용히 뽑아 달라고 하기
   - en: Off the books · Sam's name on it too
     ko: 비공식 · 샘의 이름도 걸림
   - en: Quietly. Sure. Give me a few days.
-    ko: 조용히요. 좋아요. 며칠만 줘요.
+    ko: 조용히요. 알겠어요. 며칠만 줘요.
   - en: Report the leak only; copy the cold-store line for yourself
     ko: 누수만 보고하고, 콜드 로그 저장소의 그 줄은 따로 복사해 두기
   - en: A clean report · the line stays yours

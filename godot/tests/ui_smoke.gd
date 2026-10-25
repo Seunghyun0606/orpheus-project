@@ -10,6 +10,7 @@ const Library := preload("res://scripts/story/episode_library.gd")
 const Progress := preload("res://scripts/story/progress.gd")
 const StoryRunner := preload("res://scripts/story/story_runner.gd")
 const Settings := preload("res://scripts/ui/settings.gd")
+const CastBook := preload("res://scripts/story/cast_book.gd")
 
 
 func _initialize() -> void:
@@ -54,6 +55,20 @@ func _initialize() -> void:
 			if not main.viewing_record:
 				failures += 1
 				printerr("%s (%s) did not open as a record" % [id, strategy])
+			# Fold the summary away and back; look through every status tab.
+			main._toggle_summary()
+			if main.summary_body == null or main.summary_body.visible:
+				failures += 1
+				printerr("%s (%s) summary did not fold" % [id, strategy])
+			main._toggle_summary()
+			for tab in 4:
+				main._open_status(tab)
+				main._close_status()
+		# By the final record the whole recurring cast has been met.
+		var met: int = main._people().size()
+		if met < CastBook.characters().size() - 1:
+			failures += 1
+			printerr("%s run met only %d of %d people" % [strategy, met, CastBook.characters().size()])
 		if ending == "":
 			failures += 1
 			printerr("%s run reached no ending" % strategy)

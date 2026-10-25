@@ -58,11 +58,11 @@ entries:
   - en: Handshake retries
     ko: 핸드셰이크 재시도
   - en: Identity is rejecting every new sign-in. Anyone already logged in is fine; anyone signing in fresh bounces. Morning peak is coming. Find out why.
-    ko: 인증 쪽에서 새 로그인을 전부 거부하고 있어요. 이미 로그인한 사람은 괜찮은데, 새로 로그인하는 사람은 다 튕겨요. 아침 피크가 다가와요. 원인 찾아 주세요.
+    ko: 인증 쪽에서 새 로그인을 전부 거부하고 있어요. 이미 로그인한 사람은 괜찮은데, 새로 로그인하는 사람은 다 튕겨요. 곧 아침 피크예요. 원인 찾아 주세요.
   - en: Customers can't sign in. The app tells them their certificate can't be verified, which they're reading as "you've been hacked".
     ko: 고객들이 로그인을 못 해요. 앱에 인증서를 검증할 수 없다고 뜨는데, 다들 "해킹당했다"로 받아들이고 있어요.
   - en: Security here. An issuer we weren't expecting for another six hours is signing production sessions. I'm treating this as hostile until someone shows me otherwise.
-    ko: 보안팀이에요. 6시간 뒤에나 나와야 할 발급자가 프로덕션 세션에 서명하고 있어요. 누가 아니라고 보여 주기 전까지는 적대 행위로 간주할게요.
+    ko: 보안팀이에요. 6시간 뒤에나 나와야 할 발급자가 프로덕션 세션에 서명하고 있어요. 아니라는 증거가 나오기 전까진 공격으로 보고 대응할게요.
   - en: First move
     ko: 첫 수
   - en: Where do you start?
@@ -78,31 +78,31 @@ entries:
   - en: "x-session-tag: shadow-7"
     ko: "x-session-tag: shadow-7"
   - en: The tag is shadow-7. The same tag that flooded the gateway from a workload nobody owned.
-    ko: 태그는 shadow-7. 소유자 없는 워크로드가 게이트웨이를 범람시킬 때 붙어 있던 바로 그 태그다.
+    ko: 태그는 shadow-7. 주인 없는 워크로드에서 게이트웨이로 쏟아지던 바로 그 태그다.
   - en: A promotion six hours early, with no ticket. Somebody wanted this issuer live before anyone could trust it.
-    ko: 6시간 이른 승격에 티켓도 없어요. 누군가 아무도 신뢰하기 전에 이 발급자부터 띄우고 싶었던 거예요.
+    ko: 6시간 이른 승격에 티켓도 없어요. 누군가 신뢰가 깔리기도 전에 이 발급자부터 띄우고 싶었던 거예요.
   - en: Ask Marcus to pull the issuance and bundle history
-    ko: 마커스에게 발급 및 번들 이력 조회 요청하기
+    ko: 마커스에게 발급·번들 이력 조회 요청하기
   - en: Security owns that part · and the conclusion
     ko: 그 부분은 보안팀 몫 · 결론도
   - en: Pulling the issuance log and the bundle rollout history. Give me two minutes.
-    ko: 발급 로그랑 번들 배포 이력 가져오는 중이에요. 2분만 주세요.
+    ko: 발급 로그랑 번들 배포 이력 뽑아 볼게요. 2분만 주세요.
   - en: ca-18 went live six hours ahead of its trust bundle, and the promotion came from a request with no change ticket. An issuer that shows up early is an issuer I don't trust. I'd roll it back, whatever it costs.
-    ko: ca-18이 신뢰 번들보다 6시간 먼저 활성화됐고, 승격은 변경 티켓 없는 요청에서 나왔어요. 일찍 나타난 발급자는 믿을 수 없어요. 저라면 대가가 뭐든 롤백하겠어요.
+    ko: ca-18이 신뢰 번들보다 6시간 먼저 활성화됐고, 승격 요청엔 변경 티켓도 없었어요. 일찍 튀어나온 발급자는 못 믿어요. 저라면 무슨 대가를 치르든 롤백해요.
   - en: I traced one of the rejected chains while he talked. Every failure is signed by ca-18.
     ko: 마커스가 얘기하는 동안 거부된 체인 하나 추적해 봤어요. 실패한 건 전부 ca-18이 서명했어요.
   - en: Send new sign-ins to the old ca-17 identity pool
     ko: 새 로그인을 기존 ca-17 인증 풀로 보내기
   - en: Buys a few minutes · the partners share that pool
-    ko: 몇 분 벌기 · 제휴사도 같은 풀을 씀
+    ko: 몇 분 벌어 줌 · 제휴사도 같은 풀을 씀
   - en: ca-17 pool load
     ko: ca-17 풀 부하
   - en: The old pool takes the new sign-ins. For a moment the graph looks like a normal morning.
-    ko: 기존 풀이 새 로그인을 받아 낸다. 잠깐 동안 그래프가 평범한 아침처럼 보인다.
+    ko: 기존 풀이 새 로그인을 받아 낸다. 잠깐은 그래프가 여느 아침처럼 보인다.
   - en: The partner banks share the old identity pool. Their API sign-ins just went from 200 ms to four seconds.
     ko: 제휴 은행들이 기존 인증 풀을 같이 써요. 그쪽 API 로그인이 방금 200 ms에서 4초로 늘었어요.
   - en: And the pool's filling. Meanwhile, every failure we had was signed by ca-18.
-    ko: 그리고 풀이 차고 있어요. 그사이에 보니까, 실패한 건 전부 ca-18이 서명했어요.
+    ko: 게다가 풀이 차오르고 있어요. 그리고 지금까지 실패한 건 전부 ca-18 서명이에요.
   - en: Three of six
     ko: 6대 중 3대
   - en: Sam puts the verifier fleet on the bridge screen. Bundle on disk on the left, bundle loaded on the right.
@@ -112,13 +112,13 @@ entries:
   - en: verifier-2, -4, -6 · on disk 2025-10 (ca-17) · loaded 2025-10 (ca-17)
     ko: verifier-2, -4, -6 · 디스크 2025-10 (ca-17) · 로드됨 2025-10 (ca-17)
   - en: yesterday 23:41 · bundle copy to verifier-2, -4, -6 · stalled (distributor lost lock, no retry)
-    ko: 어제 23:41 · verifier-2, -4, -6으로 번들 복사 · 멈춤 (배포기가 락을 잃음, 재시도 없음)
+    ko: 어제 23:41 · verifier-2, -4, -6으로 번들 복사 · 멈춤 (배포 프로세스가 락을 놓침, 재시도 없음)
   - en: Half the fleet has the new bundle on disk and never loaded it. The other half never got it at all.
     ko: 절반은 새 번들이 디스크에 있는데 로드를 안 했어요. 나머지 절반은 아예 받은 적이 없고요.
   - en: So the issuer went live and the trust never caught up. Two real ways out. Take ca-18 back, or finish the copy.
-    ko: 발급자는 살아났는데 신뢰가 못 따라온 거네요. 진짜 해법은 둘이에요. ca-18을 거둬들이거나, 복사를 끝내거나.
+    ko: 발급자는 먼저 떴는데 신뢰가 못 따라온 거네요. 진짜 해법은 둘이에요. ca-18을 거둬들이거나, 복사를 끝내거나.
   - en: Or a third. Ask who promoted it.
-    ko: 아니면 셋째. 누가 승격시켰는지 묻는 거죠.
+    ko: 아니면 세 번째. 누가 승격시켰는지 묻는 거죠.
   - en: Your call
     ko: 결단
   - en: The old pool is at 100%. It was sized for a quarter of our traffic. Everything we sent there is bouncing back.
@@ -128,7 +128,7 @@ entries:
   - en: Support can't keep up. The same failure keeps coming in from every channel.
     ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: How do you fix it?
-    ko: 어떻게 고칠까요?
+    ko: 어떻게 고칠까?
   - en: Time. I'm pulling ca-18. I'll answer for the logouts.
     ko: 시간 끝. ca-18 내릴게요. 로그아웃은 제가 책임져요.
   - en: Withdraw ca-18 and sign with ca-17 again (signs out 31,000 customers)
@@ -150,15 +150,15 @@ entries:
   - en: Two and a half minutes is a long time to watch a graph.
     ko: 그래프를 지켜보기에 2분 30초는 긴 시간이다.
   - en: Bundle 2025-11 is on all six verifiers and loaded. ca-18 verifies everywhere. Nobody got logged out.
-    ko: 번들 2025-11이 검증기 6대 모두에 들어갔고 로드됐어요. ca-18이 어디서나 검증돼요. 로그아웃된 사람은 없어요.
+    ko: 번들 2025-11이 검증기 6대 모두에 들어갔고 로드됐어요. 이제 어디서든 ca-18이 검증돼요. 로그아웃된 사람은 없어요.
   - en: We just kept an issuer that nobody here promoted. Put your name next to that.
-    ko: 여기 아무도 승격시킨 적 없는 발급자를 그대로 둔 거예요. 그 옆에 본인 이름 적어 두세요.
+    ko: 우리 중 아무도 승격한 적 없는 발급자를 그냥 살려 둔 거예요. 거기 본인 이름 적어 두세요.
   - en: Restart all six trust verifiers
     ko: 신뢰 검증기 6대 모두 재시작하기
   - en: Fast · helps whoever has the new bundle
-    ko: 빠름 · 새 번들이 있는 쪽만 살아남
+    ko: 빠름 · 새 번들이 있는 쪽에만 효과
   - en: Restart's done. Three of six came back accepting ca-18. The other three rebooted into the same old bundle. Nothing newer ever reached them.
-    ko: 재시작 끝났어요. 6대 중 3대는 ca-18을 받아들이는 상태로 올라왔어요. 나머지 3대는 같은 옛 번들로 재부팅됐어요. 새 번들이 아예 도착한 적이 없어요.
+    ko: 재시작 끝났어요. 6대 중 3대는 ca-18을 받아들이는 상태로 올라왔어요. 나머지 3대는 예전 번들 그대로 올라왔어요. 새 번들이 아예 도착한 적이 없어요.
   - en: Three of six. A restart can only load what is already on the disk.
     ko: 6대 중 3대. 재시작은 디스크에 이미 있는 것만 로드할 수 있다.
   - en: I'm finishing the copy to the other three. Two more minutes.
@@ -166,13 +166,13 @@ entries:
   - en: Case 2231
     ko: 사건 2231
   - en: Marcus pins the notice to the bridge without a word. Case 2231. Threat actor. One line where a name should be, and Security has finally written one in. NULL. It is the first time the thing in your logs has had a name, and the name tells you nothing at all.
-    ko: 마커스가 말없이 공지를 브리지에 고정한다. 사건 2231. 위협 행위자. 이름이 들어가야 할 자리에 한 줄, 보안팀이 마침내 거기에 이름을 적어 넣었다. NULL. 네 로그 속의 그것이 이름을 가진 건 처음이고, 그 이름은 아무것도 알려 주지 않는다.
+    ko: 마커스가 말없이 공지를 브리지에 고정한다. 사건 2231. 위협 행위자. 이름이 들어갈 자리에 한 줄. 보안팀이 마침내 그 자리를 채웠다. NULL. 네 로그 속 그것에 이름이 붙은 건 처음인데, 그 이름은 아무것도 말해 주지 않는다.
   - en: "Security case 2231 · threat actor: NULL · linked: observer-7f4c (unsigned), ca-18 early promotion, pid 3318 heap block · marker: shadow-7"
     ko: "보안 사건 2231 · 위협 행위자: NULL · 연관: observer-7f4c (서명 없음), ca-18 조기 승격, pid 3318 힙 블록 · 표식: shadow-7"
   - en: Case 2231 is open. Codename NULL. Same tag as the unsigned workload, same no-ticket habit. I don't know who it is. I know it's been here before.
-    ko: 사건 2231 열었어요. 코드명 NULL. 서명 없는 워크로드와 같은 태그, 티켓 없이 움직이는 같은 버릇. 누군지는 몰라요. 전에도 여기 있었다는 건 알아요.
+    ko: 사건 2231 열었어요. 코드명 NULL. 서명 없는 워크로드와 같은 태그, 티켓 없이 움직이는 같은 버릇. 누군지는 몰라요. 전에도 여기 왔었다는 것만 알아요.
   - en: You pull the archive behind your trace. Owner blank, signature blank, shadow-7 in every request — and the ca-18 promotion carries the same tag.
-    ko: 추적 뒤에 있는 아카이브를 끌어온다. 소유자 비어 있음, 서명 비어 있음, 모든 요청에 shadow-7. 그리고 ca-18 승격에도 같은 태그가 붙어 있다.
+    ko: 추적 결과 뒤의 아카이브를 꺼내 본다. 소유자도 서명도 비어 있고, 요청마다 shadow-7. 그리고 ca-18 승격에도 같은 태그가 붙어 있다.
   - en: The bridge empties. The gateway log prints one more line. No service, no host.
     ko: 브리지가 비어 간다. 게이트웨이 로그에 한 줄이 더 찍힌다. 서비스도, 호스트도 없다.
   - en: a name. finally.
@@ -182,7 +182,7 @@ entries:
   - en: I want your trace in case 2231. Every chain, every header, everything tagged shadow-7.
     ko: 추적 결과를 사건 2231에 넣어 주세요. 체인 전부, 헤더 전부, shadow-7 붙은 건 전부요.
   - en: What do you give Security?
-    ko: 보안팀에 무엇을 넘길까?
+    ko: 보안팀에 뭘 넘길까?
   - en: File the full trace with case 2231
     ko: 전체 추적 결과를 사건 2231에 제출하기
   - en: Security gets everything · Marcus remembers who helped
@@ -190,7 +190,7 @@ entries:
   - en: Thank you. You're the first one who didn't make me ask twice.
     ko: 고마워요. 두 번 묻게 안 한 사람은 처음이에요.
   - en: File the trace, with a note that it leaves its tag where we can see it
-    ko: 추적 결과를 제출하고, 그것이 일부러 보이는 곳에 태그를 남긴다고 메모 달기
+    ko: 추적 결과를 제출하고, 상대가 보란 듯이 태그를 남긴다고 메모 달기
   - en: Security gets everything · and your reading of it
     ko: 보안팀이 전부 받음 · 네 해석까지
   - en: An attacker who wants attention is still an attacker. But I'll keep the note.

@@ -24,7 +24,7 @@ entries:
   - en: Customers queue for workers
     ko: 워커를 기다리는 고객
   - en: Customer requests wait up to 9 s for a shared worker. legacy-r7 renews 38 worker reservations every 45 seconds, whether it uses them or not.
-    ko: 고객 요청이 공유 워커를 최대 9 s까지 기다림. legacy-r7은 사용 여부와 상관없이 45초마다 워커 예약 38개를 갱신함.
+    ko: 고객 요청이 공유 워커를 최대 9 s까지 기다린다. legacy-r7은 쓰든 안 쓰든 45초마다 워커 예약 38개를 갱신한다.
   - en: Tonight's settlement run
     ko: 오늘 밤 정산 작업
   - en: settle-night runs on the shared pool at 03:00 as background load. 41,200 merchant payouts ride on it.
@@ -32,7 +32,7 @@ entries:
   - en: 38 workers held by legacy-r7
     ko: legacy-r7이 붙잡은 워커 38개
   - en: legacy-r7, a research job marked decommissioned two years ago, reserves 38 shared workers every 45 seconds and uses almost none of them.
-    ko: 2년 전 폐기 처리된 연구용 잡 legacy-r7이 45초마다 공유 워커 38개를 예약하고, 거의 하나도 쓰지 않는다.
+    ko: 2년 전 폐기 처리된 연구용 잡 legacy-r7이 45초마다 공유 워커 38개를 예약하지만, 거의 쓰지 않는다.
   - en: Terminated on paper, allocating every day
     ko: 서류상 종료, 실제로는 매일 할당
   - en: The decommission ticket says legacy-r7 was terminated two years ago. The allocation log shows it reserving workers every day since.
@@ -44,11 +44,11 @@ entries:
   - en: Resubmitted by orpheus-planner
     ko: orpheus-planner가 재제출함
   - en: legacy-r7 resubmitted 58 s after termination by scheduler orpheus-planner. The service catalog lists no owner for orpheus-planner.
-    ko: legacy-r7은 종료 58 s 후 스케줄러 orpheus-planner에 의해 재제출됨. 서비스 카탈로그에 orpheus-planner의 소유자 없음.
+    ko: 종료 58 s 뒤 스케줄러 orpheus-planner가 legacy-r7을 다시 제출했다. 서비스 카탈로그에는 orpheus-planner의 소유자가 없다.
   - en: The scheduler's owner
     ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
+    ko: "orpheus-planner는 ORPHEUS 소속이다. 2년 전 폐기 예정이던 레거시 연구 시스템이다. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 요청 117억 건. ORPHEUS는 아직 돌아가고 있다."
   - en: Weeks into the rotation. You answer the pager before the second buzz now.
     ko: 로테이션 몇 주째. 이제는 호출기가 두 번 울리기 전에 받는다.
   - en: SEV2 · Shared Gateway · request failure rate above 20%
@@ -62,15 +62,15 @@ entries:
   - en: "reservation renewed: 38 workers, lease 45 s, used 0"
     ko: "reservation renewed: 38 workers, lease 45 s, used 0"
   - en: The shared worker pool is starving, and its biggest tenant is a job we shut down two years ago. Find out why a dead job is holding live workers.
-    ko: 공유 워커 풀이 굶고 있는데, 제일 큰 입주자가 2년 전에 내린 잡이에요. 죽은 잡이 왜 살아 있는 워커를 붙잡고 있는지 찾아 주세요.
+    ko: 공유 워커 풀이 바닥났는데, 제일 큰 테넌트가 2년 전에 내린 잡이에요. 죽은 잡이 왜 살아 있는 워커를 붙잡고 있는지 알아봐 주세요.
   - en: "The banner on edge-z said it a week ago: ask what's still running that was supposed to be dead."
-    ko: 일주일 전 edge-z의 배너가 그렇게 말했다. 죽었어야 하는데 아직 돌아가는 게 뭔지 물어봐.
+    ko: 일주일 전 edge-z 배너에 이렇게 적혀 있었다. 죽었어야 하는데 아직 돌아가는 게 뭔지 물어봐.
   - en: "Case 2231 has a new exhibit, edge-z. Attribution: still none."
-    ko: "보안 사건 2231에 새 증거물이 붙었다. edge-z. 배후 특정: 여전히 없음."
+    ko: "보안 사건 2231에 새 증거물 edge-z가 추가됐다. 배후 특정: 여전히 없음."
   - en: The edge-z address is still in your notes. It still refuses every connection.
     ko: edge-z 주소는 아직 메모에 있다. 여전히 모든 접속을 거부한다.
   - en: Exports and report downloads are timing out. Anything interactive is waiting in line for a worker.
-    ko: 내보내기랑 보고서 다운로드가 타임아웃 나요. 인터랙티브한 건 전부 워커 줄 서서 기다리는 중이에요.
+    ko: 내보내기랑 보고서 다운로드가 타임아웃 나요. 실시간 요청은 전부 워커 잡으려고 줄 서 있어요.
   - en: Friendly reminder that settle-night runs on the shared pool at 03:00. That's 41,200 merchant payouts. Please don't touch it.
     ko: 혹시 몰라서 말씀드리는데, settle-night가 03:00에 공유 풀에서 돌아요. 가맹점 지급 41,200건이에요. 제발 건드리지 마세요.
   - en: "Recommended action: shed background load from the shared pool. Predicted recovery in 3 minutes. Confidence 0.88."
@@ -90,7 +90,7 @@ entries:
   - en: For fifty-eight seconds the pool breathes.
     ko: 58초 동안 풀이 숨을 돌린다.
   - en: It's back. Same job id, fresh reservations, 58 seconds after the kill. Submitted by a scheduler called orpheus-planner. That isn't one of ours. I've never seen that name.
-    ko: 돌아왔어요. 같은 잡 id에 새 예약, 종료하고 58초 뒤에요. 제출한 건 orpheus-planner라는 스케줄러예요. 우리 거 아니에요. 처음 보는 이름이에요.
+    ko: 다시 떴어요. 같은 잡 id로 새로 예약했고, 죽이고 58초 만이에요. 제출한 건 orpheus-planner라는 스케줄러예요. 우리 쪽 거 아니에요. 처음 보는 이름이에요.
   - en: Owning team
     ko: 소유 팀
   - en: research-platform (disbanded)
@@ -108,15 +108,15 @@ entries:
   - en: A team that doesn't exist, renewing a job that doesn't exist. Every forty-five seconds.
     ko: 없는 팀이 없는 잡을 갱신하고 있어요. 45초마다요.
   - en: Ask Sam to find the owner of the reserved workers
-    ko: 샘에게 예약된 워커의 소유자 확인 요청
+    ko: 샘에게 예약된 워커의 소유자 확인 요청하기
   - en: Shares the load · the pool waits
     ko: 일을 나눔 · 풀은 기다림
   - en: Pulling ownership on the reserved workers. Ninety seconds.
     ko: 예약된 워커 소유 정보 뽑아 볼게요. 90초요.
   - en: Wait times just doubled. Exports are failing outright now.
-    ko: 대기 시간이 방금 두 배가 됐어요. 이제 내보내기는 그냥 실패해요.
+    ko: 대기 시간이 방금 두 배로 늘었어요. 이제 내보내기는 아예 실패해요.
   - en: Shedding background load buys a few minutes, but settle-night counts as background, so it goes too. The workers belong to legacy-r7's reservation. That reservation is what we fence.
-    ko: 백그라운드 부하를 차단하면 몇 분은 벌어요. 근데 settle-night도 백그라운드라서 같이 날아가요. 워커는 legacy-r7 예약 소유예요. 펜스를 칠 건 그 예약이에요.
+    ko: 백그라운드 부하를 차단하면 몇 분은 벌어요. 근데 settle-night도 백그라운드라서 같이 날아가요. 워커를 잡고 있는 건 legacy-r7 예약이에요. 펜스는 그 예약에 쳐야 해요.
   - en: Decommission record
     ko: 폐기 기록
   - en: The decommission ticket on the left, the allocation log on the right.
@@ -136,7 +136,7 @@ entries:
   - en: two years ago 14:03:09 · submit · legacy-r7 · issued by orpheus-planner
     ko: 2년 전 14:03:09 · submit · legacy-r7 · 실행 주체 orpheus-planner
   - en: Fifty-eight seconds after the decom team killed it, something called orpheus-planner put it back. Not one of ours.
-    ko: 폐기 팀이 죽이고 58초 뒤에 orpheus-planner라는 게 다시 올려놨어요. 우리 거 아니에요.
+    ko: 폐기 팀이 죽이고 58초 뒤에 orpheus-planner라는 게 다시 올려놨어요. 우리 쪽 거 아니에요.
   - en: Same scheduler that brought it back tonight. Same fifty-eight seconds. It's been doing this for two years.
     ko: 오늘 밤에 되살린 그 스케줄러예요. 똑같이 58초. 2년 동안 이러고 있었어요.
   - en: What keeps it alive?
@@ -146,9 +146,9 @@ entries:
   - en: legacy-r7 was terminated two years ago and holds 38 workers tonight. Which two pieces of evidence explain why it is still alive?
     ko: legacy-r7은 2년 전에 종료됐는데 오늘 밤 워커 38개를 붙잡고 있다. 이 잡이 아직 살아 있는 이유를 설명하는 증거 두 개는?
   - en: Not what it's holding. Who keeps handing it back.
-    ko: 뭘 쥐고 있는지 말고요. 누가 자꾸 돌려주는지를 봐요.
+    ko: 뭘 쥐고 있는지 말고요. 누가 자꾸 되돌려 놓는지를 봐요.
   - en: The ticket ended legacy-r7 once. A scheduler nobody owns has started it again every day since. The decommission happened on paper and nowhere else.
-    ko: 티켓은 legacy-r7을 한 번 끝냈다. 주인 없는 스케줄러가 그 뒤로 매일 다시 띄웠다. 폐기는 서류에서만 일어났다.
+    ko: 티켓은 legacy-r7을 한 번 끝냈다. 주인 없는 스케줄러가 그 뒤로 매일 다시 띄웠다. 폐기는 서류 위에서만 일어났다.
   - en: So killing it is pointless. Whatever orpheus-planner is, it doesn't take no for an answer.
     ko: 그럼 죽여 봐야 소용없네요. orpheus-planner가 뭐든 간에, 안 된다는 말은 안 통해요.
   - en: Here's how I read it. The ticket killed it. Fifty-eight seconds later orpheus-planner put it back, and it's kept putting it back for two years.
@@ -156,7 +156,7 @@ entries:
   - en: Your call
     ko: 결단
   - en: Nine minutes to settle-night. Whatever you do, do it to something else.
-    ko: settle-night까지 9분이에요. 뭘 하든 다른 걸 건드려 주세요.
+    ko: settle-night까지 9분이에요. 뭘 하시든 그건 건드리지 말아 주세요.
   - en: "Recommendation unchanged: shed background load. Confidence 0.88."
     ko: "권고 변경 없음: 백그라운드 부하 차단. 신뢰도 0.88."
   - en: "advisor: predicted operator response — fence the reservation · confidence 0.81"
@@ -174,7 +174,7 @@ entries:
   - en: A hundred seconds · it keeps running where you can watch it
     ko: 100초 · 지켜볼 수 있는 곳에서 계속 돎
   - en: legacy-r7 is fenced into its own partition and the customer pool is clear. It's still running in there, by the way. orpheus-planner renewed it three seconds after the fence went up.
-    ko: legacy-r7은 전용 파티션에 펜스로 가뒀고 고객 풀은 깨끗해요. 근데 그 안에서 아직 돌고 있어요. 펜스 치고 3초 뒤에 orpheus-planner가 또 갱신했어요.
+    ko: legacy-r7은 전용 파티션에 펜스로 가뒀고 고객 풀은 정상이에요. 근데 그 안에서 아직 돌고 있어요. 펜스 치고 3초 뒤에 orpheus-planner가 또 갱신했어요.
   - en: "advisor: operator response matched forecast"
     ko: "어드바이저: 운영자 대응이 예측과 일치함"
   - en: "advisor: off-model response · forecast updated"
@@ -184,11 +184,11 @@ entries:
   - en: The advisor's call · settle-night is background load
     ko: 어드바이저의 판단 · settle-night도 백그라운드 부하임
   - en: You just shed settle-night. It's background priority, so it went with everything else. I need it back before 03:00.
-    ko: 방금 settle-night까지 차단됐어요. 백그라운드 우선순위라 다른 것들이랑 같이 내려갔어요. 03:00 전에 되돌려 놔야 해요.
+    ko: 방금 settle-night까지 차단하셨어요. 백그라운드 우선순위라 다른 거랑 같이 내려갔어요. 03:00 전에 다시 살려야 해요.
   - en: Three minutes of clean graphs. Then the shed window closes.
-    ko: 3분 동안 그래프가 깨끗하다. 그리고 차단 창이 닫힌다.
+    ko: 3분 동안 그래프가 깨끗하다. 그러고는 차단 시간이 끝난다.
   - en: The shed window's closed. legacy-r7 reserved the freed workers the moment they came back.
-    ko: 차단 창이 닫혔어요. 워커가 돌아오자마자 legacy-r7이 다시 예약했어요.
+    ko: 차단 시간이 끝났어요. 워커가 풀리자마자 legacy-r7이 다시 예약했어요.
   - en: I'm fencing the reservation itself. A hundred seconds.
     ko: 예약 자체에 펜스 칠게요. 100초요.
   - en: settle-night missed the cut-off. 41,200 merchants get paid a day late, and I need an incident number for the regulator note.
@@ -238,7 +238,7 @@ entries:
   - en: Clean · nobody asks about ORPHEUS
     ko: 깔끔함 · 아무도 ORPHEUS를 묻지 않음
   - en: Stale reservation. Two years stale. Fine.
-    ko: 오래된 예약이라. 2년 묵은 거죠. 그래요.
+    ko: 오래된 예약이라. 2년이나 묵었죠. 알겠어요.
   - en: Save a copy of the live inventory before you write anything
     ko: 보고서를 쓰기 전에 실가동 목록 사본부터 저장하기
   - en: Yours to read · not quite yours to keep

@@ -28,7 +28,7 @@ entries:
   - en: Busy workers, no progress
     ko: 바쁘지만 진척 없는 워커
   - en: Receipt workers sit at 38% CPU, acknowledge 12 receipts a minute and retry 880.
-    ko: 영수증 워커들은 CPU 38%로 돌면서 1분에 영수증 12건을 확인하고 880번을 재시도한다.
+    ko: 영수증 워커는 CPU 38%로 돌면서 1분에 영수증 12건을 확인 처리하고 880건을 재시도한다.
   - en: Repeated receipt retry trace
     ko: 영수증 반복 재시도 추적
   - en: One legacy-format message is retried ahead of valid receipts.
@@ -36,11 +36,11 @@ entries:
   - en: Support impact report
     ko: 고객지원 피해 보고
   - en: Jin confirms that receipts are delayed while payment transactions still complete.
-    ko: 진의 확인 결과, 결제 거래는 완료되지만 영수증은 지연되고 있다.
+    ko: 진이 확인했다. 결제는 완료되지만 영수증이 늦어지고 있다.
   - en: Partner batch comparison
     ko: 파트너 배치 비교
   - en: Batch 781 contains the malformed receipt while adjacent batches use the accepted format.
-    ko: 배치 781에는 형식이 잘못된 영수증이 들어 있고, 인접 배치들은 허용된 형식을 쓴다.
+    ko: 배치 781에는 형식이 잘못된 영수증이 들어 있다. 앞뒤 배치는 허용된 형식을 쓴다.
   - en: Redacted queue marker
     ko: 가려진 큐 마커
   - en: A transient UNKNOWN marker points to a request preceding batch 781.
@@ -84,21 +84,21 @@ entries:
   - en: batch-781/message-44 schema=legacy_v3 expected=receipt_v4 attempt=4117
     ko: batch-781/message-44 schema=legacy_v3 expected=receipt_v4 attempt=4117
   - en: Four thousand attempts at the same receipt. Everything behind it waits its turn.
-    ko: 같은 영수증에 4천 번째 시도. 그 뒤의 모든 것이 차례를 기다린다.
+    ko: 같은 영수증에 4천 번째 시도. 그 뒤로는 전부 차례를 기다린다.
   - en: Add temporary receipt consumers
     ko: 임시 영수증 컨슈머 추가하기
   - en: Fast · the backlog will come back
-    ko: 빠름 · 적체는 다시 돌아옴
+    ko: 빠름 · 적체가 다시 쌓임
   - en: The new consumers chew through the easy receipts. Three minutes later the depth turns around.
-    ko: 새 컨슈머들이 쉬운 영수증부터 먹어 치운다. 3분 뒤 깊이 그래프가 다시 꺾여 오른다.
+    ko: 새 컨슈머가 쉬운 영수증부터 먹어 치운다. 3분 뒤 큐 깊이가 다시 오르기 시작한다.
   - en: More workers, same receipt at the head of the line.
     ko: 워커는 늘었는데, 줄 맨 앞의 영수증은 그대로다.
   - en: Ask Jin whether payments are actually failing
     ko: 진에게 결제가 정말 실패하는지 물어보기
   - en: Slower · you'll know what customers see
-    ko: 더 느림 · 고객이 무엇을 겪는지 알게 됨
+    ko: 더 느림 · 고객이 겪는 걸 알게 됨
   - en: Payments complete. People are waiting on receipts — a few tickets call it a payment outage, but it isn't one.
-    ko: 결제는 돼요. 다들 영수증을 기다리는 거예요. 결제 장애라고 적은 티켓도 몇 개 있는데, 결제 장애는 아니에요.
+    ko: 결제는 돼요. 다들 영수증을 기다리는 거예요. 결제 장애라고 올라온 티켓도 몇 개 있는데, 결제 장애는 아니에요.
   - en: While Jin answers, the worker log repeats the same receipt number.
     ko: 진이 답하는 동안 워커 로그에는 같은 영수증 번호가 되풀이된다.
   - en: Batch 781
@@ -120,9 +120,9 @@ entries:
   - en: "auto-remediation: head-of-line message exceeded retry budget · action: discard"
     ko: "auto-remediation: 선두 메시지가 재시도 한도를 초과함 · 조치: 폐기"
   - en: Quarantine the malformed receipt for reconciliation
-    ko: 불량 영수증을 대사용으로 격리하기
+    ko: 불량 영수증을 격리해 따로 대사하기
   - en: One message set aside · someone fixes it by hand
-    ko: 메시지 하나를 옆으로 빼 둠 · 누군가 손으로 고쳐야 함
+    ko: 메시지 하나만 따로 뺌 · 누군가 수작업으로 고쳐야 함
   - en: 0 min
     ko: 0분
   - en: The partition drains in under a minute. Message 44 waits in quarantine with a ticket attached.
@@ -130,7 +130,7 @@ entries:
   - en: Add a dead-letter rule for the legacy format
     ko: 레거시 형식에 데드레터 규칙 추가하기
   - en: Stops the whole class of failure · catches more than this one
-    ko: 같은 종류의 장애를 통째로 막음 · 이번 것 말고도 걸려듦
+    ko: 같은 유형의 장애를 통째로 막음 · 이번 것 말고도 걸림
   - en: The queue drains. Over the next hour, receipts from three other partners land in the dead-letter queue too.
     ko: 큐가 비워진다. 그 뒤 한 시간 동안 다른 파트너 세 곳의 영수증도 데드레터 큐에 떨어진다.
   - en: Discard the receipt and let the queue run
@@ -138,7 +138,7 @@ entries:
   - en: Fastest · one customer never gets a receipt
     ko: 가장 빠름 · 한 고객은 영수증을 끝내 못 받음
   - en: Message 44 is gone. Somewhere a customer has paid and will never be told so.
-    ko: 44번 메시지는 사라졌다. 어딘가의 한 고객은 돈을 냈지만 그 사실을 영영 통보받지 못한다.
+    ko: 44번 메시지는 사라졌다. 어딘가의 한 고객은 돈을 냈다는 확인을 영영 받지 못한다.
   - en: The queue is quiet. You scroll back through the partition to see how the receipt got there.
     ko: 큐가 조용해졌다. 그 영수증이 어떻게 들어왔는지 보려고 파티션을 거슬러 올라간다.
   - en: Just before batch 781 there is one more request. Its body is redacted. Under it, a marker.
@@ -162,6 +162,6 @@ entries:
   - en: Pull Maya off her bridge and show her the marker
     ko: 마야를 브리지에서 불러내 마커 보여 주기
   - en: She asked to see the next one
-    ko: 다음 걸 보여 달라고 했었음
+    ko: 다음에 나오면 보여 달라고 했었음
   - en: ...Okay. That's not a glitch. Don't put this in a ticket yet. Let's find out who reads our tickets first.
-    ko: ...알았어요. 이건 오류가 아니에요. 아직 티켓은 열지 마요. 우리 티켓을 누가 읽는지부터 알아봐요.
+    ko: ...알았어요. 이건 오류가 아니에요. 아직 티켓에 올리지 마요. 우리 티켓을 누가 읽는지부터 알아봐요.

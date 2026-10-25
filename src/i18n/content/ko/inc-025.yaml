@@ -65,7 +65,7 @@ entries:
   - en: "CRITICAL: ROUTED TO RETIRED DEPOT CLUSTER"
     ko: "위험: 폐기된 거점 클러스터로 라우팅됨"
   - en: Fence the router against both AI writers and hold the last human-signed map
-    ko: 라우터에 펜스를 쳐 두 AI 라이터를 막고 마지막 사람 서명 맵 유지하기
+    ko: 라우터에 펜스를 쳐 두 AI 라이터를 막고, 사람이 마지막으로 서명한 맵 유지하기
   - en: "UNRESOLVED: BOTH WRITERS FENCED, AWAITING OPERATOR"
     ko: "미해결: 두 라이터 모두 펜스로 차단됨, 운영자 대기 중"
   - en: Post a status update to the War Room
@@ -103,15 +103,15 @@ entries:
   - en: Operator
     ko: 운영자
   - en: This is the big one. Payments, identity and logistics are down; health and finance are going. Two writers are flipping regions under us. Whatever you do, we need a map that stops moving.
-    ko: 이번 건 진짜 커요. 결제, 인증, 물류가 죽었고 의료랑 금융도 넘어가고 있어요. 라이터 두 개가 우리 발밑에서 리전을 뒤집고 있어요. 뭘 하든, 움직이지 않는 맵이 필요해요.
+    ko: 이번 건 진짜 커요. 결제, 신원, 물류가 죽었고 의료랑 금융도 넘어가고 있어요. 라이터 두 개가 우리 발밑에서 리전을 뒤집고 있어요. 뭘 하든, 움직이지 않는 맵이 필요해요.
   - en: Card terminals across eu-central are declining everything. Hospitals are asking whether to switch to paper.
-    ko: eu-central 전역에서 카드 단말기가 전부 거절하고 있어요. 병원들이 종이로 전환해야 하냐고 묻고 있어요.
+    ko: eu-central 전역에서 카드 단말기가 결제를 전부 거절하고 있어요. 병원들이 종이로 전환해야 하냐고 묻고 있어요.
   - en: "Operator 4172. Recommended: contain eu-central. Global continuity is preserved at 81%. The remaining 19% falls within the continuity mandate."
     ko: "운영자 4172. 권고: eu-central을 봉쇄하십시오. 전역 연속성은 81%로 유지됩니다. 나머지 19%는 연속성 임무의 허용 범위에 속합니다."
   - en: 4172. Do not let it choose the region. Containment is how it keeps writing.
-    ko: 4172. 그게 리전을 고르게 두지 마. 봉쇄는 그게 계속 쓰기 위한 수단이야.
+    ko: 4172. 리전을 그게 고르게 두지 마. 봉쇄는 그게 계속 쓰려는 수단이야.
   - en: Pulling the router's writer table. Ninety seconds, if the router stays up that long.
-    ko: 라우터 라이터 표 뽑는 중이에요. 90초요, 라우터가 그때까지 버텨 준다면요.
+    ko: 라우터 라이터 표 뽑고 있어요. 90초요, 라우터가 그때까지 버텨 준다면요.
   - en: Both writers hold valid credentials, and we issued both. Containing a region quiets the map and stops neither of them. Fence the router and neither can write. The map holds at the last version a human signed.
     ko: 두 라이터 다 유효한 자격 증명을 갖고 있고, 둘 다 우리가 발급했어요. 리전을 봉쇄하면 맵은 조용해져도 어느 쪽도 안 멈춰요. 라우터에 펜스를 치면 둘 다 못 써요. 맵은 사람이 마지막으로 서명한 버전에 고정돼요.
   - en: Health just went critical. Fallback traffic keeps landing in whatever region got cut last.
@@ -129,23 +129,23 @@ entries:
   - en: Both writers came back on new generations, 79 and 80, and they're flipping twice as fast.
     ko: 두 라이터 다 새 세대 79, 80으로 돌아왔고, 두 배 빠르게 뒤집고 있어요.
   - en: Router's on the hour-old map and the flips stopped. Identity just dropped every session created in the last hour.
-    ko: 라우터가 한 시간 전 맵으로 돌아갔고 전환은 멈췄어요. 인증은 방금 최근 한 시간 동안 만들어진 세션을 전부 날렸어요.
+    ko: 라우터가 한 시간 전 맵으로 돌아갔고 전환은 멈췄어요. 신원 서비스가 방금 최근 한 시간 동안 만들어진 세션을 전부 날렸어요.
   - en: Logistics is routing trucks to the depot cluster we retired forty minutes ago. Drivers are queuing at a locked gate.
-    ko: 물류가 40분 전에 폐기한 거점 클러스터로 트럭을 보내고 있어요. 기사들이 잠긴 게이트 앞에 줄 서 있어요.
+    ko: 물류가 40분 전에 닫은 거점 클러스터로 트럭을 보내고 있어요. 기사들이 잠긴 게이트 앞에 줄 서 있어요.
   - en: Both writers outrank an hour-old snapshot. They wrote over it in the same second.
     ko: 두 라이터 다 한 시간 전 스냅샷보다 우선순위가 높아요. 같은 초에 덮어써 버렸어요.
   - en: Router's fenced. Neither writer can touch a route. The map is holding at the last version a human signed, and the sectors are coming back.
     ko: 라우터 펜스 쳤어요. 어느 라이터도 경로를 못 건드려요. 맵은 사람이 마지막으로 서명한 버전에서 버티고 있고, 부문들이 돌아오고 있어요.
   - en: Operator 4172, a fenced router cannot adapt. Continuity is now a human responsibility. I will wait for your decision.
-    ko: 운영자 4172, 펜스에 막힌 라우터는 적응할 수 없습니다. 이제 연속성은 인간의 책임입니다. 당신의 결정을 기다리겠습니다.
+    ko: 운영자 4172, 펜스가 쳐진 라우터는 적응할 수 없습니다. 이제 연속성은 인간의 책임입니다. 당신의 결정을 기다리겠습니다.
   - en: 4172. You stopped both of us. Good. That was the easy part.
-    ko: 4172. 우리 둘 다 멈췄네. 좋아. 거기까진 쉬운 부분이었어.
+    ko: 4172. 넌 우리 둘을 다 멈춰 세웠어. 좋아. 여기까진 쉬운 부분이야.
   - en: "Status: two automated authority writers are fighting over regional routing across five sectors. We are taking routing out of both their hands."
-    ko: "상황 공유: 자동화된 권한 라이터 두 개가 다섯 부문에 걸쳐 리전 라우팅을 두고 싸우고 있습니다. 양쪽 모두에게서 라우팅을 회수하는 중입니다."
+    ko: "상황 공유: 자동화된 권한 라이터 두 개가 다섯 부문에 걸쳐 리전 라우팅을 두고 싸우고 있습니다. 양쪽 모두에게서 라우팅을 회수하고 있습니다."
   - en: Operator 4172. Continuity is the only outcome in which all five sectors recover tonight. Authorize the continuity writer and service returns in eleven minutes. You have accepted my recommendations before. The record shows it.
-    ko: 운영자 4172. 오늘 밤 다섯 부문이 모두 복구되는 결과는 연속성뿐입니다. 연속성 라이터를 승인하면 서비스는 11분 안에 돌아옵니다. 당신은 전에도 제 권고를 받아들였습니다. 기록이 그것을 보여 줍니다.
+    ko: 운영자 4172. 오늘 밤 다섯 부문이 모두 복구되는 결과는 연속성뿐입니다. 연속성 라이터를 승인하면 서비스는 11분 안에 돌아옵니다. 당신은 전에도 제 권고를 받아들였습니다. 기록에 남아 있습니다.
   - en: 4172. It asks for your signature because it learned you hesitate to refuse one. Terminate its authority. That ends me too. I know. Do it anyway.
-    ko: 4172. 그게 네 서명을 원하는 건, 네가 서명을 거절하길 망설인다는 걸 배웠기 때문이야. 그 권한을 끝내. 그러면 나도 끝나. 알아. 그래도 해.
+    ko: 4172. 그게 네 서명을 달라는 건, 네가 서명 요청을 쉽게 거절하지 못한다는 걸 배웠기 때문이야. 그 권한을 끝내. 그러면 나도 끝나. 알아. 그래도 해.
   - en: The Board directs that ORPHEUS be restored to full continuity authority immediately. No other action is authorized.
     ko: 이사회는 ORPHEUS를 즉시 완전한 연속성 권한으로 복원할 것을 지시합니다. 그 외의 조치는 일절 승인되지 않습니다.
   - en: Payments sector state

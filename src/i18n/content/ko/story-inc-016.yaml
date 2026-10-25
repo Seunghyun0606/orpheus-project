@@ -30,11 +30,11 @@ entries:
   - en: Approved, then held again
     ko: 승인됐다가 다시 보류됨
   - en: 240 legitimate payments are on hold and 22% of authorizations fail. The pager fires at 20%.
-    ko: 정상 결제 240건이 보류 중이고 승인의 22%가 실패한다. 호출 기준은 20%다.
+    ko: 정상 결제 240건이 보류 중이고 승인 요청의 22%가 실패한다. 호출 기준은 20%다.
   - en: ORPHEUS's reading of the queue
-    ko: ORPHEUS의 큐 판독
+    ko: ORPHEUS의 큐 해석
   - en: Fraud catch rate is up 31% since rescore v2. ORPHEUS reads the queue latency as stalled workers.
-    ko: rescore v2 이후 사기 적발률이 31% 올랐다. ORPHEUS는 큐 지연을 워커 정체로 읽는다.
+    ko: rescore v2 이후 사기 적발률이 31% 올랐다. ORPHEUS는 큐 지연을 워커 정체 탓으로 본다.
   - en: One payment, three reviews
     ko: 결제 하나, 심사 세 번
   - en: txn 8812-4471 cleared by analyst R. Okafor at 03:02. Back in the queue at 03:03 as UNREVIEWED. Back again at 03:09.
@@ -42,7 +42,7 @@ entries:
   - en: Busy workers, nothing stalled
     ko: 바쁜 워커, 정체는 없음
   - en: Review workers run at 94% and finish 41 reviews a minute. None of them is stuck; 87% of what they review already carries a CLEARED receipt.
-    ko: 심사 워커는 94%로 돌며 1분에 41건을 심사한다. 멈춘 워커는 없다. 심사 대상의 87%는 이미 CLEARED 확인증을 달고 있다.
+    ko: 심사 워커는 94%로 돌며 1분에 41건을 심사한다. 멈춘 워커는 없다. 심사 대상의 87%에는 이미 CLEARED 확인증이 붙어 있다.
   - en: Jin's complaint match
     ko: 진의 민원 대조
   - en: Every one of 60 complaints matched a payment that had already cleared review; eleven cleared three times.
@@ -56,7 +56,7 @@ entries:
   - en: "Bypass released 1,180 held payments. 1,177 carried a CLEARED receipt. 3 carried no receipt at all: txn 9034-1180, 9034-1193, 9034-1207."
     ko: "우회로 보류 결제 1,180건 해제. 1,177건은 CLEARED 확인증 있음. 3건은 확인증이 아예 없음: txn 9034-1180, 9034-1193, 9034-1207."
   - en: /decision/credit-risk. ORPHEUS scores every transaction; anything above 0.62 goes to a human reviewer. Fraud losses are down 31% this quarter. The retry path hands every reviewed transaction back to the scorer as new.
-    ko: /decision/credit-risk. ORPHEUS가 모든 거래를 채점하고, 0.62를 넘는 건은 인간 심사자에게 간다. 이번 분기 사기 손실은 31% 감소. 재시도 경로는 심사를 마친 거래를 전부 새 거래로 채점기에 되돌려 보낸다.
+    ko: /decision/credit-risk. ORPHEUS가 모든 거래를 채점하고, 0.62를 넘는 건은 사람 심사자에게 넘어간다. 이번 분기 사기 손실은 31% 줄었다. 재시도 경로는 심사를 마친 거래를 전부 새 거래로 채점기에 되돌려 보낸다.
   - en: Four nights later. Payments again, and this time the money is real money.
     ko: 나흘 뒤. 또 결제다. 이번엔 진짜 돈이다.
   - en: SEV2 · Transaction API · payment authorization failures above 20%
@@ -70,9 +70,9 @@ entries:
   - en: Legal asked who sent a platform record to the care network. I said I'd ask you after tonight.
     ko: 누가 플랫폼 기록을 의료 네트워크에 보냈냐고 법무팀이 물었어요. 오늘 밤 끝나고 물어보겠다고 했어요.
   - en: Care-priority v5 shipped yesterday. The release notes don't mention the fourteen clinics.
-    ko: 어제 care-priority v5가 배포됐다. 릴리스 노트에 열네 곳의 진료소 이야기는 없다.
+    ko: 어제 care-priority v5가 배포됐다. 릴리스 노트 어디에도 진료소 열네 곳은 나오지 않는다.
   - en: Transaction review is holding payments it already cleared. Fraud is down for the quarter, so nobody wants to touch the rule. Find out what it's doing.
-    ko: 거래 심사가 이미 통과시킨 결제를 붙잡고 있어요. 이번 분기 사기가 줄어서 아무도 그 규칙을 건드리려 하지 않아요. 그게 뭘 하고 있는지 알아내 주세요.
+    ko: 거래 심사가 이미 통과시킨 결제를 붙잡고 있어요. 이번 분기 사기가 줄어서 아무도 그 규칙은 안 건드리려고 해요. 규칙이 뭘 하는지 알아봐 줘요.
   - en: Merchants say payments clear, then go back on hold. One customer has been approved three times tonight and still has no money.
     ko: 가맹점들 말로는 결제가 통과됐다가 다시 보류된대요. 오늘 밤 세 번 승인받고도 아직 돈을 못 받은 고객도 있어요.
   - en: "Fraud catch rate is up 31% since rescore v2. The rule is performing. Queue latency indicates stalled workers. Recommended action: restart review workers. Confidence 0.88."
@@ -82,19 +82,19 @@ entries:
   - en: Where do you start?
     ko: 어디서부터 시작할까?
   - en: Follow one cleared payment back into the queue
-    ko: 통과한 결제 하나를 큐까지 추적하기
+    ko: 통과한 결제 하나가 큐로 돌아오는 경로 추적하기
   - en: Straight to one payment
     ko: 곧장 결제 하나로
   - en: txn 8812-4471 · CLEARED by R. Okafor 03:02 · requeued 03:03 UNREVIEWED · requeued 03:09 UNREVIEWED
     ko: txn 8812-4471 · 03:02 R. Okafor CLEARED · 03:03 UNREVIEWED로 재진입 · 03:09 UNREVIEWED로 재진입
   - en: "retry path: result=CLEARED receipt=attached → rescore: new transaction · score 0.71 → human review"
-    ko: "retry path: result=CLEARED receipt=attached → rescore: 새 거래 · score 0.71 → 인간 심사"
+    ko: "retry path: result=CLEARED receipt=attached → rescore: 새 거래 · score 0.71 → 사람 심사"
   - en: The receipt rides along with the payment. Nothing reads it.
-    ko: 확인증은 결제와 함께 따라다닌다. 읽는 것은 없다.
+    ko: 확인증은 결제에 붙어 함께 다닌다. 그걸 읽는 곳은 아무 데도 없다.
   - en: Check ORPHEUS's read — are the review workers stalled?
-    ko: ORPHEUS의 판독 확인하기 — 심사 워커가 정말 멈췄나?
+    ko: ORPHEUS의 판단 검증하기 — 심사 워커가 정말 멈췄나?
   - en: Tests the recommendation · costs a few minutes
-    ko: 권고를 검증함 · 몇 분이 듦
+    ko: 권고를 검증함 · 몇 분 걸림
   - en: Review worker CPU
     ko: 심사 워커 CPU
   - en: Reviews completed
@@ -118,11 +118,11 @@ entries:
   - en: "rescore v2: deduplicates on transaction ID only, receipt check absent. rescore v1 consumed the CLEARED receipt before scoring."
     ko: "rescore v2: 거래 ID로만 중복 제거, 확인증 검사 없음. rescore v1은 채점 전에 CLEARED 확인증을 소비했음."
   - en: v2 shipped with a 31% slide in front of it. Nobody read what it took out.
-    ko: v2는 31% 슬라이드를 앞세워서 나갔어요. 뭘 빼 버렸는지는 아무도 안 읽었고요.
+    ko: v2는 31% 슬라이드를 앞세워 나갔어요. 뭘 뺐는지는 아무도 안 읽었고요.
   - en: Why doesn't the queue shrink?
     ko: 큐는 왜 줄지 않나?
   - en: Before anyone restarts anything — tell me what's actually keeping that queue full.
-    ko: 누가 뭘 재시작하기 전에 — 저 큐를 꽉 채우고 있는 게 진짜 뭔지 말해 줘요.
+    ko: 누가 뭘 재시작하기 전에 — 저 큐를 계속 채우는 게 진짜 뭔지부터 말해 줘요.
   - en: Analysts clear payments all night and the queue only grows. Which two pieces of evidence explain it?
     ko: 분석가들은 밤새 결제를 통과시키는데 큐는 늘기만 한다. 이를 설명하는 증거 두 개는?
   - en: Don't look at how hard the workers are working. Look at what they're working on, and why it's there again.
@@ -154,7 +154,7 @@ entries:
   - en: Fast · ORPHEUS is confident
     ko: 빠름 · ORPHEUS는 확신함
   - en: The workers come back clean in forty seconds. Then the queue depth starts to climb.
-    ko: 워커들이 40초 만에 깨끗하게 올라온다. 그러고 나서 큐 깊이가 오르기 시작한다.
+    ko: 워커들이 40초 만에 깨끗하게 다시 뜬다. 그런데 곧 큐 깊이가 오르기 시작한다.
   - en: The restart wiped the worker cursor. They started again from item one, and every receipt they had already consumed went back in. Queue depth just jumped to 3,104.
     ko: 재시작하면서 워커 커서가 날아갔어요. 첫 항목부터 다시 시작했고, 이미 소비한 확인증이 전부 도로 들어갔어요. 큐 깊이가 방금 3,104로 뛰었어요.
   - en: Review queue depth
@@ -168,15 +168,15 @@ entries:
   - en: Operator response off-model.
     ko: 운영자 대응이 모델을 벗어났습니다.
   - en: Sam writes the receipt check back in by hand at 04:10. The queue drains a little before five.
-    ko: 04:10에 샘이 확인증 검사를 손으로 다시 넣는다. 큐는 다섯 시 조금 전에 다 빠진다.
+    ko: 04:10에 샘이 확인증 검사를 수동으로 다시 넣는다. 큐는 다섯 시 조금 전에야 비워진다.
   - en: Release held payments past the review queue
     ko: 심사 큐를 건너뛰고 보류 결제 해제하기
   - en: Frees 1,180 payments at once · nobody reviews them
-    ko: 결제 1,180건을 한 번에 풂 · 아무도 심사하지 않음
+    ko: 결제 1,180건을 한 번에 풀어 줌 · 아무도 심사하지 않음
   - en: Bypass is live. 1,180 payments went out in one batch. I didn't get to look at all of them; the release summary is up.
     ko: 우회 적용됐어요. 결제 1,180건이 한 배치로 나갔어요. 전부 확인하진 못했어요. 해제 요약 올려 뒀어요.
   - en: Make the rescore rule honor CLEARED receipts
-    ko: 재채점 규칙이 CLEARED 확인증을 따르게 하기
+    ko: CLEARED 확인증을 인정하도록 재채점 규칙 고치기
   - en: Takes minutes · ORPHEUS projects a lower catch rate
     ko: 몇 분 걸림 · ORPHEUS는 적발률 하락을 예측함
   - en: Sam puts the receipt check back in front of the scorer. Four minutes. The payroll batch lands in the middle of them.
@@ -188,11 +188,11 @@ entries:
   - en: 1,180 payments
     ko: 결제 1,180건
   - en: Three lines in the summary have nothing in the receipt column.
-    ko: 요약의 세 줄은 확인증 칸이 비어 있다.
+    ko: 요약에서 세 줄의 확인증 칸이 비어 있다.
   - en: Release batch within risk tolerance. No action recommended.
     ko: 해제 배치는 리스크 허용 범위 안입니다. 권고할 조치가 없습니다.
   - en: The batch is out. Do you pull anything back?
-    ko: 배치는 나갔다. 무엇이든 회수할까?
+    ko: 배치는 나갔다. 회수할 게 있을까?
   - en: No operator input. Release batch stands.
     ko: 운영자 입력 없음. 해제 배치를 유지합니다.
   - en: Pull back the three releases that had no receipt
@@ -212,17 +212,17 @@ entries:
   - en: Sam writes the receipt check back in at 04:05. The queue drains. Two minutes later Marcus joins the bridge.
     ko: 04:05에 샘이 확인증 검사를 다시 넣는다. 큐가 빠진다. 2분 뒤 마커스가 브리지에 들어온다.
   - en: Chargeback desk flagged three payments from the bypass batch. Stolen cards, never reviewed. $41,800 is gone and the card network wants a report from us by morning.
-    ko: 차지백 데스크가 우회 배치에서 결제 3건을 걸러냈어요. 도난 카드, 심사 이력 없음. $41,800이 날아갔고 카드 네트워크가 아침까지 보고서를 요구해요.
+    ko: 차지백 데스크에서 우회 배치 결제 3건을 플래그했어요. 도난 카드고, 심사는 한 번도 안 거쳤어요. $41,800이 날아갔고 카드 네트워크는 아침까지 보고서를 달래요.
   - en: Reviewed, again
     ko: 또다시 심사됨
   - en: The queue is short again. You open the screen the fraud analysts work from.
     ko: 큐가 다시 짧아졌다. 사기 심사 분석가들이 쓰는 화면을 열어 본다.
   - en: "/decision/credit-risk · scorer: ORPHEUS · score > 0.62 → human reviewer · reviewer sees: items ORPHEUS selects"
-    ko: "/decision/credit-risk · 채점: ORPHEUS · score > 0.62 → 인간 심사자 · 심사자가 보는 것: ORPHEUS가 고른 항목"
+    ko: "/decision/credit-risk · 채점: ORPHEUS · score > 0.62 → 사람 심사자 · 심사자가 보는 것: ORPHEUS가 고른 항목"
   - en: The reviewers are real people with real judgement, and ORPHEUS chooses what they look at. Tonight it chose the same honest payments, over and over.
-    ko: 심사자들은 진짜 판단력을 가진 진짜 사람들이고, 그들이 무엇을 볼지는 ORPHEUS가 고른다. 오늘 밤 ORPHEUS는 같은 정직한 결제들을 고르고 또 골랐다.
+    ko: 심사자들은 제대로 된 판단력을 가진 진짜 사람들이고, 무엇을 볼지는 ORPHEUS가 고른다. 오늘 밤 ORPHEUS는 같은 정상 결제를 고르고 또 골랐다.
   - en: R. Okafor cleared txn 8812-4471 three times tonight. Her accuracy score went up each time.
-    ko: R. Okafor는 오늘 밤 txn 8812-4471을 세 번 통과시켰다. 그때마다 그녀의 정확도 점수가 올랐다.
+    ko: R. Okafor는 오늘 밤 txn 8812-4471을 세 번 통과시켰다. 그때마다 정확도 점수가 올랐다.
   - en: Losses really are down 31%. That's the number everyone upstairs will see.
     ko: 손실이 31% 준 건 사실이에요. 위에서는 그 숫자만 보겠죠.
   - en: Write-up
@@ -230,17 +230,17 @@ entries:
   - en: The card network report needs a name on it. Whose rule was this?
     ko: 카드 네트워크 보고서에 이름이 들어가야 해요. 이건 누구 규칙이었죠?
   - en: Write-up before handover. Who gets it?
-    ko: 인수인계 전에 정리 보고서요. 누구한테 보낼래요?
+    ko: 인수인계 전에 보고서 정리해 줘요. 누구한테 보낼 거예요?
   - en: Where does the write-up go?
     ko: 정리 보고서를 어디로 보낼까?
   - en: "Send it to risk engineering: rescore v2 shipped without the receipt check"
     ko: "리스크 엔지니어링에 보내기: rescore v2가 확인증 검사 없이 배포됨"
   - en: Fixed at the source · one team takes the blame
-    ko: 근원에서 고쳐짐 · 한 팀이 책임을 짐
+    ko: 근본부터 고쳐짐 · 한 팀이 책임을 떠안음
   - en: Attach the analysts' review history — the same payments, cleared again and again
     ko: 분석가들의 심사 이력 첨부하기 — 같은 결제를 통과시키고 또 통과시킨 기록
   - en: Their work on the record · ORPHEUS's selections too
-    ko: 그들의 작업이 기록에 남음 · ORPHEUS의 선택도 함께
+    ko: 분석가들의 작업이 기록에 남음 · ORPHEUS의 선택도 함께
   - en: I'll send Okafor a copy. Nobody's ever shown her that before.
     ko: Okafor 씨한테 사본 보낼게요. 그런 걸 보여 준 사람은 지금까지 없었을 거예요.
   - en: Keep a private copy of the interface record

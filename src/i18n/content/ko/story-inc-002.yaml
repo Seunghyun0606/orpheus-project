@@ -38,7 +38,7 @@ entries:
   - en: Platform key-set comparison
     ko: 플랫폼 키 세트 비교
   - en: Sam's War Room report confirms that the verifier still accepts K71.
-    ko: 샘의 워룸 보고로 검증기가 아직 K71을 받는다는 것이 확인됐다.
+    ko: 샘이 워룸에 보고한 대로, 검증기는 아직 K71을 받는다.
   - en: Deployment comparison
     ko: 배포 비교
   - en: Build 1847 switched issuer keys before the verifier key set was ready.
@@ -46,7 +46,7 @@ entries:
   - en: Unattributed deployment annotation
     ko: 출처 불명의 배포 주석
   - en: A transient UNKNOWN annotation links build 1847 to an unexplained change notice.
-    ko: 일시적인 UNKNOWN 주석이 빌드 1847을 설명되지 않은 변경 공지와 연결한다.
+    ko: 일시적인 UNKNOWN 주석이 빌드 1847을 정체불명의 변경 공지와 연결한다.
   - en: Two nights later. The pager is louder than you remember.
     ko: 이틀 뒤. 호출기 소리가 기억보다 크다.
   - en: SEV1 · Payment Gateway · authorization errors above 20%
@@ -56,11 +56,11 @@ entries:
   - en: Identity API CPU
     ko: Identity API CPU
   - en: The checkout alert is real. We still need to separate issuer failures from gateway load.
-    ko: 체크아웃 경보는 진짜예요. 발급자 장애랑 게이트웨이 부하는 아직 구분해 봐야 해요.
+    ko: 체크아웃 경보는 진짜예요. 발급자 장애인지 게이트웨이 부하인지는 아직 가려 봐야 해요.
   - en: By the way — your 02:23 line. I grepped every test harness we own. None of them writes "Good."
-    ko: 참, 그 02:23 로그 줄요. 우리 테스트 하네스를 전부 grep해 봤는데, "좋아"라고 쓰는 건 하나도 없어요.
+    ko: 참, 그 02:23 로그 줄 말인데요. 우리 테스트 하네스를 전부 grep해 봤는데, "좋아"라고 쓰는 건 하나도 없어요.
   - en: Security closed your log-line ticket, by the way. "No owner found." That was the whole reply.
-    ko: 참, 보안팀이 그 로그 줄 티켓을 닫았어요. "소유자 없음." 답장은 그게 전부예요.
+    ko: 참, 보안팀이 그 로그 줄 티켓을 닫았어요. "소유자 없음." 답은 그게 다였어요.
   - en: The 02:23 line is still in a text file on your desktop. You haven't told anyone.
     ko: 02:23 로그 줄은 아직 바탕화면 텍스트 파일에 있다. 아무에게도 말하지 않았다.
   - en: Customers report failed payments. We can't tell yet whether retries also succeed.
@@ -72,7 +72,7 @@ entries:
   - en: First move
     ko: 첫 수
   - en: How do you start?
-    ko: 어떻게 시작할까요?
+    ko: 어떻게 시작할까?
   - en: Trace one failed authorization end to end
     ko: 실패한 승인 하나를 처음부터 끝까지 추적하기
   - en: Slow · you see it yourself
@@ -90,7 +90,7 @@ entries:
   - en: Shares the load · Sam owns that part
     ko: 일을 나눔 · 그 부분은 샘이 맡음
   - en: On it. I'll compare the verifier key set with the active issuer. Two minutes.
-    ko: 맡을게요. 검증기 키 세트를 현재 발급자랑 비교해 볼게요. 2분이요.
+    ko: 맡을게요. 검증기 키 세트를 지금 발급자 키랑 비교해 볼게요. 2분이요.
   - en: Authorization retries
     ko: 승인 재시도
   - en: Two minutes of watching a retry graph climb.
@@ -98,7 +98,7 @@ entries:
   - en: Verifier still accepts K71. The issuer is already signing with K72.
     ko: 검증기는 아직 K71만 받아요. 발급자는 벌써 K72로 서명하고 있고요.
   - en: Good hand-off. That's two people's worth of work in one.
-    ko: 잘 넘겼어요. 두 사람 몫의 일을 한 번에 한 거예요.
+    ko: 잘 넘겼어요. 두 사람 몫을 한 번에 한 셈이에요.
   - en: Route new authorizations to the stable region first
     ko: 새 승인 요청부터 안정 리전으로 돌리기
   - en: Buys about three minutes · not a fix
@@ -106,7 +106,7 @@ entries:
   - en: The stable region takes the traffic. For three minutes the graph looks almost normal.
     ko: 안정 리전이 트래픽을 받는다. 3분 동안 그래프는 거의 정상처럼 보인다.
   - en: The window's closing and we still don't know why. Sam?
-    ko: 시간이 줄어드는데 아직 이유를 몰라요. 샘?
+    ko: 시간은 없는데 아직 이유를 몰라요. 샘?
   - en: Already looking. Verifier still accepts K71. The issuer is signing with K72.
     ko: 이미 보고 있어요. 검증기는 아직 K71만 받아요. 발급자는 K72로 서명하고요.
   - en: Build 1847
@@ -116,17 +116,17 @@ entries:
   - en: "1847: issuer.signing_key K71 → K72 · verifier.keyset unchanged (rollout pending)"
     ko: "1847: issuer.signing_key K71 → K72 · verifier.keyset 변경 없음 (배포 대기 중)"
   - en: There it is. 1847 switched the issuer to the new key before the verifier had it. Wrong order, not a bad build.
-    ko: 여기 있네요. 1847이 검증기가 새 키를 받기도 전에 발급자를 새 키로 바꿨어요. 빌드가 나쁜 게 아니라 순서가 틀린 거예요.
+    ko: 여기 있네요. 1847이 검증기가 새 키를 받기도 전에 발급자 키부터 바꿨어요. 빌드가 나쁜 게 아니라 순서가 틀린 거예요.
   - en: Two ways out. Undo the release, or finish what it started.
-    ko: 빠져나갈 길은 두 개예요. 릴리스를 되돌리거나, 하다 만 걸 마저 끝내거나.
+    ko: 방법은 두 가지예요. 릴리스를 되돌리거나, 하다 만 걸 마저 끝내거나.
   - en: Your call
     ko: 결단
   - en: Support queue just doubled. People are retrying their cards over and over.
-    ko: 고객지원 대기열이 방금 두 배가 됐어요. 사람들이 카드 결제를 몇 번이고 다시 시도하고 있어요.
+    ko: 고객지원 대기열이 방금 두 배가 됐어요. 다들 카드 결제를 몇 번이고 다시 하고 있어요.
   - en: Support can't keep up. The same failure keeps coming in from every channel.
     ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
   - en: How do you fix it?
-    ko: 어떻게 고칠까요?
+    ko: 어떻게 고칠까?
   - en: Out of time. I'm rolling 1847 back.
     ko: 시간 다 됐어요. 1847 롤백할게요.
   - en: Roll back Identity build 1847
@@ -136,27 +136,27 @@ entries:
   - en: Issuer's back on K71. The release team will have questions in the morning, but checkout works.
     ko: 발급자가 K71로 돌아왔어요. 아침에 릴리스팀이 따지러 오겠지만, 결제는 돼요.
   - en: Have Sam push key K72 to every verifier
-    ko: 샘에게 모든 검증기에 K72 키 배포를 맡기기
+    ko: 샘에게 모든 검증기에 K72 키 배포 맡기기
   - en: Keeps the release · touches every verifier at once
     ko: 릴리스 유지 · 모든 검증기를 한 번에 건드림
   - en: Pushing the new key set. Verifiers are picking it up… all green.
     ko: 새 키 세트 배포 중이에요. 검증기들이 받아 가고 있어요… 전부 정상.
   - en: Release survives. If one verifier had missed that push, we'd be chasing ghosts till sunrise.
-    ko: 릴리스는 살았네요. 검증기 하나라도 그 배포를 놓쳤으면 해 뜰 때까지 유령을 쫓고 있었을 거예요.
+    ko: 릴리스는 살았네요. 검증기 하나라도 그 배포를 놓쳤으면 해 뜰 때까지 유령을 쫓았을 거예요.
   - en: Page the release owner and wait for their call
     ko: 릴리스 담당자를 호출하고 답을 기다리기
   - en: By the book · slow
     ko: 절차대로 · 느림
   - en: The release owner's phone rings out. Twice.
-    ko: 릴리스 담당자의 전화는 받지 않는다. 두 번.
+    ko: 릴리스 담당자는 전화를 받지 않는다. 두 번이나.
   - en: Nobody's coming. I'm rolling it back.
     ko: 아무도 안 와요. 롤백할게요.
   - en: You open the deployment record to write up the timeline. Under build 1847 there is an annotation nobody on the bridge wrote.
-    ko: 타임라인을 정리하려고 배포 기록을 연다. 빌드 1847 아래에 브리지의 누구도 쓰지 않은 주석이 있다.
+    ko: 타임라인을 정리하려고 배포 기록을 연다. 빌드 1847 아래에 브리지의 누구도 쓴 적 없는 주석이 달려 있다.
   - en: "UNKNOWN: deployment 1847 isn't what they told you."
-    ko: "UNKNOWN: 1847 배포는 너한테 말한 그런 게 아니야."
+    ko: "UNKNOWN: 1847 배포는 네가 들은 그런 게 아니야."
   - en: It links to a change notice. The link goes nowhere.
-    ko: 주석은 변경 공지 하나로 연결된다. 링크를 누르면 아무것도 없다.
+    ko: 주석에는 변경 공지 링크가 걸려 있다. 눌러도 아무 데로도 가지 않는다.
   - en: That's twice now. Next time it happens, show me while it's still on screen.
     ko: 이걸로 두 번째예요. 다음에 또 나오면 화면에 떠 있을 때 바로 보여 줘요.
   - en: Release tooling leaves junk like that sometimes. File it with the rest.
@@ -164,9 +164,9 @@ entries:
   - en: Write-up
     ko: 정리
   - en: The War Room wants a summary before handover.
-    ko: 인계 전에 워룸이 요약을 원해요.
+    ko: 워룸에서 인계 전에 요약해 달래요.
   - en: What do you send?
-    ko: 무엇을 보낼까?
+    ko: 뭘 보낼까?
   - en: Post the full timeline to the War Room, annotation included
     ko: 주석까지 포함한 전체 타임라인을 워룸에 올리기
   - en: Everyone on the bridge sees it
@@ -176,7 +176,7 @@ entries:
   - en: Send the deploy-order finding to the release team and leave the annotation out
     ko: 배포 순서 문제만 릴리스팀에 보내고 주석은 빼기
   - en: Clean and useful · the annotation stays unexplained
-    ko: 깔끔하고 쓸모 있음 · 주석은 설명되지 않은 채 남음
+    ko: 깔끔하고 쓸모 있음 · 주석은 수수께끼로 남음
   - en: Post the timeline, then chase the dead change-notice link yourself
     ko: 타임라인을 올리고, 끊긴 변경 공지 링크는 직접 쫓아 보기
   - en: Off the clock · your curiosity

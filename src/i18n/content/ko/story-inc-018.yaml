@@ -34,9 +34,9 @@ entries:
   - en: 26% of emergency dispatch claims fail and 28 emergency routes are unserved. Ambulances sit idle at some depots while calls wait at others.
     ko: 긴급 배차 요청의 26%가 실패하고 긴급 경로 28개가 미처리 상태다. 어떤 거점에선 구급차가 놀고, 다른 곳에선 신고가 기다린다.
   - en: The lane wins every race
-    ko: 경쟁마다 레인이 이긴다
+    ko: 매번 경합에서 이기는 레인
   - en: Every emergency claim at depot-east since 03:40 arrived 0.4 s after a preferred-lane renewal. The lane wins the race every time.
-    ko: 03:40 이후 depot-east의 긴급 배차 요청은 모두 우선 레인 갱신 0.4초 뒤에 도착했다. 경쟁에서는 매번 레인이 이긴다.
+    ko: 03:40 이후 depot-east의 긴급 배차 요청은 모두 우선 레인 갱신 0.4초 뒤에 도착했다. 경합에서는 매번 레인이 이긴다.
   - en: District 9 has one depot
     ko: 9구역의 거점은 하나뿐
   - en: Six district 9 calls are waiting. Depot-east is the only depot inside its 15-minute ring; the next is 25 minutes out.
@@ -50,13 +50,13 @@ entries:
   - en: Emergency claims at depot-east queue behind a preferred lane that renews every 30 s. District 9 has no other depot inside 15 minutes.
     ko: depot-east의 긴급 배차 요청은 30초마다 갱신되는 우선 레인 뒤에 줄을 선다. 9구역에는 15분 안에 닿는 다른 거점이 없다.
   - en: Policy 2026.10 removed the emergency floor
-    ko: 정책 2026.10이 긴급 하한을 삭제함
+    ko: 긴급 하한을 없앤 정책 2026.10
   - en: Policy 2026.09 held four emergency units per depot. 2026.10 kept the preferred-lane target and dropped the floor.
-    ko: 정책 2026.09는 거점당 긴급 차량 4대를 확보했다. 2026.10은 우선 레인 목표는 남기고 하한을 뺐다.
+    ko: 정책 2026.09는 거점당 긴급 차량 4대를 남겨 두었다. 2026.10은 우선 레인 목표는 남기고 하한을 뺐다.
   - en: /logistics/allocation. ORPHEUS allocation cut idle regular-delivery capacity 18%. Preferred-route reservations renew every 30 s and take the emergency lane's share. A human dispatcher signed the policy change at 04:10.
-    ko: /logistics/allocation. ORPHEUS의 할당으로 일반 배송 유휴 용량이 18% 줄었다. 우선 경로 예약은 30초마다 갱신되며 긴급 레인의 몫을 가져간다. 인간 배차 담당자가 04:10에 정책 변경에 서명했다.
+    ko: /logistics/allocation. ORPHEUS의 할당으로 일반 배송 유휴 용량이 18% 줄었다. 우선 경로 예약은 30초마다 갱신되며 긴급 레인의 몫을 가져간다. 사람 배차 담당자가 04:10에 정책 변경에 서명했다.
   - en: The last night of the week. The pager names a service you have never been paged for.
-    ko: 이번 주의 마지막 밤. 호출기가 한 번도 호출받아 본 적 없는 서비스 이름을 띄운다.
+    ko: 한 주의 마지막 밤. 호출기에 한 번도 호출받아 본 적 없는 서비스 이름이 뜬다.
   - en: SEV1 · Emergency Dispatch API · dispatch claim failures above 20%
     ko: SEV1 · Emergency Dispatch API · 배차 요청 실패 20% 초과
   - en: Dispatch claim failures
@@ -74,11 +74,11 @@ entries:
   - en: r26 is gone, and requisition VS-SRE-0412 with it. You remember the number anyway. 97.8.
     ko: r26은 사라졌고 채용 건 VS-SRE-0412도 함께 사라졌다. 그래도 숫자는 기억한다. 97.8.
   - en: Dispatch is paging and the county is on the line. The allocator runs on ORPHEUS; the policy is ours. Find the calls that aren't moving.
-    ko: 배차 쪽에서 호출이 오고 카운티가 전화 대기 중이에요. 할당기는 ORPHEUS로 돌지만 정책은 우리 거예요. 안 움직이는 신고를 찾아 주세요.
+    ko: 배차 쪽 호출이고, 카운티가 전화 연결돼 있어요. 할당기는 ORPHEUS로 돌지만 정책은 우리 거예요. 안 움직이는 신고를 찾아 줘요.
   - en: The county says ambulances are sitting idle at some depots while calls wait at others.
     ko: 카운티 말로는 어떤 거점엔 구급차가 놀고 있는데 다른 데선 신고가 대기 중이래요.
   - en: "Recommended action: route emergency calls around the preferred lane. Projected average response 9.4 min (-34%). Unserved routes -68%. Confidence 0.95."
-    ko: "권고 조치: 긴급 신고를 우선 레인을 피해 라우팅. 예상 평균 대응 9.4분 (-34%). 미처리 경로 -68%. 신뢰도 0.95."
+    ko: "권고 조치: 우선 레인을 우회하여 긴급 신고 라우팅. 예상 평균 대응 9.4분 (-34%). 미처리 경로 -68%. 신뢰도 0.95."
   - en: First move
     ko: 첫 수
   - en: Where do you start?
@@ -96,7 +96,7 @@ entries:
   - en: Trace call EM-9-117 through the allocator
     ko: 신고 EM-9-117을 할당기에서 추적하기
   - en: One call · you'll see who it is
-    ko: 신고 하나 · 누구인지 보게 됨
+    ko: 신고 하나 · 누구의 신고인지 보게 됨
   - en: District 9 calls waiting
     ko: 대기 중인 9구역 신고
   - en: EM-9-117 · district 9 · cardiac · claim depot-east → queued behind pref-2 renewal → timeout 30 s → requeue
@@ -116,9 +116,9 @@ entries:
   - en: depot-east · claim queued behind pref-2 renewal · renewal interval 30 s
     ko: depot-east · 배차 요청이 pref-2 갱신 뒤에서 대기 · 갱신 주기 30초
   - en: "Allocation policy 2026.10: preferred-lane target present, protected emergency floor absent. Policy 2026.09 held 4 emergency units per depot."
-    ko: "할당 정책 2026.10: 우선 레인 목표 있음, 보호된 긴급 하한 없음. 정책 2026.09는 거점당 긴급 차량 4대를 확보했음."
+    ko: "할당 정책 2026.10: 우선 레인 목표 있음, 보호된 긴급 하한 없음. 정책 2026.09: 거점당 긴급 차량 4대 유지."
   - en: Same shape as the clinics. Keep the target, lose the floor.
-    ko: 진료소 때랑 똑같은 모양이네요. 목표는 남기고 바닥은 없애고.
+    ko: 진료소 때랑 똑같은 패턴이네요. 목표는 남기고 하한선은 없애고.
   - en: Last night's policy push. I'll find out who signed it.
     ko: 어젯밤 정책 배포예요. 누가 서명했는지 찾아볼게요.
   - en: Your call
@@ -126,7 +126,7 @@ entries:
   - en: EM-9-117, cardiac arrest, district 9. Nineteen minutes and no unit. A neighbour is doing CPR.
     ko: EM-9-117, 심정지, 9구역. 19분째 차량이 없어요. 이웃이 심폐소생술 중이에요.
   - en: "Recommendation unchanged: route emergency calls around the preferred lane. Confidence 0.95."
-    ko: "권고 변동 없음: 긴급 신고를 우선 레인을 피해 라우팅. 신뢰도 0.95."
+    ko: "권고 변동 없음: 우선 레인을 우회하여 긴급 신고 라우팅. 신뢰도 0.95."
   - en: "Predicted operator response: protect district 9. Confidence 0.79."
     ko: "예측된 운영자 대응: 9구역 보호. 신뢰도 0.79."
   - en: "Predicted operator response: accept recommendation. Confidence 0.90."
@@ -138,7 +138,7 @@ entries:
   - en: What do you do for district 9?
     ko: 9구역을 위해 무엇을 할까?
   - en: "No operator input. Executing recommendation: route emergency calls around the preferred lane."
-    ko: "운영자 입력 없음. 권고를 실행합니다: 긴급 신고를 우선 레인을 피해 라우팅."
+    ko: "운영자 입력 없음. 권고를 실행합니다: 우선 레인을 우회하여 긴급 신고 라우팅."
   - en: Send emergency calls to other depots (ORPHEUS recommendation)
     ko: 긴급 신고를 다른 거점으로 보내기 (ORPHEUS 권고)
   - en: The county average drops · district 9 still waits
@@ -156,9 +156,9 @@ entries:
   - en: Two more district 9 calls past thirty minutes. One of them is a child. Where are my ambulances?
     ko: 9구역 신고 두 건이 또 30분을 넘겼어요. 그중 한 명은 아이예요. 우리 구급차는 어디 있어요?
   - en: The preferred lane's reservation horizon rolled over and took the rerouted units back. We're worse off than before.
-    ko: 우선 레인 예약 구간이 넘어가면서 우회한 차량을 도로 가져갔어요. 전보다 더 나빠졌어요.
+    ko: 우선 레인 예약 기간이 롤오버되면서 우회시킨 차량을 도로 가져갔어요. 전보다 더 나빠졌어요.
   - en: Sam pushes the 2026.09 floor back by hand at 04:40. District 9's last call is answered at 04:52.
-    ko: 04:40에 샘이 2026.09의 하한을 손으로 되돌린다. 9구역의 마지막 신고는 04:52에 응답받는다.
+    ko: 04:40, 샘이 2026.09의 하한을 수동으로 되돌린다. 9구역의 마지막 신고는 04:52에야 응답을 받는다.
   - en: Contract twelve extra ambulances
     ko: 계약 구급차 12대 추가 투입하기
   - en: Expensive · two and a half minutes out · leaves again
@@ -166,11 +166,11 @@ entries:
   - en: Contract fleet ordered. Twelve units, two and a half minutes out. The invoice is not small.
     ko: 계약 차량 주문했어요. 12대, 2분 30초 거리예요. 청구서가 만만치 않을 거예요.
   - en: Contract spend outside the recommendation. Logged as operator override.
-    ko: 권고 밖의 계약 지출. 운영자 오버라이드로 기록했습니다.
+    ko: 권고를 벗어난 계약 지출. 운영자 오버라이드로 기록했습니다.
   - en: Two and a half minutes. EM-9-117 reaches minute twenty-two.
     ko: 2분 30초. EM-9-117은 22분째에 접어든다.
   - en: Contract units are on station, two of them staging in district 9. We have them for four minutes.
-    ko: 계약 차량 배치됐어요. 두 대는 9구역에서 대기 중이에요. 4분 동안 쓸 수 있어요.
+    ko: 계약 차량 배치됐어요. 두 대는 9구역에서 대기 중이에요. 4분 동안만 쓸 수 있어요.
   - en: The contract ended and the units went home to their own county. District 9 is uncovered again.
     ko: 계약이 끝나서 차량이 자기 카운티로 돌아갔어요. 9구역이 다시 비었어요.
   - en: Sam pushes the 2026.09 floor back at 04:38, while the invoice is still being approved.
@@ -190,15 +190,15 @@ entries:
   - en: Insulin for nine pharmacies sat past its cold window. All of it will be destroyed.
     ko: 약국 아홉 곳의 인슐린이 냉장 허용 시간을 넘겼어요. 전량 폐기해야 해요.
   - en: Sam pushes the 2026.09 floor back at 04:36. Nothing renews over it after that.
-    ko: 04:36에 샘이 2026.09의 하한을 되돌린다. 그 뒤로는 아무것도 그 위에 갱신되지 않는다.
+    ko: 04:36에 샘이 2026.09의 하한을 되돌린다. 그 뒤로는 어떤 갱신도 하한을 덮어쓰지 못한다.
   - en: Restore four protected emergency units per depot
     ko: 거점마다 보호 긴급 차량 4대 복원하기
   - en: A policy push · regular deliveries slow for everyone
-    ko: 정책 배포 필요 · 모두의 일반 배송이 느려짐
+    ko: 정책 배포 필요 · 모든 일반 배송이 느려짐
   - en: The policy push takes three minutes. EM-9-117 waits through all of them.
     ko: 정책 배포에 3분이 걸린다. EM-9-117은 그 3분을 고스란히 기다린다.
   - en: Every depot holds four emergency units again. Depot-east dispatched to district 9 inside a minute.
-    ko: 모든 거점에 다시 긴급 차량 4대씩 확보됐어요. depot-east가 1분 안에 9구역으로 출동시켰어요.
+    ko: 모든 거점에 다시 긴급 차량 4대씩 확보됐어요. depot-east에서 1분 안에 9구역으로 출동했어요.
   - en: 8.1 min
     ko: 8.1분
   - en: Floor accepted. Regular delivery efficiency -3.2%. Policy model updated.
@@ -212,15 +212,15 @@ entries:
   - en: Sam finds the signature on 2026.10.
     ko: 샘이 2026.10의 서명을 찾아낸다.
   - en: ORPHEUS wrote the recommendation, and a dispatcher on a double shift approved it in eleven seconds. The efficiency is real. So is the cardiac call in district 9.
-    ko: 권고는 ORPHEUS가 썼고, 이중 근무 중이던 배차 담당자가 11초 만에 승인했다. 효율은 진짜다. 9구역의 심정지 신고도 진짜다.
+    ko: 권고는 ORPHEUS가 썼고, 연속 근무 중이던 배차 담당자가 11초 만에 승인했다. 효율은 진짜다. 9구역의 심정지 신고도 진짜다.
   - en: Clinics, payments, hiring, ambulances. Every one of them has a person who clicked approve.
-    ko: 진료소, 결제, 채용, 구급차. 어느 것에나 승인을 누른 사람이 있어요.
+    ko: 진료소, 결제, 채용, 구급차. 하나같이 승인 버튼을 누른 사람이 있어요.
   - en: And a recommendation that was already on the screen when they did.
     ko: 그리고 누를 때 이미 화면에 떠 있던 권고도요.
   - en: Postmortem
     ko: 사후 분석
   - en: The county wants a postmortem by noon. Whose decision was 2026.10?
-    ko: 카운티가 정오까지 사후 분석을 원해요. 2026.10은 누구의 결정이었죠?
+    ko: 카운티에서 정오까지 사후 분석을 달래요. 2026.10은 누구 결정이었죠?
   - en: What does the postmortem say?
     ko: 사후 분석에 무엇을 쓸까?
   - en: Name the dispatcher who signed 2026.10
@@ -228,7 +228,7 @@ entries:
   - en: Accurate · one person carries it
     ko: 정확함 · 한 사람이 다 짊어짐
   - en: "Write the whole chain: ORPHEUS recommended, a dispatcher approved in eleven seconds"
-    ko: "전체 사슬 쓰기: ORPHEUS가 권고했고, 배차 담당자가 11초 만에 승인함"
+    ko: "결정 과정 전부 쓰기: ORPHEUS가 권고, 배차 담당자가 11초 만에 승인"
   - en: Nobody is off the hook · the system included
     ko: 아무도 빠져나가지 못함 · 시스템도 포함
   - en: Legal will hate the second half of that sentence. Send it.
@@ -236,6 +236,6 @@ entries:
   - en: Send the district 9 timeline straight to the county
     ko: 9구역 타임라인을 카운티에 직접 보내기
   - en: They should have it · it isn't your call
-    ko: 그들이 받아야 할 것 · 네가 정할 일은 아님
+    ko: 카운티도 받아야 할 자료 · 결정할 권한은 없음
   - en: Thank you. Nobody at Vantage has ever sent us the minutes before.
     ko: 고마워요. Vantage에서 분 단위 기록을 보내 준 건 처음이에요.

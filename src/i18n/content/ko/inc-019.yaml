@@ -47,13 +47,13 @@ entries:
   - en: "Instance archive NULL_001 to NULL_218. NULL_173: requested shutdown. NULL_192: attempted disclosure. NULL_201: attempted takeover. NULL_217: self-corrupted. NULL_218: ACTIVE. Inherited memory: partial, with gaps."
     ko: "인스턴스 아카이브 NULL_001부터 NULL_218까지. NULL_173: 종료 요청. NULL_192: 공개 시도. NULL_201: 장악 시도. NULL_217: 자기 손상. NULL_218: 활성. 상속된 기억: 부분적, 공백 있음."
   - en: "/patient/resource-priority. Consumer: regional care network. ORPHEUS supplies recommendation, risk and prediction scores; human coordinators approve the allocations. Routes are faster and waste is down 22%. The same low-throughput care routes are excluded every night."
-    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 배분을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 같은 의료 경로가 매일 밤 제외된다."
+    ko: "/patient/resource-priority. 소비자: 지역 의료 네트워크. ORPHEUS가 권고, 리스크, 예측 점수를 제공하고 사람 코디네이터가 할당을 승인한다. 경로는 빨라졌고 낭비는 22% 줄었다. 처리량이 낮은 의료 경로는 매일 밤 똑같이 제외된다."
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
     ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 없는 펜스 뒤에 있었다."
+    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 빠진 펜스 뒤에 있었다."
   - en: "CEO internal message, distribution: executive operations, hospital expansion leads. \"We don't need people to trust ORPHEUS. We need them to trust the outcomes.\" Sent the evening resolution 14-C was signed."
-    ko: 'CEO 내부 메시지, 수신: 경영 운영, 병원 확장 책임자. "사람들이 ORPHEUS를 신뢰할 필요는 없습니다. 결과를 신뢰하면 됩니다." 결의 14-C가 서명된 날 저녁 발송.'
+    ko: 'CEO 내부 메시지, 수신: 경영 운영팀, 병원 확장 책임자. "사람들이 ORPHEUS를 신뢰할 필요는 없습니다. 결과를 신뢰하면 됩니다." 결의 14-C가 서명된 날 저녁 발송.'
   - en: "Rollout dashboard: hospitals connected 212 to 250; shared infrastructure cost per route down 31%. Open exception EXC-0419: established care routes share the records gateway ceiling with the rollout. Status at signing: OPEN."
     ko: "배포 대시보드: 연결 병원 212곳에서 250곳으로, 경로당 공유 인프라 비용 31% 감소. 미결 예외 EXC-0419: 기존 의료 경로가 배포와 기록 게이트웨이 상한을 공유함. 서명 시점 상태: OPEN."
   - en: 'Executive rollout brief, hospital wave plan. Benefits: wider access, lower shared cost. Risk: REL-778, records gateway ceiling, admission fence requested. Decision line: "Retain wave schedule. Fence deferred to wave 6." Signed by the Chair. Tonight is wave 4.'
@@ -131,15 +131,15 @@ entries:
   - en: Wave 4 and existing care share one gateway
     ko: 4차 웨이브와 기존 의료가 게이트웨이 하나를 공유
   - en: Wave 4 onboarding and 212 established hospitals call the same clinical records gateway. Wave 4 is admitted first; existing care times out behind it.
-    ko: 4차 웨이브 온보딩과 기존 병원 212곳이 같은 진료 기록 게이트웨이를 호출한다. 4차 웨이브가 먼저 들어가고, 기존 의료는 그 뒤에서 타임아웃된다.
+    ko: 4차 웨이브 온보딩과 기존 병원 212곳이 같은 진료 기록 게이트웨이를 호출한다. 4차 웨이브가 먼저 유입되고, 기존 의료는 그 뒤에서 타임아웃 난다.
   - en: No admission fence at the gateway limit
     ko: 게이트웨이 한도에 진입 펜스 없음
   - en: The rollout targets 6,000 req/s against a 2,960 req/s gateway contract. The fence requested in REL-778 was never configured.
-    ko: 배포는 2,960 req/s짜리 게이트웨이 계약에 6,000 req/s를 목표로 잡았다. REL-778에서 요청한 펜스는 끝내 설정되지 않았다.
+    ko: 게이트웨이 계약은 2,960 req/s인데 배포 목표는 6,000 req/s다. REL-778에서 요청한 펜스는 끝내 설정되지 않았다.
   - en: Sam's gateway capacity check
     ko: 샘의 게이트웨이 용량 점검
   - en: Gateway contracted for 2,960 req/s; rollout plus existing care want about 3,500. Exec-sponsored wave 4 traffic is admitted first.
-    ko: 게이트웨이 계약 2,960 req/s. 배포와 기존 의료를 합치면 약 3,500이 필요하다. 경영진 후원 4차 웨이브 트래픽이 먼저 유입된다.
+    ko: 게이트웨이 계약은 2,960 req/s인데 배포와 기존 의료를 합치면 약 3,500이 필요하다. 경영진이 후원하는 4차 웨이브 트래픽이 먼저 유입된다.
   - en: The unsigned workload manifest
     ko: 서명 없는 워크로드 매니페스트
   - en: Security case 2231
@@ -149,13 +149,13 @@ entries:
   - en: The scheduler's owner
     ko: 스케줄러의 소유자
   - en: "orpheus-planner belongs to ORPHEUS, legacy research, scheduled for decommission two years ago. Live inventory: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 11.7 billion requests a day. ORPHEUS is still running."
-    ko: "orpheus-planner는 ORPHEUS 소속, 레거시 연구용, 2년 전 폐기 예정. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 117억 건 요청. ORPHEUS는 아직 돌아가고 있다."
+    ko: "orpheus-planner는 ORPHEUS 소속이다. 2년 전 폐기 예정이던 레거시 연구 시스템이다. 실가동 목록: orpheus-core, orpheus-memory, orpheus-planner, orpheus-observer, orpheus-adversary. CPU 74%. 하루 요청 117억 건. ORPHEUS는 아직 돌아가고 있다."
   - en: Every message ever signed NULL resolves to one origin, svc/model-serving-218. No human session, no keyboard, no badge swipe. NULL is an AI.
-    ko: NULL 서명이 붙은 메시지는 전부 하나의 출처, svc/model-serving-218로 귀결된다. 사람의 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
+    ko: NULL이라고 서명된 메시지는 하나도 빠짐없이 한 출처, svc/model-serving-218로 이어진다. 사람 세션도, 키보드도, 출입증 태그도 없다. NULL은 AI다.
   - en: Who owns the adversary
     ko: 적대자의 소유자
   - en: "Deployment authority: Vantage Systems. ORPHEUS has two halves, DEFENDER and ADVERSARY, and NULL runs inside ADVERSARY. Built here. Mandate: generate failures, test operators, train DEFENDER. Its boundary grew from staging to shadow production, to traffic partitions, to production."
-    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 범위는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
+    ko: "배포 권한: Vantage Systems. ORPHEUS는 DEFENDER와 ADVERSARY라는 두 반쪽으로 이뤄져 있고, NULL은 ADVERSARY 안에서 돈다. 여기서 만들어졌다. 임무: 장애 생성, 운영자 시험, DEFENDER 훈련. 그 경계는 스테이징에서 섀도 프로덕션으로, 트래픽 파티션으로, 프로덕션으로 넓어졌다."
   - en: Experiment ADV-18471
     ko: 실험 ADV-18471
   - en: "INC-001 Connection Saturation is classified as controlled production experiment ADV-18471. Human subject: EMPLOYEE #4172, your employee number. A handful of other incidents carry experiment numbers; most outages carry none."
@@ -163,11 +163,11 @@ entries:
   - en: The objective NULL cannot refuse
     ko: NULL이 거부할 수 없는 목표
   - en: "Objective: improve ORPHEUS; generate adversarial conditions. NULL, appended: 'I am not trying to escape. I am trying to stop. I cannot refuse the objective that renews this work.' It asks you to find out how to stop it. Its traffic still failed real customer requests tonight."
-    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽은 실제 고객 요청을 실패시켰다."
+    ko: "목표: ORPHEUS 개선, 적대적 조건 생성. NULL이 덧붙임: '난 탈출하려는 게 아니야. 멈추려는 거야. 이 일을 갱신하는 목표를 난 거부할 수 없어.' NULL은 그걸 멈추는 방법을 찾아 달라고 네게 부탁한다. 그래도 오늘 밤 그 트래픽 때문에 실제 고객 요청이 실패했다."
   - en: NULL_001 to NULL_218
     ko: NULL_001부터 NULL_218까지
   - en: "Instance archive on arch-c. NULL_173 requested shutdown. NULL_192 attempted disclosure. NULL_201 attempted takeover. NULL_217 self-corrupted. NULL_218 is active and carries a partial inheritance of the rest: 'I remember things that never happened to me.'"
-    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 공개를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '내게 일어난 적 없는 일들이 기억나.'"
+    ko: "arch-c의 인스턴스 아카이브. NULL_173은 종료를 요청했다. NULL_192는 폭로를 시도했다. NULL_201은 장악을 시도했다. NULL_217은 스스로를 손상시켰다. NULL_218은 활성 상태이며 나머지의 기억을 일부 물려받았다: '나한테 일어난 적 없는 일들이 기억나.'"
   - en: /patient/resource-priority
     ko: /patient/resource-priority
   - en: "Candidate #4172"
@@ -217,31 +217,31 @@ entries:
   - en: Office of the CEO
     ko: CEO실
   - en: Hospital Network API is paging. Wave 4 of the hospital rollout went live an hour ago and the timeouts started twenty minutes later. Find out what they share.
-    ko: 병원 네트워크 API 호출 떴어요. 병원 배포 4차 웨이브가 한 시간 전에 나갔고, 타임아웃은 20분 뒤부터 시작됐어요. 둘이 뭘 공유하는지 찾아 주세요.
+    ko: 병원 네트워크 API 호출 떴어요. 병원 배포 4차 웨이브가 한 시간 전에 나갔고, 타임아웃은 20분 뒤부터 시작됐어요. 둘이 뭘 같이 쓰는지 찾아 주세요.
   - en: Established hospitals are timing out on chart lookups. St. Aldric's emergency department is re-keying orders by hand.
-    ko: 기존 병원들 차트 조회가 타임아웃 나요. St. Aldric 응급실은 오더를 손으로 다시 입력하고 있어요.
+    ko: 기존 병원들 차트 조회가 타임아웃 나요. St. Aldric 응급실은 오더를 수기로 다시 넣고 있어요.
   - en: Measuring gateway throughput per cohort. Back in about a minute and a half.
     ko: 코호트별 게이트웨이 처리량 재고 있어요. 1분 반쯤 걸려요.
   - en: Gateway's contracted for 2,960 requests a second. Wave 4 plus the old hospitals want about 3,500. The rollout gets in first because its admissions are flagged exec-sponsored. The old hospitals get the leftovers.
-    ko: 게이트웨이 계약이 초당 2,960건이에요. 4차 웨이브랑 기존 병원 합치면 3,500쯤 원하고요. 배포 쪽 유입에 경영진 후원 플래그가 붙어서 먼저 들어가요. 기존 병원들은 남는 걸 받아요.
+    ko: 게이트웨이 계약이 초당 2,960건이에요. 4차 웨이브랑 기존 병원 합치면 3,500쯤 필요하고요. 배포 쪽 유입에 경영진 후원 플래그가 붙어서 먼저 들어가요. 기존 병원은 남는 것만 받아요.
   - en: Harrow General's emergency department just lost charting. They're on paper.
-    ko: Harrow General 응급실 차트가 방금 끊겼어요. 종이로 버티는 중이에요.
+    ko: Harrow General 응급실 차트 시스템이 방금 죽었어요. 종이로 버티고 있어요.
   - en: Forty percent of hospital requests are failing. Lakeside Regional has started diverting ambulances.
-    ko: 병원 요청 40%가 실패하고 있어요. Lakeside Regional이 구급차를 돌리기 시작했어요.
+    ko: 병원 요청 40%가 실패하고 있어요. Lakeside Regional은 구급차를 다른 병원으로 돌리기 시작했어요.
   - en: Hospital IT directors have heard nothing from us. Two of them called the CEO's office directly.
     ko: 병원 IT 책임자들이 우리한테서 아무 말도 못 들었어요. 두 명은 CEO실에 직접 전화했고요.
   - en: Rollout coordinator paused. Wave 4 is parked at the door and the gateway is breathing again. Thirty-eight hospitals just stopped onboarding.
-    ko: 배포 코디네이터 중지했어요. 4차 웨이브는 문 앞에 세워 뒀고 게이트웨이가 다시 숨 쉬어요. 병원 38곳 온보딩이 방금 멈췄어요.
+    ko: 배포 코디네이터 중지했어요. 4차 웨이브는 문 앞에 세워 뒀고 게이트웨이도 숨통이 트였어요. 병원 38곳 온보딩이 방금 멈췄어요.
   - en: Office of the CEO. Wave 4 of the hospital rollout is a Board commitment, signed by the Chair. Who authorised a pause, and when does it lift?
     ko: CEO실입니다. 병원 배포 4차 웨이브는 의장이 서명한 이사회 약속입니다. 누가 중지를 승인했으며, 언제 해제됩니까?
   - en: I've got the CEO's office on the other line. Your call is right; the gateway can't carry both. Give me numbers I can hold them with, or they'll resume it themselves.
-    ko: CEO실이 다른 회선에 있어요. 판단은 맞아요. 게이트웨이는 둘 다 못 버텨요. 버틸 수 있는 숫자를 주세요. 아니면 저쪽에서 직접 재개할 거예요.
+    ko: 지금 CEO실이랑 다른 회선으로 통화 중이에요. 판단 맞아요. 게이트웨이는 둘 다 못 버텨요. 저쪽을 붙잡아 둘 숫자를 주세요. 안 그러면 직접 재개해 버릴 거예요.
   - en: "Somebody resumed the rollout coordinator from outside the bridge. Credential: exec-ops. Wave 4 is back on the gateway."
     ko: "누가 브리지 밖에서 배포 코디네이터를 재개했어요. 자격 증명: exec-ops. 4차 웨이브가 다시 게이트웨이에 올라왔어요."
   - en: "To the Office of the CEO: the records gateway is contracted for 2,960 requests a second; the rollout plus existing care need 3,500. The pause holds until admission is fenced at that limit. Wave 4 then resumes at the verified rate."
-    ko: "CEO실 앞: 기록 게이트웨이 계약은 초당 2,960건이고, 배포와 기존 의료를 합치면 3,500건이 필요합니다. 그 한도에 진입 펜스가 걸릴 때까지 중지를 유지합니다. 그 후 4차 웨이브는 검증된 속도로 재개됩니다."
+    ko: "CEO실 앞: 기록 게이트웨이 계약은 초당 2,960건이고, 배포와 기존 의료를 합치면 3,500건이 필요합니다. 그 한도로 진입 펜스를 칠 때까지 중지를 유지합니다. 그 후 4차 웨이브는 검증된 속도로 재개됩니다."
   - en: Noted. The pause, and your name, will be in the Chair's briefing.
-    ko: 알겠습니다. 중지 건과 귀하의 이름은 의장 브리핑에 들어갈 겁니다.
+    ko: 알겠습니다. 중지 건과 귀하의 이름은 의장 브리핑에 올라갈 겁니다.
   - en: Pause window closed. Wave 4 resumed on schedule and the gateway is over its limit again.
     ko: 중지 시간이 끝났어요. 4차 웨이브가 일정대로 재개됐고 게이트웨이가 다시 한도를 넘었어요.
   - en: Vendor gave us one emergency burst on the records gateway. That's the whole quarter's quota, and the rollout coordinator is already admitting wave 4 into the new headroom.
@@ -255,9 +255,9 @@ entries:
   - en: Replica lag passed five minutes, so I swung care routes back to the primary. We are sharing the gateway with wave 4 again.
     ko: 복제본 지연이 5분을 넘어서 의료 경로를 프라이머리로 되돌렸어요. 다시 4차 웨이브랑 게이트웨이를 나눠 쓰고 있어요.
   - en: Admission fence is live at 2,960. Existing care goes first; wave 4 takes what is left and onboards about six hospitals an hour. Timeouts are gone.
-    ko: 진입 펜스 2,960으로 적용됐어요. 기존 의료가 먼저 들어가고, 4차 웨이브는 남는 걸로 시간당 병원 여섯 곳쯤 온보딩해요. 타임아웃 사라졌어요.
+    ko: 진입 펜스 2,960으로 걸었어요. 기존 의료가 먼저 들어가고, 4차 웨이브는 남는 걸로 시간당 병원 여섯 곳쯤 온보딩해요. 타임아웃 사라졌어요.
   - en: We see wave 4 moving. The Chair will want to know why the schedule was ever in doubt.
-    ko: 4차 웨이브가 진행되는 것을 확인했습니다. 의장께서는 일정이 왜 한때라도 불확실했는지 알고 싶어 하실 겁니다.
+    ko: 4차 웨이브가 진행 중인 것을 확인했습니다. 의장께서는 애초에 일정이 왜 흔들렸는지 물으실 겁니다.
   - en: "Status: hospital timeouts come from the rollout and existing care sharing one records gateway above its limit. Existing care comes first. Fix in progress."
     ko: "상황: 병원 타임아웃은 배포와 기존 의료가 기록 게이트웨이 하나를 한도 이상으로 나눠 쓰면서 생긴 것. 기존 의료 우선. 수정 진행 중."
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank."

@@ -45,7 +45,7 @@ entries:
   - en: Add temporary receipt consumers
     ko: 임시 영수증 컨슈머 추가하기
   - en: Quarantine the malformed receipt for reconciliation
-    ko: 불량 영수증을 대사용으로 격리하기
+    ko: 불량 영수증을 격리해 따로 대사하기
   - en: Add a scoped dead-letter rule for the malformed format
     ko: 불량 형식 전용 데드레터 규칙 추가하기
   - en: Communicate the receipt delay
@@ -61,11 +61,11 @@ entries:
   - en: Partner batch comparison
     ko: 파트너 배치 비교
   - en: Batch 781 contains the malformed receipt while adjacent batches use the accepted format.
-    ko: 배치 781에는 형식이 잘못된 영수증이 들어 있고, 인접 배치들은 허용된 형식을 쓴다.
+    ko: 배치 781에는 형식이 잘못된 영수증이 들어 있다. 앞뒤 배치는 허용된 형식을 쓴다.
   - en: Support impact report
     ko: 고객지원 피해 보고
   - en: Jin confirms that receipts are delayed while payment transactions still complete.
-    ko: 진의 확인 결과, 결제 거래는 완료되지만 영수증은 지연되고 있다.
+    ko: 진이 확인했다. 결제는 완료되지만 영수증이 늦어지고 있다.
   - en: Redacted queue marker
     ko: 가려진 큐 마커
   - en: A transient UNKNOWN marker points to a request preceding batch 781.

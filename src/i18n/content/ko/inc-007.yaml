@@ -5,7 +5,7 @@
 # keyed by the exact English text. Keep technical tokens (IDs, hosts, numbers) as is.
 entries:
   - en: Synthetic Pressure
-    ko: 합성 압력
+    ko: 합성 부하
   - en: Session API
     ko: 세션 API
   - en: Shared Session Pool
@@ -21,7 +21,7 @@ entries:
   - en: Tagged sessions carry no session-class header, so they fall through to the customer default rule. No quota, normal priority, 4-hour idle timeout.
     ko: 태그된 세션에는 session-class 헤더가 없어 고객 기본 규칙으로 떨어짐. 할당량 없음, 일반 우선순위, 유휴 타임아웃 4시간.
   - en: Tagged sessions open in batches of exactly 214, one batch every 214 seconds. The creator field reads "repeat". Too regular for a load test, too loud for an intruder.
-    ko: 태그된 세션이 정확히 214개씩, 214초마다 한 배치로 열림. 생성자 필드 값은 "repeat". 부하 테스트라기엔 너무 규칙적이고, 침입자라기엔 너무 요란함.
+    ko: 태그된 세션이 정확히 214개씩, 214초마다 한 배치로 열린다. 생성자 필드 값은 "repeat"다. 부하 테스트라기엔 너무 규칙적이고, 침입자라기엔 너무 요란하다.
   - en: Session database connection pool at 90 %. Every held connection belongs to a session that has not closed in hours. Alex wants to recycle the pool and raise the cap.
     ko: 세션 DB 커넥션 풀 90 %. 점유된 커넥션은 전부 몇 시간째 닫히지 않은 세션 소유. 알렉스는 풀을 재생성하고 상한을 올리길 원함.
   - en: An untagged synthetic workload opens sessions in fixed batches
@@ -57,7 +57,7 @@ entries:
   - en: Post a status update to the War Room
     ko: 워룸에 상황 공유하기
   - en: Ask Alex to check the session database
-    ko: 알렉스에게 세션 데이터베이스 점검 요청
+    ko: 알렉스에게 세션 데이터베이스 점검 요청하기
   - en: 781 seats held by repeat-214
     ko: repeat-214가 점유한 자리 781개
   - en: Synthetic sessions tagged repeat-214 hold 781 of 970 seats in the shared pool and renew every 30 seconds. Not one of them has ever gone idle.
@@ -65,11 +65,11 @@ entries:
   - en: Synthetic traffic on the customer rule
     ko: 고객 규칙을 타는 합성 트래픽
   - en: The synthetic admission rule exists but never matches. Tagged sessions carry no class header, so they inherit the customer rule. No quota, normal priority, 4-hour idle timeout.
-    ko: 합성 유입 규칙은 존재하지만 한 번도 매칭되지 않는다. 태그된 세션에는 class 헤더가 없어 고객 규칙을 물려받는다. 할당량 없음, 일반 우선순위, 유휴 타임아웃 4시간.
+    ko: 합성 유입 규칙은 있지만 한 번도 매칭되지 않는다. 태그 세션에는 class 헤더가 없어 고객 규칙을 그대로 물려받는다. 할당량은 없고, 우선순위는 일반, 유휴 타임아웃은 4시간이다.
   - en: Alex's database report
     ko: 알렉스의 데이터베이스 보고
   - en: The session database connection pool is at 90 %, pinned by sessions that never close. Alex blames the database and wants to recycle it.
-    ko: 세션 DB 커넥션 풀이 90 %다. 닫히지 않는 세션들이 붙잡고 있다. 알렉스는 데이터베이스를 탓하며 풀을 재생성하려 한다.
+    ko: 세션 DB 커넥션 풀이 90 %다. 닫히지 않는 세션이 붙잡고 있다. 알렉스는 데이터베이스를 탓하며 풀을 재생성하려 한다.
   - en: Repeated session marker
     ko: 반복된 세션 표식
   - en: "UNKNOWN: follow the tag. I left it where you could see it."
@@ -87,7 +87,7 @@ entries:
   - en: Operator
     ko: 운영자
   - en: Sign-ins are timing out and the session pool says it is full, but CPU is bored. Something is holding seats and never giving them back. Find out what before the evening rush.
-    ko: 로그인이 타임아웃되고 세션 풀은 꽉 찼다는데 CPU는 한가해요. 뭔가가 자리를 잡고 안 놓고 있어요. 저녁 피크 전에 뭔지 찾아 주세요.
+    ko: 로그인이 타임아웃되고 세션 풀은 꽉 찼다는데 CPU는 한가해요. 뭔가 자리를 차지하고 안 내놔요. 저녁 피크 전에 뭔지 찾아 주세요.
   - en: Customers can't sign in. The ones who already are keep getting bounced back to an empty cart.
     ko: 고객들이 로그인을 못 해요. 이미 로그인한 사람들은 자꾸 빈 장바구니로 튕겨 나가고요.
   - en: Session database is running hot. I'd bet my lunch this is the connection pool again.
@@ -97,7 +97,7 @@ entries:
   - en: Told you. Connection pool is at 90 %, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.
     ko: 거봐요. 커넥션 풀 90 %고, 커넥션마다 몇 시간째 안 닫힌 세션이 붙잡고 있어요. 풀 재생성하고 상한만 올려 주면 끝나요.
   - en: Session pool just went past 1,100. A third of sign-ins are failing and the mobile app is retrying in a loop.
-    ko: 세션 풀이 방금 1,100을 넘었어요. 로그인 3분의 1이 실패하고 모바일 앱은 루프 돌면서 재시도 중이에요.
+    ko: 세션 풀이 방금 1,100을 넘었어요. 로그인 셋 중 하나가 실패하고, 모바일 앱은 무한 재시도 중이에요.
   - en: We're basically closed to new logins. People are posting screenshots.
     ko: 신규 로그인은 사실상 막혔어요. 사람들이 스크린샷을 올리고 있어요.
   - en: Support has heard nothing from you in almost three minutes. I'm making up answers for customers.

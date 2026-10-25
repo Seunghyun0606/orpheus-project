@@ -6,6 +6,8 @@ extends RefCounted
 ##   finished episode is never played again; its record replays read-only.
 ## - `current`: the episode in progress (entry carry + inputs so far), so leaving
 ##   mid-incident resumes at the same point instead of starting over.
+## - `cast_seen`: profile lines the player has looked at in the status window,
+##   so new people and new lines can be marked.
 ## The runner is deterministic, so carries and inputs reproduce every state.
 ## These functions only change the dictionary; the caller decides when to save.
 
@@ -17,7 +19,7 @@ const ENDINGS_PATH := "user://endings.json"
 
 
 static func empty() -> Dictionary:
-	return {"after": {}, "records": {}, "current": null}
+	return {"after": {}, "records": {}, "current": null, "cast_seen": []}
 
 
 static func load_progress() -> Dictionary:
@@ -30,6 +32,8 @@ static func load_progress() -> Dictionary:
 		progress["records"] = {}
 	if not progress.has("current"):
 		progress["current"] = null
+	if not progress.get("cast_seen") is Array:
+		progress["cast_seen"] = []
 	return progress
 
 
