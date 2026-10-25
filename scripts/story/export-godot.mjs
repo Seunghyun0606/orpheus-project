@@ -12,7 +12,13 @@ import { parse } from 'yaml';
 
 import { parseCast } from '../../src/story/cast.ts';
 import { parseEpisode } from '../../src/story/schema.ts';
-import { campaignCarries, enumeratePaths } from '../../src/story/validate.ts';
+import { campaignCarries, enumeratePaths, flagsRead } from '../../src/story/validate.ts';
+import {
+  representativePaths,
+  threeWayCarries,
+  thresholdRuns,
+  tripleKeys,
+} from './parity-coverage.mjs';
 
 const DATA = 'src/story/data/';
 const CAST = 'src/story/cast.yaml';
@@ -78,18 +84,61 @@ if (process.argv.includes('--check')) {
   if (process.argv.includes('--fixtures')) {
     mkdirSync(FIXTURES, { recursive: true });
     const carries = campaignCarries(episodes);
+    const coverage = [];
     for (const episode of episodes) {
-      // A dozen entry states per episode keeps the fixtures small; the
-      // TypeScript validator covers every carry.
+      // Keep the existing bounded campaign sample; targeted synthetic carries
+      // below exercise numeric boundaries and higher-order flag combinations.
       const runs = carries
         .get(episode.id)
         .slice(0, 12)
         .map((carry) => ({ carry, paths: enumeratePaths(episode, carry).paths }));
+      const baselinePaths = runs.reduce((total, run) => total + run.paths.length, 0);
+      const dialogue = (sample) =>
+        sample.flatMap((run) =>
+          run.paths.flatMap((path) =>
+            path.state.feed.filter((entry) => ['line', 'log', 'narrate'].includes(entry.kind)),
+          ),
+        );
+      const baselineDialogue = new Set(dialogue(runs).map((entry) => JSON.stringify(entry)));
+      const thresholds = thresholdRuns(episode, runs);
+      const flags = [...flagsRead(episode)].sort();
+      const previouslyCovered = new Set(runs.flatMap((run) => tripleKeys(flags, run.carry)));
+      const combinations = threeWayCarries(episode);
+      const triples = new Set(combinations.flatMap((carry) => tripleKeys(flags, carry)));
+      const flagRuns = combinations.map((carry) => ({
+        carry,
+        paths: representativePaths(episode, carry),
+      }));
+      const newDialogue = [
+        ...new Map(
+          dialogue([...thresholds.runs, ...flagRuns])
+            .filter((entry) => !baselineDialogue.has(JSON.stringify(entry)))
+            .map((entry) => [JSON.stringify(entry), entry]),
+        ).values(),
+      ];
+      coverage.push({
+        episode: episode.id,
+        baselinePaths,
+        thresholdPaths: thresholds.runs.length,
+        thresholds: thresholds.coverage,
+        flagPaths: flagRuns.reduce((total, run) => total + run.paths.length, 0),
+        flagCarries: flagRuns.length,
+        flagTripleCombinations: triples.size,
+        newFlagTripleCombinations: [...triples].filter((key) => !previouslyCovered.has(key)).length,
+        newDialogue,
+      });
+      runs.push(...thresholds.runs, ...flagRuns);
       writeFileSync(
         `${FIXTURES}${episode.id.toLowerCase()}.paths.json`,
         JSON.stringify({ episode: episode.id, runs }),
       );
     }
+    writeFileSync(`${FIXTURES}coverage.json`, json(coverage));
+    const total = (key) => coverage.reduce((sum, entry) => sum + entry[key], 0);
+    console.log(
+      `Parity fixtures: ${total('baselinePaths')} baseline + ${total('thresholdPaths')} boundary + ${total('flagPaths')} three-way flag paths.`,
+    );
+    console.log(`Coverage details: ${FIXTURES}coverage.json`);
   }
   console.log(`Exported ${episodes.length} episode(s) and ${LOCALES.length} locale(s).`);
 }

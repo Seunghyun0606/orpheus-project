@@ -15,3 +15,39 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+
+  godot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GODOT_BIN: ${{ github.workspace }}/.qa/tools/godot/Godot_v4.7.2-stable_linux.x86_64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/cache@v4
+        id: godot-cache
+        with:
+          path: .qa/tools/godot
+          key: godot-4.7.2-stable-linux-x86_64
+      - name: Download official Godot 4.7.2 (headless via --headless)
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .qa/tools/godot
+          curl --fail --location --retry 3 \
+            https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip \
+            -o .qa/tools/godot.zip
+          unzip -q .qa/tools/godot.zip -d .qa/tools/godot
+      - name: Verify Godot version
+        run: |
+          chmod +x "$GODOT_BIN"
+          "$GODOT_BIN" --headless --version | grep '^4\.7\.2\.stable\.'
+      - run: node --test scripts/story/parity-coverage.test.mjs
+      - run: npm run godot:parity
+      - run: npm run godot:smoke
+      - run: npm run godot:saves

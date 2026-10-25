@@ -4,7 +4,7 @@ extends SceneTree
 ## switches language mid-incident and ends on the credits. Any script error
 ## shows up in the output; the run fails if an episode does not end.
 ##
-##   godot --headless --path godot --script res://tests/ui_smoke.gd
+##   npm run godot:smoke  (uses an isolated QA copy and application name)
 
 const Library := preload("res://scripts/story/episode_library.gd")
 const Progress := preload("res://scripts/story/progress.gd")
@@ -118,6 +118,16 @@ func _initialize() -> void:
 	main._show_title()
 	await process_frame
 	print("ui smoke: %d inputs, %d failures" % [steps, failures])
+	# Release the test-owned scene (including active audio players) before the
+	# SceneTree quits. The mixer needs wall-clock time to retire playbacks;
+	# headless process_frame yields alone can finish before its next mix.
+	main.sound.loop_player.stop()
+	for player in main.sound.players:
+		player.stop()
+	await create_timer(0.1).timeout
+	main.queue_free()
+	await process_frame
+	await process_frame
 	quit(1 if failures > 0 else 0)
 
 
