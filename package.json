@@ -35,6 +35,7 @@
     "godot:play": "node scripts/story/godot.mjs play",
     "godot:parity": "node scripts/story/godot.mjs parity",
     "godot:smoke": "node scripts/story/godot.mjs smoke",
+    "godot:build": "node scripts/story/godot.mjs build",
     "godot:editor": "node scripts/story/godot.mjs editor",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run validate:scenarios && npm run validate:locales && npm run validate:story && node scripts/story/export-godot.mjs --check && npm test && npm run test:release-harness && npm run build:web",
     "tauri": "tauri"

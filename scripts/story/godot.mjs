@@ -3,12 +3,13 @@
 //   node scripts/story/godot.mjs play      export story data, then open the game window
 //   node scripts/story/godot.mjs parity    GDScript runner vs reference runner on every path
 //   node scripts/story/godot.mjs smoke     the whole campaign through the real UI, three ways
+//   node scripts/story/godot.mjs build     export an unsigned Windows x86_64 build
 //   node scripts/story/godot.mjs editor    open the project in the Godot editor
 //
 // The Godot binary comes from GODOT_BIN, then `godot` on PATH, then a Godot 4
 // console build found under ../_basic_tool or %LOCALAPPDATA%\Programs.
 import { execFileSync, spawn, spawnSync } from 'node:child_process';
-import { existsSync, readdirSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const PROJECT = 'godot';
@@ -51,6 +52,24 @@ const exportData = (...flags) =>
   });
 
 switch (process.argv[2]) {
+  case 'build': {
+    const out = resolve('build', 'windows');
+    exportData();
+    run(['--headless', '--path', PROJECT, '--import']);
+    mkdirSync(out, { recursive: true });
+    run([
+      '--headless',
+      '--path',
+      PROJECT,
+      '--export-release',
+      'Windows Desktop',
+      join(out, 'OrpheusProject.exe'),
+    ]);
+    for (const file of readdirSync(join(PROJECT, 'fonts')))
+      if (file.endsWith('-OFL.txt')) copyFileSync(join(PROJECT, 'fonts', file), join(out, file));
+    console.log(`Windows build: ${join(out, 'OrpheusProject.exe')} (keep the whole folder).`);
+    break;
+  }
   case 'parity':
     exportData('--fixtures');
     run(['--headless', '--path', PROJECT, '--import']);
@@ -74,5 +93,5 @@ switch (process.argv[2]) {
     spawn(godot, ['--editor', '--path', PROJECT], { detached: true, stdio: 'ignore' }).unref();
     break;
   default:
-    console.log('Usage: node scripts/story/godot.mjs play|parity|smoke|editor');
+    console.log('Usage: node scripts/story/godot.mjs play|parity|smoke|build|editor');
 }

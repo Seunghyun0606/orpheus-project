@@ -33,6 +33,8 @@ for its tooling; it is no longer the product.
 npm ci
 npm run godot:play     # export the story data, then open the game window
 npm run godot:editor   # open the project in the Godot editor (F5 runs it)
+npm run godot:build    # build a local unsigned Windows x86_64 program
+# Output: build/windows/OrpheusProject.exe (keep the whole build/windows folder)
 ```
 
 Story content is YAML: episodes in `src/story/data/inc-NNN.yaml`, the cast in
