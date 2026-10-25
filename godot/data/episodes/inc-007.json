@@ -426,7 +426,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "People are filling the same cart three times and giving up. I can't promise it holds on the fourth.",
           "when": {
             "pressure": {
               "gte": 2

@@ -96,7 +96,7 @@ scenes:
           - narrate: Four thousand attempts at the same receipt. Everything behind it waits its turn.
         effects: { values: { evidence: 1 } }
       - id: SCALE
-        text: Add temporary receipt consumers
+        text: Add temporary consumers to the receipt queue
         consequence: Fast · the backlog will come back
         beats:
           - metric: { label: Receipt queue depth, value: '12,900', trend: down }
@@ -140,7 +140,7 @@ scenes:
       - metric: { label: Oldest message, value: 31 min, trend: up }
       - narrate: Nobody is going to make this decision for you. Or almost nobody.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: Sixty tickets from people who paid and got no receipt. Some paid a second time to be sure.
         when:
           pressure:
             gte: 2
@@ -153,7 +153,7 @@ scenes:
           text: 'auto-remediation: head-of-line message exceeded retry budget · action: discard'
     options:
       - id: QUARANTINE
-        text: Quarantine the malformed receipt for reconciliation
+        text: Quarantine the malformed receipt and reconcile it by hand
         consequence: One message set aside · someone fixes it by hand
         beats:
           - metric: { label: Receipt queue depth, value: '0', trend: down }

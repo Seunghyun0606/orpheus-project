@@ -155,8 +155,8 @@ entries:
     ko: 9,100/s
   - en: Synthetic traffic just passed nine thousand a second. Whatever this is, it isn't slowing down on its own.
     ko: 합성 트래픽이 방금 초당 9천을 넘었어요. 이게 뭐든 저절로 잦아들 기미가 없어요.
-  - en: Support can't keep up. The same failure keeps coming in from every channel.
-    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
+  - en: Four hundred chats waiting, most from people who timed out mid-checkout. Nobody here can tell them if the order went in.
+    ko: 채팅 대기가 4백 건인데, 대부분 결제 중에 시간 초과가 난 사람들이에요. 주문이 들어갔는지는 여기 누구도 답을 못 해요.
   - en: What do you do with the gateway?
     ko: 게이트웨이를 어떻게 할까?
   - en: Out of time. I'm capping admissions.

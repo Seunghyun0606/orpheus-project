@@ -163,8 +163,8 @@ entries:
     ko: "어드바이저: 운영자 예상 대응 — 예약에 펜스 치기 · 신뢰도 0.81"
   - en: "advisor: predicted operator response — accept recommendation · confidence 0.72"
     ko: "어드바이저: 운영자 예상 대응 — 권고 수락 · 신뢰도 0.72"
-  - en: Support can't keep up. The same failure keeps coming in from every channel.
-    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
+  - en: Merchants can't download their reports, and now they're asking whether tonight's payouts are safe. I have nothing to give them.
+    ko: 가맹점들이 리포트를 못 받으니까 오늘 밤 지급은 괜찮냐고 묻기 시작했어요. 해 줄 말이 없어요.
   - en: What do you do about legacy-r7?
     ko: legacy-r7을 어떻게 할까?
   - en: "No operator input. Executing recommended action: shed background load."

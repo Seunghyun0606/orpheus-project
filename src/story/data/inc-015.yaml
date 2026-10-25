@@ -162,7 +162,7 @@ scenes:
       - speaker: MAYA
         text: Leadership sees one number. You see fourteen. Pick.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: Kestrel Falls just called a fifth time. I still can't tell them when a route is coming.
         when:
           pressure:
             gte: 2

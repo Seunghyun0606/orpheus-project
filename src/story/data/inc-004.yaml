@@ -158,7 +158,7 @@ scenes:
       - speaker: JIN
         text: The sale opens in a minute. Support still has nothing to tell anyone.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: Spinner complaints just tripled. People ask if they should pay again, and I can't see whether the first try went through.
         when:
           pressure:
             gte: 2

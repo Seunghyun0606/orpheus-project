@@ -155,7 +155,7 @@ scenes:
       - speaker: PRIYA
         text: Restart is one command. Say go.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: Tickets in four languages now, all the same redirect error. A shop in Lyon asks whether its orders went through, and I can't say.
         when:
           pressure:
             gte: 2

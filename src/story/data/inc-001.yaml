@@ -143,7 +143,7 @@ scenes:
       - speaker: MAYA
         text: Errors are still climbing. I need a decision now.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: Over two hundred tickets about failed checkouts. Half of them ask whether they were charged anyway, and I don't know yet.
         when:
           pressure:
             gte: 2
@@ -157,13 +157,15 @@ scenes:
     options:
       - id: TERMINATE
         text: Terminate the stale sessions
-        consequence: Takes two minutes · removes the cause
+        consequence: Takes two minutes · frees what holds the pool
         beats:
           - log: "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';"
           - metric: { label: PostgreSQL connections, value: 112 / 500, trend: down }
           - metric: { label: Payment API error rate, value: 0.2%, trend: down }
           - speaker: MAYA
-            text: Connections are back. That's a fix, not a bandage.
+            text: Connections are back. We freed what was actually holding the pool, not just the symptoms.
+          - speaker: MAYA
+            text: Whatever left those transactions open will do it again. I'm opening a ticket to find it.
         effects:
           values: { operationalSafety: 2, collateralDamage: 1 }
           flags: { ROOT_CAUSE_RESOLVED: true }

@@ -143,8 +143,8 @@ entries:
     ko: "예측된 운영자 대응: 규칙 변경. 신뢰도 0.77."
   - en: "Predicted operator response: restart. Confidence 0.69."
     ko: "예측된 운영자 대응: 재시작. 신뢰도 0.69."
-  - en: Support can't keep up. The same failure keeps coming in from every channel.
-    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
+  - en: The customer who was approved three times is back on my line. I still can't tell them which approval counts.
+    ko: 세 번 승인받은 그 고객이 또 전화했어요. 어느 승인이 진짜인지 저도 아직 말을 못 해 드려요.
   - en: How do you clear the holds?
     ko: 보류를 어떻게 풀까?
   - en: "No operator input. Executing recommendation: restart review workers."
@@ -191,6 +191,8 @@ entries:
     ko: 요약에서 세 줄의 확인증 칸이 비어 있다.
   - en: Release batch within risk tolerance. No action recommended.
     ko: 해제 배치는 리스크 허용 범위 안입니다. 권고할 조치가 없습니다.
+  - en: Merchants are calling back to say the money landed. If anything in that batch shouldn't have gone, the next calls won't be thank-yous.
+    ko: 가맹점들이 돈 들어왔다고 다시 전화 주고 있어요. 그 배치에 나가면 안 되는 게 섞여 있었다면, 다음 전화는 고맙다는 얘기가 아닐 거예요.
   - en: The batch is out. Do you pull anything back?
     ko: 배치는 나갔다. 회수할 게 있을까?
   - en: No operator input. Release batch stands.

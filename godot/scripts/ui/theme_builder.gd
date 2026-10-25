@@ -113,6 +113,8 @@ static func build(size_index: int) -> Theme:
 	theme.set_stylebox("panel", "Tile", box(PANEL_HI, BORDER, 1, 10))
 	theme.set_type_variation("ConsolePanel", "PanelContainer")
 	theme.set_stylebox("panel", "ConsolePanel", box(Color("070908"), BORDER, 1, 10))
+	theme.set_type_variation("PortraitFrame", "PanelContainer")
+	theme.set_stylebox("panel", "PortraitFrame", box(Color("070908"), BORDER, 1, 2))
 	theme.set_type_variation("DialoguePanel", "PanelContainer")
 	var dialogue := box(Color("0e1210"), BORDER, 1, 18)
 	dialogue.border_width_left = 3

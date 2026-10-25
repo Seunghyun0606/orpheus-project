@@ -169,6 +169,7 @@ func _replace_screen(next: Control) -> void:
 ## Left: the title and the next incident to play. Right: every incident,
 ## grouped by Act; an Act's name stays hidden until one of its incidents opens.
 func _show_title() -> void:
+	_keep_timer()
 	episode = {}
 	state = {}
 	pending.clear()
@@ -317,6 +318,20 @@ func _save_progress() -> void:
 		Progress.save_progress(progress)
 
 
+## Leaving mid-decision keeps the time left with the run, so resuming does not
+## restart the clock (see _show_controls).
+func _keep_timer() -> void:
+	var current: Variant = progress.get("current")
+	if timer_left > 0.0 and not viewing_record and current is Dictionary and current["id"] == episode.get("id"):
+		current["timer"] = {"step": current["inputs"].size(), "left": timer_left}
+		_save_progress()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_keep_timer()
+
+
 ## Top bar over two columns: the ops desk (metric tiles, log console and the
 ## evidence tray) on the left, the dialogue column on the right.
 func _build_episode_screen() -> void:
@@ -453,7 +468,7 @@ func _queue_new_entries() -> void:
 
 
 func _process(delta: float) -> void:
-	if settings_layer != null or act_card != null or status_layer != null:
+	if _modal_open():
 		return
 	if typing_label != null:
 		# Korean text carries a word joiner between letters (see _t), so it types
@@ -486,6 +501,11 @@ func _process(delta: float) -> void:
 		if timer_left <= 0.0:
 			timer_left = -1.0
 			_submit({"type": "timeout"})
+
+
+## Something covers the incident: settings, the status window or an Act card.
+func _modal_open() -> bool:
+	return settings_layer != null or status_layer != null or act_card != null
 
 
 func _skip_reveal() -> void:
@@ -584,7 +604,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			_close_settings()
 		else:
 			_open_settings()
-	elif settings_layer != null or episode.is_empty():
+	elif _modal_open() or episode.is_empty():
+		# Settings, the status window or the Act card cover the incident: no key
+		# reaches the choices behind them.
 		return
 	elif key == KEY_SPACE and (not pending.is_empty() or typing_label != null):
 		_skip_reveal()
@@ -697,6 +719,12 @@ func _show_controls() -> void:
 			if scene.has("timer") and Settings.timer:
 				timer_total = float(_decision_seconds(scene))
 				timer_left = timer_total
+				var current: Variant = progress.get("current")
+				if current is Dictionary and current.has("timer"):
+					# Resumed at the decision it was left on: the clock goes on from there.
+					if int(current["timer"]["step"]) == current["inputs"].size():
+						timer_left = clampf(float(current["timer"]["left"]), 1.0, timer_total)
+					current.erase("timer")
 				var row := HBoxContainer.new()
 				row.add_theme_constant_override("separation", 10)
 				timer_bar = ProgressBar.new()
@@ -729,7 +757,7 @@ func _show_controls() -> void:
 			connect_slot = VBoxContainer.new()
 			controls.add_child(connect_slot)
 			_update_deduction()
-	if not option_actions.is_empty():
+	if not option_actions.is_empty() and not _modal_open():
 		_focus_first_choice.call_deferred()
 
 
@@ -774,7 +802,7 @@ func _add_choice(bbcode: String, action: Callable, enabled := true, parent: Cont
 		)
 		row.gui_input.connect(func(event: InputEvent) -> void:
 			var click: bool = event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT
-			if click or event.is_action_pressed("ui_accept"):
+			if (click or event.is_action_pressed("ui_accept")) and not _modal_open():
 				row.accept_event()
 				action.call()
 		)
@@ -1166,6 +1194,12 @@ func _change_setting(key: String, value: Variant) -> void:
 		timer_left = -1.0
 		if timer_bar != null:
 			timer_bar.get_parent().visible = false
+	elif key == "timer" and timer_left <= 0.0 and not episode.is_empty() and not viewing_record and pending.is_empty() and typing_label == null:
+		var scene := StoryRunner.current_scene(episode, state)
+		if not scene.is_empty() and scene["type"] == "choice" and scene.has("timer"):
+			# Turned back on mid-decision: the decision gets its full time again
+			# (with the timer off it had no limit at all).
+			_show_controls()
 	if key == "language" or key == "text_size":
 		_close_settings()
 		_rebuild()
@@ -1348,7 +1382,16 @@ func _status_people(people: Array, fresh: Array) -> Control:
 		text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		text.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 		text.text = "[b]%s[/b]%s\n[color=#%s]%s[/color]" % [_esc(_t(person["name"])), "  [color=#%s]●[/color]" % amber if _person_fresh(person, fresh) else "", dim, _esc(_t(person["role"]))]
-		entry.add_child(text)
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		text.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		var line := HBoxContainer.new()
+		line.add_theme_constant_override("separation", 10)
+		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var thumb := _portrait(person["id"], 44)
+		if thumb != null:
+			line.add_child(thumb)
+		line.add_child(text)
+		entry.add_child(line)
 		rows[person["id"]] = entry
 		entry.gui_input.connect(func(event: InputEvent) -> void:
 			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -1369,10 +1412,20 @@ func _show_person(detail: VBoxContainer, person: Dictionary, fresh: Array) -> vo
 	for child in detail.get_children():
 		child.queue_free()
 	var amber := ThemeBuilder.AMBER.to_html(false)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 18)
+	var portrait := _portrait(person["id"], 168)
+	if portrait != null:
+		head.add_child(portrait)
+	var title := VBoxContainer.new()
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.alignment = BoxContainer.ALIGNMENT_END
 	var name := _label(_t(person["name"]), "PromptLabel", false)
 	name.add_theme_font_size_override("font_size", ThemeBuilder.size(Settings.text_size) + 6)
-	detail.add_child(name)
-	detail.add_child(_label(_t(person["role"]), "DimLabel"))
+	title.add_child(name)
+	title.add_child(_label(_t(person["role"]), "DimLabel"))
+	head.add_child(title)
+	detail.add_child(head)
 	for section in [["traits", "person_traits"], ["background", "person_background"]]:
 		detail.add_child(_spacer(8))
 		detail.add_child(_label(_header(UiText.t(section[1])), "HeaderLabel", false))
@@ -1390,6 +1443,26 @@ func _show_person(detail: VBoxContainer, person: Dictionary, fresh: Array) -> vo
 			detail.add_child(text)
 		if hidden > 0:
 			detail.add_child(_label(UiText.t("person_hidden") % hidden, "DimLabel"))
+
+
+## A framed square of the person's portrait (assets/portraits/<id>.png), or
+## null when there is none.
+func _portrait(id: String, side: int) -> Control:
+	var path := "res://assets/portraits/%s.png" % id.to_lower()
+	if not ResourceLoader.exists(path):
+		return null
+	var frame := PanelContainer.new()
+	frame.theme_type_variation = "PortraitFrame"
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var image := TextureRect.new()
+	image.texture = load(path)
+	image.custom_minimum_size = Vector2(side, side)
+	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.add_child(image)
+	return frame
 
 
 func _people() -> Array:

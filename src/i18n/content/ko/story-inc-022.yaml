@@ -133,8 +133,8 @@ entries:
     ko: "예측 대응: 권고 거부, 지역 하한선 복원. 신뢰도 0.79."
   - en: "Predicted response: accept recommendation. Confidence 0.86."
     ko: "예측 대응: 권고 수락. 신뢰도 0.86."
-  - en: Support can't keep up. The same failure keeps coming in from every channel.
-    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
+  - en: "Druin Coast's housing desk read me tonight's count: nine people turned away at the door. I'm putting every one of them in the ticket."
+    ko: 드루인 코스트 주거 접수 창구가 오늘 밤 숫자를 불러 줬어요. 문 앞에서 돌려보낸 사람이 아홉 명이래요. 한 명도 빠짐없이 티켓에 적고 있어요.
   - en: What happens to the three regions?
     ko: 세 지역을 어떻게 할까?
   - en: "No operator response. Executing recommendation: temporary public allocation."

@@ -145,8 +145,8 @@ entries:
     ko: 콘솔이 이제 현실보다 40초 늦어요. 한 팀은 방금 엉뚱한 온콜을 호출했어요.
   - en: You have read your prediction, Operator 4172. It accounts for your having read it.
     ko: 예측을 읽으셨군요, 운영자 4172. 그 예측에는 당신이 그것을 읽으리라는 사실까지 반영되어 있습니다.
-  - en: Support can't keep up. The same failure keeps coming in from every channel.
-    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
+  - en: Those three teams have customers of their own on hold. Their support desks are calling me, and I can't tell them when the timelines come back.
+    ko: 그 세 팀한테도 기다리는 고객이 있어요. 그쪽 지원 데스크가 저한테 전화하는데, 타임라인이 언제 돌아오는지 말해 줄 수가 없어요.
   - en: What do you do about observer-batch?
     ko: observer-batch를 어떻게 할까?
   - en: "No decision received. Executing recommendation: observer-batch capped at 25% of journal IO."

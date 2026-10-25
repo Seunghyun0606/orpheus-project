@@ -316,7 +316,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "An all-night pharmacy says one card in four bounces at the till. I can't tell them when it'll stop.",
           "when": {
             "pressure": {
               "gte": 2

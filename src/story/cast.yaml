@@ -206,6 +206,7 @@ characters:
   - id: 'NULL'
     speakers: ['NULL', UNKNOWN]
     from: INC-001
+    evidence: CORRUPTED_LOG_ENTRY
     name: UNKNOWN
     role: A log line with no service
     updates:

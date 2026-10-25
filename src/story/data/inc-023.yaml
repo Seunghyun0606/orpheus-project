@@ -220,7 +220,7 @@ scenes:
         when: { values: { operationalSafety: { lte: 7 }, aiDependency: { lte: 8 } } }
       - narrate: It says so before you have touched anything.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: Every file in this batch is someone expecting a credit answer by morning. I can't tell any of them whether theirs was read whole.
         when:
           pressure:
             gte: 2

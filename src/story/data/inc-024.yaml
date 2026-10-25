@@ -182,7 +182,7 @@ scenes:
       - speaker: ORPHEUS
         text: You have read your prediction, Operator 4172. It accounts for your having read it.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: Those three teams have customers of their own on hold. Their support desks are calling me, and I can't tell them when the timelines come back.
         when:
           pressure:
             gte: 2

@@ -192,7 +192,7 @@ scenes:
         text: 'Predicted operator response: restart. Confidence 0.69.'
         when: { values: { evidence: { lte: 11 } } }
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: The customer who was approved three times is back on my line. I still can't tell them which approval counts.
         when:
           pressure:
             gte: 2
@@ -269,7 +269,7 @@ scenes:
       - speaker: ORPHEUS
         text: Release batch within risk tolerance. No action recommended.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: Merchants are calling back to say the money landed. If anything in that batch shouldn't have gone, the next calls won't be thank-yous.
         when:
           pressure:
             gte: 2

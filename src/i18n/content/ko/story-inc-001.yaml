@@ -109,20 +109,22 @@ entries:
     ko: 결단
   - en: Errors are still climbing. I need a decision now.
     ko: 오류가 계속 올라가요. 지금 결정해 줘요.
-  - en: Support can't keep up. The same failure keeps coming in from every channel.
-    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
+  - en: Over two hundred tickets about failed checkouts. Half of them ask whether they were charged anyway, and I don't know yet.
+    ko: 결제 실패 문의가 2백 건을 넘었어요. 절반은 그래도 돈이 빠져나갔냐고 묻는데, 저도 아직 몰라요.
   - en: What do you do?
     ko: 어떻게 할까?
   - en: No call? I'm restarting the API. We can't just sit here.
     ko: 결정 안 해요? API 재시작할게요. 손 놓고 있을 순 없어요.
   - en: Terminate the stale sessions
     ko: 오래된 세션 종료하기
-  - en: Takes two minutes · removes the cause
-    ko: 2분 걸림 · 원인 제거
+  - en: Takes two minutes · frees what holds the pool
+    ko: 2분 걸림 · 풀을 붙잡은 세션 정리
   - en: SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';
     ko: SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';
-  - en: Connections are back. That's a fix, not a bandage.
-    ko: 커넥션 돌아왔어요. 땜질이 아니라 제대로 고친 거예요.
+  - en: Connections are back. We freed what was actually holding the pool, not just the symptoms.
+    ko: 커넥션 돌아왔어요. 증상만 누른 게 아니라 풀을 실제로 붙잡고 있던 걸 풀었어요.
+  - en: Whatever left those transactions open will do it again. I'm opening a ticket to find it.
+    ko: 트랜잭션을 열어 둔 채 가 버린 게 뭐든, 또 그럴 거예요. 찾아내라고 티켓 열어 둘게요.
   - en: Restart the Payment API
     ko: Payment API 재시작하기
   - en: Fast · will come back
@@ -150,7 +152,7 @@ entries:
   - en: "02:23:11 / UNKNOWN: Good."
     ko: "02:23:11 / UNKNOWN: 좋아."
   - en: Did you write that? No? Probably a test harness talking to itself.
-    ko: 이거 직접 쓴 거예요? 아니라고요? 테스트 하네스가 혼잣말한 거겠죠.
+    ko: 이거 직접 쓴 거예요? 아니라고요? 자동 테스트 도구(테스트 하네스)가 혼잣말한 거겠죠.
   - en: There is no service called UNKNOWN.
     ko: UNKNOWN이라는 서비스는 없다.
   - en: Postmortem

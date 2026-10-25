@@ -180,7 +180,7 @@ scenes:
       - speaker: MAYA
         text: Once arch-c is rebuilt from its peers, whatever only it holds is gone. Your call.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: A court clerk has called three times. Her filing is due at nine, and I still can't tell her when the contract comes back.
         when:
           pressure:
             gte: 2

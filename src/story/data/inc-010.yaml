@@ -175,7 +175,7 @@ scenes:
       - log: 'advisor: predicted operator response — override, causal repair · confidence 0.63'
         when: { values: { aiDependency: { lte: 2 } } }
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: Merchants want to know whether the vanished payments were charged. I can't tell them which ones to retry.
         when:
           pressure:
             gte: 2

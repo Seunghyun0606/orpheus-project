@@ -383,7 +383,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "The customer who was approved three times is back on my line. I still can't tell them which approval counts.",
           "when": {
             "pressure": {
               "gte": 2
@@ -582,7 +582,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "Merchants are calling back to say the money landed. If anything in that batch shouldn't have gone, the next calls won't be thank-yous.",
           "when": {
             "pressure": {
               "gte": 2

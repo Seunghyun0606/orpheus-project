@@ -175,7 +175,7 @@ scenes:
       - speaker: 'NULL'
         text: Roll it back.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: "One partner bank read me a customer's message: signed out halfway through a transfer, and she doesn't know if the money left. Neither do I."
         when:
           pressure:
             gte: 2

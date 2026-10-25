@@ -322,7 +322,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "A candidate wrote in: a recruiter booked her interview, then cancelled it ten minutes later. I can't tell her which list is the real one.",
           "when": {
             "pressure": {
               "gte": 2

@@ -194,7 +194,7 @@ scenes:
         text: Session pool just went past 1,100. A third of sign-ins are failing and the mobile app is retrying in a loop.
       - metric: { label: Sign-in failure rate, value: 33%, trend: up }
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: People are filling the same cart three times and giving up. I can't promise it holds on the fourth.
         when:
           pressure:
             gte: 2

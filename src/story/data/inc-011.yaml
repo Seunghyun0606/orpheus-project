@@ -183,7 +183,7 @@ scenes:
       - log: 'advisor: predicted operator response — accept recommendation · confidence 0.77'
         when: { values: { collateralDamage: { lte: 37 } } }
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: Customers are asking whether their data was stolen. I can't say no until someone tells me what this is.
         when:
           pressure:
             gte: 2

@@ -19,7 +19,7 @@ func _initialize() -> void:
 	await process_frame
 	# Never touch the player's saves.
 	main.reviewing = true
-	var failures := 0
+	var failures := _regressions(main)
 	var steps := 0
 	for strategy in ["first", "last+timeout", "middle"]:
 		main.progress = Progress.empty()
@@ -64,6 +64,8 @@ func _initialize() -> void:
 			for tab in 4:
 				main._open_status(tab)
 				main._close_status()
+			# Let freed screens go, as between real frames.
+			await process_frame
 		# By the final record the whole recurring cast has been met.
 		var met: int = main._people().size()
 		if met < CastBook.characters().size() - 1:
@@ -110,13 +112,84 @@ func _initialize() -> void:
 	# leaving and resuming, opening settings and switching language while text
 	# types. Every scene must offer its controls on its own.
 	for strategy in ["first", "last+timeout", "middle"]:
-		var result: Array = _realtime(main, strategy)
+		var result: Array = await _realtime(main, strategy)
 		steps += result[0]
 		failures += result[1]
 	main._show_title()
 	await process_frame
 	print("ui smoke: %d inputs, %d failures" % [steps, failures])
 	quit(1 if failures > 0 else 0)
+
+
+## Fixed bugs from the 2026-10-25 QA review, at INC-001's first timed decision:
+## keys behind the status window, the timer setting turned back on, the time
+## left surviving a trip to the title, and UNKNOWN before its log line.
+func _regressions(main: Control) -> int:
+	var failures := 0
+	var had_timer: bool = Settings.timer
+	if not had_timer:
+		main._change_setting("timer", true)
+		main._close_settings()
+	main.progress = Progress.empty()
+	main._start_episode("INC-001")
+	main._close_act_card()
+	if _met(main, "NULL"):
+		failures += 1
+		printerr("UNKNOWN is listed before its log line")
+	var scene: Dictionary = {}
+	for step in 40:
+		main._skip_reveal()
+		scene = StoryRunner.current_scene(main.episode, main.state)
+		if scene.is_empty() or scene.has("timer"):
+			break
+		main._submit(_input(scene, main.state, "first", step))
+	if scene.is_empty():
+		printerr("INC-001 has no timed decision")
+		return failures + 1
+	main._process(5.0)
+	var left: float = main.timer_left
+	main._show_title()
+	main._start_episode("INC-001")
+	if absf(main.timer_left - left) > 0.01:
+		failures += 1
+		printerr("resuming reset the timer: %.1f -> %.1f" % [left, main.timer_left])
+	main._change_setting("timer", false)
+	main._change_setting("timer", true)
+	main._close_settings()
+	if main.timer_left <= 0.0:
+		failures += 1
+		printerr("turning the timer back on did not restart it")
+	main._open_status(main.PEOPLE_TAB)
+	var key := InputEventKey.new()
+	key.keycode = KEY_1
+	key.pressed = true
+	main._unhandled_input(key)
+	main._close_status()
+	if main.state["sceneId"] != scene["id"]:
+		failures += 1
+		printerr("a number key chose behind the status window")
+	if not had_timer:
+		main._change_setting("timer", false)
+		main._close_settings()
+	for step in 40:
+		main._skip_reveal()
+		scene = StoryRunner.current_scene(main.episode, main.state)
+		if scene.is_empty():
+			break
+		main._submit(_input(scene, main.state, "first", step))
+	main._skip_reveal()
+	if not _met(main, "NULL"):
+		failures += 1
+		printerr("UNKNOWN is not listed after INC-001")
+	print("regressions: %d failures" % failures)
+	return failures
+
+
+func _met(main: Control, id: String) -> bool:
+	for person in main._people():
+		if person["id"] == id:
+			return true
+	return false
 
 
 ## Advances frames until the scene offers its controls (or ends).
@@ -204,6 +277,7 @@ func _realtime(main: Control, strategy: String) -> Array:
 		if not Progress.is_finished(main.progress, id):
 			failures += 1
 			printerr("%s (%s) did not finish in real time" % [id, strategy])
+		await process_frame
 	print("real time %s: %d inputs, %d failures" % [strategy, steps, failures])
 	return [steps, failures]
 

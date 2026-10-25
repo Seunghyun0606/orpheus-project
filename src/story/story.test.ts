@@ -179,7 +179,7 @@ describe('INC-001 episode', () => {
       deduce('ERROR_SPIKE', 'CLEAN_DEPLOY'),
     ]);
     const frayed = (state: EpisodeState) =>
-      state.feed.some((e) => e.kind === 'line' && e.text.startsWith('Support can'));
+      state.feed.some((e) => e.kind === 'line' && e.text.startsWith('Over two hundred tickets'));
     expect(frayed(calm)).toBe(false);
     expect(tense.pressure).toBe(2);
     expect(frayed(tense)).toBe(true);

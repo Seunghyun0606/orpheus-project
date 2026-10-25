@@ -337,7 +337,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "A charge nurse at St. Aldric's asked me whether to give up on the screen and go to paper. I couldn't tell her when it comes back.",
           "when": {
             "pressure": {
               "gte": 2

@@ -85,8 +85,8 @@ entries:
     ko: batch-781/message-44 schema=legacy_v3 expected=receipt_v4 attempt=4117
   - en: Four thousand attempts at the same receipt. Everything behind it waits its turn.
     ko: 같은 영수증에 4천 번째 시도. 그 뒤로는 전부 차례를 기다린다.
-  - en: Add temporary receipt consumers
-    ko: 임시 영수증 컨슈머 추가하기
+  - en: Add temporary consumers to the receipt queue
+    ko: 영수증 큐에 임시 처리기(컨슈머) 붙이기
   - en: Fast · the backlog will come back
     ko: 빠름 · 적체가 다시 쌓임
   - en: The new consumers chew through the easy receipts. Three minutes later the depth turns around.
@@ -106,21 +106,21 @@ entries:
   - en: "partner batch 780: receipt_v4 ×2000 · batch 781: receipt_v4 ×1999, legacy_v3 ×1 · batch 782: receipt_v4 ×2000"
     ko: "partner batch 780: receipt_v4 ×2000 · batch 781: receipt_v4 ×1999, legacy_v3 ×1 · batch 782: receipt_v4 ×2000"
   - en: One receipt in one partner batch, in a format nobody has sent for a year. It sits at the head of its partition and nothing gets past it.
-    ko: 파트너 배치 하나에 든 영수증 한 건. 1년째 아무도 보내지 않던 형식이다. 그 영수증이 파티션 맨 앞에 버티고 있어 아무것도 지나가지 못한다.
+    ko: 파트너 배치 하나에 든 영수증 한 건. 1년째 아무도 보내지 않던 형식이다. 그 영수증이 파티션(큐의 한 줄) 맨 앞에 버티고 있어 아무것도 지나가지 못한다.
   - en: Your call
     ko: 결단
   - en: 31 min
     ko: 31분
   - en: Nobody is going to make this decision for you. Or almost nobody.
     ko: 이 결정은 아무도 대신 내려 주지 않는다. 아니, 거의 아무도.
-  - en: Support can't keep up. The same failure keeps coming in from every channel.
-    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
+  - en: Sixty tickets from people who paid and got no receipt. Some paid a second time to be sure.
+    ko: 결제는 됐는데 영수증이 없다는 문의가 60건이에요. 확실히 하려고 한 번 더 결제한 사람도 있어요.
   - en: What happens to the stuck receipt?
     ko: 막힌 영수증을 어떻게 할까?
   - en: "auto-remediation: head-of-line message exceeded retry budget · action: discard"
     ko: "auto-remediation: 선두 메시지가 재시도 한도를 초과함 · 조치: 폐기"
-  - en: Quarantine the malformed receipt for reconciliation
-    ko: 불량 영수증을 격리해 따로 대사하기
+  - en: Quarantine the malformed receipt and reconcile it by hand
+    ko: 불량 영수증을 따로 빼 두고 거래 내역과 대조하기
   - en: One message set aside · someone fixes it by hand
     ko: 메시지 하나만 따로 뺌 · 누군가 수작업으로 고쳐야 함
   - en: 0 min
@@ -128,7 +128,7 @@ entries:
   - en: The partition drains in under a minute. Message 44 waits in quarantine with a ticket attached.
     ko: 파티션이 1분도 안 돼 비워진다. 44번 메시지는 티켓이 붙은 채 격리 구역에서 기다린다.
   - en: Add a dead-letter rule for the legacy format
-    ko: 레거시 형식에 데드레터 규칙 추가하기
+    ko: 레거시 형식은 실패 메시지 보관 큐(데드레터)로 보내는 규칙 추가하기
   - en: Stops the whole class of failure · catches more than this one
     ko: 같은 유형의 장애를 통째로 막음 · 이번 것 말고도 걸림
   - en: The queue drains. Over the next hour, receipts from three other partners land in the dead-letter queue too.

@@ -68,7 +68,7 @@ entries:
   - en: Identity build 1847 went out an hour ago. Everyone will want to roll it back. Let's know why first.
     ko: Identity 빌드 1847이 한 시간 전에 나갔어요. 다들 롤백하자고 할 거예요. 이유부터 알고 가요.
   - en: Sam from Platform is on the bridge tonight. You can hand him work.
-    ko: 오늘 밤엔 플랫폼팀 샘도 브리지에 있어요. 일을 넘겨도 돼요.
+    ko: 오늘 밤엔 플랫폼팀 샘도 장애 대응 통화(브리지)에 들어와 있어요. 일을 넘겨도 돼요.
   - en: First move
     ko: 첫 수
   - en: How do you start?
@@ -123,8 +123,8 @@ entries:
     ko: 결단
   - en: Support queue just doubled. People are retrying their cards over and over.
     ko: 고객지원 대기열이 방금 두 배가 됐어요. 다들 카드 결제를 몇 번이고 다시 하고 있어요.
-  - en: Support can't keep up. The same failure keeps coming in from every channel.
-    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
+  - en: An all-night pharmacy says one card in four bounces at the till. I can't tell them when it'll stop.
+    ko: 24시간 약국 한 곳에서 카드 넷 중 하나가 계산대에서 튕긴대요. 언제 괜찮아지냐는데 말해 줄 수가 없어요.
   - en: How do you fix it?
     ko: 어떻게 고칠까?
   - en: Out of time. I'm rolling 1847 back.

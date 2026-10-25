@@ -159,7 +159,7 @@ scenes:
       - speaker: MAYA
         text: Half of sign-ins are failing and the morning peak has started. I need a decision, not another graph.
       - speaker: JIN
-        text: Support can't keep up. The same failure keeps coming in from every channel.
+        text: People are resetting their passwords because they think they've been hacked. It doesn't help, and I can't tell them they're safe yet.
         when:
           pressure:
             gte: 2

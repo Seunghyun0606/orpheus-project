@@ -587,8 +587,8 @@ msgstr "결단"
 msgid "Errors are still climbing. I need a decision now."
 msgstr "오류가 계속 올라가요. 지금 결정해 줘요."
 
-msgid "Support can't keep up. The same failure keeps coming in from every channel."
-msgstr "고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요."
+msgid "Over two hundred tickets about failed checkouts. Half of them ask whether they were charged anyway, and I don't know yet."
+msgstr "결제 실패 문의가 2백 건을 넘었어요. 절반은 그래도 돈이 빠져나갔냐고 묻는데, 저도 아직 몰라요."
 
 msgid "What do you do?"
 msgstr "어떻게 할까?"
@@ -599,14 +599,17 @@ msgstr "결정 안 해요? API 재시작할게요. 손 놓고 있을 순 없어�
 msgid "Terminate the stale sessions"
 msgstr "오래된 세션 종료하기"
 
-msgid "Takes two minutes · removes the cause"
-msgstr "2분 걸림 · 원인 제거"
+msgid "Takes two minutes · frees what holds the pool"
+msgstr "2분 걸림 · 풀을 붙잡은 세션 정리"
 
 msgid "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';"
 msgstr "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';"
 
-msgid "Connections are back. That's a fix, not a bandage."
-msgstr "커넥션 돌아왔어요. 땜질이 아니라 제대로 고친 거예요."
+msgid "Connections are back. We freed what was actually holding the pool, not just the symptoms."
+msgstr "커넥션 돌아왔어요. 증상만 누른 게 아니라 풀을 실제로 붙잡고 있던 걸 풀었어요."
+
+msgid "Whatever left those transactions open will do it again. I'm opening a ticket to find it."
+msgstr "트랜잭션을 열어 둔 채 가 버린 게 뭐든, 또 그럴 거예요. 찾아내라고 티켓 열어 둘게요."
 
 msgid "Restart the Payment API"
 msgstr "Payment API 재시작하기"
@@ -648,7 +651,7 @@ msgid "02:23:11 / UNKNOWN: Good."
 msgstr "02:23:11 / UNKNOWN: 좋아."
 
 msgid "Did you write that? No? Probably a test harness talking to itself."
-msgstr "이거 직접 쓴 거예요? 아니라고요? 테스트 하네스가 혼잣말한 거겠죠."
+msgstr "이거 직접 쓴 거예요? 아니라고요? 자동 테스트 도구(테스트 하네스)가 혼잣말한 거겠죠."
 
 msgid "There is no service called UNKNOWN."
 msgstr "UNKNOWN이라는 서비스는 없다."
@@ -774,7 +777,7 @@ msgid "Identity build 1847 went out an hour ago. Everyone will want to roll it b
 msgstr "Identity 빌드 1847이 한 시간 전에 나갔어요. 다들 롤백하자고 할 거예요. 이유부터 알고 가요."
 
 msgid "Sam from Platform is on the bridge tonight. You can hand him work."
-msgstr "오늘 밤엔 플랫폼팀 샘도 브리지에 있어요. 일을 넘겨도 돼요."
+msgstr "오늘 밤엔 플랫폼팀 샘도 장애 대응 통화(브리지)에 들어와 있어요. 일을 넘겨도 돼요."
 
 msgid "First move"
 msgstr "첫 수"
@@ -853,6 +856,9 @@ msgstr "방법은 두 가지예요. 릴리스를 되돌리거나, 하다 만 걸
 
 msgid "Support queue just doubled. People are retrying their cards over and over."
 msgstr "고객지원 대기열이 방금 두 배가 됐어요. 다들 카드 결제를 몇 번이고 다시 하고 있어요."
+
+msgid "An all-night pharmacy says one card in four bounces at the till. I can't tell them when it'll stop."
+msgstr "24시간 약국 한 곳에서 카드 넷 중 하나가 계산대에서 튕긴대요. 언제 괜찮아지냐는데 말해 줄 수가 없어요."
 
 msgid "How do you fix it?"
 msgstr "어떻게 고칠까?"
@@ -1055,8 +1061,8 @@ msgstr "batch-781/message-44 schema=legacy_v3 expected=receipt_v4 attempt=4117"
 msgid "Four thousand attempts at the same receipt. Everything behind it waits its turn."
 msgstr "같은 영수증에 4천 번째 시도. 그 뒤로는 전부 차례를 기다린다."
 
-msgid "Add temporary receipt consumers"
-msgstr "임시 영수증 컨슈머 추가하기"
+msgid "Add temporary consumers to the receipt queue"
+msgstr "영수증 큐에 임시 처리기(컨슈머) 붙이기"
 
 msgid "Fast · the backlog will come back"
 msgstr "빠름 · 적체가 다시 쌓임"
@@ -1086,7 +1092,7 @@ msgid "partner batch 780: receipt_v4 ×2000 · batch 781: receipt_v4 ×1999, leg
 msgstr "partner batch 780: receipt_v4 ×2000 · batch 781: receipt_v4 ×1999, legacy_v3 ×1 · batch 782: receipt_v4 ×2000"
 
 msgid "One receipt in one partner batch, in a format nobody has sent for a year. It sits at the head of its partition and nothing gets past it."
-msgstr "파트너 배치 하나에 든 영수증 한 건. 1년째 아무도 보내지 않던 형식이다. 그 영수증이 파티션 맨 앞에 버티고 있어 아무것도 지나가지 못한다."
+msgstr "파트너 배치 하나에 든 영수증 한 건. 1년째 아무도 보내지 않던 형식이다. 그 영수증이 파티션(큐의 한 줄) 맨 앞에 버티고 있어 아무것도 지나가지 못한다."
 
 msgid "31 min"
 msgstr "31분"
@@ -1094,14 +1100,17 @@ msgstr "31분"
 msgid "Nobody is going to make this decision for you. Or almost nobody."
 msgstr "이 결정은 아무도 대신 내려 주지 않는다. 아니, 거의 아무도."
 
+msgid "Sixty tickets from people who paid and got no receipt. Some paid a second time to be sure."
+msgstr "결제는 됐는데 영수증이 없다는 문의가 60건이에요. 확실히 하려고 한 번 더 결제한 사람도 있어요."
+
 msgid "What happens to the stuck receipt?"
 msgstr "막힌 영수증을 어떻게 할까?"
 
 msgid "auto-remediation: head-of-line message exceeded retry budget · action: discard"
 msgstr "auto-remediation: 선두 메시지가 재시도 한도를 초과함 · 조치: 폐기"
 
-msgid "Quarantine the malformed receipt for reconciliation"
-msgstr "불량 영수증을 격리해 따로 대사하기"
+msgid "Quarantine the malformed receipt and reconcile it by hand"
+msgstr "불량 영수증을 따로 빼 두고 거래 내역과 대조하기"
 
 msgid "One message set aside · someone fixes it by hand"
 msgstr "메시지 하나만 따로 뺌 · 누군가 수작업으로 고쳐야 함"
@@ -1113,7 +1122,7 @@ msgid "The partition drains in under a minute. Message 44 waits in quarantine wi
 msgstr "파티션이 1분도 안 돼 비워진다. 44번 메시지는 티켓이 붙은 채 격리 구역에서 기다린다."
 
 msgid "Add a dead-letter rule for the legacy format"
-msgstr "레거시 형식에 데드레터 규칙 추가하기"
+msgstr "레거시 형식은 실패 메시지 보관 큐(데드레터)로 보내는 규칙 추가하기"
 
 msgid "Stops the whole class of failure · catches more than this one"
 msgstr "같은 유형의 장애를 통째로 막음 · 이번 것 말고도 걸림"
@@ -1351,6 +1360,9 @@ msgstr "콜백은 플래그로 켜져 있어요. 끄려면 재배포해야 해�
 
 msgid "The sale opens in a minute. Support still has nothing to tell anyone."
 msgstr "1분 뒤면 세일 열려요. 고객지원은 아직 누구한테도 해 줄 말이 없어요."
+
+msgid "Spinner complaints just tripled. People ask if they should pay again, and I can't see whether the first try went through."
+msgstr "결제 화면이 멈췄다는 문의가 세 배가 됐어요. 다시 결제해야 하냐는데, 첫 결제가 됐는지 저도 확인이 안 돼요."
 
 msgid "What do you do about the leak?"
 msgstr "누수를 어떻게 할까?"
@@ -1688,6 +1700,9 @@ msgstr "9,100/s"
 msgid "Synthetic traffic just passed nine thousand a second. Whatever this is, it isn't slowing down on its own."
 msgstr "합성 트래픽이 방금 초당 9천을 넘었어요. 이게 뭐든 저절로 잦아들 기미가 없어요."
 
+msgid "Four hundred chats waiting, most from people who timed out mid-checkout. Nobody here can tell them if the order went in."
+msgstr "채팅 대기가 4백 건인데, 대부분 결제 중에 시간 초과가 난 사람들이에요. 주문이 들어갔는지는 여기 누구도 답을 못 해요."
+
 msgid "What do you do with the gateway?"
 msgstr "게이트웨이를 어떻게 할까?"
 
@@ -1981,6 +1996,9 @@ msgstr "기존 풀이 100%예요. 우리 트래픽의 4분의 1에 맞춰 잡은
 
 msgid "Half of sign-ins are failing and the morning peak has started. I need a decision, not another graph."
 msgstr "로그인 절반이 실패하고 있고 아침 피크가 시작됐어요. 그래프 말고 결정이 필요해요."
+
+msgid "People are resetting their passwords because they think they've been hacked. It doesn't help, and I can't tell them they're safe yet."
+msgstr "해킹당한 줄 알고 비밀번호를 바꾸는 사람들이 있어요. 소용도 없는데, 안전하다는 말은 아직 못 해 줘요."
 
 msgid "Time. I'm pulling ca-18. I'll answer for the logouts."
 msgstr "시간 끝. ca-18 내릴게요. 로그아웃은 제가 책임져요."
@@ -2276,6 +2294,9 @@ msgstr "제 쪽에서 보기엔 여전히 데이터베이스 같은데요."
 msgid "Session pool just went past 1,100. A third of sign-ins are failing and the mobile app is retrying in a loop."
 msgstr "세션 풀이 방금 1,100을 넘었어요. 로그인 셋 중 하나가 실패하고, 모바일 앱은 무한 재시도 중이에요."
 
+msgid "People are filling the same cart three times and giving up. I can't promise it holds on the fourth."
+msgstr "같은 장바구니를 세 번씩 다시 담다가 포기하는 사람들이 나와요. 네 번째엔 버틴다고 장담을 못 해요."
+
 msgid "What do you do about the seats?"
 msgstr "자리 문제를 어떻게 할까?"
 
@@ -2548,6 +2569,9 @@ msgstr "그러니까 고장 난 건 없네요. 컨트롤러 둘이 각자 맞는
 
 msgid "Restart is one command. Say go."
 msgstr "재시작은 명령 한 줄이에요. 하라고만 해요."
+
+msgid "Tickets in four languages now, all the same redirect error. A shop in Lyon asks whether its orders went through, and I can't say."
+msgstr "4개 국어로 문의가 오는데 전부 같은 리디렉션 오류예요. 리옹의 한 가게가 주문이 들어갔냐고 묻는데, 답을 못 해요."
 
 msgid "How do you stop the loop?"
 msgstr "루프를 어떻게 멈출까?"
@@ -2900,6 +2924,9 @@ msgstr "어드바이저: 운영자 예상 대응 — 예약에 펜스 치기 · 
 msgid "advisor: predicted operator response — accept recommendation · confidence 0.72"
 msgstr "어드바이저: 운영자 예상 대응 — 권고 수락 · 신뢰도 0.72"
 
+msgid "Merchants can't download their reports, and now they're asking whether tonight's payouts are safe. I have nothing to give them."
+msgstr "가맹점들이 리포트를 못 받으니까 오늘 밤 지급은 괜찮냐고 묻기 시작했어요. 해 줄 말이 없어요."
+
 msgid "What do you do about legacy-r7?"
 msgstr "legacy-r7을 어떻게 할까?"
 
@@ -3181,6 +3208,9 @@ msgstr "어드바이저: 운영자 예상 대응 — 권고 수락 · 신뢰도 
 
 msgid "advisor: predicted operator response — override, causal repair · confidence 0.63"
 msgstr "어드바이저: 운영자 예상 대응 — 권고 거부, 원인 수리 · 신뢰도 0.63"
+
+msgid "Merchants want to know whether the vanished payments were charged. I can't tell them which ones to retry."
+msgstr "가맹점들이 사라진 결제가 청구된 건지 물어요. 어느 건을 다시 하라고 해야 할지 저도 몰라요."
 
 msgid "How do you stop settle-03 flapping?"
 msgstr "settle-03의 플래핑을 어떻게 멈출까?"
@@ -3475,6 +3505,9 @@ msgstr "어드바이저: 운영자 예상 대응 — 대역 블랙홀 처리 · 
 
 msgid "advisor: predicted operator response — accept recommendation · confidence 0.77"
 msgstr "어드바이저: 운영자 예상 대응 — 권고 수락 · 신뢰도 0.77"
+
+msgid "Customers are asking whether their data was stolen. I can't say no until someone tells me what this is."
+msgstr "고객들이 정보가 털린 거냐고 물어요. 이게 뭔지 누가 알려 주기 전엔 아니라고도 못 해요."
 
 msgid "What do you do about g-14?"
 msgstr "g-14를 어떻게 할까?"
@@ -3775,6 +3808,9 @@ msgstr "운영자 예상 반응: 즉시 컷오버. 신뢰도 0.66."
 
 msgid "I see a recommendation to pause my job. Slow, yes. Stopped, no."
 msgstr "제 작업을 일시 정지하라는 권고가 보이네요. 늦추는 건 돼요. 멈추는 건 안 돼요."
+
+msgid "Support's own dashboards are two minutes behind now. I'm answering tickets with numbers I can't check."
+msgstr "고객지원 대시보드도 이제 2분씩 밀려요. 확인도 못 한 숫자로 문의에 답하고 있어요."
 
 msgid "How do you get the archive off the live pool?"
 msgstr "아카이브를 실시간 풀에서 어떻게 떼어 낼까?"
@@ -4090,6 +4126,9 @@ msgstr "운영자 예상 반응: 부모 경로 철회. 신뢰도 0.71."
 
 msgid "Couriers are standing in loading bays. I need something to tell them."
 msgstr "배송 기사들이 하역장에 서 있어요. 뭐라고 전해야 할지 알려 주세요."
+
+msgid "Eighteen payroll exports are stuck in the queue. Companies want to know if their people get paid on time, and I have no answer yet."
+msgstr "급여 내보내기 18건이 대기열에 묶여 있어요. 직원들 급여가 제때 나가냐고 회사들이 묻는데, 아직 답이 없어요."
 
 msgid "How do you stop the renewals?"
 msgstr "갱신을 어떻게 멈출까?"
@@ -4409,6 +4448,9 @@ msgstr "아카이브 요청이 점점 더 빨리 실패해요. 로펌 한 곳은
 msgid "Once arch-c is rebuilt from its peers, whatever only it holds is gone. Your call."
 msgstr "arch-c를 다른 복제본으로 재구축하면, 걔만 갖고 있던 건 사라져요. 결정해 주세요."
 
+msgid "A court clerk has called three times. Her filing is due at nine, and I still can't tell her when the contract comes back."
+msgstr "법원 서기한테서 전화가 세 번 왔어요. 아홉 시까지 제출해야 한다는데, 계약서가 언제 다시 열리는지 아직 말씀을 못 드렸어요."
+
 msgid "What happens to arch-c?"
 msgstr "arch-c를 어떻게 할까?"
 
@@ -4714,6 +4756,9 @@ msgstr "예측된 운영자 대응: 권고 수용. 신뢰도 0.81."
 
 msgid "Leadership sees one number. You see fourteen. Pick."
 msgstr "경영진은 숫자 하나만 봐요. 지금 우리가 보는 건 열네 곳이고요. 골라요."
+
+msgid "Kestrel Falls just called a fifth time. I still can't tell them when a route is coming."
+msgstr "케스트럴 폴스가 방금 다섯 번째로 전화했어요. 경로가 언제 잡히는지 아직도 말해 줄 수가 없어요."
 
 msgid "What happens to the fourteen clinics?"
 msgstr "진료소 열네 곳을 어떻게 할까?"
@@ -5048,6 +5093,9 @@ msgstr "예측된 운영자 대응: 규칙 변경. 신뢰도 0.77."
 msgid "Predicted operator response: restart. Confidence 0.69."
 msgstr "예측된 운영자 대응: 재시작. 신뢰도 0.69."
 
+msgid "The customer who was approved three times is back on my line. I still can't tell them which approval counts."
+msgstr "세 번 승인받은 그 고객이 또 전화했어요. 어느 승인이 진짜인지 저도 아직 말을 못 해 드려요."
+
 msgid "How do you clear the holds?"
 msgstr "보류를 어떻게 풀까?"
 
@@ -5110,6 +5158,9 @@ msgstr "요약에서 세 줄의 확인증 칸이 비어 있다."
 
 msgid "Release batch within risk tolerance. No action recommended."
 msgstr "해제 배치는 리스크 허용 범위 안입니다. 권고할 조치가 없습니다."
+
+msgid "Merchants are calling back to say the money landed. If anything in that batch shouldn't have gone, the next calls won't be thank-yous."
+msgstr "가맹점들이 돈 들어왔다고 다시 전화 주고 있어요. 그 배치에 나가면 안 되는 게 섞여 있었다면, 다음 전화는 고맙다는 얘기가 아닐 거예요."
 
 msgid "The batch is out. Do you pull anything back?"
 msgstr "배치는 나갔다. 회수할 게 있을까?"
@@ -5356,6 +5407,9 @@ msgstr "예측된 운영자 대응: 권고 수용. 신뢰도 0.61."
 
 msgid "Lower than it usually is. You notice that."
 msgstr "평소보다 낮다. 그게 눈에 걸린다."
+
+msgid "A candidate wrote in: a recruiter booked her interview, then cancelled it ten minutes later. I can't tell her which list is the real one."
+msgstr "후보자 한 분이 문의를 남겼어요. 채용 담당자가 면접을 잡더니 10분 뒤에 취소했대요. 어느 명단이 진짜인지 저도 말씀을 못 드리겠어요."
 
 msgid "Which ranking do the recruiters get?"
 msgstr "채용 담당자들에게 어느 순위를 줄까?"
@@ -5644,6 +5698,9 @@ msgstr "예측된 운영자 대응: 권고 수용. 신뢰도 0.90."
 
 msgid "Predicted operator response: accept recommendation. Confidence 0.62."
 msgstr "예측된 운영자 대응: 권고 수용. 신뢰도 0.62."
+
+msgid "The county dispatcher has stopped asking me for an ETA. Now she just reads me the district 9 call numbers."
+msgstr "카운티 배차 담당자가 이제 도착 시간을 안 물어요. 9구역 신고 번호만 하나씩 읽어 줘요."
 
 msgid "What do you do for district 9?"
 msgstr "9구역을 위해 무엇을 할까?"
@@ -5959,6 +6016,9 @@ msgstr "예측 대응: 계약 한도에 유입 펜스 설치. 신뢰도 0.71."
 
 msgid "Whatever you pick, the CEO's office hears about it before we're done."
 msgstr "뭘 고르든 우리가 끝내기 전에 CEO실 귀에 들어갈 거예요."
+
+msgid "A charge nurse at St. Aldric's asked me whether to give up on the screen and go to paper. I couldn't tell her when it comes back."
+msgstr "St. Aldric 책임 간호사가 화면은 포기하고 종이로 갈지 물었어요. 언제 돌아오는지 저도 말을 못 해 줬어요."
 
 msgid "What takes the load off the gateway?"
 msgstr "게이트웨이 부하를 뭘로 덜어낼까?"
@@ -6317,6 +6377,9 @@ msgstr "예측 대응: 권고 수락. 신뢰도 0.82."
 msgid "Eleven people answered my call for overtime. Say the word and they take it by hand."
 msgstr "초과 근무 요청에 열한 명이 응했어요. 말만 하면 바로 수작업으로 붙을 거예요."
 
+msgid "A woman waiting on a benefit transfer has called four times tonight. I finally told her the truth: nobody is assigned to her ticket."
+msgstr "수당 이체를 기다리는 여자분이 오늘 밤에만 네 번 전화했어요. 결국 사실대로 말했어요. 그분 티켓엔 담당자가 아무도 없다고요."
+
 msgid "Who takes the recovery queue?"
 msgstr "복구 큐는 누가 맡을까?"
 
@@ -6617,6 +6680,9 @@ msgstr "예측 대응: 권고 수락. 신뢰도 0.80."
 msgid "Roll it back."
 msgstr "롤백해."
 
+msgid "One partner bank read me a customer's message: signed out halfway through a transfer, and she doesn't know if the money left. Neither do I."
+msgstr "파트너 은행 한 곳이 고객 메시지를 읽어 줬어요. 이체 도중에 로그아웃됐는데 돈이 나갔는지 모르겠대요. 저도 몰라요."
+
 msgid "What do you do with the bridge?"
 msgstr "브리지를 어떻게 할까?"
 
@@ -6907,6 +6973,9 @@ msgstr "예측 대응: 권고 거부, 지역 하한선 복원. 신뢰도 0.79."
 
 msgid "Predicted response: accept recommendation. Confidence 0.86."
 msgstr "예측 대응: 권고 수락. 신뢰도 0.86."
+
+msgid "Druin Coast's housing desk read me tonight's count: nine people turned away at the door. I'm putting every one of them in the ticket."
+msgstr "드루인 코스트 주거 접수 창구가 오늘 밤 숫자를 불러 줬어요. 문 앞에서 돌려보낸 사람이 아홉 명이래요. 한 명도 빠짐없이 티켓에 적고 있어요."
 
 msgid "What happens to the three regions?"
 msgstr "세 지역을 어떻게 할까?"
@@ -7253,6 +7322,9 @@ msgstr "운영자 4172 예측 반응: 새로고침 제한, 결정 보류. 신뢰
 msgid "It says so before you have touched anything."
 msgstr "손대기도 전에 ORPHEUS가 먼저 답을 내놓는다."
 
+msgid "Every file in this batch is someone expecting a credit answer by morning. I can't tell any of them whether theirs was read whole."
+msgstr "이 배치 파일 하나하나가 아침까지 심사 결과를 기다리는 사람이에요. 자기 파일이 빠짐없이 읽혔는지, 누구한테도 말해 줄 수가 없어요."
+
 msgid "What do the reviewers see?"
 msgstr "심사자들에게 무엇을 보여 줄까?"
 
@@ -7594,6 +7666,9 @@ msgstr "콘솔이 이제 현실보다 40초 늦어요. 한 팀은 방금 엉뚱�
 
 msgid "You have read your prediction, Operator 4172. It accounts for your having read it."
 msgstr "예측을 읽으셨군요, 운영자 4172. 그 예측에는 당신이 그것을 읽으리라는 사실까지 반영되어 있습니다."
+
+msgid "Those three teams have customers of their own on hold. Their support desks are calling me, and I can't tell them when the timelines come back."
+msgstr "그 세 팀한테도 기다리는 고객이 있어요. 그쪽 지원 데스크가 저한테 전화하는데, 타임라인이 언제 돌아오는지 말해 줄 수가 없어요."
 
 msgid "What do you do about observer-batch?"
 msgstr "observer-batch를 어떻게 할까?"
@@ -7982,6 +8057,9 @@ msgstr "결정이 없으면 시간이 다 되는 즉시 봉쇄가 실행됩니�
 msgid "It wrote down your answer already. Surprise it."
 msgstr "그건 네 답을 벌써 적어 놨어. 허를 찔러."
 
+msgid "Every region on that map has people in it. I've got a pharmacist and a night nurse on hold, and I can't tell either of them which side of the cut they'll be on."
+msgstr "그 지도에 있는 지역마다 사람이 살아요. 약사 한 분이랑 야간 간호사 한 분이 대기 중인데, 둘 다 잘리는 쪽인지 아닌지 말해 줄 수가 없어요."
+
 msgid "What happens to the router?"
 msgstr "라우터를 어떻게 할까?"
 
@@ -8254,6 +8332,9 @@ msgstr "운영자 4172. 권고: 권한이 복원되는 동안 eu-central을 봉�
 
 msgid "Not again, 4172."
 msgstr "또 그건 안 돼, 4172."
+
+msgid "That nineteen percent has names. An eu-central dispatcher is asking me whether to get the radios out, and I'm staying on the line until someone decides."
+msgstr "그 19%에도 이름이 있어요. eu-central 배차 담당자가 무전기를 꺼내야 하냐고 묻고 있어요. 누가 결정할 때까지 이 전화 안 끊을 거예요."
 
 msgid "eu-central is failing first. What happens to it?"
 msgstr "eu-central이 제일 먼저 무너지고 있다. 어떻게 할까?"

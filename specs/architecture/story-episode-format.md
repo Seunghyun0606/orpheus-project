@@ -114,7 +114,9 @@ scenes: [...]
 
 Each character lists `speakers` (episode cast IDs) and/or `from` (an episode ID). A person is
 known once one of their speakers has talked in an incident the player reached (the live feed
-or an earlier record), or once the `from` episode begins. `traits` (성향) and `background`
+or an earlier record), or once the `from` episode begins. With `evidence` as well, the person
+is known in the `from` episode only once that evidence is collected (a voice first met in the
+logs, like UNKNOWN), and from the next episode on. `traits` (성향) and `background`
 (배경) lines, and later `updates` to the name or role, unlock by `after: INC-NNN` (that
 episode's close has been reached) and/or `flag: X` (the campaign flag is set; reveal flags
 land mid-episode). Locked lines show only as a count. A line must not say more than the story

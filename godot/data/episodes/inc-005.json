@@ -416,7 +416,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "Four hundred chats waiting, most from people who timed out mid-checkout. Nobody here can tell them if the order went in.",
           "when": {
             "pressure": {
               "gte": 2

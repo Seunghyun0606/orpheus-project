@@ -2,7 +2,8 @@ extends RefCounted
 ## Who the player has met and what they know about them (src/story/cast.ts).
 ##
 ## A person is known once one of their speakers has talked in an incident the
-## player has reached (or once the episode in `from` begins). A profile line,
+## player has reached (or once the episode in `from` begins; with `evidence`,
+## once that evidence is collected there). A profile line,
 ## name or role unlocks once its `after` incident has closed and/or its `flag`
 ## is set. Everything is read "as of" one incident: the one being played or the
 ## record being viewed.
@@ -59,7 +60,7 @@ static func context(progress: Dictionary, episode_id: String, state: Dictionary)
 		if _position(entry["id"]) >= at:
 			break
 		heard.merge(_heard_in(progress, entry["id"]))
-	return {"at": at, "ended": state.get("sceneId") == null, "flags": state.get("flags", {}), "heard": heard}
+	return {"at": at, "ended": state.get("sceneId") == null, "flags": state.get("flags", {}), "heard": heard, "collected": state.get("collected", [])}
 
 
 static func unlocked(item: Dictionary, context: Dictionary) -> bool:
@@ -76,7 +77,12 @@ static func _known(character: Dictionary, context: Dictionary) -> bool:
 	for speaker in character["speakers"]:
 		if context["heard"].has(speaker):
 			return true
-	return character.has("from") and _position(character["from"]) <= context["at"]
+	if not character.has("from"):
+		return false
+	var from := _position(character["from"])
+	if from == context["at"] and character.has("evidence"):
+		return context["collected"].has(character["evidence"])
+	return from <= context["at"]
 
 
 ## The people known so far, in cast order:

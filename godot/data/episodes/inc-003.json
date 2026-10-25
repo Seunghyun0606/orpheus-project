@@ -190,7 +190,7 @@
         },
         {
           "id": "SCALE",
-          "text": "Add temporary receipt consumers",
+          "text": "Add temporary consumers to the receipt queue",
           "consequence": "Fast · the backlog will come back",
           "beats": [
             {
@@ -296,7 +296,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "Sixty tickets from people who paid and got no receipt. Some paid a second time to be sure.",
           "when": {
             "pressure": {
               "gte": 2
@@ -319,7 +319,7 @@
       "options": [
         {
           "id": "QUARANTINE",
-          "text": "Quarantine the malformed receipt for reconciliation",
+          "text": "Quarantine the malformed receipt and reconcile it by hand",
           "consequence": "One message set aside · someone fixes it by hand",
           "beats": [
             {

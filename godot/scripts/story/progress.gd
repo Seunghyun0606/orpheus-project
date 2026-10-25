@@ -5,7 +5,8 @@ extends RefCounted
 ## - `records[id]`: how a finished episode was played (entry carry + inputs). A
 ##   finished episode is never played again; its record replays read-only.
 ## - `current`: the episode in progress (entry carry + inputs so far), so leaving
-##   mid-incident resumes at the same point instead of starting over.
+##   mid-incident resumes at the same point instead of starting over. Left
+##   during a timed decision, it also keeps the time left (`timer`).
 ## - `cast_seen`: profile lines the player has looked at in the status window,
 ##   so new people and new lines can be marked.
 ## The runner is deterministic, so carries and inputs reproduce every state.
@@ -14,6 +15,8 @@ extends RefCounted
 const StoryRunner := preload("res://scripts/story/story_runner.gd")
 const Library := preload("res://scripts/story/episode_library.gd")
 const PATH := "user://campaign.json"
+## The save before the last one, used when the campaign file is unreadable.
+const BACKUP_PATH := "user://campaign.bak.json"
 ## Endings seen survive "start over".
 const ENDINGS_PATH := "user://endings.json"
 
@@ -23,10 +26,10 @@ static func empty() -> Dictionary:
 
 
 static func load_progress() -> Dictionary:
-	var progress: Variant = null
-	if FileAccess.file_exists(PATH):
-		progress = Library.normalize(JSON.parse_string(FileAccess.get_file_as_string(PATH)))
-	if not (progress is Dictionary and progress.get("after") is Dictionary):
+	var progress := _read(PATH)
+	if progress.is_empty():
+		progress = _read(BACKUP_PATH)
+	if progress.is_empty():
 		return empty()
 	if not progress.get("records") is Dictionary:
 		progress["records"] = {}
@@ -37,10 +40,26 @@ static func load_progress() -> Dictionary:
 	return progress
 
 
+static func _read(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		return {}
+	var progress: Variant = Library.normalize(JSON.parse_string(FileAccess.get_file_as_string(path)))
+	return progress if progress is Dictionary and progress.get("after") is Dictionary else {}
+
+
+## Written beside the save and then swapped in, so a crash mid-write never
+## leaves a half-written campaign; the previous save stays as the backup.
 static func save_progress(progress: Dictionary) -> void:
-	var file := FileAccess.open(PATH, FileAccess.WRITE)
-	if file != null:
-		file.store_string(JSON.stringify(progress, "  ", true))
+	var temp := PATH + ".tmp"
+	var file := FileAccess.open(temp, FileAccess.WRITE)
+	if file == null:
+		return
+	file.store_string(JSON.stringify(progress, "  ", true))
+	file.close()
+	if FileAccess.file_exists(PATH):
+		DirAccess.remove_absolute(BACKUP_PATH)
+		DirAccess.rename_absolute(PATH, BACKUP_PATH)
+	DirAccess.rename_absolute(temp, PATH)
 
 
 static func _previous(id: String) -> String:

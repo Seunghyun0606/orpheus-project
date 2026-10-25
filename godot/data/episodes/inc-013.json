@@ -392,7 +392,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "Eighteen payroll exports are stuck in the queue. Companies want to know if their people get paid on time, and I have no answer yet.",
           "when": {
             "pressure": {
               "gte": 2

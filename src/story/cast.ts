@@ -5,7 +5,8 @@ import type { Episode } from './schema.ts';
 
 // The cast file (DEC-072): who the player has met, shown in the status window.
 // A person becomes known when one of their speakers talks (or once the episode
-// in `from` begins); each line of their profile unlocks as the campaign goes on.
+// in `from` begins, or once its `evidence` is collected); each line of their
+// profile unlocks as the campaign goes on.
 // Text is English; translations live in src/i18n/content/<locale>/story-cast.yaml.
 
 const id = z.string().regex(/^[A-Z][A-Z0-9_]*$/, 'IDs are UPPER_SNAKE_CASE');
@@ -26,6 +27,9 @@ const characterSchema = z
     speakers: z.array(id).default([]),
     // Known once this episode begins, spoken or not (log voices, the player).
     from: episodeId.optional(),
+    // With `from`: known in that episode only once this evidence is collected
+    // (a voice met in the logs), and from the next episode on.
+    evidence: id.optional(),
     name: text,
     role: text,
     // Later names and roles, the last unlocked one wins.
@@ -39,7 +43,8 @@ const characterSchema = z
     traits: z.array(entrySchema).min(1),
     background: z.array(entrySchema).min(1),
   })
-  .refine((c) => c.speakers.length > 0 || c.from !== undefined, 'give speakers or from');
+  .refine((c) => c.speakers.length > 0 || c.from !== undefined, 'give speakers or from')
+  .refine((c) => c.evidence === undefined || c.from !== undefined, 'evidence needs from');
 
 export const castSchema = z.strictObject({ characters: z.array(characterSchema).min(1) });
 
@@ -69,6 +74,12 @@ export function validateCast(cast: Cast, episodes: readonly Episode[]): string[]
     seen.add(at);
     for (const speaker of character.speakers)
       if (!castIds.has(speaker)) problems.push(`${at}: speaker ${speaker} is in no episode cast`);
+    const from = episodes.find((episode) => episode.id === character.from);
+    if (
+      character.evidence !== undefined &&
+      !from?.evidence.some((e) => e.id === character.evidence)
+    )
+      problems.push(`${at}: ${character.from} has no evidence ${character.evidence}`);
     const unlocks = [
       { after: character.from },
       ...character.updates,

@@ -341,7 +341,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "The county dispatcher has stopped asking me for an ETA. Now she just reads me the district 9 call numbers.",
           "when": {
             "pressure": {
               "gte": 2

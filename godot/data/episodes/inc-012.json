@@ -389,7 +389,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "Support's own dashboards are two minutes behind now. I'm answering tickets with numbers I can't check.",
           "when": {
             "pressure": {
               "gte": 2

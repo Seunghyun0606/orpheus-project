@@ -133,8 +133,8 @@ entries:
     ko: "예측된 운영자 대응: 권고 수용. 신뢰도 0.90."
   - en: "Predicted operator response: accept recommendation. Confidence 0.62."
     ko: "예측된 운영자 대응: 권고 수용. 신뢰도 0.62."
-  - en: Support can't keep up. The same failure keeps coming in from every channel.
-    ko: 고객지원이 감당을 못 해요. 같은 장애 문의가 모든 창구로 계속 들어와요.
+  - en: The county dispatcher has stopped asking me for an ETA. Now she just reads me the district 9 call numbers.
+    ko: 카운티 배차 담당자가 이제 도착 시간을 안 물어요. 9구역 신고 번호만 하나씩 읽어 줘요.
   - en: What do you do for district 9?
     ko: 9구역을 위해 무엇을 할까?
   - en: "No operator input. Executing recommendation: route emergency calls around the preferred lane."

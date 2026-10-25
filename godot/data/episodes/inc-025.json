@@ -387,7 +387,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "Every region on that map has people in it. I've got a pharmacist and a night nurse on hold, and I can't tell either of them which side of the cut they'll be on.",
           "when": {
             "pressure": {
               "gte": 2

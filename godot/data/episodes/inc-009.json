@@ -458,7 +458,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "Support can't keep up. The same failure keeps coming in from every channel.",
+          "text": "Merchants can't download their reports, and now they're asking whether tonight's payouts are safe. I have nothing to give them.",
           "when": {
             "pressure": {
               "gte": 2
