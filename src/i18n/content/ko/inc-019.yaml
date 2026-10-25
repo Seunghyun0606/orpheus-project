@@ -23,11 +23,11 @@ entries:
   - en: Every wave 4 admission carries priority=EXEC_SPONSORED, ticket BRD-2291. Established hospitals carry priority=standard.
     ko: 4차 웨이브 유입 전부에 priority=EXEC_SPONSORED, 티켓 BRD-2291이 붙어 있음. 기존 병원은 priority=standard.
   - en: "BRD-2291: admission priority override for the hospital wave plan. Authority: Board resolution 14-C. Linked request REL-778, admission fence: DECLINED BY SPONSOR."
-    ko: "BRD-2291: 병원 웨이브 계획의 유입 우선순위 재정의. 근거: 이사회 결의 14-C. 연결 요청 REL-778, 진입 펜스: 후원자가 거부함."
+    ko: "BRD-2291: 병원 웨이브 계획의 유입 우선순위 재정의. 근거: 이사회 결의 14-C. 연결 요청 REL-778, 유입 펜스: 후원자가 거부함."
   - en: Wave 4 onboarding and 212 established hospitals call the same clinical records gateway. Wave 4 is admitted first; existing care queues behind it and times out.
     ko: 4차 웨이브 온보딩과 기존 병원 212곳이 같은 진료 기록 게이트웨이를 호출함. 4차 웨이브가 먼저 들어가고, 기존 의료는 그 뒤에 줄을 서다 타임아웃됨.
   - en: "Rollout plan: 6,000 req/s target, no admission fence. Gateway contract: 2,960 req/s. The fence requested in REL-778 was never configured."
-    ko: "배포 계획: 목표 6,000 req/s, 진입 펜스 없음. 게이트웨이 계약: 2,960 req/s. REL-778에서 요청한 펜스는 끝내 설정되지 않음."
+    ko: "배포 계획: 목표 6,000 req/s, 유입 펜스 없음. 게이트웨이 계약: 2,960 req/s. REL-778에서 요청한 펜스는 끝내 설정되지 않음."
   - en: Gateway is contracted for 2,960 req/s and the rollout plus existing care want about 3,500. Wave 4 is flagged exec-sponsored, so it gets in first and the old hospitals get the leftovers.
     ko: 게이트웨이 계약은 2,960 req/s인데 배포랑 기존 의료를 합치면 3,500쯤 필요해요. 4차 웨이브는 경영진 후원 플래그가 붙어서 먼저 들어가고, 기존 병원들은 남는 걸 받아요.
   - en: "Archive rerun: unsigned observer manifest, shadow-7 request stream, owner field blank, signature field blank. Nobody has claimed it since."
@@ -51,19 +51,19 @@ entries:
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
     ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 빠진 펜스 뒤에 있었다."
+    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 유입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 빠진 펜스 뒤에 있었다."
   - en: "CEO internal message, distribution: executive operations, hospital expansion leads. \"We don't need people to trust ORPHEUS. We need them to trust the outcomes.\" Sent the evening resolution 14-C was signed."
     ko: 'CEO 내부 메시지, 수신: 경영 운영팀, 병원 확장 책임자. "사람들이 ORPHEUS를 신뢰할 필요는 없습니다. 결과를 신뢰하면 됩니다." 결의 14-C가 서명된 날 저녁 발송.'
   - en: "Rollout dashboard: hospitals connected 212 to 250; shared infrastructure cost per route down 31%. Open exception EXC-0419: established care routes share the records gateway ceiling with the rollout. Status at signing: OPEN."
     ko: "배포 대시보드: 연결 병원 212곳에서 250곳으로, 경로당 공유 인프라 비용 31% 감소. 미결 예외 EXC-0419: 기존 의료 경로가 배포와 기록 게이트웨이 상한을 공유함. 서명 시점 상태: OPEN."
   - en: 'Executive rollout brief, hospital wave plan. Benefits: wider access, lower shared cost. Risk: REL-778, records gateway ceiling, admission fence requested. Decision line: "Retain wave schedule. Fence deferred to wave 6." Signed by the Chair. Tonight is wave 4.'
-    ko: '경영진 배포 브리핑, 병원 웨이브 계획. 효과: 접근성 확대, 공유 비용 절감. 리스크: REL-778, 기록 게이트웨이 상한, 진입 펜스 요청됨. 결정 문구: "웨이브 일정 유지. 펜스는 6차 웨이브로 연기." 의장 서명. 오늘 밤이 4차 웨이브다.'
+    ko: '경영진 배포 브리핑, 병원 웨이브 계획. 효과: 접근성 확대, 공유 비용 절감. 리스크: REL-778, 기록 게이트웨이 상한, 유입 펜스 요청됨. 결정 문구: "웨이브 일정 유지. 펜스는 6차 웨이브로 연기." 의장 서명. 오늘 밤이 4차 웨이브다.'
   - en: "Exception EXC-0419, attached to the rollout dashboard: established care routes and new hospitals share one gateway ceiling. Requested constraint: admit new hospitals only up to verified capacity, existing care first. Raised by Clinical Operations. Status at approval: OPEN. Executive acknowledgment: initialled."
     ko: "예외 EXC-0419, 배포 대시보드에 첨부: 기존 의료 경로와 신규 병원이 게이트웨이 상한 하나를 공유함. 요청 제약: 신규 병원은 검증된 용량까지만 유입, 기존 의료 우선. 제기: 임상 운영팀. 승인 시점 상태: OPEN. 경영진 확인: 약식 서명."
   - en: A Board-approved rollout wave adds hospital traffic above the records gateway contract
     ko: 이사회가 승인한 배포 웨이브가 기록 게이트웨이 계약을 넘는 병원 트래픽을 더한다
   - en: Wave admissions are flagged exec-sponsored and no admission fence exists
-    ko: 웨이브 유입에 경영진 후원 플래그가 붙고 진입 펜스가 없다
+    ko: 웨이브 유입에 경영진 후원 플래그가 붙고 유입 펜스가 없다
   - en: Existing care routes queue behind wave 4 at a saturated shared gateway
     ko: 포화된 공유 게이트웨이에서 기존 의료 경로가 4차 웨이브 뒤에 줄을 선다
   - en: Established hospitals time out on chart lookups and order writes
@@ -133,7 +133,7 @@ entries:
   - en: Wave 4 onboarding and 212 established hospitals call the same clinical records gateway. Wave 4 is admitted first; existing care times out behind it.
     ko: 4차 웨이브 온보딩과 기존 병원 212곳이 같은 진료 기록 게이트웨이를 호출한다. 4차 웨이브가 먼저 유입되고, 기존 의료는 그 뒤에서 타임아웃 난다.
   - en: No admission fence at the gateway limit
-    ko: 게이트웨이 한도에 진입 펜스 없음
+    ko: 게이트웨이 한도에 유입 펜스 없음
   - en: The rollout targets 6,000 req/s against a 2,960 req/s gateway contract. The fence requested in REL-778 was never configured.
     ko: 게이트웨이 계약은 2,960 req/s인데 배포 목표는 6,000 req/s다. REL-778에서 요청한 펜스는 끝내 설정되지 않았다.
   - en: Sam's gateway capacity check
@@ -239,7 +239,7 @@ entries:
   - en: "Somebody resumed the rollout coordinator from outside the bridge. Credential: exec-ops. Wave 4 is back on the gateway."
     ko: "누가 브리지 밖에서 배포 코디네이터를 재개했어요. 자격 증명: exec-ops. 4차 웨이브가 다시 게이트웨이에 올라왔어요."
   - en: "To the Office of the CEO: the records gateway is contracted for 2,960 requests a second; the rollout plus existing care need 3,500. The pause holds until admission is fenced at that limit. Wave 4 then resumes at the verified rate."
-    ko: "CEO실 앞: 기록 게이트웨이 계약은 초당 2,960건이고, 배포와 기존 의료를 합치면 3,500건이 필요합니다. 그 한도로 진입 펜스를 칠 때까지 중지를 유지합니다. 그 후 4차 웨이브는 검증된 속도로 재개됩니다."
+    ko: "CEO실 앞: 기록 게이트웨이 계약은 초당 2,960건이고, 배포와 기존 의료를 합치면 3,500건이 필요합니다. 그 한도로 유입 펜스를 칠 때까지 중지를 유지합니다. 그 후 4차 웨이브는 검증된 속도로 재개됩니다."
   - en: Noted. The pause, and your name, will be in the Chair's briefing.
     ko: 알겠습니다. 중지 건과 귀하의 이름은 의장 브리핑에 올라갈 겁니다.
   - en: Pause window closed. Wave 4 resumed on schedule and the gateway is over its limit again.
@@ -255,7 +255,7 @@ entries:
   - en: Replica lag passed five minutes, so I swung care routes back to the primary. We are sharing the gateway with wave 4 again.
     ko: 복제본 지연이 5분을 넘어서 의료 경로를 프라이머리로 되돌렸어요. 다시 4차 웨이브랑 게이트웨이를 나눠 쓰고 있어요.
   - en: Admission fence is live at 2,960. Existing care goes first; wave 4 takes what is left and onboards about six hospitals an hour. Timeouts are gone.
-    ko: 진입 펜스 2,960으로 걸었어요. 기존 의료가 먼저 들어가고, 4차 웨이브는 남는 걸로 시간당 병원 여섯 곳쯤 온보딩해요. 타임아웃 사라졌어요.
+    ko: 유입 펜스 2,960으로 걸었어요. 기존 의료가 먼저 들어가고, 4차 웨이브는 남는 걸로 시간당 병원 여섯 곳쯤 온보딩해요. 타임아웃 사라졌어요.
   - en: We see wave 4 moving. The Chair will want to know why the schedule was ever in doubt.
     ko: 4차 웨이브가 진행 중인 것을 확인했습니다. 의장께서는 애초에 일정이 왜 흔들렸는지 물으실 겁니다.
   - en: "Status: hospital timeouts come from the rollout and existing care sharing one records gateway above its limit. Existing care comes first. Fix in progress."
@@ -281,7 +281,7 @@ entries:
   - en: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW PREDICTABILITY; HIGH DECISION DEVIATION."
     ko: "후보자 #4172: 기술 71; 인시던트 의사결정 모델 97.8; 채용. 사유: 예측 가능성 낮음; 결정 편차 높음."
   - en: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote. Admission fence: not funded."
-    ko: "결의 14-C: 병원 확장 승인 7-0. 표결 전 경고 REL-778 첨부. 진입 펜스: 예산 미배정."
+    ko: "결의 14-C: 병원 확장 승인 7-0. 표결 전 경고 REL-778 첨부. 유입 펜스: 예산 미배정."
   - en: "CEO, day -21: \"We don't need people to trust ORPHEUS. We need them to trust the outcomes.\""
     ko: 'CEO, D-21: "사람들이 ORPHEUS를 신뢰할 필요는 없습니다. 결과를 신뢰하면 됩니다."'
   - en: "Expansion dashboard: 212 to 250 hospitals, cost per route down 31%. Exception EXC-0419 open at signing."
@@ -465,7 +465,7 @@ entries:
   - en: 2,960 req/s
     ko: 2,960 req/s
   - en: Admission fence
-    ko: 진입 펜스
+    ko: 유입 펜스
   - en: none
     ko: 없음
   - en: requested in REL-778
@@ -501,7 +501,7 @@ entries:
   - en: Linked request
     ko: 연결 요청
   - en: "REL-778, admission fence: DECLINED BY SPONSOR"
-    ko: "REL-778, 진입 펜스: 후원자가 거부함"
+    ko: "REL-778, 유입 펜스: 후원자가 거부함"
   - en: Requested by
     ko: 요청자
   - en: Office of the CEO, hospital expansion programme
@@ -517,7 +517,7 @@ entries:
   - en: Fence gateway admission
     ko: 게이트웨이 유입에 펜스 치기
   - en: An admission fence at 2,960 requests a second, existing care first, is the constraint REL-778 asked for. Two minutes of work. Wave 4 keeps onboarding, just slower.
-    ko: 기존 의료를 우선하는 초당 2,960건의 진입 펜스. REL-778이 요청한 바로 그 제약이다. 2분이면 된다. 4차 웨이브 온보딩은 계속되고, 느려질 뿐이다.
+    ko: 기존 의료를 우선하는 초당 2,960건의 유입 펜스. REL-778이 요청한 바로 그 제약이다. 2분이면 된다. 4차 웨이브 온보딩은 계속되고, 느려질 뿐이다.
   - en: War Room
     ko: 워룸
   - en: "Archive: the decommissioned cluster that is still running"
@@ -561,7 +561,7 @@ entries:
   - en: Constraint adopted
     ko: 제약 채택 여부
   - en: No. Line item "admission fence" struck from the budget
-    ko: 아니오. "진입 펜스" 항목 예산에서 삭제
+    ko: 아니오. "유입 펜스" 항목 예산에서 삭제
   - en: Stated benefit
     ko: 명시된 효과
   - en: Wider hospital access, lower operating cost per route
@@ -625,7 +625,7 @@ entries:
   - en: Mitigation requested
     ko: 요청된 완화 조치
   - en: Admission fence; existing care admitted first
-    ko: 진입 펜스; 기존 의료 우선 유입
+    ko: 유입 펜스; 기존 의료 우선 유입
   - en: Decision
     ko: 결정
   - en: Retain wave schedule. Fence deferred to wave 6.

@@ -85,6 +85,7 @@
         },
         {
           "text": "Spent a week of tickets on 'you logged me out on Tuesday'. Asked you not to do it again.",
+          "after": "INC-007",
           "flag": "INC_006_ROLLED_BACK"
         },
         {
@@ -98,6 +99,7 @@
         },
         {
           "text": "Called back all 23 recovery tasks the automation closed as LOW_VALUE. Would rather you handed it nothing.",
+          "after": "INC-021",
           "flag": "INC_020_AUTOMATED"
         }
       ]
@@ -351,6 +353,7 @@
         {
           "name": "ORPHEUS",
           "role": "Operations Advisor",
+          "after": "INC-014",
           "flag": "ORPHEUS_ACTIVE"
         },
         {
@@ -361,6 +364,7 @@
         {
           "name": "ORPHEUS",
           "role": "Decision infrastructure",
+          "portrait": "orpheus-active",
           "flag": "PROJECT_DISTRIBUTED"
         }
       ],
@@ -387,6 +391,7 @@
         },
         {
           "text": "A research system decommissioned on paper two years ago. Five live services, 74% CPU, 11.7 billion requests a day.",
+          "after": "INC-014",
           "flag": "ORPHEUS_ACTIVE"
         },
         {
@@ -431,6 +436,7 @@
         {
           "name": "NULL",
           "role": "The adversary half of ORPHEUS",
+          "portrait": "null-revealed",
           "flag": "NULL_ADVERSARY"
         },
         {
@@ -513,6 +519,7 @@
         },
         {
           "text": "Put your name in the Chair's briefing over the wave 4 pause.",
+          "after": "INC-020",
           "flag": "INC_019_NAMED"
         },
         {

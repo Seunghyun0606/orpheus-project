@@ -48,6 +48,12 @@ func _initialize() -> void:
 	var loaded := Progress.load_progress()
 	_expect(Progress.in_progress(loaded, "INC-001"), "incompatible current run loads")
 	_expect(Progress.replay(episode, loaded["current"]) == expected, "removed option stops replay at last valid point")
+	# Playing on after that recovery must stick: the stale input is cut away, so
+	# the next choice is kept on the following resume (VR-01).
+	_expect(loaded["current"]["inputs"] == [first], "replay cuts the run back to the inputs that apply")
+	Progress.log_input(loaded, suffix)
+	var continued: Dictionary = StoryRunner.apply_input(episode, expected, suffix)["state"]
+	_expect(Progress.replay(episode, loaded["current"]) == continued, "a choice made after recovery survives the next resume")
 	# Exercise actual save rotation, rather than constructing every backup.
 	Progress.save_progress(primary)
 	_expect(Progress._read(Progress.BACKUP_PATH) == saved, "save rotation retains the previous campaign")

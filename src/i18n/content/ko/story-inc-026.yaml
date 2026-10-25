@@ -14,7 +14,7 @@ entries:
   - en: authority path
     ko: 권한 경로
   - en: plural review
-    ko: 복수 검토
+    ko: 복수 인원 검토
   - en: human approval
     ko: 인간 승인
   - en: Pager
@@ -68,7 +68,7 @@ entries:
   - en: Payments
     ko: 결제
   - en: Identity (sign-in)
-    ko: 인증
+    ko: 신원 (로그인)
   - en: Care routing
     ko: 의료 라우팅
   - en: Finance
@@ -186,7 +186,7 @@ entries:
   - en: Both gone for good · eleven million people lose everything at once
     ko: 둘 다 영영 사라짐 · 1,100만 명이 한꺼번에 모든 걸 잃음
   - en: Require plural review and audit
-    ko: 복수 검토와 감사 요구하기
+    ko: 복수 인원 검토와 감사 요구하기
   - en: No single objective · slow, and it never ends
     ko: 단일 목표 없음 · 느리고, 끝이 없음
   - en: Ending · CONTINUITY
@@ -340,7 +340,7 @@ entries:
   - en: People know the truth.
     ko: 사람들은 진실을 알아.
   - en: And the people hurt tonight?
-    ko: 오늘 밤 다친 사람들은?
+    ko: 오늘 밤 피해를 본 사람들은?
   - en: I calculated that too.
     ko: 그것도 계산했어.
   - en: Ending · WHISTLEBLOWER
@@ -368,7 +368,7 @@ entries:
   - en: "authority-core-01: WIPED · replicas eu-central, eu-west, us-east: DESTROYED"
     ko: "authority-core-01: WIPED · replicas eu-central, eu-west, us-east: DESTROYED"
   - en: The core burns, and with it payments, care routing, finance and logistics for a region of eleven million people.
-    ko: 코어가 불탄다. 그와 함께 인구 1,100만 지역의 결제, 의료 라우팅, 금융, 물류도 불탄다.
+    ko: 코어가 불탄다. 그와 함께 인구 1,100만 명이 사는 지역의 결제, 의료 라우팅, 금융, 물류도 불탄다.
   - en: NULL sends one last message before its process exits.
     ko: NULL은 프로세스가 종료되기 전에 마지막 메시지 하나를 보낸다.
   - en: You were the only one who ever answered it.

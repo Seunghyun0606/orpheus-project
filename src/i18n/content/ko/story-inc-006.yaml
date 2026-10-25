@@ -52,13 +52,13 @@ entries:
   - en: Morning shift. Coffee, a quiet handover, and then the pager.
     ko: 아침 근무. 커피, 조용한 인수인계, 그리고 호출기.
   - en: SEV1 · Identity Gateway · new-session failure rate above 20%
-    ko: SEV1 · 인증 게이트웨이 · 신규 세션 실패율 20% 초과
+    ko: SEV1 · 신원 서비스 게이트웨이 · 신규 세션 실패율 20% 초과
   - en: Sign-in failure rate
     ko: 로그인 실패율
   - en: Handshake retries
     ko: 핸드셰이크 재시도
   - en: Identity is rejecting every new sign-in. Anyone already logged in is fine; anyone signing in fresh bounces. Morning peak is coming. Find out why.
-    ko: 인증 쪽에서 새 로그인을 전부 거부하고 있어요. 이미 로그인한 사람은 괜찮은데, 새로 로그인하는 사람은 다 튕겨요. 곧 아침 피크예요. 원인 찾아 주세요.
+    ko: 신원 서비스가 새 로그인을 전부 거부하고 있어요. 이미 로그인한 사람은 괜찮은데, 새로 로그인하는 사람은 다 튕겨요. 곧 아침 피크예요. 원인 찾아 주세요.
   - en: Customers can't sign in. The app tells them their certificate can't be verified, which they're reading as "you've been hacked".
     ko: 고객들이 로그인을 못 해요. 앱에 인증서를 검증할 수 없다고 뜨는데, 다들 "해킹당했다"로 받아들이고 있어요.
   - en: Security here. An issuer we weren't expecting for another six hours is signing production sessions. I'm treating this as hostile until someone shows me otherwise.

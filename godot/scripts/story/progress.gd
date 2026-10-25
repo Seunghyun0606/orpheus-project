@@ -140,13 +140,18 @@ static func add_ending(ending: String) -> void:
 			file.store_string(JSON.stringify(seen))
 
 
-## Replays a run (entry carry + inputs) to its current state.
+## Replays a run (entry carry + inputs) to its current state. An input that no
+## longer applies (the content changed) cuts the run back to the inputs before
+## it, so play goes on from there instead of returning to it on every resume.
 static func replay(episode: Dictionary, run: Dictionary) -> Dictionary:
 	var state := StoryRunner.start_episode(episode, run["carry"])
-	for input in run["inputs"]:
-		var result := StoryRunner.apply_input(episode, state, input)
+	var inputs: Array = run["inputs"]
+	for i in inputs.size():
+		var result := StoryRunner.apply_input(episode, state, inputs[i])
 		if result["error"] != "":
 			push_warning("Saved input no longer applies: %s" % result["error"])
+			run["inputs"] = inputs.slice(0, i)
+			run.erase("timer")
 			break
 		state = result["state"]
 	return state

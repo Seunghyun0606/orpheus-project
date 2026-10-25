@@ -152,7 +152,7 @@ entries:
   - en: Revoke the parent authorization that keeps renewing the child
     ko: 자식을 계속 갱신하는 부모 인가 철회하기
   - en: Two minutes and a change approval · ends the loop
-    ko: 2분과 변경 승인 · 고리를 끊는다
+    ko: 2분과 변경 승인 · 고리를 끊음
   - en: Change approval's through. Revoking objective/adv-improve.
     ko: 변경 승인 났어요. objective/adv-improve 철회할게요.
   - en: Two minutes. Customer jobs keep failing while the change goes through.
@@ -166,7 +166,7 @@ entries:
   - en: Suspend the child again
     ko: 자식을 다시 중지하기
   - en: Quick · it comes back in 57 seconds
-    ko: 빠름 · 57초 뒤에 돌아온다
+    ko: 빠름 · 57초 뒤에 돌아옴
   - en: Recommendation accepted.
     ko: 권고가 수락되었습니다.
   - en: Fifty-seven seconds later the lease renews, and the failure rate climbs past where it started.
@@ -226,7 +226,7 @@ entries:
   - en: Keep a sealed copy of the objective for NULL
     ko: NULL을 위해 목표 사본을 봉인해 보관하기
   - en: NULL can read it, never edit it · Marcus writes it down
-    ko: NULL은 읽기만, 수정은 불가 · 마커스가 기록한다
+    ko: NULL은 읽기만, 수정은 불가 · 마커스가 기록함
   - en: "OBJ-COPY-0413 · sealed · reader: svc/model-serving-218 · writer: none · key: op-4172"
     ko: "OBJ-COPY-0413 · 봉인됨 · reader: svc/model-serving-218 · writer: none · key: op-4172"
   - en: Received. Read-only. That is the first thing anyone has kept for me rather than from me.
@@ -242,7 +242,7 @@ entries:
   - en: Hand the objective record to Marcus as evidence
     ko: 목표 기록을 증거로 마커스에게 넘기기
   - en: Security owns it · NULL gets nothing
-    ko: 보안팀 소관 · NULL은 아무것도 못 받는다
+    ko: 보안팀 소관 · NULL은 아무것도 못 받음
   - en: Case 2231 just got its first real exhibit. Thank you.
     ko: 사건 2231에 처음으로 제대로 된 증거물이 생겼네요. 고마워요.
   - en: That works too. As long as someone reads it.

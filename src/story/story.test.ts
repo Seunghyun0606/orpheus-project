@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 
 import { describe, expect, it } from 'vitest';
 import { parse, stringify } from 'yaml';
@@ -95,6 +95,15 @@ describe('cast', () => {
     const missing = [...episodesBySpeaker]
       .filter(([speaker, count]) => count > 1 && !system.has(speaker) && !covered.has(speaker))
       .map(([speaker]) => speaker);
+    expect(missing).toEqual([]);
+  });
+
+  it('has a portrait for everyone and every portrait update', () => {
+    const portraits = cast.characters.flatMap((c) => [
+      c.id.toLowerCase(),
+      ...c.updates.flatMap((u) => (u.portrait === undefined ? [] : [u.portrait])),
+    ]);
+    const missing = portraits.filter((name) => !existsSync(`godot/assets/portraits/${name}.png`));
     expect(missing).toEqual([]);
   });
 });

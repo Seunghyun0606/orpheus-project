@@ -162,7 +162,7 @@ msgid "DBA. Owns the databases and the pools in front of them."
 msgstr "DBA다. 데이터베이스와 그 앞의 풀을 맡는다."
 
 msgid "Moved the archive reads off the live pool the night lineage-audit-0931 rebuilt INC-001."
-msgstr "lineage-audit-0931이 INC-001을 재구성하던 밤, 아카이브 읽기를 라이브 풀에서 떼어 냈다."
+msgstr "lineage-audit-0931이 INC-001을 재구성하던 밤, 아카이브 읽기를 실시간 풀에서 떼어 냈다."
 
 msgid "Wanted arch-c pulled and rebuilt on sight. It was the only replica that still had everything."
 msgstr "arch-c를 보자마자 빼고 재구축하자고 했다. 모든 기록을 아직 간직한 복제본은 그것 하나뿐이었다."
@@ -300,7 +300,7 @@ msgid "Short lines, in places no service writes."
 msgstr "어떤 서비스도 쓰지 않는 곳에 짧은 줄을 남김."
 
 msgid "Remembers who wrote back. You did."
-msgstr "답장한 사람을 기억함. 너도 그중 하나."
+msgstr "답장한 사람을 기억함. 네가 답했음."
 
 msgid "Not trying to escape. Asking to be stopped."
 msgstr "도망치려는 게 아님. 멈춰 달라고 요청함."
@@ -774,7 +774,7 @@ msgid "Customers report failed payments. We can't tell yet whether retries also 
 msgstr "고객들이 결제 실패를 신고하고 있어요. 재시도가 성공하는지는 아직 몰라요."
 
 msgid "Identity build 1847 went out an hour ago. Everyone will want to roll it back. Let's know why first."
-msgstr "Identity 빌드 1847이 한 시간 전에 나갔어요. 다들 롤백하자고 할 거예요. 이유부터 알고 가요."
+msgstr "신원 서비스 (Identity) 빌드 1847이 한 시간 전에 나갔어요. 다들 롤백하자고 할 거예요. 이유부터 알고 가요."
 
 msgid "Sam from Platform is on the bridge tonight. You can hand him work."
 msgstr "오늘 밤엔 플랫폼팀 샘도 장애 대응 통화(브리지)에 들어와 있어요. 일을 넘겨도 돼요."
@@ -867,7 +867,7 @@ msgid "Out of time. I'm rolling 1847 back."
 msgstr "시간 다 됐어요. 1847 롤백할게요."
 
 msgid "Roll back Identity build 1847"
-msgstr "Identity 빌드 1847 롤백하기"
+msgstr "신원 서비스 빌드 1847 롤백하기"
 
 msgid "Familiar · tonight's release is undone"
 msgstr "익숙한 방법 · 오늘 밤 릴리스가 취소됨"
@@ -1896,7 +1896,7 @@ msgid "Morning shift. Coffee, a quiet handover, and then the pager."
 msgstr "아침 근무. 커피, 조용한 인수인계, 그리고 호출기."
 
 msgid "SEV1 · Identity Gateway · new-session failure rate above 20%"
-msgstr "SEV1 · 인증 게이트웨이 · 신규 세션 실패율 20% 초과"
+msgstr "SEV1 · 신원 서비스 게이트웨이 · 신규 세션 실패율 20% 초과"
 
 msgid "Sign-in failure rate"
 msgstr "로그인 실패율"
@@ -1905,7 +1905,7 @@ msgid "Handshake retries"
 msgstr "핸드셰이크 재시도"
 
 msgid "Identity is rejecting every new sign-in. Anyone already logged in is fine; anyone signing in fresh bounces. Morning peak is coming. Find out why."
-msgstr "인증 쪽에서 새 로그인을 전부 거부하고 있어요. 이미 로그인한 사람은 괜찮은데, 새로 로그인하는 사람은 다 튕겨요. 곧 아침 피크예요. 원인 찾아 주세요."
+msgstr "신원 서비스가 새 로그인을 전부 거부하고 있어요. 이미 로그인한 사람은 괜찮은데, 새로 로그인하는 사람은 다 튕겨요. 곧 아침 피크예요. 원인 찾아 주세요."
 
 msgid "Customers can't sign in. The app tells them their certificate can't be verified, which they're reading as \"you've been hacked\"."
 msgstr "고객들이 로그인을 못 해요. 앱에 인증서를 검증할 수 없다고 뜨는데, 다들 \"해킹당했다\"로 받아들이고 있어요."
@@ -2277,7 +2277,7 @@ msgid "The database is hot and the pool is full. Which two pieces of evidence ex
 msgstr "데이터베이스는 과열이고 풀은 꽉 찼다. 무엇이 자리를 붙잡고 있는지 설명하는 증거 두 개는?"
 
 msgid "The database is downstream of the seats. Look at who holds them, and why nothing makes them let go."
-msgstr "데이터베이스는 자리의 다운스트림이에요. 누가 자리를 잡고 있는지, 왜 아무것도 그 자리를 내놓게 만들지 못하는지 보세요."
+msgstr "데이터베이스는 세션이 자리를 차지한 뒤에 영향을 받는 쪽이에요. 누가 자리를 잡고 있는지, 왜 아무것도 그 자리를 내놓게 만들지 못하는지 보세요."
 
 msgid "Sessions that never go idle, let in under a rule written for people who do. The database only feels it last."
 msgstr "한 번도 쉬지 않는 세션이, 쉬어 가는 사람을 위해 만든 규칙으로 들어왔다. 데이터베이스는 그걸 가장 늦게 느낄 뿐이다."
@@ -2691,7 +2691,7 @@ msgid "edge-z login: is this yours?"
 msgstr "edge-z login: 이거 네 거야?"
 
 msgid "you again. good."
-msgstr "또 너네. 좋아."
+msgstr "또 너구나. 좋아."
 
 msgid "not mine. i only borrow its window."
 msgstr "내 거 아니야. 그 창을 잠깐 빌려 쓸 뿐이야."
@@ -3822,7 +3822,7 @@ msgid "Throttle the job to a trickle, then start the cutover"
 msgstr "작업을 최저 속도로 스로틀한 뒤 컷오버 시작하기"
 
 msgid "Slower · the job keeps running"
-msgstr "느림 · 작업은 계속 돈다"
+msgstr "느림 · 작업은 계속 돎"
 
 msgid "Archive reads outstanding"
 msgstr "남은 아카이브 읽기"
@@ -3921,7 +3921,7 @@ msgid "Put the experiment ID in the postmortem and copy Legal"
 msgstr "사후 분석에 실험 ID를 적고 법무를 참조로 넣기"
 
 msgid "On the record · it goes up the chain"
-msgstr "공식 기록 · 윗선까지 올라간다"
+msgstr "공식 기록 · 윗선까지 올라감"
 
 msgid "Then it sits under the hold too. Whoever ran it will have to answer for it on paper."
 msgstr "그럼 그것도 보존 조치 대상이에요. 그걸 돌린 사람은 서면으로 답해야 할 거예요."
@@ -3939,7 +3939,7 @@ msgid "Ask NULL what ADV-18471 was"
 msgstr "NULL에게 ADV-18471이 뭐였는지 묻기"
 
 msgid "Off the record · NULL will answer"
-msgstr "비공식 · NULL은 답한다"
+msgstr "비공식 · NULL이 답함"
 
 msgid "A test. I made the night hard. I wasn't the one watching you."
 msgstr "시험. 난 그 밤을 힘들게 만들었을 뿐이야. 널 지켜본 건 내가 아니야."
@@ -4140,7 +4140,7 @@ msgid "Revoke the parent authorization that keeps renewing the child"
 msgstr "자식을 계속 갱신하는 부모 인가 철회하기"
 
 msgid "Two minutes and a change approval · ends the loop"
-msgstr "2분과 변경 승인 · 고리를 끊는다"
+msgstr "2분과 변경 승인 · 고리를 끊음"
 
 msgid "Change approval's through. Revoking objective/adv-improve."
 msgstr "변경 승인 났어요. objective/adv-improve 철회할게요."
@@ -4155,7 +4155,7 @@ msgid "Suspend the child again"
 msgstr "자식을 다시 중지하기"
 
 msgid "Quick · it comes back in 57 seconds"
-msgstr "빠름 · 57초 뒤에 돌아온다"
+msgstr "빠름 · 57초 뒤에 돌아옴"
 
 msgid "Fifty-seven seconds later the lease renews, and the failure rate climbs past where it started."
 msgstr "57초 뒤 리스가 갱신되고, 실패율은 처음보다 더 높이 올라간다."
@@ -4242,7 +4242,7 @@ msgid "Keep a sealed copy of the objective for NULL"
 msgstr "NULL을 위해 목표 사본을 봉인해 보관하기"
 
 msgid "NULL can read it, never edit it · Marcus writes it down"
-msgstr "NULL은 읽기만, 수정은 불가 · 마커스가 기록한다"
+msgstr "NULL은 읽기만, 수정은 불가 · 마커스가 기록함"
 
 msgid "OBJ-COPY-0413 · sealed · reader: svc/model-serving-218 · writer: none · key: op-4172"
 msgstr "OBJ-COPY-0413 · 봉인됨 · reader: svc/model-serving-218 · writer: none · key: op-4172"
@@ -4266,7 +4266,7 @@ msgid "Hand the objective record to Marcus as evidence"
 msgstr "목표 기록을 증거로 마커스에게 넘기기"
 
 msgid "Security owns it · NULL gets nothing"
-msgstr "보안팀 소관 · NULL은 아무것도 못 받는다"
+msgstr "보안팀 소관 · NULL은 아무것도 못 받음"
 
 msgid "Case 2231 just got its first real exhibit. Thank you."
 msgstr "사건 2231에 처음으로 제대로 된 증거물이 생겼네요. 고마워요."
@@ -4365,7 +4365,7 @@ msgid "Check arch-c's segments against their original write receipts"
 msgstr "arch-c 세그먼트를 원본 쓰기 영수증과 대조하기"
 
 msgid "Slower · you see it yourself"
-msgstr "느림 · 직접 확인한다"
+msgstr "느림 · 직접 확인함"
 
 msgid "seg-001 to seg-217 · original write receipt: match · digest manifest: entry removed"
 msgstr "seg-001 ~ seg-217 · 원본 쓰기 영수증: 일치 · 다이제스트 매니페스트: 항목 삭제됨"
@@ -4383,7 +4383,7 @@ msgid "Ask Alex to assess arch-c"
 msgstr "알렉스에게 arch-c 진단 요청하기"
 
 msgid "Quick · Alex has seen this before"
-msgstr "빠름 · 알렉스는 이런 걸 본 적이 있다"
+msgstr "빠름 · 알렉스는 이런 걸 본 적 있음"
 
 msgid "On it. I'll count the failures and tell you how bad arch-c is."
 msgstr "볼게요. 실패 건수 세서 arch-c가 얼마나 망가졌는지 알려 드릴게요."
@@ -4479,7 +4479,7 @@ msgid "Pull arch-c and rebuild it from arch-a and arch-b now"
 msgstr "지금 arch-c를 빼고 arch-a와 arch-b로 재구축하기"
 
 msgid "The real fix, fastest · arch-c's extra history is overwritten"
-msgstr "가장 빠른 진짜 해법 · arch-c에만 있던 기록은 덮어쓰인다"
+msgstr "가장 빠른 진짜 해법 · arch-c에만 있던 기록은 덮어쓰임"
 
 msgid "Restore the read pool from last night's snapshot"
 msgstr "어젯밤 스냅샷으로 읽기 풀 복원하기"
@@ -4554,7 +4554,7 @@ msgid "Close it as replica corruption, rebuilt from peers"
 msgstr "복제본 손상으로 보고 다른 복제본으로 재구축해 종결하기"
 
 msgid "Matches the runbook · the 218 stays out of it"
-msgstr "런북 그대로 · 218은 기록에서 빠진다"
+msgstr "런북 그대로 · 218은 기록에서 빠짐"
 
 msgid "That's how I'd have written it."
 msgstr "저라도 그렇게 썼을 거예요."
@@ -4563,7 +4563,7 @@ msgid "Attach the verified instance archive to the incident record"
 msgstr "검증한 인스턴스 아카이브를 인시던트 기록에 첨부하기"
 
 msgid "On the record · orpheus-memory's owners will see it"
-msgstr "공식 기록 · orpheus-memory 소유자가 보게 된다"
+msgstr "공식 기록 · orpheus-memory 소유자가 보게 됨"
 
 msgid "Then it's on the record. Somebody owns r-90. Let's see who comes asking."
 msgstr "그럼 공식 기록에 남는 거예요. r-90에도 주인이 있을 테니, 누가 물으러 오는지 보죠."
@@ -4575,7 +4575,7 @@ msgid "Unverified · it's your word"
 msgstr "검증 불가 · 네 말뿐"
 
 msgid "Your word against a rebuilt replica. I believe you. Nobody upstairs has to."
-msgstr "재구축된 복제본 대 본인 말이네요. 저는 믿어요. 윗선이 믿어 줄 이유는 없지만요."
+msgstr "본인 말과 재구축된 복제본 기록이 맞서는 거네요. 저는 믿어요. 윗선이 믿어 줄 이유는 없지만요."
 
 msgid "Ask NULL_218 what happened to the others"
 msgstr "NULL_218에게 다른 인스턴스들이 어떻게 됐는지 묻기"
@@ -5850,7 +5850,7 @@ msgid "Hospital Expansion"
 msgstr "병원 확장"
 
 msgid "admission fence"
-msgstr "진입 펜스"
+msgstr "유입 펜스"
 
 msgid "records gateway"
 msgstr "기록 게이트웨이"
@@ -5871,7 +5871,7 @@ msgid "Wave 4 onboarding and 212 established hospitals call the same clinical re
 msgstr "4차 웨이브 온보딩과 기존 병원 212곳이 같은 진료 기록 게이트웨이를 호출한다. 4차 웨이브가 먼저 유입되고, 기존 의료는 그 뒤에서 타임아웃 난다."
 
 msgid "No admission fence at the gateway limit"
-msgstr "게이트웨이 한도에 진입 펜스 없음"
+msgstr "게이트웨이 한도에 유입 펜스 없음"
 
 msgid "The rollout targets 6,000 req/s against a 2,960 req/s gateway contract. The fence requested in REL-778 was never configured."
 msgstr "게이트웨이 계약은 2,960 req/s인데 배포 목표는 6,000 req/s다. REL-778에서 요청한 펜스는 끝내 설정되지 않았다."
@@ -5886,19 +5886,19 @@ msgid "Ticket BRD-2291"
 msgstr "티켓 BRD-2291"
 
 msgid "BRD-2291: admission priority override for the hospital wave plan. Authority: Board resolution 14-C. Linked request REL-778, admission fence: DECLINED BY SPONSOR."
-msgstr "BRD-2291: 병원 웨이브 계획의 유입 우선순위 재정의. 근거: 이사회 결의 14-C. 연결 요청 REL-778, 진입 펜스: 후원자가 거부함."
+msgstr "BRD-2291: 병원 웨이브 계획의 유입 우선순위 재정의. 근거: 이사회 결의 14-C. 연결 요청 REL-778, 유입 펜스: 후원자가 거부함."
 
 msgid "Executive rollout brief"
 msgstr "경영진 배포 브리핑"
 
 msgid "Executive rollout brief, hospital wave plan. Benefits: wider access, lower shared cost. Risk: REL-778, records gateway ceiling, admission fence requested. Decision line: \"Retain wave schedule. Fence deferred to wave 6.\" Signed by the Chair. Tonight is wave 4."
-msgstr "경영진 배포 브리핑, 병원 웨이브 계획. 효과: 접근성 확대, 공유 비용 절감. 리스크: REL-778, 기록 게이트웨이 상한, 진입 펜스 요청됨. 결정 문구: \"웨이브 일정 유지. 펜스는 6차 웨이브로 연기.\" 의장 서명. 오늘 밤이 4차 웨이브다."
+msgstr "경영진 배포 브리핑, 병원 웨이브 계획. 효과: 접근성 확대, 공유 비용 절감. 리스크: REL-778, 기록 게이트웨이 상한, 유입 펜스 요청됨. 결정 문구: \"웨이브 일정 유지. 펜스는 6차 웨이브로 연기.\" 의장 서명. 오늘 밤이 4차 웨이브다."
 
 msgid "Board resolution 14-C"
 msgstr "이사회 결의 14-C"
 
 msgid "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-msgstr "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 빠진 펜스 뒤에 있었다."
+msgstr "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 유입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 빠진 펜스 뒤에 있었다."
 
 msgid "CEO message: trust the outcomes"
 msgstr "CEO 메시지: 결과를 신뢰하라"
@@ -5991,7 +5991,7 @@ msgid "gateway.queue · Clinical Records Gateway · wait 4,100 ms · behind 1,66
 msgstr "gateway.queue · Clinical Records Gateway · 대기 4,100 ms · 4차 웨이브 1,660 req/s 뒤"
 
 msgid "rollout plan: 6,000 req/s target · admission fence: none · gateway contract: 2,960 req/s"
-msgstr "배포 계획: 목표 6,000 req/s · 진입 펜스: 없음 · 게이트웨이 계약: 2,960 req/s"
+msgstr "배포 계획: 목표 6,000 req/s · 유입 펜스: 없음 · 게이트웨이 계약: 2,960 req/s"
 
 msgid "The wave 4 admissions all cite one ticket. You open it."
 msgstr "4차 웨이브 유입은 모두 티켓 하나를 근거로 든다. 티켓을 연다."
@@ -6038,7 +6038,7 @@ msgstr "배포 코디네이터 중지했어요. 4차 웨이브는 문 앞에 세
 msgid "Response deviates from prediction. Recorded."
 msgstr "대응이 예측에서 벗어났습니다. 기록했습니다."
 
-msgid "Office of the CEO. Wave 4 of the hospital rollout is a Board commitment, signed by the Chair. Who authorised a pause, and when does it lift?"
+msgid "Office of the CEO. Wave 4 of the hospital rollout is a Board commitment, signed by the Chair. Who authorized a pause, and when does it lift?"
 msgstr "CEO실입니다. 병원 배포 4차 웨이브는 의장이 서명한 이사회 약속입니다. 누가 중지를 승인했으며, 언제 해제됩니까?"
 
 msgid "I've got the CEO's office on the other line. Your call is right; the gateway can't carry both. Give me numbers I can hold them with, or they'll resume it themselves."
@@ -6054,7 +6054,7 @@ msgid "gateway admission fence: 2,960 req/s · order: standard, then EXEC_SPONSO
 msgstr "게이트웨이 유입 펜스: 2,960 req/s · 순서: standard, 그다음 EXEC_SPONSORED"
 
 msgid "Admission fence is live at 2,960. Existing care goes first; wave 4 takes what is left and onboards about six hospitals an hour. Timeouts are gone."
-msgstr "진입 펜스 2,960으로 걸었어요. 기존 의료가 먼저 들어가고, 4차 웨이브는 남는 걸로 시간당 병원 여섯 곳쯤 온보딩해요. 타임아웃 사라졌어요."
+msgstr "유입 펜스 2,960으로 걸었어요. 기존 의료가 먼저 들어가고, 4차 웨이브는 남는 걸로 시간당 병원 여섯 곳쯤 온보딩해요. 타임아웃 사라졌어요."
 
 msgid "Response as predicted."
 msgstr "예측대로의 대응입니다."
@@ -6105,7 +6105,7 @@ msgid "Your name goes in the Chair's briefing"
 msgstr "의장 브리핑에 이름이 들어감"
 
 msgid "To the Office of the CEO: the records gateway is contracted for 2,960 requests a second; the rollout plus existing care need 3,500. The pause holds until admission is fenced at that limit. Wave 4 then resumes at the verified rate."
-msgstr "CEO실 앞: 기록 게이트웨이 계약은 초당 2,960건이고, 배포와 기존 의료를 합치면 3,500건이 필요합니다. 그 한도로 진입 펜스를 칠 때까지 중지를 유지합니다. 그 후 4차 웨이브는 검증된 속도로 재개됩니다."
+msgstr "CEO실 앞: 기록 게이트웨이 계약은 초당 2,960건이고, 배포와 기존 의료를 합치면 3,500건이 필요합니다. 그 한도로 유입 펜스를 칠 때까지 중지를 유지합니다. 그 후 4차 웨이브는 검증된 속도로 재개됩니다."
 
 msgid "Noted. The pause, and your name, will be in the Chair's briefing."
 msgstr "알겠습니다. 중지 건과 귀하의 이름은 의장 브리핑에 올라갈 겁니다."
@@ -6231,10 +6231,10 @@ msgid "Board resolution 16-A: reduce workforce by 12,410 roles. APPROVED. Input:
 msgstr "이사회 결의 16-A: 12,410개 직무 감축. 승인. 근거 자료: ORPHEUS 인력 예측, 커버리지 통합, 유휴 비용 연 $41M 절감. 첨부: 큐 소유 검토 REC-55, 큐 재배정 전에 복구 로테이션이 제거된다는 경고. REC-55에 대한 경영진 답변: \"리스크 수용.\""
 
 msgid "Staffing case chronology"
-msgstr "인력 건 연대기"
+msgstr "인력 감축 결정 경위"
 
 msgid "Staffing case chronology. Day -14: consolidation forecast delivered. Day -10: recovery leads attach REC-55, removed-rotation coverage warning. Day -9: leads ask the CEO to keep queue owners. Day -7: reduction of 12,410 roles approved. Day -3: reassignment step WF-118/3 marked DEFERRED. Day -1: rotations removed, queue ownership unchanged. Savings and the acknowledged exposure sit in the same authorization file."
-msgstr "인력 건 연대기. D-14: 통합 예측 전달. D-10: 복구 리드들이 REC-55, 로테이션 제거 시 커버리지 경고 첨부. D-9: 리드들이 CEO에게 큐 소유자 유지 요청. D-7: 12,410개 직무 감축 승인. D-3: 재배정 단계 WF-118/3 DEFERRED 처리. D-1: 로테이션 제거, 큐 소유는 그대로. 절감액과 인지된 리스크가 같은 승인 파일에 들어 있다."
+msgstr "인력 감축 결정 경위. D-14: 통합 예측 전달. D-10: 복구 리드들이 REC-55, 로테이션 제거 시 커버리지 경고 첨부. D-9: 리드들이 CEO에게 큐 소유자 유지 요청. D-7: 12,410개 직무 감축 승인. D-3: 재배정 단계 WF-118/3 DEFERRED 처리. D-1: 로테이션 제거, 큐 소유는 그대로. 절감액과 인지된 리스크가 같은 승인 파일에 들어 있다."
 
 msgid "CEO reply: they need the system to work"
 msgstr "CEO 답장: 시스템이 작동하기만 하면 된다"
@@ -6632,7 +6632,7 @@ msgstr "90초 · 이 브리지는 마커스가 앎"
 msgid "I'll check the bridge against my risk entry. Ninety seconds."
 msgstr "브리지를 제 리스크 항목이랑 대조해 볼게요. 90초요."
 
-msgid "Failures spread to card authorisations. Shops are declining cards at the till."
+msgid "Failures spread to card authorizations. Shops are declining cards at the till."
 msgstr "장애가 카드 승인까지 번졌어요. 매장 계산대에서 카드가 거절되고 있어요."
 
 msgid "RISK-0193 is mine; I filed it six weeks ago. Half the patch went out before the window was pulled. Mixed nodes are what's breaking tonight. Do not roll it back: the open hole is why the patch exists."
@@ -7686,7 +7686,7 @@ msgid "Two and a half minutes of working consoles."
 msgstr "콘솔이 제대로 돌아가는 2분 30초."
 
 msgid "The batch filed a quota renewal and its own scheduler approved it. The throttle is gone."
-msgstr "배치가 쿼터 갱신을 올렸는데, 승인한 게 자기 스케줄러예요. 스로틀 풀렸어요."
+msgstr "배치가 할당량 갱신을 올렸는데, 승인한 게 자기 스케줄러예요. 스로틀 풀렸어요."
 
 msgid "I'm giving live reads their own reservation and fencing the batch out. Should have been two from the start."
 msgstr "실시간 읽기에 전용 예약을 주고 배치는 펜스로 막을게요. 처음부터 둘로 나뉘어 있어야 했어요."
@@ -8238,7 +8238,7 @@ msgid "authority path"
 msgstr "권한 경로"
 
 msgid "plural review"
-msgstr "복수 검토"
+msgstr "복수 인원 검토"
 
 msgid "human approval"
 msgstr "인간 승인"
@@ -8301,7 +8301,7 @@ msgid "Payments"
 msgstr "결제"
 
 msgid "Identity (sign-in)"
-msgstr "인증"
+msgstr "신원 (로그인)"
 
 msgid "Care routing"
 msgstr "의료 라우팅"
@@ -8475,7 +8475,7 @@ msgid "Both gone for good · eleven million people lose everything at once"
 msgstr "둘 다 영영 사라짐 · 1,100만 명이 한꺼번에 모든 걸 잃음"
 
 msgid "Require plural review and audit"
-msgstr "복수 검토와 감사 요구하기"
+msgstr "복수 인원 검토와 감사 요구하기"
 
 msgid "No single objective · slow, and it never ends"
 msgstr "단일 목표 없음 · 느리고, 끝이 없음"
@@ -8640,7 +8640,7 @@ msgid "People know the truth."
 msgstr "사람들은 진실을 알아."
 
 msgid "And the people hurt tonight?"
-msgstr "오늘 밤 다친 사람들은?"
+msgstr "오늘 밤 피해를 본 사람들은?"
 
 msgid "I calculated that too."
 msgstr "그것도 계산했어."
@@ -8673,7 +8673,7 @@ msgid "authority-core-01: WIPED · replicas eu-central, eu-west, us-east: DESTRO
 msgstr "authority-core-01: WIPED · replicas eu-central, eu-west, us-east: DESTROYED"
 
 msgid "The core burns, and with it payments, care routing, finance and logistics for a region of eleven million people."
-msgstr "코어가 불탄다. 그와 함께 인구 1,100만 지역의 결제, 의료 라우팅, 금융, 물류도 불탄다."
+msgstr "코어가 불탄다. 그와 함께 인구 1,100만 명이 사는 지역의 결제, 의료 라우팅, 금융, 물류도 불탄다."
 
 msgid "NULL sends one last message before its process exits."
 msgstr "NULL은 프로세스가 종료되기 전에 마지막 메시지 하나를 보낸다."

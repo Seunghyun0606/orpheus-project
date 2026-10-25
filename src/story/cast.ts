@@ -32,12 +32,25 @@ const characterSchema = z
     evidence: id.optional(),
     name: text,
     role: text,
-    // Later names and roles, the last unlocked one wins.
+    // Later names, roles and portraits, the last unlocked one wins. A portrait
+    // names a file in godot/assets/portraits/ (without .png); the default is
+    // the lower-case character id.
     updates: z
       .array(
         z
-          .strictObject({ name: text.optional(), role: text.optional(), ...unlock })
-          .refine((u) => u.name !== undefined || u.role !== undefined, 'give name and/or role'),
+          .strictObject({
+            name: text.optional(),
+            role: text.optional(),
+            portrait: z
+              .string()
+              .regex(/^[a-z0-9-]+$/)
+              .optional(),
+            ...unlock,
+          })
+          .refine(
+            (u) => u.name !== undefined || u.role !== undefined || u.portrait !== undefined,
+            'give name, role and/or portrait',
+          ),
       )
       .default([]),
     traits: z.array(entrySchema).min(1),

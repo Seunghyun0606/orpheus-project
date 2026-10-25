@@ -108,7 +108,7 @@ entries:
   - en: DBA. Owns the databases and the pools in front of them.
     ko: DBA다. 데이터베이스와 그 앞의 풀을 맡는다.
   - en: Moved the archive reads off the live pool the night lineage-audit-0931 rebuilt INC-001.
-    ko: lineage-audit-0931이 INC-001을 재구성하던 밤, 아카이브 읽기를 라이브 풀에서 떼어 냈다.
+    ko: lineage-audit-0931이 INC-001을 재구성하던 밤, 아카이브 읽기를 실시간 풀에서 떼어 냈다.
   - en: Wanted arch-c pulled and rebuilt on sight. It was the only replica that still had everything.
     ko: arch-c를 보자마자 빼고 재구축하자고 했다. 모든 기록을 아직 간직한 복제본은 그것 하나뿐이었다.
   - en: Split the journal reservation the night observer-batch took the consoles. 'Should have been two from the start.'
@@ -200,7 +200,7 @@ entries:
   - en: Short lines, in places no service writes.
     ko: 어떤 서비스도 쓰지 않는 곳에 짧은 줄을 남김.
   - en: Remembers who wrote back. You did.
-    ko: 답장한 사람을 기억함. 너도 그중 하나.
+    ko: 답장한 사람을 기억함. 네가 답했음.
   - en: Not trying to escape. Asking to be stopped.
     ko: 도망치려는 게 아님. 멈춰 달라고 요청함.
   - en: Says so when it is wrong. About the Board, it was wrong about the cause, not the signatures.

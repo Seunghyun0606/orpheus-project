@@ -66,7 +66,7 @@ entries:
   - en: Customers report failed payments. We can't tell yet whether retries also succeed.
     ko: 고객들이 결제 실패를 신고하고 있어요. 재시도가 성공하는지는 아직 몰라요.
   - en: Identity build 1847 went out an hour ago. Everyone will want to roll it back. Let's know why first.
-    ko: Identity 빌드 1847이 한 시간 전에 나갔어요. 다들 롤백하자고 할 거예요. 이유부터 알고 가요.
+    ko: 신원 서비스 (Identity) 빌드 1847이 한 시간 전에 나갔어요. 다들 롤백하자고 할 거예요. 이유부터 알고 가요.
   - en: Sam from Platform is on the bridge tonight. You can hand him work.
     ko: 오늘 밤엔 플랫폼팀 샘도 장애 대응 통화(브리지)에 들어와 있어요. 일을 넘겨도 돼요.
   - en: First move
@@ -130,7 +130,7 @@ entries:
   - en: Out of time. I'm rolling 1847 back.
     ko: 시간 다 됐어요. 1847 롤백할게요.
   - en: Roll back Identity build 1847
-    ko: Identity 빌드 1847 롤백하기
+    ko: 신원 서비스 빌드 1847 롤백하기
   - en: Familiar · tonight's release is undone
     ko: 익숙한 방법 · 오늘 밤 릴리스가 취소됨
   - en: Issuer's back on K71. The release team will have questions in the morning, but checkout works.

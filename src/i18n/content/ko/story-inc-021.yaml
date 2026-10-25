@@ -109,7 +109,7 @@ entries:
     ko: 90초 · 이 브리지는 마커스가 앎
   - en: I'll check the bridge against my risk entry. Ninety seconds.
     ko: 브리지를 제 리스크 항목이랑 대조해 볼게요. 90초요.
-  - en: Failures spread to card authorisations. Shops are declining cards at the till.
+  - en: Failures spread to card authorizations. Shops are declining cards at the till.
     ko: 장애가 카드 승인까지 번졌어요. 매장 계산대에서 카드가 거절되고 있어요.
   - en: "RISK-0193 is mine; I filed it six weeks ago. Half the patch went out before the window was pulled. Mixed nodes are what's breaking tonight. Do not roll it back: the open hole is why the patch exists."
     ko: RISK-0193은 제 거예요. 6주 전에 제가 등록했어요. 작업 시간이 취소되기 전에 패치가 절반만 나갔어요. 오늘 밤 문제는 패치가 섞인 노드들이에요. 롤백하지 마세요. 그 구멍 막으려고 만든 패치예요.

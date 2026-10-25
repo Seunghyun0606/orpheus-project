@@ -53,13 +53,13 @@ entries:
   - en: "/hr/candidate-risk. Candidate #4172: Technical Score 71; Incident Decision Model 97.8; Recommendation HIRE. Reason: HIGH DEVIATION FROM OPTIMAL DECISION MODEL; LOW PREDICTABILITY; HIGH DECISION DEVIATION."
     ko: "/hr/candidate-risk. 후보자 #4172: 기술 점수 71; 인시던트 의사결정 모델 97.8; 권고 채용. 사유: 최적 의사결정 모델 대비 편차 높음; 예측 가능성 낮음; 결정 편차 높음."
   - en: "Board resolution 14-C: expand ORPHEUS into hospital networks. APPROVED, 7-0. Attached before the vote: dependency-capacity warning REL-778, requesting a rollout admission fence. Fence: not funded. Stated benefit: wider access, lower operating cost. The care routes that timed out sat behind that missing fence."
-    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 진입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 빠진 펜스 뒤에 있었다."
+    ko: "이사회 결의 14-C: ORPHEUS를 병원 네트워크로 확장. 승인, 7-0. 표결 전 첨부: 의존성 용량 경고 REL-778, 배포 유입 펜스 요청. 펜스: 예산 미배정. 명시된 효과: 접근성 확대, 운영비 절감. 타임아웃된 의료 경로는 바로 그 빠진 펜스 뒤에 있었다."
   - en: 'Board resolution 16-A: reduce workforce by 12,410 roles. APPROVED. Input: ORPHEUS staffing forecast, consolidated coverage, idle cost down $41M a year. Attached: queue-ownership review REC-55, warning that recovery rotations would be removed before their queues were reassigned. Executive response on REC-55: "Exposure accepted."'
     ko: '이사회 결의 16-A: 12,410개 직무 감축. 승인. 근거 자료: ORPHEUS 인력 예측, 커버리지 통합, 유휴 비용 연 $41M 절감. 첨부: 큐 소유 검토 REC-55, 큐 재배정 전에 복구 로테이션이 제거된다는 경고. REC-55에 대한 경영진 답변: "리스크 수용."'
   - en: "CEO internal message, reply to recovery leads who asked for staffed queue owners before the cuts: \"The public doesn't need to understand the system. They need the system to work.\" The consolidation schedule stayed as signed. The savings line has no entry for the uncovered queue."
     ko: 'CEO 내부 메시지, 감축 전에 인원이 있는 큐 소유자를 요청한 복구 리드들에게 보낸 답장: "대중이 시스템을 이해할 필요는 없습니다. 시스템이 작동하기만 하면 됩니다." 통합 일정은 서명된 그대로 유지됐다. 절감액 항목 어디에도 비어 버린 큐는 적혀 있지 않다.'
   - en: "Staffing case chronology. Day -14: consolidation forecast delivered. Day -10: recovery leads attach REC-55, removed-rotation coverage warning. Day -9: leads ask the CEO to keep queue owners. Day -7: reduction of 12,410 roles approved. Day -3: reassignment step WF-118/3 marked DEFERRED. Day -1: rotations removed, queue ownership unchanged. Savings and the acknowledged exposure sit in the same authorization file."
-    ko: "인력 건 연대기. D-14: 통합 예측 전달. D-10: 복구 리드들이 REC-55, 로테이션 제거 시 커버리지 경고 첨부. D-9: 리드들이 CEO에게 큐 소유자 유지 요청. D-7: 12,410개 직무 감축 승인. D-3: 재배정 단계 WF-118/3 DEFERRED 처리. D-1: 로테이션 제거, 큐 소유는 그대로. 절감액과 인지된 리스크가 같은 승인 파일에 들어 있다."
+    ko: "인력 감축 결정 경위. D-14: 통합 예측 전달. D-10: 복구 리드들이 REC-55, 로테이션 제거 시 커버리지 경고 첨부. D-9: 리드들이 CEO에게 큐 소유자 유지 요청. D-7: 12,410개 직무 감축 승인. D-3: 재배정 단계 WF-118/3 DEFERRED 처리. D-1: 로테이션 제거, 큐 소유는 그대로. 절감액과 인지된 리스크가 같은 승인 파일에 들어 있다."
   - en: The workforce reduction removed the rotations that owned the recovery queues
     ko: 인력 감축으로 복구 큐를 소유하던 로테이션이 사라졌다
   - en: Queue reassignment step WF-118/3 was deferred
@@ -191,7 +191,7 @@ entries:
   - en: "CEO reply: they need the system to work"
     ko: "CEO 답장: 시스템이 작동하기만 하면 된다"
   - en: Staffing case chronology
-    ko: 인력 건 연대기
+    ko: 인력 감축 결정 경위
   - en: Exposure accepted
     ko: 리스크 수용
   - en: Two words in the margin of REC-55. The review said exactly which queues would go dark. The answer was to accept it and keep the schedule.
@@ -275,7 +275,7 @@ entries:
   - en: "Candidate #4172: Technical 71; Incident Decision Model 97.8; HIRE. Reason: LOW PREDICTABILITY; HIGH DECISION DEVIATION."
     ko: "후보자 #4172: 기술 71; 인시던트 의사결정 모델 97.8; 채용. 사유: 예측 가능성 낮음; 결정 편차 높음."
   - en: "Resolution 14-C: hospital expansion APPROVED 7-0. Warning REL-778 attached before the vote. Admission fence: not funded."
-    ko: "결의 14-C: 병원 확장 승인 7-0. 표결 전 경고 REL-778 첨부. 진입 펜스: 예산 미배정."
+    ko: "결의 14-C: 병원 확장 승인 7-0. 표결 전 경고 REL-778 첨부. 유입 펜스: 예산 미배정."
   - en: 'Resolution 16-A: 12,410 roles cut, APPROVED. REC-55 warned recovery queues would lose their owners. Response: "Exposure accepted."'
     ko: '결의 16-A: 12,410개 직무 감축 승인. REC-55가 복구 큐의 소유자가 사라진다고 경고함. 답변: "리스크 수용."'
   - en: "CEO, to recovery leads: \"The public doesn't need to understand the system. They need the system to work.\" Schedule unchanged."

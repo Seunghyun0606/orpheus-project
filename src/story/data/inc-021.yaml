@@ -129,7 +129,7 @@ scenes:
           - speaker: MARCUS
             text: I'll check the bridge against my risk entry. Ninety seconds.
           - speaker: JIN
-            text: Failures spread to card authorisations. Shops are declining cards at the till.
+            text: Failures spread to card authorizations. Shops are declining cards at the till.
           - speaker: MARCUS
             text: "RISK-0193 is mine; I filed it six weeks ago. Half the patch went out before the window was pulled. Mixed nodes are what's breaking tonight. Do not roll it back: the open hole is why the patch exists."
           - collect: TEAM_DIAGNOSIS

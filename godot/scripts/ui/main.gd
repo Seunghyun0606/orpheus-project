@@ -132,6 +132,8 @@ func _ready() -> void:
 		progress = Progress.empty()
 	if args.has("lang"):
 		Settings.language = args["lang"]
+	if args.has("text-size"):
+		Settings.text_size = int(args["text-size"])
 	_apply_settings()
 	crt = ColorRect.new()
 	crt.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -258,7 +260,7 @@ func _show_title() -> void:
 		button.disabled = not unlocked
 		button.pressed.connect(_start_episode.bind(id))
 		list.add_child(button)
-	_replace_screen(root)
+	_replace_screen(_with_backdrop(root, "res://assets/title.jpg", 0.35))
 	if first != null:
 		first.grab_focus.call_deferred()
 
@@ -348,14 +350,16 @@ func _build_episode_screen() -> void:
 	top_panel.theme_type_variation = "TopBar"
 	top_bar = top_panel
 	var top := HBoxContainer.new()
-	top.add_theme_constant_override("separation", 18)
+	top.add_theme_constant_override("separation", 12)
 	top_panel.add_child(top)
-	top.add_child(_label("VANTAGE // INCIDENT DESK", "DimLabel", false))
-	top.add_child(_label("%s · %s" % [episode["id"], _t(episode["title"])], "HeaderLabel", false))
-	var gap := Control.new()
-	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	top.add_child(gap)
-	scene_label = _label("", "PromptLabel", false)
+	# The titles give way (ellipsis) to keep Status and Menu on screen at large
+	# text sizes, sharing the room by ratio.
+	var desk_name := _shrinking_label("VANTAGE // INCIDENT DESK", "DimLabel", 0.6)
+	top.add_child(desk_name)
+	var title := _shrinking_label("%s · %s" % [episode["id"], _t(episode["title"])], "HeaderLabel", 2.0)
+	top.add_child(title)
+	scene_label = _shrinking_label("", "PromptLabel", 1.0)
+	scene_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	top.add_child(scene_label)
 	pressure_label = _label("", "DimLabel", false)
 	pressure_label.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -634,6 +638,7 @@ func _render_entry(index: int, animate: bool) -> void:
 			var scene := StoryRunner.find_scene(episode, entry["sceneId"])
 			if scene.has("title"):
 				scene_label.text = _t(scene["title"])
+				scene_label.tooltip_text = scene_label.text
 				feed.append_text("\n[center][color=#%s]—  %s  —[/color][/center]\n" % [dim, _esc(_t(scene["title"]))])
 		"narrate":
 			feed.append_text(stamp)
@@ -1387,7 +1392,7 @@ func _status_people(people: Array, fresh: Array) -> Control:
 		var line := HBoxContainer.new()
 		line.add_theme_constant_override("separation", 10)
 		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var thumb := _portrait(person["id"], 44)
+		var thumb := _portrait(person["portrait"], 44)
 		if thumb != null:
 			line.add_child(thumb)
 		line.add_child(text)
@@ -1414,7 +1419,7 @@ func _show_person(detail: VBoxContainer, person: Dictionary, fresh: Array) -> vo
 	var amber := ThemeBuilder.AMBER.to_html(false)
 	var head := HBoxContainer.new()
 	head.add_theme_constant_override("separation", 18)
-	var portrait := _portrait(person["id"], 168)
+	var portrait := _portrait(person["portrait"], 168)
 	if portrait != null:
 		head.add_child(portrait)
 	var title := VBoxContainer.new()
@@ -1445,10 +1450,10 @@ func _show_person(detail: VBoxContainer, person: Dictionary, fresh: Array) -> vo
 			detail.add_child(_label(UiText.t("person_hidden") % hidden, "DimLabel"))
 
 
-## A framed square of the person's portrait (assets/portraits/<id>.png), or
-## null when there is none.
-func _portrait(id: String, side: int) -> Control:
-	var path := "res://assets/portraits/%s.png" % id.to_lower()
+## A framed square portrait (assets/portraits/<name>.png), or null when there
+## is none.
+func _portrait(name: String, side: int) -> Control:
+	var path := "res://assets/portraits/%s.png" % name
 	if not ResourceLoader.exists(path):
 		return null
 	var frame := PanelContainer.new()
@@ -1570,7 +1575,7 @@ func _show_act_card() -> void:
 	act_card.add_child(shade)
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
-	act_card.add_child(center)
+	act_card.add_child(_with_backdrop(center, "res://assets/acts/act-%d.jpg" % act, 0.5))
 	var column := VBoxContainer.new()
 	column.alignment = BoxContainer.ALIGNMENT_CENTER
 	column.add_theme_constant_override("separation", 12)
@@ -1656,7 +1661,7 @@ func _show_credits(ending: String) -> void:
 	back.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	back.pressed.connect(_show_title)
 	column.add_child(back)
-	_replace_screen(root)
+	_replace_screen(_with_backdrop(root, "res://assets/endings/%s.jpg" % ending.to_lower(), 0.7))
 	back.grab_focus.call_deferred()
 
 
@@ -1694,6 +1699,30 @@ func _rebuild() -> void:
 
 # ---------------------------------------------------------------- helpers --
 
+## `content` over a full-screen picture, darkened by `shade` (0–1) so text on
+## it stays readable; just `content` when the picture is missing.
+func _with_backdrop(content: Control, path: String, shade: float) -> Control:
+	if not ResourceLoader.exists(path):
+		return content
+	var screen := Control.new()
+	screen.set_anchors_preset(Control.PRESET_FULL_RECT)
+	screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var picture := TextureRect.new()
+	picture.set_anchors_preset(Control.PRESET_FULL_RECT)
+	picture.texture = load(path)
+	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	screen.add_child(picture)
+	var dim := ColorRect.new()
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.color = Color(ThemeBuilder.BG, shade)
+	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	screen.add_child(dim)
+	screen.add_child(content)
+	return screen
+
+
 func _margin(amount: int) -> MarginContainer:
 	var root := MarginContainer.new()
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -1714,6 +1743,19 @@ func _label(text: String, variation := "", wrap := true) -> Label:
 	label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	if variation != "":
 		label.theme_type_variation = variation
+	return label
+
+
+## A one-line label that shrinks with an ellipsis instead of widening its row;
+## the full text stays in the tooltip.
+func _shrinking_label(text: String, variation: String, ratio: float) -> Label:
+	var label := _label(text, variation, false)
+	label.clip_text = true
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.size_flags_stretch_ratio = ratio
+	label.mouse_filter = Control.MOUSE_FILTER_PASS
+	label.tooltip_text = text
 	return label
 
 

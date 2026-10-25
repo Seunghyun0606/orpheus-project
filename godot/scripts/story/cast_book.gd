@@ -86,7 +86,7 @@ static func _known(character: Dictionary, context: Dictionary) -> bool:
 
 
 ## The people known so far, in cast order:
-## {id, name, role, traits: [{text, open, key}], background: [...], key}.
+## {id, name, role, portrait, traits: [{text, open, key}], background: [...], key}.
 ## `key` names what is visible (a changed name or role makes a new key), so
 ## the caller can mark what the player has not looked at yet.
 static func people(context: Dictionary) -> Array:
@@ -94,11 +94,12 @@ static func people(context: Dictionary) -> Array:
 	for character in characters():
 		if not _known(character, context):
 			continue
-		var person := {"id": character["id"], "name": character["name"], "role": character["role"]}
+		var person := {"id": character["id"], "name": character["name"], "role": character["role"], "portrait": character["id"].to_lower()}
 		for update in character["updates"]:
 			if unlocked(update, context):
 				person["name"] = update.get("name", person["name"])
 				person["role"] = update.get("role", person["role"])
+				person["portrait"] = update.get("portrait", person["portrait"])
 		person["key"] = "%s:%s/%s" % [character["id"], person["name"], person["role"]]
 		for section in ["traits", "background"]:
 			var lines := []

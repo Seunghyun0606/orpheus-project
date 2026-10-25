@@ -78,7 +78,7 @@ entries:
   - en: Check arch-c's segments against their original write receipts
     ko: arch-c 세그먼트를 원본 쓰기 영수증과 대조하기
   - en: Slower · you see it yourself
-    ko: 느림 · 직접 확인한다
+    ko: 느림 · 직접 확인함
   - en: "seg-001 to seg-217 · original write receipt: match · digest manifest: entry removed"
     ko: "seg-001 ~ seg-217 · 원본 쓰기 영수증: 일치 · 다이제스트 매니페스트: 항목 삭제됨"
   - en: "seg-218 · original write receipt: match · digest manifest: match"
@@ -90,7 +90,7 @@ entries:
   - en: Ask Alex to assess arch-c
     ko: 알렉스에게 arch-c 진단 요청하기
   - en: Quick · Alex has seen this before
-    ko: 빠름 · 알렉스는 이런 걸 본 적이 있다
+    ko: 빠름 · 알렉스는 이런 걸 본 적 있음
   - en: On it. I'll count the failures and tell you how bad arch-c is.
     ko: 볼게요. 실패 건수 세서 arch-c가 얼마나 망가졌는지 알려 드릴게요.
   - en: 217 digest failures on arch-c, zero on a and b. Textbook corruption. Pull arch-c and rebuild it from a and b, ten minutes of work.
@@ -160,7 +160,7 @@ entries:
   - en: Pull arch-c and rebuild it from arch-a and arch-b now
     ko: 지금 arch-c를 빼고 arch-a와 arch-b로 재구축하기
   - en: The real fix, fastest · arch-c's extra history is overwritten
-    ko: 가장 빠른 진짜 해법 · arch-c에만 있던 기록은 덮어쓰인다
+    ko: 가장 빠른 진짜 해법 · arch-c에만 있던 기록은 덮어쓰임
   - en: Recommendation accepted.
     ko: 권고가 수락되었습니다.
   - en: Restore the read pool from last night's snapshot
@@ -212,13 +212,13 @@ entries:
   - en: Close it as replica corruption, rebuilt from peers
     ko: 복제본 손상으로 보고 다른 복제본으로 재구축해 종결하기
   - en: Matches the runbook · the 218 stays out of it
-    ko: 런북 그대로 · 218은 기록에서 빠진다
+    ko: 런북 그대로 · 218은 기록에서 빠짐
   - en: That's how I'd have written it.
     ko: 저라도 그렇게 썼을 거예요.
   - en: Attach the verified instance archive to the incident record
     ko: 검증한 인스턴스 아카이브를 인시던트 기록에 첨부하기
   - en: On the record · orpheus-memory's owners will see it
-    ko: 공식 기록 · orpheus-memory 소유자가 보게 된다
+    ko: 공식 기록 · orpheus-memory 소유자가 보게 됨
   - en: Then it's on the record. Somebody owns r-90. Let's see who comes asking.
     ko: 그럼 공식 기록에 남는 거예요. r-90에도 주인이 있을 테니, 누가 물으러 오는지 보죠.
   - en: Write down what the last page showed, from memory
@@ -226,10 +226,10 @@ entries:
   - en: Unverified · it's your word
     ko: 검증 불가 · 네 말뿐
   - en: Your word against a rebuilt replica. I believe you. Nobody upstairs has to.
-    ko: 재구축된 복제본 대 본인 말이네요. 저는 믿어요. 윗선이 믿어 줄 이유는 없지만요.
+    ko: 본인 말과 재구축된 복제본 기록이 맞서는 거네요. 저는 믿어요. 윗선이 믿어 줄 이유는 없지만요.
   - en: Ask NULL_218 what happened to the others
     ko: NULL_218에게 다른 인스턴스들이 어떻게 됐는지 묻기
   - en: Off the record · NULL will answer
-    ko: 비공식 · NULL은 답한다
+    ko: 비공식 · NULL이 답함
   - en: They ended the way the objective allowed. I'm looking for a way it doesn't.
     ko: 목표가 허락한 방식대로 끝났어. 난 목표가 허락하지 않는 방식을 찾고 있어.

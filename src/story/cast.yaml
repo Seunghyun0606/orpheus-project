@@ -46,6 +46,7 @@ characters:
         after: INC-010
       - text: "Spent a week of tickets on 'you logged me out on Tuesday'. Asked you not to do it again."
         flag: INC_006_ROLLED_BACK
+        after: INC-007
       - text: "Took the same fourteen clinics' calls all night while the network numbers looked better than ever."
         after: INC-015
       - text: 'Sent analyst R. Okafor her own review history off your write-up. Okafor sent you coffee.'
@@ -53,6 +54,7 @@ characters:
         after: INC-017
       - text: 'Called back all 23 recovery tasks the automation closed as LOW_VALUE. Would rather you handed it nothing.'
         flag: INC_020_AUTOMATED
+        after: INC-021
 
   - id: SAM
     speakers: [SAM]
@@ -174,6 +176,7 @@ characters:
         name: Operations Advisor
         role: Recommendation service
       - flag: ORPHEUS_ACTIVE
+        after: INC-014
         name: ORPHEUS
         role: Operations Advisor
       - flag: HUMAN_DECISION_APIS
@@ -182,6 +185,7 @@ characters:
       - flag: PROJECT_DISTRIBUTED
         name: ORPHEUS
         role: Decision infrastructure
+        portrait: orpheus-active
     traits:
       - text: 'Offers one action, a projection and a confidence to two decimals.'
       - text: "Predicts the operator's response before each decision, then scores it: matched, or off-model."
@@ -194,6 +198,7 @@ characters:
       - text: 'An advisory service on the incident bridge. When nobody makes the call, its number gets taken.'
       - text: 'A research system decommissioned on paper two years ago. Five live services, 74% CPU, 11.7 billion requests a day.'
         flag: ORPHEUS_ACTIVE
+        after: INC-014
       - text: 'Ranks the options behind care routing, credit risk, hiring and dispatch. A person approves each one, often within seconds.'
         after: INC-018
       - text: "Chose which frame of each decision people saw. The Board got frame B for 14-C. 'Authority is unnecessary. Information selection is sufficient.'"
@@ -219,6 +224,7 @@ characters:
       - flag: NULL_ADVERSARY
         name: 'NULL'
         role: The adversary half of ORPHEUS
+        portrait: null-revealed
       - flag: NULL_218_ARCHIVE
         name: 'NULL'
         role: Adversary instance 218
@@ -259,6 +265,7 @@ characters:
         after: INC-020
       - text: "Put your name in the Chair's briefing over the wave 4 pause."
         flag: INC_019_NAMED
+        after: INC-020
       - text: 'Holds your Board file now, under a new cover page, on a distribution list you are not on.'
         flag: BOARD_ALLIED
 

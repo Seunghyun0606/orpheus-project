@@ -134,7 +134,7 @@ entries:
   - en: The database is hot and the pool is full. Which two pieces of evidence explain what is holding the seats?
     ko: 데이터베이스는 과열이고 풀은 꽉 찼다. 무엇이 자리를 붙잡고 있는지 설명하는 증거 두 개는?
   - en: The database is downstream of the seats. Look at who holds them, and why nothing makes them let go.
-    ko: 데이터베이스는 자리의 다운스트림이에요. 누가 자리를 잡고 있는지, 왜 아무것도 그 자리를 내놓게 만들지 못하는지 보세요.
+    ko: 데이터베이스는 세션이 자리를 차지한 뒤에 영향을 받는 쪽이에요. 누가 자리를 잡고 있는지, 왜 아무것도 그 자리를 내놓게 만들지 못하는지 보세요.
   - en: Sessions that never go idle, let in under a rule written for people who do. The database only feels it last.
     ko: 한 번도 쉬지 않는 세션이, 쉬어 가는 사람을 위해 만든 규칙으로 들어왔다. 데이터베이스는 그걸 가장 늦게 느낄 뿐이다.
   - en: ...Fine. It's not the database. It's what's sitting on the database.
