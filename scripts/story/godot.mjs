@@ -120,6 +120,8 @@ switch (mode) {
     const flags = process.argv.slice(3);
     run(['--headless', '--path', project, '--import']);
     run(['--headless', ...flags, '--path', project, '--script', `res://tests/${script}.gd`]);
+    if (mode === 'saves')
+      run(['--headless', ...flags, '--path', project, '--script', 'res://tests/save_compat.gd']);
     break;
   }
   case 'play':
