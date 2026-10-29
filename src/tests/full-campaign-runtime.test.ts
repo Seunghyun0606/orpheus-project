@@ -74,7 +74,7 @@ describe('DEC-060 complete opt-in package connection (deferred)', () => {
         }
       } else expect(remaining.ok).toBe(false);
     }
-  });
+  }, 20_000); // Composes the whole campaign; ~5 s on a loaded CI runner.
   it('starts only the first operational Incident and preserves genuine first completion without skipping', () => {
     const p = composition(),
       d = p.definition;
