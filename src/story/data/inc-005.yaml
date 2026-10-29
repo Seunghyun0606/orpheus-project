@@ -54,8 +54,8 @@ evidence:
     body: The observer manifest is absent from the signed rollout ledger. Signature field blank, owner field blank, created 22 minutes ago by no pipeline.
   - id: TEAM_DIAGNOSIS
     kind: operational
-    title: Marcus's signature check
-    body: The signature matches no key Vantage has ever issued. Owner field blank. The workload is under a Security hold and must stay intact.
+    title: Marcus's provenance check
+    body: There is no signature to verify. Owner field blank. The workload is under a Security hold and must stay intact.
   - id: OPERATIONAL_DIAGNOSIS
     kind: operational
     title: shadow-7 traced to the observer workload
@@ -130,17 +130,17 @@ scenes:
           - collect: SESSION_TAG
         effects: { values: { curiosity: 1 }, pressure: 1 }
       - id: MARCUS
-        text: Ask Marcus to check the workload's signature
+        text: Ask Marcus to check where the workload came from
         consequence: Seventy-five seconds · Security owns that part
         beats:
           - speaker: MARCUS
-            text: Checking its signature against every key we've issued. Seventy-five seconds.
+            text: Checking where it came from against every key and pipeline we run. Seventy-five seconds.
           - speaker: SAM
             text: 'While he looks — the gateway log is full of one header. x-session-tag: shadow-7.'
           - collect: SESSION_TAG
           - metric: { label: Request failure rate, value: 33%, trend: up }
           - speaker: MARCUS
-            text: Signature matches nothing we've ever issued. Not revoked, not expired, never ours. Owner field is blank. Fence it if you need to, but it stays intact. It's evidence now.
+            text: No signature. No owner. No pipeline run. Fence it if you need to, but it stays intact. It's evidence now.
           - collect: TEAM_DIAGNOSIS
         effects: { values: { teamTrust: 1 }, pressure: 1 }
     next: thread

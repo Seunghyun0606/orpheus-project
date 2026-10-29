@@ -313,7 +313,7 @@ scenes:
       - narrate: The queue is short again. You open the screen the fraud analysts work from.
       - log: '/decision/credit-risk · scorer: ORPHEUS · score > 0.62 → human reviewer · reviewer sees: items ORPHEUS selects'
       - collect: RECORD_FINANCE_DECISION_SUPPORT
-      - narrate: The reviewers are real people with real judgement, and ORPHEUS chooses what they look at. Tonight it chose the same honest payments, over and over.
+      - narrate: The reviewers are real people with real judgment, and ORPHEUS chooses what they look at. Tonight it chose the same honest payments, over and over.
       - narrate: R. Okafor cleared txn 8812-4471 three times tonight. Her accuracy score went up each time.
       - speaker: SAM
         text: Losses really are down 31%. That's the number everyone upstairs will see.

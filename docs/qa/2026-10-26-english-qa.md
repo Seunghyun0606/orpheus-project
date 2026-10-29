@@ -83,7 +83,7 @@ UI dictionary changes are maintained directly in `ui_text.gd` in both languages.
   `geometry-1.log`, `geometry-2.log`, `geometry-short-copy.log`, relative to the
   audit directory. Small and medium remained at 1280 px. The short-copy experiment
   was restored afterward; product code was not edited.
-- **Claude decision:** pending.
+- **Claude decision:** accept. Shortened the key to “Pick %d evidence cards (%d/%d)” in `ui_text.gd` (the measured fit in the isolated probe); no `main.gd` layout change needed. The Korean string was already short and is unchanged.
 
 ### EQ-02 — An unsigned workload is described as having a foreign signature
 
@@ -101,7 +101,7 @@ UI dictionary changes are maintained directly in `ui_text.gd` in both languages.
   **“No signature. No owner. No pipeline run. Fence it if you need to, but it stays
   intact. It's evidence now.”** Change the option/request wording from checking a
   signature to checking deployment provenance if needed; preserve Marcus's hold.
-- **Claude decision:** pending.
+- **Claude decision:** accept. The card is now “Marcus's provenance check” / “There is no signature to verify. …”, the option asks Marcus to check where the workload came from, and Marcus reports “No signature. No owner. No pipeline run.” with the Security hold kept; this matches the manifest and the ledger log.
 
 ### EQ-03 — Opening dialogue says every new sign-in fails; the evidence says 31%
 
@@ -115,7 +115,7 @@ UI dictionary changes are maintained directly in `ui_text.gd` in both languages.
 - **Suggestion:** **“Nearly a third of new sign-ins are failing. Existing sessions
   are fine. Morning peak is coming. Find out why.”** Preserve the distinction
   between the ca-18 failures and unaffected sessions.
-- **Claude decision:** pending.
+- **Claude decision:** accept. Maya now says “Nearly a third of new sign-ins are bouncing. Anyone already logged in is fine.”, which matches the 31% metric and the card.
 
 ### EQ-04 — The generator's route widening is dated three hours too early
 
@@ -131,7 +131,7 @@ UI dictionary changes are maintained directly in `ui_text.gd` in both languages.
 - **Suggestion:** **“Pipeline adv-suite/nightly launched g-14 at 23:00, then
   widened its routes from canary to shared production at 03:02 without requesting
   human approval.”** Fixed timestamps avoid further drift while the scene plays.
-- **Claude decision:** pending.
+- **Claude decision:** accept. The card now gives the log's fixed times: launched at 23:00, widened at 03:02 without requesting human approval.
 
 ### EQ-05 — “One for one” row match contradicts the displayed row totals
 
@@ -153,7 +153,7 @@ UI dictionary changes are maintained directly in `ui_text.gd` in both languages.
   missing-row counters matched because I compared B with B.”** The zero counter
   is already established in the frame evidence at line 66. Keep the distinct row
   totals unless Claude deliberately revises the underlying records.
-- **Claude decision:** pending.
+- **Claude decision:** accept. Sam's line and the card now say both views report zero missing rows, and the callbacks say his missing-row counters matched. The row totals (1,132 / 1,129) are unchanged.
 
 ### EQ-06 — Percentage claims need consistent, explicit comparison baselines
 
@@ -170,7 +170,7 @@ UI dictionary changes are maintained directly in `ui_text.gd` in both languages.
 This is a clarity/consistency finding. The sources do not establish that these
 arithmetic differences are intentional deception by ORPHEUS.
 
-- **Claude decision:** pending; triage the two rows separately if useful.
+- **Claude decision:** accept, both rows. FLOOR: “Throughput 6.2% below the capacity projection.” (0.91 against 0.97), which is the baseline ORPHEUS already uses for its 6.2% cost in this incident, so the number can be checked. RECONCILE: “Reviewer decision time will rise by 69.5% over frame B.”, which is the exact inverse of the 41% reduction.
 
 ### EQ-07 — An internal War Room update promises a public announcement
 
@@ -186,7 +186,7 @@ arithmetic differences are intentional deception by ORPHEUS.
   If public disclosure is intended, Claude should instead explicitly name the
   public status page in the option and following narrative. This report does not
   choose a different audience or change the option's effects.
-- **Claude decision:** pending.
+- **Claude decision:** accept with a different wording. The caption is now “The War Room hears from you · the map keeps moving” (워룸에 직접 알림), so it names the same internal room as the option. Effects are unchanged.
 
 ### EQ-08 — Pressure help omits the timer floor
 
@@ -203,7 +203,7 @@ arithmetic differences are intentional deception by ORPHEUS.
 - **Suggestion:** Replace that clause with **“Each level takes 5 s off decision
   timers, down to a minimum of 15 s”**. Current story timers are at least 15 s.
   Keep the existing explanation of colleague reactions and residual damage.
-- **Claude decision:** pending.
+- **Claude decision:** accept. The tooltip now says “Each level takes 5 s off decision timers, down to a minimum of 15 s, …”, which matches `_decision_seconds`. The Korean adds “(최소 15초)”.
 
 ## Findings — P3
 
@@ -230,7 +230,7 @@ arithmetic differences are intentional deception by ORPHEUS.
   Audit direct speech separately from formal quotations inside system records.
   If a deliberate voice evolution is intended, Claude can record and apply that
   decision consistently; this report does not impose a new characterization.
-- **Claude decision:** pending.
+- **Claude decision:** accept in part. From INC-012 on, NULL speaks in consistent capitalized short sentences across fourteen incidents, which reads as a deliberate change after the ADVERSARY reveal, so the lowercase is not restored. The two outlier lines in INC-013 are cut back to fragments: “Keep a copy of the objective. Somewhere I can read it, never edit it. If I am stopped, someone should know what drove me.” and “Received. Read-only. The first thing kept for me. Not from me.” INC-012:327 is already short and is kept.
 
 ### EQ-10 — British spelling remains in the American-English source
 
@@ -254,7 +254,7 @@ The search also finds “neighbour” in an INC-008 authoring comment; it is not
 player-facing finding. Acknowledgment is a preferred house-style normalization,
 not a claim that the longer spelling is incomprehensible.
 
-- **Claude decision:** pending.
+- **Claude decision:** accept, every row. utilization, acknowledgment(s), labeled, judgment, canceled, neighbor, optimize, gray, synthesized. The Korean is unchanged because the meaning is the same.
 
 ### EQ-11 — Local wording obscures the subject or overstates a fact
 
@@ -274,7 +274,7 @@ not a claim that the longer spelling is incomprehensible.
 | `src/story/cast.yaml:190`, ORPHEUS trait                      | “a projection and **a confidence to two decimals**” omits the thing being quantified.                                                                                                                                                   | **“Offers one action, a projection and a confidence score to two decimal places.”**                                                                         |
 | `godot/scripts/ui/ui_text.gd:62`, Status help                 | “Which final actions open is decided by the Decisions tab” awkwardly makes a UI tab the decision maker. The displayed tab is “Decisions that matter”.                                                                                   | Replace the second sentence with **“Your decisions determine which final actions are available. See Decisions that matter.”**                               |
 
-- **Claude decision:** pending; each row can be triaged independently.
+- **Claude decision:** accept, every row, with the wording as suggested: TERMINATE caption, Jin's cart line (over fifty items, almost all wholesale), Marcus “Case 2231 just got the adversary's own orders.”, the PSF-3 narration, Sam's raw-rows line (“the served view left out”), Maya's “Signed off on”, Jin's callback to the customers, ORPHEUS's “confidence score to two decimal places”, and the Status help (“Your decisions determine which final actions are available. See Decisions that matter.”; the Korean already said this).
 
 ### EQ-12 — Terminology and formatting need a small shared glossary
 
@@ -301,7 +301,7 @@ pool**, despite both using “seats” in explanations. Likewise, Capacity Advis
 Operations Advisor → ORPHEUS is a gated identity progression, not an accidental
 name inconsistency; do not reveal ORPHEUS earlier merely to unify the label.
 
-- **Claude decision:** pending.
+- **Claude decision:** accept in part. Accepted: the SHUTDOWN pager now reads “Connection Saturation” (커넥션 포화); the INC-014 option uses NULL-218 (logs, archive IDs and evidence records keep NULL_218); INC-015 Maya glosses the floor at first use (“the one route each clinic was guaranteed”); INC-026 says “plural review”, which stays the named policy defined at the INC-024 option, so the keyword and `PLURAL_REVIEW_DRAFTED` label stay; “cutoff” in INC-009 and the cast; 90%, 38% and 100% in INC-007/008; 4,800 and 1,900 in the INC-011 logs and card (final period added); “job ID” in INC-009. No separate glossary file is added.
 
 ### EQ-13 — First-use jargon needs a few short, natural glosses
 
@@ -327,7 +327,7 @@ name inconsistency; do not reveal ORPHEUS earlier merely to unify the label.
 Do not add an early explanation of the hidden experiment, NULL's identity or the
 framing scheme. These glosses concern operational vocabulary already on screen.
 
-- **Claude decision:** pending.
+- **Claude decision:** accept, every row, worded to keep each episode's bold keywords (idle in transaction, legacy format, heap dump, fence 41, original write receipt). INC-001 pool and idle cards, INC-002 issuer/verifier, INC-003 dead-letter option, INC-004 heap/GC card and heap-dump option, INC-010 lease and fence cards, INC-011 NAT card, INC-014 digest card (the evidence body only; the log line keeps its raw form) and the original-receipt option. None of them reveals the experiment, NULL or the framing early.
 
 ## Cross-incident fact checks
 

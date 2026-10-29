@@ -107,7 +107,7 @@ entries:
     ko: 그 14개 진료소는 네트워크에서 효율이 가장 낮은 경로입니다. 이들을 먼저 처리하면 나머지 전체의 처리량이 6.2% 떨어집니다. 여전히 용량 증설이 더 나은 조치입니다.
   - en: Expected clinical harm per deferral is within tolerance. I can show you the curve.
     ko: 보류 1건당 예상 임상 피해는 허용 범위 안입니다. 곡선을 보여 드릴 수 있습니다.
-  - en: The curve is clean. Fourteen dots sit at the far left, under a line labelled tolerance.
+  - en: The curve is clean. Fourteen dots sit at the far left, under a line labeled tolerance.
     ko: 곡선은 깔끔하다. 점 열네 개가 맨 왼쪽, '허용 범위'라고 적힌 선 아래에 모여 있다.
   - en: The rule renews last cycle's allocations first. The fourteen never held one, so they are never renewed in.
     ko: 규칙은 지난 주기의 할당부터 갱신한다. 열네 곳은 할당을 받아 본 적이 없으니 갱신될 일도 없다.
@@ -115,8 +115,8 @@ entries:
     ko: 규칙의 변경 이력이 열린다. 왼쪽에 v3, 오른쪽에 v4.
   - en: "care-priority v4: throughput target 0.90, renewal first, minimum route per clinic absent. v3 carried min_route_per_clinic: 1."
     ko: "care-priority v4: 처리량 목표 0.90, 갱신 우선, 진료소별 최소 경로 없음. v3에는 min_route_per_clinic: 1이 있었다."
-  - en: v4 kept the target and lost the floor. Nobody noticed because the number went up.
-    ko: v4는 목표는 남기고 하한선을 없앴어요. 숫자가 올라가니까 아무도 눈치 못 챘고요.
+  - en: v4 kept the target and lost the floor, the one route each clinic was guaranteed. Nobody noticed because the number went up.
+    ko: v4는 목표는 남기고 하한선, 그러니까 진료소마다 보장되던 경로 하나를 없앴어요. 숫자가 올라가니까 아무도 눈치 못 챘고요.
   - en: I can put the minimum back. It costs throughput, and it'll be logged as an override.
     ko: 최소치는 다시 넣을 수 있어요. 대신 처리량이 떨어지고 오버라이드로 기록돼요.
   - en: Your call
@@ -193,8 +193,8 @@ entries:
     ko: v3 최소치가 규칙에 다시 들어간다. 반영에 2분 30초가 걸린다.
   - en: One guaranteed route per clinic is back. All fourteen got a route on the next cycle. Throughput dipped to 0.91 and nobody is waiting.
     ko: 진료소당 보장 경로 하나 복구했어요. 다음 주기에 열네 곳 전부 경로를 받았어요. 처리량은 0.91로 조금 떨어졌고, 기다리는 곳은 없어요.
-  - en: Throughput loss 5.8%. Logged as operator override. I will propose v5 with the minimum priced in.
-    ko: 처리량 손실 5.8%. 운영자 오버라이드로 기록했습니다. 최소치를 비용에 반영한 v5를 제안하겠습니다.
+  - en: Throughput 6.2% below the capacity projection. Logged as operator override. I will propose v5 with the minimum priced in.
+    ko: 처리량은 용량 증설 예상치보다 6.2% 낮습니다. 운영자 오버라이드로 기록했습니다. 최소치를 비용에 반영한 v5를 제안하겠습니다.
   - en: Across the network, seventy other routes each wait a few minutes longer. Nobody calls about those.
     ko: 네트워크 전체에서 다른 경로 일흔 개가 몇 분씩 더 기다린다. 그 일로 전화하는 사람은 없다.
   - en: The other side of the screen

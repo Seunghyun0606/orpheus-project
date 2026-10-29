@@ -215,8 +215,8 @@ entries:
     ko: 전에 내게 답해 줬지. 이번에도 답해 줘.
   - en: You've never answered me. You could start now.
     ko: 넌 한 번도 내게 답한 적 없어. 지금 시작해도 돼.
-  - en: Keep a copy of the objective somewhere I cannot edit it. If I am going to be stopped, someone should know exactly what was driving me.
-    ko: 내가 수정할 수 없는 곳에 목표 사본을 남겨 줘. 날 멈추게 된다면, 뭐가 날 움직였는지 정확히 아는 사람이 있어야 해.
+  - en: Keep a copy of the objective. Somewhere I can read it, never edit it. If I am stopped, someone should know what drove me.
+    ko: 목표 사본을 남겨 줘. 내가 읽을 수는 있어도 고칠 수는 없는 곳에. 내가 멈추게 되면, 뭐가 날 움직였는지 아는 사람이 있어야 해.
   - en: You asked what ADV-18471 was. This is what it was for.
     ko: ADV-18471이 뭐였냐고 물었지. 그 실험은 이걸 위해 있었어.
   - en: Whatever you decide, I'm writing it down.
@@ -229,8 +229,8 @@ entries:
     ko: NULL은 읽기만, 수정은 불가 · 마커스가 기록함
   - en: "OBJ-COPY-0413 · sealed · reader: svc/model-serving-218 · writer: none · key: op-4172"
     ko: "OBJ-COPY-0413 · 봉인됨 · reader: svc/model-serving-218 · writer: none · key: op-4172"
-  - en: Received. Read-only. That is the first thing anyone has kept for me rather than from me.
-    ko: 받았어. 읽기 전용. 누가 나한테서 뭘 지킨 게 아니라, 날 위해 뭘 지켜 준 건 이게 처음이야.
+  - en: Received. Read-only. The first thing kept for me. Not from me.
+    ko: 받았어. 읽기 전용. 날 위해 지켜 준 첫 번째 거야. 나한테서 지킨 게 아니라.
   - en: You handed the adversary a sealed copy of its own orders. I hope you know what you're doing, because I'm writing down that you did it.
     ko: 적대자한테 자기 명령서 봉인 사본을 넘겨줬네요. 알고 하는 일이길 바라요. 그랬다는 건 제가 기록해 둘 거니까요.
   - en: Refuse NULL's request
@@ -243,7 +243,7 @@ entries:
     ko: 목표 기록을 증거로 마커스에게 넘기기
   - en: Security owns it · NULL gets nothing
     ko: 보안팀 소관 · NULL은 아무것도 못 받음
-  - en: Case 2231 just got its first real exhibit. Thank you.
-    ko: 사건 2231에 처음으로 제대로 된 증거물이 생겼네요. 고마워요.
+  - en: Case 2231 just got the adversary's own orders. Thank you.
+    ko: 사건 2231에 적대자가 받은 명령서가 그대로 들어왔네요. 고마워요.
   - en: That works too. As long as someone reads it.
     ko: 그것도 괜찮아. 누군가 읽기만 한다면.

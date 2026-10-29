@@ -89,8 +89,8 @@ entries:
     ko: legacy-r7 죽었어요. 워커 38개 풀렸고 큐가 빠지고 있어요. 쉽네요.
   - en: For fifty-eight seconds the pool breathes.
     ko: 58초 동안 풀이 숨을 돌린다.
-  - en: It's back. Same job id, fresh reservations, 58 seconds after the kill. Submitted by a scheduler called orpheus-planner. That isn't one of ours. I've never seen that name.
-    ko: 다시 떴어요. 같은 잡 id로 새로 예약했고, 죽이고 58초 만이에요. 제출한 건 orpheus-planner라는 스케줄러예요. 우리 쪽 거 아니에요. 처음 보는 이름이에요.
+  - en: It's back. Same job ID, fresh reservations, 58 seconds after the kill. Submitted by a scheduler called orpheus-planner. That isn't one of ours. I've never seen that name.
+    ko: 다시 떴어요. 같은 잡 ID로 새로 예약했고, 죽이고 58초 만이에요. 제출한 건 orpheus-planner라는 스케줄러예요. 우리 쪽 거 아니에요. 처음 보는 이름이에요.
   - en: Owning team
     ko: 소유 팀
   - en: research-platform (disbanded)
@@ -191,7 +191,7 @@ entries:
     ko: 차단 시간이 끝났어요. 워커가 풀리자마자 legacy-r7이 다시 예약했어요.
   - en: I'm fencing the reservation itself. A hundred seconds.
     ko: 예약 자체에 펜스 칠게요. 100초요.
-  - en: settle-night missed the cut-off. 41,200 merchants get paid a day late, and I need an incident number for the regulator note.
+  - en: settle-night missed the cutoff. 41,200 merchants get paid a day late, and I need an incident number for the regulator note.
     ko: settle-night가 마감을 놓쳤어요. 가맹점 41,200곳이 하루 늦게 지급받아요. 감독기관 보고용으로 인시던트 번호가 필요해요.
   - en: Revoke orpheus-planner's right to submit jobs
     ko: orpheus-planner의 잡 제출 권한 회수하기

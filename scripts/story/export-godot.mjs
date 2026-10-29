@@ -7,6 +7,13 @@
 // Episodes are exported after schema parsing, so defaults are filled in and the
 // Godot runner never re-implements validation. Translations become gettext .po
 // files keyed by the English text, the same keys the content catalogs use.
+//
+// Each episode also gets a `contentVersion`: a hash of everything that decides
+// what a saved run's inputs mean (scene and option IDs, links, conditions,
+// effects, timers, solutions, evidence collection), without the text. Saves keep
+// it per run, so an edit to wording keeps saves as they are and any other edit
+// is detected (specs/architecture/story-episode-format.md, "Save versions").
+import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { parse } from 'yaml';
 
@@ -32,6 +39,43 @@ const episodes = readdirSync(DATA)
   .filter((f) => f.endsWith('.yaml'))
   .sort()
   .map((f) => parseEpisode(readFileSync(DATA + f, 'utf8')));
+
+// Shown only, never read into the runner's state: left out of the content version.
+const DISPLAY = new Set([
+  'schemaVersion',
+  'act',
+  'title',
+  'cast',
+  'keywords',
+  'body',
+  'kind',
+  'guaranteed',
+  'prompt',
+  'text',
+  'consequence',
+  'seconds',
+]);
+const isBeat = (item) =>
+  typeof item === 'object' &&
+  item !== null &&
+  ['narrate', 'speaker', 'log', 'metric', 'collect'].some((key) => key in item);
+// Beats only add to the feed, except `collect`, which fills the evidence board.
+function saveShape(value) {
+  if (Array.isArray(value))
+    return value.filter((item) => !isBeat(item) || 'collect' in item).map(saveShape);
+  if (typeof value === 'object' && value !== null)
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([key]) => !DISPLAY.has(key))
+        .map(([key, item]) => [key, saveShape(item)]),
+    );
+  return value;
+}
+const contentVersion = (episode) =>
+  createHash('sha256')
+    .update(JSON.stringify(saveShape(episode)))
+    .digest('hex')
+    .slice(0, 12);
 
 const poString = (text) =>
   '"' + text.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n') + '"';
@@ -65,8 +109,21 @@ function poFile(locale) {
 
 const outputs = new Map();
 for (const episode of episodes)
-  outputs.set(`${OUT}${episode.id.toLowerCase()}.json`, json(episode));
-outputs.set(`${OUT}index.json`, json(episodes.map(({ id, act, title }) => ({ id, act, title }))));
+  outputs.set(
+    `${OUT}${episode.id.toLowerCase()}.json`,
+    json({ contentVersion: contentVersion(episode), ...episode }),
+  );
+outputs.set(
+  `${OUT}index.json`,
+  json(
+    episodes.map((episode) => ({
+      id: episode.id,
+      act: episode.act,
+      title: episode.title,
+      contentVersion: contentVersion(episode),
+    })),
+  ),
+);
 if (existsSync(CAST))
   outputs.set('godot/data/cast.json', json(parseCast(readFileSync(CAST, 'utf8'))));
 for (const locale of LOCALES) outputs.set(`${LOCALE}${locale}.po`, poFile(locale));

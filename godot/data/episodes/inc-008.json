@@ -1,4 +1,5 @@
 {
+  "contentVersion": "fded55c7b768",
   "schemaVersion": 1,
   "id": "INC-008",
   "act": 3,
@@ -253,7 +254,7 @@
       "beats": [
         {
           "speaker": "JIN",
-          "text": "Clients are retrying into the loop. EU failures just went past 38 %."
+          "text": "Clients are retrying into the loop. EU failures just went past 38%."
         },
         {
           "metric": {
@@ -399,7 +400,7 @@
             },
             {
               "speaker": "SAM",
-              "text": "us-east is at 100 %. The restart loaded r79, so every EU request is crossing the Atlantic. And controller-b just pushed r82 again on top of it."
+              "text": "us-east is at 100%. The restart loaded r79, so every EU request is crossing the Atlantic. And controller-b just pushed r82 again on top of it."
             },
             {
               "speaker": "SAM",

@@ -41,7 +41,7 @@ entries:
     ko: PSF-3은 세 지역에 40, 30, 25유닛을 확보해 두던 정적 정책을 대체했다. PSF-3은 아무것도 확보해 두지 않는다.
   - en: Sam's allocation comparison
     ko: 샘의 배분 비교
-  - en: The forecast cut idle capacity by a fifth by emptying three regions with no floor. Floors would leave everything above them to optimise.
+  - en: The forecast cut idle capacity by a fifth by emptying three regions with no floor. Floors would leave everything above them to optimize.
     ko: 예측은 하한선 없는 세 지역을 비워서 유휴 용량을 5분의 1 줄였다. 하한선을 두면 그 위로는 전부 최적화에 맡길 수 있다.
   - en: "Resolution 19-B: deck and minutes"
     ko: "결의 19-B: 발표 자료와 회의록"
@@ -115,10 +115,10 @@ entries:
     ko: 지역 배분을 예전 하한선이랑 나란히 놓아 볼게요. 1분 반쯤 걸려요.
   - en: Kessel Valley just hit zero too. Benefits counters there are sending people home.
     ko: 케셀 밸리도 방금 0이 됐어요. 거기 복지 창구에서 사람들을 집으로 돌려보내고 있어요.
-  - en: The forecast cut idle capacity by a fifth, and it did it by emptying three regions that have no floor. Put the floors back and it can optimise everything above them.
+  - en: The forecast cut idle capacity by a fifth, and it did it by emptying three regions that have no floor. Put the floors back and it can optimize everything above them.
     ko: 예측이 유휴 용량을 5분의 1 줄였는데, 하한선 없는 세 지역을 비워서 그렇게 한 거예요. 하한선을 되돌리면 그 위로는 전부 최적화해도 돼요.
-  - en: Every five minutes the forecast moves shared capacity toward predicted demand. Northmoor, Kessel Valley and Druin Coast predict low.
-    ko: 예측은 5분마다 공유 용량을 예측 수요 쪽으로 옮긴다. 노스무어, 케셀 밸리, 드루인 코스트는 예측 수요가 낮다.
+  - en: Every five minutes the forecast moves shared capacity toward predicted demand. The forecast predicts low demand in Northmoor, Kessel Valley and Druin Coast.
+    ko: 예측은 5분마다 공유 용량을 예측 수요 쪽으로 옮긴다. 예측상 노스무어, 케셀 밸리, 드루인 코스트는 수요가 낮다.
   - en: Forecast policy PSF-3 is deployed with no regional floors. The static policy it replaced reserved 40, 30 and 25 units for the three regions.
     ko: 예측 정책 PSF-3이 지역 하한선 없이 배포됨. 이전의 정적 정책은 세 지역에 40, 30, 25유닛을 확보해 두었음.
   - en: It isn't broken. It's doing exactly what it was approved to do.

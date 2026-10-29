@@ -75,7 +75,7 @@ scenes:
       - metric: { label: Handshake retries, value: 520/s, trend: up }
       - collect: SIGNIN_REJECTS
       - speaker: MAYA
-        text: Identity is rejecting every new sign-in. Anyone already logged in is fine; anyone signing in fresh bounces. Morning peak is coming. Find out why.
+        text: Nearly a third of new sign-ins are bouncing. Anyone already logged in is fine. Morning peak is coming. Find out why.
       - speaker: JIN
         text: Customers can't sign in. The app tells them their certificate can't be verified, which they're reading as "you've been hacked".
       - speaker: MARCUS

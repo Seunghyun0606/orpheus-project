@@ -1,4 +1,5 @@
 {
+  "contentVersion": "0b18bcebd6fa",
   "schemaVersion": 1,
   "id": "INC-014",
   "act": 5,
@@ -33,7 +34,7 @@
     {
       "id": "REPLICA_HEALTH",
       "title": "arch-c marked corrupt",
-      "body": "arch-a healthy / arch-b healthy / arch-c CORRUPT: digest mismatch on 217 segments",
+      "body": "217 of arch-c's segments fail their integrity checks (digests), so arch-c is marked CORRUPT. arch-a and arch-b are healthy.",
       "kind": "operational"
     },
     {
@@ -170,7 +171,7 @@
       "options": [
         {
           "id": "CHECKSUM",
-          "text": "Check arch-c's segments against their original write receipts",
+          "text": "Check arch-c's segments against their original write receipts, the hashes recorded when each was first written",
           "consequence": "Slower · you see it yourself",
           "beats": [
             {
@@ -755,7 +756,7 @@
         },
         {
           "id": "ASK_NULL",
-          "text": "Ask NULL_218 what happened to the others",
+          "text": "Ask NULL-218 what happened to the others",
           "consequence": "Off the record · NULL will answer",
           "beats": [
             {

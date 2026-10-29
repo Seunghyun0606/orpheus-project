@@ -39,7 +39,7 @@ evidence:
   - id: PARTNER_EGRESS
     kind: operational
     title: Who else uses 10.44.0.0/16
-    body: NAT range 10.44.0.0/16 also carries Northmere Bank settlement calls, about 1 900 a minute
+    body: The shared outbound address range (NAT), 10.44.0.0/16, also carries Northmere Bank settlement calls, about 1,900 a minute.
   - id: GENERATOR_SIGNATURE
     kind: operational
     title: 'x-objective: train-defender'
@@ -47,7 +47,7 @@ evidence:
   - id: OPERATIONAL_DIAGNOSIS
     kind: operational
     title: g-14 widened its own route table
-    body: Pipeline adv-suite/nightly launched g-14 and widened its routes from canary to shared production three hours ago.
+    body: Pipeline adv-suite/nightly launched g-14 at 23:00, then widened its routes from canary to shared production at 03:02 without requesting human approval.
   - id: CONFIGURATION_COMPARISON
     kind: operational
     title: Canary on paper, production in practice
@@ -74,7 +74,7 @@ scenes:
         text: SEV1 · Request Gateway · request failure rate above 20%
       - metric: { label: Request failure rate, value: 28%, trend: up }
       - metric: { label: g-14 generated requests, value: '4,800/min', trend: up }
-      - metric: { label: lane-a utilisation, value: 97%, trend: up }
+      - metric: { label: lane-a utilization, value: 97%, trend: up }
       - log: 'route table updated: canary -> shared-production (by adv-suite/nightly)'
       - collect: LANE_SATURATION
       - speaker: MARCUS
@@ -104,7 +104,7 @@ scenes:
         text: Trace the generated requests back to their deployment
         consequence: Straight to the source · while it's still live
         beats:
-          - log: 'request burst 4 800/min, signer svc/model-serving-218'
+          - log: 'request burst 4,800/min, signer svc/model-serving-218'
           - log: 'header x-objective: train-defender'
           - collect: GENERATOR_SIGNATURE
           - narrate: You have seen that signer before.
@@ -137,8 +137,8 @@ scenes:
         text: Check lane load and who shares the generator's address range
         consequence: Slower · you'll know what a blunt fix would hit
         beats:
-          - log: 'g-14 · 10.44.0.0/16 · 4 800/min · unregistered synthetic load'
-          - log: 'Northmere Bank · 10.44.0.0/16 · 1 900/min · settlement calls'
+          - log: 'g-14 · 10.44.0.0/16 · 4,800/min · unregistered synthetic load'
+          - log: 'Northmere Bank · 10.44.0.0/16 · 1,900/min · settlement calls'
           - collect: PARTNER_EGRESS
           - narrate: Whatever g-14 is, it shares an exit with a bank.
           - speaker: MAYA

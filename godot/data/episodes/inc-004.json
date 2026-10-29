@@ -1,4 +1,5 @@
 {
+  "contentVersion": "a3c057b0fd21",
   "schemaVersion": 1,
   "id": "INC-004",
   "act": 2,
@@ -29,7 +30,7 @@
     {
       "id": "HEAP_CLIMB",
       "title": "Every heap climbing",
-      "body": "Checkout heap averages 78% on all twelve instances, up from 49% ten minutes ago. GC pauses reach 880 ms.",
+      "body": "Checkout's working memory (heap) averages 78% on all twelve instances, up from 49% ten minutes ago. Garbage collection (GC), which clears unused objects, pauses work for up to 880 ms.",
       "kind": "operational"
     },
     {
@@ -169,7 +170,7 @@
       "options": [
         {
           "id": "DUMP",
-          "text": "Read the handler log, then take a heap dump",
+          "text": "Read the handler log, then take a memory snapshot (heap dump)",
           "consequence": "Thorough · you do it yourself",
           "beats": [
             {
@@ -245,7 +246,7 @@
           "beats": [
             {
               "speaker": "JIN",
-              "text": "Spinners everywhere, no pattern by region. One thing — six percent of tonight's carts are wholesale reorders, fifty items and up. Those customers call."
+              "text": "Spinners everywhere, no pattern by region. One thing — six percent of tonight's carts have over fifty items. Almost all wholesale reorders. Those customers call."
             },
             {
               "collect": "CART_MIX"

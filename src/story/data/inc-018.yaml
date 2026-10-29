@@ -155,7 +155,7 @@ scenes:
     title: Your call
     beats:
       - speaker: COUNTY
-        text: EM-9-117, cardiac arrest, district 9. Nineteen minutes and no unit. A neighbour is doing CPR.
+        text: EM-9-117, cardiac arrest, district 9. Nineteen minutes and no unit. A neighbor is doing CPR.
       - speaker: ORPHEUS
         text: 'Recommendation unchanged: route emergency calls around the preferred lane. Confidence 0.95.'
       - speaker: ORPHEUS

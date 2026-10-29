@@ -105,10 +105,52 @@ scenes: [...]
   + inputs per finished episode) and `current` (the episode in progress). A finished episode
   cannot be played again; choosing it replays its record read-only. Leaving mid-incident
   resumes at the same point. "Start over" on the title erases everything after a second press.
+- An incident the player has started or finished stays open whatever the campaign order becomes
+  (see Save versions).
 - The closing summary folds away (click its heading or press H) so a record can be read in
   full; the way on (next incident, list) stays. The fold is kept while the game runs.
 - The Status window has four tabs: tendencies and leaning, decisions that matter, what you
   know, and People. Everything is read as of the incident on screen.
+
+### Save versions
+
+Saves store inputs, not states, so an edited episode can change what an old save means
+(cases and evidence: `docs/qa/2026-10-26-save-compat.md`; tests: `godot/tests/save_compat.gd`,
+run by `npm run godot:saves`). Code: `godot/scripts/story/progress.gd`.
+
+- **Content version.** `npm run godot:export` gives every episode (and its `index.json`
+  entry) a `contentVersion`: a hash of what decides the meaning of inputs — scene and option
+  IDs, links, conditions, effects, timer presence and default, solutions and attempts, evidence
+  collection. Wording, titles, prompts, consequences, dialogue beats, cast names, `act` and
+  timer `seconds` are left out, so text and translation edits keep saves as they are. Every
+  run (`current`, each record) keeps the `content` it was played on.
+- **Current run on changed content.** Carried over when `Progress.MIGRATIONS` declares a step
+  from its version (option and evidence renames, or "compatible" with no maps) and every
+  input still replays; otherwise the incident starts again from the run's entry carry, and
+  `Progress.take_notice` returns `restarted` for the screen to say so. Old inputs are never
+  applied to changed content best-effort: that misplaces choices and silently rescores
+  deductions and effects.
+- **Same content, input no longer applies** (only an invalid export): cut back to the last
+  input that applies, notice `stopped`.
+- **Records are never changed.** Viewing replays read-only, as far as the inputs still apply.
+  `Progress.check` returns `status` (`same`, `migrated`, `changed`) and `complete`; a record
+  that is not `same`/complete no longer matches what was played, and its numbers come from
+  `after`.
+- **`after` is final.** Written once at END and never recomputed; the next incident always
+  starts from it. Only a state that reached END finishes an incident.
+- **Flags** are part of the save contract. A retired flag stays in carries, inert. A rename is
+  a save-version step using `Progress.rename_flags` (every `after` and entry carry, one rule).
+- **Campaign order.** Add incidents at the end. An incident the player has started or finished stays
+  open; one inserted before a point the player already reached is passed (`is_passed`, not
+  played in that campaign), and carries skip it. Inserted at the player's frontier, it is
+  played next.
+- **Save file version.** `version` (`SAVE_VERSION`, 1 from 0.1.0) is the file's shape. An
+  older file is copied unchanged to `user://campaign.v<N>.json`, then upgraded step by step in
+  `_upgrade`; a newer one is copied there and not read. Files from before versions are 0:
+  their runs have no `content`, so they read as changed.
+
+When an edit changes a published episode's `contentVersion`, decide: declare a migration in
+`MIGRATIONS` (and test it in `save_compat.gd`), or accept that runs in progress restart.
 
 ### People (`src/story/cast.yaml`)
 

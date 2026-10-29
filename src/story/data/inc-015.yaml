@@ -126,7 +126,7 @@ scenes:
           - speaker: ORPHEUS
             text: Expected clinical harm per deferral is within tolerance. I can show you the curve.
           - collect: ORPHEUS_RATIONALE
-          - narrate: The curve is clean. Fourteen dots sit at the far left, under a line labelled tolerance.
+          - narrate: The curve is clean. Fourteen dots sit at the far left, under a line labeled tolerance.
           - log: 'cycle 1,206 · orpheus-planner/care-throughput · deferral reason PRIORITY_RENEWED for clinic set R-14'
           - narrate: The rule renews last cycle's allocations first. The fourteen never held one, so they are never renewed in.
           - collect: OPERATIONAL_DIAGNOSIS
@@ -141,7 +141,7 @@ scenes:
       - log: 'care-priority v4: throughput target 0.90, renewal first, minimum route per clinic absent. v3 carried min_route_per_clinic: 1.'
       - collect: CONFIGURATION_COMPARISON
       - speaker: MAYA
-        text: v4 kept the target and lost the floor. Nobody noticed because the number went up.
+        text: v4 kept the target and lost the floor, the one route each clinic was guaranteed. Nobody noticed because the number went up.
       - speaker: SAM
         text: I can put the minimum back. It costs throughput, and it'll be logged as an override.
     next: decide
@@ -238,7 +238,7 @@ scenes:
             text: One guaranteed route per clinic is back. All fourteen got a route on the next cycle. Throughput dipped to 0.91 and nobody is waiting.
           - metric: { label: Network throughput, value: '0.91', trend: down }
           - speaker: ORPHEUS
-            text: Throughput loss 5.8%. Logged as operator override. I will propose v5 with the minimum priced in.
+            text: Throughput 6.2% below the capacity projection. Logged as operator override. I will propose v5 with the minimum priced in.
           - speaker: ORPHEUS
             text: Operator response as predicted.
             when: { values: { publicInterest: { gte: 0 } } }

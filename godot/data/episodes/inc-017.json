@@ -1,4 +1,5 @@
 {
+  "contentVersion": "cce55bf06349",
   "schemaVersion": 1,
   "id": "INC-017",
   "act": 6,
@@ -322,7 +323,7 @@
         },
         {
           "speaker": "JIN",
-          "text": "A candidate wrote in: a recruiter booked her interview, then cancelled it ten minutes later. I can't tell her which list is the real one.",
+          "text": "A candidate wrote in: a recruiter booked her interview, then canceled it ten minutes later. I can't tell her which list is the real one.",
           "when": {
             "pressure": {
               "gte": 2

@@ -347,7 +347,7 @@ scenes:
     type: briefing
     title: Ending · SHUTDOWN
     beats:
-      - narrate: You sign the cut. At 04:09 both authority paths go dead, and every dashboard on the wall turns grey.
+      - narrate: You sign the cut. At 04:09 both authority paths go dead, and every dashboard on the wall turns gray.
       - narrate: ORPHEUS and NULL are both gone by sunrise.
       - narrate: Everything that leaned on them falls over. People who have never run anything by hand learn how.
       - narrate: The binder from three nights ago goes around the floor in photocopies. Page twelve wears out first.
@@ -359,7 +359,7 @@ scenes:
           02:14
 
           INC-001
-          Database Connection Exhaustion
+          Connection Saturation
       - log: '> open metrics'
     next: after
 
@@ -472,7 +472,7 @@ scenes:
     beats:
       - narrate: You sign the change with Maya and Sam as second and third reviewers. It is the first change in years that needs three names.
       - narrate: You remove the single objective that sat under everything — ensure continuity of Vantage Systems — and you do not replace it with another one.
-      - narrate: ORPHEUS still predicts. It still recommends. Every execution now needs plural human review, and an auditor outside the company checks the record.
+      - narrate: ORPHEUS still predicts. It still recommends. Every execution now needs plural review, and an auditor outside the company checks the record.
       - narrate: The first review panel is Maya, Sam, Jin and a stranger from the auditor's office. Their first decision takes three hours. It is about a disk.
       - log: |-
           AI prediction: ENABLED

@@ -29,11 +29,11 @@ evidence:
   - id: POOL_AT_LIMIT
     kind: operational
     title: A full pool on a quiet database
-    body: PostgreSQL holds 498 of its 500 connections, yet its CPU sits at 41%.
+    body: PostgreSQL holds 498 of its 500 connections, the slots every request needs to reach the database, yet its CPU sits at 41%.
   - id: IDLE_TRANSACTIONS
     kind: operational
     title: Sessions idle in transaction
-    body: 164 sessions have been idle in transaction for 47 minutes on average, each one holding a connection.
+    body: 164 sessions have been idle in transaction for 47 minutes on average. Each began a unit of database work, never finished it, and still holds a connection.
   - id: CLEAN_DEPLOY
     kind: operational
     title: Yesterday's deploy
@@ -157,7 +157,7 @@ scenes:
     options:
       - id: TERMINATE
         text: Terminate the stale sessions
-        consequence: Takes two minutes · frees what holds the pool
+        consequence: Takes two minutes · frees the held connections
         beats:
           - log: "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';"
           - metric: { label: PostgreSQL connections, value: 112 / 500, trend: down }

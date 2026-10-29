@@ -25,12 +25,12 @@ entries:
     ko: 결제 요청의 31%가 실패한다. 호출 기준은 20%다.
   - en: A full pool on a quiet database
     ko: 한가한 DB의 꽉 찬 커넥션 풀
-  - en: PostgreSQL holds 498 of its 500 connections, yet its CPU sits at 41%.
-    ko: PostgreSQL 커넥션은 500개 중 498개가 찼는데, CPU는 41%에 머물러 있다.
+  - en: PostgreSQL holds 498 of its 500 connections, the slots every request needs to reach the database, yet its CPU sits at 41%.
+    ko: PostgreSQL 커넥션은 500개 중 498개가 찼다. 요청이 데이터베이스를 쓰려면 하나씩 차지해야 하는 자리다. 그런데 CPU는 41%에 머물러 있다.
   - en: Sessions idle in transaction
     ko: 트랜잭션 중 유휴 상태인 세션
-  - en: 164 sessions have been idle in transaction for 47 minutes on average, each one holding a connection.
-    ko: 세션 164개가 평균 47분째 트랜잭션을 연 채 놀고 있고, 저마다 커넥션을 하나씩 붙잡고 있다.
+  - en: 164 sessions have been idle in transaction for 47 minutes on average. Each began a unit of database work, never finished it, and still holds a connection.
+    ko: 세션 164개가 평균 47분째 idle in transaction 상태다. 저마다 데이터베이스 작업 단위(트랜잭션)를 시작해 놓고 끝내지 않은 채, 커넥션을 하나씩 붙잡고 있다.
   - en: Yesterday's deploy
     ko: 어제 배포
   - en: The last Payment API deploy went out 19 hours ago. Errors stayed flat until 02:04.
@@ -117,8 +117,8 @@ entries:
     ko: 결정 안 해요? API 재시작할게요. 손 놓고 있을 순 없어요.
   - en: Terminate the stale sessions
     ko: 오래된 세션 종료하기
-  - en: Takes two minutes · frees what holds the pool
-    ko: 2분 걸림 · 풀을 붙잡은 세션 정리
+  - en: Takes two minutes · frees the held connections
+    ko: 2분 걸림 · 붙잡힌 커넥션 해제
   - en: SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';
     ko: SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';
   - en: Connections are back. We freed what was actually holding the pool, not just the symptoms.

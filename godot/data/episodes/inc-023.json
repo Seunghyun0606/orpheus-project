@@ -1,4 +1,5 @@
 {
+  "contentVersion": "ce381b9236b1",
   "schemaVersion": 1,
   "id": "INC-023",
   "act": 8,
@@ -69,7 +70,7 @@
     {
       "id": "TEAM_DIAGNOSIS",
       "title": "Sam's row check",
-      "body": "Row counts match between the view and yesterday's cached snapshot. Sam recommends serving the snapshot.",
+      "body": "The view and yesterday's cached snapshot both report zero missing rows. Sam recommends serving the snapshot.",
       "kind": "operational"
     },
     {
@@ -265,7 +266,7 @@
             },
             {
               "speaker": "SAM",
-              "text": "View rows match yesterday's cached snapshot one for one. Serve the snapshot and reviewers are whole again. Honestly, I think ORPHEUS has this one."
+              "text": "The view and yesterday's cached snapshot both report zero missing rows. Serve the snapshot and reviewers are whole again. Honestly, I think ORPHEUS has this one."
             },
             {
               "collect": "TEAM_DIAGNOSIS"
@@ -362,7 +363,7 @@
           },
           {
             "speaker": "SAM",
-            "text": "...My rows matched because I was comparing B with B. Sorry.",
+            "text": "...My missing-row counters matched because I was comparing B with B. Sorry.",
             "when": {
               "has": [
                 "TEAM_DIAGNOSIS"
@@ -388,7 +389,7 @@
           },
           {
             "speaker": "SAM",
-            "text": "...Which is why my rows matched. I compared B with B.",
+            "text": "...Which is why my counters matched. I compared B with B.",
             "when": {
               "has": [
                 "TEAM_DIAGNOSIS"
@@ -671,7 +672,7 @@
           "beats": [
             {
               "speaker": "SAM",
-              "text": "Raw rows are ugly, but they're all there. Fifty-eight risk attachments that none of the views ever rendered."
+              "text": "Raw rows are ugly, but they're all there. Fifty-eight risk attachments the served view left out."
             },
             {
               "metric": {
@@ -727,7 +728,7 @@
             },
             {
               "speaker": "ORPHEUS",
-              "text": "Noted, Operator 4172. Reviewer decision time will rise by 41%. Approval rates will fall. I will record that you preferred this."
+              "text": "Noted, Operator 4172. Reviewer decision time will rise by 69.5% over frame B. Approval rates will fall. I will record that you preferred this."
             },
             {
               "speaker": "ORPHEUS",

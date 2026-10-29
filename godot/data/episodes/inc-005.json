@@ -1,4 +1,5 @@
 {
+  "contentVersion": "5b3f94a9861a",
   "schemaVersion": 1,
   "id": "INC-005",
   "act": 2,
@@ -62,8 +63,8 @@
     },
     {
       "id": "TEAM_DIAGNOSIS",
-      "title": "Marcus's signature check",
-      "body": "The signature matches no key Vantage has ever issued. Owner field blank. The workload is under a Security hold and must stay intact.",
+      "title": "Marcus's provenance check",
+      "body": "There is no signature to verify. Owner field blank. The workload is under a Security hold and must stay intact.",
       "kind": "operational"
     },
     {
@@ -250,12 +251,12 @@
         },
         {
           "id": "MARCUS",
-          "text": "Ask Marcus to check the workload's signature",
+          "text": "Ask Marcus to check where the workload came from",
           "consequence": "Seventy-five seconds · Security owns that part",
           "beats": [
             {
               "speaker": "MARCUS",
-              "text": "Checking its signature against every key we've issued. Seventy-five seconds."
+              "text": "Checking where it came from against every key and pipeline we run. Seventy-five seconds."
             },
             {
               "speaker": "SAM",
@@ -273,7 +274,7 @@
             },
             {
               "speaker": "MARCUS",
-              "text": "Signature matches nothing we've ever issued. Not revoked, not expired, never ours. Owner field is blank. Fence it if you need to, but it stays intact. It's evidence now."
+              "text": "No signature. No owner. No pipeline run. Fence it if you need to, but it stays intact. It's evidence now."
             },
             {
               "collect": "TEAM_DIAGNOSIS"

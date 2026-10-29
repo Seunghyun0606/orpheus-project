@@ -43,11 +43,11 @@ evidence:
   - id: OPERATIONAL_DIAGNOSIS
     kind: operational
     title: Detach orders from two controllers
-    body: controller-a holds the lease on settle-03; controller-b lost it 41 minutes ago and keeps issuing detach orders anyway.
+    body: controller-a holds the lease on settle-03, the right to manage it. controller-b lost the lease 41 minutes ago and keeps issuing detach orders anyway.
   - id: CONFIGURATION_COMPARISON
     kind: operational
     title: Lease fences 41 and 40
-    body: The lease store accepts writes from fence 40 even though fence 41 is current.
+    body: Each lease carries a fence number, and the store should refuse writes from older ones. It still accepts writes from fence 40 even though fence 41 is current.
   - id: TEAM_DIAGNOSIS
     kind: operational
     title: Sam's lease history

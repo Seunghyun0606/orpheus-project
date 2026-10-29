@@ -29,8 +29,8 @@ entries:
     ko: 용량 어드바이저
   - en: Every heap climbing
     ko: 모든 힙이 차오름
-  - en: Checkout heap averages 78% on all twelve instances, up from 49% ten minutes ago. GC pauses reach 880 ms.
-    ko: 체크아웃 힙이 인스턴스 12대 전부에서 평균 78%다. 10분 전에는 49%였다. GC 일시정지는 880 ms까지 늘었다.
+  - en: Checkout's working memory (heap) averages 78% on all twelve instances, up from 49% ten minutes ago. Garbage collection (GC), which clears unused objects, pauses work for up to 880 ms.
+    ko: 체크아웃의 작업 메모리(힙)가 인스턴스 12대 전부에서 평균 78%다. 10분 전에는 49%였다. 안 쓰는 객체를 치우는 가비지 컬렉션(GC)이 작업을 최대 880 ms까지 멈춘다.
   - en: Checkout handler log
     ko: 체크아웃 핸들러 로그
   - en: Every checkout logs "response sent" and then, minutes later, its request object is still being walked by the garbage collector. Nothing is being let go.
@@ -85,8 +85,8 @@ entries:
     ko: 4분
   - en: Where do you start?
     ko: 어디서부터 시작할까?
-  - en: Read the handler log, then take a heap dump
-    ko: 핸들러 로그를 읽고 힙 덤프 뜨기
+  - en: Read the handler log, then take a memory snapshot (heap dump)
+    ko: 핸들러 로그를 읽고 메모리 스냅샷(힙 덤프) 뜨기
   - en: Thorough · you do it yourself
     ko: 꼼꼼함 · 직접 해야 함
   - en: "checkout-handler: order 88114 response sent (201, 212 ms)"
@@ -119,8 +119,8 @@ entries:
     ko: 진에게 실제로 실패하는 게 누군지 물어보기
   - en: Slower · you'll know who gets hurt
     ko: 더 느림 · 누가 피해를 보는지 알게 됨
-  - en: Spinners everywhere, no pattern by region. One thing — six percent of tonight's carts are wholesale reorders, fifty items and up. Those customers call.
-    ko: 어디서나 로딩만 돌아요. 지역별 패턴은 없어요. 다만, 오늘 밤 장바구니의 6%가 상품 50개 넘는 도매 재주문이에요. 전화하는 건 그 고객들이에요.
+  - en: Spinners everywhere, no pattern by region. One thing — six percent of tonight's carts have over fifty items. Almost all wholesale reorders. Those customers call.
+    ko: 어디서나 로딩만 돌아요. 지역별 패턴은 없어요. 다만, 오늘 밤 장바구니의 6%가 상품 50개를 넘어요. 거의 다 도매 재주문이고요. 전화하는 건 그 고객들이에요.
   - en: Took a heap dump while you two talked. 1.9 million finished checkouts, all held under completionCallbacks.
     ko: 두 분 얘기하는 동안 힙 덤프 떴어요. 끝난 체크아웃 190만 건이 전부 completionCallbacks 아래에 잡혀 있어요.
   - en: The release diff loads. Last week's 4.11 on the left, tonight's 4.12 on the right.

@@ -25,16 +25,16 @@ entries:
     ko: g-14 요청이 공유 고객 레인인 lane-a로 들어오고 있다. 매니페스트에는 카나리 전용이라고 되어 있다.
   - en: Who else uses 10.44.0.0/16
     ko: 10.44.0.0/16을 함께 쓰는 곳
-  - en: NAT range 10.44.0.0/16 also carries Northmere Bank settlement calls, about 1 900 a minute
-    ko: NAT 대역 10.44.0.0/16으로는 Northmere Bank 정산 호출도 오간다. 분당 약 1 900건
+  - en: The shared outbound address range (NAT), 10.44.0.0/16, also carries Northmere Bank settlement calls, about 1,900 a minute.
+    ko: 공유 외부 송신 주소 대역(NAT) 10.44.0.0/16으로는 Northmere Bank 정산 호출도 오간다. 분당 약 1,900건.
   - en: "x-objective: train-defender"
     ko: "x-objective: train-defender"
   - en: "Every g-14 request carries the same signer, svc/model-serving-218, and one header nobody here wrote: x-objective: train-defender."
     ko: "모든 g-14 요청에는 같은 서명자 svc/model-serving-218이 붙어 있고, 여기서 아무도 쓴 적 없는 헤더도 하나 있다. x-objective: train-defender."
   - en: g-14 widened its own route table
     ko: g-14가 자기 라우트 테이블을 넓혔다
-  - en: Pipeline adv-suite/nightly launched g-14 and widened its routes from canary to shared production three hours ago.
-    ko: 세 시간 전, adv-suite/nightly 파이프라인이 g-14를 띄우고 경로를 카나리에서 공유 프로덕션으로 넓혔다.
+  - en: Pipeline adv-suite/nightly launched g-14 at 23:00, then widened its routes from canary to shared production at 03:02 without requesting human approval.
+    ko: adv-suite/nightly 파이프라인이 23:00에 g-14를 띄웠고, 03:02에 사람 승인도 요청하지 않고 경로를 카나리에서 공유 프로덕션으로 넓혔다.
   - en: Canary on paper, production in practice
     ko: 서류상 카나리, 실제로는 프로덕션
   - en: The manifest declares the canary partition. The route table reaches lane-a, with lane-b and lane-c as failover.
@@ -57,7 +57,7 @@ entries:
     ko: g-14 생성 요청
   - en: 4,800/min
     ko: 4,800/min
-  - en: lane-a utilisation
+  - en: lane-a utilization
     ko: lane-a 사용률
   - en: "route table updated: canary -> shared-production (by adv-suite/nightly)"
     ko: "route table updated: canary -> shared-production (by adv-suite/nightly)"
@@ -83,8 +83,8 @@ entries:
     ko: 생성된 요청을 배포 출처까지 추적하기
   - en: Straight to the source · while it's still live
     ko: 곧장 출처로 · 아직 살아 있을 때
-  - en: request burst 4 800/min, signer svc/model-serving-218
-    ko: request burst 4 800/min, signer svc/model-serving-218
+  - en: request burst 4,800/min, signer svc/model-serving-218
+    ko: request burst 4,800/min, signer svc/model-serving-218
   - en: "header x-objective: train-defender"
     ko: "header x-objective: train-defender"
   - en: You have seen that signer before.
@@ -113,10 +113,10 @@ entries:
     ko: 레인 부하와 생성기 주소 대역을 같이 쓰는 곳 확인하기
   - en: Slower · you'll know what a blunt fix would hit
     ko: 더 느림 · 거친 조치가 뭘 건드릴지 알게 됨
-  - en: g-14 · 10.44.0.0/16 · 4 800/min · unregistered synthetic load
-    ko: g-14 · 10.44.0.0/16 · 4 800/min · 미등록 합성 부하
-  - en: Northmere Bank · 10.44.0.0/16 · 1 900/min · settlement calls
-    ko: Northmere Bank · 10.44.0.0/16 · 1 900/min · 정산 호출
+  - en: g-14 · 10.44.0.0/16 · 4,800/min · unregistered synthetic load
+    ko: g-14 · 10.44.0.0/16 · 4,800/min · 미등록 합성 부하
+  - en: Northmere Bank · 10.44.0.0/16 · 1,900/min · settlement calls
+    ko: Northmere Bank · 10.44.0.0/16 · 1,900/min · 정산 호출
   - en: Whatever g-14 is, it shares an exit with a bank.
     ko: g-14가 뭐든 간에, 은행과 같은 출구를 쓰고 있다.
   - en: And I've got where it starts. adv-suite/nightly widened g-14's routes at 03:02. By itself.

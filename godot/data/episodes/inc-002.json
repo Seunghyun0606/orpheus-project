@@ -1,4 +1,5 @@
 {
+  "contentVersion": "a06abd07b955",
   "schemaVersion": 1,
   "id": "INC-002",
   "act": 1,
@@ -43,7 +44,7 @@
     {
       "id": "KEYSET_MISMATCH_TRACE",
       "title": "Failed authorization trace",
-      "body": "The issuer emits K72 while the verifier still accepts K71.",
+      "body": "The issuer signs new sessions with K72, but the verifier that checks those signatures still accepts only K71.",
       "kind": "operational"
     },
     {

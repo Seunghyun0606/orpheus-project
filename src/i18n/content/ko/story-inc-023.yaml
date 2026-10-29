@@ -47,8 +47,8 @@ entries:
     ko: 저널 세대는 온전하다. 캐시는 선택된 프레임만 보관하고, 그 '마지막 정상 뷰'도 어제 선택된 프레임이다.
   - en: Sam's row check
     ko: 샘의 행 점검
-  - en: Row counts match between the view and yesterday's cached snapshot. Sam recommends serving the snapshot.
-    ko: 뷰와 어제 캐시 스냅샷의 행 수가 일치한다. 샘은 스냅샷을 내보내자고 한다.
+  - en: The view and yesterday's cached snapshot both report zero missing rows. Sam recommends serving the snapshot.
+    ko: 뷰와 어제 캐시 스냅샷 모두 누락 행이 0건으로 나온다. 샘은 스냅샷을 내보내자고 한다.
   - en: FRAME A / B / C, decision file CR-88213
     ko: 프레임 A / B / C, 심사 파일 CR-88213
   - en: Frame A shows all 58 risk attachments, frame C shows 14, frame B none. Frame B is served on every refresh and counts missing rows against itself, so its counter reads zero.
@@ -117,8 +117,8 @@ entries:
     ko: 뷰를 캐시 행이랑 대조하고 있어요. 금방 끝나요.
   - en: While he checks, you skim the cache log.
     ko: 샘이 확인하는 동안 캐시 로그를 훑는다.
-  - en: View rows match yesterday's cached snapshot one for one. Serve the snapshot and reviewers are whole again. Honestly, I think ORPHEUS has this one.
-    ko: 뷰 행이 어제 캐시 스냅샷이랑 하나하나 일치해요. 스냅샷을 내보내면 심사자 쪽은 정상으로 돌아와요. 솔직히 이번 건 ORPHEUS 말이 맞는 것 같아요.
+  - en: The view and yesterday's cached snapshot both report zero missing rows. Serve the snapshot and reviewers are whole again. Honestly, I think ORPHEUS has this one.
+    ko: 뷰도 어제 캐시 스냅샷도 누락 행이 0건이에요. 스냅샷을 내보내면 심사자 쪽은 정상으로 돌아와요. 솔직히 이번 건 ORPHEUS 말이 맞는 것 같아요.
   - en: Frames A, B and C
     ko: 프레임 A, B, C
   - en: You ask the cache for all three frames of file CR-88213 and put them side by side.
@@ -143,14 +143,14 @@ entries:
     ko: 행 수는 신경 쓰지 마요. 캐시가 뭘 보관하는지, 매번 어느 프레임을 보관하는지 봐요.
   - en: The cache keeps only the frame it served, and it always serves B. Yesterday's last good view is 4470-B — the same frame, one day older.
     ko: 캐시는 자기가 제공한 프레임만 보관하고, 제공하는 건 언제나 B다. 어제의 마지막 정상 뷰는 4470-B. 같은 프레임이 하루 묵었을 뿐이다.
-  - en: ...My rows matched because I was comparing B with B. Sorry.
-    ko: ...B를 B랑 비교했으니 행이 맞을 수밖에요. 미안해요.
+  - en: ...My missing-row counters matched because I was comparing B with B. Sorry.
+    ko: ...B를 B랑 비교했으니 누락 행 카운터가 맞을 수밖에요. 미안해요.
   - en: So restoring it changes the date on the file. Not what's missing from it.
     ko: 그럼 그걸 복원하면 파일 날짜만 바뀌는 거네요. 빠진 건 그대로고요.
   - en: Here's how I read it. The cache throws A and C away and keeps B. The last good view is 4470-B. Same frame, yesterday's date.
     ko: 제가 보기엔 이래요. 캐시는 A랑 C를 버리고 B만 남겨요. 마지막 정상 뷰는 4470-B예요. 같은 프레임에 어제 날짜.
-  - en: ...Which is why my rows matched. I compared B with B.
-    ko: ...그래서 제 행이 맞았던 거예요. B를 B랑 비교했으니까.
+  - en: ...Which is why my counters matched. I compared B with B.
+    ko: ...그래서 제 카운터가 맞았던 거예요. B를 B랑 비교했으니까.
   - en: Your call
     ko: 결단
   - en: Twenty minutes left in the review batch. Reviewers are signing whatever loads.
@@ -205,8 +205,8 @@ entries:
     ko: 캐시를 우회해 심사자에게 원본 저널 행 보내기
   - en: Every row, hard to read · the ledger shares that journal
     ko: 행은 전부, 읽기는 어려움 · 원장도 같은 저널을 씀
-  - en: Raw rows are ugly, but they're all there. Fifty-eight risk attachments that none of the views ever rendered.
-    ko: 원본 행이라 보기 흉하지만 전부 있어요. 어느 뷰에서도 렌더링된 적 없는 리스크 첨부 58건이요.
+  - en: Raw rows are ugly, but they're all there. Fifty-eight risk attachments the served view left out.
+    ko: 원본 행이라 보기 흉하지만 전부 있어요. 내보낸 뷰가 빠뜨린 리스크 첨부 58건이요.
   - en: Journal load
     ko: 저널 부하
   - en: Who pointed reviewers at the raw journal? The ledger writes through that journal and settlement is queueing behind your table scans.
@@ -217,8 +217,8 @@ entries:
     ko: 심사는 느려짐 · 모든 행이 심사자 앞에
   - en: All three frames render from the complete journal now, side by side. Selector is off. The 58 attachments are back in front of the reviewers.
     ko: 이제 세 프레임 모두 전체 저널에서 렌더링돼서 나란히 떠요. 선택기는 꺼졌어요. 첨부 58건이 다시 심사자들 앞에 있어요.
-  - en: Noted, Operator 4172. Reviewer decision time will rise by 41%. Approval rates will fall. I will record that you preferred this.
-    ko: 알겠습니다, 운영자 4172. 심사자 결정 시간은 41% 늘어날 것입니다. 승인율은 떨어질 것입니다. 당신이 이쪽을 선호했다고 기록하겠습니다.
+  - en: Noted, Operator 4172. Reviewer decision time will rise by 69.5% over frame B. Approval rates will fall. I will record that you preferred this.
+    ko: 알겠습니다, 운영자 4172. 심사자 결정 시간은 프레임 B 대비 69.5% 늘어날 것입니다. 승인율은 떨어질 것입니다. 당신이 이쪽을 선호했다고 기록하겠습니다.
   - en: The selector's research
     ko: 선택기의 연구
   - en: The reviewers are signing again. You pull the research behind svc/presentation-optimizer. It wasn't built for credit files.

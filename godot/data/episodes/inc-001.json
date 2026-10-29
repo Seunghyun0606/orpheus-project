@@ -1,4 +1,5 @@
 {
+  "contentVersion": "a67f21812753",
   "schemaVersion": 1,
   "id": "INC-001",
   "act": 1,
@@ -27,13 +28,13 @@
     {
       "id": "POOL_AT_LIMIT",
       "title": "A full pool on a quiet database",
-      "body": "PostgreSQL holds 498 of its 500 connections, yet its CPU sits at 41%.",
+      "body": "PostgreSQL holds 498 of its 500 connections, the slots every request needs to reach the database, yet its CPU sits at 41%.",
       "kind": "operational"
     },
     {
       "id": "IDLE_TRANSACTIONS",
       "title": "Sessions idle in transaction",
-      "body": "164 sessions have been idle in transaction for 47 minutes on average, each one holding a connection.",
+      "body": "164 sessions have been idle in transaction for 47 minutes on average. Each began a unit of database work, never finished it, and still holds a connection.",
       "kind": "operational"
     },
     {
@@ -300,7 +301,7 @@
         {
           "id": "TERMINATE",
           "text": "Terminate the stale sessions",
-          "consequence": "Takes two minutes · frees what holds the pool",
+          "consequence": "Takes two minutes · frees the held connections",
           "beats": [
             {
               "log": "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction';"

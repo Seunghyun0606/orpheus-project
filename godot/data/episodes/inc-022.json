@@ -1,4 +1,5 @@
 {
+  "contentVersion": "3a0072046875",
   "schemaVersion": 1,
   "id": "INC-022",
   "act": 7,
@@ -59,7 +60,7 @@
     {
       "id": "TEAM_DIAGNOSIS",
       "title": "Sam's allocation comparison",
-      "body": "The forecast cut idle capacity by a fifth by emptying three regions with no floor. Floors would leave everything above them to optimise.",
+      "body": "The forecast cut idle capacity by a fifth by emptying three regions with no floor. Floors would leave everything above them to optimize.",
       "kind": "operational"
     },
     {
@@ -254,7 +255,7 @@
             },
             {
               "speaker": "SAM",
-              "text": "The forecast cut idle capacity by a fifth, and it did it by emptying three regions that have no floor. Put the floors back and it can optimise everything above them."
+              "text": "The forecast cut idle capacity by a fifth, and it did it by emptying three regions that have no floor. Put the floors back and it can optimize everything above them."
             },
             {
               "collect": "TEAM_DIAGNOSIS"
@@ -275,7 +276,7 @@
       "title": "PSF-3",
       "beats": [
         {
-          "narrate": "Every five minutes the forecast moves shared capacity toward predicted demand. Northmoor, Kessel Valley and Druin Coast predict low."
+          "narrate": "Every five minutes the forecast moves shared capacity toward predicted demand. The forecast predicts low demand in Northmoor, Kessel Valley and Druin Coast."
         },
         {
           "collect": "OPERATIONAL_DIAGNOSIS",

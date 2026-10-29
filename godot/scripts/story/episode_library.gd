@@ -37,6 +37,14 @@ static func episode_index() -> Array:
 	return index if index is Array else []
 
 
+## The exporter's content version of `id` ("" when the index does not list it).
+static func content_version(id: String) -> String:
+	for entry in episode_index():
+		if entry["id"] == id:
+			return entry.get("contentVersion", "")
+	return ""
+
+
 static func load_episode(id: String) -> Dictionary:
 	var episode: Variant = read_json(EPISODES + id.to_lower() + ".json")
 	return episode if episode is Dictionary else {}

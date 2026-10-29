@@ -1,4 +1,5 @@
 {
+  "contentVersion": "71664527818d",
   "schemaVersion": 1,
   "id": "INC-007",
   "act": 3,
@@ -47,7 +48,7 @@
     {
       "id": "TEAM_DIAGNOSIS",
       "title": "Alex's database report",
-      "body": "The session database connection pool is at 90 %, pinned by sessions that never close. Alex blames the database and wants to recycle it.",
+      "body": "The session database connection pool is at 90%, pinned by sessions that never close. Alex blames the database and wants to recycle it.",
       "kind": "operational"
     },
     {
@@ -227,7 +228,7 @@
             },
             {
               "speaker": "ALEX",
-              "text": "Told you. Connection pool is at 90 %, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this."
+              "text": "Told you. Connection pool is at 90%, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this."
             },
             {
               "metric": {
@@ -282,7 +283,7 @@
       "beats": [
         {
           "speaker": "ALEX",
-          "text": "Told you. Connection pool is at 90 %, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.",
+          "text": "Told you. Connection pool is at 90%, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.",
           "when": {
             "lacks": [
               "TEAM_DIAGNOSIS"

@@ -243,7 +243,7 @@ frame times additionally include layout/draw work. There is no imposed project p
   cache-bound regression test when implementing the fix.
 - Impact: slow session-lifetime cache growth across histories. Its measured size does **not**
   explain the earlier OS low-memory kill; no such causal claim is made.
-- Claude decision: **pending**.
+- Claude decision: **accepted** as proposed. `CastBook._heard` now holds one `{key, speakers}` entry per incident ID, keyed by a hash of what replay reads (`content`, entry carry, inputs), and replaces it when the record changes; resume timers and notices no longer make entries. The cache is bounded by the number of incidents, so no reset hook is needed. Regression test: `_heard_cache()` in `godot/tests/save_recovery.gd` (200 timer changes leave one entry; a changed record replaces it).
 
 ### PF-02 — P3 — Late-record settings changes synchronously rebuild the whole UI
 
@@ -265,7 +265,7 @@ frame times additionally include layout/draw work. There is no imposed project p
   separately. Reuse themes per text-size setting and cache rendered entry markup per language
   where evidence supports it; spread genuinely expensive rebuild work across frames if needed.
   Product changes remain for Claude to decide and implement.
-- Claude decision: **pending**.
+- Claude decision: **accepted** (2026-10-29), first two steps. Profiled in a QA copy (headless, completed first-choice campaign, INC-026 record, 8 changes each): theme creation ran on _every_ setting change, sliders and toggles included, and re-themed the whole tree. Now only language and text size touch the screen, and the theme for each size is built once and reused (`godot/scripts/ui/main.gd:1395`, `:1967`). Median call: language 68 → 40 ms, text size 62 → 40 ms, music slider 6.1 → 0.7 ms, CRT toggle 6.1 → 0.4 ms. What remains of a language/size change is re-rendering the record's feed (about 26–42 ms on a late record); spreading that over frames is deferred as disproportionate for a one-off settings action.
 
 ### PF-03 — P3 — Late People/status opening has a repeatable frame hitch
 
@@ -288,7 +288,7 @@ frame times additionally include layout/draw work. There is no imposed project p
 - Proposed fix: profile those sections separately; construct inactive tab contents lazily and
   consider bounded portrait/context reuse if the profile supports it. Verify both initial and
   repeated opens after any change. No UI changes were made in this brief.
-- Claude decision: **pending**.
+- Claude decision: **accepted** (2026-10-29). Profiled: loading the 14 portraits from disk was most of the People cost (about 3 ms each), and every open built all four pages. Pages are now built when their tab is first shown (`godot/scripts/ui/main.gd:1504`), and portrait textures are kept once loaded, one per cast member (`main.gd:1732`). Same QA probe, 20 opens each: Status tab 101 → 15 ms median; People 112 → 24 ms median (68 ms on the very first open, when the portraits load). Cast context lookup itself measured about 2 ms and was left alone.
 
 ## Verification and artifact inventory
 

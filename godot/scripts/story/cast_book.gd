@@ -14,7 +14,8 @@ const CAST := "res://data/cast.json"
 
 static var _characters: Array = []
 static var _positions := {}
-## Speakers heard in a finished incident, keyed by its record.
+## Speakers heard in a finished incident: {id: {"key", "speakers"}}, one entry
+## per incident, replaced when its record changes.
 static var _heard := {}
 
 
@@ -46,10 +47,14 @@ static func _heard_in(progress: Dictionary, id: String) -> Dictionary:
 	var record: Variant = progress["records"].get(id)
 	if not record is Dictionary:
 		return {}
-	var key := "%s:%d" % [id, JSON.stringify(record).hash()]
-	if not _heard.has(key):
-		_heard[key] = _speakers_in(Progress.replay(Library.load_episode(id), record)["feed"])
-	return _heard[key]
+	# Only what replay reads: a resume timer or notice must not make a new entry.
+	var key := JSON.stringify([record.get("content", ""), record["carry"], record["inputs"]]).hash()
+	var cached: Variant = _heard.get(id)
+	if not cached is Dictionary or cached["key"] != key:
+		var episode := Library.load_episode(id)
+		cached = {"key": key, "speakers": _speakers_in(Progress.replay(episode, record)["feed"])}
+		_heard[id] = cached
+	return cached["speakers"]
 
 
 ## What the player knows at `episode_id` in `state` (live or a record).

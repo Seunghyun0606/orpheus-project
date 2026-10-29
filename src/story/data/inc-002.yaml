@@ -40,7 +40,7 @@ evidence:
   - id: KEYSET_MISMATCH_TRACE
     kind: operational
     title: Failed authorization trace
-    body: The issuer emits K72 while the verifier still accepts K71.
+    body: The issuer signs new sessions with K72, but the verifier that checks those signatures still accepts only K71.
   - id: SAM_KEYSET_COMPARISON
     kind: operational
     title: Platform key-set comparison

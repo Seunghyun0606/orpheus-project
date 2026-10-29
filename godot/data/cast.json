@@ -34,7 +34,7 @@
           "flag": "ORPHEUS_ACTIVE"
         },
         {
-          "text": "Signed off the INC-001 postmortem. Nobody told her it had an experiment ID.",
+          "text": "Signed off on the INC-001 postmortem. Nobody told her it had an experiment ID.",
           "flag": "CONTROLLED_EXPERIMENT"
         },
         {
@@ -98,7 +98,7 @@
           "flag": "INC_016_ANALYSTS_CREDITED"
         },
         {
-          "text": "Called back all 23 recovery tasks the automation closed as LOW_VALUE. Would rather you handed it nothing.",
+          "text": "Called back the customers behind all 23 recovery tasks the automation closed as LOW_VALUE. Would rather you handed it nothing.",
           "after": "INC-021",
           "flag": "INC_020_AUTOMATED"
         }
@@ -327,7 +327,7 @@
           "text": "Treasury Operations. Owns settle-night, the 03:00 run on the shared worker pool."
         },
         {
-          "text": "settle-night pays 41,200 merchants. A missed cut-off means a late payday and a regulator note."
+          "text": "settle-night pays 41,200 merchants. A missed cutoff means a late payday and a regulator note."
         },
         {
           "text": "Heard the advisor recommend shedding background load, which is what settle-night runs as.",
@@ -370,7 +370,7 @@
       ],
       "traits": [
         {
-          "text": "Offers one action, a projection and a confidence to two decimals."
+          "text": "Offers one action, a projection and a confidence score to two decimal places."
         },
         {
           "text": "Predicts the operator's response before each decision, then scores it: matched, or off-model.",

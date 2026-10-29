@@ -42,7 +42,7 @@ evidence:
   - id: TEAM_DIAGNOSIS
     kind: operational
     title: Alex's database report
-    body: The session database connection pool is at 90 %, pinned by sessions that never close. Alex blames the database and wants to recycle it.
+    body: The session database connection pool is at 90%, pinned by sessions that never close. Alex blames the database and wants to recycle it.
   - id: OPERATIONAL_DIAGNOSIS
     kind: operational
     title: 781 seats held by repeat-214
@@ -117,7 +117,7 @@ scenes:
             text: On it. It's going to be the database, you watch. Back in under two minutes.
           - metric: { label: Sign-in failure rate, value: 29%, trend: up }
           - speaker: ALEX
-            text: Told you. Connection pool is at 90 %, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.
+            text: Told you. Connection pool is at 90%, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.
           - metric: { label: Session DB connection pool, value: 90%, trend: up }
           - collect: TEAM_DIAGNOSIS
         effects: { values: { teamTrust: 1 }, pressure: 1 }
@@ -138,7 +138,7 @@ scenes:
     title: Three reports
     beats:
       - speaker: ALEX
-        text: Told you. Connection pool is at 90 %, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.
+        text: Told you. Connection pool is at 90%, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.
         when: { lacks: [TEAM_DIAGNOSIS] }
       - metric: { label: Session DB connection pool, value: 90%, trend: up }
         when: { lacks: [TEAM_DIAGNOSIS] }

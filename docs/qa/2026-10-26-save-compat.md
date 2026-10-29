@@ -34,7 +34,7 @@ SC-04's deliberately stale choice reference and SC-07's dangling link are defens
 
 Reproduce every case with `npm.cmd run godot:saves -- --verbose` on Windows, or `npm run godot:saves -- --verbose` elsewhere, with a Godot binary available to the helper. Each `SC-xx` label is printed by the test. Test anchors below are in `godot/tests/save_compat.gd` and name the function plus the case's mutation; the corresponding SC label locates the exact assertions.
 
-For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carry remains byte-for-value equivalent after load/normalization, the finished marker survives, and the next incident starts with the old values/alignment/flags. Record replay never reconciles that carry. “Expected” below is the proposed player-safe behavior, not a previously approved product requirement. Claude's accept/defer/reject decision is pending for each finding. Compatible controls are explicitly marked as such.
+For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carry remains byte-for-value equivalent after load/normalization, the finished marker survives, and the next incident starts with the old values/alignment/flags. Record replay never reconciles that carry. “Expected” below is the proposed player-safe behavior, not a previously approved product requirement. Claude's decision is recorded under each case. Compatible controls are explicitly marked as such.
 
 ### SC-01 — Remove an option
 
@@ -43,6 +43,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Resume current at a disclosed recovery point; retain the historical finished record.
 - **Actual:** Both runs stop at `route` with one retained input. Current can select `OTHER`, and that replacement survives another replay. Finished record also loses its suffix; saving persists the truncation. The real record screen shows a summary and next/back actions, with no way to make the missing historical choice.
 - **Suggestion:** Permit current-prefix recovery with a notice; replay records without mutation and use historical snapshots.
+- **Claude decision:** **accepted**, with restart instead of prefix recovery. The run keeps its episode's `contentVersion`; on a changed episode with no declared migration the current run starts the incident again from its entry carry and `Progress.take_notice` returns `restarted`. Replaying old inputs into changed content is what misplaces choices (SC-06) and rescores outcomes (SC-11), so the incident's entry is the only safe checkpoint. Records are replayed read-only and never truncated; `Progress.check` reports `changed`. Test: `_options()`.
 
 ### SC-02 — Rename an option
 
@@ -51,6 +52,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** An explicit rename map preserves the choice and record.
 - **Actual:** Identical to removal: both logs truncate to one input, despite a semantically equivalent replacement. Choosing `RENAMED` resumes current safely.
 - **Suggestion:** Versioned, scene-scoped option maps for true renames; otherwise use SC-01 recovery.
+- **Claude decision:** **accepted**. `Progress.MIGRATIONS` maps option IDs per (current) scene from one content version to the next; the run is carried over only if every input then replays, and the record replays through the same map. Without a declared migration, the SC-01 rule applies. Test: `_options()`.
 
 ### SC-03 — Remove a scene and repair incoming links
 
@@ -59,6 +61,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** An explicit migration or recovery decision, with historical record preserved.
 - **Actual:** The saved choice meets a deduction, so both runs stop at `infer` with one input. Current has a real scene to continue; finished history is truncated and shown as a summary.
 - **Suggestion:** Remove the obsolete input only through a reviewed migration; disclose any lost effects or require restart from an approved checkpoint.
+- **Claude decision:** **accepted**: restart (SC-01 rule). A migration that drops an input is **deferred** until a released change needs one.
 
 ### SC-04 — Rename a scene
 
@@ -67,6 +70,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** A pure rename preserves outcomes and text; invalid references fail authoring validation.
 - **Actual:** Fully repaired rename is compatible: current reaches `close`, record reaches END, and values are unchanged. History now uses `route-v2`. With the stale condition, replay accepts every input but silently omits “Route recognized.” Current logs do not contain scene IDs, so they do not require a scene rename map today.
 - **Suggestion:** Keep the existing reference-validation gate. Future scene-aware input logs need a scene map for pure renames. Treat the stale-reference observation as defense in depth, not a validation-gate failure.
+- **Claude decision:** **accepted**. Inputs name no scene, so a pure rename needs only a declared-compatible migration (an entry with no maps); without one it restarts. The stale-reference subcase stays with the validator (`src/story/validate.ts`); no runtime change. Test: `_scenes()`.
 
 ### SC-05 — Insert a briefing scene
 
@@ -75,6 +79,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Explicit checkpoint migration/recovery; preserve the completed transcript.
 - **Actual:** The old choice cannot continue the new briefing. Both logs truncate to one input at the insertion; current can continue normally, but the finished record is reduced to the opening.
 - **Suggestion:** Stop at the insertion and ask the current player to continue; never truncate finished history. Auto-inserting a `continue` needs a reviewed migration because briefing effects may have changed.
+- **Claude decision:** **accepted**: restart (SC-01 rule); no automatic `continue` is inserted.
 
 ### SC-06 — Insert a choice that accepts the old option ID
 
@@ -83,6 +88,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Detect that the input belongs to a different scene before applying it.
 - **Actual:** Both replays silently apply the player's old `route.KEEP` input to the inserted scene. The subsequent deduction then fails at the original route. Both logs retain two inputs, current contains `choices = {inserted: KEEP}`, and evidence is 50 instead of the original 2. Stopping on the later error does not undo the misapplied choice.
 - **Suggestion:** Store/verify the originating scene on every input, plus a content version for legacy logs. Refuse cross-scene replay until explicitly migrated.
+- **Claude decision:** **accepted** through the content version: changed content never takes old inputs best-effort, so an input cannot reach another scene. Per-input `sceneId` is **rejected** as unnecessary: same-version inputs cannot move between scenes, and migrations are reviewed. Test: `_scenes()`.
 
 ### SC-07 — Remove a scene without repairing its incoming link
 
@@ -91,6 +97,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Report an incompatible/missing scene and retain current progress for recovery; only explicit END completes an incident.
 - **Actual:** Replay stops with non-null `sceneId = route`, one input, and an empty `current_scene`. The UI treats that empty scene as completion, calls `Progress.finish`, clears current, archives the truncated log, and shows a summary. Finished record replay also returns the missing scene; old `after` remains intact until the current path is falsely completed.
 - **Suggestion:** Distinguish END from unresolved scene IDs before summary/finish. Keep the existing authoring reference gate; add a runtime invalid-content result rather than relying on an empty dictionary.
+- **Claude decision:** **accepted**, data side. Replay stops before an input that leads to a scene the episode lacks (notice `stopped` for the current run), and `Progress.finish` refuses a state that has not reached END, so the run stays in progress. UI part (main.gd, not in this change): show a content error instead of the summary when `sceneId` is set but the scene is missing. The validator remains the gate. Tests: `_scenes()`, `_ui_consequences()`.
 
 ### SC-08 — Timed choice becomes plain; saved input was a timeout
 
@@ -99,6 +106,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Preserve the historical default outcome through an explicit migration or offer current recovery.
 - **Actual:** Both replays stop at `decide`, retain three inputs, and discard the timeout and suffix. Current can make a plain choice. Finished record no longer contains its original timed outcome.
 - **Suggestion:** Migrate a historical timeout to its **old** default option only when equivalent; store resolved timeout option and timeout status for future saves. Otherwise ask about current recovery and keep the finished snapshot.
+- **Claude decision:** **accepted**: restart (SC-01 rule). A migration that cannot replay the timeout also restarts (tested). Storing the resolved timeout option is **deferred** until a migration needs it.
 
 ### SC-09 — Timed choice becomes plain; input was explicit or decision was pending
 
@@ -107,6 +115,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Keep the explicit choice; pending choice is untimed.
 - **Actual:** Explicit choices replay to the original endpoints. Pending current remains at `decide`. `Progress.replay` leaves stale timer metadata on the run, but the actual UI has no timer bar and a negative `timer_left`. No observed gameplay penalty.
 - **Suggestion:** Drop obsolete timer metadata during version migration; no restart needed for this exact change if option meanings/effects are unchanged.
+- **Claude decision:** **accepted**, conservatively: without a migration the run restarts; a declared-compatible migration keeps explicit choices. Time left is dropped whenever the resumed scene has no timer. Test: `_timers()`.
 
 ### SC-10 — Plain choice becomes timed
 
@@ -115,6 +124,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Preserve completed decisions; obtain a current-run policy decision before adding a deadline the player did not leave with.
 - **Actual:** Replay detects no mismatch, and completed explicit choices still end normally. A pending decision displays a new full 30-second clock in the actual UI.
 - **Suggestion:** Grandfather that pending scene as untimed, or offer a disclosed fresh timer/restart. Bind timer metadata to scene ID and content version, not only input count.
+- **Claude decision:** **accepted**: restart, so no deadline appears mid-decision. Under a declared-compatible migration a pending decision gets a fresh full clock, which is acceptable as a disclosed fresh timer.
 
 ### SC-11 — Same-size deduction solution changes, with retries remaining
 
@@ -123,6 +133,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Preserve the old result, or disclose that the deduction requires a new attempt without rewriting finished history.
 - **Actual:** The formerly correct picks become an accepted failed first attempt. The later choice is rejected, so both ordinary logs retain three inputs and stop at `infer` with one attempt used and no curiosity reward. If current ends at the deduction input, no input error occurs at all; its old pending-decision timer metadata even remains. The feed now reports `correct: false`.
 - **Suggestion:** Treat solution/attempt changes as semantic incompatibilities. Never infer compatibility merely from successful `apply_input`; ask current players to redo from a safe checkpoint or use an explicitly reviewed migration.
+- **Claude decision:** **accepted**: semantic change, restart (SC-01 rule). Rescored picks are never committed; the record is flagged `changed` and `after` keeps the played outcome. Test: `_deductions()`.
 
 ### SC-12 — Same-size solution changes and only one attempt remains
 
@@ -131,6 +142,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** No silent change to a previously successful deduction or finished outcome.
 - **Actual:** Every record input is accepted, record reaches END with `solved.infer = false`, and collateral damage becomes 5. No truncation or recovery warning identifies the changed outcome; `after` still reflects the old success.
 - **Suggestion:** Version deduction semantics; snapshots preserve completed outcomes. Restart/retry current only with the player's explicit choice.
+- **Claude decision:** **accepted**, as SC-11. The best-effort record would say "missed"; it is flagged `changed`, and the UI is to show `after` numbers for such a record (UI change, not in this change).
 
 ### SC-13 — Deduction solution changes cardinality
 
@@ -139,6 +151,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Disclosed current recovery; completed outcome retained.
 - **Actual:** Old two-item picks are rejected; both logs retain two inputs at `infer`. This is a playable current checkpoint but an incomplete finished record.
 - **Suggestion:** Use the same semantic-version policy as SC-11/12, even though this variant happens to produce an input error.
+- **Claude decision:** **accepted**, as SC-11.
 
 ### SC-14 — Rename an evidence ID
 
@@ -147,6 +160,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** A pure evidence rename preserves the player's deduction using a reviewed map.
 - **Actual:** Board collects `[A_V2, B, C]`; saved picks still cite uncollected `A`. Both logs truncate to two inputs at `infer`. Current can submit `[A_V2, B]` successfully. Evidence is episode-local, so the historical `after` carry is unaffected.
 - **Suggestion:** Migrate IDs inside saved deduction picks; future snapshots must retain evidence text, not just IDs. Require an explicit map if semantics changed along with the name.
+- **Claude decision:** **accepted**. `MIGRATIONS` maps evidence IDs inside saved picks (tested). Evidence text snapshots are **deferred** with record snapshots.
 
 ### SC-15 — Rename a flag
 
@@ -155,6 +169,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Apply one consistent rename across current/record entry carries and campaign carries, or declare incompatibility.
 - **Actual:** Current/record recomputation produces `NEW`; old `after` retains `OLD`. Entry carries containing `OLD` are copied unchanged, so the renamed gate does not open in either replay or the next incident. Unknown flags are retained without migration.
 - **Suggestion:** Map flags in every carry location, including all `after` entries and saved run entry carries, with an explicit conflict rule. Do not replay all completed episodes to derive replacement carries.
+- **Claude decision:** **accepted in part**. Flags are part of the save contract: avoid renaming them after release. A needed rename is a save-version step using `Progress.rename_flags`, which rewrites every `after` and entry carry with one rule (a carry that already has the new name keeps its value). It is not automatic. Test: `_flags()`.
 
 ### SC-16 — Remove a flag
 
@@ -163,6 +178,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Explicitly retire the old flag or assign a documented replacement/default so historical progress has defined semantics.
 - **Actual:** Recomputed current/record no longer produces `OLD`, while old entry carries and `after` retain it. `NEW` is absent everywhere, so its new conditional text is omitted. This fixture demonstrates a missed conditional beat, not a proven production deadlock.
 - **Suggestion:** Allow obsolete flags to remain inert if nothing reads them; otherwise migrate each carry consistently and define the replacement value. Never silently erase unrelated flags.
+- **Claude decision:** **accepted**: a retired flag stays in carries, inert, and is never erased. A downstream gate that needs a replacement value goes through a rename step (SC-15).
 
 ### SC-17 — Insert an incident in the middle of the campaign
 
@@ -171,6 +187,7 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** A declared campaign-order migration preserves access and carry continuity, or asks the player how to include the new incident.
 - **Actual:** The insertion is unlocked, but INC-002 becomes locked because its new predecessor lacks `after`. This applies even when INC-002 is already finished; the incident-list button uses that unlock predicate. A saved INC-002 current still exists but is inaccessible through the normal list. Starting the insertion through `begin` replaces that single current slot; after completing it, INC-002 starts with the new carry and **an empty input log**, losing its saved partial progress. Save/load preserves that loss. Separately, `carry_for(INC-002)` before insertion completion returns empty, while calling `begin` directly for its existing current retains the old entry carry. A caller that preserves that current while writing the new predecessor's finished outcome instead skips the inserted effects: `begin` still returns the old carry. In the more advanced campaign, INC-003 stays unlocked and receives unchanged `after[INC-002]`, leaving the insertion gap. Both old finished records themselves remain replayable.
 - **Suggestion:** Store campaign order/version, grandfather completed/current access, and offer the insertion as an optional branch or explicit campaign restart. Never splice new effects into an already started incident without a declared reconciliation rule.
+- **Claude decision:** **accepted** (P1, fixed). An incident the player has started or finished stays open. An incident inserted before a point already reached is _passed_ (`Progress.is_passed`: closed, not played in that campaign), and `carry_for` takes the last finished incident, so carries skip the gap and no current run is replaced. Inserted at the frontier, it is played next and carries on. A stored campaign order and a campaign content version are **rejected**; the rule is to add incidents at the end. UI note: a passed incident shows as locked; a "new campaign" label would read better. Test: `_campaign_order()`.
 
 ### SC-18 — Change values/alignment effects
 
@@ -179,6 +196,17 @@ For SC-01–SC-16 and SC-18, the common `after` result is: the old finished carr
 - **Expected:** Preserve finished numerical history; explicitly choose whether current is rebalanced or restarted.
 - **Actual:** Current and record silently recompute evidence 20/corporate −4. Record still accepts all five inputs. Historical `after` and next entry retain evidence 2/corporate 1. The actual record UI also shows recomputed evidence 20 while the campaign carry is 2.
 - **Suggestion:** A semantic content version must cover effects. Preserve finished result/carry snapshots; apply current rebalance only through a reviewed migration or explicit player choice.
+- **Claude decision:** **accepted**: restart (SC-01 rule). `after` keeps the played numbers and the next incident starts from it. The record is flagged `changed`; UI change: show `after` numbers, not the replayed state, for such a record.
+
+## Claude decision: save version policy
+
+Adopted, implemented and tested on `story-pivot` (`godot/scripts/story/progress.gd`, `scripts/story/export-godot.mjs`; spec: `specs/architecture/story-episode-format.md`, "Save versions"). `godot/tests/save_compat.gd` now asserts the policy instead of the behaviour characterized below.
+
+- **Accepted:** a per-run content version from a deterministic export hash (`contentVersion`) that leaves out wording, so text and translation edits keep saves as they are; a save-file `version` with a step-by-step upgrade and an unchanged copy of an older or newer file (`user://campaign.v<N>.json`); unversioned saves read as unknown content, not current content; a migration registry (`Progress.MIGRATIONS`: option and evidence maps, or declared compatible), accepted only when every input replays; record replay that never changes the record; a structured replay result (`Progress.check`: `state`, `inputs`, `complete`, `status`); only END finishes an incident; `after` never recomputed; started and finished incidents always open.
+- **Changed:** a current run on changed content with no migration **restarts from its entry carry**, with a notice, instead of a best-effort prefix recovery. Prefix recovery on changed content cannot detect misplaced inputs or rescored outcomes without per-input context.
+- **Rejected:** a separate campaign content version and stored campaign order (replaced by kept access, passed insertions and "add incidents at the end"); per-input scene origin and resolved context (not needed once changed content never replays best-effort).
+- **Deferred:** finished-record text and result snapshots. A record re-renders with today's text; when its content changed it is flagged, and its numbers come from `after`. Also deferred: migrations that drop inputs, and stored resolved timeout options.
+- **UI work left** (main.gd and ui_text.gd belong to the UI owner): tell the player `Progress.take_notice` after `begin` (`restarted`, `stopped`); mark a record whose `Progress.check` is not `same` and complete, and show its `after` numbers; show a content error rather than the summary on a missing scene; label passed incidents.
 
 ## Proposed policy for Claude
 
@@ -294,6 +322,6 @@ compatible_controls: [SC-04_pure_rename, SC-09, SC-10_completed_explicit_choice]
 invalid_content_defensive_probes: [SC-04_stale_reference, SC-07]
 policy_implemented: false
 triage_owner: Claude
-triage_status: pending
+triage_status: decided
 product_acceptance: not_granted_by_this_report
 ```

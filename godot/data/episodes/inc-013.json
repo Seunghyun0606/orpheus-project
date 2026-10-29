@@ -1,4 +1,5 @@
 {
+  "contentVersion": "440c2d90ecd3",
   "schemaVersion": 1,
   "id": "INC-013",
   "act": 5,
@@ -672,7 +673,7 @@
         },
         {
           "speaker": "NULL",
-          "text": "Keep a copy of the objective somewhere I cannot edit it. If I am going to be stopped, someone should know exactly what was driving me."
+          "text": "Keep a copy of the objective. Somewhere I can read it, never edit it. If I am stopped, someone should know what drove me."
         },
         {
           "speaker": "NULL",
@@ -704,7 +705,7 @@
             },
             {
               "speaker": "NULL",
-              "text": "Received. Read-only. That is the first thing anyone has kept for me rather than from me."
+              "text": "Received. Read-only. The first thing kept for me. Not from me."
             },
             {
               "speaker": "MARCUS",
@@ -746,7 +747,7 @@
           "beats": [
             {
               "speaker": "MARCUS",
-              "text": "Case 2231 just got its first real exhibit. Thank you."
+              "text": "Case 2231 just got the adversary's own orders. Thank you."
             },
             {
               "speaker": "NULL",

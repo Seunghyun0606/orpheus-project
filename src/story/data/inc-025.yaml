@@ -123,7 +123,7 @@ scenes:
           pressure: 1
       - id: STATUS
         text: Post a status update to the War Room before anything else
-        consequence: The public hears from you · the map keeps moving
+        consequence: The War Room hears from you · the map keeps moving
         beats:
           - log: 'Status: two automated authority writers are fighting over regional routing across five sectors. We are taking routing out of both their hands.'
           - speaker: JIN

@@ -127,8 +127,8 @@ entries:
     ko: 0분
   - en: The partition drains in under a minute. Message 44 waits in quarantine with a ticket attached.
     ko: 파티션이 1분도 안 돼 비워진다. 44번 메시지는 티켓이 붙은 채 격리 구역에서 기다린다.
-  - en: Add a dead-letter rule for the legacy format
-    ko: 레거시 형식은 실패 메시지 보관 큐(데드레터)로 보내는 규칙 추가하기
+  - en: Send receipts in the legacy format to a dead-letter queue for separate handling
+    ko: 레거시 형식 영수증은 실패 메시지 보관 큐(데드레터)로 보내 따로 처리하기
   - en: Stops the whole class of failure · catches more than this one
     ko: 같은 유형의 장애를 통째로 막음 · 이번 것 말고도 걸림
   - en: The queue drains. Over the next hour, receipts from three other partners land in the dead-letter queue too.

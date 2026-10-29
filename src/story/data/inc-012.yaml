@@ -62,7 +62,7 @@ evidence:
   - id: REBUILT_NIGHT
     kind: story
     title: Your first night, rebuilt
-    body: The job has rebuilt 18 of 96 minutes of INC-001 so far — operator keystrokes, pager acknowledgements, chat. All of it yours.
+    body: The job has rebuilt 18 of 96 minutes of INC-001 so far — operator keystrokes, pager acknowledgments, chat. All of it yours.
   - id: RECORD_CONTROLLED_EXPERIMENT
     kind: story
     guaranteed: true
@@ -133,7 +133,7 @@ scenes:
         beats:
           - log: '02:59:58 lineage-audit-0931 · rebuilt 18 of 96 minutes: operator keystrokes, pager acks, chat'
           - log: '02:14:09 op-4172 · pager ack · SEV1 Payment API'
-          - narrate: Your own acknowledgement, eleven seconds after the page. You remember fumbling for the phone. The job has it to the millisecond.
+          - narrate: Your own acknowledgment, eleven seconds after the page. You remember fumbling for the phone. The job has it to the millisecond.
           - collect: REBUILT_NIGHT
           - speaker: MAYA
             text: Creepy, and also eating our pool. 212 reservations, all that job's. The cutover runbook says it only converges under forty.

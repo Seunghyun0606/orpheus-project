@@ -107,8 +107,8 @@ entries:
     ko: 컨트롤러 둘, 세대 둘. 엣지는 마지막에 도착한 쪽을 믿어요.
   - en: Two truths
     ko: 두 개의 진실
-  - en: Clients are retrying into the loop. EU failures just went past 38 %.
-    ko: 클라이언트가 재시도하면서 계속 루프로 들어가요. EU 실패율이 방금 38 %를 넘었어요.
+  - en: Clients are retrying into the loop. EU failures just went past 38%.
+    ko: 클라이언트가 재시도하면서 계속 루프로 들어가요. EU 실패율이 방금 38%를 넘었어요.
   - en: I traced a request while you looked. edge-a hands it to edge-b on r81, edge-b hands it back on r82. Round and round.
     ko: 보시는 동안 요청 하나 추적했어요. edge-a는 r81대로 edge-b에 넘기고, edge-b는 r82대로 도로 넘겨요. 계속 뱅뱅 돌아요.
   - en: And the generations. controller-b is publishing r82 from a draft. No commit record. The edges don't check.
@@ -143,8 +143,8 @@ entries:
     ko: 2분 동안 초록불. 그러다 미국 쪽 그래프가 오르기 시작한다.
   - en: us-east load
     ko: us-east 부하
-  - en: us-east is at 100 %. The restart loaded r79, so every EU request is crossing the Atlantic. And controller-b just pushed r82 again on top of it.
-    ko: us-east가 100 %예요. 재시작하면서 r79가 로드돼서 EU 요청이 전부 대서양을 건너고 있어요. 게다가 controller-b가 그 위에 r82를 또 밀어 넣었어요.
+  - en: us-east is at 100%. The restart loaded r79, so every EU request is crossing the Atlantic. And controller-b just pushed r82 again on top of it.
+    ko: us-east가 100%예요. 재시작하면서 r79가 로드돼서 EU 요청이 전부 대서양을 건너고 있어요. 게다가 controller-b가 그 위에 r82를 또 밀어 넣었어요.
   - en: I said don't restart. Fencing to r81 now.
     ko: 재시작하지 말랬잖아요. 지금 r81로 펜스 칠게요.
   - en: Fencing the edges to r81. Nothing else holds.

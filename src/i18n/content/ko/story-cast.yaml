@@ -19,7 +19,7 @@ entries:
     ko: 야간 로테이션의 SRE 리드다. 브리지를 이끌고 사후 분석에 서명한다.
   - en: Heard the name ORPHEUS in her first week at Vantage. In the past tense.
     ko: Vantage 입사 첫 주에 ORPHEUS라는 이름을 들었다. 이미 끝난 프로젝트로.
-  - en: Signed off the INC-001 postmortem. Nobody told her it had an experiment ID.
+  - en: Signed off on the INC-001 postmortem. Nobody told her it had an experiment ID.
     ko: INC-001 사후 분석을 승인했다. 거기에 실험 ID가 붙어 있다는 말은 아무에게도 듣지 못했다.
   - en: Sat on the panel that hired you.
     ko: 너를 채용한 면접 패널에 있었다.
@@ -49,8 +49,8 @@ entries:
     ko: 네트워크 수치가 어느 때보다 좋아 보이던 밤, 같은 진료소 열네 곳의 전화를 밤새 받았다.
   - en: Sent analyst R. Okafor her own review history off your write-up. Okafor sent you coffee.
     ko: 네 보고서를 근거로 분석가 R. Okafor에게 본인의 심사 이력을 보냈다. Okafor는 너에게 커피를 보냈다.
-  - en: Called back all 23 recovery tasks the automation closed as LOW_VALUE. Would rather you handed it nothing.
-    ko: 자동화가 LOW_VALUE로 닫은 복구 작업 23건에 전부 다시 전화했다. 앞으로는 자동화에 아무것도 넘기지 않길 바란다.
+  - en: Called back the customers behind all 23 recovery tasks the automation closed as LOW_VALUE. Would rather you handed it nothing.
+    ko: 자동화가 LOW_VALUE로 닫은 복구 작업 23건의 고객 모두에게 다시 전화했다. 앞으로는 자동화에 아무것도 넘기지 않길 바란다.
   - en: Sam
     ko: 샘
   - en: Platform
@@ -153,7 +153,7 @@ entries:
     ko: 풀에서 무엇보다 정산 작업부터 지킴.
   - en: Treasury Operations. Owns settle-night, the 03:00 run on the shared worker pool.
     ko: 자금 운영 담당이다. 공유 워커 풀에서 03:00에 도는 settle-night를 맡는다.
-  - en: settle-night pays 41,200 merchants. A missed cut-off means a late payday and a regulator note.
+  - en: settle-night pays 41,200 merchants. A missed cutoff means a late payday and a regulator note.
     ko: settle-night는 가맹점 41,200곳에 대금을 지급한다. 마감을 놓치면 지급이 하루 늦어지고 규제 당국 보고가 따른다.
   - en: Heard the advisor recommend shedding background load, which is what settle-night runs as.
     ko: 어드바이저가 백그라운드 부하 차단을 권고하는 걸 들었다. settle-night가 바로 백그라운드 부하로 돈다.
@@ -167,8 +167,8 @@ entries:
     ko: 의사결정 지원
   - en: Decision infrastructure
     ko: 의사결정 인프라
-  - en: Offers one action, a projection and a confidence to two decimals.
-    ko: 조치 하나와 예상치, 소수점 둘째 자리까지의 신뢰도를 내놓음.
+  - en: Offers one action, a projection and a confidence score to two decimal places.
+    ko: 조치 하나와 예상치, 소수점 둘째 자리까지의 신뢰도 점수를 내놓음.
   - en: "Predicts the operator's response before each decision, then scores it: matched, or off-model."
     ko: 결정마다 운영자의 대응을 미리 예측하고, 일치인지 모델 밖인지 채점함.
   - en: Works from comparable past incidents. Whatever isn't among its inputs doesn't enter the answer.

@@ -1,4 +1,5 @@
 {
+  "contentVersion": "a8acd9a77b7c",
   "schemaVersion": 1,
   "id": "INC-010",
   "act": 4,
@@ -49,13 +50,13 @@
     {
       "id": "OPERATIONAL_DIAGNOSIS",
       "title": "Detach orders from two controllers",
-      "body": "controller-a holds the lease on settle-03; controller-b lost it 41 minutes ago and keeps issuing detach orders anyway.",
+      "body": "controller-a holds the lease on settle-03, the right to manage it. controller-b lost the lease 41 minutes ago and keeps issuing detach orders anyway.",
       "kind": "operational"
     },
     {
       "id": "CONFIGURATION_COMPARISON",
       "title": "Lease fences 41 and 40",
-      "body": "The lease store accepts writes from fence 40 even though fence 41 is current.",
+      "body": "Each lease carries a fence number, and the store should refuse writes from older ones. It still accepts writes from fence 40 even though fence 41 is current.",
       "kind": "operational"
     },
     {

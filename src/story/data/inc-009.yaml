@@ -112,7 +112,7 @@ scenes:
           - narrate: For fifty-eight seconds the pool breathes.
           - metric: { label: Request failure rate, value: 36%, trend: up }
           - speaker: SAM
-            text: It's back. Same job id, fresh reservations, 58 seconds after the kill. Submitted by a scheduler called orpheus-planner. That isn't one of ours. I've never seen that name.
+            text: It's back. Same job ID, fresh reservations, 58 seconds after the kill. Submitted by a scheduler called orpheus-planner. That isn't one of ours. I've never seen that name.
           - collect: SCHEDULER_RESPAWN
           - metric: { label: Owning team, value: research-platform (disbanded) }
           - collect: OPERATIONAL_DIAGNOSIS
@@ -251,7 +251,7 @@ scenes:
             text: I'm fencing the reservation itself. A hundred seconds.
           - metric: { label: Request failure rate, value: 0.5%, trend: down }
           - speaker: NADIA
-            text: settle-night missed the cut-off. 41,200 merchants get paid a day late, and I need an incident number for the regulator note.
+            text: settle-night missed the cutoff. 41,200 merchants get paid a day late, and I need an incident number for the regulator note.
           - log: 'advisor: operator response matched forecast'
             when: { timedOut: false, values: { operationalSafety: { lte: 8 } } }
           - log: 'advisor: off-model response · forecast updated'

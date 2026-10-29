@@ -132,7 +132,7 @@ scenes:
     title: Two truths
     beats:
       - speaker: JIN
-        text: Clients are retrying into the loop. EU failures just went past 38 %.
+        text: Clients are retrying into the loop. EU failures just went past 38%.
       - metric: { label: EU failure rate, value: 38%, trend: up }
       - speaker: SAM
         text: I traced a request while you looked. edge-a hands it to edge-b on r81, edge-b hands it back on r82. Round and round.
@@ -190,7 +190,7 @@ scenes:
           - narrate: Two minutes of green. Then the US graphs start to climb.
           - metric: { label: us-east load, value: 100%, trend: up }
           - speaker: SAM
-            text: us-east is at 100 %. The restart loaded r79, so every EU request is crossing the Atlantic. And controller-b just pushed r82 again on top of it.
+            text: us-east is at 100%. The restart loaded r79, so every EU request is crossing the Atlantic. And controller-b just pushed r82 again on top of it.
           - speaker: SAM
             text: I said don't restart. Fencing to r81 now.
             when: { has: [TEAM_DIAGNOSIS] }

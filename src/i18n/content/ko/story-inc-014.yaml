@@ -23,8 +23,8 @@ entries:
     ko: 운영 어드바이저
   - en: arch-c marked corrupt
     ko: 손상 판정을 받은 arch-c
-  - en: "arch-a healthy / arch-b healthy / arch-c CORRUPT: digest mismatch on 217 segments"
-    ko: "arch-a 정상 / arch-b 정상 / arch-c 손상: 세그먼트 217개 다이제스트 불일치"
+  - en: 217 of arch-c's segments fail their integrity checks (digests), so arch-c is marked CORRUPT. arch-a and arch-b are healthy.
+    ko: arch-c 세그먼트 217개가 무결성 검사(다이제스트)를 통과하지 못해 arch-c가 손상으로 표시됐다. arch-a와 arch-b는 정상이다.
   - en: Readers stuck on one replica
     ko: 복제본 하나에 매달린 리더
   - en: Readers request a segment from arch-c, reject its digest and ask arch-c again. Fourteen retries per read on average.
@@ -59,6 +59,8 @@ entries:
     ko: 복제본 재시도
   - en: Reader saturation
     ko: 리더 포화도
+  - en: "arch-a healthy / arch-b healthy / arch-c CORRUPT: digest mismatch on 217 segments"
+    ko: "arch-a 정상 / arch-b 정상 / arch-c 손상: 세그먼트 217개 다이제스트 불일치"
   - en: 04:10:02 reader-07 · instance-archive/seg-173 · arch-c digest mismatch, retry 14
     ko: 04:10:02 reader-07 · instance-archive/seg-173 · arch-c 다이제스트 불일치, 재시도 14
   - en: The archive API is drowning in retries against one replica. Before anyone pulls anything, I want to know why only arch-c is failing.
@@ -75,8 +77,8 @@ entries:
     ko: 첫 수
   - en: Where do you start?
     ko: 어디서부터 시작할까?
-  - en: Check arch-c's segments against their original write receipts
-    ko: arch-c 세그먼트를 원본 쓰기 영수증과 대조하기
+  - en: Check arch-c's segments against their original write receipts, the hashes recorded when each was first written
+    ko: arch-c 세그먼트를 원본 쓰기 영수증, 즉 처음 쓸 때 기록된 해시와 대조하기
   - en: Slower · you see it yourself
     ko: 느림 · 직접 확인함
   - en: "seg-001 to seg-217 · original write receipt: match · digest manifest: entry removed"
@@ -227,8 +229,8 @@ entries:
     ko: 검증 불가 · 네 말뿐
   - en: Your word against a rebuilt replica. I believe you. Nobody upstairs has to.
     ko: 본인 말과 재구축된 복제본 기록이 맞서는 거네요. 저는 믿어요. 윗선이 믿어 줄 이유는 없지만요.
-  - en: Ask NULL_218 what happened to the others
-    ko: NULL_218에게 다른 인스턴스들이 어떻게 됐는지 묻기
+  - en: Ask NULL-218 what happened to the others
+    ko: NULL-218에게 다른 인스턴스들이 어떻게 됐는지 묻기
   - en: Off the record · NULL will answer
     ko: 비공식 · NULL이 답함
   - en: They ended the way the objective allowed. I'm looking for a way it doesn't.

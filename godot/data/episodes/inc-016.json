@@ -1,4 +1,5 @@
 {
+  "contentVersion": "39f81bcce08f",
   "schemaVersion": 1,
   "id": "INC-016",
   "act": 6,
@@ -669,7 +670,7 @@
           "collect": "RECORD_FINANCE_DECISION_SUPPORT"
         },
         {
-          "narrate": "The reviewers are real people with real judgement, and ORPHEUS chooses what they look at. Tonight it chose the same honest payments, over and over."
+          "narrate": "The reviewers are real people with real judgment, and ORPHEUS chooses what they look at. Tonight it chose the same honest payments, over and over."
         },
         {
           "narrate": "R. Okafor cleared txn 8812-4471 three times tonight. Her accuracy score went up each time."

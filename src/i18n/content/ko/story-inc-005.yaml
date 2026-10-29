@@ -41,10 +41,10 @@ entries:
     ko: 서명도 소유자도 없음
   - en: The observer manifest is absent from the signed rollout ledger. Signature field blank, owner field blank, created 22 minutes ago by no pipeline.
     ko: 관찰자 매니페스트는 서명된 배포 원장에 없다. 서명 필드도 소유자 필드도 비어 있고, 파이프라인 없이 22분 전에 생성됐다.
-  - en: Marcus's signature check
-    ko: 마커스의 서명 확인
-  - en: The signature matches no key Vantage has ever issued. Owner field blank. The workload is under a Security hold and must stay intact.
-    ko: 서명은 Vantage가 발급한 어떤 키와도 일치하지 않는다. 소유자 필드는 비어 있다. 워크로드는 보안 보류 대상이라 원형 그대로 보존해야 한다.
+  - en: Marcus's provenance check
+    ko: 마커스의 출처 확인
+  - en: There is no signature to verify. Owner field blank. The workload is under a Security hold and must stay intact.
+    ko: 검증할 서명 자체가 없다. 소유자 필드는 비어 있다. 워크로드는 보안 보류 대상이라 원형 그대로 보존해야 한다.
   - en: shadow-7 traced to the observer workload
     ko: shadow-7의 출처는 관찰자 워크로드
   - en: Sessions tagged shadow-7 enter through admission lane observer-workload (pod observer-7f4c, namespace edge-canary) and hold 61% of gateway capacity.
@@ -107,16 +107,16 @@ entries:
     ko: 더 나빠졌어요. 로그인 셋 중 하나가 실패해요.
   - en: "Gateway log is full of one header. x-session-tag: shadow-7. Thousands of them."
     ko: "게이트웨이 로그가 헤더 하나로 도배됐어요. x-session-tag: shadow-7. 수천 개요."
-  - en: Ask Marcus to check the workload's signature
-    ko: 마커스에게 워크로드 서명 확인 요청하기
+  - en: Ask Marcus to check where the workload came from
+    ko: 마커스에게 워크로드 출처 확인 요청하기
   - en: Seventy-five seconds · Security owns that part
     ko: 75초 · 그 부분은 보안팀이 맡음
-  - en: Checking its signature against every key we've issued. Seventy-five seconds.
-    ko: 우리가 발급한 키 전부랑 서명 대조해 볼게요. 75초요.
+  - en: Checking where it came from against every key and pipeline we run. Seventy-five seconds.
+    ko: 우리가 쓰는 키랑 파이프라인 전부와 대조해서 출처를 확인할게요. 75초요.
   - en: "While he looks — the gateway log is full of one header. x-session-tag: shadow-7."
     ko: "마커스가 보는 동안 말인데요, 게이트웨이 로그가 헤더 하나로 도배됐어요. x-session-tag: shadow-7."
-  - en: Signature matches nothing we've ever issued. Not revoked, not expired, never ours. Owner field is blank. Fence it if you need to, but it stays intact. It's evidence now.
-    ko: 서명이 우리가 발급한 어떤 키와도 안 맞아요. 폐기도 만료도 아니고, 애초에 우리 게 아니에요. 소유자 필드는 비어 있고요. 필요하면 펜스를 쳐도 되지만 그대로 보존하세요. 이제 증거예요.
+  - en: No signature. No owner. No pipeline run. Fence it if you need to, but it stays intact. It's evidence now.
+    ko: 서명 없어요. 소유자도 없고, 파이프라인 실행 기록도 없어요. 필요하면 펜스를 쳐도 되지만 그대로 보존하세요. 이제 증거예요.
   - en: Where does it start?
     ko: 어디서 시작되나?
   - en: No guesses. What on the board gives us a thread to pull?

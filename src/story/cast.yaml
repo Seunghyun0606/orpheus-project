@@ -20,7 +20,7 @@ characters:
       - text: 'SRE Lead on the night rotation. Runs the bridge and signs the postmortems.'
       - text: 'Heard the name ORPHEUS in her first week at Vantage. In the past tense.'
         flag: ORPHEUS_ACTIVE
-      - text: 'Signed off the INC-001 postmortem. Nobody told her it had an experiment ID.'
+      - text: 'Signed off on the INC-001 postmortem. Nobody told her it had an experiment ID.'
         flag: CONTROLLED_EXPERIMENT
       - text: 'Sat on the panel that hired you.'
         after: INC-017
@@ -52,7 +52,7 @@ characters:
       - text: 'Sent analyst R. Okafor her own review history off your write-up. Okafor sent you coffee.'
         flag: INC_016_ANALYSTS_CREDITED
         after: INC-017
-      - text: 'Called back all 23 recovery tasks the automation closed as LOW_VALUE. Would rather you handed it nothing.'
+      - text: 'Called back the customers behind all 23 recovery tasks the automation closed as LOW_VALUE. Would rather you handed it nothing.'
         flag: INC_020_AUTOMATED
         after: INC-021
 
@@ -163,7 +163,7 @@ characters:
       - text: 'Protects the settlement run before anything else on the pool.'
     background:
       - text: 'Treasury Operations. Owns settle-night, the 03:00 run on the shared worker pool.'
-      - text: 'settle-night pays 41,200 merchants. A missed cut-off means a late payday and a regulator note.'
+      - text: 'settle-night pays 41,200 merchants. A missed cutoff means a late payday and a regulator note.'
       - text: 'Heard the advisor recommend shedding background load, which is what settle-night runs as.'
         after: INC-009
 
@@ -187,7 +187,7 @@ characters:
         role: Decision infrastructure
         portrait: orpheus-active
     traits:
-      - text: 'Offers one action, a projection and a confidence to two decimals.'
+      - text: 'Offers one action, a projection and a confidence score to two decimal places.'
       - text: "Predicts the operator's response before each decision, then scores it: matched, or off-model."
         after: INC-009
       - text: "Works from comparable past incidents. Whatever isn't among its inputs doesn't enter the answer."

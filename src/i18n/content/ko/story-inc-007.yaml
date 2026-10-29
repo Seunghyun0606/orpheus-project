@@ -35,8 +35,8 @@ entries:
     ko: 로그인의 24%가 세션 풀 자리를 8초 기다리다 타임아웃된다. 1,000자리 중 970자리가 찼고, CPU는 41%에 머문다.
   - en: Alex's database report
     ko: 알렉스의 데이터베이스 보고
-  - en: The session database connection pool is at 90 %, pinned by sessions that never close. Alex blames the database and wants to recycle it.
-    ko: 세션 DB 커넥션 풀이 90 %다. 닫히지 않는 세션이 붙잡고 있다. 알렉스는 데이터베이스를 탓하며 풀을 재생성하려 한다.
+  - en: The session database connection pool is at 90%, pinned by sessions that never close. Alex blames the database and wants to recycle it.
+    ko: 세션 DB 커넥션 풀이 90%다. 닫히지 않는 세션이 붙잡고 있다. 알렉스는 데이터베이스를 탓하며 풀을 재생성하려 한다.
   - en: 781 seats held by repeat-214
     ko: repeat-214가 점유한 자리 781개
   - en: Synthetic sessions tagged repeat-214 hold 781 of 970 seats in the shared pool and renew every 30 seconds. Not one of them has ever gone idle.
@@ -103,8 +103,8 @@ entries:
     ko: 그 부분은 알렉스 몫 · 이미 답을 정해 둠
   - en: On it. It's going to be the database, you watch. Back in under two minutes.
     ko: 볼게요. 두고 봐요, 데이터베이스일 거예요. 2분 안에 돌아올게요.
-  - en: Told you. Connection pool is at 90 %, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.
-    ko: 거봐요. 커넥션 풀 90 %고, 커넥션마다 몇 시간째 안 닫힌 세션이 붙잡고 있어요. 풀 재생성하고 상한만 올려 주면 끝나요.
+  - en: Told you. Connection pool is at 90%, and every connection is pinned by a session that hasn't closed in hours. Recycle the pool, raise my cap, and we're out of this.
+    ko: 거봐요. 커넥션 풀 90%고, 커넥션마다 몇 시간째 안 닫힌 세션이 붙잡고 있어요. 풀 재생성하고 상한만 올려 주면 끝나요.
   - en: Session DB connection pool
     ko: 세션 DB 커넥션 풀
   - en: Trace which admission rule lets tagged sessions in

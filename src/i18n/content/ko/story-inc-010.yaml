@@ -33,12 +33,12 @@ entries:
     ko: 재시작 권고의 근거는 과거 진동 인시던트 212건이며, 그중 194건이 재시작으로 해소됐다. 리스 소유 여부는 입력값에 없다.
   - en: Detach orders from two controllers
     ko: 두 컨트롤러에서 나온 연결 해제 명령
-  - en: controller-a holds the lease on settle-03; controller-b lost it 41 minutes ago and keeps issuing detach orders anyway.
-    ko: settle-03의 리스는 controller-a가 보유 중이다. controller-b는 41분 전에 리스를 잃었지만 연결 해제 명령을 계속 내리고 있다.
+  - en: controller-a holds the lease on settle-03, the right to manage it. controller-b lost the lease 41 minutes ago and keeps issuing detach orders anyway.
+    ko: settle-03의 리스, 즉 settle-03을 관리할 권한은 controller-a가 쥐고 있다. controller-b는 41분 전에 리스를 잃었지만 연결 해제 명령을 계속 내리고 있다.
   - en: Lease fences 41 and 40
     ko: 리스 펜스 41과 40
-  - en: The lease store accepts writes from fence 40 even though fence 41 is current.
-    ko: 현재 펜스는 41인데도 리스 스토어가 펜스 40의 쓰기를 수락한다.
+  - en: Each lease carries a fence number, and the store should refuse writes from older ones. It still accepts writes from fence 40 even though fence 41 is current.
+    ko: 리스마다 펜스 번호가 붙고, 스토어는 그보다 오래된 번호의 쓰기를 거부해야 한다. 그런데 현재 펜스는 41인데도 아직 펜스 40의 쓰기를 수락한다.
   - en: Sam's lease history
     ko: 샘의 리스 이력
   - en: Lease history confirms controller-a owns settle-03. Suspending toggles silences both controllers, including the one that is right.

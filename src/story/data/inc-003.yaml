@@ -162,7 +162,7 @@ scenes:
         effects:
           values: { operationalSafety: 2, collateralDamage: 2 }
       - id: DEAD_LETTER
-        text: Add a dead-letter rule for the legacy format
+        text: Send receipts in the legacy format to a dead-letter queue for separate handling
         consequence: Stops the whole class of failure · catches more than this one
         beats:
           - metric: { label: Receipt queue depth, value: '0', trend: down }

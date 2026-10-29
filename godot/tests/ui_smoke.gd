@@ -11,6 +11,7 @@ const Progress := preload("res://scripts/story/progress.gd")
 const StoryRunner := preload("res://scripts/story/story_runner.gd")
 const Settings := preload("res://scripts/ui/settings.gd")
 const CastBook := preload("res://scripts/story/cast_book.gd")
+const UiText := preload("res://scripts/ui/ui_text.gd")
 
 
 func _initialize() -> void:
@@ -20,6 +21,8 @@ func _initialize() -> void:
 	# Never touch the player's saves.
 	main.reviewing = true
 	var failures := _regressions(main)
+	failures += await _keyboard(main)
+	failures += await _save_versions(main)
 	var steps := 0
 	for strategy in ["first", "last+timeout", "middle"]:
 		main.progress = Progress.empty()
@@ -193,6 +196,244 @@ func _regressions(main: Control) -> int:
 		printerr("UNKNOWN is not listed after INC-001")
 	print("regressions: %d failures" % failures)
 	return failures
+
+
+## Keyboard-only play from the 2026-10-26 accessibility review, with real key
+## events sent through Input as a player's keyboard would: overlays keep focus
+## to themselves and give it back (AX-04), the first deduction is solved with
+## the keys alone (AX-01), the status window opens, changes tab and chooses a
+## person (AX-02), and reduced motion leaves no highlight running (AX-06).
+func _keyboard(main: Control) -> int:
+	var failures := 0
+	main.progress = Progress.empty()
+	main._show_title()
+	await _frames(2)
+	var opener: Control = root.gui_get_focus_owner()
+	if opener == null:
+		failures += 1
+		printerr("keyboard: the title has no focused control")
+	# Settings over the title: Tab stays inside, Escape gives focus back.
+	await _press(KEY_ESCAPE)
+	if main.settings_layer == null:
+		printerr("keyboard: Escape did not open settings")
+		return failures + 1
+	for i in 24:
+		await _press(KEY_TAB)
+		var owner: Control = root.gui_get_focus_owner()
+		if owner == null or not main.settings_layer.is_ancestor_of(owner):
+			failures += 1
+			printerr("keyboard: Tab left the settings dialog for %s" % owner)
+			break
+	await _press(KEY_ESCAPE)
+	if main.settings_layer != null or root.gui_get_focus_owner() != opener:
+		failures += 1
+		printerr("keyboard: closing settings did not give focus back to %s" % opener)
+	# A language change rebuilds the dialog with the language control focused.
+	await _press(KEY_ESCAPE)
+	main.settings_controls["language"].grab_focus()
+	var language: String = Settings.language
+	main._change_setting("language", "en" if language == "ko" else "ko")
+	await _frames(2)
+	if root.gui_get_focus_owner() != main.settings_controls["language"]:
+		failures += 1
+		printerr("keyboard: a language change lost the language control's focus")
+	main._change_setting("language", language)
+	await _frames(2)
+	await _press(KEY_ESCAPE)
+	var back: Control = root.gui_get_focus_owner()
+	if back == null or not main.screen.is_ancestor_of(back):
+		failures += 1
+		printerr("keyboard: after a rebuild, closing settings left no focus on the title")
+
+	# INC-001 by keys: Space shows the text, Enter takes the focused choice.
+	main._start_episode("INC-001")
+	main._close_act_card()
+	var scene: Dictionary = {}
+	for step in 80:
+		await _frames(2)
+		scene = StoryRunner.current_scene(main.episode, main.state)
+		if scene.is_empty() or scene["type"] == "deduction" and main.deduce_label != null:
+			break
+		if not main.pending.is_empty() or main.typing_label != null:
+			await _press(KEY_SPACE)
+			continue
+		var focused: Control = root.gui_get_focus_owner()
+		if focused == null or not focused.has_meta("choice"):
+			failures += 1
+			printerr("keyboard: no choice has focus at %s" % scene["id"])
+			return failures
+		await _press(KEY_ENTER)
+	if scene.is_empty() or scene["type"] != "deduction":
+		printerr("keyboard: INC-001 reached no deduction")
+		return failures + 1
+	# The deduction: focus starts on a card; Enter and Space pick, Tab reaches Connect.
+	var deduction: String = scene["id"]
+	if not main.cards.values().has(root.gui_get_focus_owner()):
+		failures += 1
+		printerr("keyboard: the deduction did not focus a card")
+	var keys := [KEY_ENTER, KEY_SPACE]
+	for i in scene["solution"].size():
+		var id: String = scene["solution"][i]
+		for tab in 30:
+			if root.gui_get_focus_owner() == main.cards[id]:
+				break
+			await _press(KEY_TAB)
+		await _press(keys[i % 2])
+		if not main.picks.has(id) or not main.card_titles[id].text.begins_with("✓"):
+			failures += 1
+			printerr("keyboard: %s was not picked from the keyboard" % id)
+	for tab in 30:
+		var owner: Control = root.gui_get_focus_owner()
+		if owner != null and main.connect_slot != null and main.connect_slot.is_ancestor_of(owner):
+			break
+		await _press(KEY_TAB)
+	await _press(KEY_ENTER)
+	await _frames(2)
+	if main.state["sceneId"] == deduction or main.state["attempts"] > 0:
+		failures += 1
+		printerr("keyboard: Connect did not solve the deduction (%s)" % main.picks)
+	# Status: S opens it on the tab bar, Right changes tab, Tab and Down choose a person.
+	main._skip_reveal()
+	await _frames(2)
+	var before: Control = root.gui_get_focus_owner()
+	main.status_tab = 0
+	await _press(KEY_S)
+	if main.status_layer == null:
+		printerr("keyboard: S did not open the status window")
+		return failures + 1
+	for i in 3:
+		await _press(KEY_RIGHT)
+	if main.status_tab != main.PEOPLE_TAB:
+		failures += 1
+		printerr("keyboard: Right did not reach the People tab (%d)" % main.status_tab)
+	await _press(KEY_TAB)
+	var first_person: String = main.status_person
+	await _press(KEY_DOWN)
+	if main._people().size() > 1 and main.status_person == first_person:
+		failures += 1
+		printerr("keyboard: Down did not choose another person")
+	for i in 24:
+		await _press(KEY_TAB)
+		var owner: Control = root.gui_get_focus_owner()
+		if owner == null or not main.status_layer.is_ancestor_of(owner):
+			failures += 1
+			printerr("keyboard: Tab left the status window for %s" % owner)
+			break
+	await _press(KEY_ESCAPE)
+	if main.status_layer != null or (before != null and root.gui_get_focus_owner() != before):
+		failures += 1
+		printerr("keyboard: closing the status window did not give focus back")
+	main.status_tab = 0
+	main.status_person = ""
+	# Reduced motion: new metric tiles and evidence cards arrive without a
+	# highlight tween (AX-06).
+	var motion: bool = Settings.reduce_motion
+	Settings.reduce_motion = true
+	main.progress = Progress.empty()
+	main._start_episode("INC-001")
+	main._close_act_card()
+	main._skip_reveal()
+	# Earlier screens (and their fades) are freed at the end of the frame.
+	await _frames(2)
+	for node in main.metrics_grid.get_children() + main.cards.values():
+		if node.modulate != Color.WHITE:
+			failures += 1
+			printerr("keyboard: %s is highlighted under reduced motion" % node)
+			break
+	if main.visual_tweens.any(func(t: Tween) -> bool: return t.is_valid() and t.is_running()):
+		failures += 1
+		printerr("keyboard: a visual tween runs under reduced motion")
+	Settings.reduce_motion = motion
+	print("keyboard: %d failures" % failures)
+	return failures
+
+
+## Saves of a changed episode (specs/architecture/story-episode-format.md,
+## "Save versions"): a run in progress restarts and says so once; a record
+## says it changed and takes its numbers from the saved outcome; a run on a
+## scene the episode lost shows an error instead of closing.
+func _save_versions(main: Control) -> int:
+	var failures := 0
+	main.progress = Progress.empty()
+	main._start_episode("INC-001")
+	main._close_act_card()
+	main._skip_reveal()
+	main._submit(_input(StoryRunner.current_scene(main.episode, main.state), main.state, "first", 0))
+	main.progress["current"]["content"] = "an older version"
+	main._show_title()
+	main._start_episode("INC-001")
+	main._close_act_card()
+	if main.run_notice != Progress.RESTARTED or not main.progress["current"]["inputs"].is_empty():
+		failures += 1
+		printerr("save versions: a changed episode did not restart its run (%s)" % main.run_notice)
+	main._skip_reveal()
+	var told := false
+	for child in main.controls.get_children():
+		if child is Label and child.text == UiText.t("notice_restarted"):
+			told = true
+	if not told:
+		failures += 1
+		printerr("save versions: the restart was not shown")
+	main._show_title()
+	main._start_episode("INC-001")
+	main._close_act_card()
+	if main.run_notice != "":
+		failures += 1
+		printerr("save versions: the restart notice came back")
+	# A scene the episode no longer has: an error line, and the run stays open.
+	main._skip_reveal()
+	main.state["sceneId"] = "a-scene-that-was-removed"
+	main._show_controls()
+	await process_frame
+	var shown := false
+	for child in main.controls.get_children():
+		if child is Label and child.text.contains("a-scene-that-was-removed"):
+			shown = true
+	if not shown or Progress.is_finished(main.progress, "INC-001"):
+		failures += 1
+		printerr("save versions: a missing scene did not show the content error")
+	# A record of a changed episode.
+	main.progress = Progress.empty()
+	main._start_episode("INC-001")
+	main._close_act_card()
+	for step in 60:
+		main._skip_reveal()
+		var scene: Dictionary = StoryRunner.current_scene(main.episode, main.state)
+		if scene.is_empty():
+			break
+		main._submit(_input(scene, main.state, "first", step))
+	main._skip_reveal()
+	main.progress["records"]["INC-001"]["content"] = "an older version"
+	main._start_episode("INC-001")
+	if not main.viewing_record or main.record_numbers != main.progress["after"]["INC-001"]:
+		failures += 1
+		printerr("save versions: a changed record does not read its saved outcome")
+	var noted := false
+	for child in main.controls.get_children():
+		if child is Label and child.text == UiText.t("record_changed"):
+			noted = true
+	if not noted:
+		failures += 1
+		printerr("save versions: a changed record carries no note")
+	main._show_title()
+	print("save versions: %d failures" % failures)
+	return failures
+
+
+## A key pressed and released, as from a keyboard, then the frames it takes.
+func _press(key: Key) -> void:
+	for pressed in [true, false]:
+		var event := InputEventKey.new()
+		event.keycode = key
+		event.physical_keycode = key
+		event.pressed = pressed
+		Input.parse_input_event(event)
+	await _frames(2)
+
+
+func _frames(count: int) -> void:
+	for i in count:
+		await process_frame
 
 
 func _met(main: Control, id: String) -> bool:

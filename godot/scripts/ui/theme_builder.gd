@@ -7,7 +7,11 @@ const PANEL := Color("111713")
 const PANEL_HI := Color("1a241c")
 const BORDER := Color("2b3b2e")
 const TEXT := Color("d6dfd2")
-const DIM := Color("8b978c")
+## Secondary text. Bright enough for 4.5:1 on every panel, the selected card
+## included, under the CRT overlay at its darkest corner (AX-09).
+const DIM := Color("aab4ab")
+## Clock stamps in the feed and logs: a step below DIM, still 4.5:1 there (AX-08).
+const STAMP := Color("9aa69b")
 const AMBER := Color("ffb347")
 const GREEN := Color("7ddc95")
 const CYAN := Color("78c8ff")
@@ -43,9 +47,16 @@ static func size(index: int) -> int:
 	return SIZES[clampi(index, 0, SIZES.size() - 1)]
 
 
+## The keyboard focus ring: a 2 px amber outline drawn over the control.
+static func ring(margin := 10) -> StyleBoxFlat:
+	var style := box(Color(0, 0, 0, 0), AMBER, 2, margin)
+	style.draw_center = false
+	return style
+
+
 static func build(size_index: int) -> Theme:
-	var theme := Theme.new()
 	var base := size(size_index)
+	var theme := Theme.new()
 	theme.default_font = font()
 	theme.default_font_size = base
 
@@ -80,24 +91,75 @@ static func build(size_index: int) -> Theme:
 	theme.set_stylebox("panel", "SelectedCard", box(PANEL_HI.lightened(0.08), AMBER, 2, 8))
 	theme.set_type_variation("SelectableCard", "PanelContainer")
 	theme.set_stylebox("panel", "SelectableCard", box(PANEL_HI, DIM, 1, 8))
+	# Keyboard focus on a card: a light 3 px frame, apart from the amber of a
+	# selected card (AX-01).
+	theme.set_type_variation("CardPanelFocus", "PanelContainer")
+	theme.set_stylebox("panel", "CardPanelFocus", box(PANEL_HI, TEXT, 3, 8))
+	theme.set_type_variation("SelectableCardFocus", "PanelContainer")
+	theme.set_stylebox("panel", "SelectableCardFocus", box(PANEL_HI, TEXT, 3, 8))
+	theme.set_type_variation("SelectedCardFocus", "PanelContainer")
+	theme.set_stylebox("panel", "SelectedCardFocus", box(PANEL_HI.lightened(0.08), TEXT, 3, 8))
+	# Opaque backing for text over artwork (Act cards, credits; AX-07).
+	theme.set_type_variation("Backing", "PanelContainer")
+	theme.set_stylebox("panel", "Backing", box(BG, BORDER, 1, 28))
 
 	theme.set_stylebox("normal", "Button", box(PANEL_HI, BORDER, 1, 10))
 	theme.set_stylebox("hover", "Button", box(PANEL_HI.lightened(0.06), AMBER, 1, 10))
 	theme.set_stylebox("pressed", "Button", box(BG, AMBER, 2, 10))
 	theme.set_stylebox("disabled", "Button", box(PANEL, BORDER, 1, 10))
-	var focus := box(Color(0, 0, 0, 0), AMBER, 2, 10)
-	focus.draw_center = false
-	theme.set_stylebox("focus", "Button", focus)
+	theme.set_stylebox("focus", "Button", ring())
 	theme.set_color("font_color", "Button", TEXT)
 	theme.set_color("font_hover_color", "Button", AMBER)
 	theme.set_color("font_focus_color", "Button", AMBER)
 	theme.set_color("font_pressed_color", "Button", AMBER)
 	theme.set_color("font_disabled_color", "Button", DIM)
 
-	for item in ["normal", "hover", "pressed", "focus", "hover_pressed"]:
+	for item in ["normal", "hover", "pressed", "hover_pressed"]:
 		theme.set_stylebox(item, "CheckButton", StyleBoxEmpty.new())
+	# Focus rings on every keyboard target (AX-05, AX-03).
+	theme.set_stylebox("focus", "CheckButton", ring(4))
+	theme.set_stylebox("focus", "HSlider", ring(0))
+	theme.set_stylebox("focus", "RichTextLabel", ring(0))
+	theme.set_stylebox("focus", "ScrollContainer", ring(0))
+
+	# Scroll bars: a 24 px pointer target around an 8 px visible bar (AX-12).
+	for pair in [["VScrollBar", true], ["HScrollBar", false]]:
+		# Dark, so text scrolled under the bar's strip does not show through it.
+		var track := StyleBoxFlat.new()
+		track.bg_color = Color(PANEL, 0.9)
+		if pair[1]:
+			track.content_margin_left = 12
+			track.content_margin_right = 12
+		else:
+			track.content_margin_top = 12
+			track.content_margin_bottom = 12
+		theme.set_stylebox("scroll", pair[0], track)
+		theme.set_stylebox("scroll_focus", pair[0], track)
+		for state in [["grabber", BORDER.lightened(0.15)], ["grabber_highlight", DIM], ["grabber_pressed", AMBER]]:
+			var thumb := StyleBoxFlat.new()
+			thumb.bg_color = state[1]
+			thumb.border_color = Color(0, 0, 0, 0)
+			thumb.set_corner_radius_all(2)
+			if pair[1]:
+				thumb.border_width_left = 8
+				thumb.border_width_right = 8
+				thumb.content_margin_left = 12
+				thumb.content_margin_right = 12
+				thumb.content_margin_top = 12
+				thumb.content_margin_bottom = 12
+			else:
+				thumb.border_width_top = 8
+				thumb.border_width_bottom = 8
+				thumb.content_margin_left = 12
+				thumb.content_margin_right = 12
+				thumb.content_margin_top = 12
+				thumb.content_margin_bottom = 12
+			theme.set_stylebox(state[0], pair[0], thumb)
 
 	theme.set_stylebox("panel", "PopupMenu", box(PANEL, AMBER, 1, 6))
+	# Tooltips on an opaque panel, not Godot's half-transparent default.
+	theme.set_stylebox("panel", "TooltipPanel", box(PANEL, BORDER, 1, 8))
+	theme.set_color("font_color", "TooltipLabel", TEXT)
 	theme.set_color("font_color", "PopupMenu", TEXT)
 	theme.set_color("font_hover_color", "PopupMenu", AMBER)
 	theme.set_stylebox("hover", "PopupMenu", box(PANEL_HI, AMBER, 0, 4))
@@ -141,6 +203,11 @@ static func build(size_index: int) -> Theme:
 	row_active.border_width_left = 3
 	row_active.border_color = AMBER
 	theme.set_stylebox("panel", "ChoiceRowActive", row_active)
+	# A person row with keyboard focus: the selected bar plus a full outline.
+	theme.set_type_variation("ChoiceRowFocus", "PanelContainer")
+	var row_focus := box(PANEL_HI, AMBER, 2, 6)
+	row_focus.border_width_left = 3
+	theme.set_stylebox("panel", "ChoiceRowFocus", row_focus)
 	theme.set_type_variation("TrayActive", "PanelContainer")
 	theme.set_stylebox("panel", "TrayActive", box(PANEL_HI, AMBER, 2, 10))
 
@@ -171,7 +238,9 @@ static func build(size_index: int) -> Theme:
 	theme.set_stylebox("tab_selected", "TabContainer", tab_on)
 	theme.set_stylebox("tab_unselected", "TabContainer", tab_off)
 	theme.set_stylebox("tab_hovered", "TabContainer", tab_hover)
-	theme.set_stylebox("tab_focus", "TabContainer", StyleBoxEmpty.new())
+	# Focus on the tab bar: an outline around the current tab, apart from the
+	# selected-tab underline (AX-05).
+	theme.set_stylebox("tab_focus", "TabContainer", ring(10))
 	theme.set_stylebox("panel", "TabContainer", box(Color("0e1210"), BORDER, 1, 0))
 	theme.set_stylebox("tabbar_background", "TabContainer", StyleBoxEmpty.new())
 	theme.set_color("font_selected_color", "TabContainer", AMBER)

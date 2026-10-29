@@ -15,6 +15,7 @@ extends Control
 ##   --episode=INC-001  --play=c,SESSIONS,d:POOL_AT_LIMIT+IDLE_TRANSACTIONS
 ##   --lang=ko|en  --flags=FLAG+FLAG  --select=ID+ID  --settings  --wait=<seconds>
 ##   --until=timer|deduction|<scene id>  --status  --reenter  --act-card  --credits  --shot=<png path>
+##   --focus=<settings key>|card|person|tabs (shows keyboard focus there)  --settle (waits for fades)
 ## `c` continues, `t` lets the timer run out, `d:A+B` deduces, anything else
 ## chooses that option. --flags enters the episode with those campaign flags set
 ## (saved progress is never touched while capturing). --wait lets the reveal run in real time before the
@@ -37,6 +38,9 @@ const MARK_CLOSE := "\ue001"
 const KEYWORD_COLOR := "ffd27f"
 const PRESSURE_SECONDS := 5
 const PEOPLE_TAB := 3
+## The CRT vignette's darkest corner keeps every text colour at 4.5:1 (AX-09);
+## the scanlines stay as they were.
+const CRT_VIGNETTE := 0.12
 
 ## Pause after each entry has finished typing.
 const REVEAL_DELAY := {
@@ -50,8 +54,23 @@ const CLOCK_ADVANCE := {
 	"evidence": 5, "choice": 24, "deduction": 31,
 }
 
+## A label whose tooltip wraps inside the window instead of running off its
+## edge as one long line (the pressure help; AX-10).
+class WrappedTipLabel extends Label:
+	func _make_custom_tooltip(for_text: String) -> Object:
+		var tip := Label.new()
+		tip.text = for_text
+		tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		var width := minf(640.0, get_viewport_rect().size.x - 32.0)
+		tip.custom_minimum_size.x = width
+		# Lay the text out at that width now, so the tooltip opens at its full height.
+		tip.size = Vector2(width, 0)
+		return tip
+
+
 var screen: Control
 var crt: ColorRect
+
 var settings_layer: Control
 
 var episode := {}
@@ -70,6 +89,12 @@ var typing_pos := 0.0
 var typing_end := 0
 ## Showing a finished incident's record: nothing can be chosen.
 var viewing_record := false
+## A record whose episode changed after it was played (Progress.check: not
+## "same", or not every input still applies): its numbers are the incident's
+## saved outcome (`after`), not the replay. Empty otherwise.
+var record_numbers := {}
+## What Progress.begin changed about the saved run ("restarted", "stopped" or "").
+var run_notice := ""
 var restart_armed := false
 var sound: Node
 var top_bar: PanelContainer
@@ -94,6 +119,23 @@ var summary_big := false
 var keyword_cache := PackedStringArray()
 var keyword_key := ""
 var last_timer_second := -1
+## The control that had focus when settings or the status window opened; it
+## gets focus back when they close (AX-04).
+var settings_opener: Control
+var status_opener: Control
+## Settings controls by key, so a rebuild can return focus to the one in use.
+var settings_controls := {}
+## Visual tweens (fades, highlights), finished at once when reduced motion is
+## turned on (AX-06).
+var visual_tweens: Array[Tween] = []
+## The evidence tray takes picks (a deduction is open).
+var tray_selectable := false
+## Each card's title label, which carries a check mark while it is picked.
+var card_titles := {}
+## Portrait textures by path.
+var portrait_cache := {}
+## Themes by text size.
+var themes := {}
 
 # Episode screen widgets.
 var feed: RichTextLabel
@@ -140,6 +182,7 @@ func _ready() -> void:
 	crt.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var material := ShaderMaterial.new()
 	material.shader = CRT_SHADER
+	material.set_shader_parameter("vignette_strength", CRT_VIGNETTE)
 	crt.material = material
 	crt.z_index = 100
 	add_child(crt)
@@ -163,9 +206,10 @@ func _replace_screen(next: Control) -> void:
 	screen = next
 	add_child(screen)
 	move_child(screen, 0)
+	_sync_overlay()
 	if not Settings.reduce_motion:
 		screen.modulate.a = 0.0
-		create_tween().tween_property(screen, "modulate:a", 1.0, 0.3)
+		_visual_tween(screen).tween_property(screen, "modulate:a", 1.0, 0.3)
 
 
 ## Left: the title and the next incident to play. Right: every incident,
@@ -178,6 +222,7 @@ func _show_title() -> void:
 	timer_left = -1.0
 	restart_armed = false
 	viewing_record = false
+	record_numbers = {}
 	var root := _margin(56)
 	var columns := HBoxContainer.new()
 	columns.add_theme_constant_override("separation", 48)
@@ -234,6 +279,8 @@ func _show_title() -> void:
 	list_panel.custom_minimum_size.x = 520
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	# The focused incident stays in view as Tab or the arrows move down the list.
+	_keyboard_scroll(scroll)
 	var list := VBoxContainer.new()
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_theme_constant_override("separation", 6)
@@ -252,17 +299,23 @@ func _show_title() -> void:
 			list.add_child(_label("%s  %s" % [UiText.t("act") % act, act_name], "DimLabel", false))
 		var mark: String = "✓" if Progress.is_finished(progress, id) else ("▸" if unlocked else "·")
 		var title: String = _t(entry["title"]) if unlocked else UiText.t("locked")
+		if not unlocked and Progress.is_passed(progress, id):
+			# Added to the campaign before a point this one already reached.
+			title = UiText.t("passed_later")
 		if Progress.is_finished(progress, id):
 			title += "   · " + UiText.t("record")
 		elif Progress.in_progress(progress, id):
 			title += "   · " + UiText.t("in_progress")
 		var button := _button("%s  %s   %s" % [mark, id, title])
 		button.disabled = not unlocked
+		# Locked incidents are skipped by Tab and the arrows (AX-03).
+		if not unlocked:
+			button.focus_mode = Control.FOCUS_NONE
 		button.pressed.connect(_start_episode.bind(id))
 		list.add_child(button)
 	_replace_screen(_with_backdrop(root, "res://assets/title.jpg", 0.35))
 	if first != null:
-		first.grab_focus.call_deferred()
+		_grab.call_deferred(first)
 
 
 func _start_episode(id: String) -> void:
@@ -275,10 +328,15 @@ func _start_episode(id: String) -> void:
 		_show_record(id)
 		return
 	viewing_record = false
+	record_numbers = {}
 	var carry: Dictionary = Progress.carry_for(progress, id).duplicate(true)
 	carry["flags"].merge(review_flags, true)
-	var run := Progress.begin(progress, id, carry)
+	var run := Progress.begin(progress, id, carry, episode)
 	entry_carry = run["carry"]
+	# The episode changed since the run was saved: it starts again, or goes on
+	# from the last point that still applies. Said over the controls until the
+	# first input (_add_notice).
+	run_notice = Progress.take_notice(progress)
 	_save_progress()
 	state = Progress.replay(episode, run)
 	_build_episode_screen()
@@ -297,11 +355,16 @@ func _start_episode(id: String) -> void:
 ## nothing to choose.
 func _show_record(id: String) -> void:
 	viewing_record = true
+	record_numbers = {}
+	run_notice = ""
 	sound.loop("ambient")
 	var record: Variant = progress["records"].get(id)
 	if record is Dictionary:
-		state = Progress.replay(episode, record)
+		var check := Progress.check(episode, record)
+		state = check["state"]
 		entry_carry = record["carry"]
+		if check["status"] != Progress.SAME or not check["complete"]:
+			record_numbers = progress["after"][id]
 	else:
 		entry_carry = Progress.carry_for(progress, id)
 		state = StoryRunner.start_episode(episode, Progress.carry_for(progress, id))
@@ -339,6 +402,8 @@ func _notification(what: int) -> void:
 func _build_episode_screen() -> void:
 	metric_tiles.clear()
 	cards.clear()
+	card_titles.clear()
+	tray_selectable = false
 	picks.clear()
 	shown_entries = 0
 	var root := _margin(12)
@@ -361,17 +426,20 @@ func _build_episode_screen() -> void:
 	scene_label = _shrinking_label("", "PromptLabel", 1.0)
 	scene_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	top.add_child(scene_label)
-	pressure_label = _label("", "DimLabel", false)
+	# The full pressure help is also on the Status window's first tab, for the
+	# keyboard (AX-10); the tooltip wraps inside the window.
+	pressure_label = WrappedTipLabel.new()
+	pressure_label.theme_type_variation = "DimLabel"
+	pressure_label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	pressure_label.mouse_filter = Control.MOUSE_FILTER_PASS
 	pressure_label.tooltip_text = UiText.t("pressure_help")
 	top.add_child(pressure_label)
+	# Status and Menu take keyboard focus; S and Escape open them too (AX-02).
 	var status := _button(UiText.t("status"))
-	status.focus_mode = Control.FOCUS_NONE
 	status.pressed.connect(_open_status)
 	status_button = status
 	top.add_child(status)
 	var menu := _button(UiText.t("menu"))
-	menu.focus_mode = Control.FOCUS_NONE
 	menu.pressed.connect(_open_settings)
 	top.add_child(menu)
 	column.add_child(top_panel)
@@ -409,9 +477,14 @@ func _build_episode_screen() -> void:
 	tray.custom_minimum_size.y = 210
 	var tray_column := VBoxContainer.new()
 	tray_column.add_theme_constant_override("separation", 8)
-	tray_header = _label("", "HeaderLabel", false)
+	# Wraps, so a long instruction at large text never widens the screen (AX-11).
+	tray_header = _label("", "HeaderLabel")
 	tray_column.add_child(tray_header)
 	tray_scroll = ScrollContainer.new()
+	# Page Up/Down read a long card (AX-03); a focused card is brought into view
+	# by _show_card, top first, rather than by follow_focus.
+	_keyboard_scroll(tray_scroll)
+	tray_scroll.follow_focus = false
 	tray_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	# The tray keeps its height; a long card scrolls inside it rather than
 	# pushing the log console up.
@@ -439,6 +512,9 @@ func _build_episode_screen() -> void:
 	# column (the finale offers ten); beyond that they scroll.
 	controls_scroll = ScrollContainer.new()
 	controls_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	# Page Up/Down from a choice read a long summary; the focused row stays in view.
+	_keyboard_scroll(controls_scroll)
+
 	controls = VBoxContainer.new()
 	controls.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	controls.add_theme_constant_override("separation", 4)
@@ -463,6 +539,7 @@ func _queue_new_entries() -> void:
 	shown_entries = entries.size()
 	reveal_wait = 0.15
 	_clear_controls()
+	_add_notice()
 	if not pending.is_empty():
 		controls.add_child(_label(UiText.t("skip"), "DimLabel"))
 	elif typing_label == null:
@@ -599,7 +676,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_close_act_card()
 		get_viewport().set_input_as_handled()
 		return
-	if key == KEY_ESCAPE and status_layer != null:
+	if (key == KEY_ESCAPE or key == KEY_S) and status_layer != null and settings_layer == null:
 		_close_status()
 		get_viewport().set_input_as_handled()
 		return
@@ -614,6 +691,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	elif key == KEY_SPACE and (not pending.is_empty() or typing_label != null):
 		_skip_reveal()
+	elif key == KEY_S:
+		_open_status()
 	elif key == KEY_H and summary_body != null:
 		_toggle_summary()
 	elif key >= KEY_1 and key <= KEY_9 and pending.is_empty():
@@ -628,7 +707,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _render_entry(index: int, animate: bool) -> void:
 	var entry: Dictionary = state["feed"][index]
 	var dim := ThemeBuilder.DIM.to_html(false)
-	var stamp := "[color=#%s]%s[/color]  " % [ThemeBuilder.DIM.darkened(0.25).to_html(false), entry_times[index]]
+	var stamp := "[color=#%s]%s[/color]  " % [ThemeBuilder.STAMP.to_html(false), entry_times[index]]
 	var start := 0
 	var amber := ThemeBuilder.AMBER.to_html(false)
 	var green := ThemeBuilder.GREEN.to_html(false)
@@ -709,9 +788,17 @@ func _clear_controls() -> void:
 
 func _show_controls() -> void:
 	_clear_controls()
+	_add_notice()
 	_update_status_badge()
 	var scene := StoryRunner.current_scene(episode, state)
-	_set_tray_selectable(not scene.is_empty() and scene["type"] == "deduction")
+	_set_tray_selectable(not viewing_record and not scene.is_empty() and scene["type"] == "deduction")
+	if scene.is_empty() and state.get("sceneId") != null and not viewing_record:
+		# The run is on a scene the episode no longer has (invalid content):
+		# nothing can be chosen and the incident cannot close.
+		controls.add_child(_label(UiText.t("content_error") % state["sceneId"], "DimLabel"))
+		_add_choice("[color=#%s]1.[/color] %s" % [ThemeBuilder.AMBER.to_html(false), UiText.t("back")], _show_title)
+		_focus_first_choice.call_deferred()
+		return
 	if scene.is_empty() or viewing_record:
 		_show_summary()
 		return
@@ -759,11 +846,21 @@ func _show_controls() -> void:
 			controls.add_child(_label(_t(scene["prompt"]), "PromptLabel"))
 			deduce_label = _label("", "DimLabel")
 			controls.add_child(deduce_label)
+			controls.add_child(_label(UiText.t("deduce_keys"), "DimLabel"))
 			connect_slot = VBoxContainer.new()
 			controls.add_child(connect_slot)
 			_update_deduction()
+			# Keyboard play starts on the first card (AX-01).
+			_focus_first_card.call_deferred()
 	if not option_actions.is_empty() and not _modal_open():
 		_focus_first_choice.call_deferred()
+
+
+## Why the saved run was restarted or cut back, over the controls until the
+## player's next input.
+func _add_notice() -> void:
+	if run_notice != "" and controls != null:
+		controls.add_child(_label(UiText.t("notice_" + run_notice), "DimLabel"))
 
 
 func _fit_controls() -> void:
@@ -773,11 +870,48 @@ func _fit_controls() -> void:
 	controls_scroll.custom_minimum_size.y = minf(controls.get_combined_minimum_size().y, limit)
 
 
-func _focus_first_choice() -> void:
+func _focus_first_choice() -> bool:
+	if _modal_open() or controls == null or not is_instance_valid(controls):
+		return false
 	for child in controls.get_children():
-		if child is PanelContainer and child.focus_mode == Control.FOCUS_ALL:
-			child.grab_focus()
+		if child is PanelContainer and child.has_meta("choice") and child.focus_mode == Control.FOCUS_ALL and _grab(child):
+			return true
+	return false
+
+
+func _focus_first_card() -> bool:
+	if _modal_open() or deduce_label == null:
+		return false
+	for id in cards:
+		if _grab(cards[id]):
+			return true
+	return false
+
+
+## Somewhere useful for the keyboard when nothing has focus (an overlay closed
+## over a rebuilt screen): the deduction's first card, the first choice, or the
+## screen's first control.
+func _focus_default() -> void:
+	if _modal_open() or screen == null or not is_instance_valid(screen):
+		return
+	var owner := get_viewport().gui_get_focus_owner()
+	if owner != null and owner.is_visible_in_tree():
+		return
+	if not episode.is_empty() and controls != null:
+		if _focus_first_card() or _focus_first_choice():
 			return
+	_grab(_first_focusable(screen))
+
+
+func _first_focusable(node: Node) -> Control:
+	for child in node.get_children():
+		if child is Control and child.is_visible_in_tree() and not child.is_queued_for_deletion():
+			if child.get_focus_mode_with_override() == Control.FOCUS_ALL and not (child is BaseButton and child.disabled):
+				return child
+			var found := _first_focusable(child)
+			if found != null:
+				return found
+	return null
 
 
 ## A numbered dialogue choice: a text row that highlights on hover or focus and
@@ -787,6 +921,7 @@ func _add_choice(bbcode: String, action: Callable, enabled := true, parent: Cont
 	row.theme_type_variation = "ChoiceRow"
 	row.focus_mode = Control.FOCUS_ALL if enabled else Control.FOCUS_NONE
 	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if enabled else Control.CURSOR_ARROW
+	row.set_meta("choice", true)
 	var text := RichTextLabel.new()
 	text.bbcode_enabled = true
 	text.fit_content = true
@@ -798,7 +933,7 @@ func _add_choice(bbcode: String, action: Callable, enabled := true, parent: Cont
 		text.modulate = Color(1, 1, 1, 0.4)
 	row.add_child(text)
 	if enabled:
-		row.mouse_entered.connect(row.grab_focus)
+		row.mouse_entered.connect(func() -> void: _grab(row))
 		row.focus_entered.connect(func() -> void:
 			row.theme_type_variation = "ChoiceRowActive"
 		)
@@ -819,6 +954,7 @@ func _submit(input: Dictionary) -> void:
 	if viewing_record:
 		return
 	timer_left = -1.0
+	run_notice = ""
 	var result := StoryRunner.apply_input(episode, state, input)
 	if result["error"] != "":
 		push_warning(result["error"])
@@ -853,7 +989,7 @@ func _update_deduction() -> void:
 	var needed: int = scene["solution"].size()
 	deduce_label.text = UiText.t("deduce") % [needed, picks.size(), needed]
 	for id in cards:
-		cards[id].theme_type_variation = "SelectedCard" if picks.has(id) else "SelectableCard"
+		_style_card(id)
 	for child in connect_slot.get_children():
 		child.queue_free()
 	option_actions.clear()
@@ -883,6 +1019,9 @@ func _show_summary() -> void:
 		_add_summary_toggle("%s — %s" % [UiText.t("ending"), UiText.t("endings").get(ending, ending)], true)
 	else:
 		_add_summary_toggle(UiText.t("end_title"), false)
+	if not record_numbers.is_empty():
+		controls.add_child(_label(UiText.t("record_changed"), "DimLabel"))
+	var numbers := _numbers()
 	var details := VBoxContainer.new()
 	details.add_theme_constant_override("separation", 4)
 	details.visible = not summary_collapsed
@@ -899,13 +1038,14 @@ func _show_summary() -> void:
 	details.add_child(_label("%s\n%s" % [UiText.t("end_choices"), "\n".join(lines)]))
 	var changes := []
 	for group in ["values", "alignment"]:
-		for key in state[group]:
+		for key in numbers[group]:
 			var amount := _delta(group, key)
 			if amount != 0:
 				changes.append("%s %s%d" % [UiText.value_name(key), "+" if amount > 0 else "", amount])
 	var changed: String = "   ".join(changes) if not changes.is_empty() else UiText.t("no_change")
 	details.add_child(_label("%s: %s" % [UiText.t("end_changes_now"), changed], "DimLabel"))
-	if int(state["pressure"]) > 0:
+	# Pressure is not kept in the saved outcome; a changed record leaves it out.
+	if record_numbers.is_empty() and int(state["pressure"]) > 0:
 		details.add_child(_label(UiText.t("pressure_damage") % [int(state["pressure"]), int(state["pressure"])], "DimLabel"))
 	details.add_child(_label(UiText.t("see_status"), "DimLabel"))
 	var amber := ThemeBuilder.AMBER.to_html(false)
@@ -931,6 +1071,14 @@ func _add_summary_toggle(title: String, big: bool) -> void:
 	row.theme_type_variation = "ChoiceRow"
 	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	row.tooltip_text = UiText.t("summary_tip")
+	# Tab reaches it and Enter folds it, as H does (AX-03).
+	row.focus_mode = Control.FOCUS_ALL
+	row.focus_entered.connect(func() -> void:
+		row.theme_type_variation = "ChoiceRowActive"
+	)
+	row.focus_exited.connect(func() -> void:
+		row.theme_type_variation = "ChoiceRow"
+	)
 	summary_toggle = RichTextLabel.new()
 	summary_toggle.bbcode_enabled = true
 	summary_toggle.fit_content = true
@@ -942,10 +1090,12 @@ func _add_summary_toggle(title: String, big: bool) -> void:
 		row.theme_type_variation = "ChoiceRowActive"
 	)
 	row.mouse_exited.connect(func() -> void:
-		row.theme_type_variation = "ChoiceRow"
+		if not row.has_focus():
+			row.theme_type_variation = "ChoiceRow"
 	)
 	row.gui_input.connect(func(event: InputEvent) -> void:
-		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var click: bool = event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT
+		if (click or event.is_action_pressed("ui_accept")) and not _modal_open():
 			row.accept_event()
 			_toggle_summary()
 	)
@@ -991,8 +1141,9 @@ func _set_metric(entry: Dictionary) -> void:
 		tile.add_child(column)
 		metrics_grid.add_child(tile)
 		metric_tiles[label] = value
-		tile.modulate = Color(1.5, 1.4, 1.0)
-		create_tween().tween_property(tile, "modulate", Color.WHITE, 0.6)
+		if not Settings.reduce_motion:
+			tile.modulate = Color(1.5, 1.4, 1.0)
+			_visual_tween(tile).tween_property(tile, "modulate", Color.WHITE, 0.6)
 	var value_label: Label = metric_tiles[label]
 	value_label.text = "%s %s" % [_t(entry["value"]), _arrow(entry)]
 	var trend: String = entry.get("trend", "")
@@ -1009,10 +1160,21 @@ func _add_card(item: Dictionary) -> void:
 	card.custom_minimum_size.x = 232
 	card.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	card.mouse_filter = Control.MOUSE_FILTER_STOP
+	# Cards take keyboard focus (to read them, and to pick them in a deduction
+	# with Enter or Space; AX-01).
+	card.focus_mode = Control.FOCUS_ALL
+	var id: String = item["id"]
+	card.focus_entered.connect(func() -> void:
+		_style_card(id)
+		_show_card.call_deferred(id)
+	)
+	card.focus_exited.connect(_style_card.bind(id))
 	var column := VBoxContainer.new()
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var title := _label(_t(item["title"]), "PromptLabel")
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.set_meta("text", title.text)
+	card_titles[id] = title
 	var body := RichTextLabel.new()
 	body.theme_type_variation = "CardRich"
 	body.bbcode_enabled = true
@@ -1026,9 +1188,11 @@ func _add_card(item: Dictionary) -> void:
 	card.add_child(column)
 	card.gui_input.connect(_on_card_input.bind(item["id"]))
 	cards_box.add_child(card)
-	cards[item["id"]] = card
-	card.modulate = Color(1.6, 1.4, 1.0)
-	create_tween().tween_property(card, "modulate", Color.WHITE, 0.8)
+	cards[id] = card
+	_style_card(id)
+	if not Settings.reduce_motion:
+		card.modulate = Color(1.6, 1.4, 1.0)
+		_visual_tween(card).tween_property(card, "modulate", Color.WHITE, 0.8)
 	_update_tray_header()
 	_scroll_tray_to_end.call_deferred()
 
@@ -1049,18 +1213,53 @@ func _update_tray_header() -> void:
 
 
 func _set_tray_selectable(selectable: bool) -> void:
+	tray_selectable = selectable
 	tray.theme_type_variation = "TrayActive" if selectable else "Tile"
 	_update_tray_header()
 	for id in cards:
 		var card: PanelContainer = cards[id]
-		card.theme_type_variation = "SelectableCard" if selectable else "CardPanel"
 		card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if selectable else Control.CURSOR_ARROW
+		_style_card(id)
+
+
+## A card's frame: picked (amber, with a check mark) or not while a deduction
+## is open, and a light frame while it has keyboard focus.
+func _style_card(id: String) -> void:
+	var card: PanelContainer = cards.get(id)
+	if card == null or not is_instance_valid(card):
+		return
+	var picked := tray_selectable and picks.has(id)
+	var variation := "CardPanel"
+	if tray_selectable:
+		variation = "SelectedCard" if picked else "SelectableCard"
+	card.theme_type_variation = variation + ("Focus" if card.has_focus() else "")
+	var title: Label = card_titles[id]
+	title.text = ("✓ " if picked else "") + title.get_meta("text")
+
+
+## Scrolls the tray to a focused card: all of its width, and its top.
+func _show_card(id: String) -> void:
+	# After the layout pass, so a card that just arrived has its place.
+	await get_tree().process_frame
+	var card: PanelContainer = cards.get(id)
+	if card == null or not is_instance_valid(card) or tray_scroll == null:
+		return
+	var view := tray_scroll.size.x - (tray_scroll.get_v_scroll_bar().size.x if tray_scroll.get_v_scroll_bar().visible else 0.0)
+	var left := card.position.x
+	var right := left + card.size.x
+	if left < tray_scroll.scroll_horizontal:
+		tray_scroll.scroll_horizontal = int(left)
+	elif right > tray_scroll.scroll_horizontal + view:
+		tray_scroll.scroll_horizontal = int(right - view)
+	tray_scroll.scroll_vertical = 0
 
 
 func _on_card_input(event: InputEvent, id: String) -> void:
-	if deduce_label == null or not pending.is_empty():
+	if deduce_label == null or not pending.is_empty() or _modal_open():
 		return
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+	var click: bool = event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT
+	if click or event.is_action_pressed("ui_accept"):
+		cards[id].accept_event()
 		_toggle_pick(id)
 
 
@@ -1075,9 +1274,13 @@ func _toggle_pick(id: String) -> void:
 
 # --------------------------------------------------------------- settings --
 
-func _open_settings() -> void:
+## `focus_key` names the control that gets focus (the one just changed, when a
+## language or size change rebuilt the dialog); Close otherwise.
+func _open_settings(focus_key := "") -> void:
 	if settings_layer != null:
 		return
+	settings_opener = get_viewport().gui_get_focus_owner()
+	settings_controls.clear()
 	settings_layer = Control.new()
 	settings_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 	var shade := ColorRect.new()
@@ -1090,11 +1293,16 @@ func _open_settings() -> void:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size.x = 460
 	center.add_child(panel)
+	# The controls on the left, the key list beside them (it would make the
+	# dialog too tall for the window at large text under them).
+	var panel_column := HBoxContainer.new()
+	panel_column.add_theme_constant_override("separation", 32)
+	panel.add_child(panel_column)
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 24)
 	grid.add_theme_constant_override("v_separation", 12)
-	panel.add_child(grid)
+	panel_column.add_child(grid)
 
 	grid.add_child(_label(UiText.t("settings"), "HeaderLabel", false))
 	grid.add_child(Control.new())
@@ -1105,6 +1313,7 @@ func _open_settings() -> void:
 	language.selected = Settings.LANGUAGES.find(Settings.language)
 	language.item_selected.connect(func(index: int) -> void: _change_setting("language", Settings.LANGUAGES[index]))
 	grid.add_child(language)
+	settings_controls["language"] = language
 	grid.add_child(_label(UiText.t("text_size"), "", false))
 	var sizes := OptionButton.new()
 	for name in UiText.t("sizes"):
@@ -1112,16 +1321,19 @@ func _open_settings() -> void:
 	sizes.selected = Settings.text_size
 	sizes.item_selected.connect(func(index: int) -> void: _change_setting("text_size", index))
 	grid.add_child(sizes)
+	settings_controls["text_size"] = sizes
 	grid.add_child(_label(UiText.t("crt"), "", false))
 	var crt_toggle := CheckButton.new()
 	crt_toggle.button_pressed = Settings.crt
 	crt_toggle.toggled.connect(func(on: bool) -> void: _change_setting("crt", on))
 	grid.add_child(crt_toggle)
+	settings_controls["crt"] = crt_toggle
 	grid.add_child(_label(UiText.t("timer"), "", false))
 	var timer_toggle := CheckButton.new()
 	timer_toggle.button_pressed = Settings.timer
 	timer_toggle.toggled.connect(func(on: bool) -> void: _change_setting("timer", on))
 	grid.add_child(timer_toggle)
+	settings_controls["timer"] = timer_toggle
 	grid.add_child(_label(UiText.t("text_speed"), "", false))
 	var speeds := OptionButton.new()
 	for name in UiText.t("speeds"):
@@ -1129,6 +1341,7 @@ func _open_settings() -> void:
 	speeds.selected = Settings.text_speed
 	speeds.item_selected.connect(func(index: int) -> void: _change_setting("text_speed", index))
 	grid.add_child(speeds)
+	settings_controls["text_speed"] = speeds
 	for row in [["music", Settings.music_volume], ["sfx", Settings.sfx_volume]]:
 		grid.add_child(_label(UiText.t(row[0]), "", false))
 		var slider := HSlider.new()
@@ -1139,16 +1352,19 @@ func _open_settings() -> void:
 		slider.custom_minimum_size = Vector2(180, 24)
 		slider.value_changed.connect(func(v: float) -> void: _change_setting(row[0], v))
 		grid.add_child(slider)
+		settings_controls[row[0]] = slider
 	for row in [["fullscreen", Settings.fullscreen], ["reduce_motion", Settings.reduce_motion]]:
 		grid.add_child(_label(UiText.t(row[0]), "", false))
 		var toggle := CheckButton.new()
 		toggle.button_pressed = row[1]
 		toggle.toggled.connect(func(on: bool) -> void: _change_setting(row[0], on))
 		grid.add_child(toggle)
+		settings_controls[row[0]] = toggle
 	grid.add_child(Control.new())
 	var close := _button(UiText.t("close"))
 	close.pressed.connect(_close_settings)
 	grid.add_child(close)
+	settings_controls["close"] = close
 	if not episode.is_empty():
 		grid.add_child(Control.new())
 		var back := _button(UiText.t("back"))
@@ -1157,16 +1373,64 @@ func _open_settings() -> void:
 			_show_title()
 		)
 		grid.add_child(back)
+	# Every key the game answers to, readable without a mouse (AX-02, AX-10).
+	var keys := _label(UiText.t("keys_help"), "DimLabel")
+	keys.custom_minimum_size.x = 300
+	keys.size_flags_vertical = Control.SIZE_SHRINK_END
+	panel_column.add_child(keys)
+
 	add_child(settings_layer)
 	move_child(settings_layer, crt.get_index())
-	close.grab_focus.call_deferred()
+	_sync_overlay()
+	var target: Control = settings_controls.get(focus_key, close)
+	_grab.call_deferred(target)
 
 
 func _close_settings() -> void:
 	if settings_layer == null:
 		return
-	settings_layer.queue_free()
+	_free_overlay(settings_layer)
 	settings_layer = null
+	_sync_overlay()
+	_restore_focus.call_deferred(settings_opener)
+
+
+## Takes `layer` out of the focus cycle at once and frees it.
+func _free_overlay(layer: Control) -> void:
+	layer.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED
+	layer.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
+	layer.queue_free()
+
+
+## While settings, the status window or an Act card is up, only it takes focus
+## and the mouse: Tab cannot reach (or Enter press) what is behind it (AX-04).
+func _sync_overlay() -> void:
+	var top: Control = settings_layer if settings_layer != null else (status_layer if status_layer != null else act_card)
+	for child in get_children():
+		if child is Control and child != crt and not child.is_queued_for_deletion():
+			var blocked := top != null and child != top
+			child.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED if blocked else Control.FOCUS_BEHAVIOR_INHERITED
+
+
+## Gives focus back to the control that opened an overlay, or somewhere useful
+## when that control went with a rebuilt screen.
+func _restore_focus(opener: Variant) -> void:
+	if _modal_open() or _grab(opener):
+		return
+	_focus_default()
+
+
+## Focuses `control` if it is still there and can take focus now (an overlay
+## may have opened, or the screen been rebuilt, since it was asked for).
+func _grab(control: Variant) -> bool:
+	if not is_instance_valid(control) or not control is Control:
+		return false
+	if not control.is_inside_tree() or control.is_queued_for_deletion() or not control.is_visible_in_tree():
+		return false
+	if control.get_focus_mode_with_override() == Control.FOCUS_NONE:
+		return false
+	control.grab_focus()
+	return true
 
 
 func _change_setting(key: String, value: Variant) -> void:
@@ -1193,7 +1457,11 @@ func _change_setting(key: String, value: Variant) -> void:
 	sound.apply_volumes()
 	if key == "fullscreen":
 		_apply_window_mode()
-	_apply_settings()
+	# Only language and size change what is on screen (PF-02).
+	if key == "language" or key == "text_size":
+		_apply_settings()
+	if key == "reduce_motion" and Settings.reduce_motion:
+		_settle_motion()
 	crt.visible = Settings.crt
 	if key == "timer" and not Settings.timer:
 		timer_left = -1.0
@@ -1206,9 +1474,13 @@ func _change_setting(key: String, value: Variant) -> void:
 			# (with the timer off it had no limit at all).
 			_show_controls()
 	if key == "language" or key == "text_size":
+		# The dialog comes back in the new language or size with the edited
+		# control still focused; closing it later returns focus to its opener.
+		var opener := settings_opener
 		_close_settings()
 		_rebuild()
-		_open_settings()
+		_open_settings(key)
+		settings_opener = opener
 
 
 ## Pressure costs decision time: five seconds a level, never below fifteen.
@@ -1220,7 +1492,13 @@ func _decision_seconds(scene: Dictionary) -> int:
 ## How much `key` moved since this incident began.
 func _delta(group: String, key: String) -> int:
 	var before: int = entry_carry.get(group, {}).get(key, 0)
-	return int(state[group][key]) - before
+	return int(_numbers()[group].get(key, 0)) - before
+
+
+## Values, leaning and flags as the incident left them: the run's state, or for
+## a record of a since-changed episode, the outcome saved when it closed.
+func _numbers() -> Dictionary:
+	return record_numbers if not record_numbers.is_empty() else state
 
 
 ## Four tabs: tendencies and leaning (with this incident's change), the
@@ -1232,6 +1510,7 @@ func _open_status(tab := -1) -> void:
 		return
 	if tab >= 0:
 		status_tab = tab
+	status_opener = get_viewport().gui_get_focus_owner()
 	status_layer = Control.new()
 	status_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 	var shade := ColorRect.new()
@@ -1268,17 +1547,28 @@ func _open_status(tab := -1) -> void:
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	column.add_child(tabs)
-	tabs.add_child(_status_page(_status_values()))
-	tabs.add_child(_status_page(_status_flags("decision_flags", "status_decisions_hint")))
-	tabs.add_child(_status_page(_status_flags("reveal_flags", "")))
-	tabs.add_child(_status_people(people, fresh))
+	# A tab's page is built when it is first shown, not all four on opening (PF-03).
+	var pages := [
+		func() -> Control: return _status_page(_status_values()),
+		func() -> Control: return _status_page(_status_flags("decision_flags", "status_decisions_hint")),
+		func() -> Control: return _status_page(_status_flags("reveal_flags", "")),
+		func() -> Control: return _status_people(people, fresh),
+	]
+	for i in pages.size():
+		tabs.add_child(MarginContainer.new())
+	var fill := func(index: int) -> void:
+		var holder: Control = tabs.get_child(index)
+		if holder.get_child_count() == 0:
+			holder.add_child(pages[index].call())
 	tabs.set_tab_title(0, UiText.t("status_values_tab"))
 	tabs.set_tab_title(1, UiText.t("status_decisions"))
 	tabs.set_tab_title(2, UiText.t("status_reveals"))
 	tabs.set_tab_title(3, UiText.t("status_people") + ("  ●" if not fresh.is_empty() else ""))
+	fill.call(status_tab)
 	tabs.current_tab = status_tab
 	tabs.tab_changed.connect(func(index: int) -> void:
 		status_tab = index
+		fill.call(index)
 		if index == PEOPLE_TAB:
 			_mark_people_seen(people)
 			tabs.set_tab_title(PEOPLE_TAB, UiText.t("status_people"))
@@ -1288,13 +1578,18 @@ func _open_status(tab := -1) -> void:
 		tabs.set_tab_title(PEOPLE_TAB, UiText.t("status_people"))
 	add_child(status_layer)
 	move_child(status_layer, crt.get_index())
-	close.grab_focus.call_deferred()
+	_sync_overlay()
+	# The tab bar takes focus: Left/Right switch tabs, Tab goes into the page.
+	_grab.call_deferred(tabs.get_tab_bar())
 
 
 ## A tab's content, scrolling when it is taller than the window.
 func _status_page(content: Control) -> Control:
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	# Nothing in a page takes focus, so the page itself does: arrows and Page
+	# Up/Down scroll it (AX-03).
+	_keyboard_scroll(scroll, true)
 	var margin := _margin(14)
 	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1307,17 +1602,21 @@ func _status_values() -> Control:
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 8)
 	box.add_child(_label(_header(UiText.t("status_values")), "PromptLabel", false))
+	var numbers := _numbers()
 	var top_value := 10
-	for key in state["values"]:
-		top_value = maxi(top_value, absi(int(state["values"][key])))
-	for key in state["values"]:
-		box.add_child(_status_row(UiText.value_name(key), int(state["values"][key]), _delta("values", key), top_value))
+	for key in numbers["values"]:
+		top_value = maxi(top_value, absi(int(numbers["values"][key])))
+	for key in numbers["values"]:
+		box.add_child(_status_row(UiText.value_name(key), int(numbers["values"][key]), _delta("values", key), top_value))
 	box.add_child(_spacer(6))
 	box.add_child(_label(_header(UiText.t("status_alignment")), "PromptLabel", false))
-	for key in state["alignment"]:
-		box.add_child(_status_row(UiText.value_name(key), int(state["alignment"][key]), _delta("alignment", key), maxi(top_value, 10)))
+	for key in numbers["alignment"]:
+		box.add_child(_status_row(UiText.value_name(key), int(numbers["alignment"][key]), _delta("alignment", key), maxi(top_value, 10)))
 	box.add_child(_spacer(6))
 	box.add_child(_label(UiText.t("status_hint"), "DimLabel"))
+	box.add_child(_spacer(6))
+	box.add_child(_label("%s  %s" % [UiText.t("pressure"), "■".repeat(int(state["pressure"])) + "□".repeat(maxi(0, 4 - int(state["pressure"])))], "PromptLabel", false))
+	box.add_child(_label(UiText.t("pressure_help"), "DimLabel"))
 	return box
 
 
@@ -1327,7 +1626,7 @@ func _status_flags(names_key: String, hint_key: String) -> Control:
 	var names: Dictionary = UiText.t(names_key)
 	var any := false
 	for flag in names:
-		if state["flags"].get(flag, false):
+		if _numbers()["flags"].get(flag, false):
 			box.add_child(_label("·  " + names[flag]))
 			any = true
 	if not any:
@@ -1348,6 +1647,7 @@ func _status_people(people: Array, fresh: Array) -> Control:
 	var list_scroll := ScrollContainer.new()
 	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	list_scroll.custom_minimum_size.x = 300
+	_keyboard_scroll(list_scroll)
 	var list := VBoxContainer.new()
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_theme_constant_override("separation", 2)
@@ -1356,6 +1656,7 @@ func _status_people(people: Array, fresh: Array) -> Control:
 	var detail_scroll := ScrollContainer.new()
 	detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	detail_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_keyboard_scroll(detail_scroll, true)
 	var detail := VBoxContainer.new()
 	detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail.add_theme_constant_override("separation", 6)
@@ -1376,10 +1677,17 @@ func _status_people(people: Array, fresh: Array) -> Control:
 	var rows := {}
 	var amber := ThemeBuilder.AMBER.to_html(false)
 	var dim := ThemeBuilder.DIM.to_html(false)
+	# A person is chosen by click, or by moving keyboard focus onto the row
+	# (Tab, the arrows; Enter too) (AX-02).
+	var restyle := func() -> void:
+		for id in rows:
+			var focused: bool = rows[id].has_focus()
+			rows[id].theme_type_variation = "ChoiceRowFocus" if focused else ("ChoiceRowActive" if id == status_person else "ChoiceRow")
 	for person in people:
 		var entry := PanelContainer.new()
 		entry.theme_type_variation = "ChoiceRowActive" if person["id"] == status_person else "ChoiceRow"
 		entry.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		entry.focus_mode = Control.FOCUS_ALL
 		var text := RichTextLabel.new()
 		text.bbcode_enabled = true
 		text.fit_content = true
@@ -1398,13 +1706,18 @@ func _status_people(people: Array, fresh: Array) -> Control:
 		line.add_child(text)
 		entry.add_child(line)
 		rows[person["id"]] = entry
-		entry.gui_input.connect(func(event: InputEvent) -> void:
-			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-				entry.accept_event()
+		var choose := func() -> void:
+			if status_person != person["id"]:
 				status_person = person["id"]
-				for id in rows:
-					rows[id].theme_type_variation = "ChoiceRowActive" if id == status_person else "ChoiceRow"
 				_show_person(detail, person, fresh)
+			restyle.call()
+		entry.focus_entered.connect(choose)
+		entry.focus_exited.connect(restyle)
+		entry.gui_input.connect(func(event: InputEvent) -> void:
+			var click: bool = event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT
+			if click or event.is_action_pressed("ui_accept"):
+				entry.accept_event()
+				choose.call()
 		)
 		list.add_child(entry)
 	_show_person(detail, chosen, fresh)
@@ -1461,7 +1774,11 @@ func _portrait(name: String, side: int) -> Control:
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	frame.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	var image := TextureRect.new()
-	image.texture = load(path)
+	# Kept once loaded (one per cast member): reopening People loaded every
+	# portrait from disk again, most of its opening time (PF-03).
+	if not portrait_cache.has(path):
+		portrait_cache[path] = load(path)
+	image.texture = portrait_cache[path]
 	image.custom_minimum_size = Vector2(side, side)
 	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
@@ -1537,8 +1854,10 @@ func _status_row(name: String, value: int, change: int, scale: int) -> Control:
 func _close_status() -> void:
 	if status_layer == null:
 		return
-	status_layer.queue_free()
+	_free_overlay(status_layer)
 	status_layer = null
+	_sync_overlay()
+	_restore_focus.call_deferred(status_opener)
 
 
 func _apply_window_mode() -> void:
@@ -1551,7 +1870,24 @@ func _flash(node: CanvasItem, color: Color) -> void:
 	if node == null or Settings.reduce_motion:
 		return
 	node.modulate = color
-	create_tween().tween_property(node, "modulate", Color.WHITE, 0.7)
+	_visual_tween(node).tween_property(node, "modulate", Color.WHITE, 0.7)
+
+
+## A tween for a fade or highlight on `node`, remembered so reduced motion can
+## finish it at once.
+func _visual_tween(node: Node) -> Tween:
+	visual_tweens = visual_tweens.filter(func(t: Tween) -> bool: return t.is_valid())
+	var tween := node.create_tween()
+	visual_tweens.append(tween)
+	return tween
+
+
+## Reduced motion turned on: every running fade and highlight jumps to its end.
+func _settle_motion() -> void:
+	for tween in visual_tweens:
+		if tween.is_valid() and tween.is_running():
+			tween.custom_step(60.0)
+	visual_tweens.clear()
 
 
 ## True when `id` is the first incident of its Act.
@@ -1576,10 +1912,15 @@ func _show_act_card() -> void:
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	act_card.add_child(_with_backdrop(center, "res://assets/acts/act-%d.jpg" % act, 0.5))
+	# The text sits on an opaque backing: the artwork's light patches would
+	# otherwise wash it out (AX-07).
+	var backing := PanelContainer.new()
+	backing.theme_type_variation = "Backing"
+	center.add_child(backing)
 	var column := VBoxContainer.new()
 	column.alignment = BoxContainer.ALIGNMENT_CENTER
 	column.add_theme_constant_override("separation", 12)
-	center.add_child(column)
+	backing.add_child(column)
 	for line in [
 		[UiText.t("act") % act, "HeaderLabel"],
 		[UiText.t("act_names")[act - 1], "TitleLabel"],
@@ -1594,12 +1935,13 @@ func _show_act_card() -> void:
 	)
 	add_child(act_card)
 	move_child(act_card, crt.get_index())
+	_sync_overlay()
 	sound.play("pager", -14.0, 0.5)
 	if Settings.reduce_motion:
 		get_tree().create_timer(2.6).timeout.connect(_close_act_card)
 		return
 	act_card.modulate.a = 0.0
-	var tween := create_tween()
+	var tween := _visual_tween(act_card)
 	tween.tween_property(act_card, "modulate:a", 1.0, 0.6)
 	tween.tween_interval(2.0)
 	tween.tween_callback(_close_act_card)
@@ -1610,10 +1952,11 @@ func _close_act_card() -> void:
 		return
 	var card := act_card
 	act_card = null
+	_sync_overlay()
 	if Settings.reduce_motion:
 		card.queue_free()
 		return
-	var tween := create_tween()
+	var tween := _visual_tween(card)
 	tween.tween_property(card, "modulate:a", 0.0, 0.5)
 	tween.tween_callback(card.queue_free)
 
@@ -1631,13 +1974,17 @@ func _show_credits(ending: String) -> void:
 				decisions += 1
 			if input["type"] == "timeout":
 				timeouts += 1
-	var root := _margin(64)
+	var root := _margin(40)
 	var center := CenterContainer.new()
 	root.add_child(center)
+	# Opaque backing under the text, as on the Act cards (AX-07).
+	var backing := PanelContainer.new()
+	backing.theme_type_variation = "Backing"
+	center.add_child(backing)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 16)
 	column.custom_minimum_size.x = 760
-	center.add_child(column)
+	backing.add_child(column)
 	var lines := [
 		[UiText.t("title"), "DimLabel"],
 		["%s — %s" % [UiText.t("ending"), UiText.t("endings").get(ending, ending)], "TitleLabel"],
@@ -1662,12 +2009,16 @@ func _show_credits(ending: String) -> void:
 	back.pressed.connect(_show_title)
 	column.add_child(back)
 	_replace_screen(_with_backdrop(root, "res://assets/endings/%s.jpg" % ending.to_lower(), 0.7))
-	back.grab_focus.call_deferred()
+	_grab.call_deferred(back)
 
 
 func _apply_settings() -> void:
 	TranslationServer.set_locale(Settings.language)
-	theme = ThemeBuilder.build(Settings.text_size)
+	# One theme per text size, built on first use and reused (PF-02).
+	if not themes.has(Settings.text_size):
+		themes[Settings.text_size] = ThemeBuilder.build(Settings.text_size)
+	if theme != themes[Settings.text_size]:
+		theme = themes[Settings.text_size]
 
 
 ## Re-creates the current screen in the new language or size, without replaying
@@ -1767,16 +2118,54 @@ func _button(text: String) -> Button:
 	return button
 
 
+## The log console and the dialogue feed: Tab reaches them, and the arrows,
+## Page Up/Down and Home/End read back through them (AX-03).
 func _rich() -> RichTextLabel:
 	var rich := RichTextLabel.new()
 	rich.bbcode_enabled = true
 	rich.scroll_following = true
 	rich.selection_enabled = false
+	rich.focus_mode = Control.FOCUS_ALL
 	rich.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	rich.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	# Lay the whole line out first so typed words don't jump between lines.
 	rich.visible_characters_behavior = TextServer.VC_CHARS_AFTER_SHAPING
 	return rich
+
+
+## Page Up/Down and Home/End scroll `scroll` while focus is anywhere inside it,
+## and the focused control is kept in view. A `focusable` one (whose content
+## takes no focus) is a Tab stop itself and scrolls with the arrows too.
+func _keyboard_scroll(scroll: ScrollContainer, focusable := false) -> void:
+	scroll.follow_focus = true
+	if focusable:
+		scroll.focus_mode = Control.FOCUS_ALL
+		scroll.draw_focus_border = true
+	scroll.gui_input.connect(func(event: InputEvent) -> void:
+		if not event is InputEventKey or not event.pressed:
+			return
+		var page := maxf(40.0, scroll.size.y * 0.85)
+		var line := 48.0
+		var own := scroll.has_focus()
+		var target := -1.0
+		var bar := scroll.get_v_scroll_bar()
+		if event.is_action_pressed("ui_page_down", true):
+			target = scroll.scroll_vertical + page
+		elif event.is_action_pressed("ui_page_up", true):
+			target = scroll.scroll_vertical - page
+		elif own and event.is_action_pressed("ui_down", true):
+			target = scroll.scroll_vertical + line
+		elif own and event.is_action_pressed("ui_up", true):
+			target = scroll.scroll_vertical - line
+		elif own and event.is_action_pressed("ui_home"):
+			target = 0.0
+		elif own and event.is_action_pressed("ui_end"):
+			target = bar.max_value
+		else:
+			return
+		scroll.scroll_vertical = int(clampf(target, 0.0, bar.max_value))
+		scroll.accept_event()
+	)
 
 
 func _spacer(height: int) -> Control:
@@ -1813,8 +2202,10 @@ func _voice_color(speaker: String, person: String) -> String:
 
 
 func _ending() -> String:
-	for flag in state.get("flags", {}):
-		if flag.begins_with("ENDING_") and state["flags"][flag]:
+	var flags: Dictionary = _numbers().get("flags", {})
+	for flag in flags:
+		if flag.begins_with("ENDING_") and flags[flag]:
+
 			return flag.trim_prefix("ENDING_")
 	return ""
 
@@ -1954,6 +2345,27 @@ func _review(args: Dictionary) -> void:
 		_show_credits(_ending())
 	for i in 4:
 		await get_tree().process_frame
+	if args.has("focus"):
+		# --focus=<settings key>|card|person|tabs: shows that control's keyboard focus.
+		var target: Control = settings_controls.get(args["focus"]) if settings_layer != null else null
+		if args["focus"] == "card":
+			for id in cards:
+				target = cards[id]
+		elif args["focus"] == "person" or args["focus"] == "tabs":
+			var tabs := status_layer.find_children("*", "TabContainer", true, false) if status_layer != null else []
+			if not tabs.is_empty():
+				target = tabs[0].get_tab_bar()
+				if args["focus"] == "person":
+					var rows := tabs[0].find_children("*", "PanelContainer", true, false).filter(func(c: Control) -> bool: return c.focus_mode == Control.FOCUS_ALL)
+					target = rows[min(1, rows.size() - 1)] if not rows.is_empty() else target
+		if target != null:
+			target.grab_focus()
+		for i in 3:
+			await get_tree().process_frame
+	if args.has("settle"):
+		# Lets fades and highlights finish (an Act card stays up for 2.6 s).
+		await get_tree().create_timer(0.95).timeout
+
 	await RenderingServer.frame_post_draw
 	var image := get_viewport().get_texture().get_image()
 	image.save_png(args["shot"])

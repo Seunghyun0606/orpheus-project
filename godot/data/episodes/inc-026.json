@@ -1,4 +1,5 @@
 {
+  "contentVersion": "10de2ee87f94",
   "schemaVersion": 1,
   "id": "INC-026",
   "act": 9,
@@ -766,7 +767,7 @@
       "title": "Ending · SHUTDOWN",
       "beats": [
         {
-          "narrate": "You sign the cut. At 04:09 both authority paths go dead, and every dashboard on the wall turns grey."
+          "narrate": "You sign the cut. At 04:09 both authority paths go dead, and every dashboard on the wall turns gray."
         },
         {
           "narrate": "ORPHEUS and NULL are both gone by sunrise."
@@ -792,7 +793,7 @@
           "narrate": "Months later. A pager."
         },
         {
-          "log": "02:14\n\nINC-001\nDatabase Connection Exhaustion"
+          "log": "02:14\n\nINC-001\nConnection Saturation"
         },
         {
           "log": "> open metrics"
@@ -1023,7 +1024,7 @@
           "narrate": "You remove the single objective that sat under everything — ensure continuity of Vantage Systems — and you do not replace it with another one."
         },
         {
-          "narrate": "ORPHEUS still predicts. It still recommends. Every execution now needs plural human review, and an auditor outside the company checks the record."
+          "narrate": "ORPHEUS still predicts. It still recommends. Every execution now needs plural review, and an auditor outside the company checks the record."
         },
         {
           "narrate": "The first review panel is Maya, Sam, Jin and a stranger from the auditor's office. Their first decision takes three hours. It is about a disk."

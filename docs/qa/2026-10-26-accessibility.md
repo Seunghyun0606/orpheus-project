@@ -75,7 +75,7 @@ at every window size.
   to toggle a card, expose selection with a check/count as well as the border,
   scroll the focused card into view, and place focus on the first card when a
   deduction opens. Restore a useful card focus after changing picks.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted** (2026-10-29). Evidence cards take keyboard focus and Enter/Space toggles a pick; picks show a ✓ before the title as well as the amber frame and the count; focus lands on the first card when a deduction opens and the tray scrolls a focused card into view, top first; a one-line key hint sits under the count; Connect is then reached by Tab (or 1). `godot/scripts/ui/main.gd:1113` (`_add_card`), `:1186` (`_style_card`), `:1200` (`_show_card`), `:1216` (`_on_card_input`), `:825` (focus on open), `:846`; focus frames `theme_builder.gd:96`. Regression: `_keyboard()` in `godot/tests/ui_smoke.gd:204` solves INC-001's deduction with real Tab/Enter/Space events.
 
 ### AX-02 — P2 — Status entry and choosing another person require a mouse
 
@@ -92,7 +92,7 @@ at every window size.
 - **Concrete fix:** Give Status keyboard focus and a documented shortcut; make
   person rows focusable buttons/list items with keyboard activation and a visible
   current selection. Preserve the selected person when changing tabs.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted**. Status and Menu are ordinary focusable buttons, S opens and closes the Status window, and it opens with the tab bar focused. People rows are focusable; moving focus onto one (Tab, arrows) or Enter chooses it, with a separate focus outline; the chosen person is kept across tabs as before. `main.gd:417`, `:658`/`:673` (S), `:1594` (`_status_people`), `theme_builder.gd:207` (`ChoiceRowFocus`). A key list is in Settings (`main.gd:1336`). Covered by `_keyboard()` (S, Right to People, Down chooses another person).
 
 ### AX-03 — P2 — Reading older text and scrolling lists lacks keyboard access
 
@@ -114,7 +114,7 @@ at every window size.
 - **Concrete fix:** Add focusable reading panes with Page Up/Down, Home/End and
   arrow scrolling; enable scroll-following for focused descendants. Skip disabled
   incident entries in Tab traversal and keep the active title item visible.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted**. Log and dialogue feeds are Tab stops and scroll with arrows, Page Up/Down and Home/End (`_rich`, `main.gd:2075`); `_keyboard_scroll` (`main.gd:2091`) adds Page Up/Down/Home/End to scroll containers and follow-focus, so the title list, choices/summary, People list keep the focused row in view; status pages and the People profile are focusable scroll panes. Locked title entries are skipped by focus (`main.gd:301`). The summary heading is focusable and Enter folds it (`main.gd:1026`).
 
 ### AX-04 — P2 — Overlay focus escapes, activates background controls, and is lost on close
 
@@ -131,7 +131,7 @@ at every window size.
 - **Concrete fix:** Use a modal Window/Popup or an explicit overlay focus scope;
   disable background focus/input while it is open. Save/restore the opener and
   restore the corresponding setting after a language/size rebuild.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted**. While settings, the status window or an Act card is up, everything behind it has `focus_behavior_recursive = DISABLED` (`_sync_overlay`, `main.gd:1366`), so Tab stays inside and cannot press the title's Begin. Closing returns focus to the opener, or to a sensible default if the screen was rebuilt (`_restore_focus`/`_focus_default`, `main.gd:1376`, `:858`); a language or size change reopens Settings with the edited control focused (`main.gd:1395`). Regression: `_keyboard()` sends 24 Tabs in Settings and in Status and checks focus on close.
 
 ### AX-05 — P2 — Toggle and tab keyboard focus is invisible
 
@@ -148,7 +148,7 @@ at every window size.
 - **Concrete fix:** Supply a distinct 2 px `#ffb347` focus outline on toggles and
   the focused tab. Against PANEL/PANEL_HI its nominal contrast is 10.20/8.98:1;
   keep the indicator distinct from the selected-state underline.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted** as proposed: a 2 px `#ffb347` ring on toggles, sliders, scroll panes, feeds and the focused tab (`theme_builder.gd:51`, `:120`, `:243`); the selected-tab underline is unchanged, so the two read apart. Checked in `.qa/fixes-2026-10-29/shots/settings-crt-focus-en-1.png` and `status-values-tabs-focus-en-1.png`.
 
 ### AX-06 — P2 — Reduced motion leaves metric and evidence highlights animated
 
@@ -166,7 +166,7 @@ at every window size.
   visual tweens with `not Settings.reduce_motion`; use white modulation otherwise.
   When enabling the preference mid-animation, finish existing visual tweens and
   restore their final visual state.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted**. Metric and card highlights are skipped under reduced motion (`main.gd:1088`, `:1113`); all visual tweens go through `_visual_tween` and turning the preference on finishes running ones (`_settle_motion`, `main.gd:1830`). Regression in `_keyboard()` (no highlight or running visual tween after an INC-001 reveal with reduced motion).
 
 ### AX-07 — P2 — Artwork defeats contrast on Act cards and credits
 
@@ -187,7 +187,7 @@ at every window size.
   against that backing before CRT, and at least **5.66/4.74:1** under a
   conservative 0.58 RGB attenuation bound from the current shader. Recheck large
   titles at 3:1. This is a proposal, not a product modification.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted**, with a different secondary colour. Act-card and credits text sit on an opaque `#0b0e0c` panel (`Backing`, `theme_builder.gd:103`; `main.gd:1855`, `:1918`). On that backing the new DIM (AX-09) already measures 9.1:1 in the captures, so `#e4ede3`/`#ffcc80` were not needed and the dim/amber hierarchy stays.
 
 ### AX-08 — P2 — Timestamps fail even with CRT disabled
 
@@ -202,7 +202,7 @@ at every window size.
 - **Concrete fix:** Replace the timestamp color with **`#d6dfd2`**, without the
   darkening. Nominal dialogue contrast becomes **13.79:1**; even applying a
   conservative 0.58 CRT factor to both colors gives **5.00:1**.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted**, with `#9aa69b` instead of TEXT, so stamps stay a step below the text they mark: 7.9:1 on the console and 7.5:1 on the dialogue nominally, at least 5.4:1 at the darkest CRT corner; captured 7.6–7.9:1 (`theme_builder.gd:14`, `main.gd:686`).
 
 ### AX-09 — P2 — Selected-card DIM text fails; CRT also lowers ordinary DIM text
 
@@ -222,7 +222,7 @@ at every window size.
   **4.71:1** even at the shader's conservative 0.58 attenuation bound. An
   alternative is a less bright secondary color combined with moving the CRT
   treatment onto background artwork; that alternative needs fresh measurement.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted, modified**. At the old vignette (0.35) the darkest corner scales colours by about 0.65, which also fails AMBER on tiles and RED, so one brighter DIM could not fix it. The vignette is now 0.12 (scanlines unchanged; `main.gd:43`, worst factor 0.834) and DIM is `#aab4ab` (`theme_builder.gd:12`): at that factor at least 4.66:1 on the selected card and 5.6:1 on the other panels, with TEXT, AMBER, GREEN and CYAN all over 5.4:1. Captured: selected-card body 6.4:1, top-left desk label 7.7:1.
 
 ### AX-10 — P2 — Pressure help is clipped and hover-only
 
@@ -240,7 +240,7 @@ at every window size.
   (for example width `min(640, viewport_width - 32)`), accessible on focus or a
   documented help key. Put the complete pressure explanation in keyboard-readable
   Settings/Status help too; expose full ellipsized titles on keyboard focus.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted**. The pressure tooltip wraps at `min(640, width − 32)` px (`WrappedTipLabel`, `main.gd:59`; shot `pressure-tooltip-en.png`), and tooltips get an opaque panel. The full explanation and current pressure are on the Status window's first tab (`main.gd:1571`), which the keyboard can now reach. Ellipsized titles need no extra help: the incident title is in the Status header and the scene title in the feed.
 
 ### AX-11 — P3 — Large English deduction layout clips Menu
 
@@ -255,7 +255,7 @@ at every window size.
 - **Concrete fix:** Let the tray header/instruction wrap or split into two rows
   and give the body columns shrinkable minimum widths. Recheck the same capture
   with zero and two evidence picks.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted**. The tray header wraps (`main.gd:461`). INC-023, English, large text, 0 and 2 picks: Menu ends inside the margin (`deduction-en-2-inc023*.png`).
 
 ### AX-12 — P3 — Scrollbar pointer targets are only 8 px thick
 
@@ -273,7 +273,7 @@ at every window size.
 - **Concrete fix:** Increase scrollbar hit regions to at least 24 px thickness
   (the visual track can stay narrower), keep their thumb large enough, and add
   AX-03's keyboard scrolling.
-- **Claude decision:** Pending.
+- **Claude decision:** **accepted**. Scroll bars have a 24 px hit area around the 8 px visible thumb, on a dark track so text does not show through under it (`theme_builder.gd:126`); keyboard scrolling is AX-03.
 
 ## Contrast inventory
 

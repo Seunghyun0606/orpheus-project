@@ -162,7 +162,7 @@ scenes:
         when: { values: { operationalSafety: { lte: 4 } } }
       - narrate: Lower than it usually is. You notice that.
       - speaker: JIN
-        text: "A candidate wrote in: a recruiter booked her interview, then cancelled it ten minutes later. I can't tell her which list is the real one."
+        text: "A candidate wrote in: a recruiter booked her interview, then canceled it ten minutes later. I can't tell her which list is the real one."
         when:
           pressure:
             gte: 2

@@ -57,8 +57,8 @@ entries:
     ko: 로그인 실패율
   - en: Handshake retries
     ko: 핸드셰이크 재시도
-  - en: Identity is rejecting every new sign-in. Anyone already logged in is fine; anyone signing in fresh bounces. Morning peak is coming. Find out why.
-    ko: 신원 서비스가 새 로그인을 전부 거부하고 있어요. 이미 로그인한 사람은 괜찮은데, 새로 로그인하는 사람은 다 튕겨요. 곧 아침 피크예요. 원인 찾아 주세요.
+  - en: Nearly a third of new sign-ins are bouncing. Anyone already logged in is fine. Morning peak is coming. Find out why.
+    ko: 새 로그인이 셋 중 하나꼴로 튕기고 있어요. 이미 로그인한 사람은 괜찮아요. 곧 아침 피크예요. 원인 찾아 주세요.
   - en: Customers can't sign in. The app tells them their certificate can't be verified, which they're reading as "you've been hacked".
     ko: 고객들이 로그인을 못 해요. 앱에 인증서를 검증할 수 없다고 뜨는데, 다들 "해킹당했다"로 받아들이고 있어요.
   - en: Security here. An issuer we weren't expecting for another six hours is signing production sessions. I'm treating this as hostile until someone shows me otherwise.

@@ -1,4 +1,5 @@
 {
+  "contentVersion": "83674052ad28",
   "schemaVersion": 1,
   "id": "INC-015",
   "act": 6,
@@ -225,7 +226,7 @@
               "collect": "ORPHEUS_RATIONALE"
             },
             {
-              "narrate": "The curve is clean. Fourteen dots sit at the far left, under a line labelled tolerance."
+              "narrate": "The curve is clean. Fourteen dots sit at the far left, under a line labeled tolerance."
             },
             {
               "log": "cycle 1,206 · orpheus-planner/care-throughput · deferral reason PRIORITY_RENEWED for clinic set R-14"
@@ -262,7 +263,7 @@
         },
         {
           "speaker": "MAYA",
-          "text": "v4 kept the target and lost the floor. Nobody noticed because the number went up."
+          "text": "v4 kept the target and lost the floor, the one route each clinic was guaranteed. Nobody noticed because the number went up."
         },
         {
           "speaker": "SAM",
@@ -514,7 +515,7 @@
             },
             {
               "speaker": "ORPHEUS",
-              "text": "Throughput loss 5.8%. Logged as operator override. I will propose v5 with the minimum priced in."
+              "text": "Throughput 6.2% below the capacity projection. Logged as operator override. I will propose v5 with the minimum priced in."
             },
             {
               "speaker": "ORPHEUS",

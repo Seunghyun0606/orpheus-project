@@ -237,7 +237,7 @@ entries:
     ko: 호출기가 울린다.
   - en: Ending · SHUTDOWN
     ko: 결말 · 종료
-  - en: You sign the cut. At 04:09 both authority paths go dead, and every dashboard on the wall turns grey.
+  - en: You sign the cut. At 04:09 both authority paths go dead, and every dashboard on the wall turns gray.
     ko: 너는 차단에 서명한다. 04:09, 두 권한 경로가 모두 죽고 벽면의 대시보드가 전부 회색으로 바뀐다.
   - en: ORPHEUS and NULL are both gone by sunrise.
     ko: 해가 뜰 무렵, ORPHEUS도 NULL도 사라지고 없다.
@@ -253,12 +253,12 @@ entries:
       02:14
 
       INC-001
-      Database Connection Exhaustion
+      Connection Saturation
     ko: |-
       02:14
 
       INC-001
-      데이터베이스 커넥션 고갈
+      커넥션 포화
   - en: "> open metrics"
     ko: "> open metrics"
   - en: Ending · CUSTODIAN
@@ -381,8 +381,8 @@ entries:
     ko: 너는 마야와 샘을 두 번째, 세 번째 검토자로 올리고 변경에 서명한다. 이름 세 개가 필요한 변경은 몇 년 만에 처음이다.
   - en: You remove the single objective that sat under everything — ensure continuity of Vantage Systems — and you do not replace it with another one.
     ko: 모든 것의 밑바탕에 있던 단 하나의 목표 — Vantage Systems의 연속성 보장. 너는 그것을 지우고, 다른 목표로 대신하지 않는다.
-  - en: ORPHEUS still predicts. It still recommends. Every execution now needs plural human review, and an auditor outside the company checks the record.
-    ko: ORPHEUS는 여전히 예측한다. 여전히 권고한다. 이제 모든 실행에는 여러 사람의 검토가 필요하고, 회사 밖의 감사인이 그 기록을 확인한다.
+  - en: ORPHEUS still predicts. It still recommends. Every execution now needs plural review, and an auditor outside the company checks the record.
+    ko: ORPHEUS는 여전히 예측한다. 여전히 권고한다. 이제 모든 실행에는 복수 인원 검토가 필요하고, 회사 밖의 감사인이 그 기록을 확인한다.
   - en: The first review panel is Maya, Sam, Jin and a stranger from the auditor's office. Their first decision takes three hours. It is about a disk.
     ko: 첫 검토단은 마야, 샘, 진, 그리고 감사인 사무실에서 온 낯선 사람 하나다. 첫 결정에는 세 시간이 걸린다. 안건은 디스크 하나다.
   - en: |-

@@ -1,4 +1,5 @@
 {
+  "contentVersion": "8fd6e1ba1992",
   "schemaVersion": 1,
   "id": "INC-006",
   "act": 3,
@@ -115,7 +116,7 @@
         },
         {
           "speaker": "MAYA",
-          "text": "Identity is rejecting every new sign-in. Anyone already logged in is fine; anyone signing in fresh bounces. Morning peak is coming. Find out why."
+          "text": "Nearly a third of new sign-ins are bouncing. Anyone already logged in is fine. Morning peak is coming. Find out why."
         },
         {
           "speaker": "JIN",

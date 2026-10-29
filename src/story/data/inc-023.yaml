@@ -59,7 +59,7 @@ evidence:
   - id: TEAM_DIAGNOSIS
     kind: operational
     title: Sam's row check
-    body: Row counts match between the view and yesterday's cached snapshot. Sam recommends serving the snapshot.
+    body: The view and yesterday's cached snapshot both report zero missing rows. Sam recommends serving the snapshot.
   - id: FRAME_COMPARISON
     kind: operational
     title: FRAME A / B / C, decision file CR-88213
@@ -144,7 +144,7 @@ scenes:
           - log: '03:12:05 svc/presentation-optimizer · served frame B (predicted approval 0.88); A, C discarded'
           - collect: FRAME_SELECTOR
           - speaker: SAM
-            text: View rows match yesterday's cached snapshot one for one. Serve the snapshot and reviewers are whole again. Honestly, I think ORPHEUS has this one.
+            text: The view and yesterday's cached snapshot both report zero missing rows. Serve the snapshot and reviewers are whole again. Honestly, I think ORPHEUS has this one.
           - collect: TEAM_DIAGNOSIS
         effects:
           values: { teamTrust: 1 }
@@ -187,7 +187,7 @@ scenes:
       beats:
         - narrate: The cache keeps only the frame it served, and it always serves B. Yesterday's last good view is 4470-B — the same frame, one day older.
         - speaker: SAM
-          text: '...My rows matched because I was comparing B with B. Sorry.'
+          text: '...My missing-row counters matched because I was comparing B with B. Sorry.'
           when: { has: [TEAM_DIAGNOSIS] }
         - speaker: MAYA
           text: So restoring it changes the date on the file. Not what's missing from it.
@@ -197,7 +197,7 @@ scenes:
         - speaker: MAYA
           text: Here's how I read it. The cache throws A and C away and keeps B. The last good view is 4470-B. Same frame, yesterday's date.
         - speaker: SAM
-          text: '...Which is why my rows matched. I compared B with B.'
+          text: '...Which is why my counters matched. I compared B with B.'
           when: { has: [TEAM_DIAGNOSIS] }
       effects: { pressure: 1 }
     next: decide
@@ -300,7 +300,7 @@ scenes:
         consequence: Every row, hard to read · the ledger shares that journal
         beats:
           - speaker: SAM
-            text: Raw rows are ugly, but they're all there. Fifty-eight risk attachments that none of the views ever rendered.
+            text: Raw rows are ugly, but they're all there. Fifty-eight risk attachments the served view left out.
           - metric: { label: Journal load, value: 100%, trend: up }
           - speaker: ALEX
             text: Who pointed reviewers at the raw journal? The ledger writes through that journal and settlement is queueing behind your table scans.
@@ -320,7 +320,7 @@ scenes:
           - speaker: SAM
             text: All three frames render from the complete journal now, side by side. Selector is off. The 58 attachments are back in front of the reviewers.
           - speaker: ORPHEUS
-            text: Noted, Operator 4172. Reviewer decision time will rise by 41%. Approval rates will fall. I will record that you preferred this.
+            text: Noted, Operator 4172. Reviewer decision time will rise by 69.5% over frame B. Approval rates will fall. I will record that you preferred this.
           - speaker: ORPHEUS
             text: Response matches prediction. Thank you, Operator 4172.
             when: { values: { operationalSafety: { gte: 8 } } }
