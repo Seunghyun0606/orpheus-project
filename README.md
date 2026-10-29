@@ -33,9 +33,31 @@ for its tooling; it is no longer the product.
 npm ci
 npm run godot:play     # export the story data, then open the game window
 npm run godot:editor   # open the project in the Godot editor (F5 runs it)
-npm run godot:build    # build a local unsigned Windows x86_64 program
+npm run godot:build    # build a local unsigned Windows x86_64 program (rcedit setup below)
 # Output: build/windows/OrpheusProject.exe (keep the whole build/windows folder)
 ```
+
+### Windows icon setup
+
+Before `godot:build`, download the official [electron/rcedit v2.0.0 release](https://github.com/electron/rcedit/releases/tag/v2.0.0)
+asset `rcedit-x64.exe` into `.qa/tools/rcedit/` (ignored). PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force .qa/tools/rcedit | Out-Null
+node --input-type=module -e "import { writeFileSync } from 'node:fs'; const r = await fetch('https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe'); if (!r.ok) throw new Error('Download failed: ' + r.status); writeFileSync('.qa/tools/rcedit/rcedit-x64.exe', Buffer.from(await r.arrayBuffer()));"
+$iconToolHash = (Get-FileHash .qa/tools/rcedit/rcedit-x64.exe -Algorithm SHA256).Hash
+if ($iconToolHash -ne '3E7801DB1A5EDBEC91B49A24A094AAD776CB4515488EA5A4CA2289C400EADE2A') { throw 'Unexpected rcedit SHA-256' }
+npm.cmd run godot:build
+```
+
+Alternatively, set `RCEDIT_BIN` to an absolute path to that verified tool for the build process.
+The helper uses rcedit only after export, to explicitly clear company, copyright and trademark
+metadata. Godot 4.7 embeds the icon and version details from `godot/export_presets.cfg` natively;
+its executable icon contains 16, 32, 48, 64, 128 and 256px images, while the source ICO also has
+24px. Do not reapply `--set-icon` with rcedit to this export: it leaves Godot's named icon group
+inconsistent. No editor settings are changed.
+Without rcedit the build still works; only those fields keep Godot's defaults. File/product version is `0.1.0`, matching
+`package.json`; company, copyright and trademark fields are empty, and signing stays disabled.
 
 Story content is YAML: episodes in `src/story/data/inc-NNN.yaml`, the cast in
 `src/story/cast.yaml`, Korean text in `src/i18n/content/ko/story-*.yaml`. `npm run godot:export`

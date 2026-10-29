@@ -95,6 +95,8 @@ const mode = process.argv[2];
 switch (mode) {
   case 'build': {
     const out = resolve('build', 'windows');
+    // Optional, export-only tool; never written into the user's Godot editor settings.
+    const rcedit = resolve(process.env.RCEDIT_BIN ?? '.qa/tools/rcedit/rcedit-x64.exe');
     exportData();
     run(['--headless', '--path', PROJECT, '--import']);
     mkdirSync(out, { recursive: true });
@@ -106,6 +108,30 @@ switch (mode) {
       'Windows Desktop',
       join(out, 'OrpheusProject.exe'),
     ]);
+    // Godot 4.7 embeds the icon and version natively. rcedit, when present, only
+    // clears the identity fields Godot fills by default (no publisher is invented);
+    // reapplying the icon with it would leave Godot's named icon group inconsistent.
+    if (existsSync(rcedit))
+      execFileSync(
+        rcedit,
+        [
+          join(out, 'OrpheusProject.exe'),
+          '--set-version-string',
+          'CompanyName',
+          '',
+          '--set-version-string',
+          'LegalCopyright',
+          '',
+          '--set-version-string',
+          'LegalTrademarks',
+          '',
+        ],
+        { stdio: 'inherit' },
+      );
+    else
+      console.warn(
+        'rcedit not found (README, Windows icon setup): company and copyright fields keep Godot defaults.',
+      );
     for (const file of readdirSync(join(PROJECT, 'fonts')))
       if (file.endsWith('-OFL.txt')) copyFileSync(join(PROJECT, 'fonts', file), join(out, file));
     console.log(`Windows build: ${join(out, 'OrpheusProject.exe')} (keep the whole folder).`);
